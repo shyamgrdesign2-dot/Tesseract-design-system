@@ -1,0 +1,245 @@
+// TPButton.module.scss
+// All variant × theme × size × surface × state — owned entirely by CSS.
+// No JS hover/focus state. No event handlers. No re-renders.
+
+// ─── Design tokens ───────────────────────────────────────────────────────────
+// Primary
+$p-bg:    #4B4AD5;
+$p-hover: #3C3BB5;
+$p-ring:  rgba(75, 74, 213, 0.3);
+$p-tonal: #EEEEFF;
+
+// Neutral
+$n-bg:    #F1F1F5;
+$n-text:  #454551;
+$n-bdr:   #D0D5DD;
+$n-hover: #E2E2EA;
+$n-ring:  rgba(160, 160, 168, 0.35);
+
+// Error
+$e-bg:    #E11D48;
+$e-hover: #C8102E;
+$e-ring:  rgba(225, 29, 72, 0.25);
+$e-tonal: #FFF1F2;
+
+// Disabled
+$dis-bg:   #E2E2EA;
+$dis-text: #A2A2A8;
+
+// ─── Base ─────────────────────────────────────────────────────────────────────
+.btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  border:          none;
+  border-radius:   10px;
+  font-weight:     600;
+  font-family:     "Inter", sans-serif;
+  cursor:          pointer;
+  white-space:     nowrap;
+  transition:      background 140ms ease, color 140ms ease,
+                   border-color 140ms ease, box-shadow 140ms ease,
+                   opacity 140ms ease;
+
+  // ─── Sizes (height / padding / gap / font / radius) ─────────────────────
+  &[data-size="sm"] { height: 36px; padding: 0 14px; gap: 5px; font-size: 13px; border-radius: 8px; }
+  &[data-size="md"] { height: 42px; padding: 0 18px; gap: 6px; font-size: 14px; border-radius: 10px; }
+  &[data-size="lg"] { height: 48px; padding: 0 22px; gap: 8px; font-size: 14px; border-radius: 12px; }
+
+  // ─── Disabled (non-link) ────────────────────────────────────────────────
+  &:disabled:not([data-variant="link"]) {
+    background: $dis-bg;
+    color:      $dis-text;
+    border:     none;
+    cursor:     not-allowed;
+  }
+
+  // ─── Solid ──────────────────────────────────────────────────────────────
+  &[data-variant="solid"] {
+    &[data-theme="primary"] {
+      background: $p-bg;
+      color:      #fff;
+      &:hover:not(:disabled) { background: $p-hover; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $p-ring; }
+    }
+    &[data-theme="neutral"] {
+      background: $n-bg;
+      color:      $n-text;
+      &:hover:not(:disabled) { background: $n-hover; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $n-ring; }
+    }
+    &[data-theme="error"] {
+      background: $e-bg;
+      color:      #fff;
+      &:hover:not(:disabled) { background: $e-hover; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $e-ring; }
+    }
+    // Dark surface → inverted to white
+    &[data-surface="dark"] {
+      background: #fff;
+      color:      #161558;
+      &:hover:not(:disabled)  { background: #E2E2EA; }
+      &:focus-visible          { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.4); }
+      &:disabled               { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); }
+    }
+  }
+
+  // ─── Outline ────────────────────────────────────────────────────────────
+  &[data-variant="outline"] {
+    background: transparent;
+    &[data-theme="primary"] {
+      border: 1.5px solid $p-bg;
+      color:  $p-bg;
+      &:hover:not(:disabled) { background: $p-tonal; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $p-ring; }
+    }
+    &[data-theme="neutral"] {
+      border: 1.5px solid $n-bdr;
+      color:  $n-text;
+      &:hover:not(:disabled) { background: $n-hover; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $n-ring; }
+    }
+    &[data-theme="error"] {
+      border: 1.5px solid $e-bg;
+      color:  $e-bg;
+      &:hover:not(:disabled) { background: $e-tonal; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $e-ring; }
+    }
+    &:disabled {
+      background: transparent;
+      border-color: $dis-bg;
+      color:        $dis-text;
+    }
+    // Dark surface → frosted glass
+    &[data-surface="dark"] {
+      background:      rgba(255,255,255,0.07);
+      border:          1.5px solid rgba(255,255,255,0.34);
+      color:           #fff;
+      backdrop-filter: blur(8px);
+      &:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
+      &:disabled { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.4); }
+    }
+  }
+
+  // ─── Ghost ──────────────────────────────────────────────────────────────
+  &[data-variant="ghost"] {
+    background: transparent;
+    &[data-theme="primary"] {
+      color: $p-bg;
+      &:hover:not(:disabled) { background: $p-tonal; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $p-ring; }
+    }
+    &[data-theme="neutral"] {
+      color: $n-text;
+      &:hover:not(:disabled) { background: $n-bg; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $n-ring; }
+    }
+    &[data-theme="error"] {
+      color: $e-bg;
+      &:hover:not(:disabled) { background: $e-tonal; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $e-ring; }
+    }
+    &:disabled { color: $dis-text; }
+    // Dark surface → white text, soft hover
+    &[data-surface="dark"] {
+      color: rgba(255,255,255,0.9);
+      &:hover:not(:disabled) { background: rgba(255,255,255,0.1); }
+      &:disabled { color: rgba(255,255,255,0.3); }
+    }
+  }
+
+  // ─── Tonal ──────────────────────────────────────────────────────────────
+  &[data-variant="tonal"] {
+    &[data-theme="primary"] {
+      background: $p-tonal;
+      color:      $p-bg;
+      &:hover:not(:disabled) { background: darken($p-tonal, 4%); }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $p-ring; }
+    }
+    &[data-theme="neutral"] {
+      background: $n-bg;
+      color:      $n-text;
+      &:hover:not(:disabled) { background: $n-hover; }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $n-ring; }
+    }
+    &[data-theme="error"] {
+      background: $e-tonal;
+      color:      $e-bg;
+      &:hover:not(:disabled) { background: darken($e-tonal, 4%); }
+      &:focus-visible { outline: none; box-shadow: 0 0 0 3px $e-ring; }
+    }
+    &:disabled { background: $dis-bg; color: $dis-text; }
+    // Dark surface → semi-opaque white fill
+    &[data-surface="dark"] {
+      background: rgba(255,255,255,0.12);
+      color:      #fff;
+      &:hover:not(:disabled) { background: rgba(255,255,255,0.2); }
+      &:disabled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+    }
+  }
+
+  // ─── Link ───────────────────────────────────────────────────────────────
+  &[data-variant="link"] {
+    height:               auto;
+    padding:              0;
+    background:           transparent;
+    border:               none;
+    border-radius:        0;
+    text-decoration:      underline;
+    text-underline-offset: 3px;
+    &[data-theme="primary"] { color: $p-bg; }
+    &[data-theme="neutral"] { color: $n-text; }
+    &[data-theme="error"]   { color: $e-bg; }
+    &:hover:not(:disabled)  { opacity: 0.75; }
+    &:disabled              { color: $dis-text; cursor: not-allowed; }
+    // Dark surface → white underlined
+    &[data-surface="dark"] {
+      color: rgba(255,255,255,0.9);
+      &:disabled { color: rgba(255,255,255,0.3); }
+    }
+  }
+}
+
+// ─── Icon slot ────────────────────────────────────────────────────────────────
+.icon {
+  display:         inline-flex;
+  flex-shrink:     0;
+  align-items:     center;
+  justify-content: center;
+  color:           inherit;
+
+  [data-size="sm"] & { width: 16px; height: 16px; }
+  [data-size="md"] & { width: 18px; height: 18px; }
+  [data-size="lg"] & { width: 20px; height: 20px; }
+
+  :global(svg) {
+    width:        100%;
+    height:       100%;
+    stroke:       currentColor;
+    fill:         none;
+    flex-shrink:  0;
+  }
+}
+
+// ─── Label ────────────────────────────────────────────────────────────────────
+.label {
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+
+// ─── Loading spinner ──────────────────────────────────────────────────────────
+.spinner {
+  display:      inline-block;
+  border-radius: 50%;
+  border:       2px solid currentColor;
+  border-top-color: transparent;
+  animation:    tp-spin 0.65s linear infinite;
+
+  [data-size="sm"] & { width: 15px; height: 15px; }
+  [data-size="md"] & { width: 17px; height: 17px; }
+  [data-size="lg"] & { width: 19px; height: 19px; }
+}
+
+@keyframes tp-spin {
+  to { transform: rotate(360deg); }
+}

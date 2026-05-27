@@ -1,0 +1,226 @@
+// TPInput.module.scss
+// All interaction states owned by CSS. No JS hover/focus state.
+
+// ─── Tokens ──────────────────────────────────────────────────────────────────
+$border:        #E2E2EA;
+$border-focus:  #7776E0;
+$ring-focus:    rgba(119,118,224,0.2);
+
+$success:       #10B981;
+$ring-success:  rgba(16,185,129,0.18);
+
+$error:         #E11D48;
+$ring-error:    rgba(225,29,72,0.18);
+
+$text:          #171725;
+$placeholder:   #A2A2A8;
+$helper:        #717179;
+$label:         #454551;
+
+$dis-bg:        #FAFAFB;
+$dis-text:      #A2A2A8;
+$dis-border:    #E2E2EA;
+
+$addon-bg:      #F7F7FB;
+
+// ─── Outer wrapper ────────────────────────────────────────────────────────────
+.wrap {
+  display:        inline-flex;
+  flex-direction: column;
+  gap:            6px;
+  min-width:      0;
+
+  &.fullWidth { width: 100%; }
+
+  // Size propagation — shared by fieldRow height and border-radius
+  &[data-size="sm"] { --h: 36px; --r: 8px;  --px: 10px; --fs: 13px; --icon: 16px; }
+  &[data-size="md"] { --h: 42px; --r: 10px; --px: 12px; --fs: 14px; --icon: 18px; }
+  &[data-size="lg"] { --h: 48px; --r: 12px; --px: 14px; --fs: 14px; --icon: 20px; }
+}
+
+// ─── Label ────────────────────────────────────────────────────────────────────
+.label {
+  display:     flex;
+  align-items: center;
+  gap:         3px;
+  font-size:   13px;
+  font-weight: 500;
+  color:       $label;
+  line-height: 1.4;
+}
+
+.required { color: $error; }
+
+// ─── Field row (addon + input + addon) ────────────────────────────────────────
+.fieldRow {
+  display:     flex;
+  align-items: stretch;
+  height:      var(--h, 42px);
+  width:       100%;
+
+  // Clip the row so addons share the outer radius cleanly
+  border-radius: var(--r, 10px);
+  overflow:      hidden;
+  border:        1.5px solid $border;
+  background:    #fff;
+  transition:    border-color 140ms ease, box-shadow 140ms ease;
+
+  // Hover
+  &:hover:not(:has(input:disabled)) { border-color: darken($border, 8%); }
+
+  // Focus-within — the ring lives on the row, not the bare input
+  &:focus-within {
+    border-color: $border-focus;
+    box-shadow:   0 0 0 3px $ring-focus;
+    outline:      none;
+  }
+
+  // Status: error
+  [data-status="error"] & {
+    border-color: $error;
+    &:focus-within { box-shadow: 0 0 0 3px $ring-error; }
+  }
+
+  // Status: success
+  [data-status="success"] & {
+    border-color: $success;
+    &:focus-within { box-shadow: 0 0 0 3px $ring-success; }
+  }
+
+  // Disabled
+  [data-disabled] & {
+    background:   $dis-bg;
+    border-color: $dis-border;
+    cursor:       not-allowed;
+    &:hover { border-color: $dis-border; }
+    &:focus-within { box-shadow: none; border-color: $dis-border; }
+  }
+}
+
+// ─── Core input ───────────────────────────────────────────────────────────────
+.input {
+  flex:            1 1 0;
+  min-width:       0;
+  height:          100%;
+  padding:         0 var(--px, 12px);
+  font-size:       var(--fs, 14px);
+  font-family:     "Inter", sans-serif;
+  font-weight:     400;
+  color:           $text;
+  background:      transparent;
+  border:          none;
+  outline:         none;
+  line-height:     1.5;
+
+  &::placeholder { color: $placeholder; }
+
+  &:disabled {
+    color:  $dis-text;
+    cursor: not-allowed;
+  }
+
+  // Tighten padding when icon present (handled by inputWrap padding)
+  .iconLeft  ~ & { padding-left:  6px; }
+}
+
+// ─── Input wrap (icon container) ─────────────────────────────────────────────
+.inputWrap {
+  display:     flex;
+  align-items: center;
+  flex:        1 1 0;
+  min-width:   0;
+  overflow:    hidden;
+
+  // Left icon presence → reduce input left padding
+  &:has(.iconLeft) .input  { padding-left: 6px; }
+  &:has(.iconRight) .input { padding-right: 6px; }
+  &:has(.unit) .input      { padding-right: 4px; }
+}
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
+.iconLeft,
+.iconRight {
+  display:          inline-flex;
+  flex-shrink:      0;
+  align-items:      center;
+  justify-content:  center;
+  width:            var(--icon, 18px);
+  height:           var(--icon, 18px);
+  color:            $placeholder;
+
+  svg { width: 100%; height: 100%; stroke: currentColor; fill: none; }
+}
+
+.iconLeft  { margin-left:  var(--px, 12px); }
+.iconRight { margin-right: var(--px, 12px); }
+
+// Success icon gets success color
+[data-status="success"] .iconRight { color: $success; }
+// Error icon gets error color
+[data-status="error"]   .iconRight { color: $error; }
+
+// ─── Unit (fixed text, e.g. "kg", "USD") ─────────────────────────────────────
+.unit {
+  flex-shrink:    0;
+  padding:        0 10px 0 4px;
+  font-size:      var(--fs, 14px);
+  font-weight:    500;
+  color:          $helper;
+  white-space:    nowrap;
+  pointer-events: none;
+}
+
+// ─── Addons (pinned left/right blocks) ───────────────────────────────────────
+.addonLeft,
+.addonRight {
+  display:         flex;
+  align-items:     center;
+  flex-shrink:     0;
+  background:      $addon-bg;
+  padding:         0 10px;
+  font-size:       var(--fs, 14px);
+  color:           $helper;
+  white-space:     nowrap;
+  border-color:    inherit;
+}
+
+.addonLeft  { border-right: 1.5px solid $border; }
+.addonRight { border-left:  1.5px solid $border; }
+
+// ─── Counter stepper buttons (+/-) ───────────────────────────────────────────
+.stepBtn {
+  display:          inline-flex;
+  flex-shrink:      0;
+  align-items:      center;
+  justify-content:  center;
+  width:            var(--h, 42px);
+  height:           100%;
+  background:       $addon-bg;
+  border:           none;
+  color:            $label;
+  cursor:           pointer;
+  transition:       background 120ms ease;
+
+  &:hover:not(:disabled) { background: darken($addon-bg, 4%); }
+  &:disabled { cursor: not-allowed; color: $dis-text; }
+
+  // Left stepper
+  &:first-child { border-right: 1.5px solid $border; }
+  // Right stepper
+  &:last-child  { border-left:  1.5px solid $border; }
+
+  svg { pointer-events: none; }
+}
+
+// ─── Helper / error text ──────────────────────────────────────────────────────
+.helper {
+  display:     flex;
+  align-items: center;
+  gap:         4px;
+  font-size:   12px;
+  color:       $helper;
+  line-height: 1.4;
+
+  [data-status="error"]   & { color: $error; }
+  [data-status="success"] & { color: $success; }
+}

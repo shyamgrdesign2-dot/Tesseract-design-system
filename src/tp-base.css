@@ -1,0 +1,101 @@
+/* ─── Smoothed corners (squircle) ────────────────────────────────────────────
+   Applies iOS-style super-ellipse rounding to every element that already has
+   a non-zero border-radius. The `corner-shape` property is a CSS Shapes Level 2
+   feature supported in Chrome 133+. Older browsers silently ignore it and fall
+   back to the standard `border-radius` value — no breakage.
+   ──────────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  corner-shape: squircle;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  overflow-x: clip;
+}
+
+body {
+  font-family: "Inter", var(--font-sans), sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #171725;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+h2 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.27;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h3 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+h4 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+h5 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+h6 {
+  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.rxpad-rich-editor.tiptap.ProseMirror ::selection {
+  background-color: color-mix(in oklab, var(--tp-blue-100) 88%, transparent);
+  color: var(--tp-slate-900);
+}
+
+.rxpad-rich-editor.tiptap.ProseMirror-focused .ProseMirror-selectednode {
+  outline: 2px solid color-mix(in oklab, var(--tp-blue-500) 32%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch-show {
+    opacity: 0.6 !important;
+  }
+}

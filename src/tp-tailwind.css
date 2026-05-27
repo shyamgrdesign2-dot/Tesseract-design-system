@@ -1,0 +1,129 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Maps the design-system tokens (defined in tp-tokens.css) onto Tailwind's
+   theme so utilities like `bg-tp-blue-500`, `text-tp-slate-700`,
+   `border-border`, `rounded-lg` resolve to the brand palette. */
+@theme inline {
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-tp-slate-0: var(--tp-slate-0);
+  --color-tp-slate-50: var(--tp-slate-50);
+  --color-tp-slate-100: var(--tp-slate-100);
+  --color-tp-slate-200: var(--tp-slate-200);
+  --color-tp-slate-300: var(--tp-slate-300);
+  --color-tp-slate-400: var(--tp-slate-400);
+  --color-tp-slate-500: var(--tp-slate-500);
+  --color-tp-slate-600: var(--tp-slate-600);
+  --color-tp-slate-700: var(--tp-slate-700);
+  --color-tp-slate-800: var(--tp-slate-800);
+  --color-tp-slate-900: var(--tp-slate-900);
+
+  --color-tp-blue-50: var(--tp-blue-50);
+  --color-tp-blue-100: var(--tp-blue-100);
+  --color-tp-blue-200: var(--tp-blue-200);
+  --color-tp-blue-300: var(--tp-blue-300);
+  --color-tp-blue-400: var(--tp-blue-400);
+  --color-tp-blue-500: var(--tp-blue-500);
+  --color-tp-blue-600: var(--tp-blue-600);
+  --color-tp-blue-700: var(--tp-blue-700);
+  --color-tp-blue-800: var(--tp-blue-800);
+  --color-tp-blue-900: var(--tp-blue-900);
+
+  --color-tp-violet-50: var(--tp-violet-50);
+  --color-tp-violet-100: var(--tp-violet-100);
+  --color-tp-violet-200: var(--tp-violet-200);
+  --color-tp-violet-300: var(--tp-violet-300);
+  --color-tp-violet-400: var(--tp-violet-400);
+  --color-tp-violet-500: var(--tp-violet-500);
+  --color-tp-violet-600: var(--tp-violet-600);
+  --color-tp-violet-700: var(--tp-violet-700);
+  --color-tp-violet-800: var(--tp-violet-800);
+  --color-tp-violet-900: var(--tp-violet-900);
+
+  --color-tp-amber-50: var(--tp-amber-50);
+  --color-tp-amber-500: var(--tp-amber-500);
+
+  --color-tp-success-50: var(--tp-success-50);
+  --color-tp-success-100: var(--tp-success-100);
+  --color-tp-success-200: var(--tp-success-200);
+  --color-tp-success-300: var(--tp-success-300);
+  --color-tp-success-400: var(--tp-success-400);
+  --color-tp-success-500: var(--tp-success-500);
+  --color-tp-success-600: var(--tp-success-600);
+  --color-tp-success-700: var(--tp-success-700);
+  --color-tp-success-800: var(--tp-success-800);
+  --color-tp-success-900: var(--tp-success-900);
+
+  --color-tp-warning-50: var(--tp-warning-50);
+  --color-tp-warning-100: var(--tp-warning-100);
+  --color-tp-warning-200: var(--tp-warning-200);
+  --color-tp-warning-300: var(--tp-warning-300);
+  --color-tp-warning-400: var(--tp-warning-400);
+  --color-tp-warning-500: var(--tp-warning-500);
+  --color-tp-warning-600: var(--tp-warning-600);
+  --color-tp-warning-700: var(--tp-warning-700);
+  --color-tp-warning-800: var(--tp-warning-800);
+  --color-tp-warning-900: var(--tp-warning-900);
+
+  --color-tp-error-50: var(--tp-error-50);
+  --color-tp-error-100: var(--tp-error-100);
+  --color-tp-error-200: var(--tp-error-200);
+  --color-tp-error-300: var(--tp-error-300);
+  --color-tp-error-400: var(--tp-error-400);
+  --color-tp-error-500: var(--tp-error-500);
+  --color-tp-error-600: var(--tp-error-600);
+  --color-tp-error-700: var(--tp-error-700);
+  --color-tp-error-800: var(--tp-error-800);
+  --color-tp-error-900: var(--tp-error-900);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+/* Shared keyframes used by decorative atoms (ShineBorder / ShinyText). */
+@keyframes shine {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+.animate-shine { animation: shine var(--duration, 14s) linear infinite; }
+
+@keyframes aiShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
