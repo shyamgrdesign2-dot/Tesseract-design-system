@@ -478,3 +478,170 @@ export const FullWidthTabs = {
     </div>
   ),
 };
+
+// ── Additional healthcare scenarios ──────────────────────────────────────────
+
+/** Billing & insurance — three tabs: itemised charges, payment history, insurance claims. */
+export const BillingAndInsurance = {
+  name: '💳 Billing & Insurance',
+  render: () => {
+    const charges = [
+      { item: 'Consultation — Dr. Ananya Mehta', qty: 1, rate: 800, total: 800 },
+      { item: 'ECG + Interpretation', qty: 1, rate: 1200, total: 1200 },
+      { item: 'Lipid Profile (Lab)', qty: 1, rate: 950, total: 950 },
+    ];
+    const payments = [
+      { date: '27 May 2026', amount: 2000, mode: 'Card', ref: 'UHI-TXN-8821' },
+      { date: '27 May 2026', amount: 950, mode: 'Pending', ref: '—' },
+    ];
+    const th = { fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#54545C', background: '#F8FAFC', padding: '8px 12px', textAlign: 'left', borderBottom: '1px solid #E2E2EA' };
+    const td = { fontSize: 13, color: '#171725', padding: '10px 12px', borderBottom: '1px solid #F0F0F6' };
+    const Panel = ({ children }) => (
+      <div style={{ marginTop: 12, border: '1px solid #E2E2EA', borderRadius: 10, overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
+        {children}
+      </div>
+    );
+    return (
+      <div style={{ maxWidth: 580, fontFamily: 'Inter, sans-serif' }}>
+        <Tabs defaultValue="charges">
+          <TabsList>
+            <TabsTrigger value="charges">Itemised Charges</TabsTrigger>
+            <TabsTrigger value="payments">Payments</TabsTrigger>
+            <TabsTrigger value="insurance">Insurance</TabsTrigger>
+          </TabsList>
+          <TabsContent value="charges">
+            <Panel>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead><tr>{['Service', 'Qty', 'Rate', 'Total'].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
+                <tbody>
+                  {charges.map(c => (
+                    <tr key={c.item}>
+                      <td style={td}>{c.item}</td>
+                      <td style={{ ...td, textAlign: 'center' }}>{c.qty}</td>
+                      <td style={{ ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>₹{c.rate}</td>
+                      <td style={{ ...td, textAlign: 'right', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>₹{c.total}</td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan={3} style={{ ...td, fontWeight: 700, textAlign: 'right', borderTop: '2px solid #E2E2EA' }}>Total</td>
+                    <td style={{ ...td, fontWeight: 700, fontSize: 15, textAlign: 'right', borderTop: '2px solid #E2E2EA', fontVariantNumeric: 'tabular-nums' }}>₹{charges.reduce((s, c) => s + c.total, 0).toLocaleString('en-IN')}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </Panel>
+          </TabsContent>
+          <TabsContent value="payments">
+            <Panel>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead><tr>{['Date', 'Amount', 'Mode', 'Reference'].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
+                <tbody>
+                  {payments.map((p, i) => (
+                    <tr key={i}>
+                      <td style={td}>{p.date}</td>
+                      <td style={{ ...td, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>₹{p.amount.toLocaleString('en-IN')}</td>
+                      <td style={td}>
+                        <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 99, background: p.mode === 'Pending' ? '#FEF3C7' : '#DCFCE7', color: p.mode === 'Pending' ? '#92400E' : '#15803D' }}>{p.mode}</span>
+                      </td>
+                      <td style={{ ...td, fontSize: 12, color: '#54545C', fontFamily: 'monospace' }}>{p.ref}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Panel>
+          </TabsContent>
+          <TabsContent value="insurance">
+            <div style={{ marginTop: 12, padding: '20px 16px', border: '1px solid #E2E2EA', borderRadius: 10, fontFamily: 'Inter, sans-serif' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 24px', fontSize: 14 }}>
+                {[['Provider', 'Star Health Insurance'], ['Policy No.', 'SHI-2024-088741'], ['Coverage', '₹5,00,000'], ['Validity', '31 Mar 2027'], ['TPA', 'Medi Assist'], ['Claim Status', 'Pre-auth Approved']].map(([k, v]) => (
+                  <React.Fragment key={k}>
+                    <span style={{ color: '#54545C', fontWeight: 500 }}>{k}</span>
+                    <span style={{ fontWeight: 600, color: '#171725' }}>{v}</span>
+                  </React.Fragment>
+                ))}
+              </div>
+              <div style={{ marginTop: 16, padding: '10px 14px', background: '#DCFCE7', borderRadius: 8, fontSize: 13, color: '#15803D', fontWeight: 500 }}>
+                ✓ Pre-authorisation approved for Lipid Profile · Claim ID: CLM-2026-4421
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  },
+};
+
+/** Visit notes tab panel — mirrors what a doctor sees in the consultation screen. */
+export const ConsultationNotes = {
+  name: '🩺 Consultation Notes',
+  render: () => {
+    const [activeTab, setActiveTab] = React.useState('notes');
+    return (
+      <div style={{ maxWidth: 600, fontFamily: 'Inter, sans-serif' }}>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList>
+            <TabsTrigger value="notes">Visit Notes</TabsTrigger>
+            <TabsTrigger value="rx">Prescription</TabsTrigger>
+            <TabsTrigger value="investigations">Investigations</TabsTrigger>
+            <TabsTrigger value="attachments">Attachments</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="notes">
+            <div style={{ marginTop: 12, padding: '16px', border: '1px solid #E2E2EA', borderRadius: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 14, color: '#171725', lineHeight: 1.6 }}>
+                <div><span style={{ fontWeight: 700, color: '#54545C', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Chief Complaint</span><div style={{ marginTop: 4 }}>Persistent headache and dizziness for 3 days. BP reading at home was 145/95 mmHg.</div></div>
+                <div><span style={{ fontWeight: 700, color: '#54545C', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Clinical Findings</span><div style={{ marginTop: 4 }}>BP 142/92 mmHg (elevated). HR 84 bpm. SpO₂ 98%. No papilloedema. No focal neurological deficit.</div></div>
+                <div><span style={{ fontWeight: 700, color: '#54545C', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Impression</span><div style={{ marginTop: 4 }}>Hypertension Stage 1, uncontrolled. Tension headache secondary to elevated BP.</div></div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="rx">
+            <div style={{ marginTop: 12, border: '1px solid #E2E2EA', borderRadius: 10, overflow: 'hidden' }}>
+              {[
+                { drug: 'Amlodipine', dose: '10 mg', freq: 'Once daily (morning)', duration: '30 days', note: 'Dose increase from 5 mg' },
+                { drug: 'Losartan', dose: '50 mg', freq: 'Once daily (morning)', duration: '30 days', note: 'New addition' },
+                { drug: 'Aspirin', dose: '75 mg', freq: 'Once daily with food', duration: '90 days', note: 'Continue as before' },
+              ].map((rx, i) => (
+                <div key={rx.drug} style={{ padding: '12px 16px', borderBottom: i < 2 ? '1px solid #F0F0F6' : 'none', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 8, background: '#EEF0FF', color: '#4B4AD5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{i + 1}</div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#171725' }}>{rx.drug} <span style={{ fontWeight: 500, color: '#54545C' }}>{rx.dose}</span></div>
+                    <div style={{ fontSize: 12, color: '#54545C' }}>{rx.freq} · {rx.duration}</div>
+                    {rx.note && <div style={{ fontSize: 11, color: '#4B4AD5', marginTop: 2 }}>ℹ {rx.note}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="investigations">
+            <div style={{ marginTop: 12, border: '1px solid #E2E2EA', borderRadius: 10, overflow: 'hidden' }}>
+              {[
+                { test: 'Lipid Profile (Fasting)', lab: 'Apollo Diagnostics', status: 'Ordered', urgency: 'Routine' },
+                { test: 'Renal Function Tests', lab: 'Apollo Diagnostics', status: 'Ordered', urgency: 'Routine' },
+                { test: 'Serum Electrolytes', lab: 'Apollo Diagnostics', status: 'Ordered', urgency: 'Routine' },
+              ].map((inv, i, arr) => (
+                <div key={inv.test} style={{ padding: '12px 16px', borderBottom: i < arr.length - 1 ? '1px solid #F0F0F6' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>{inv.test}</div>
+                    <div style={{ fontSize: 12, color: '#54545C' }}>{inv.lab} · {inv.urgency}</div>
+                  </div>
+                  <span style={{ fontSize: 12, fontWeight: 600, background: '#FEF3C7', color: '#92400E', padding: '3px 10px', borderRadius: 99 }}>{inv.status}</span>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="attachments">
+            <div style={{ marginTop: 12, padding: '32px 16px', border: '1px solid #E2E2EA', borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, color: '#54545C', fontSize: 14 }}>
+              <div style={{ fontSize: 32 }}>📎</div>
+              <div style={{ fontWeight: 600 }}>No attachments yet</div>
+              <div style={{ fontSize: 12, color: '#8F8FA0' }}>Upload reports, scans, or documents for this visit</div>
+              <button type="button" style={{ marginTop: 4, padding: '7px 18px', borderRadius: 8, border: '1px solid #E2E2EA', background: '#fff', fontSize: 13, fontWeight: 600, color: '#4B4AD5', cursor: 'pointer' }}>Upload document</button>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  },
+};

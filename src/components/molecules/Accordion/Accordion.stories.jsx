@@ -186,3 +186,167 @@ export const FAQAccordion = {
     </div>
   ),
 };
+
+// ── Additional healthcare scenarios ──────────────────────────────────────────
+
+/** SOAP clinical note — each section expands to show structured note content. */
+export const SOAPClinicalNote = {
+  name: '📋 SOAP Clinical Note',
+  render: () => (
+    <div style={{ maxWidth: 560, fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ marginBottom: 12 }}>
+        <span style={{ fontSize: 15, fontWeight: 700, color: '#171725' }}>Visit Note — 27 May 2026</span>
+        <span style={{ fontSize: 12, color: '#54545C', marginLeft: 8 }}>Dr. Ananya Mehta · Rohan Sharma</span>
+      </div>
+      <Accordion type="multiple" defaultValue={['subjective']}>
+        <AccordionItem value="subjective">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: '#EEF0FF', color: '#4B4AD5' }}>S</span>
+              Subjective — Chief Complaint & History
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, color: '#171725', fontSize: 14, lineHeight: 1.6 }}>
+              <div><strong>Chief complaint:</strong> Persistent headache and mild dizziness for 3 days.</div>
+              <div><strong>History of present illness:</strong> Patient reports bilateral throbbing headache, 6/10 severity, worse in the morning. Denies nausea, vomiting, vision changes, or neurological symptoms. No fever or neck stiffness.</div>
+              <div><strong>Current medications:</strong> Amlodipine 5 mg OD, Atorvastatin 40 mg OD, Aspirin 75 mg OD.</div>
+              <div><strong>Allergies:</strong> Penicillin (rash), Sulfa drugs.</div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="objective">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: '#FEF3C7', color: '#92400E' }}>O</span>
+              Objective — Examination Findings
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 14 }}>
+              {[['BP', '142/92 mmHg ↑'], ['HR', '84 bpm'], ['SpO₂', '98%'], ['Temp', '37.2°C'], ['Weight', '72 kg'], ['RR', '16/min']].map(([k, v]) => (
+                <div key={k} style={{ padding: '8px 12px', background: '#F8FAFC', borderRadius: 8, border: '1px solid #E2E2EA' }}>
+                  <div style={{ fontSize: 11, color: '#54545C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{k}</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: k === 'BP' ? '#92400E' : '#171725', marginTop: 2 }}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="assessment">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: '#DCFCE7', color: '#15803D' }}>A</span>
+              Assessment — Diagnosis
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <span style={{ background: '#EEF0FF', color: '#4B4AD5', fontSize: 11, fontWeight: 700, padding: '2px 6px', borderRadius: 4, whiteSpace: 'nowrap', marginTop: 2 }}>ICD-10</span>
+                <div><strong>I10</strong> — Essential (primary) hypertension — <em>Stage 1, uncontrolled</em></div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <span style={{ background: '#EEF0FF', color: '#4B4AD5', fontSize: 11, fontWeight: 700, padding: '2px 6px', borderRadius: 4, whiteSpace: 'nowrap', marginTop: 2 }}>ICD-10</span>
+                <div><strong>G43.909</strong> — Migraine, unspecified, not intractable</div>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="plan">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: '#FCE7F3', color: '#BE185D' }}>P</span>
+              Plan — Treatment & Follow-up
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
+              <div><strong>Medications:</strong> Increase Amlodipine to 10 mg OD. Add Losartan 50 mg OD. Continue existing Rx.</div>
+              <div><strong>Investigations:</strong> Repeat lipid profile, renal function test, serum electrolytes.</div>
+              <div><strong>Lifestyle:</strong> Restrict sodium to &lt;2 g/day. 30 min moderate exercise 5×/week. Reduce caffeine.</div>
+              <div><strong>Follow-up:</strong> Review in 2 weeks with BP diary. Emergency visit if BP &gt; 160/100.</div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  ),
+};
+
+/** Medication history grouped by status — active, discontinued, and allergies. */
+export const MedicationHistory = {
+  name: '💊 Medication History',
+  render: () => (
+    <div style={{ maxWidth: 540, fontFamily: 'Inter, sans-serif' }}>
+      <Accordion type="multiple" defaultValue={['active']}>
+        <AccordionItem value="active">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              Active Medications
+              <span style={{ fontSize: 11, fontWeight: 700, background: '#DCFCE7', color: '#15803D', padding: '2px 8px', borderRadius: 99 }}>3</span>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {[
+              { drug: 'Amlodipine 5 mg', freq: 'Once daily', since: 'Apr 2025', note: 'BP control' },
+              { drug: 'Atorvastatin 40 mg', freq: 'Once daily at night', since: 'Apr 2025', note: 'Lipid management' },
+              { drug: 'Aspirin 75 mg', freq: 'Once daily with food', since: 'Apr 2025', note: 'Antiplatelet' },
+            ].map(({ drug, freq, since, note }) => (
+              <div key={drug} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F0F0F6', fontSize: 14 }}>
+                <div>
+                  <div style={{ fontWeight: 600, color: '#171725' }}>{drug}</div>
+                  <div style={{ fontSize: 12, color: '#54545C' }}>{freq} · Since {since}</div>
+                </div>
+                <div style={{ fontSize: 12, color: '#54545C', textAlign: 'right' }}>{note}</div>
+              </div>
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="discontinued">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              Discontinued
+              <span style={{ fontSize: 11, fontWeight: 700, background: '#F1F5F9', color: '#64748B', padding: '2px 8px', borderRadius: 99 }}>2</span>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {[
+              { drug: 'Metoprolol 25 mg', freq: 'Twice daily', stopped: 'Jan 2026', reason: 'Bradycardia' },
+              { drug: 'Ramipril 5 mg', freq: 'Once daily', stopped: 'Mar 2026', reason: 'Persistent cough' },
+            ].map(({ drug, freq, stopped, reason }) => (
+              <div key={drug} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F0F0F6', fontSize: 14 }}>
+                <div>
+                  <div style={{ fontWeight: 600, color: '#54545C', textDecoration: 'line-through' }}>{drug}</div>
+                  <div style={{ fontSize: 12, color: '#8F8FA0' }}>Stopped {stopped} · {reason}</div>
+                </div>
+              </div>
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="allergies">
+          <AccordionTrigger>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              Allergies & Intolerances
+              <span style={{ fontSize: 11, fontWeight: 700, background: '#FFE4E6', color: '#9F1239', padding: '2px 8px', borderRadius: 99 }}>2</span>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {[
+              { allergen: 'Penicillin', reaction: 'Urticaria (skin rash)', severity: 'Moderate' },
+              { allergen: 'Sulfa drugs', reaction: 'Angioedema', severity: 'Severe' },
+            ].map(({ allergen, reaction, severity }) => (
+              <div key={allergen} style={{ display: 'flex', gap: 12, padding: '8px 0', borderBottom: '1px solid #F0F0F6', fontSize: 14, alignItems: 'center' }}>
+                <span style={{ fontSize: 16 }}>⚠️</span>
+                <div>
+                  <div style={{ fontWeight: 700, color: '#9F1239' }}>{allergen}</div>
+                  <div style={{ fontSize: 12, color: '#54545C' }}>{reaction} · <strong>{severity}</strong></div>
+                </div>
+              </div>
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  ),
+};

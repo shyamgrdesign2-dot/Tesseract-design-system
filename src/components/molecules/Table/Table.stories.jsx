@@ -392,3 +392,120 @@ export const CompactDense = {
     </Table>
   ),
 };
+
+// ── Healthcare-specific tables ───────────────────────────────────────────────
+
+const VITALS = [
+  { date: '27 May 2026', bp: '128/84', hr: 78, spo2: 98, temp: '37.1', weight: '72 kg', rr: 16, flag: null },
+  { date: '20 May 2026', bp: '134/88', hr: 82, spo2: 97, temp: '37.4', weight: '73 kg', rr: 17, flag: 'high-bp' },
+  { date: '13 May 2026', bp: '126/82', hr: 76, spo2: 99, temp: '36.9', weight: '72 kg', rr: 15, flag: null },
+  { date: '06 May 2026', bp: '142/92', hr: 88, spo2: 96, temp: '38.1', weight: '74 kg', rr: 18, flag: 'elevated' },
+  { date: '29 Apr 2026', bp: '122/80', hr: 74, spo2: 98, temp: '37.0', weight: '72 kg', rr: 16, flag: null },
+];
+
+/** Vitals trend table — colour-coded readings for BP, HR, and temperature outliers. */
+export const VitalsTrend = {
+  name: '📈 Vitals Trend',
+  render: () => (
+    <div style={{ fontFamily: 'Inter, sans-serif', maxWidth: 740 }}>
+      <div style={{ marginBottom: 14 }}>
+        <span style={{ fontSize: 15, fontWeight: 700, color: '#171725' }}>Vital Signs — Rohan Sharma</span>
+        <span style={{ fontSize: 12, color: '#54545C', marginLeft: 10 }}>Last 5 visits</span>
+      </div>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {['Date', 'BP (mmHg)', 'HR (bpm)', 'SpO₂ (%)', 'Temp (°C)', 'Weight', 'RR'].map((h) => (
+              <TableCell key={h} component="th" style={{ fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#54545C', background: '#F8FAFC', whiteSpace: 'nowrap' }}>
+                {h}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {VITALS.map((v) => {
+            const bpHigh = v.flag === 'high-bp' || v.flag === 'elevated';
+            const tempHigh = parseFloat(v.temp) >= 38;
+            const hrHigh = v.hr > 85;
+            return (
+              <TableRow key={v.date} style={{ background: v.flag ? '#FFFBEB' : undefined }}>
+                <TableCell style={{ fontSize: 13, color: '#54545C', whiteSpace: 'nowrap' }}>{v.date}</TableCell>
+                <TableCell style={{ fontSize: 14, fontWeight: 600, color: bpHigh ? '#92400E' : '#171725' }}>{v.bp} {bpHigh && <span style={{ fontSize: 10, marginLeft: 4 }}>↑</span>}</TableCell>
+                <TableCell style={{ fontSize: 14, fontWeight: 500, color: hrHigh ? '#92400E' : '#171725' }}>{v.hr}</TableCell>
+                <TableCell style={{ fontSize: 14, fontWeight: 500, color: v.spo2 < 97 ? '#9F1239' : '#15803D' }}>{v.spo2}</TableCell>
+                <TableCell style={{ fontSize: 14, fontWeight: 500, color: tempHigh ? '#9F1239' : '#171725' }}>{v.temp} {tempHigh && <span style={{ fontSize: 10 }}>↑</span>}</TableCell>
+                <TableCell style={{ fontSize: 13, color: '#54545C' }}>{v.weight}</TableCell>
+                <TableCell style={{ fontSize: 13, color: '#54545C' }}>{v.rr}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+      <div style={{ marginTop: 8, fontSize: 11, color: '#8F8FA0', display: 'flex', gap: 14 }}>
+        <span>↑ Above normal range</span>
+        <span style={{ color: '#FEF3C7', background: '#FEF3C7', border: '1px solid #FDE68A', padding: '1px 6px', borderRadius: 4, color: '#92400E' }}>Yellow row = flagged reading</span>
+      </div>
+    </div>
+  ),
+};
+
+const BILLING = [
+  { id: 'INV-001', service: 'Consultation — Dr. Ananya Mehta', date: '27 May 2026', amount: 800,  status: 'Paid',    mode: 'UPI' },
+  { id: 'INV-002', service: 'ECG + Interpretation',             date: '27 May 2026', amount: 1200, status: 'Paid',    mode: 'Card' },
+  { id: 'INV-003', service: 'Lipid Profile (Lab)',               date: '27 May 2026', amount: 950,  status: 'Pending', mode: '—' },
+  { id: 'INV-004', service: 'Echocardiogram',                   date: '20 May 2026', amount: 3500, status: 'Paid',    mode: 'Cash' },
+  { id: 'INV-005', service: 'Consultation — Dr. Ananya Mehta',  date: '13 May 2026', amount: 800,  status: 'Paid',    mode: 'UPI' },
+];
+
+const BILL_STATUS = {
+  Paid:    { background: '#DCFCE7', color: '#15803D' },
+  Pending: { background: '#FEF3C7', color: '#92400E' },
+  Waived:  { background: '#F1F5F9', color: '#475569' },
+};
+
+/** Invoice / billing history for a patient visit. */
+export const BillingHistory = {
+  name: '💳 Billing History',
+  render: () => {
+    const total = BILLING.reduce((s, r) => s + r.amount, 0);
+    const paid  = BILLING.filter(r => r.status === 'Paid').reduce((s, r) => s + r.amount, 0);
+    return (
+      <div style={{ fontFamily: 'Inter, sans-serif', maxWidth: 720 }}>
+        {/* Summary strip */}
+        <div style={{ display: 'flex', gap: 16, marginBottom: 14 }}>
+          {[['Total', `₹${total.toLocaleString('en-IN')}`, '#171725'], ['Paid', `₹${paid.toLocaleString('en-IN')}`, '#15803D'], ['Pending', `₹${(total - paid).toLocaleString('en-IN')}`, '#92400E']].map(([label, val, color]) => (
+            <div key={label} style={{ flex: 1, padding: '10px 14px', border: '1px solid #E2E2EA', borderRadius: 10, background: '#fff' }}>
+              <div style={{ fontSize: 12, color: '#54545C' }}>{label}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color }}>{val}</div>
+            </div>
+          ))}
+        </div>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {['Invoice', 'Service', 'Date', 'Amount', 'Mode', 'Status'].map((h) => (
+                <TableCell key={h} component="th" style={{ fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#54545C', background: '#F8FAFC' }}>
+                  {h}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {BILLING.map((b) => (
+              <TableRow key={b.id}>
+                <TableCell style={{ fontSize: 12, color: '#54545C', fontFamily: 'monospace' }}>{b.id}</TableCell>
+                <TableCell style={{ fontSize: 14, color: '#171725', maxWidth: 220 }}>{b.service}</TableCell>
+                <TableCell style={{ fontSize: 12, color: '#54545C', whiteSpace: 'nowrap' }}>{b.date}</TableCell>
+                <TableCell style={{ fontSize: 14, fontWeight: 600, color: '#171725', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>₹{b.amount.toLocaleString('en-IN')}</TableCell>
+                <TableCell style={{ fontSize: 13, color: '#54545C' }}>{b.mode}</TableCell>
+                <TableCell>
+                  <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 99, fontSize: 12, fontWeight: 600, ...BILL_STATUS[b.status] }}>{b.status}</span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  },
+};
