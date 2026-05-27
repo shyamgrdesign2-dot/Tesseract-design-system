@@ -118,7 +118,7 @@ export const SymptomSelector = {
             />
           ))}
         </div>
-        <div style={{ marginTop: 12, fontSize: 12, color: '#717179' }}>
+        <div style={{ marginTop: 12, fontSize: 12, color: '#54545C' }}>
           {selected.size === 0 ? 'No symptoms selected' : `${selected.size} selected: ${[...selected].join(', ')}`}
         </div>
       </div>
@@ -139,9 +139,9 @@ export const ActiveFilters = {
     const remove = (id) => setFilters((f) => f.filter((x) => x.id !== id));
     return (
       <div style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#A2A2A8', marginBottom: 10 }}>Active filters</div>
+        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#54545C', marginBottom: 10 }}>Active filters</div>
         {filters.length === 0 ? (
-          <span style={{ fontSize: 13, color: '#A2A2A8' }}>No active filters</span>
+          <span style={{ fontSize: 13, color: '#54545C' }}>No active filters</span>
         ) : (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             {filters.map((f) => (
@@ -149,7 +149,7 @@ export const ActiveFilters = {
             ))}
             <button
               onClick={() => setFilters([])}
-              style={{ fontSize: 12, color: '#717179', background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', fontFamily: 'Inter, sans-serif', textDecoration: 'underline' }}
+              style={{ fontSize: 12, color: '#54545C', background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', fontFamily: 'Inter, sans-serif', textDecoration: 'underline' }}
             >
               Clear all
             </button>

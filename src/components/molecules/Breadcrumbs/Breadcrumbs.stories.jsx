@@ -114,7 +114,7 @@ export const AllVariants = {
         { label: 'Arrow (→)', sep: <span aria-hidden>→</span> },
       ].map(({ label, sep }) => (
         <div key={label}>
-          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#A2A2A8', display: 'block', marginBottom: 6 }}>{label}</span>
+          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#54545C', display: 'block', marginBottom: 6 }}>{label}</span>
           <Breadcrumbs {...(sep ? { separator: sep } : {})}>
             <BreadcrumbItem>Home</BreadcrumbItem>
             <BreadcrumbItem>Patients</BreadcrumbItem>

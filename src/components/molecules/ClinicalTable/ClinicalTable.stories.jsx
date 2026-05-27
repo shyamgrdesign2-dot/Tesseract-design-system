@@ -124,8 +124,8 @@ const LAB_DATA = [
 ];
 
 const statusChip = (status) => {
-  const map = { critical: ['#E11D48', '#FFE4E6'], high: ['#D97706', '#FEF3C7'], normal: ['#16A34A', '#DCFCE7'] };
-  const [color, bg] = map[status] || ['#717179', '#F1F5F9'];
+  const map = { critical: ['#9F1239', '#FFE4E6'], high: ['#92400E', '#FEF3C7'], normal: ['#15803D', '#DCFCE7'] };
+  const [color, bg] = map[status] || ['#54545C', '#F1F5F9'];
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 99, fontSize: 11, fontWeight: 600, background: bg, color, fontFamily: 'Inter, sans-serif' }}>
       {status === 'critical' ? '⚠ Critical' : status === 'high' ? '↑ High' : '✓ Normal'}
@@ -135,11 +135,11 @@ const statusChip = (status) => {
 
 const LAB_COLUMNS = [
   { id: 'test', header: 'Test', accessor: (r) => r.test, minWidth: '160px', sortable: true, sortValue: (r) => r.test },
-  { id: 'result', header: 'Result', align: 'right', accessor: (r) => <span style={{ fontWeight: 600, color: r.status === 'critical' ? '#E11D48' : r.status === 'high' ? '#D97706' : '#171725', fontFamily: 'Inter, sans-serif' }}>{r.result}</span>, width: '80px' },
-  { id: 'unit', header: 'Unit', accessor: (r) => <span style={{ fontSize: 12, color: '#717179', fontFamily: 'Inter, sans-serif' }}>{r.unit}</span>, width: '80px' },
-  { id: 'ref', header: 'Reference', accessor: (r) => <span style={{ fontSize: 12, color: '#A2A2A8', fontFamily: 'Inter, sans-serif' }}>{r.ref}</span>, minWidth: '120px' },
+  { id: 'result', header: 'Result', align: 'right', accessor: (r) => <span style={{ fontWeight: 600, color: r.status === 'critical' ? '#9F1239' : r.status === 'high' ? '#92400E' : '#171725', fontFamily: 'Inter, sans-serif' }}>{r.result}</span>, width: '80px' },
+  { id: 'unit', header: 'Unit', accessor: (r) => <span style={{ fontSize: 12, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>{r.unit}</span>, width: '80px' },
+  { id: 'ref', header: 'Reference', accessor: (r) => <span style={{ fontSize: 12, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>{r.ref}</span>, minWidth: '120px' },
   { id: 'status', header: 'Status', accessor: (r) => statusChip(r.status), width: '110px' },
-  { id: 'date', header: 'Date', accessor: (r) => <span style={{ fontSize: 12, color: '#717179', fontFamily: 'Inter, sans-serif' }}>{r.date}</span>, minWidth: '120px', sortable: true, sortValue: (r) => r.date },
+  { id: 'date', header: 'Date', accessor: (r) => <span style={{ fontSize: 12, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>{r.date}</span>, minWidth: '120px', sortable: true, sortValue: (r) => r.date },
 ];
 
 /** Lab results with colour-coded status chips and sortable columns. */
@@ -163,8 +163,8 @@ const RX_DATA = [
 ];
 
 const rxStatusChip = (status) => {
-  const map = { Active: ['#16A34A', '#DCFCE7'], 'Refill due': ['#D97706', '#FEF3C7'], Discontinued: ['#717179', '#F1F5F9'] };
-  const [color, bg] = map[status] || ['#717179', '#F1F5F9'];
+  const map = { Active: ['#15803D', '#DCFCE7'], 'Refill due': ['#92400E', '#FEF3C7'], Discontinued: ['#54545C', '#F1F5F9'] };
+  const [color, bg] = map[status] || ['#54545C', '#F1F5F9'];
   return <span style={{ display: 'inline-flex', padding: '3px 8px', borderRadius: 99, fontSize: 11, fontWeight: 600, background: bg, color, fontFamily: 'Inter, sans-serif' }}>{status}</span>;
 };
 

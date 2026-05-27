@@ -80,10 +80,10 @@ export const PatientListPagination = {
     return (
       <div style={{ fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#FAFAFA', border: '1px solid #E2E2EA', borderRadius: 10 }}>
-          <span style={{ fontSize: 13, color: '#717179' }}>
+          <span style={{ fontSize: 13, color: '#54545C' }}>
             Showing <strong style={{ color: '#171725' }}>{from}–{to}</strong> of <strong style={{ color: '#171725' }}>{total}</strong> patients
           </span>
-          <span style={{ fontSize: 12, color: '#A2A2A8' }}>Page {page} of {totalPages}</span>
+          <span style={{ fontSize: 12, color: '#54545C' }}>Page {page} of {totalPages}</span>
         </div>
         <Pagination count={totalPages} page={page} siblingCount={1} onChange={setPage} />
       </div>
@@ -102,7 +102,7 @@ export const LabResultsPagination = {
     return (
       <div style={{ fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>Lab Results — Rohan Sharma</div>
-        <div style={{ fontSize: 13, color: '#717179' }}>{total} results across {totalPages} pages</div>
+        <div style={{ fontSize: 13, color: '#54545C' }}>{total} results across {totalPages} pages</div>
         <Pagination count={totalPages} page={page} siblingCount={2} onChange={setPage} />
       </div>
     );
@@ -118,7 +118,7 @@ export const InCardFooter = {
       <div style={{ width: 480, border: '1px solid #E2E2EA', borderRadius: 12, overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
         <div style={{ padding: '14px 16px', borderBottom: '1px solid #F0F0F6' }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>Upcoming appointments</div>
-          <div style={{ fontSize: 12, color: '#717179', marginTop: 2 }}>Next 3 months</div>
+          <div style={{ fontSize: 12, color: '#54545C', marginTop: 2 }}>Next 3 months</div>
         </div>
         <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[
@@ -128,7 +128,7 @@ export const InCardFooter = {
           ].map((a) => (
             <div key={a.date} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#454551', padding: '6px 0', borderBottom: '1px solid #F7F7FB' }}>
               <span>{a.date} · {a.time}</span>
-              <span style={{ color: '#717179' }}>{a.doctor}</span>
+              <span style={{ color: '#54545C' }}>{a.doctor}</span>
             </div>
           ))}
         </div>

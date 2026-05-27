@@ -172,8 +172,8 @@ export const BookAppointmentDialog = {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Patient Name</label>
-            <select style={selectStyle} defaultValue="">
+            <label htmlFor="book-patient" style={labelStyle}>Patient Name</label>
+            <select id="book-patient" style={selectStyle} defaultValue="">
               <option value="" disabled>Select patient</option>
               <option>Priya Sharma</option>
               <option>Rohan Mehta</option>
@@ -182,8 +182,8 @@ export const BookAppointmentDialog = {
             </select>
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Doctor Name</label>
-            <select style={selectStyle} defaultValue="">
+            <label htmlFor="book-doctor" style={labelStyle}>Doctor Name</label>
+            <select id="book-doctor" style={selectStyle} defaultValue="">
               <option value="" disabled>Select doctor</option>
               <option>Dr. Arun Kapoor — Cardiologist</option>
               <option>Dr. Neha Gupta — Diabetologist</option>
@@ -191,16 +191,17 @@ export const BookAppointmentDialog = {
             </select>
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Appointment Date</label>
+            <label htmlFor="book-date" style={labelStyle}>Appointment Date</label>
             <input
+              id="book-date"
               type="date"
               style={selectStyle}
               defaultValue="2026-06-05"
             />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Time Slot</label>
-            <select style={selectStyle} defaultValue="">
+            <label htmlFor="book-slot" style={labelStyle}>Time Slot</label>
+            <select id="book-slot" style={selectStyle} defaultValue="">
               <option value="" disabled>Select time slot</option>
               <option value="morning">Morning — 9:00 AM to 12:00 PM</option>
               <option value="afternoon">Afternoon — 1:00 PM to 5:00 PM</option>
@@ -208,8 +209,9 @@ export const BookAppointmentDialog = {
             </select>
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Notes (optional)</label>
+            <label htmlFor="book-notes" style={labelStyle}>Notes (optional)</label>
             <textarea
+              id="book-notes"
               style={textareaStyle}
               placeholder="Add any relevant clinical notes or patient concerns…"
             />
@@ -275,7 +277,7 @@ export const ViewLabResultsDialog = {
       { test: 'Haemoglobin', value: '13.1 g/dL', ref: '12–16 g/dL', status: 'normal' },
       { test: 'Platelets', value: '2.4 lakh/μL', ref: '1.5–4.0 lakh/μL', status: 'normal' },
     ];
-    const statusColor = { normal: '#16A34A', warning: '#D97706', error: '#E11D48' };
+    const statusColor = { normal: '#15803D', warning: '#92400E', error: '#9F1239' };
     const statusBg = { normal: '#F0FDF4', warning: '#FFFBEB', error: '#FFF1F2' };
     const statusDot = { normal: '✅', warning: '🟡', error: '🔴' };
     return (
@@ -306,11 +308,11 @@ export const ViewLabResultsDialog = {
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#717179', fontFamily: 'Inter, sans-serif' }}>{r.test}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>{r.test}</span>
                 <span style={{ fontSize: 14 }}>{statusDot[r.status]}</span>
               </div>
               <span style={{ fontSize: 18, fontWeight: 700, color: statusColor[r.status], fontFamily: 'Inter, sans-serif' }}>{r.value}</span>
-              <span style={{ fontSize: 11, color: '#717179', fontFamily: 'Inter, sans-serif' }}>Ref: {r.ref}</span>
+              <span style={{ fontSize: 11, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>Ref: {r.ref}</span>
             </div>
           ))}
         </div>
@@ -348,13 +350,13 @@ export const ScheduleFollowUpDialog = {
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#4B4AD5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14, fontFamily: 'Inter, sans-serif', flexShrink: 0 }}>PS</div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#171725', fontFamily: 'Inter, sans-serif' }}>Priya Sharma</p>
-              <p style={{ margin: 0, fontSize: 12, color: '#717179', fontFamily: 'Inter, sans-serif' }}>Last visit: 15 Apr 2026 · Diabetes follow-up</p>
+              <p style={{ margin: 0, fontSize: 12, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>Last visit: 15 Apr 2026 · Diabetes follow-up</p>
             </div>
           </div>
 
           {/* Follow-up type */}
-          <div style={fieldStyle}>
-            <label style={labelStyle}>Follow-up Type</label>
+          <fieldset style={{ border: 'none', padding: 0, margin: '0 0 16px' }}>
+            <legend style={labelStyle}>Follow-up Type</legend>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
               {visitTypes.map((t) => (
                 <label key={t.value} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#171725' }}>
@@ -370,18 +372,19 @@ export const ScheduleFollowUpDialog = {
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           {/* Date picker */}
           <div style={fieldStyle}>
-            <label style={labelStyle}>Date</label>
-            <input type="date" style={selectStyle} defaultValue="2026-06-15" />
+            <label htmlFor="followup-date" style={labelStyle}>Date</label>
+            <input id="followup-date" type="date" style={selectStyle} defaultValue="2026-06-15" />
           </div>
 
           {/* Reminder toggle */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0' }}>
-            <span style={{ fontSize: 14, color: '#171725', fontFamily: 'Inter, sans-serif' }}>Send reminder to patient</span>
+            <label htmlFor="followup-reminder" style={{ fontSize: 14, color: '#171725', fontFamily: 'Inter, sans-serif' }}>Send reminder to patient</label>
             <button
+              id="followup-reminder"
               type="button"
               role="switch"
               aria-checked={reminder}

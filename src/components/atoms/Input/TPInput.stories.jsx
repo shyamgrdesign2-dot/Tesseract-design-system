@@ -26,7 +26,7 @@ const Stack = ({ children, width = 320 }) => (
 
 const Group = ({ label, children, width = 340 }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#A2A2A8' }}>
+    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#54545C' }}>
       {label}
     </span>
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width }}>{children}</div>
@@ -51,7 +51,7 @@ function EyeToggle() {
 // Country-code prefix dropdown (addon)
 function CountryAddon() {
   return (
-    <select style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: 13, color: '#454551', cursor: 'pointer', paddingRight: 4 }}>
+    <select aria-label="Country code" style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: 13, color: '#454551', cursor: 'pointer', paddingRight: 4 }}>
       <option>🇮🇳 +91</option>
       <option>🇺🇸 +1</option>
       <option>🇬🇧 +44</option>
@@ -193,7 +193,7 @@ export const LeftAddon = {
       />
       <TPInput
         label="Prefix text addon"
-        leftAddon={<span style={{ fontSize: 13, color: '#717179', whiteSpace: 'nowrap' }}>https://</span>}
+        leftAddon={<span style={{ fontSize: 13, color: '#54545C', whiteSpace: 'nowrap' }}>https://</span>}
         placeholder="yoursite.com"
         fullWidth
       />
@@ -233,8 +233,8 @@ export const SelectInput = {
   render: () => (
     <Stack width={340}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <label style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Blood group</label>
-        <select style={{
+        <label htmlFor="select-blood-group" style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Blood group</label>
+        <select id="select-blood-group" style={{
           height: 42, padding: '0 12px', fontSize: 14, fontFamily: 'Inter,sans-serif',
           border: '1.5px solid #E2E2EA', borderRadius: 10, background: '#fff',
           color: '#171725', outline: 'none', width: '100%', cursor: 'pointer',
@@ -251,8 +251,8 @@ export const SelectInput = {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <label style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Specialty (sm)</label>
-        <select style={{
+        <label htmlFor="select-specialty" style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Specialty (sm)</label>
+        <select id="select-specialty" style={{
           height: 36, padding: '0 10px', fontSize: 13, fontFamily: 'Inter,sans-serif',
           border: '1.5px solid #E2E2EA', borderRadius: 8, background: '#fff',
           color: '#171725', outline: 'none', width: '100%', cursor: 'pointer',
@@ -269,8 +269,8 @@ export const SelectInput = {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <label style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Department (lg)</label>
-        <select style={{
+        <label htmlFor="select-department" style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>Department (lg)</label>
+        <select id="select-department" style={{
           height: 48, padding: '0 16px', fontSize: 14, fontFamily: 'Inter,sans-serif',
           border: '1.5px solid #E2E2EA', borderRadius: 12, background: '#fff',
           color: '#171725', outline: 'none', width: '100%', cursor: 'pointer',
@@ -336,7 +336,7 @@ export const Responsive = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {[360, 768, 1024].map((w) => (
         <div key={w}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: '#A2A2A8', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'block', marginBottom: 8 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: '#54545C', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'block', marginBottom: 8 }}>
             {w}px viewport
           </span>
           <div style={{ width: w, maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>

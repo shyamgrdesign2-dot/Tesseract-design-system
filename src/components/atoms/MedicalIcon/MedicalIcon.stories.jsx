@@ -126,8 +126,8 @@ export const DepartmentNav = {
               cursor: 'pointer', minWidth: 80,
             }}
           >
-            <MedicalIcon name={name} size={28} color={active === name ? '#4B4AD5' : '#717179'} variant="line" />
-            <span style={{ fontSize: 11, fontWeight: 600, color: active === name ? '#4B4AD5' : '#717179' }}>{label}</span>
+            <MedicalIcon name={name} size={28} color={active === name ? '#4B4AD5' : '#54545C'} variant="line" />
+            <span style={{ fontSize: 11, fontWeight: 600, color: active === name ? '#4B4AD5' : '#54545C' }}>{label}</span>
           </button>
         ))}
       </div>
@@ -154,7 +154,7 @@ export const ClinicalStatCards = {
             </div>
             <div>
               <div style={{ fontSize: 22, fontWeight: 700, color: '#171725' }}>{value}</div>
-              <div style={{ fontSize: 11, color: '#717179', marginTop: 2 }}>{label}</div>
+              <div style={{ fontSize: 11, color: '#54545C', marginTop: 2 }}>{label}</div>
             </div>
           </div>
         ))}
@@ -172,6 +172,7 @@ export const SearchableGallery = {
     return (
       <div style={{ fontFamily: 'Inter, sans-serif' }}>
         <input
+          aria-label="Search medical icons"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search icons…"
@@ -181,15 +182,15 @@ export const SearchableGallery = {
           {filtered.slice(0, 48).map((name) => (
             <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, padding: '10px 4px', border: '1px solid #F0F0F6', borderRadius: 8, cursor: 'default' }}>
               <MedicalIcon name={name} size={28} variant="line" />
-              <span style={{ fontSize: 9, color: '#A2A2A8', textAlign: 'center', wordBreak: 'break-all' }}>{name}</span>
+              <span style={{ fontSize: 9, color: '#54545C', textAlign: 'center', wordBreak: 'break-all' }}>{name}</span>
             </div>
           ))}
         </div>
         {filtered.length > 48 && (
-          <p style={{ fontSize: 12, color: '#717179', marginTop: 12 }}>Showing 48 of {filtered.length} icons matching "{query}".</p>
+          <p style={{ fontSize: 12, color: '#54545C', marginTop: 12 }}>Showing 48 of {filtered.length} icons matching "{query}".</p>
         )}
         {filtered.length === 0 && (
-          <p style={{ fontSize: 13, color: '#A2A2A8' }}>No icons match "{query}".</p>
+          <p style={{ fontSize: 13, color: '#54545C' }}>No icons match "{query}".</p>
         )}
       </div>
     );

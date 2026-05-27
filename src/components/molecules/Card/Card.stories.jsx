@@ -21,7 +21,7 @@ export const Playground = {
   render: (args) => (
     <Card {...args} style={{ maxWidth: 360 }}>
       <p style={{ margin: 0, fontWeight: 600 }}>Appointment summary</p>
-      <p style={{ margin: '6px 0 0', color: 'var(--tp-slate-500, #717179)' }}>
+      <p style={{ margin: '6px 0 0', color: 'var(--tp-slate-500, #54545C)' }}>
         Dr. Mehta · 10:30 AM · Cardiology
       </p>
     </Card>
@@ -58,7 +58,7 @@ export const Composed = {
       </CardHeader>
       <CardContent>
         <p style={{ margin: 0 }}>Anita Sharma, 42</p>
-        <p style={{ margin: '6px 0 0', color: 'var(--tp-slate-500, #717179)' }}>
+        <p style={{ margin: '6px 0 0', color: 'var(--tp-slate-500, #54545C)' }}>
           Last visit: 12 May 2026
         </p>
       </CardContent>
@@ -100,7 +100,7 @@ export const PatientCard = {
             <p style={{ margin: 0, fontWeight: 700, fontSize: 15, color: 'var(--tp-slate-900, #18181B)' }}>
               Rohan Sharma
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--tp-slate-500, #717179)' }}>
+            <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--tp-slate-500, #54545C)' }}>
               Age 38 · Blood Group B+
             </p>
           </div>
@@ -176,7 +176,7 @@ export const StatsGrid = {
                     ? '#15803D'
                     : s.up === false
                     ? '#B91C1C'
-                    : 'var(--tp-slate-500, #717179)',
+                    : 'var(--tp-slate-500, #54545C)',
                 fontWeight: 500,
               }}
             >
@@ -219,7 +219,7 @@ export const AppointmentCard = {
             <p style={{ margin: 0, fontWeight: 700, fontSize: 14, color: 'var(--tp-slate-900, #18181B)' }}>
               Dr. Ananya Mehta
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+            <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
               Cardiologist
             </p>
           </div>
@@ -277,7 +277,7 @@ export const ActionCard = {
         }}
       >
         {/* Sparkle icon inline SVG */}
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z" />
           <path d="M5 3l.75 2.25L8 6l-2.25.75L5 9l-.75-2.25L2 6l2.25-.75z" />
           <path d="M19 15l.75 2.25L22 18l-2.25.75L19 21l-.75-2.25L16 18l2.25-.75z" />

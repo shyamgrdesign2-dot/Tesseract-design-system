@@ -100,7 +100,7 @@ export const AppointmentsListBanner = {
               style={{
                 padding: '12px 20px', border: 'none', background: 'none', cursor: 'pointer',
                 fontSize: 14, fontWeight: tab === t ? 600 : 400,
-                color: tab === t ? '#4B4AD5' : '#717179',
+                color: tab === t ? '#4B4AD5' : '#54545C',
                 borderBottom: tab === t ? '2px solid #4B4AD5' : '2px solid transparent',
                 fontFamily: 'Inter, sans-serif', textTransform: 'capitalize',
               }}

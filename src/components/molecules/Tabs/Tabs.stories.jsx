@@ -87,7 +87,7 @@ export const Controlled = {
             <Panel>History panel.</Panel>
           </TabsContent>
         </Tabs>
-        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
           Active tab: {value}
         </p>
       </div>
@@ -145,7 +145,7 @@ export const PatientProfile = {
                         fontSize: 11,
                         textTransform: 'uppercase',
                         letterSpacing: '0.06em',
-                        color: 'var(--tp-slate-500, #717179)',
+                        color: 'var(--tp-slate-500, #54545C)',
                         background: 'var(--tp-slate-50, #F8FAFC)',
                         borderBottom: '1px solid var(--tp-slate-200, #E4E4E7)',
                       }}
@@ -191,7 +191,7 @@ export const PatientProfile = {
                   }}
                 >
                   <p style={{ margin: 0, fontWeight: 700, fontSize: 14 }}>{rx.drug}</p>
-                  <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+                  <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
                     {rx.dose} · {rx.freq} · {rx.duration}
                   </p>
                 </div>
@@ -376,7 +376,7 @@ export const WithCountBadges = {
               height: 18,
               borderRadius: 99,
               background: 'var(--tp-slate-200, #E4E4E7)',
-              color: 'var(--tp-slate-500, #717179)',
+              color: 'var(--tp-slate-500, #54545C)',
               fontSize: 10,
               fontWeight: 700,
               padding: '0 5px',

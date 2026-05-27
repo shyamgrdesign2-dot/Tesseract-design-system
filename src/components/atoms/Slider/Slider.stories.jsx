@@ -86,7 +86,7 @@ export const PainScale = {
           <span style={{ fontSize: 22, fontWeight: 700, color: color === 'success' ? '#16A34A' : color === 'warning' ? '#D97706' : '#E11D48' }}>{pain}</span>
         </div>
         <Slider {...args} color={color} min={0} max={10} step={1} value={pain} onChange={(_e, v) => setPain(v)} />
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#A2A2A8' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#54545C' }}>
           <span>No pain</span>
           <span style={{ fontWeight: 600, color: '#454551' }}>{label}</span>
           <span>Worst</span>
@@ -111,7 +111,7 @@ export const DosageAdjust = {
           <span style={{ fontSize: 20, fontWeight: 700, color: isOverSafe ? '#E11D48' : '#171725' }}>{dose} mg</span>
           {isOverSafe && <span style={{ fontSize: 12, color: '#E11D48', fontWeight: 500 }}>⚠ Exceeds recommended max (10 mg)</span>}
         </div>
-        <div style={{ marginTop: 6, fontSize: 12, color: '#717179' }}>Recommended range: 2.5–10 mg/day</div>
+        <div style={{ marginTop: 6, fontSize: 12, color: '#54545C' }}>Recommended range: 2.5–10 mg/day</div>
       </div>
     );
   },
@@ -130,7 +130,7 @@ export const BMIFilter = {
         <Slider {...args} color={color} min={10} max={50} step={0.5} value={bmi} onChange={(_e, v) => setBmi(v)} />
         <div style={{ marginTop: 8, display: 'flex', gap: 12, alignItems: 'center' }}>
           <span style={{ fontSize: 20, fontWeight: 700, color: '#171725' }}>{bmi.toFixed(1)}</span>
-          <span style={{ fontSize: 12, fontWeight: 500, padding: '3px 8px', borderRadius: 6, background: color === 'success' ? '#DCFCE7' : color === 'warning' ? '#FEF3C7' : '#FFE4E6', color: color === 'success' ? '#16A34A' : color === 'warning' ? '#D97706' : '#E11D48' }}>{category}</span>
+          <span style={{ fontSize: 12, fontWeight: 500, padding: '3px 8px', borderRadius: 6, background: color === 'success' ? '#DCFCE7' : color === 'warning' ? '#FEF3C7' : '#FFE4E6', color: color === 'success' ? '#16A34A' : color === 'warning' ? '#92400E' : '#9F1239' }}>{category}</span>
         </div>
       </div>
     );

@@ -88,7 +88,7 @@ export const Controlled = {
             </AccordionItem>
           ))}
         </Accordion>
-        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
           Open item: {value || '(none)'}
         </p>
       </Frame>
@@ -115,7 +115,7 @@ export const PatientMedicalHistory = {
               ].map((med) => (
                 <div key={med.name} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '6px 0', borderBottom: '1px solid #F1F1F5' }}>
                   <span style={{ fontWeight: 600, color: '#171725' }}>{med.name}</span>
-                  <span style={{ color: '#717179' }}>{med.freq} · Since {med.since}</span>
+                  <span style={{ color: '#54545C' }}>{med.freq} · Since {med.since}</span>
                 </div>
               ))}
             </div>

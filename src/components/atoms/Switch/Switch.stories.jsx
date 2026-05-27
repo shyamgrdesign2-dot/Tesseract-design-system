@@ -73,7 +73,7 @@ const SettingsRow = ({ label, description, children }) => (
   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: '1px solid #F0F0F6', fontFamily: 'Inter, sans-serif' }}>
     <div>
       <div style={{ fontSize: 14, fontWeight: 500, color: '#171725' }}>{label}</div>
-      {description && <div style={{ fontSize: 12, color: '#717179', marginTop: 2 }}>{description}</div>}
+      {description && <div style={{ fontSize: 12, color: '#54545C', marginTop: 2 }}>{description}</div>}
     </div>
     {children}
   </div>
@@ -92,7 +92,7 @@ export const NotificationSettings = {
     return (
       <div style={{ width: 420, fontFamily: 'Inter, sans-serif' }}>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#171725', marginBottom: 4 }}>Notification Preferences</div>
-        <div style={{ fontSize: 13, color: '#717179', marginBottom: 16 }}>Control how you receive alerts and reminders.</div>
+        <div style={{ fontSize: 13, color: '#54545C', marginBottom: 16 }}>Control how you receive alerts and reminders.</div>
         <SettingsRow label="SMS reminders" description="Appointment and prescription reminders via SMS">
           <Switch {...args} checked={settings.sms} onCheckedChange={() => toggle('sms')} aria-label="SMS reminders" />
         </SettingsRow>
@@ -151,10 +151,10 @@ export const InlineToggle = {
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 24, padding: '16px 20px', border: '1px solid #E2E2EA', borderRadius: 10, background: '#fff', fontFamily: 'Inter, sans-serif' }}>
         <div>
           <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>Dr. Ananya Mehta</div>
-          <div style={{ fontSize: 12, color: '#717179' }}>Cardiologist · Apollo Clinic</div>
+          <div style={{ fontSize: 12, color: '#54545C' }}>Cardiologist · Apollo Clinic</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 13, color: active ? '#16A34A' : '#717179', fontWeight: 500 }}>
+          <span style={{ fontSize: 13, color: active ? '#15803D' : '#54545C', fontWeight: 500 }}>
             {active ? 'Active' : 'Inactive'}
           </span>
           <Switch {...args} checked={active} onCheckedChange={setActive} aria-label="Doctor active status" />

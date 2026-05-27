@@ -36,7 +36,7 @@ const FLASH_MESSAGES = {
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 const Label = ({ children }) => (
-  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#A2A2A8', display: 'block', marginBottom: 6 }}>
+  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#54545C', display: 'block', marginBottom: 6 }}>
     {children}
   </span>
 );
@@ -228,7 +228,7 @@ export const URLPattern = {
       <h3 style={{ margin: '0 0 16px', fontSize: 16, fontWeight: 600, color: '#171725' }}>
         How FlashSnackbar works
       </h3>
-      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#717179', lineHeight: 1.6 }}>
+      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#54545C', lineHeight: 1.6 }}>
         Any page can trigger a flash toast by navigating with a <code style={{ background: '#F1F1F5', borderRadius: 4, padding: '1px 5px', fontSize: 13 }}>?flash=key</code> query param.
         FlashSnackbar reads the key, maps it to a message, shows the Snackbar, then strips the param from the URL.
       </p>
@@ -236,12 +236,12 @@ export const URLPattern = {
         {Object.entries(FLASH_MESSAGES).map(([key, msg]) => (
           <div key={key}>
             <span style={{ color: '#4B4AD5', fontWeight: 600 }}>?flash={key}</span>
-            <span style={{ color: '#A2A2A8' }}> → </span>
+            <span style={{ color: '#54545C' }}> → </span>
             <span style={{ color: '#10B981' }}>"{msg}"</span>
           </div>
         ))}
       </div>
-      <p style={{ margin: '12px 0 0', fontSize: 13, color: '#A2A2A8', lineHeight: 1.5 }}>
+      <p style={{ margin: '12px 0 0', fontSize: 13, color: '#54545C', lineHeight: 1.5 }}>
         Example: <code style={{ background: '#F1F1F5', borderRadius: 4, padding: '1px 5px' }}>router.push('/appointments?flash=rx-saved')</code>
       </p>
     </div>

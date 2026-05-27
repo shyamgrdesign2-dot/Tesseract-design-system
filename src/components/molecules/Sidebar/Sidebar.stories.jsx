@@ -144,17 +144,17 @@ export const PrescriptionPreview = {
         >
           <div style={{ padding: 20, display: 'grid', gap: 16, fontFamily: 'Inter, sans-serif' }}>
             <div style={{ padding: '12px 14px', background: '#F7F7FB', borderRadius: 10, border: '1px solid #E2E2EA' }}>
-              <div style={{ fontSize: 12, color: '#717179', marginBottom: 2 }}>Patient</div>
+              <div style={{ fontSize: 12, color: '#54545C', marginBottom: 2 }}>Patient</div>
               <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>Rohan Sharma · MRN-20240812-001</div>
-              <div style={{ fontSize: 12, color: '#717179', marginTop: 2 }}>Dr. Ananya Mehta · Apollo Clinic</div>
+              <div style={{ fontSize: 12, color: '#54545C', marginTop: 2 }}>Dr. Ananya Mehta · Apollo Clinic</div>
             </div>
             {meds.map((m) => (
               <div key={m.name} style={{ padding: '14px 16px', border: '1px solid #E2E2EA', borderRadius: 10 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>{m.name} {m.dose}</div>
-                <div style={{ fontSize: 12, color: '#717179', marginTop: 4 }}>{m.freq} · {m.duration}</div>
+                <div style={{ fontSize: 12, color: '#54545C', marginTop: 4 }}>{m.freq} · {m.duration}</div>
               </div>
             ))}
-            <div style={{ fontSize: 12, color: '#717179', borderTop: '1px solid #F0F0F6', paddingTop: 14 }}>
+            <div style={{ fontSize: 12, color: '#54545C', borderTop: '1px solid #F0F0F6', paddingTop: 14 }}>
               Prescribed by: Dr. Ananya Mehta (Reg. MCI-KA-2012-0042)<br />
               Valid until: 14 Jun 2026
             </div>
@@ -172,14 +172,17 @@ export const PatientFilterPanel = {
     const [open, setOpen] = React.useState(true);
     const [filters, setFilters] = React.useState({ dept: 'all', status: 'active', gender: 'all' });
     const set = (k, v) => setFilters((f) => ({ ...f, [k]: v }));
-    const SelectRow = ({ label, field, options }) => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <span style={{ fontSize: 12, fontWeight: 500, color: '#717179' }}>{label}</span>
-        <select value={filters[field]} onChange={(e) => set(field, e.target.value)} style={{ padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725', background: '#fff' }}>
-          {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-        </select>
-      </div>
-    );
+    const SelectRow = ({ label, field, options }) => {
+      const id = `filter-${field}`;
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <label htmlFor={id} style={{ fontSize: 12, fontWeight: 500, color: '#54545C' }}>{label}</label>
+          <select id={id} value={filters[field]} onChange={(e) => set(field, e.target.value)} style={{ padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725', background: '#fff' }}>
+            {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        </div>
+      );
+    };
     return (
       <Stage>
         <div style={{ padding: 24 }}>

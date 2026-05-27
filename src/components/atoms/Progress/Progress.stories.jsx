@@ -98,14 +98,14 @@ export const UploadProgress = {
       <div style={{ width: 340, fontFamily: 'Inter, sans-serif' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
           <span style={{ fontSize: 13, fontWeight: 500, color: '#454551' }}>scan-029.dcm</span>
-          <span style={{ fontSize: 12, color: '#717179' }}>{progress}%</span>
+          <span style={{ fontSize: 12, color: '#54545C' }}>{progress}%</span>
         </div>
         <Progress {...args} value={Math.min(progress, 100)} color={progress >= 100 ? 'success' : 'primary'} height={6} />
         <div style={{ marginTop: 12 }}>
           <button
             onClick={start}
             disabled={uploading}
-            style={{ padding: '7px 18px', borderRadius: 6, border: 'none', background: uploading ? '#E2E2EA' : '#4B4AD5', color: uploading ? '#717179' : '#fff', fontWeight: 600, fontSize: 13, cursor: uploading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif' }}
+            style={{ padding: '7px 18px', borderRadius: 6, border: 'none', background: uploading ? '#E2E2EA' : '#4B4AD5', color: uploading ? '#54545C' : '#fff', fontWeight: 600, fontSize: 13, cursor: uploading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif' }}
           >
             {progress >= 100 ? 'Upload again' : uploading ? 'Uploading…' : 'Start upload'}
           </button>
@@ -138,7 +138,7 @@ export const ProfileCompletion = {
             <div key={f.label}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                 <span style={{ fontSize: 12, color: '#454551' }}>{f.label}</span>
-                <span style={{ fontSize: 12, fontWeight: 600, color: f.value === 100 ? '#16A34A' : f.value >= 50 ? '#D97706' : '#E11D48' }}>{f.value}%</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: f.value === 100 ? '#15803D' : f.value >= 50 ? '#92400E' : '#9F1239' }}>{f.value}%</span>
               </div>
               <Progress {...args} value={f.value} color={f.color} height={4} />
             </div>

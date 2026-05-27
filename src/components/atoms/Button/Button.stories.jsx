@@ -33,7 +33,7 @@ const Row = ({ children, gap = 12 }) => (
 
 const Section = ({ label, children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #A2A2A8)' }}>
+    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #54545C)' }}>
       {label}
     </span>
     {children}
@@ -283,14 +283,14 @@ export const FullMatrix = {
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, marginBottom: 8 }}>
         <div />
         {VARIANTS.map((v) => (
-          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #A2A2A8)', textAlign: 'center' }}>
+          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #54545C)', textAlign: 'center' }}>
             {v}
           </span>
         ))}
       </div>
       {THEMES.map((theme) => (
         <div key={theme} style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-600, #717179)' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-600, #54545C)' }}>
             {theme.charAt(0).toUpperCase() + theme.slice(1)}
           </span>
           {VARIANTS.map((variant) => (
@@ -305,7 +305,7 @@ export const FullMatrix = {
 
       {/* Disabled row */}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginTop: 12, marginBottom: 8 }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #A2A2A8)' }}>Disabled</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Disabled</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} disabled>
@@ -317,7 +317,7 @@ export const FullMatrix = {
 
       {/* Loading row */}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center' }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #A2A2A8)' }}>Loading</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Loading</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} loading>
@@ -434,7 +434,7 @@ export const UseCases = {
 // helper for the UseCases story (X icon inline since not imported above)
 function X({ size = 16, strokeWidth = 2 }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"
       strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
       width={size} height={size} aria-hidden>
       <path d="M18 6 6 18M6 6l12 12" />

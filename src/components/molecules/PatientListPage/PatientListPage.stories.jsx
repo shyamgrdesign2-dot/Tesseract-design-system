@@ -26,14 +26,14 @@ const FILTERED_PATIENTS = PATIENTS.filter((p) => p.dept === 'Cardiology' || p.de
 const STATUS_STYLES = {
   Active: { color: '#15803D', background: '#DCFCE7' },
   'Follow-up': { color: '#92400E', background: '#FEF9C3' },
-  Discharged: { color: '#717179', background: '#F3F4F6' },
+  Discharged: { color: '#54545C', background: '#F3F4F6' },
   Critical: { color: '#B91C1C', background: '#FEE2E2' },
 };
 
 // ─── Shared sub-components ──────────────────────────────────────────────────
 
 const StatusChip = ({ status }) => {
-  const style = STATUS_STYLES[status] || { color: '#717179', background: '#F3F4F6' };
+  const style = STATUS_STYLES[status] || { color: '#54545C', background: '#F3F4F6' };
   return (
     <span
       style={{
@@ -77,7 +77,7 @@ const TH = ({ children, style }) => (
       textAlign: 'left',
       fontSize: 12,
       fontWeight: 600,
-      color: '#717179',
+      color: '#54545C',
       background: '#F8F8FB',
       borderBottom: '1px solid #E2E2EA',
       whiteSpace: 'nowrap',
@@ -110,10 +110,10 @@ const PatientRow = ({ patient }) => (
         <span style={{ fontWeight: 500 }}>{patient.name}</span>
       </div>
     </TD>
-    <TD style={{ color: '#717179', fontFamily: 'monospace', fontSize: 13 }}>{patient.id}</TD>
+    <TD style={{ color: '#54545C', fontFamily: 'monospace', fontSize: 13 }}>{patient.id}</TD>
     <TD>{patient.age}y / {patient.gender}</TD>
     <TD>{patient.dept}</TD>
-    <TD style={{ color: '#717179' }}>{patient.lastVisit}</TD>
+    <TD style={{ color: '#54545C' }}>{patient.lastVisit}</TD>
     <TD><StatusChip status={patient.status} /></TD>
   </tr>
 );
@@ -170,11 +170,12 @@ const PageHeader = ({ searchValue, onSearch }) => (
         background: '#fff',
       }}
     >
-      <Search size={15} color="#717179" />
+      <Search size={15} color="#54545C" />
       <input
         value={searchValue}
         onChange={onSearch}
         placeholder="Search patients…"
+        aria-label="Search patients"
         style={{
           border: 'none',
           outline: 'none',
@@ -261,7 +262,7 @@ const TabBar = ({ active, onSelect }) => (
             border: 'none',
             borderBottom: isActive ? '2px solid #4B4AD5' : '2px solid transparent',
             background: 'transparent',
-            color: isActive ? '#4B4AD5' : '#717179',
+            color: isActive ? '#4B4AD5' : '#54545C',
             fontWeight: isActive ? 600 : 500,
             fontSize: 14,
             cursor: 'pointer',
@@ -291,7 +292,7 @@ const PaginationRow = ({ total, page, perPage }) => {
         background: '#fff',
       }}
     >
-      <span style={{ fontSize: 13, color: '#717179', fontFamily: 'Inter, sans-serif' }}>
+      <span style={{ fontSize: 13, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>
         Showing {from}–{to} of {total} patients
       </span>
       <div style={{ display: 'flex', gap: 8 }}>
@@ -382,7 +383,7 @@ export const WithFiltersOpen = {
         >
           {/* Status filter */}
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {['All', 'Active', 'Follow-up', 'Discharged', 'Critical'].map((s) => (
                 <label key={s} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#171725', cursor: 'pointer' }}>
@@ -402,25 +403,26 @@ export const WithFiltersOpen = {
 
           {/* Date range */}
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Date Range</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Date Range</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div>
-                <div style={{ fontSize: 12, color: '#717179', marginBottom: 4 }}>From</div>
-                <input type="date" style={{ border: '1px solid #E2E2EA', borderRadius: 6, padding: '6px 10px', fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725' }} />
+                <div style={{ fontSize: 12, color: '#54545C', marginBottom: 4 }}>From</div>
+                <input type="date" aria-label="From date" style={{ border: '1px solid #E2E2EA', borderRadius: 6, padding: '6px 10px', fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725' }} />
               </div>
               <div>
-                <div style={{ fontSize: 12, color: '#717179', marginBottom: 4 }}>To</div>
-                <input type="date" style={{ border: '1px solid #E2E2EA', borderRadius: 6, padding: '6px 10px', fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725' }} />
+                <div style={{ fontSize: 12, color: '#54545C', marginBottom: 4 }}>To</div>
+                <input type="date" aria-label="To date" style={{ border: '1px solid #E2E2EA', borderRadius: 6, padding: '6px 10px', fontSize: 13, fontFamily: 'Inter, sans-serif', color: '#171725' }} />
               </div>
             </div>
           </div>
 
           {/* Department */}
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Department</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Department</div>
             <select
               value={filters.dept}
               onChange={(e) => setFilters((f) => ({ ...f, dept: e.target.value }))}
+              aria-label="Filter by department"
               style={{
                 border: '1px solid #E2E2EA',
                 borderRadius: 6,
@@ -446,7 +448,7 @@ export const WithFiltersOpen = {
           <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'column', gap: 8, justifyContent: 'flex-end', alignSelf: 'flex-end' }}>
             <button
               onClick={() => setFilters({ status: 'All', dept: '' })}
-              style={{ height: 34, padding: '0 16px', border: '1px solid #E2E2EA', borderRadius: 6, background: '#fff', color: '#717179', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
+              style={{ height: 34, padding: '0 16px', border: '1px solid #E2E2EA', borderRadius: 6, background: '#fff', color: '#54545C', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
             >
               Clear
             </button>
@@ -503,12 +505,12 @@ export const EmptyFiltered = {
                 justifyContent: 'center',
               }}
             >
-              <Search size={24} color="#717179" />
+              <Search size={24} color="#54545C" />
             </div>
             <div style={{ fontSize: 16, fontWeight: 600, color: '#171725', textAlign: 'center' }}>
               No patients match your filters
             </div>
-            <div style={{ fontSize: 14, color: '#717179', textAlign: 'center' }}>
+            <div style={{ fontSize: 14, color: '#54545C', textAlign: 'center' }}>
               Try adjusting your search criteria or removing some filters.
             </div>
             <span

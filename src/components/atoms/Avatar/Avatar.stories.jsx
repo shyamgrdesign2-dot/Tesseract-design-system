@@ -112,7 +112,7 @@ export const AvatarStack = {
           justifyContent: 'center',
           fontSize: 13,
           fontWeight: 600,
-          color: '#717179',
+          color: '#54545C',
           border: '2px solid #fff',
           fontFamily: 'Inter, sans-serif',
         }}
@@ -140,7 +140,7 @@ export const DoctorTeam = {
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: '#171725' }}>{name}</div>
-            <div style={{ fontSize: 12, color: '#717179' }}>{specialty}</div>
+            <div style={{ fontSize: 12, color: '#54545C' }}>{specialty}</div>
           </div>
         </div>
       ))}
@@ -175,7 +175,7 @@ export const WithOnlineStatus = {
               }}
             />
           </div>
-          <div style={{ fontSize: 12, color: '#717179' }}>{status}</div>
+          <div style={{ fontSize: 12, color: '#54545C' }}>{status}</div>
         </div>
       ))}
     </div>
@@ -185,7 +185,7 @@ export const WithOnlineStatus = {
 const PATIENT_LIST = [
   { name: 'Ramesh Gupta', specialty: 'Cardiology', status: 'Active', statusColor: '#22C55E', statusBg: '#DCFCE7' },
   { name: 'Lakshmi Devi', specialty: 'Neurology', status: 'Follow-up', statusColor: '#F59E0B', statusBg: '#FEF9C3' },
-  { name: 'Ajay Verma', specialty: 'Orthopedics', status: 'Discharged', statusColor: '#717179', statusBg: '#F3F4F6' },
+  { name: 'Ajay Verma', specialty: 'Orthopedics', status: 'Discharged', statusColor: '#54545C', statusBg: '#F3F4F6' },
 ];
 
 export const InList = {
@@ -217,7 +217,7 @@ export const InList = {
           <Avatar name={name} size="md" />
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>{name}</div>
-            <div style={{ fontSize: 12, color: '#717179' }}>{specialty}</div>
+            <div style={{ fontSize: 12, color: '#54545C' }}>{specialty}</div>
           </div>
           <div
             style={{

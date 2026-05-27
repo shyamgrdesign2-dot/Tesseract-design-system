@@ -33,7 +33,7 @@ export default {
 // ─── Design Tokens ────────────────────────────────────────────────────────────
 const T = {
   heading: '#171725',
-  secondary: '#717179',
+  secondary: '#54545C',
   border: '#E2E2EA',
   blue: '#4B4AD5',
   surface: '#F7F7FB',
@@ -508,33 +508,34 @@ function EditPatientForm({ onClose }) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 24px 24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <div style={fieldStyle}>
-            <label style={labelStyle}>First Name</label>
-            <input style={inputStyle} defaultValue="Rohan" />
+            <label htmlFor="edit-first-name" style={labelStyle}>First Name</label>
+            <input id="edit-first-name" style={inputStyle} defaultValue="Rohan" />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Last Name</label>
-            <input style={inputStyle} defaultValue="Sharma" />
+            <label htmlFor="edit-last-name" style={labelStyle}>Last Name</label>
+            <input id="edit-last-name" style={inputStyle} defaultValue="Sharma" />
           </div>
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Mobile</label>
-          <input style={inputStyle} defaultValue="+91 98765 43210" />
+          <label htmlFor="edit-mobile" style={labelStyle}>Mobile</label>
+          <input id="edit-mobile" style={inputStyle} defaultValue="+91 98765 43210" />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Email</label>
-          <input style={inputStyle} type="email" defaultValue="rohan.sharma@email.com" />
+          <label htmlFor="edit-email" style={labelStyle}>Email</label>
+          <input id="edit-email" style={inputStyle} type="email" defaultValue="rohan.sharma@email.com" />
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Blood Group</label>
-          <select style={inputStyle} defaultValue="B+">
+          <label htmlFor="edit-blood-group" style={labelStyle}>Blood Group</label>
+          <select id="edit-blood-group" style={inputStyle} defaultValue="B+">
             {['A+', 'A−', 'B+', 'B−', 'AB+', 'AB−', 'O+', 'O−'].map((bg) => (
               <option key={bg} value={bg}>{bg}</option>
             ))}
           </select>
         </div>
         <div style={fieldStyle}>
-          <label style={labelStyle}>Chief Complaint</label>
+          <label htmlFor="edit-complaint" style={labelStyle}>Chief Complaint</label>
           <textarea
+            id="edit-complaint"
             style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }}
             defaultValue="Chest tightness on exertion, mild breathlessness."
           />

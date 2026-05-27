@@ -335,7 +335,7 @@ export const LoadingState = {
           <thead>
             <tr style={{ background: '#F8FAFC', borderRadius: 12 }}>
               {['Patient', 'MRN', 'Appointment', 'Status', 'Action'].map((h) => (
-                <th key={h} style={{ padding: '12px', textAlign: 'left', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', color: '#717179' }}>
+                <th key={h} style={{ padding: '12px', textAlign: 'left', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', color: '#54545C' }}>
                   {h}
                 </th>
               ))}
@@ -516,7 +516,7 @@ export const WithRowActions = {
                 {['Patient', 'MRN', 'Appointment', 'Status', 'Action'].map((h, i, arr) => (
                   <th key={h} style={{
                     padding: '12px', textAlign: 'left', fontSize: 12,
-                    fontWeight: 600, textTransform: 'uppercase', color: '#717179',
+                    fontWeight: 600, textTransform: 'uppercase', color: '#54545C',
                     borderRadius: i === 0 ? '12px 0 0 12px' : i === arr.length - 1 ? '0 12px 12px 0' : 0,
                     position: i === arr.length - 1 ? 'sticky' : 'static',
                     right: 0, background: '#F8FAFC',

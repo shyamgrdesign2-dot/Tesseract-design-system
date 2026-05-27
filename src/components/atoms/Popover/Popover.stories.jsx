@@ -89,27 +89,27 @@ export const LabValueDetail = {
       { name: 'HbA1c', value: '7.2', unit: '%', status: 'high', ref: '< 5.7' },
       { name: 'Creatinine', value: '0.9', unit: 'mg/dL', status: 'normal', ref: '0.7–1.3' },
     ];
-    const statusStyle = { critical: { color: '#E11D48', bg: '#FFE4E6' }, high: { color: '#D97706', bg: '#FEF3C7' }, normal: { color: '#16A34A', bg: '#DCFCE7' } };
+    const statusStyle = { critical: { color: '#9F1239', bg: '#FFE4E6' }, high: { color: '#92400E', bg: '#FEF3C7' }, normal: { color: '#15803D', bg: '#DCFCE7' } };
     return (
       <div style={{ display: 'flex', gap: 12, fontFamily: 'Inter, sans-serif' }}>
         {results.map((r) => (
           <Popover key={r.name}>
             <PopoverTrigger asChild>
               <button style={{ padding: '8px 14px', borderRadius: 8, border: `1px solid ${statusStyle[r.status].color}20`, background: statusStyle[r.status].bg, cursor: 'pointer', fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
-                <span style={{ fontSize: 11, color: '#717179' }}>{r.name}</span>
+                <span style={{ fontSize: 11, color: '#54545C' }}>{r.name}</span>
                 <span style={{ fontSize: 18, fontWeight: 700, color: statusStyle[r.status].color }}>{r.value}</span>
-                <span style={{ fontSize: 10, color: '#A2A2A8' }}>{r.unit}</span>
+                <span style={{ fontSize: 10, color: '#54545C' }}>{r.unit}</span>
               </button>
             </PopoverTrigger>
             <PopoverContent side="top" sideOffset={8}>
               <div style={{ padding: 4, display: 'grid', gap: 6, minWidth: 180, fontFamily: 'Inter, sans-serif' }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: '#171725' }}>{r.name}</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                  <span style={{ color: '#717179' }}>Result</span>
+                  <span style={{ color: '#54545C' }}>Result</span>
                   <span style={{ fontWeight: 600, color: statusStyle[r.status].color }}>{r.value} {r.unit}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                  <span style={{ color: '#717179' }}>Reference</span>
+                  <span style={{ color: '#54545C' }}>Reference</span>
                   <span style={{ color: '#454551' }}>{r.ref} {r.unit}</span>
                 </div>
                 <div style={{ padding: '4px 8px', borderRadius: 4, background: statusStyle[r.status].bg, fontSize: 11, fontWeight: 600, color: statusStyle[r.status].color, textAlign: 'center', textTransform: 'capitalize' }}>
@@ -144,13 +144,13 @@ export const PatientQuickView = {
                 <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#4B4AD5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>RS</div>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#171725' }}>Rohan Sharma</div>
-                  <div style={{ fontSize: 12, color: '#717179' }}>MRN-20240812-001</div>
+                  <div style={{ fontSize: 12, color: '#54545C' }}>MRN-20240812-001</div>
                 </div>
               </div>
               <div style={{ display: 'grid', gap: 5, fontSize: 12 }}>
                 {[['Age', '38 years'], ['Blood group', 'B+'], ['Last visit', '15 May 2026'], ['Doctor', 'Dr. Ananya Mehta']].map(([k, v]) => (
                   <div key={k} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#717179' }}>{k}</span>
+                    <span style={{ color: '#54545C' }}>{k}</span>
                     <span style={{ color: '#454551', fontWeight: 500 }}>{v}</span>
                   </div>
                 ))}

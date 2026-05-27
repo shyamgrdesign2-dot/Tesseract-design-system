@@ -93,7 +93,7 @@ export const Matrix = {
     <div style={{ display: 'grid', gap: 16 }}>
       {VARIANTS.map((variant) => (
         <div key={variant} style={{ display: 'grid', gap: 8 }}>
-          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
             {variant}
           </strong>
           <Row>
@@ -116,7 +116,7 @@ export const DiagnosisTags = {
   name: '🩺 Diagnosis Tags',
   render: (args) => (
     <div style={{ fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Active diagnoses — Rohan Sharma</div>
+      <div style={{ fontSize: 12, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Active diagnoses — Rohan Sharma</div>
       <Row>
         <Tag {...args} color="error" variant="light">Hypertension (I10)</Tag>
         <Tag {...args} color="amber" variant="light">Type 2 Diabetes (E11)</Tag>
@@ -133,7 +133,7 @@ export const SpecialtyTags = {
   name: '🏥 Specialties',
   render: (args) => (
     <div style={{ fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Dr. Ananya Mehta</div>
+      <div style={{ fontSize: 12, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Dr. Ananya Mehta</div>
       <Row>
         <Tag {...args} color="blue" variant="filled" size="sm">Cardiology</Tag>
         <Tag {...args} color="violet" variant="filled" size="sm">Interventional</Tag>

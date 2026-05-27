@@ -35,15 +35,15 @@ export const Variants = {
   render: () => (
     <div style={{ width: 240, display: 'grid', gap: 16 }}>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>text</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>text</strong>
         <Skeleton variant="text" />
       </div>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>circular</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>circular</strong>
         <Skeleton variant="circular" />
       </div>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>rectangular</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>rectangular</strong>
         <Skeleton variant="rectangular" height={80} />
       </div>
     </div>
@@ -104,7 +104,7 @@ export const PatientTableRows = {
       {/* header */}
       <div style={{ display: 'grid', gridTemplateColumns: '40px 200px 1fr 100px 80px', gap: 16, padding: '10px 16px', background: '#F7F7FB', borderBottom: '1px solid #E2E2EA' }}>
         {['', 'Patient', 'Dept / Doctor', 'Status', ''].map((h, i) => (
-          <div key={i} style={{ fontSize: 11, fontWeight: 600, color: '#A2A2A8', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Inter, sans-serif' }}>{h}</div>
+          <div key={i} style={{ fontSize: 11, fontWeight: 600, color: '#54545C', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Inter, sans-serif' }}>{h}</div>
         ))}
       </div>
       {/* skeleton rows */}

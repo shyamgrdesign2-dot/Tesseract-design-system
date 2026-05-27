@@ -54,7 +54,7 @@ const HeaderRow = () => (
           fontSize: 12,
           textTransform: 'uppercase',
           letterSpacing: '0.06em',
-          color: 'var(--tp-slate-500, #717179)',
+          color: 'var(--tp-slate-500, #54545C)',
           background: 'var(--tp-slate-50, #F8FAFC)',
         }}
       >
@@ -152,7 +152,7 @@ export const WithActions = {
                 fontSize: 12,
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
-                color: 'var(--tp-slate-500, #717179)',
+                color: 'var(--tp-slate-500, #54545C)',
                 background: 'var(--tp-slate-50, #F8FAFC)',
               }}
             >
@@ -175,13 +175,13 @@ export const WithActions = {
               <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                 <button
                   title="View"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--tp-slate-500, #717179)', display: 'flex' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--tp-slate-500, #54545C)', display: 'flex' }}
                 >
                   <Eye size={14} />
                 </button>
                 <button
                   title="Edit"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--tp-slate-500, #717179)', display: 'flex' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--tp-slate-500, #54545C)', display: 'flex' }}
                 >
                   <Pencil size={14} />
                 </button>
@@ -235,7 +235,7 @@ export const WithSortHeaders = {
             fontSize: 12,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
-            color: active ? 'var(--tp-blue-600, #2563EB)' : 'var(--tp-slate-500, #717179)',
+            color: active ? 'var(--tp-blue-600, #2563EB)' : 'var(--tp-slate-500, #54545C)',
             background: 'var(--tp-slate-50, #F8FAFC)',
             cursor: 'pointer',
             userSelect: 'none',
@@ -263,7 +263,7 @@ export const WithSortHeaders = {
               component="th"
               style={{
                 fontWeight: 700, fontSize: 12, textTransform: 'uppercase',
-                letterSpacing: '0.06em', color: 'var(--tp-slate-500, #717179)',
+                letterSpacing: '0.06em', color: 'var(--tp-slate-500, #54545C)',
                 background: 'var(--tp-slate-50, #F8FAFC)',
               }}
             >
@@ -276,7 +276,7 @@ export const WithSortHeaders = {
                 component="th"
                 style={{
                   fontWeight: 700, fontSize: 12, textTransform: 'uppercase',
-                  letterSpacing: '0.06em', color: 'var(--tp-slate-500, #717179)',
+                  letterSpacing: '0.06em', color: 'var(--tp-slate-500, #54545C)',
                   background: 'var(--tp-slate-50, #F8FAFC)',
                 }}
               >
@@ -319,7 +319,7 @@ export const Empty = {
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
               <ClipboardList size={36} style={{ color: 'var(--tp-slate-300, #D4D4D8)' }} />
-              <p style={{ margin: 0, fontWeight: 600, fontSize: 15, color: 'var(--tp-slate-500, #717179)' }}>
+              <p style={{ margin: 0, fontWeight: 600, fontSize: 15, color: 'var(--tp-slate-500, #54545C)' }}>
                 No patients found
               </p>
               <p style={{ margin: 0, fontSize: 13, color: 'var(--tp-slate-400, #A1A1AA)' }}>
@@ -364,7 +364,7 @@ export const CompactDense = {
                 fontSize: 11,
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
-                color: 'var(--tp-slate-500, #717179)',
+                color: 'var(--tp-slate-500, #54545C)',
                 background: 'var(--tp-slate-50, #F8FAFC)',
                 padding: '6px 10px',
               }}

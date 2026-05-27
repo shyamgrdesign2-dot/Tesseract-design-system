@@ -15,11 +15,11 @@ export default {
 };
 
 const Text = ({ children }) => (
-  <p style={{ margin: 0, fontSize: 14, color: 'var(--tp-slate-600, #717179)' }}>{children}</p>
+  <p style={{ margin: 0, fontSize: 14, color: 'var(--tp-slate-600, #54545C)' }}>{children}</p>
 );
 
 const Label = ({ children }) => (
-  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#A2A2A8' }}>
+  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#54545C' }}>
     {children}
   </span>
 );
@@ -100,7 +100,7 @@ export const Gradient = {
         <Label>Vertical gradient</Label>
         <div style={{ display: 'flex', alignItems: 'center', height: 48, gap: 16 }}>
           <span style={{ fontSize: 14 }}>Left</span>
-          <Divider variant="gradient" orientation="vertical" color="var(--tp-slate-400, #A2A2A8)" />
+          <Divider variant="gradient" orientation="vertical" color="var(--tp-slate-400, #54545C)" />
           <span style={{ fontSize: 14 }}>Middle</span>
           <Divider variant="gradient" orientation="vertical" color="var(--tp-blue-500, #4B4AD5)" />
           <span style={{ fontSize: 14 }}>Right</span>

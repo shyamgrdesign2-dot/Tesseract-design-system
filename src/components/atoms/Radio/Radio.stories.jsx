@@ -64,7 +64,7 @@ export const AppointmentType = {
     const [type, setType] = React.useState('in-person');
     return (
       <div style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Appointment Type</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Appointment Type</div>
         <RadioGroup name="appt-type" value={type} onChange={setType}>
           <Radio value="in-person" label="In-person" />
           <Radio value="teleconsult" label="Teleconsult (Video)" />
@@ -82,7 +82,7 @@ export const PatientGender = {
     const [gender, setGender] = React.useState('male');
     return (
       <div style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Gender</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Gender</div>
         <RadioGroup name="patient-gender" value={gender} onChange={setGender} style={{ flexDirection: 'row', gap: 20 }}>
           <Radio value="male" label="Male" />
           <Radio value="female" label="Female" />
@@ -106,7 +106,7 @@ export const ConsultationMode = {
     };
     return (
       <div style={{ background: '#fff', border: '1px solid #E2E2EA', borderRadius: 10, padding: 20, fontFamily: 'Inter, sans-serif', maxWidth: 360 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Consultation Urgency</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Consultation Urgency</div>
         <RadioGroup name="consultation-urgency" value={urgency} onChange={setUrgency}>
           <Radio value="routine" label="Routine" />
           <Radio value="urgent" label="Urgent (within 48 hours)" />
@@ -124,7 +124,7 @@ export const FormIntegration = {
     const [channel, setChannel] = React.useState('sms');
     return (
       <div style={{ fontFamily: 'Inter, sans-serif', maxWidth: 360 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#717179', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Send reminder via</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#54545C', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Send reminder via</div>
         <RadioGroup name="reminder-channel" value={channel} onChange={setChannel} style={{ flexDirection: 'row', gap: 20 }}>
           <Radio value="sms" label="SMS" />
           <Radio value="email" label="Email" />

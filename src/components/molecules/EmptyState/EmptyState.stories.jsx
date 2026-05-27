@@ -30,7 +30,7 @@ export const Playground = {
   render: (args) => (
     <EmptyState
       {...args}
-      icon={<Calendar width={40} height={40} color="#A2A2A8" />}
+      icon={<Calendar width={40} height={40} color="#54545C" />}
     />
   ),
 };
@@ -39,7 +39,7 @@ export const Playground = {
 export const NoAppointments = {
   render: () => (
     <EmptyState
-      icon={<Calendar width={40} height={40} color="#A2A2A8" />}
+      icon={<Calendar width={40} height={40} color="#54545C" />}
       title="No appointments today"
       description="Your schedule is clear."
       action={
@@ -55,7 +55,7 @@ export const NoAppointments = {
 export const NoSearchResults = {
   render: () => (
     <EmptyState
-      icon={<Search width={40} height={40} color="#A2A2A8" />}
+      icon={<Search width={40} height={40} color="#54545C" />}
       title="No patients found"
       description="Try a different name, MRN, or phone number."
       action={
@@ -71,7 +71,7 @@ export const NoSearchResults = {
 export const NoDocuments = {
   render: () => (
     <EmptyState
-      icon={<FileText width={40} height={40} color="#A2A2A8" />}
+      icon={<FileText width={40} height={40} color="#54545C" />}
       title="No documents uploaded"
       description="Upload discharge summaries, lab reports, or prescriptions."
       action={
@@ -87,7 +87,7 @@ export const NoDocuments = {
 export const NoPatients = {
   render: () => (
     <EmptyState
-      icon={<Users width={40} height={40} color="#A2A2A8" />}
+      icon={<Users width={40} height={40} color="#54545C" />}
       title="No patients registered"
       description="Add your first patient to get started."
       action={
@@ -133,7 +133,7 @@ export const InContextTable = {
       }}
     >
       <EmptyState
-        icon={<Search width={36} height={36} color="#A2A2A8" />}
+        icon={<Search width={36} height={36} color="#54545C" />}
         title="No patients found"
         description="Try a different name, MRN, or phone number."
         action={
@@ -164,9 +164,9 @@ export const IconSizes = {
             background: '#fff',
           }}
         >
-          <span style={{ fontSize: 11, color: '#717179', fontFamily: 'Inter, sans-serif', marginBottom: 16 }}>{size}px</span>
+          <span style={{ fontSize: 11, color: '#54545C', fontFamily: 'Inter, sans-serif', marginBottom: 16 }}>{size}px</span>
           <EmptyState
-            icon={<Calendar width={size} height={size} color="#A2A2A8" />}
+            icon={<Calendar width={size} height={size} color="#54545C" />}
             title="No appointments"
             description="Schedule is clear."
           />

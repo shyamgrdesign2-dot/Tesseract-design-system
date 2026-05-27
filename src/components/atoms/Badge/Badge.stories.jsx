@@ -79,7 +79,7 @@ export const Matrix = {
     <div style={{ display: 'grid', gap: 16 }}>
       {['solid', 'soft', 'outline'].map((variant) => (
         <div key={variant} style={{ display: 'grid', gap: 8 }}>
-          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
             {variant}
           </strong>
           <Row>
@@ -103,7 +103,7 @@ export const PatientStatusBadges = {
   render: () => (
     <div style={{ fontFamily: 'Inter, sans-serif', display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#A2A2A8', marginBottom: 10 }}>Appointment status</div>
+        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#54545C', marginBottom: 10 }}>Appointment status</div>
         <Row>
           <Badge variant="soft" color="success">Confirmed</Badge>
           <Badge variant="soft" color="warning">Waiting</Badge>
@@ -113,7 +113,7 @@ export const PatientStatusBadges = {
         </Row>
       </div>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#A2A2A8', marginBottom: 10 }}>Lab result flags</div>
+        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#54545C', marginBottom: 10 }}>Lab result flags</div>
         <Row>
           <Badge variant="solid" color="error">Critical ↑</Badge>
           <Badge variant="solid" color="warning">High</Badge>
@@ -123,7 +123,7 @@ export const PatientStatusBadges = {
         </Row>
       </div>
       <div>
-        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#A2A2A8', marginBottom: 10 }}>Patient record state</div>
+        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#54545C', marginBottom: 10 }}>Patient record state</div>
         <Row>
           <Badge variant="soft" color="success">Active</Badge>
           <Badge variant="soft" color="neutral">Discharged</Badge>

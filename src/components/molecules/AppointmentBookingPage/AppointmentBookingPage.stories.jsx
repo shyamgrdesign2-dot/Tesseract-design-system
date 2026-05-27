@@ -27,7 +27,7 @@ const DOCTORS = [
   {
     id: 1,
     initials: 'PM',
-    color: '#16A34A',
+    color: '#15803D',
     bg: '#DCFCE7',
     name: 'Dr. Priya Mehta',
     specialty: 'General Physician',
@@ -155,7 +155,7 @@ const s = {
     display: 'inline-block',
     fontSize: 11,
     fontWeight: 500,
-    color: '#16A34A',
+    color: '#15803D',
     background: '#DCFCE7',
     borderRadius: 20,
     padding: '2px 8px',
@@ -275,62 +275,78 @@ function DefaultPage() {
             placeholder="Search by name or specialty…"
             style={{ marginBottom: 16 }}
           />
-          <div>
+          <div role="radiogroup" aria-label="Select a doctor">
             {DOCTORS.map((doc) => (
-              <div
+              <button
                 key={doc.id}
-                style={s.doctorCard(selectedDoctor === doc.id)}
+                type="button"
+                role="radio"
+                aria-checked={selectedDoctor === doc.id}
+                style={{ ...s.doctorCard(selectedDoctor === doc.id), width: '100%', textAlign: 'left' }}
                 onClick={() => setSelectedDoctor(doc.id)}
               >
-                <div style={s.avatar(doc.color, doc.bg)}>{doc.initials}</div>
+                <div style={s.avatar(doc.color, doc.bg)} aria-hidden="true">{doc.initials}</div>
                 <div style={s.doctorInfo}>
                   <div style={s.doctorName}>{doc.name}</div>
                   <div style={s.doctorSpec}>{doc.specialty}</div>
                   <span style={s.nextChip}>Next: {doc.next}</span>
                 </div>
-                <Button
-                  variant={selectedDoctor === doc.id ? 'solid' : 'outline'}
-                  theme="primary"
-                  size="sm"
-                  onClick={(e) => { e.stopPropagation(); setSelectedDoctor(doc.id); }}
+                <span
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    padding: '5px 12px', borderRadius: 6, fontSize: 13, fontWeight: 600,
+                    border: selectedDoctor === doc.id ? 'none' : '1px solid #E2E2EA',
+                    background: selectedDoctor === doc.id ? '#4B4AD5' : 'transparent',
+                    color: selectedDoctor === doc.id ? '#fff' : '#454551',
+                    pointerEvents: 'none',
+                  }}
+                  aria-hidden="true"
                 >
                   {selectedDoctor === doc.id ? 'Selected' : 'Select'}
-                </Button>
-              </div>
+                </span>
+              </button>
             ))}
           </div>
 
           {/* Pick date & time */}
           <div style={s.sectionHeading}>Pick a date &amp; time</div>
-          <div style={s.dayRow}>
+          <div style={s.dayRow} role="radiogroup" aria-label="Select appointment date">
             {DAYS.map((day, i) => (
-              <div
+              <button
                 key={i}
+                type="button"
+                role="radio"
+                aria-checked={selectedDay === i}
+                aria-label={`${day.short} ${day.num} ${day.month}`}
                 style={s.dayPill(selectedDay === i)}
                 onClick={() => setSelectedDay(i)}
               >
-                <span style={s.dayLabel}>{day.short}</span>
-                <span style={s.dayNum}>{day.num}</span>
-                <span style={{ fontSize: 10, opacity: 0.8 }}>{day.month}</span>
-              </div>
+                <span style={s.dayLabel} aria-hidden="true">{day.short}</span>
+                <span style={s.dayNum} aria-hidden="true">{day.num}</span>
+                <span style={{ fontSize: 10, opacity: 0.8 }} aria-hidden="true">{day.month}</span>
+              </button>
             ))}
           </div>
 
           {/* Time slots */}
-          <div style={s.timeGrid}>
+          <div style={s.timeGrid} role="radiogroup" aria-label="Select appointment time">
             {TIME_SLOTS.map((t) => {
               const isBooked = BOOKED_SLOTS.includes(t);
               const isSelected = selectedTime === t;
               return (
                 <button
                   key={t}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  aria-label={isBooked ? `${t} — booked` : t}
                   style={s.timeBtn(isSelected, isBooked)}
                   disabled={isBooked}
                   onClick={() => !isBooked && setSelectedTime(t)}
                 >
                   {t}
                   {isBooked && (
-                    <div style={{ fontSize: 10, marginTop: 2, color: '#B0B0BA' }}>Booked</div>
+                    <div style={{ fontSize: 10, marginTop: 2, color: '#B0B0BA' }} aria-hidden="true">Booked</div>
                   )}
                 </button>
               );
@@ -339,16 +355,23 @@ function DefaultPage() {
 
           {/* Visit details */}
           <div style={s.sectionHeading}>Visit details</div>
-          <RadioGroup
-            value={visitType}
-            onChange={setVisitType}
-            name="visit-type"
-            style={{ flexDirection: 'row', gap: 24, marginBottom: 16 }}
-          >
-            <Radio value="in-person" label="In-person" />
-            <Radio value="teleconsult" label="Teleconsult" />
-          </RadioGroup>
+          <fieldset style={{ border: 'none', padding: 0, margin: '0 0 16px' }}>
+            <legend style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 8 }}>Visit type</legend>
+            <RadioGroup
+              value={visitType}
+              onChange={setVisitType}
+              name="visit-type"
+              style={{ flexDirection: 'row', gap: 24 }}
+            >
+              <Radio value="in-person" label="In-person" />
+              <Radio value="teleconsult" label="Teleconsult" />
+            </RadioGroup>
+          </fieldset>
+          <label htmlFor="booking-complaint" style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 6 }}>
+            Chief complaint (optional)
+          </label>
           <textarea
+            id="booking-complaint"
             value={complaint}
             onChange={(e) => setComplaint(e.target.value)}
             placeholder="Chief complaint or reason for visit…"
@@ -450,7 +473,7 @@ function ConfirmedPage() {
           justifyContent: 'center',
           margin: '0 auto 20px',
         }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 13l4 4L19 7" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>

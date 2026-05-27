@@ -31,7 +31,7 @@ import {
 // ─── Design tokens ───────────────────────────────────────────────────────────
 const C = {
   text:      '#171725',
-  secondary: '#717179',
+  secondary: '#54545C',
   border:    '#E2E2EA',
   primary:   '#4B4AD5',
   success:   '#10B981',
@@ -404,8 +404,8 @@ export const AddPatientDrawer = {
 
             {/* Blood group */}
             <div style={{ marginBottom: 16 }}>
-              <Label>Blood Group</Label>
-              <select style={{
+              <label htmlFor="drawer-blood-group" style={{ ...font, fontSize: 13, fontWeight: 500, color: C.text, display: 'block', marginBottom: 6 }}>Blood Group</label>
+              <select id="drawer-blood-group" style={{
                 ...font, fontSize: 14, color: C.text,
                 width: '100%', padding: '9px 12px',
                 border: `1px solid ${C.border}`, borderRadius: 6,
@@ -419,8 +419,9 @@ export const AddPatientDrawer = {
 
             {/* Chief complaint */}
             <div>
-              <Label>Chief Complaint</Label>
+              <label htmlFor="drawer-complaint" style={{ ...font, fontSize: 13, fontWeight: 500, color: C.text, display: 'block', marginBottom: 6 }}>Chief Complaint</label>
               <textarea
+                id="drawer-complaint"
                 placeholder="Describe the primary reason for visit..."
                 rows={4}
                 style={{

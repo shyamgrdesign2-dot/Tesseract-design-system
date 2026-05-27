@@ -103,7 +103,7 @@ export const CheckboxList = {
             </Label>
           );
         })}
-        <div style={{ fontSize: 13, color: '#717179', marginTop: 8 }}>
+        <div style={{ fontSize: 13, color: '#54545C', marginTop: 8 }}>
           {checked.size} selected
         </div>
       </div>
@@ -142,7 +142,7 @@ export const ConsentForm = {
             borderRadius: 6,
             border: 'none',
             background: allChecked ? '#4B4AD5' : '#E2E2EA',
-            color: allChecked ? '#fff' : '#717179',
+            color: allChecked ? '#fff' : '#54545C',
             fontWeight: 600,
             fontSize: 14,
             cursor: allChecked ? 'pointer' : 'not-allowed',

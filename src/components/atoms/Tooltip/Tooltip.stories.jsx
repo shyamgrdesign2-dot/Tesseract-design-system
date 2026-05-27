@@ -80,7 +80,7 @@ export const IconButtonTooltips = {
       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       width: 32, height: 32, borderRadius: 6,
       border: '1px solid #E2E2EA', background: '#fff',
-      cursor: 'pointer', color: '#717179',
+      cursor: 'pointer', color: '#54545C',
     });
     return (
       <div style={{ display: 'flex', gap: 8 }}>
@@ -134,7 +134,7 @@ export const StatusChipTooltip = {
     return (
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         {chip('Active', '#16A34A', '#DCFCE7', 'Patient is currently active and receiving care')}
-        {chip('Follow-up', '#D97706', '#FEF3C7', 'Pending follow-up appointment required')}
+        {chip('Follow-up', '#92400E', '#FEF3C7', 'Pending follow-up appointment required')}
         {chip('Critical', '#E11D48', '#FFE4E6', 'Critical lab value — immediate review required')}
         {chip('Discharged', '#64748B', '#F1F5F9', 'Patient has been discharged from this visit')}
       </div>
@@ -154,7 +154,7 @@ export const FormFieldTooltip = {
           <span style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             width: 16, height: 16, borderRadius: '50%', background: '#E2E2EA',
-            fontSize: 10, fontWeight: 700, color: '#717179', cursor: 'help',
+            fontSize: 10, fontWeight: 700, color: '#54545C', cursor: 'help',
           }}>?</span>
         </Tooltip>
       </div>
@@ -163,15 +163,15 @@ export const FormFieldTooltip = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
         <div>
           <LabelWithTip label="MRN" tip="Medical Record Number — unique identifier assigned by your clinic." />
-          <input readOnly value="MRN-20240812-001" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#717179', background: '#FAFAFA', boxSizing: 'border-box' }} />
+          <input aria-label="MRN" readOnly value="MRN-20240812-001" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#54545C', background: '#FAFAFA', boxSizing: 'border-box' }} />
         </div>
         <div>
           <LabelWithTip label="eGFR" tip="Estimated Glomerular Filtration Rate — measures kidney function. Normal range: 90–120 mL/min." />
-          <input readOnly value="72 mL/min/1.73m²" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#171725', boxSizing: 'border-box' }} />
+          <input aria-label="eGFR" readOnly value="72 mL/min/1.73m²" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#171725', boxSizing: 'border-box' }} />
         </div>
         <div>
           <LabelWithTip label="ABHA ID" tip="Ayushman Bharat Health Account — national digital health identity (14-digit number)." />
-          <input readOnly value="91-1234-5678-9012" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#171725', boxSizing: 'border-box' }} />
+          <input aria-label="ABHA ID" readOnly value="91-1234-5678-9012" style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid #E2E2EA', borderRadius: 6, fontSize: 14, fontFamily: 'Inter, sans-serif', color: '#171725', boxSizing: 'border-box' }} />
         </div>
       </div>
     );

@@ -16,7 +16,7 @@ const Row = ({ children }) => (
 
 const Group = ({ label, dark, children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : '#A2A2A8' }}>{label}</span>
+    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : '#54545C' }}>{label}</span>
     {children}
   </div>
 );

@@ -48,7 +48,7 @@ export const PastPresetsOnly = {
 // ── Healthcare in-context demos ────────────────────────────────────────────
 
 const Label = ({ children }) => (
-  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#A2A2A8', display: 'block', marginBottom: 8, fontFamily: 'Inter, sans-serif' }}>
+  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#54545C', display: 'block', marginBottom: 8, fontFamily: 'Inter, sans-serif' }}>
     {children}
   </span>
 );
@@ -65,7 +65,7 @@ export const AppointmentFilter = {
         <Label>Appointments — Date Range</Label>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <DateRangePicker value={value} hideFuturePresets onChange={(r) => setValue(r.presetId)} />
-          <div style={{ fontSize: 14, color: '#717179' }}>
+          <div style={{ fontSize: 14, color: '#54545C' }}>
             <span style={{ fontWeight: 700, fontSize: 24, color: '#171725', marginRight: 4 }}>{count}</span>
             appointments
           </div>
@@ -84,7 +84,7 @@ export const RevenueAnalytics = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
         <Label>Revenue Period</Label>
         <DateRangePicker value={value} onChange={(r) => setValue(r.presetId)} />
-        <p style={{ margin: 0, fontSize: 13, color: '#717179' }}>
+        <p style={{ margin: 0, fontSize: 13, color: '#54545C' }}>
           Selected preset: <strong>{value || 'custom'}</strong>
         </p>
       </div>

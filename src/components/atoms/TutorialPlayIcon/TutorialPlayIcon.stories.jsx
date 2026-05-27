@@ -77,7 +77,7 @@ export const InHelpCard = {
       <TutorialPlayIcon {...args} size={40} color="#8A4DBB" />
       <div>
         <div style={{ fontSize: 14, fontWeight: 600, color: '#171725', marginBottom: 3 }}>Getting started</div>
-        <div style={{ fontSize: 12, color: '#717179' }}>Watch a 2-minute overview of TatvaPractice.</div>
+        <div style={{ fontSize: 12, color: '#54545C' }}>Watch a 2-minute overview of TatvaPractice.</div>
       </div>
     </div>
   ),

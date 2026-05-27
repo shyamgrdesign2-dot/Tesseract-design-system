@@ -101,7 +101,7 @@ export const Types = {
 
 const FieldLabel = ({ children }) => (
   <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontFamily: 'Inter, sans-serif' }}>
-    <span style={{ fontSize: 12, fontWeight: 500, color: '#717179' }}>{children[0]}</span>
+    <span style={{ fontSize: 12, fontWeight: 500, color: '#54545C' }}>{children[0]}</span>
     {children[1]}
   </label>
 );
@@ -122,7 +122,7 @@ export const PatientSearch = {
           onChange={(e) => setQuery(e.target.value)}
         />
         {query && (
-          <div style={{ fontSize: 12, color: '#717179', paddingLeft: 2 }}>
+          <div style={{ fontSize: 12, color: '#54545C', paddingLeft: 2 }}>
             Searching for: <strong style={{ color: '#171725' }}>{query}</strong>
           </div>
         )}
@@ -143,28 +143,28 @@ export const PatientIntakeForm = {
         <div style={{ fontSize: 15, fontWeight: 600, color: '#171725', marginBottom: 2 }}>New patient registration</div>
         <div style={{ display: 'flex', gap: 10 }}>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: '#717179', marginBottom: 4 }}>First name *</div>
+            <div style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 4 }}>First name *</div>
             <Input {...args} fullWidth placeholder="Rohan" value={form.firstName} onChange={set('firstName')} />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: '#717179', marginBottom: 4 }}>Last name *</div>
+            <div style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 4 }}>Last name *</div>
             <Input {...args} fullWidth placeholder="Sharma" value={form.lastName} onChange={set('lastName')} />
           </div>
         </div>
         <div>
-          <div style={{ fontSize: 12, fontWeight: 500, color: '#717179', marginBottom: 4 }}>Mobile number *</div>
+          <div style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 4 }}>Mobile number *</div>
           <Input {...args} fullWidth type="tel" placeholder="+91 98765 43210" value={form.mobile} onChange={set('mobile')} error={form.mobile.length > 0 && form.mobile.length < 10} />
           {form.mobile.length > 0 && form.mobile.length < 10 && (
             <div style={{ fontSize: 11, color: '#E11D48', marginTop: 4 }}>Enter a valid 10-digit number</div>
           )}
         </div>
         <div>
-          <div style={{ fontSize: 12, fontWeight: 500, color: '#717179', marginBottom: 4 }}>MRN (auto-generated if blank)</div>
+          <div style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 4 }}>MRN (auto-generated if blank)</div>
           <Input {...args} fullWidth placeholder="MRN-YYYYMMDD-XXX" value={form.mrn} onChange={set('mrn')} />
         </div>
         <button
           disabled={!valid}
-          style={{ marginTop: 4, padding: '9px 0', borderRadius: 6, border: 'none', background: valid ? '#4B4AD5' : '#E2E2EA', color: valid ? '#fff' : '#717179', fontWeight: 600, fontSize: 14, cursor: valid ? 'pointer' : 'not-allowed', fontFamily: 'Inter, sans-serif', transition: 'background 0.2s' }}
+          style={{ marginTop: 4, padding: '9px 0', borderRadius: 6, border: 'none', background: valid ? '#4B4AD5' : '#E2E2EA', color: valid ? '#fff' : '#54545C', fontWeight: 600, fontSize: 14, cursor: valid ? 'pointer' : 'not-allowed', fontFamily: 'Inter, sans-serif', transition: 'background 0.2s' }}
         >
           Register patient
         </button>
@@ -189,10 +189,10 @@ export const VitalsEntry = {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, width: 380, fontFamily: 'Inter, sans-serif' }}>
         {vitals.map(({ key, label, placeholder, unit }) => (
           <div key={key}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: '#717179', marginBottom: 4 }}>{label}</div>
+            <div style={{ fontSize: 12, fontWeight: 500, color: '#54545C', marginBottom: 4 }}>{label}</div>
             <div style={{ position: 'relative' }}>
               <Input {...args} fullWidth placeholder={placeholder} value={values[key] || ''} onChange={set(key)} />
-              <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#A2A2A8', pointerEvents: 'none', fontFamily: 'Inter, sans-serif' }}>{unit}</span>
+              <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#54545C', pointerEvents: 'none', fontFamily: 'Inter, sans-serif' }}>{unit}</span>
             </div>
           </div>
         ))}

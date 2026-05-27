@@ -77,7 +77,7 @@ export const ClinicalLoadingStates = {
         { label: 'Fetching patient records…', color: '#4B4AD5' },
         { label: 'Uploading lab report…', color: '#10b981' },
         { label: 'Syncing with ABDM…', color: '#f59e0b' },
-        { label: 'Submitting pre-authorisation…', color: '#717179' },
+        { label: 'Submitting pre-authorisation…', color: '#54545C' },
       ].map(({ label, color }) => (
         <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Spinner {...args} size="sm" color={color} />
@@ -94,7 +94,7 @@ export const PageLoadingOverlay = {
   render: (args) => (
     <div style={{ width: 400, height: 240, background: '#FAFAFB', border: '1px solid #E2E2EA', borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, fontFamily: 'Inter, sans-serif' }}>
       <Spinner {...args} size="lg" color="#4B4AD5" />
-      <div style={{ fontSize: 13, color: '#717179' }}>Loading patient record…</div>
+      <div style={{ fontSize: 13, color: '#54545C' }}>Loading patient record…</div>
     </div>
   ),
 };
@@ -107,7 +107,7 @@ export const ButtonInlineLoading = {
       {[
         { label: 'Saving…', color: '#fff', bg: '#4B4AD5' },
         { label: 'Uploading…', color: '#fff', bg: '#16A34A' },
-        { label: 'Sending…', color: '#fff', bg: '#717179' },
+        { label: 'Sending…', color: '#fff', bg: '#54545C' },
       ].map(({ label, color, bg }) => (
         <button
           key={label}

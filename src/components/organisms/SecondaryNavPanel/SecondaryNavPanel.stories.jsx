@@ -13,7 +13,7 @@ export default {
 
 function HomeIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M2.5 7.5L10 2.5L17.5 7.5V16.25C17.5 16.94 16.94 17.5 16.25 17.5H13.75V12.5H6.25V17.5H3.75C3.06 17.5 2.5 16.94 2.5 16.25V7.5Z" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -21,7 +21,7 @@ function HomeIcon({ size = 20, color = "currentColor" }) {
 
 function CalendarIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="2.5" y="3.75" width="15" height="13.75" rx="2" stroke={color} strokeWidth="1.5" />
       <path d="M2.5 8.75H17.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
       <path d="M6.25 2.5V5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
@@ -32,7 +32,7 @@ function CalendarIcon({ size = 20, color = "currentColor" }) {
 
 function UsersIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="7.5" cy="6.25" r="2.5" stroke={color} strokeWidth="1.5" />
       <path d="M2.5 17.5C2.5 14.74 4.74 12.5 7.5 12.5C10.26 12.5 12.5 14.74 12.5 17.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
       <path d="M13.75 3.75C15.13 3.75 16.25 4.87 16.25 6.25C16.25 7.63 15.13 8.75 13.75 8.75" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
@@ -43,7 +43,7 @@ function UsersIcon({ size = 20, color = "currentColor" }) {
 
 function RxPadIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="3.75" y="2.5" width="12.5" height="15" rx="2" stroke={color} strokeWidth="1.5" />
       <path d="M6.25 6.25H10" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
       <path d="M6.25 10H13.75" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
@@ -54,7 +54,7 @@ function RxPadIcon({ size = 20, color = "currentColor" }) {
 
 function AnalyticsIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M3.75 15L7.5 10L11.25 12.5L15.625 6.25" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M13.75 6.25H15.625V8.125" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -63,7 +63,7 @@ function AnalyticsIcon({ size = 20, color = "currentColor" }) {
 
 function SettingsIcon({ size = 20, color = "currentColor" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="10" cy="10" r="2.5" stroke={color} strokeWidth="1.5" />
       <path d="M10 2.5V3.75M10 16.25V17.5M3.75 10H2.5M17.5 10H16.25M5.16 5.16L5.98 5.98M14.02 14.02L14.84 14.84M5.16 14.84L5.98 14.02M14.02 5.98L14.84 5.16" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
     </svg>

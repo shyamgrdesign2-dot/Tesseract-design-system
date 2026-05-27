@@ -123,7 +123,7 @@ export const PatientKebabMenu = {
                 border: '1px solid #E2E2EA',
                 background: 'transparent',
                 cursor: 'pointer',
-                color: '#717179',
+                color: '#54545C',
               }}
             >
               <MoreVertical width={16} height={16} />
@@ -224,9 +224,9 @@ export const DoctorProfileMenu = {
               <span style={{ width: 32, height: 32, borderRadius: '50%', background: '#4B4AD5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700, fontFamily: 'Inter, sans-serif', flexShrink: 0 }}>DR</span>
               <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 13, fontWeight: 600, color: '#171725', fontFamily: 'Inter, sans-serif' }}>Dr. Ananya Mehta</span>
-                <span style={{ fontSize: 11, color: '#717179', fontFamily: 'Inter, sans-serif' }}>Cardiologist</span>
+                <span style={{ fontSize: 11, color: '#54545C', fontFamily: 'Inter, sans-serif' }}>Cardiologist</span>
               </span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#717179" strokeWidth="2.5" aria-hidden><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#54545C" strokeWidth="2.5" aria-hidden><path d="M6 9l6 6 6-6"/></svg>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

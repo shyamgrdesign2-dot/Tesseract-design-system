@@ -33,7 +33,7 @@ const Row = ({ children, gap = 16 }) => (
 const Label = ({ children, dark }) => (
   <span style={{
     fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
-    color: dark ? 'rgba(255,255,255,0.4)' : 'var(--tp-slate-400, #A2A2A8)',
+    color: dark ? 'rgba(255,255,255,0.4)' : 'var(--tp-slate-400, #54545C)',
     display: 'block', marginBottom: 4,
   }}>
     {children}

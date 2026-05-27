@@ -37,7 +37,7 @@ function SectionLabel({ children, dark }) {
   return (
     <span style={{
       fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
-      color: dark ? 'rgba(255,255,255,0.4)' : 'var(--tp-slate-400, #A2A2A8)',
+      color: dark ? 'rgba(255,255,255,0.4)' : 'var(--tp-slate-400, #54545C)',
       display: 'block', marginBottom: 4,
     }}>
       {children}
@@ -59,7 +59,7 @@ function DarkSurface({ children }) {
 // Inline X (close) icon — avoids re-exporting from lucide barrel
 function CloseIcon({ size = 18, strokeWidth = 1.75 }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"
       stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
       width={size} height={size} aria-hidden>
       <path d="M18 6 6 18M6 6l12 12" />
