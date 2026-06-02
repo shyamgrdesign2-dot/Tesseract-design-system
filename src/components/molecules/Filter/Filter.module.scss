@@ -1,0 +1,114 @@
+/* Filter.module.scss — chip-based multi-select filter bar. */
+
+.root { display: flex; flex-direction: column; gap: 10px; font-family: Inter, var(--font-sans, sans-serif); }
+
+.bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.ddRoot { position: relative; display: inline-block; }
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--tp-slate-200, #e2e2ea);
+  border-radius: 10px;
+  corner-shape: round;
+  background-color: var(--tp-slate-0, #fff);
+  color: var(--tp-slate-700, #454551);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+
+  &:hover { border-color: var(--tp-slate-300, #d4d4d8); }
+  &[data-active] { border-color: var(--tp-blue-400, #6c6bde); color: var(--tp-blue-600, #3c3bb5); background-color: var(--tp-blue-50, #eeeeff); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tp-blue-100, #d8d8fa); }
+}
+.triggerIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
+.caret { color: var(--tp-slate-400, #a1a1aa); transition: transform 150ms ease; }
+.trigger[aria-expanded="true"] .caret { transform: rotate(180deg); }
+
+.menu {
+  position: absolute;
+  z-index: 800;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--tp-slate-200, #e2e2ea);
+  border-radius: 12px;
+  corner-shape: round;
+  background-color: var(--tp-slate-0, #fff);
+  box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tp-slate-700, #454551);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+
+  &:hover { background-color: var(--tp-slate-50, #f8fafc); }
+  &[aria-selected="true"] { color: var(--tp-blue-600, #3c3bb5); font-weight: 600; }
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--tp-slate-300, #d4d4d8);
+  border-radius: 5px;
+  corner-shape: round;
+  color: #fff;
+
+  &[data-on] { background-color: var(--tp-blue-600, #3c3bb5); border-color: var(--tp-blue-600, #3c3bb5); }
+}
+
+.clear {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--tp-error-600, #C8102E);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  corner-shape: round;
+
+  &:hover { color: var(--tp-error-700, #9F1239); background-color: var(--tp-error-50, #FFF1F2); }
+}
+
+/* ── Active selection: bordered bar — chips on the left, Clear all on the right ── */
+.activeBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid var(--tp-slate-200, #e2e2ea);
+  border-radius: 12px;
+  corner-shape: round;
+  background-color: var(--tp-slate-0, #fff);
+}
+
+// Active chips reuse the Chip atom (composed in Filter.jsx). Only the group
+// prefix ("Status:") needs a lighter weight inside the chip label.
+.chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
+
+.chipGroup { font-weight: 500; opacity: 0.7; }

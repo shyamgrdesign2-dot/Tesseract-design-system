@@ -19,9 +19,16 @@ export function RadioGroup({ value, onChange, name, children, style, className }
   );
 }
 
-export function Radio({ value, label, disabled, className, style: styleProp }) {
+const RADIO_SIZES = {
+  sm: { box: 14, font: 13 },
+  md: { box: 16, font: 14 },
+  lg: { box: 18, font: 15 },
+};
+
+export function Radio({ value, label, disabled, size = "md", className, style: styleProp }) {
   const ctx = useContext(RadioGroupCtx);
   const checked = ctx.value === value;
+  const s = RADIO_SIZES[size] ?? RADIO_SIZES.md;
 
   return (
     <label
@@ -32,7 +39,7 @@ export function Radio({ value, label, disabled, className, style: styleProp }) {
         gap: 8,
         cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.5 : 1,
-        fontSize: 14,
+        fontSize: s.font,
         color: "var(--tp-slate-700)",
         userSelect: "none",
         ...styleProp,
@@ -46,8 +53,8 @@ export function Radio({ value, label, disabled, className, style: styleProp }) {
         disabled={disabled}
         onChange={() => ctx.onChange?.(value)}
         style={{
-          width: 16,
-          height: 16,
+          width: s.box,
+          height: s.box,
           accentColor: "var(--tp-blue-500)",
           cursor: disabled ? "not-allowed" : "pointer",
         }}
@@ -57,7 +64,7 @@ export function Radio({ value, label, disabled, className, style: styleProp }) {
   );
 }
 
-export function FormControlLabel({ control, label, ...props }) {
+export function FormControlLabel({ control, label }) {
   return (
     <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--tp-slate-700)", cursor: "pointer" }}>
       {control}

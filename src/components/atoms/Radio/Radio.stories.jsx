@@ -32,6 +32,19 @@ export const Playground = {
   render: (args) => <Group {...args} />,
 };
 
+export const Sizes = {
+  render: () => {
+    const [value, setValue] = React.useState('md');
+    return (
+      <RadioGroup name="sizes" value={value} onChange={setValue} style={{ flexDirection: 'row', gap: 24 }}>
+        <Radio value="sm" label="Small" size="sm" />
+        <Radio value="md" label="Medium" size="md" />
+        <Radio value="lg" label="Large" size="lg" />
+      </RadioGroup>
+    );
+  },
+};
+
 export const WithDisabledOption = {
   render: (args) => {
     const [value, setValue] = React.useState('a');

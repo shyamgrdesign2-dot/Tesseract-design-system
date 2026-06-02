@@ -103,4 +103,10 @@
   --tp-error-800: #881337;
   --tp-error-900: #4C0519;
   --core-primary-900: #161558;
+
+  /* Type families. Mulish is reserved for the H1 page title; Inter carries
+     every other heading, all body copy, and UI text. Each stack ends in a
+     system fallback so text never collapses to the browser default serif. */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: "Mulish", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }

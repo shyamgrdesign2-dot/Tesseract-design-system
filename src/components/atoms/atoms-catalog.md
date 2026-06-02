@@ -3,12 +3,12 @@
 > **Scope:** every primitive UI component shipped in `src/components/atoms/`.
 > **Audience:** designers (pick the right primitive), frontend devs (compose), PMs (vocabulary check), AI assistants (canonical inventory before suggesting "build a button…").
 > **Read when:** designing a new screen, building a new component, or wondering "do we already have an X?".
-> **Sibling docs:** [`../component-library.md`](../component-library.md) (rules) · [`../molecules/molecules-catalog.md`](../molecules/molecules-catalog.md) · [`../../design-system/design-tokens-and-theme.md`](../../design-system/design-tokens-and-theme.md) (tokens these atoms consume).
+> **Sibling docs:** [`../molecules/molecules-catalog.md`](../molecules/molecules-catalog.md) · [`../../design-system/design-tokens-and-theme.md`](../../design-system/design-tokens-and-theme.md) (tokens these atoms consume).
 
 Smallest UI primitives. Each atom is **domain-agnostic** — it can be
 shipped in a generic UI library without any change.
 
-> **Import rule:** atoms may only consume Radix UI, design tokens (`var(--tp-*)`), and `@/src/hooks/utils`. Never `molecules/`, never `organisms/`.
+> **Import rule:** atoms may only consume design tokens (`var(--tp-*)`), the shared primitives in [`@/src/hooks/ui/`](../../hooks/ui/), and `@/src/hooks/utils`. Never `molecules/`.
 
 ## Quick rules for designers + devs
 
@@ -19,70 +19,57 @@ shipped in a generic UI library without any change.
 
 ## Dependency status
 
-**Zero `@radix-ui/*` packages remain.** Every atom and molecule is
-hand-rolled. Per FE feedback (per-component Radix imports were
-bloating `package.json`), we shipped a complete removal in two phases:
+**Zero `@radix-ui/*` packages remain.** Every atom is hand-rolled and
+ships zero JS UI deps. The accessibility/positioning machinery lives in
+[`@/src/hooks/ui/`](../../hooks/ui/) (Slot, Portal, DialogPrimitive,
+use-overlay). New atoms should default to hand-rolled.
 
-- **Phase A** (commit `c02bc37`): `Switch`, `Checkbox`, `Button` (Slot dropped)
-- **Phase B** (this commit): `Tooltip`, `Popover`, plus the 7 Radix-using molecules below
+Atoms in this folder:
+`Badge`, `Button`, `Checkbox`, `Chip`, `Divider`, `Input`, `MedicalIcon`,
+`Radio`, `ShinyText`, `Skeleton`, `Slider`, `Switch`, `Tag`,
+`TutorialPlayIcon`, plus decorative helpers `NoiseOverlay` and
+`AnimatedGrid`.
 
-Hand-rolled atoms (every atom in this folder ships zero JS deps now):
-`Avatar`, `Badge`, `Button`, `Checkbox`, `Chip`, `Divider`, `Input`,
-`MedicalIcon`, `NoiseOverlay`, `OTPInput`, `Popover`, `Progress`,
-`Radio`, `Select`, `ShineBorder`, `ShinyText`, `Skeleton`, `Slider`,
-`Spinner`, `Switch`, `Tag`, `Tooltip`, `TutorialPlayIcon`.
-
-The accessibility/positioning machinery they used to inherit from
-Radix is now in [`@/src/hooks/ui/`](../../hooks/ui/) (Slot, Portal,
-DialogPrimitive, use-overlay). New atoms should default to hand-rolled.
+`Button` is the single CTA — one component covers text, with-icons,
+icon-only, and split (primary + dropdown `menu`) shapes across every
+variant × theme × size × surface.
 
 ## Catalog
 
 | Atom | Purpose | Variants / props summary |
 |---|---|---|
-| `Avatar` | Round profile chip with image / initials fallback. | size: sm/md/lg, optional badge dot. |
-| `Badge` | Small pill that labels status / count. | tone: default / success / warning / error / info / brand. |
-| `Button` | Primary CTA. Solid / outline / link / ghost; size sm/md/lg; theme primary/neutral/error. | See `Button/button-system/` for tokens. |
-| `Checkbox` | Single boolean control with optional label. | states: default, hover, focus, disabled, error. |
-| `Chip` | Removable tag-pill (filter chips, multi-select). | dismissible, onDismiss. |
+| `Badge` | Small pill that labels status / count. | variant: solid/soft/outline/dot · color: primary/success/warning/error/neutral/violet · size: sm/md/lg · 10px radius. |
+| `Button` | The single CTA. Shapes: text, `leftIcon`/`rightIcon`, icon-only (`icon` + `aria-label`), split (`menu`). variant: solid/outline/ghost/tonal/link · theme: primary/neutral/error/success/warning · size: sm/md/lg · surface: light/dark · loading/disabled. |
+| `Checkbox` | Single boolean control with optional label. | size: sm/md/lg · states: default, hover, focus, disabled, indeterminate. |
+| `Chip` | Removable / selectable label pill (filter chips, multi-select). | color: default/primary/success/warning/error · variant: filled/outlined · size: sm/md/lg · onDelete/icon · 10px radius. |
 | `Divider` | Hairline horizontal/vertical rule. | orientation, length, tone. |
 | `Input` | Single-line text field. Supports leading/trailing icons. | size sm/md/lg; states default/error/disabled. |
 | `MedicalIcon` (`TPMedicalIcon`) | Mask-painted medical glyph (ECG, virus, syringe, etc.). | name, variant: linear/bulk, size, color. |
-| `NoiseOverlay` | Subtle film-grain texture for premium surfaces. | intensity. |
-| `OTPInput` | One-time password / pin entry. | length, autoSubmit. |
-| `Popover` | Floating card anchored to a trigger. Wraps Radix Popover. | side, align, offset. |
-| `Progress` | Linear progress bar / spinner-line. | indeterminate, value. |
-| `Radio` | Single-select control in a radio group. | states match Checkbox. |
-| `Select` | Native-style dropdown. Wraps Radix Select. | options, placeholder, size. |
-| `ShineBorder` | Animated gradient border (used on AI/processing surfaces). | shineColor[], borderWidth, duration, variant. |
+| `Radio` | Single-select control in a radio group. | size: sm/md/lg · states match Checkbox. |
 | `ShinyText` | Animated gradient text for AI captions. | gradient, speed. |
 | `Skeleton` | Pulsing placeholder block while loading. | width, height, radius. |
-| `Slider` | Value slider with track + thumb. | min, max, step, orientation. |
-| `Spinner` | Circular spinner (loading indicator). | size, tone. |
-| `Switch` | Toggle (on/off). | checked, disabled, size. |
-| `Tag` | Static label with bg + border. (Different from Chip — Tag is non-dismissible.) | tone, size. |
-| `Tooltip` | Hover/focus tooltip. Wraps Radix Tooltip. | side, align, delay. |
+| `Slider` | Value slider with track + thumb. | size: sm/md/lg · min, max, step, color. |
+| `Switch` | Toggle (on/off). | size: sm/md/lg · checked, disabled. |
+| `Tag` | Static label with bg + border. | color: blue/violet/amber/success/error/warning/slate · variant: light/medium/filled/outline · size: sm/md/lg · onRemove/icon · 10px radius. |
 | `TutorialPlayIcon` | Branded play-button glyph that points to a tutorial. | size. |
+| `NoiseOverlay` | Subtle film-grain texture for premium surfaces. | opacity. |
+| `AnimatedGrid` | Decorative animated SVG lattice with comet pulses (banner/hero background). | className, style. |
 
 ## When to use what
 
 | If you need… | Reach for |
 |---|---|
 | The standard CTA | `Button` |
+| Icon-only / primary+menu CTA | `Button` with `icon` (+ `aria-label`) / `Button` with `menu` |
 | Status text + color in a small pill | `Badge` |
 | Removable filter or multi-select pill | `Chip` |
 | A non-removable label pill | `Tag` |
 | A single-line text field | `Input` |
-| A pin/OTP entry | `OTPInput` |
-| Dropdown picker | `Select` (or `molecules/DropdownMenu` for action menus) |
 | Boolean toggle | `Switch` (immediate effect) or `Checkbox` (form field) |
-| Loading: bar | `Progress` |
+| Single-select in a group | `Radio` |
 | Loading: shape | `Skeleton` |
-| Loading: ring | `Spinner` |
-| Hover description | `Tooltip` |
-| Floating panel | `Popover` (atom) — for small content; for full dialogs use `molecules/Dialog`. |
 | Medical glyph | `MedicalIcon` (TPMedicalIcon) |
-| AI/processing flair | `ShineBorder`, `ShinyText` |
+| AI/processing flair | `ShinyText` |
 
 ## Adding an atom
 

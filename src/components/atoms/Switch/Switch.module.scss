@@ -13,6 +13,7 @@
   /* Sizes */
   &[data-size="sm"] { width: 34px; height: 20px; }
   &[data-size="md"] { width: 42px; height: 24px; }
+  &[data-size="lg"] { width: 50px; height: 28px; }
 
   /* Checked */
   &[data-state="checked"] {
@@ -43,8 +44,10 @@
   /* Sizes */
   .root[data-size="sm"] & { width: 16px; height: 16px; }
   .root[data-size="md"] & { width: 20px; height: 20px; }
+  .root[data-size="lg"] & { width: 24px; height: 24px; }
 
   /* Checked — size-specific translate */
   .root[data-size="sm"][data-state="checked"] & { transform: translateX(14px); }
   .root[data-size="md"][data-state="checked"] & { transform: translateX(18px); }
+  .root[data-size="lg"][data-state="checked"] & { transform: translateX(22px); }
 }

@@ -4,12 +4,18 @@ const meta = {
   title: 'Atoms/ShinyText',
   component: ShinyText,
   tags: ['autodocs', 'ai-generated'],
+  // Scope a strict color matcher here so the polymorphic `shineColor`
+  // (string OR array of gradient stops) isn't auto-assigned the string-only
+  // color picker. Only an exact `color` arg gets the swatch.
+  parameters: { controls: { matchers: { color: /^(background|color)$/i } } },
   argTypes: {
     text: { control: 'text' },
     disabled: { control: 'boolean' },
     speed: { control: { type: 'range', min: 0.5, max: 8, step: 0.5 } },
     color: { control: 'color' },
-    shineColor: { control: 'color' },
+    // Polymorphic: a single color string OR an array of gradient stops.
+    // Use an object control so the string-only color picker never receives an array.
+    shineColor: { control: 'object' },
     spread: { control: { type: 'range', min: 0, max: 360, step: 10 } },
     yoyo: { control: 'boolean' },
     pauseOnHover: { control: 'boolean' },

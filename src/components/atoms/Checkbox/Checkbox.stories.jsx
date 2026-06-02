@@ -8,10 +8,12 @@ const meta = {
   argTypes: {
     checked: { control: 'boolean' },
     defaultChecked: { control: 'boolean' },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
   },
   args: {
+    size: 'md',
     disabled: false,
     required: false,
   },
@@ -24,6 +26,16 @@ const Row = ({ children }) => (
     {children}
   </div>
 );
+
+export const Sizes = {
+  render: () => (
+    <Row>
+      {['sm', 'md', 'lg'].map((size) => (
+        <Checkbox key={size} size={size} defaultChecked />
+      ))}
+    </Row>
+  ),
+};
 
 const Label = ({ children, ...props }) => (
   <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, color: 'var(--tp-slate-700)' }} {...props}>

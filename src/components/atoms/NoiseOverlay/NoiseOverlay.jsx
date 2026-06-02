@@ -18,7 +18,7 @@ import { cn } from "@/src/hooks/utils";
  * Each instance generates a unique filter ID via `useId()` so
  * multiple overlays on the same page don't conflict.
  */
-export function NoiseOverlay({ opacity = 0.06, className }) {
+export function NoiseOverlay({ opacity = 0.06, blendMode = "overlay", baseFrequency = 0.65, className }) {
   const filterId = `noise-${useId().replace(/[:]/g, "")}`;
 
   return (
@@ -26,14 +26,14 @@ export function NoiseOverlay({ opacity = 0.06, className }) {
       className={cn("pointer-events-none absolute inset-0 h-full w-full", className)}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true">
-      
+
       <filter id={filterId}>
         <feTurbulence
           type="fractalNoise"
-          baseFrequency="0.65"
+          baseFrequency={baseFrequency}
           numOctaves="3"
           stitchTiles="stitch" />
-        
+
         <feColorMatrix type="saturate" values="0" />
       </filter>
       <rect
@@ -41,8 +41,8 @@ export function NoiseOverlay({ opacity = 0.06, className }) {
         height="100%"
         filter={`url(#${filterId})`}
         opacity={opacity}
-        style={{ mixBlendMode: "overlay" }} />
-      
+        style={{ mixBlendMode: blendMode }} />
+
     </svg>);
 
 }

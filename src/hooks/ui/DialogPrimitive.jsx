@@ -20,8 +20,8 @@
  * Behaviour:
  *   - Focus trap inside Content while open.
  *   - <body> scroll lock while open.
- *   - Escape closes (calls onOpenChange(false)).
- *   - Pointer-down on Overlay closes.
+ *   - Escape closes (calls onOpenChange(false)); onEscapeKeyDown can preventDefault.
+ *   - Click on Overlay closes; Content's onInteractOutside can preventDefault to keep open.
  *   - Restores focus to the previously focused element on close.
  */
 
@@ -47,12 +47,15 @@ export function Root({ open: openProp, defaultOpen = false, onOpenChange, childr
 
   const triggerRef = React.useRef(null);
   const contentRef = React.useRef(null);
+  // Holds Content's onInteractOutside handler so Overlay can let it intercept
+  // the close (handler may call e.preventDefault() to keep the dialog open).
+  const interactOutsideRef = React.useRef(null);
 
   const titleId = React.useId();
   const descId = React.useId();
 
   const ctx = React.useMemo(
-    () => ({ open, setOpen, triggerRef, contentRef, titleId, descId }),
+    () => ({ open, setOpen, triggerRef, contentRef, interactOutsideRef, titleId, descId }),
     [open, setOpen, titleId, descId],
   );
 
@@ -111,6 +114,9 @@ export function Overlay({ className, style, onClick, ...props }) {
   const handleClick = (e) => {
     onClick?.(e);
     if (e.defaultPrevented) return;
+    // Give Content's onInteractOutside a chance to cancel the close.
+    ctx?.interactOutsideRef?.current?.(e);
+    if (e.defaultPrevented) return;
     ctx?.setOpen(false);
   };
   return (
@@ -147,11 +153,16 @@ export const Content = React.forwardRef(function Content(
   // expose ref
   React.useImperativeHandle(forwardedRef, () => ref.current);
   React.useEffect(() => {
-    ctx.contentRef.current = ref.current;
+    const node = ref.current;
+    const contentRef = ctx.contentRef;
+    const interactOutsideRef = ctx.interactOutsideRef;
+    contentRef.current = node;
+    interactOutsideRef.current = onInteractOutside ?? null;
     return () => {
-      if (ctx.contentRef.current === ref.current) ctx.contentRef.current = null;
+      if (contentRef.current === node) contentRef.current = null;
+      interactOutsideRef.current = null;
     };
-  }, [ctx]);
+  }, [ctx, onInteractOutside]);
 
   useScrollLock(ctx.open);
   useFocusTrap(ref, ctx.open);

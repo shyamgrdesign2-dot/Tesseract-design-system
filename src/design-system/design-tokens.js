@@ -655,15 +655,15 @@ export const ctaVariants = [
     },
 ];
 export const typographyScale = [
-    // Headings (Mulish)
+    // Headings — Mulish is reserved for H1-level page titles; H2–H6 use Inter.
     { name: "Display XL", element: "h1", fontFamily: "Mulish", size: "56px", weight: "800", lineHeight: "64px", letterSpacing: "-0.03em", paragraphSpacing: "32px", textCase: "none", textDecoration: "none", usage: "Marketing hero, landing page headline" },
     { name: "Display", element: "h1", fontFamily: "Mulish", size: "48px", weight: "700", lineHeight: "56px", letterSpacing: "-0.02em", paragraphSpacing: "24px", textCase: "none", textDecoration: "none", usage: "Hero titles, major page headers" },
     { name: "H1", element: "h1", fontFamily: "Mulish", size: "36px", weight: "700", lineHeight: "44px", letterSpacing: "-0.02em", paragraphSpacing: "20px", textCase: "none", textDecoration: "none", usage: "Page titles, section headers" },
-    { name: "H2", element: "h2", fontFamily: "Mulish", size: "30px", weight: "600", lineHeight: "38px", letterSpacing: "-0.01em", paragraphSpacing: "18px", textCase: "none", textDecoration: "none", usage: "Section titles, card headers" },
-    { name: "H3", element: "h3", fontFamily: "Mulish", size: "24px", weight: "600", lineHeight: "32px", letterSpacing: "-0.01em", paragraphSpacing: "16px", textCase: "none", textDecoration: "none", usage: "Sub-section headers" },
-    { name: "H4", element: "h4", fontFamily: "Mulish", size: "20px", weight: "600", lineHeight: "28px", letterSpacing: "0", paragraphSpacing: "14px", textCase: "none", textDecoration: "none", usage: "Card titles, widget headers" },
-    { name: "H5", element: "h5", fontFamily: "Mulish", size: "16px", weight: "600", lineHeight: "24px", letterSpacing: "0", paragraphSpacing: "12px", textCase: "none", textDecoration: "none", usage: "Small section titles, labels" },
-    { name: "H6", element: "h6", fontFamily: "Mulish", size: "14px", weight: "600", lineHeight: "20px", letterSpacing: "0.01em", paragraphSpacing: "10px", textCase: "none", textDecoration: "none", usage: "Sub-labels, grouped item headers" },
+    { name: "H2", element: "h2", fontFamily: "Inter", size: "30px", weight: "600", lineHeight: "38px", letterSpacing: "-0.01em", paragraphSpacing: "18px", textCase: "none", textDecoration: "none", usage: "Section titles, card headers" },
+    { name: "H3", element: "h3", fontFamily: "Inter", size: "24px", weight: "600", lineHeight: "32px", letterSpacing: "-0.01em", paragraphSpacing: "16px", textCase: "none", textDecoration: "none", usage: "Sub-section headers" },
+    { name: "H4", element: "h4", fontFamily: "Inter", size: "20px", weight: "600", lineHeight: "28px", letterSpacing: "0", paragraphSpacing: "14px", textCase: "none", textDecoration: "none", usage: "Card titles, widget headers" },
+    { name: "H5", element: "h5", fontFamily: "Inter", size: "16px", weight: "600", lineHeight: "24px", letterSpacing: "0", paragraphSpacing: "12px", textCase: "none", textDecoration: "none", usage: "Small section titles, labels" },
+    { name: "H6", element: "h6", fontFamily: "Inter", size: "14px", weight: "600", lineHeight: "20px", letterSpacing: "0.01em", paragraphSpacing: "10px", textCase: "none", textDecoration: "none", usage: "Sub-labels, grouped item headers" },
     // Body text (Inter)
     { name: "Body XL", element: "p", fontFamily: "Inter", size: "20px", weight: "400", lineHeight: "32px", letterSpacing: "-0.01em", paragraphSpacing: "20px", textCase: "none", textDecoration: "none", usage: "Featured text, hero descriptions" },
     { name: "Body LG", element: "p", fontFamily: "Inter", size: "18px", weight: "400", lineHeight: "28px", letterSpacing: "0", paragraphSpacing: "16px", textCase: "none", textDecoration: "none", usage: "Intro text, feature descriptions" },
@@ -942,10 +942,10 @@ export const shapeFoundationSections = {
     ],
 };
 export const typographyFoundationSections = {
-    overview: "Typography follows a dual family system: Mulish for headings and Inter for interface/body readability.",
+    overview: "Typography follows a dual family system: Mulish for the H1 page title, and Inter for every other heading (H2–H6), interface, and body text.",
     fonts: [
-        { family: "Mulish", role: "Display and heading hierarchy", weights: "600, 700" },
-        { family: "Inter", role: "Body, forms, labels, microcopy", weights: "400, 500, 600" },
+        { family: "Mulish", role: "H1 / display page titles only", weights: "600, 700, 800" },
+        { family: "Inter", role: "H2–H6 headings, body, forms, labels, microcopy", weights: "400, 500, 600, 700" },
         { family: "System Monospace", role: "Code and token references", weights: "400, 500" },
     ],
     typeScale: [

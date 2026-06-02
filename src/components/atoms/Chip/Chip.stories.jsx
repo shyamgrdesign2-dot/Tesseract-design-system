@@ -1,23 +1,34 @@
 import { Chip } from './index.js';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['default', 'primary', 'success', 'warning', 'error'];
 const VARIANTS = ['filled', 'outlined'];
+const SIZES = ['sm', 'md', 'lg'];
+const ICON_PX = { sm: 12, md: 14, lg: 16 };
 
 const meta = {
   title: 'Atoms/Chip',
   component: Chip,
-  tags: ['autodocs', 'ai-generated'],
+  tags: ['autodocs'],
   argTypes: {
-    label: { control: 'text' },
-    color: { control: 'select', options: COLORS },
-    variant: { control: 'inline-radio', options: VARIANTS },
-    disabled: { control: 'boolean' },
+    label: { control: 'text', table: { category: 'Content' } },
+    color: { control: 'select', options: COLORS, table: { category: 'Style' } },
+    variant: { control: 'inline-radio', options: VARIANTS, table: { category: 'Style' } },
+    size: { control: 'inline-radio', options: SIZES, table: { category: 'Style' } },
+    disabled: { control: 'boolean', table: { category: 'State' } },
+    removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
+    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', table: { category: 'Icons' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', table: { category: 'Icons' } },
   },
   args: {
     label: 'Chip',
     color: 'default',
     variant: 'filled',
+    size: 'md',
     disabled: false,
+    removable: false,
+    leftIconName: '',
+    rightIconName: '',
   },
 };
 
@@ -29,7 +40,29 @@ const Row = ({ children }) => (
   </div>
 );
 
-export const Playground = {};
+export const Playground = {
+  render: ({ leftIconName, rightIconName, removable, ...args }) => {
+    const px = ICON_PX[args.size] || 14;
+    return (
+      <Chip
+        {...args}
+        icon={leftIconName ? <TPLibraryIcon name={leftIconName} size={px} /> : undefined}
+        rightIcon={rightIconName ? <TPLibraryIcon name={rightIconName} size={px} /> : undefined}
+        onDelete={removable ? () => {} : undefined}
+      />
+    );
+  },
+};
+
+export const Sizes = {
+  render: (args) => (
+    <Row>
+      {SIZES.map((size) => (
+        <Chip key={size} {...args} size={size} label={size.toUpperCase()} />
+      ))}
+    </Row>
+  ),
+};
 
 export const Colors = {
   render: (args) => (

@@ -6,7 +6,7 @@ const meta = {
   component: Switch,
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     checked: { control: 'boolean' },
     defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -39,6 +39,7 @@ export const Sizes = {
     <Row>
       <Switch {...args} size="sm" defaultChecked aria-label="small" />
       <Switch {...args} size="md" defaultChecked aria-label="medium" />
+      <Switch {...args} size="lg" defaultChecked aria-label="large" />
     </Row>
   ),
 };

@@ -3,14 +3,14 @@
 > **Scope:** every composed-but-still-generic component in `src/components/molecules/`.
 > **Audience:** designers (which composed pattern fits this layout?), frontend devs (compose features without reinventing dialogs/tables/etc.), PMs (vocabulary), AI assistants (avoid recreating existing patterns).
 > **Read when:** you need a dialog, table, drawer, banner, calendar, command palette, etc. — check here before building one.
-> **Sibling docs:** [`../component-library.md`](../component-library.md) (rules) · [`../atoms/atoms-catalog.md`](../atoms/atoms-catalog.md) · [`../organisms/organisms-map.md`](../organisms/organisms-map.md) (where domain-specific compositions live).
+> **Sibling docs:** [`../atoms/atoms-catalog.md`](../atoms/atoms-catalog.md) · [`../../design-system/design-tokens-and-theme.md`](../../design-system/design-tokens-and-theme.md).
 
 Composed UI patterns built from atoms. **Still domain-agnostic** — a
 molecule could ship in a generic UI library.
 
-> **Import rule:** molecules may import atoms + sibling molecules + the shared overlay primitives in [`@/src/hooks/ui/`](../../hooks/ui/) + `@/src/hooks/utils` + design tokens. **No `@radix-ui/*` or other third-party UI lib** — every molecule is hand-rolled. Never `organisms/`.
+> **Import rule:** molecules may import atoms + sibling molecules + the shared overlay primitives in [`@/src/hooks/ui/`](../../hooks/ui/) + `@/src/hooks/utils` + design tokens. **No `@radix-ui/*` or other third-party UI lib** — every molecule is hand-rolled.
 
-> **Zero Radix:** `Dialog`, `Drawer`, `ConfirmDialog`, `DropdownMenu`, `Tabs`, `Accordion` all hand-rolled on top of [`DialogPrimitive`](../../hooks/ui/DialogPrimitive.jsx) / [`use-overlay`](../../hooks/ui/use-overlay.js) / [`Slot`](../../hooks/ui/Slot.jsx) / [`Portal`](../../hooks/ui/Portal.jsx). See [`../component-library.md`](../component-library.md) §"How we removed Radix entirely".
+> **Zero Radix:** `Dialog`, `ConfirmDialog`, `Tabs`, `Accordion` all hand-rolled on top of [`DialogPrimitive`](../../hooks/ui/DialogPrimitive.jsx) / [`use-overlay`](../../hooks/ui/use-overlay.js) / [`Slot`](../../hooks/ui/Slot.jsx) / [`Portal`](../../hooks/ui/Portal.jsx).
 
 ## Catalog
 
@@ -18,47 +18,33 @@ molecule could ship in a generic UI library.
 
 | Molecule | Purpose |
 |---|---|
-| `Card` | Padded white surface with shadow + radius. The default container. |
-| `Drawer` | Side-sliding sheet (left/right/top/bottom). |
-| `Dialog` | Centered modal with overlay. Generic primitive. |
 | `ConfirmDialog` | Specialized "Are you sure?" dialog with title + warning callout + primary/secondary CTAs. **Pattern:** primary CTA (right, blue) is the safe action; secondary CTA (left) is destructive — use `secondaryTone="destructive"` to render it red. |
-| `EmptyState` | Centered illustration + title + body + optional action. |
 
 ### Navigation
 
 | Molecule | Purpose |
 |---|---|
-| `Tabs` | Horizontal tab strip + content panels (Radix Tabs). |
-| `Breadcrumbs` | Inline breadcrumb path. |
-| `Pagination` | Page-number controls. |
-| `DropdownMenu` | Action menu — kebab, "More", filter dropdowns. (Radix DropdownMenu.) |
-| `Command` | Searchable command palette (cmdk). |
+| `Tabs` | Horizontal tab strip + content panels. |
+| `Accordion` | Collapsible disclosure. |
 
 ### Feedback
 
 | Molecule | Purpose |
 |---|---|
-| `Snackbar` | Single bottom toast — success / error / info / warning. |
-| `Toaster` | Sonner-based toast manager (mounted globally in `layout.jsx`). |
-| `FlashSnackbar` | URL-flag triggered toast (e.g. `?flash=rx-saved`). |
-| `Banner` | Inline page-top banner — informational / warning. |
-| `Alert` | Inline contextual alert with icon + title + description. |
-| `Accordion` | Collapsible disclosure (Radix Accordion). |
+| `Toast` | Solid dark inline status message (info/success/warning/error). Only the icon is colored; white/lighter-white text; optional action + square dismiss. |
 
 ### Data
 
 | Molecule | Purpose |
 |---|---|
-| `Table` | Generic table primitives (head/body/row/cell). |
-| `ClinicalTable` | Domain-flavored table with status pills + interaction patterns specific to clinical lists. |
-| `Timeline` | Vertical timeline with dot + title + description per row. |
+| `DataTable` | The single configurable table. Column-config driven; options: `rowHeight` xs/sm/md/lg/xl, `stickyHeader`, `zebra`, `hoverable`, sticky-right columns. |
 | `DateRangePicker` | Calendar-driven date range picker with preset chips ("Today", "This Week", "Till Date"…). |
 
 ### Product-specific
 
 | Molecule | Purpose |
 |---|---|
-| `AppointmentBanner` | Hero banner used at the top of the appointment screen. Decorative gradient + title. |
+| `TPBanner` | The page hero banner. Dark radial gradient + animated lattice (`AnimatedGrid`), optional back button, title/subtitle, chips, and a flexible `actions` slot that takes dark-surface `Button`s in any shape (text / icon-only / split). |
 
 ## Patterns to know
 
@@ -83,33 +69,16 @@ The recording-confirm and back-confirm dialogs follow a fixed pattern:
 />
 ```
 
-### Toaster
-
-Mount `<Toaster>` once in the root layout (already done in
-`src/app/layout.jsx`). Trigger toasts from anywhere via `import { toast } from "sonner"`.
-
-```jsx
-import { toast } from "sonner";
-toast.success("Saved.");
-```
-
-### FlashSnackbar (URL-driven)
-
-For toasts that should appear after a navigation, set a query param on
-the destination URL and let `<FlashSnackbar>` surface it on arrival.
-
 ## When to use what
 
 | If you need… | Reach for |
 |---|---|
 | Modal "are you sure?" with destructive flow | `ConfirmDialog` |
-| Generic centered modal | `Dialog` |
-| Side-sliding panel | `Drawer` |
-| Bottom-of-screen toast (one-off) | `toast()` from sonner |
-| Inline contextual alert | `Alert` (or `Banner` for page-top) |
-| Right-click / kebab menu | `DropdownMenu` |
-| Filter or search palette | `Command` |
-| Static white surface | `Card` |
+| Inline status message (dark toast) | `Toast` |
+| Page hero with CTAs | `TPBanner` |
+| Tabbed content | `Tabs` |
+| Collapsible disclosure | `Accordion` |
+| Any data / list table | `DataTable` |
 | Date range filter | `DateRangePicker` |
 
 ## Adding a molecule
@@ -117,5 +86,5 @@ the destination URL and let `<FlashSnackbar>` surface it on arrival.
 Same shape as adding an atom (folder + `<Name>.jsx` + module SCSS +
 index barrel). Re-export from [`./index.js`](./index.js).
 
-If your "molecule" needs context, app state, or feature data — it's an
-organism, not a molecule. Move it to `src/components/organisms/<feature>/`.
+Keep molecules domain-agnostic: they compose atoms and sibling
+molecules, and never depend on app state or feature data.

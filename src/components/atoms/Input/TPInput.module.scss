@@ -1,27 +1,6 @@
 // TPInput.module.scss
-// All interaction states owned by CSS. No JS hover/focus state.
-
-// ─── Tokens ──────────────────────────────────────────────────────────────────
-$border:        #E2E2EA;
-$border-focus:  #7776E0;
-$ring-focus:    rgba(119,118,224,0.2);
-
-$success:       #10B981;
-$ring-success:  rgba(16,185,129,0.18);
-
-$error:         #E11D48;
-$ring-error:    rgba(225,29,72,0.18);
-
-$text:          #171725;
-$placeholder:   #A2A2A8;
-$helper:        #717179;
-$label:         #454551;
-
-$dis-bg:        #FAFAFB;
-$dis-text:      #A2A2A8;
-$dis-border:    #E2E2EA;
-
-$addon-bg:      #F7F7FB;
+// World-class, fully token-driven input. All interaction states owned by CSS.
+// Colors come from TP tokens (var(--tp-*)) with safe hex fallbacks.
 
 // ─── Outer wrapper ────────────────────────────────────────────────────────────
 .wrap {
@@ -30,12 +9,30 @@ $addon-bg:      #F7F7FB;
   gap:            6px;
   min-width:      0;
 
+  // Per-status accent + focus ring. Default accent is the brand blue (only
+  // applied on focus); status variants apply their accent even when idle.
+  --accent: var(--tp-blue-500, #4B4AD5);
+  --ring:   color-mix(in srgb, var(--tp-blue-500, #4B4AD5) 22%, transparent);
+
+  &[data-status="success"] {
+    --accent: var(--tp-success-500, #10B981);
+    --ring:   color-mix(in srgb, var(--tp-success-500, #10B981) 20%, transparent);
+  }
+  &[data-status="error"] {
+    --accent: var(--tp-error-500, #E11D48);
+    --ring:   color-mix(in srgb, var(--tp-error-500, #E11D48) 20%, transparent);
+  }
+  &[data-status="warning"] {
+    --accent: var(--tp-warning-500, #F59E0B);
+    --ring:   color-mix(in srgb, var(--tp-warning-500, #F59E0B) 22%, transparent);
+  }
+
   &.fullWidth { width: 100%; }
 
-  // Size propagation — shared by fieldRow height and border-radius
-  &[data-size="sm"] { --h: 36px; --r: 8px;  --px: 10px; --fs: 13px; --icon: 16px; }
+  // Size propagation — uniform 10px radius across sizes.
+  &[data-size="sm"] { --h: 36px; --r: 10px; --px: 10px; --fs: 13px; --icon: 16px; }
   &[data-size="md"] { --h: 42px; --r: 10px; --px: 12px; --fs: 14px; --icon: 18px; }
-  &[data-size="lg"] { --h: 48px; --r: 12px; --px: 14px; --fs: 14px; --icon: 20px; }
+  &[data-size="lg"] { --h: 48px; --r: 10px; --px: 14px; --fs: 15px; --icon: 20px; }
 }
 
 // ─── Label ────────────────────────────────────────────────────────────────────
@@ -45,85 +42,80 @@ $addon-bg:      #F7F7FB;
   gap:         3px;
   font-size:   13px;
   font-weight: 500;
-  color:       $label;
+  color:       var(--tp-slate-700, #454551);
   line-height: 1.4;
 }
 
-.required { color: $error; }
+.required { color: var(--tp-error-500, #E11D48); }
 
 // ─── Field row (addon + input + addon) ────────────────────────────────────────
 .fieldRow {
-  display:     flex;
-  align-items: stretch;
-  height:      var(--h, 42px);
-  width:       100%;
-
-  // Clip the row so addons share the outer radius cleanly
+  display:       flex;
+  align-items:   stretch;
+  height:        var(--h, 42px);
+  width:         100%;
   border-radius: var(--r, 10px);
+  corner-shape:  round; // accurate arc (override global squircle)
   overflow:      hidden;
-  border:        1.5px solid $border;
+  border:        1.5px solid var(--tp-slate-200, #E2E2EA);
   background:    #fff;
   transition:    border-color 140ms ease, box-shadow 140ms ease;
 
-  // Hover
-  &:hover:not(:has(input:disabled)) { border-color: darken($border, 8%); }
+  // Hover — only when NOT focused, so the focused stroke always wins.
+  &:hover:not(:focus-within):not(:has(input:disabled)) {
+    border-color: var(--tp-slate-300, #D0D5DD);
+  }
 
-  // Focus-within — the ring lives on the row, not the bare input
+  // Focus ("selected") — ring lives on the row.
   &:focus-within {
-    border-color: $border-focus;
-    box-shadow:   0 0 0 3px $ring-focus;
+    border-color: var(--accent);
+    box-shadow:   0 0 0 3px var(--ring);
     outline:      none;
   }
 
-  // Status: error
-  [data-status="error"] & {
-    border-color: $error;
-    &:focus-within { box-shadow: 0 0 0 3px $ring-error; }
-  }
-
-  // Status: success
-  [data-status="success"] & {
-    border-color: $success;
-    &:focus-within { box-shadow: 0 0 0 3px $ring-success; }
+  // Status variants signal their accent even when idle.
+  [data-status="success"] &,
+  [data-status="error"] &,
+  [data-status="warning"] & {
+    border-color: var(--accent);
+    &:focus-within { box-shadow: 0 0 0 3px var(--ring); }
   }
 
   // Disabled
   [data-disabled] & {
-    background:   $dis-bg;
-    border-color: $dis-border;
+    background:   var(--tp-slate-50, #FAFAFB);
+    border-color: var(--tp-slate-200, #E2E2EA);
     cursor:       not-allowed;
-    &:hover { border-color: $dis-border; }
-    &:focus-within { box-shadow: none; border-color: $dis-border; }
+    &:hover { border-color: var(--tp-slate-200, #E2E2EA); }
+    &:focus-within { box-shadow: none; border-color: var(--tp-slate-200, #E2E2EA); }
   }
 }
 
 // ─── Core input ───────────────────────────────────────────────────────────────
 .input {
-  flex:            1 1 0;
-  min-width:       0;
-  height:          100%;
-  padding:         0 var(--px, 12px);
-  font-size:       var(--fs, 14px);
-  font-family:     "Inter", sans-serif;
-  font-weight:     400;
-  color:           $text;
-  background:      transparent;
-  border:          none;
-  outline:         none;
-  line-height:     1.5;
+  flex:        1 1 0;
+  min-width:   0;
+  height:      100%;
+  padding:     0 var(--px, 12px);
+  font-size:   var(--fs, 14px);
+  font-family: var(--font-sans, "Inter", sans-serif);
+  font-weight: 400;
+  color:       var(--tp-slate-900, #171725);
+  background:  transparent;
+  border:      none;
+  outline:     none;
+  line-height: 1.5;
 
-  &::placeholder { color: $placeholder; }
+  &::placeholder { color: var(--tp-slate-400, #A2A2A8); }
+  &:disabled { color: var(--tp-slate-400, #A2A2A8); cursor: not-allowed; }
 
-  &:disabled {
-    color:  $dis-text;
-    cursor: not-allowed;
-  }
-
-  // Tighten padding when icon present (handled by inputWrap padding)
-  .iconLeft  ~ & { padding-left:  6px; }
+  // Hide native number spinners (we provide our own stepper).
+  &[type="number"] { -moz-appearance: textfield; }
+  &[type="number"]::-webkit-outer-spin-button,
+  &[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 }
 
-// ─── Input wrap (icon container) ─────────────────────────────────────────────
+// ─── Input wrap (icons + input + trailing cluster) ────────────────────────────
 .inputWrap {
   display:     flex;
   align-items: center;
@@ -131,96 +123,172 @@ $addon-bg:      #F7F7FB;
   min-width:   0;
   overflow:    hidden;
 
-  // Left icon presence → reduce input left padding
-  &:has(.iconLeft) .input  { padding-left: 6px; }
-  &:has(.iconRight) .input { padding-right: 6px; }
-  &:has(.unit) .input      { padding-right: 4px; }
+  // Trim input padding on whichever side carries an adornment.
+  &:has(.iconLeft) .input  { padding-left:  6px; }
+  &:has(.trailing) .input  { padding-right: 4px; }
 }
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 .iconLeft,
 .iconRight {
-  display:          inline-flex;
-  flex-shrink:      0;
-  align-items:      center;
-  justify-content:  center;
-  width:            var(--icon, 18px);
-  height:           var(--icon, 18px);
-  color:            $placeholder;
+  display:         inline-flex;
+  flex-shrink:     0;
+  align-items:     center;
+  justify-content: center;
+  width:           var(--icon, 18px);
+  height:          var(--icon, 18px);
+  color:           var(--tp-slate-400, #A2A2A8);
 
-  svg { width: 100%; height: 100%; stroke: currentColor; fill: none; }
+  svg { width: 100%; height: 100%; }
 }
 
-.iconLeft  { margin-left:  var(--px, 12px); }
-.iconRight { margin-right: var(--px, 12px); }
+.iconLeft { margin-left: var(--px, 12px); }
 
-// Success icon gets success color
-[data-status="success"] .iconRight { color: $success; }
-// Error icon gets error color
-[data-status="error"]   .iconRight { color: $error; }
+// ─── Trailing cluster (unit · clear · status/spinner · right icon) ────────────
+.trailing {
+  display:        inline-flex;
+  align-items:    center;
+  gap:            6px;
+  flex-shrink:    0;
+  height:         100%;
+  padding-right:  var(--px, 12px);
+}
 
-// ─── Unit (fixed text, e.g. "kg", "USD") ─────────────────────────────────────
+// ─── Unit (fixed text, e.g. "kg", "USD") ──────────────────────────────────────
 .unit {
   flex-shrink:    0;
-  padding:        0 10px 0 4px;
   font-size:      var(--fs, 14px);
   font-weight:    500;
-  color:          $helper;
+  color:          var(--tp-slate-500, #717179);
   white-space:    nowrap;
   pointer-events: none;
 }
 
-// ─── Addons (pinned left/right blocks) ───────────────────────────────────────
-.addonLeft,
-.addonRight {
-  display:         flex;
-  align-items:     center;
+// ─── Status icon (✓ / ! / ⚠) ───────────────────────────────────────────────────
+.statusIcon {
+  display:         inline-flex;
   flex-shrink:     0;
-  background:      $addon-bg;
-  padding:         0 10px;
-  font-size:       var(--fs, 14px);
-  color:           $helper;
-  white-space:     nowrap;
-  border-color:    inherit;
+  align-items:     center;
+  justify-content: center;
+  width:           var(--icon, 18px);
+  height:          var(--icon, 18px);
+  color:           var(--accent);
+  svg { width: 100%; height: 100%; }
 }
 
-.addonLeft  { border-right: 1.5px solid $border; }
-.addonRight { border-left:  1.5px solid $border; }
+// ─── Clear button (×) ───────────────────────────────────────────────────────────
+.clear {
+  display:         inline-flex;
+  flex-shrink:     0;
+  align-items:     center;
+  justify-content: center;
+  width:           18px;
+  height:          18px;
+  padding:         0;
+  border:          none;
+  border-radius:   9999px;
+  background:      var(--tp-slate-100, #F1F1F5);
+  color:           var(--tp-slate-500, #717179);
+  cursor:          pointer;
+  transition:      background 120ms ease, color 120ms ease;
 
-// ─── Counter stepper buttons (+/-) ───────────────────────────────────────────
+  &:hover {
+    background: var(--tp-slate-200, #E2E2EA);
+    color:      var(--tp-slate-700, #454551);
+  }
+  svg { width: 11px; height: 11px; }
+}
+
+// ─── Loading spinner ───────────────────────────────────────────────────────────
+.spinner {
+  flex-shrink:     0;
+  width:           var(--icon, 18px);
+  height:          var(--icon, 18px);
+  border:          2px solid var(--tp-slate-200, #E2E2EA);
+  border-top-color: var(--accent);
+  border-radius:   9999px;
+  animation:       tp-input-spin 0.7s linear infinite;
+}
+
+@keyframes tp-input-spin { to { transform: rotate(360deg); } }
+
+// ─── Addons (pinned left/right blocks) ────────────────────────────────────────
+// Structural only: full-height, flush to the edge. The content owns its own
+// background + horizontal padding so it sits cleanly against the divider.
+.addonLeft,
+.addonRight {
+  display:      flex;
+  align-items:  stretch;
+  flex-shrink:  0;
+  white-space:  nowrap;
+  font-size:    var(--fs, 14px);
+  color:        var(--tp-slate-600, #545460);
+
+  // Any direct child fills the row height and centers its content.
+  > * {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    height:          100%;
+  }
+}
+
+.addonLeft  { border-right: 1.5px solid var(--tp-slate-200, #E2E2EA); }
+.addonRight { border-left:  1.5px solid var(--tp-slate-200, #E2E2EA); }
+
+// ─── Counter stepper buttons (+/-) ────────────────────────────────────────────
 .stepBtn {
-  display:          inline-flex;
-  flex-shrink:      0;
-  align-items:      center;
-  justify-content:  center;
-  width:            var(--h, 42px);
-  height:           100%;
-  background:       $addon-bg;
-  border:           none;
-  color:            $label;
-  cursor:           pointer;
-  transition:       background 120ms ease;
+  display:         inline-flex;
+  flex-shrink:     0;
+  align-items:     center;
+  justify-content: center;
+  width:           var(--h, 42px);
+  height:          100%;
+  background:      var(--tp-slate-50, #FAFAFB);
+  border:          none;
+  color:           var(--tp-slate-700, #454551);
+  cursor:          pointer;
+  transition:      background 120ms ease;
 
-  &:hover:not(:disabled) { background: darken($addon-bg, 4%); }
-  &:disabled { cursor: not-allowed; color: $dis-text; }
+  &:hover:not(:disabled) { background: var(--tp-slate-100, #F1F1F5); }
+  &:disabled { cursor: not-allowed; color: var(--tp-slate-400, #A2A2A8); }
 
-  // Left stepper
-  &:first-child { border-right: 1.5px solid $border; }
-  // Right stepper
-  &:last-child  { border-left:  1.5px solid $border; }
+  &:first-child { border-right: 1.5px solid var(--tp-slate-200, #E2E2EA); }
+  &:last-child  { border-left:  1.5px solid var(--tp-slate-200, #E2E2EA); }
 
   svg { pointer-events: none; }
 }
 
-// ─── Helper / error text ──────────────────────────────────────────────────────
+// ─── Footer (helper text + character count) ───────────────────────────────────
+.footer {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  gap:             10px;
+  min-height:      0;
+}
+
 .helper {
   display:     flex;
   align-items: center;
   gap:         4px;
   font-size:   12px;
-  color:       $helper;
+  color:       var(--tp-slate-500, #717179);
   line-height: 1.4;
 
-  [data-status="error"]   & { color: $error; }
-  [data-status="success"] & { color: $success; }
+  [data-status="success"] & { color: var(--tp-success-600, #059669); }
+  [data-status="error"]   & { color: var(--tp-error-600, #C8102E); }
+  [data-status="warning"] & { color: var(--tp-warning-700, #B45309); }
+
+  svg { flex-shrink: 0; }
+}
+
+.count {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size:   12px;
+  font-variant-numeric: tabular-nums;
+  color:       var(--tp-slate-400, #A2A2A8);
+
+  &[data-over="true"] { color: var(--tp-error-500, #E11D48); font-weight: 600; }
 }

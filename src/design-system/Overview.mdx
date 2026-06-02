@@ -1,0 +1,87 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Overview" />
+
+# TatvaPractice Design System
+
+A single, coherent component library for TatvaPractice (TP) surfaces. Every
+component here is **in-house, configuration-driven, and reusable anywhere** —
+the same `<DataTable>`, `<Tabs>`, or `<Toast>` drops into Appointments,
+Follow-ups, All Patients, or any new screen and reads as the same surface.
+
+This page is the entry point for the team and the community: it states the
+principles, and **[Component Standards](?path=/docs/design-system-component-standards--docs)**
+is the contract every component must satisfy.
+
+---
+
+## Principles
+
+1. **In-house, zero UI dependencies.** Only `react` / `react-dom` at runtime.
+   Overlays, tooltips, popovers, tables, date pickers — all hand-rolled on our
+   shared primitives (`Portal`, `Slot`, `usePosition`, `useEscape`,
+   `useClickOutside`). No Radix, no MUI, no headless-UI.
+
+2. **TP tokens only.** Color, radius, spacing come from `var(--tp-*)` design
+   tokens — never raw hex (token fallbacks aside). Swap the token layer, retheme
+   the whole system.
+
+3. **TP icons only.** Components use the vendored TP icon set. Any place an icon
+   is configurable exposes it through the searchable **TP Icons** panel, backed
+   by the full 6,769-icon library served on demand.
+
+4. **Configuration-driven.** Components are described by data — a column config,
+   a tabs array, a filter-groups config — not by bespoke markup per screen. Add
+   a column, add a tab, change a filter: edit config, not code.
+
+5. **Everything in Controls.** Every variant, state, and per-part option a
+   component supports is a Storybook control. If you can't drive it from the
+   Controls panel, it isn't done.
+
+6. **Responsive & accessible by default.** Horizontal scroll over squish, sticky
+   affordances with shadows, truncation + tooltip for overflow, keyboard nav,
+   ARIA roles, focus-visible rings.
+
+---
+
+## How it's organized
+
+- **Atoms** — primitives: `Button`, `Badge`/`Chip`/`Tag`, `Checkbox`, `Radio`,
+  `Switch`, `Slider`, `Input`, `Tooltip`, `Divider`, `Skeleton`,
+  `LoadingIndicator`, `TPIcon` + `IconPicker`.
+- **Molecules** — composed surfaces: `DataTable` (+ `DataCell`), `Tabs`,
+  `Toast`, `Filter`, `ConfirmDialog`, `Dialog`, `DateRangePicker`, `Accordion`,
+  `TPBanner`.
+- **Foundations** — `design-system/tokens` (colors, radius, spacing) and the
+  vendored TP icon library.
+
+---
+
+## The icon system
+
+<table>
+  <thead><tr><th>Layer</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>TPIcon</code> (curated set, 6 styles)</td><td>Component internals + common UI icons. Active states can swap <code>linear → bulk</code>.</td></tr>
+    <tr><td><code>TPLibraryIcon</code> (full 6,769 library)</td><td>Free-form icon slots, rendered mask-themed so any icon tints to <code>currentColor</code>. Served statically — not bundled.</td></tr>
+    <tr><td><strong>TP Icons</strong> addon panel</td><td>Searchable picker that writes to any <code>tpIcon</code>-flagged control. Mark an argType <code>tpIcon: true</code> and it becomes pickable.</td></tr>
+  </tbody>
+</table>
+
+---
+
+## What "reusable anywhere" means in practice
+
+The DataTable is the reference. One component renders Appointments, patient
+lists, billing — by passing a different **column config** and **data**:
+
+- per-column **sort**, **sticky**, **align**, **min/max width**
+- rich cells via `DataCell`: primary + subtext, each with **left/right icons**,
+  truncation rule (subtext → 1 line, none → 2), overflow → **Tooltip**
+- table modes: **pagination**, **infinite lazy-load**, sticky header, zebra,
+  density, horizontal scroll with a sticky-column shadow
+
+`Filter` sits beside it as a separate, swappable chip-based component — the
+filter set changes per table without touching the table. That separation is the
+pattern: **compose small configurable pieces** rather than build a bespoke table
+per screen.

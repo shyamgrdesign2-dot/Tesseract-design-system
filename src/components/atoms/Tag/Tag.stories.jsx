@@ -1,24 +1,32 @@
 import { Tag } from './index.js';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['blue', 'violet', 'amber', 'success', 'error', 'warning', 'slate'];
 const VARIANTS = ['light', 'medium', 'filled', 'outline'];
 const SIZES = ['sm', 'md', 'lg'];
+const ICON_PX = { sm: 12, md: 14, lg: 16 };
 
 const meta = {
   title: 'Atoms/Tag',
   component: Tag,
-  tags: ['autodocs', 'ai-generated'],
+  tags: ['autodocs'],
   argTypes: {
-    children: { control: 'text' },
-    color: { control: 'select', options: COLORS },
-    variant: { control: 'select', options: VARIANTS },
-    size: { control: 'inline-radio', options: SIZES },
+    children: { control: 'text', name: 'label', table: { category: 'Content' } },
+    color: { control: 'select', options: COLORS, table: { category: 'Style' } },
+    variant: { control: 'select', options: VARIANTS, table: { category: 'Style' } },
+    size: { control: 'inline-radio', options: SIZES, table: { category: 'Style' } },
+    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', description: 'TP icon before the label', table: { category: 'Icons' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon after the label', table: { category: 'Icons' } },
+    removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
   },
   args: {
     children: 'Tag',
     color: 'blue',
     variant: 'light',
     size: 'md',
+    leftIconName: '',
+    rightIconName: '',
+    removable: false,
   },
 };
 
@@ -30,7 +38,19 @@ const Row = ({ children }) => (
   </div>
 );
 
-export const Playground = {};
+export const Playground = {
+  render: ({ leftIconName, rightIconName, removable, ...args }) => {
+    const px = ICON_PX[args.size] || 14;
+    return (
+      <Tag
+        {...args}
+        icon={leftIconName ? <TPLibraryIcon name={leftIconName} size={px} /> : undefined}
+        iconRight={rightIconName ? <TPLibraryIcon name={rightIconName} size={px} /> : undefined}
+        onRemove={removable ? () => {} : undefined}
+      />
+    );
+  },
+};
 
 export const Colors = {
   render: (args) => (

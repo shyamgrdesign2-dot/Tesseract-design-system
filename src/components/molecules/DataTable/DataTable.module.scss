@@ -1,0 +1,271 @@
+/* DataTable.module.scss — scroll, sticky-shadow, density, sort, cell, pagination. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: Inter, var(--font-sans, sans-serif);
+}
+
+/* Horizontal scroll container. On overflow the row scrolls; columns keep their
+   min-widths instead of squishing. */
+.scroller {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tp-slate-200, #e2e2ea) transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar { height: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background-color: var(--tp-slate-200, #e2e2ea); border-radius: 999px; }
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  color: var(--tp-slate-800, #27272a);
+}
+
+/* ── Header ── */
+.headRow { background-color: var(--tp-slate-100, #f0f0f6); }
+
+.th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tp-slate-700, #454551);
+  white-space: nowrap;
+  background-color: var(--tp-slate-100, #f0f0f6);
+  vertical-align: middle;
+
+  &[data-align="right"]  { text-align: right; }
+  &[data-align="center"] { text-align: center; }
+
+  &:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+  &:last-child  { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+}
+
+.headRow[data-sticky-header="true"] .th {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+/* Sort affordance in the header. */
+.sortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover { color: var(--tp-slate-900, #171725); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8e8de8); outline-offset: 2px; border-radius: 4px; }
+}
+.th[data-align="right"] .sortBtn { flex-direction: row-reverse; }
+
+.sortGlyph { flex-shrink: 0; }
+
+/* Both arrows faint by default; the active direction's arrow goes dark neutral. */
+.sortUp,
+.sortDown { fill: var(--tp-slate-300, #d4d4d8); transition: fill 120ms ease; }
+
+.sortBtn:hover .sortUp,
+.sortBtn:hover .sortDown { fill: var(--tp-slate-400, #a1a1aa); }
+
+.sortBtn[data-dir="asc"]  .sortUp   { fill: var(--tp-slate-900, #171725); }
+.sortBtn[data-dir="desc"] .sortDown { fill: var(--tp-slate-900, #171725); }
+
+/* ── Body ── */
+.td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--tp-slate-100, #f0f0f6);
+  background-color: var(--tp-slate-0, #ffffff);
+
+  &[data-align="right"]  { text-align: right; }
+  &[data-align="center"] { text-align: center; }
+}
+.row:last-child .td { border-bottom: none; }
+
+/* Density (row height + vertical padding) */
+.table[data-density="xs"] .td, .table[data-density="xs"] .th { padding-top: 4px;  padding-bottom: 4px;  }
+.table[data-density="sm"] .td, .table[data-density="sm"] .th { padding-top: 7px;  padding-bottom: 7px;  }
+.table[data-density="md"] .td { padding-top: 10px; padding-bottom: 10px; }
+.table[data-density="lg"] .td { padding-top: 14px; padding-bottom: 14px; }
+.table[data-density="xl"] .td { padding-top: 18px; padding-bottom: 18px; }
+
+.table[data-zebra="true"] .row:nth-child(even) .td { background-color: var(--tp-slate-50, #f8fafc); }
+.table[data-hoverable="true"] .row:hover .td { background-color: var(--tp-slate-50, #f8fafc); }
+
+/* ── Sticky right column (e.g. Actions) ── */
+.sticky {
+  position: sticky;
+  right: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+.th.sticky { z-index: 31; }
+
+/* Linear neutral "shadow" to the LEFT of the sticky column — only while there
+   is content hidden underneath (horizontal overflow, not scrolled to the end). */
+.scroller[data-overflow="true"] .sticky::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 18px;
+  transform: translateX(-100%);
+  background: linear-gradient(to left, color-mix(in srgb, var(--tp-slate-900, #171725) 12%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* ── Rich cell (DataCell) ── */
+.cell { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cell[data-align="right"]  { align-items: flex-end; text-align: right; }
+.cell[data-align="center"] { align-items: center; text-align: center; }
+
+.cellLine { display: flex; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
+.cellIcon { display: inline-flex; flex-shrink: 0; color: var(--tp-slate-400, #a1a1aa); }
+
+.clamp {
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.primary   { font-size: 14px; color: var(--tp-slate-800, #27272a); }
+.secondary { font-size: 12px; color: var(--tp-slate-500, #717179); }
+
+/* ── Empty state ── */
+.empty { padding: 48px 16px; text-align: center; color: var(--tp-slate-400, #a1a1aa); }
+
+/* ── Shimmer skeleton (lazy-load) ── */
+.shimmer {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  corner-shape: round;
+  background: linear-gradient(
+    90deg,
+    var(--tp-slate-100, #f0f0f6) 25%,
+    var(--tp-slate-200, #e2e2ea) 37%,
+    var(--tp-slate-100, #f0f0f6) 63%
+  );
+  background-size: 400% 100%;
+  animation: tp-dt-shimmer 1.4s ease infinite;
+}
+@keyframes tp-dt-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shimmer { animation: none; }
+}
+
+/* ── Tag cell (type: "tag") ── */
+// Tag cells compose the Badge atom (see CellTag in DataTable.jsx).
+.tagRow { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+
+/* ── Pagination ── */
+/* Universal, neutral pagination — rows-per-page + range (left), pager (right). */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  font-size: 12px;
+  color: var(--tp-slate-500, #717179);
+}
+
+.pageLeft { display: flex; align-items: center; gap: 14px; }
+.pageInfo { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Rows-per-page selector (neutral) */
+.rpp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tp-slate-500, #717179);
+  white-space: nowrap;
+}
+.rppSelectWrap { position: relative; display: inline-flex; align-items: center; }
+.rppSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 26px;
+  padding: 0 24px 0 8px;
+  border: 1px solid var(--tp-slate-200, #e2e2ea);
+  border-radius: 7px;
+  corner-shape: round;
+  background-color: var(--tp-slate-0, #fff);
+  color: var(--tp-slate-700, #454551);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+
+  &:hover { border-color: var(--tp-slate-300, #d4d4d8); }
+  &:focus-visible { outline: none; border-color: var(--tp-slate-400, #a1a1aa); box-shadow: 0 0 0 3px var(--tp-slate-100, #f0f0f6); }
+}
+.rppCaret { position: absolute; right: 7px; pointer-events: none; color: var(--tp-slate-400, #a1a1aa); }
+
+/* Pager group — no outer frame, just the controls. */
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageBtn,
+.pageNav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  corner-shape: round;
+  background-color: transparent;
+  color: var(--tp-slate-600, #52525b);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+
+  &:hover:not(:disabled) { background-color: var(--tp-slate-100, #f0f0f6); color: var(--tp-slate-900, #171725); }
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+
+/* Active page — light neutral chip (no brand color, no heavy black). */
+.pageBtn[data-active="true"] {
+  background-color: var(--tp-slate-100, #f0f0f6);
+  color: var(--tp-slate-900, #171725);
+  font-weight: 700;
+}
+.pageBtn[data-active="true"]:hover { background-color: var(--tp-slate-200, #e2e2ea); color: var(--tp-slate-900, #171725); }
+
+.ellipsis { padding: 0 2px; color: var(--tp-slate-400, #a1a1aa); font-size: 12px; align-self: center; }

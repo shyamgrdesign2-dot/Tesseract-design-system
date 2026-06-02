@@ -1,20 +1,21 @@
-import * as React from "react";
+import { useSyncExternalStore } from "react";
+
+const QUERY = "(hover: none) and (pointer: coarse)";
+
+function subscribe(callback) {
+  const mql = window.matchMedia(QUERY);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+const getSnapshot = () => window.matchMedia(QUERY).matches;
+const getServerSnapshot = () => false; // SSR: assume hover-capable until hydrated
 
 /**
- * Detects whether the current device is a touch-only device (e.g. iPad, mobile).
- * Uses `(hover: none) and (pointer: coarse)` media query.
- * Returns `true` for touch-only devices, `false` for devices with hover support.
+ * useTouchDevice — true on touch-only devices (e.g. tablet/mobile), detected via
+ * `(hover: none) and (pointer: coarse)`. Built on useSyncExternalStore so it
+ * stays in sync without setState-in-effect.
  */
 export function useTouchDevice() {
-  const [isTouch, setIsTouch] = React.useState(false);
-
-  React.useEffect(() => {
-    const mql = window.matchMedia("(hover: none) and (pointer: coarse)");
-    const onChange = () => setIsTouch(mql.matches);
-    mql.addEventListener("change", onChange);
-    setIsTouch(mql.matches);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  return isTouch;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

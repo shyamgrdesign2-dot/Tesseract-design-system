@@ -107,11 +107,15 @@ Rules of thumb:
 |---|---|---|
 | Body | Inter | 14 px |
 | Meta / subtitle | Inter | 12 px |
-| Heading | Mulish | 16 / 18 / 20 / 24 / 28 / 32 px |
+| H1 page title | Mulish | 36 px (display 48 / 56) |
+| H2–H6 headings | Inter | 14 / 16 / 20 / 24 / 30 px |
 | Trackers (uppercase labels) | Inter | 10 px |
 
-Loaded once in `src/app/layout.jsx` via `next/font/google`. Available
-on `<body>` as the `--font-sans` and `--font-heading` CSS variables.
+Mulish is reserved for the H1 page title; every other heading uses Inter.
+The families resolve from the `--font-heading` (Mulish) and `--font-sans`
+(Inter) CSS variables defined in `tp-tokens.css`. Load the actual webfonts
+once (a `<link>` to Google Fonts, or self-host) — the Storybook does this in
+`.storybook/preview-head.html`.
 
 **Forbidden sizes:** 9, 11, 13, 15, 17, 19, 21, 23 px. Use the next
 even step.

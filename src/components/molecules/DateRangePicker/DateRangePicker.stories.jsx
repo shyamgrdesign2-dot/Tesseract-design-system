@@ -1,25 +1,69 @@
 import React from 'react';
 import { DateRangePicker } from './DateRangePicker';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const meta = {
   title: 'Molecules/DateRangePicker',
   component: DateRangePicker,
-  tags: ['autodocs', 'ai-generated'],
+  tags: ['autodocs'],
+  argTypes: {
+    mode: { control: 'inline-radio', options: ['range', 'single'], description: 'Range (start–end) or a single date', table: { category: 'Type' } },
+    months: { control: 'inline-radio', options: [1, 2], description: 'Number of calendars shown (max 2)', table: { category: 'Type' } },
+    showPresets: { control: 'boolean', name: 'show presets', description: 'Quick-select preset rail (range only)', table: { category: 'Type' } },
+    hideFuturePresets: { control: 'boolean', description: 'Hide presets that reference future dates', table: { category: 'Type' } },
+    iconName: { control: 'text', tpIcon: true, name: 'trigger icon', description: 'TP icon shown in the trigger', table: { category: 'Content' } },
+    value: { control: false },
+    onChange: { control: false },
+  },
+  args: { mode: 'range', months: 2, showPresets: true, hideFuturePresets: false, iconName: 'calendar-1' },
 };
 
 export default meta;
 
-/** Click the trigger to open the two-month picker with presets. */
+/** Every type in one place — switch `mode`, `months`, and `show presets` in Controls. */
 export const Playground = {
-  render: () => {
+  render: ({ iconName, mode, months, showPresets, hideFuturePresets }) => {
     const [value, setValue] = React.useState('till-date');
     return (
       <div style={{ width: 280 }}>
-        <DateRangePicker value={value} onChange={(r) => setValue(r.presetId)} />
+        <DateRangePicker
+          mode={mode}
+          months={months}
+          showPresets={showPresets}
+          hideFuturePresets={hideFuturePresets}
+          value={value}
+          onChange={(r) => setValue(r.mode === 'single' ? r.date : r.presetId)}
+          icon={iconName ? <TPLibraryIcon name={iconName} size={16} /> : undefined}
+        />
       </div>
     );
   },
 };
+
+/** Single-date picker — one month, pick one day. */
+export const SingleDate = {
+  render: () => {
+    const [value, setValue] = React.useState(null);
+    return (
+      <div style={{ width: 280 }}>
+        <DateRangePicker mode="single" value={value} onChange={(r) => setValue(r.date)} />
+      </div>
+    );
+  },
+};
+
+/** Compact range — a single month, no preset rail. */
+export const SingleMonthRange = {
+  render: () => {
+    const [value, setValue] = React.useState(null);
+    return (
+      <div style={{ width: 280 }}>
+        <DateRangePicker mode="range" months={1} showPresets={false} value={value} onChange={(r) => setValue(r.presetId)} />
+      </div>
+    );
+  },
+};
+
 
 /** Pre-selected "Today" preset. */
 export const TodayPreset = {

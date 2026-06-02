@@ -41,6 +41,8 @@ $letter-spacing-normal:  0;       // default
 $letter-spacing-wide:    0.01em;  // caption, h6
 
 // ── Heading Presets (for @include heading()) ──
+// Mulish ($font-heading) is reserved for the H1 page title. Every other
+// heading (H2–H6) uses Inter ($font-body), matching body/UI text.
 $headings: (
   h1: (
     family: $font-heading,
@@ -50,35 +52,35 @@ $headings: (
     letter-spacing: $letter-spacing-tight,
   ),
   h2: (
-    family: $font-heading,
+    family: $font-body,
     size: $font-size-title,
     weight: $font-weight-semibold,
     line-height: $line-height-snug,
     letter-spacing: $letter-spacing-snug,
   ),
   h3: (
-    family: $font-heading,
+    family: $font-body,
     size: $font-size-heading,
     weight: $font-weight-semibold,
     line-height: $line-height-heading,
     letter-spacing: $letter-spacing-normal,
   ),
   h4: (
-    family: $font-heading,
+    family: $font-body,
     size: $font-size-subhead,
     weight: $font-weight-semibold,
     line-height: $line-height-relaxed,
     letter-spacing: $letter-spacing-normal,
   ),
   h5: (
-    family: $font-heading,
+    family: $font-body,
     size: $font-size-large,
     weight: $font-weight-semibold,
     line-height: $line-height-body,
     letter-spacing: $letter-spacing-normal,
   ),
   h6: (
-    family: $font-heading,
+    family: $font-body,
     size: $font-size-body,
     weight: $font-weight-semibold,
     line-height: $line-height-loose,

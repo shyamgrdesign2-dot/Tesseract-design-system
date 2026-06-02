@@ -1,3 +1,25 @@
+/* ─── Base reset ─────────────────────────────────────────────────────────────
+   Minimal preflight-equivalent. Previously these came from Tailwind's preflight;
+   now that the library is dependency-free, they live here so layout, font
+   inheritance, and box-sizing stay consistent for every consumer.
+   ──────────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+}
+
 /* ─── Smoothed corners (squircle) ────────────────────────────────────────────
    Applies iOS-style super-ellipse rounding to every element that already has
    a non-zero border-radius. The `corner-shape` property is a CSS Shapes Level 2
@@ -21,7 +43,7 @@ html, body {
 }
 
 body {
-  font-family: "Inter", var(--font-sans), sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
   color: #171725;
@@ -29,8 +51,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Only the H1 page title uses Mulish. Every other heading uses Inter. */
 h1 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-heading);
   font-size: 36px;
   font-weight: 700;
   line-height: 1.22;
@@ -39,7 +62,7 @@ h1 {
 }
 
 h2 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-sans);
   font-size: 30px;
   font-weight: 600;
   line-height: 1.27;
@@ -48,7 +71,7 @@ h2 {
 }
 
 h3 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 600;
   line-height: 1.33;
@@ -57,7 +80,7 @@ h3 {
 }
 
 h4 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 600;
   line-height: 1.4;
@@ -66,7 +89,7 @@ h4 {
 }
 
 h5 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
@@ -75,7 +98,7 @@ h5 {
 }
 
 h6 {
-  font-family: "Mulish", var(--font-heading), sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.43;

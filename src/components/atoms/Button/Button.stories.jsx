@@ -1,28 +1,28 @@
 /**
- * Button — TatvaPractice CTA System
+ * Button — the single TatvaPractice CTA.
  *
- * Documents the CSS-module Button (data-attribute API).
- * For the token-based extended variant, see TPButton.stories.
+ * One component, every shape: text · with icons · icon-only · split (primary+menu).
+ * Styling is data-attribute driven (Button.module.scss); the split menu is the
+ * only stateful path.
  *
  * Coverage:
- *  • 5 variants  × 3 themes  × 3 sizes
- *  • Icon positions: none | left | right | left+right
- *  • States: default, hover (CSS), disabled, loading
- *  • Surface: light | dark  — all 5 variants on dark with whitish tones
- *  • Full interactive Playground
+ *  • 5 variants × 3 themes × 3 sizes
+ *  • Icons: none | left | right | both | icon-only
+ *  • Split button (menu) across variants, sizes, states, dark surface
+ *  • States: default, disabled, loading · Surface: light | dark
  */
 
 import { Button } from './Button';
-import { TPSplitButton } from './button-system/TPSplitButton';
 import {
   Plus, ChevronRight, Download, Trash2, Check, Pencil, Search, Sparkles,
-  ChevronDown, FileText,
+  FileText, MoreVertical, Printer,
 } from '@/src/components/atoms/icons/lucide';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
 const VARIANTS = ['solid', 'outline', 'ghost', 'tonal', 'link'];
-const THEMES   = ['primary', 'neutral', 'error'];
+const THEMES   = ['primary', 'neutral', 'error', 'success', 'warning'];
 const SIZES    = ['sm', 'md', 'lg'];
 
 const Row = ({ children, gap = 12 }) => (
@@ -40,41 +40,50 @@ const Section = ({ label, children }) => (
   </div>
 );
 
-const DarkBox = ({ children, style }) => (
-  <div style={{
-    background: 'linear-gradient(135deg, #1a1966 0%, #0e0d3d 100%)',
-    padding: 28,
-    borderRadius: 16,
-    ...style,
-  }}>
-    {children}
-  </div>
-);
-
-const IconSm  = () => <Plus size={16} strokeWidth={2} />;
-const IconMd  = () => <Plus size={18} strokeWidth={2} />;
-const IconLg  = () => <Plus size={20} strokeWidth={2} />;
-
 function iconForSize(size) {
-  if (size === 'sm') return <IconSm />;
-  if (size === 'lg') return <IconLg />;
-  return <IconMd />;
+  const px = size === 'sm' ? 16 : size === 'lg' ? 20 : 18;
+  return <Plus size={px} strokeWidth={2} />;
+}
+
+function chevronForSize(size) {
+  const px = size === 'sm' ? 14 : size === 'lg' ? 18 : 16;
+  return <ChevronRight size={px} strokeWidth={2} />;
 }
 
 // ─── Meta ──────────────────────────────────────────────────────────────────────
+
+// Demo menu for the split shape in the Playground.
+const DEMO_MENU = [
+  { id: 'view',     label: 'View details',  icon: <FileText size={16} strokeWidth={1.75} /> },
+  { id: 'download', label: 'Download PDF',  icon: <Download size={16} strokeWidth={1.75} /> },
+  { id: 'delete',   label: 'Delete record', icon: <Trash2 size={16} strokeWidth={1.75} />, danger: true },
+];
 
 const meta = {
   title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
-    variant:  { control: 'select',       options: VARIANTS },
-    theme:    { control: 'select',       options: THEMES },
-    size:     { control: 'inline-radio', options: SIZES },
-    surface:  { control: 'inline-radio', options: ['light', 'dark'] },
-    loading:  { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    children: { control: 'text' },
+    // Real Button props
+    variant:  { control: 'select',       options: VARIANTS,            table: { category: 'Style' } },
+    theme:    { control: 'select',       options: THEMES,              table: { category: 'Style' } },
+    size:     { control: 'inline-radio', options: SIZES,               table: { category: 'Style' } },
+    surface:  { control: 'inline-radio', options: ['light', 'dark'],   table: { category: 'Style' } },
+    radius:   { control: { type: 'range', min: 0, max: 24, step: 1 }, name: 'corner radius (px)', table: { category: 'Style' } },
+    loading:  { control: 'boolean',                                    table: { category: 'State' } },
+    disabled: { control: 'boolean',                                    table: { category: 'State' } },
+    children: { control: 'text', name: 'label',                        table: { category: 'Content' } },
+    // Playground-only synthetic controls (icon/menu are React nodes, so they
+    // can't be plain controls — these drive them via the render below).
+    shape: {
+      control: 'inline-radio',
+      options: ['text', 'icon-only', 'split'],
+      description: 'Demo only — which Button shape to render',
+      table: { category: 'Shape (demo)' },
+    },
+    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'TP icon ("" = none)', table: { category: 'Icons' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon ("" = none)', table: { category: 'Icons' } },
+    iconName:      { control: 'text', tpIcon: true, name: 'icon (icon-only / split)', table: { category: 'Icons' } },
   },
   args: {
     children: 'Button',
@@ -82,8 +91,13 @@ const meta = {
     theme:    'primary',
     size:     'md',
     surface:  'light',
+    radius:    10,
     loading:  false,
     disabled: false,
+    shape:     'text',
+    leftIconName:  '',
+    rightIconName: '',
+    iconName:      'plus',
   },
 };
 
@@ -91,11 +105,39 @@ export default meta;
 
 // ─── 1. Playground ─────────────────────────────────────────────────────────────
 
+const ICON_FOR = (size) => (size === 'sm' ? 16 : size === 'lg' ? 20 : 18);
+
 export const Playground = {
   name: '🎛 Playground',
+  // For surface="dark", switch the canvas background via the Storybook
+  // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
+  render: ({ shape, leftIconName, rightIconName, iconName, radius, children, ...args }) => {
+    const px = ICON_FOR(args.size);
+    const style = { '--tp-btn-radius': `${radius}px` };
+    const lib = (name) => (name ? <TPLibraryIcon name={name} size={px} /> : undefined);
+
+    if (shape === 'icon-only') {
+      return <Button {...args} style={style} aria-label={children || 'Action'} icon={lib(iconName) || <TPLibraryIcon name="plus" size={px} />} />;
+    }
+
+    if (shape === 'split') {
+      return (
+        <Button {...args} style={style} icon={lib(iconName)} menu={DEMO_MENU}>
+          {children}
+        </Button>
+      );
+    }
+
+    // text
+    return (
+      <Button {...args} style={style} leftIcon={lib(leftIconName)} rightIcon={lib(rightIconName)}>
+        {children}
+      </Button>
+    );
+  }
 };
 
-// ─── 2. Variants (light, primary) ──────────────────────────────────────────────
+// ─── 2. Variants ────────────────────────────────────────────────────────────────
 
 export const Variants = {
   name: '📦 All Variants',
@@ -112,6 +154,24 @@ export const Variants = {
           </Row>
         </Section>
       ))}
+
+      {/* Other shapes — same variants, as icon-only and split */}
+      <Section label="Shape: icon-only (per variant)">
+        <Row>
+          {VARIANTS.filter((v) => v !== 'link').map((variant) => (
+            <Button key={variant} variant={variant} aria-label="Add" icon={<Plus size={20} />} />
+          ))}
+        </Row>
+      </Section>
+      <Section label="Shape: split (per variant)">
+        <Row gap={16}>
+          {['solid', 'outline', 'tonal'].map((variant) => (
+            <Button key={variant} variant={variant} icon={<Plus size={16} />} menu={DEMO_MENU}>
+              {variant.charAt(0).toUpperCase() + variant.slice(1)}
+            </Button>
+          ))}
+        </Row>
+      </Section>
     </div>
   ),
 };
@@ -148,27 +208,10 @@ export const IconPositions = {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {SIZES.map((size) => (
               <Row key={size} gap={12}>
-                {/* No icon */}
-                <Button variant={variant} size={size}>
-                  Label
-                </Button>
-                {/* Left icon */}
-                <Button variant={variant} size={size} leftIcon={iconForSize(size)}>
-                  Add item
-                </Button>
-                {/* Right icon */}
-                <Button variant={variant} size={size} rightIcon={<ChevronRight size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} strokeWidth={2} />}>
-                  Continue
-                </Button>
-                {/* Both icons */}
-                <Button
-                  variant={variant}
-                  size={size}
-                  leftIcon={iconForSize(size)}
-                  rightIcon={<ChevronRight size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} strokeWidth={2} />}
-                >
-                  Action
-                </Button>
+                <Button variant={variant} size={size}>Label</Button>
+                <Button variant={variant} size={size} leftIcon={iconForSize(size)}>Add item</Button>
+                <Button variant={variant} size={size} rightIcon={chevronForSize(size)}>Continue</Button>
+                <Button variant={variant} size={size} leftIcon={iconForSize(size)} rightIcon={chevronForSize(size)}>Action</Button>
               </Row>
             ))}
           </div>
@@ -178,7 +221,39 @@ export const IconPositions = {
   ),
 };
 
-// ─── 5. States ─────────────────────────────────────────────────────────────────
+// ─── 5. Icon-only ────────────────────────────────────────────────────────────────
+
+export const IconOnly = {
+  name: '⬛ Icon-only',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Section label="Variants (md)">
+        <Row>
+          {VARIANTS.filter((v) => v !== 'link').map((variant) => (
+            <Button key={variant} variant={variant} aria-label="Search" icon={<Search size={20} />} />
+          ))}
+        </Row>
+      </Section>
+      <Section label="Sizes (tonal / neutral)">
+        <Row gap={16}>
+          {SIZES.map((size) => (
+            <Button key={size} variant="tonal" theme="neutral" size={size} aria-label="Edit" icon={<Pencil size={size === 'sm' ? 18 : size === 'lg' ? 22 : 20} />} />
+          ))}
+        </Row>
+      </Section>
+      <Section label="Common actions">
+        <Row>
+          <Button variant="ghost" theme="neutral" aria-label="More" icon={<MoreVertical size={20} />} />
+          <Button variant="ghost" theme="neutral" aria-label="Print" icon={<Printer size={20} />} />
+          <Button variant="ghost" theme="error" aria-label="Delete" icon={<Trash2 size={20} />} />
+          <Button variant="solid" aria-label="Add" icon={<Plus size={20} />} />
+        </Row>
+      </Section>
+    </div>
+  ),
+};
+
+// ─── 6. States ─────────────────────────────────────────────────────────────────
 
 export const States = {
   name: '⚡ States',
@@ -197,89 +272,34 @@ export const States = {
   ),
 };
 
-// ─── 6. Dark Surface — All Variants ────────────────────────────────────────────
+// ─── 7. Dark Surface — All Variants ────────────────────────────────────────────
 
 export const DarkSurface = {
   name: '🌑 Dark Surface — All Variants',
-  parameters: { backgrounds: { default: 'dark' } },
+  globals: { backgrounds: { value: 'dark' } },
   render: () => (
-    <DarkBox>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-        {VARIANTS.map((variant) => (
-          <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{`${variant}`}</span>}>
-            <Row>
-              {THEMES.map((theme) => (
-                <Button key={theme} variant={variant} theme={theme} surface="dark">
-                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
-                </Button>
-              ))}
-            </Row>
-          </Section>
-        ))}
-      </div>
-    </DarkBox>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+      {VARIANTS.map((variant) => (
+        <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{`${variant}`}</span>}>
+          <Row>
+            {THEMES.map((theme) => (
+              <Button key={theme} variant={variant} theme={theme} surface="dark">
+                {theme.charAt(0).toUpperCase() + theme.slice(1)}
+              </Button>
+            ))}
+          </Row>
+        </Section>
+      ))}
+    </div>
   ),
 };
 
-// ─── 7. Dark Surface — With Icons ──────────────────────────────────────────────
-
-export const DarkSurfaceWithIcons = {
-  name: '🌑 Dark Surface — With Icons',
-  parameters: { backgrounds: { default: 'dark' } },
-  render: () => (
-    <DarkBox>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {VARIANTS.map((variant) => (
-          <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{`${variant}`}</span>}>
-            <Row>
-              <Button variant={variant} surface="dark" leftIcon={<Download size={16} strokeWidth={2} />}>
-                Download
-              </Button>
-              <Button variant={variant} surface="dark" rightIcon={<ChevronRight size={16} strokeWidth={2} />}>
-                Continue
-              </Button>
-              <Button variant={variant} surface="dark" disabled>
-                Disabled
-              </Button>
-            </Row>
-          </Section>
-        ))}
-      </div>
-    </DarkBox>
-  ),
-};
-
-// ─── 8. Dark Surface — Sizes ───────────────────────────────────────────────────
-
-export const DarkSurfaceSizes = {
-  name: '🌑 Dark Surface — Sizes',
-  parameters: { backgrounds: { default: 'dark' } },
-  render: () => (
-    <DarkBox>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {VARIANTS.filter((v) => v !== 'link').map((variant) => (
-          <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{`${variant}`}</span>}>
-            <Row gap={16}>
-              {SIZES.map((size) => (
-                <Button key={size} variant={variant} surface="dark" size={size}>
-                  {size.toUpperCase()}
-                </Button>
-              ))}
-            </Row>
-          </Section>
-        ))}
-      </div>
-    </DarkBox>
-  ),
-};
-
-// ─── 9. Full Matrix (light) ────────────────────────────────────────────────────
+// ─── 8. Full Matrix (light) ────────────────────────────────────────────────────
 
 export const FullMatrix = {
   name: '📊 Full Matrix',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-      {/* Header */}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, marginBottom: 8 }}>
         <div />
         {VARIANTS.map((v) => (
@@ -295,34 +315,24 @@ export const FullMatrix = {
           </span>
           {VARIANTS.map((variant) => (
             <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant={variant} theme={theme}>
-                Label
-              </Button>
+              <Button variant={variant} theme={theme}>Label</Button>
             </div>
           ))}
         </div>
       ))}
-
-      {/* Disabled row */}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginTop: 12, marginBottom: 8 }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Disabled</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button variant={variant} disabled>
-              Label
-            </Button>
+            <Button variant={variant} disabled>Label</Button>
           </div>
         ))}
       </div>
-
-      {/* Loading row */}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center' }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Loading</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button variant={variant} loading>
-              Label
-            </Button>
+            <Button variant={variant} loading>Label</Button>
           </div>
         ))}
       </div>
@@ -330,7 +340,7 @@ export const FullMatrix = {
   ),
 };
 
-// ─── 10. Icon-first buttons ────────────────────────────────────────────────────
+// ─── 9. With Icons ───────────────────────────────────────────────────────────────
 
 export const WithIcons = {
   name: '🔷 With Icons — All Variants',
@@ -339,15 +349,9 @@ export const WithIcons = {
       {VARIANTS.map((variant) => (
         <Section key={variant} label={`${variant}`}>
           <Row>
-            <Button variant={variant} leftIcon={<Plus size={16} strokeWidth={2} />}>
-              Add Patient
-            </Button>
-            <Button variant={variant} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>
-              View Details
-            </Button>
-            <Button variant={variant} leftIcon={<Download size={16} strokeWidth={2} />} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>
-              Export Report
-            </Button>
+            <Button variant={variant} leftIcon={<Plus size={16} strokeWidth={2} />}>Add Patient</Button>
+            <Button variant={variant} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>View Details</Button>
+            <Button variant={variant} leftIcon={<Download size={16} strokeWidth={2} />} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>Export Report</Button>
           </Row>
         </Section>
       ))}
@@ -355,44 +359,114 @@ export const WithIcons = {
   ),
 };
 
-// ─── 11. Destructive / Error theme ─────────────────────────────────────────────
+// ─── 10. Destructive / Error theme ─────────────────────────────────────────────
 
 export const Destructive = {
   name: '🔴 Destructive (Error Theme)',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <Section label="Light surface">
+      <Section label="Error theme — all variants">
         <Row>
           {VARIANTS.map((variant) => (
-            <Button key={variant} variant={variant} theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>
-              Delete
-            </Button>
+            <Button key={variant} variant={variant} theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete</Button>
           ))}
-        </Row>
-      </Section>
-      <Section label="Dark surface">
-        <DarkBox>
-          <Row>
-            {VARIANTS.map((variant) => (
-              <Button key={variant} variant={variant} theme="error" surface="dark" leftIcon={<Trash2 size={16} strokeWidth={2} />}>
-                Delete
-              </Button>
-            ))}
-          </Row>
-        </DarkBox>
-      </Section>
-      <Section label="States">
-        <Row>
-          <Button theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete Record</Button>
-          <Button theme="error" disabled leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete Record</Button>
-          <Button theme="error" loading>Deleting…</Button>
         </Row>
       </Section>
     </div>
   ),
 };
 
-// ─── 12. Use-case showcase ─────────────────────────────────────────────────────
+// ─── 11. Split Button — All Variants ──────────────────────────────────────────
+
+const splitMenu = [
+  { id: 'view',     label: 'View details',  icon: <FileText size={16} strokeWidth={1.75} /> },
+  { id: 'download', label: 'Download PDF',  icon: <Download size={16} strokeWidth={1.75} /> },
+  { id: 'copy',     label: 'Duplicate',     icon: <Plus size={16} strokeWidth={1.75} /> },
+  { id: 'delete',   label: 'Delete record', icon: <Trash2 size={16} strokeWidth={1.75} />, danger: true },
+];
+
+export const SplitVariants = {
+  name: '✂️ Split — All Variants',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      {THEMES.map((theme) => (
+        <Section key={theme} label={`${theme} theme`}>
+          <Row gap={16}>
+            {['solid', 'outline', 'tonal'].map((variant) => (
+              <Button key={variant} variant={variant} theme={theme} menu={splitMenu}>
+                {variant.charAt(0).toUpperCase() + variant.slice(1)}
+              </Button>
+            ))}
+          </Row>
+        </Section>
+      ))}
+    </div>
+  ),
+};
+
+// ─── 12. Split Button — Sizes ─────────────────────────────────────────────────
+
+export const SplitSizes = {
+  name: '✂️ Split — Sizes',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {SIZES.map((size) => (
+        <Section key={size} label={`Size: ${size.toUpperCase()}`}>
+          <Row gap={16}>
+            <Button size={size} menu={splitMenu}>Save</Button>
+            <Button size={size} variant="outline" icon={iconForSize(size)} menu={splitMenu}>Export</Button>
+            <Button size={size} variant="tonal" menu={splitMenu}>Schedule</Button>
+          </Row>
+        </Section>
+      ))}
+    </div>
+  ),
+};
+
+// ─── 13. Split Button — States ────────────────────────────────────────────────
+
+export const SplitStates = {
+  name: '✂️ Split — States',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Section label="Default">
+        <Row gap={16}>
+          {['solid', 'outline', 'tonal'].map((variant) => (
+            <Button key={variant} variant={variant} menu={splitMenu}>Submit</Button>
+          ))}
+        </Row>
+      </Section>
+      <Section label="Loading / Disabled">
+        <Row gap={16}>
+          <Button variant="solid" loading menu={splitMenu}>Saving…</Button>
+          <Button variant="outline" disabled menu={splitMenu}>Submit</Button>
+          <Button variant="tonal" disabled menu={splitMenu}>Submit</Button>
+        </Row>
+      </Section>
+    </div>
+  ),
+};
+
+// ─── 14. Split Button — Dark Surface ─────────────────────────────────────────
+
+export const SplitDark = {
+  name: '✂️ Split — Dark Surface',
+  globals: { backgrounds: { value: 'dark' } },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {['solid', 'outline', 'tonal'].map((variant) => (
+        <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{variant}</span>}>
+          <Row gap={16}>
+            <Button variant={variant} surface="dark" icon={<Plus size={16} strokeWidth={1.75} />} menu={splitMenu}>Save Report</Button>
+            <Button variant={variant} surface="dark" theme="neutral" menu={splitMenu}>Neutral</Button>
+          </Row>
+        </Section>
+      ))}
+    </div>
+  ),
+};
+
+// ─── 15. Use cases ─────────────────────────────────────────────────────────────
 
 export const UseCases = {
   name: '🏥 Use Cases — Healthcare CTAs',
@@ -407,259 +481,20 @@ export const UseCases = {
           <Button variant="link" rightIcon={<ChevronRight size={16} strokeWidth={2} />}>View All Patients</Button>
         </Row>
       </Section>
-      <Section label="Report actions">
+      <Section label="Report actions (split + icon-only)">
         <Row>
-          <Button leftIcon={<Download size={16} strokeWidth={2} />} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>
+          <Button
+            leftIcon={<Download size={16} strokeWidth={2} />}
+            menu={[
+              { id: 'pdf', label: 'Export as PDF', icon: <FileText size={16} strokeWidth={1.75} /> },
+              { id: 'csv', label: 'Export as CSV', icon: <Download size={16} strokeWidth={1.75} /> },
+            ]}
+          >
             Export Report
           </Button>
-          <Button variant="outline" theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>
-            Delete Report
-          </Button>
-          <Button variant="ghost" leftIcon={<Sparkles size={16} strokeWidth={2} />}>
-            AI Summary
-          </Button>
-        </Row>
-      </Section>
-      <Section label="Form actions">
-        <Row>
-          <Button size="lg" leftIcon={<Check size={18} strokeWidth={2} />}>Save &amp; Submit</Button>
-          <Button size="lg" variant="outline">Cancel</Button>
-          <Button size="sm" variant="ghost" theme="error" leftIcon={<X size={14} strokeWidth={2} />}>Discard</Button>
-        </Row>
-      </Section>
-    </div>
-  ),
-};
-
-// helper for the UseCases story (X icon inline since not imported above)
-function X({ size = 16, strokeWidth = 2 }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"
-      strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
-      width={size} height={size} aria-hidden>
-      <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
-  );
-}
-
-// ─── Shared split-button action sets ──────────────────────────────────────────
-
-const splitActionsBase = [
-  { id: 'view',     label: 'View details',    icon: <FileText size={14} strokeWidth={1.75} /> },
-  { id: 'download', label: 'Download PDF',    icon: <Download size={14} strokeWidth={1.75} /> },
-  { id: 'copy',     label: 'Duplicate',       icon: <Plus size={14} strokeWidth={1.75} /> },
-  { id: 'delete',   label: 'Delete record',   icon: <Trash2 size={14} strokeWidth={1.75} />, disabled: false },
-];
-
-// ─── 13. Split Button — All Variants ──────────────────────────────────────────
-
-export const SplitButtonVariants = {
-  name: '✂️ Split Button — All Variants',
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <Section label="Primary theme">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              theme="primary"
-              primaryAction={{ label: variant.charAt(0).toUpperCase() + variant.slice(1), onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-      <Section label="Neutral theme">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              theme="neutral"
-              primaryAction={{ label: variant.charAt(0).toUpperCase() + variant.slice(1), onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-      <Section label="Error theme">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              theme="error"
-              primaryAction={{ label: variant.charAt(0).toUpperCase() + variant.slice(1), onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-    </div>
-  ),
-};
-
-// ─── 14. Split Button — Sizes ─────────────────────────────────────────────────
-
-export const SplitButtonSizes = {
-  name: '✂️ Split Button — Sizes',
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {SIZES.map((size) => (
-        <Section key={size} label={`Size: ${size.toUpperCase()}`}>
-          <Row gap={16}>
-            <TPSplitButton
-              size={size}
-              primaryAction={{ label: 'Save', onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-            <TPSplitButton
-              size={size}
-              variant="outline"
-              primaryAction={{ label: 'Export', icon: <Download size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} strokeWidth={1.75} />, onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-            <TPSplitButton
-              size={size}
-              variant="tonal"
-              primaryAction={{ label: 'Schedule', onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          </Row>
-        </Section>
-      ))}
-    </div>
-  ),
-};
-
-// ─── 15. Split Button — States ────────────────────────────────────────────────
-
-export const SplitButtonStates = {
-  name: '✂️ Split Button — States',
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Section label="Default">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              primaryAction={{ label: 'Submit', onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-      <Section label="Loading">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              loading
-              primaryAction={{ label: 'Saving…', onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-      <Section label="Disabled">
-        <Row gap={16}>
-          {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-            <TPSplitButton
-              key={variant}
-              variant={variant}
-              disabled
-              primaryAction={{ label: 'Submit', onClick: () => {} }}
-              secondaryActions={splitActionsBase}
-            />
-          ))}
-        </Row>
-      </Section>
-    </div>
-  ),
-};
-
-// ─── 16. Split Button — Dark Surface ─────────────────────────────────────────
-
-export const SplitButtonDark = {
-  name: '✂️ Split Button — Dark Surface',
-  parameters: { backgrounds: { default: 'dark' } },
-  render: () => (
-    <DarkBox>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {['solid', 'outline', 'tonal', 'ghost'].map((variant) => (
-          <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{variant}</span>}>
-            <Row gap={16}>
-              <TPSplitButton
-                variant={variant}
-                surface="dark"
-                primaryAction={{ label: 'Save Report', onClick: () => {} }}
-                secondaryActions={splitActionsBase}
-              />
-              <TPSplitButton
-                variant={variant}
-                surface="dark"
-                theme="neutral"
-                primaryAction={{ label: 'Neutral', onClick: () => {} }}
-                secondaryActions={splitActionsBase}
-              />
-            </Row>
-          </Section>
-        ))}
-      </div>
-    </DarkBox>
-  ),
-};
-
-// ─── 17. Split Button — Healthcare Use Cases ──────────────────────────────────
-
-export const SplitButtonUseCases = {
-  name: '✂️ Split Button — Healthcare Use Cases',
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <Section label="Appointment actions">
-        <Row gap={16}>
-          <TPSplitButton
-            primaryAction={{ label: 'Book Appointment', icon: <Plus size={16} strokeWidth={1.75} />, onClick: () => {} }}
-            secondaryActions={[
-              { id: 'walkin',    label: 'Walk-in',          icon: <Plus size={14} strokeWidth={1.75} /> },
-              { id: 'telecall',  label: 'Teleconsultation',  icon: <FileText size={14} strokeWidth={1.75} /> },
-              { id: 'followup',  label: 'Follow-up',         icon: <ChevronRight size={14} strokeWidth={1.75} /> },
-            ]}
-          />
-          <TPSplitButton
-            variant="outline"
-            primaryAction={{ label: 'Export Records', icon: <Download size={16} strokeWidth={1.75} />, onClick: () => {} }}
-            secondaryActions={[
-              { id: 'pdf',   label: 'Export as PDF',  icon: <FileText size={14} strokeWidth={1.75} /> },
-              { id: 'csv',   label: 'Export as CSV',  icon: <Download size={14} strokeWidth={1.75} /> },
-              { id: 'print', label: 'Print',           icon: <FileText size={14} strokeWidth={1.75} /> },
-            ]}
-          />
-        </Row>
-      </Section>
-      <Section label="Patient record actions">
-        <Row gap={16}>
-          <TPSplitButton
-            variant="tonal"
-            primaryAction={{ label: 'Save Changes', icon: <Check size={16} strokeWidth={1.75} />, onClick: () => {} }}
-            secondaryActions={[
-              { id: 'draft',  label: 'Save as Draft',  icon: <FileText size={14} strokeWidth={1.75} /> },
-              { id: 'share',  label: 'Share with Team', icon: <Sparkles size={14} strokeWidth={1.75} /> },
-              { id: 'delete', label: 'Discard',         icon: <Trash2 size={14} strokeWidth={1.75} /> },
-            ]}
-          />
-          <TPSplitButton
-            variant="ghost"
-            theme="error"
-            primaryAction={{ label: 'Archive Patient', icon: <Trash2 size={16} strokeWidth={1.75} />, onClick: () => {} }}
-            secondaryActions={[
-              { id: 'suspend', label: 'Suspend account', icon: <Trash2 size={14} strokeWidth={1.75} /> },
-              { id: 'delete',  label: 'Permanently delete', icon: <Trash2 size={14} strokeWidth={1.75} /> },
-            ]}
-          />
+          <Button variant="outline" theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete Report</Button>
+          <Button variant="ghost" leftIcon={<Sparkles size={16} strokeWidth={2} />}>AI Summary</Button>
+          <Button variant="ghost" theme="neutral" aria-label="More" icon={<MoreVertical size={20} />} />
         </Row>
       </Section>
     </div>

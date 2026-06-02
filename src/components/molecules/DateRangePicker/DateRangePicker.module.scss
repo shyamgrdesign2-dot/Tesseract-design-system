@@ -1,0 +1,373 @@
+// DateRangePicker — two-month range calendar with preset rail.
+// Zero dependencies: TP color tokens only. Replaces the prior Tailwind classes.
+
+// ─── Trigger ──────────────────────────────────────────────────────────────────
+.root {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--tp-slate-200);
+  border-radius: 10px;
+  corner-shape: round;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tp-slate-700);
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease;
+
+  &:hover {
+    border-color: var(--tp-slate-300);
+    background: var(--tp-slate-50);
+  }
+}
+
+.triggerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.triggerIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  color: var(--tp-slate-500);
+}
+
+.triggerText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--tp-slate-500);
+  transition: transform 200ms ease;
+
+  &[data-open="true"] {
+    transform: rotate(180deg);
+  }
+}
+
+// ─── Popover shell ─────────────────────────────────────────────────────────────
+.popover {
+  overflow: auto;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  border: 1px solid var(--tp-slate-200);
+  border-radius: 14px;
+  corner-shape: round;
+  background: #fff;
+  box-shadow: 0 16px 32px -8px rgba(23, 23, 37, 0.14);
+}
+
+.body {
+  display: flex;
+}
+
+// ─── Preset rail ────────────────────────────────────────────────────────────────
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 128px;
+  flex-shrink: 0;
+  padding: 8px;
+  border-right: 1px solid var(--tp-slate-100);
+}
+
+.groupLabel {
+  margin: 0;
+  padding: 4px 8px 2px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--tp-slate-400);
+}
+
+.preset {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 8px;
+  corner-shape: round;
+  background: transparent;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tp-slate-700);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover {
+    background: var(--tp-slate-100);
+  }
+
+  &[data-selected="true"] {
+    background: var(--tp-blue-500);
+    color: #fff;
+  }
+}
+
+.presetDivider {
+  height: 1px;
+  margin: 6px 4px;
+  background: var(--tp-slate-100);
+}
+
+.pendingHint {
+  margin: 8px 0 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  corner-shape: round;
+  background: var(--tp-amber-50);
+  font-size: 10px;
+  line-height: 1.25;
+  color: var(--tp-warning-700);
+}
+
+// ─── Main panel ───────────────────────────────────────────────────────────────
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.inputCol {
+  flex: 1;
+}
+
+.inputLabel {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--tp-slate-400);
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--tp-slate-200);
+  border-radius: 8px;
+  corner-shape: round;
+  background: var(--tp-slate-50);
+  font-size: 12px;
+  color: var(--tp-slate-400);
+
+  &[data-filled="true"] {
+    border-color: var(--tp-blue-200);
+    background: var(--tp-blue-50);
+    color: var(--tp-blue-700);
+  }
+}
+
+.inputDash {
+  width: 12px;
+  height: 1px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+  background: var(--tp-slate-300);
+}
+
+// ─── Calendars ────────────────────────────────────────────────────────────────
+.calendars {
+  display: flex;
+}
+
+// Each month column; a divider precedes every month after the first.
+.calCol {
+  display: flex;
+}
+
+.calBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--tp-slate-600);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover {
+    background: var(--tp-slate-100);
+    color: var(--tp-slate-900);
+  }
+}
+
+.navSpacer {
+  width: 24px;
+  height: 24px;
+}
+
+.monthLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tp-slate-800);
+}
+
+.calDivider {
+  flex-shrink: 0;
+  width: 1px;
+  margin: 0 16px;
+  background: var(--tp-slate-100);
+}
+
+// ─── Calendar month grid ─────────────────────────────────────────────────────
+.month {
+  width: 190px;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 2px;
+}
+
+.weekday {
+  padding: 2px 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--tp-slate-400);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+
+  &[data-in-range="true"] {
+    background: var(--tp-blue-50);
+  }
+  &[data-start="true"] {
+    border-top-left-radius: 9999px;
+    border-bottom-left-radius: 9999px;
+  }
+  &[data-end="true"] {
+    border-top-right-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+  }
+}
+
+.day {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tp-slate-700);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover {
+    background: var(--tp-slate-100);
+  }
+
+  // In-range (non-edge) days
+  &[data-inrange="true"] {
+    color: var(--tp-blue-700);
+
+    &:hover {
+      background: var(--tp-blue-100);
+    }
+  }
+
+  // Today (not edge, not in range)
+  &[data-today="true"] {
+    font-weight: 700;
+    color: var(--tp-blue-500);
+  }
+
+  // Range edges + single selected day — solid accent, wins over the above
+  &[data-edge="true"] {
+    background: var(--tp-blue-500);
+    color: #fff;
+
+    &:hover {
+      background: var(--tp-blue-500);
+    }
+  }
+}
+
+.todayDot {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 2px;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: var(--tp-blue-400);
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--tp-slate-100);
+}
+
+// Clear / Cancel / Apply compose the Button atom (see DateRangePicker.jsx).
+.actionsRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

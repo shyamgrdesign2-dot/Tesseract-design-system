@@ -1,0 +1,54 @@
+/* LoadingIndicator — spinner animations. Color follows `currentColor`. */
+
+@keyframes tp-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tp-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+}
+
+.tp-loader__glyph {
+  display: block;
+  color: currentColor;
+  transform-origin: center;
+}
+
+/* line-simple: smooth continuous rotation */
+.tp-loader__glyph[data-type="line-simple"] {
+  animation: tp-loader-spin 0.7s linear infinite;
+}
+
+/* line-spinner: 12 spokes, stepped rotation for the classic "chase" */
+.tp-loader__glyph[data-type="line-spinner"] {
+  animation: tp-loader-spin 1s steps(12) infinite;
+}
+
+/* dot-circle: 8 dots, stepped rotation */
+.tp-loader__glyph[data-type="dot-circle"] {
+  animation: tp-loader-spin 1.1s steps(8) infinite;
+}
+
+.tp-loader__label {
+  font: 500 14px/1.4 Inter, sans-serif;
+  color: var(--tp-slate-600, #54545c);
+}
+
+.tp-loader__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-loader__glyph { animation-duration: 2s; }
+}

@@ -5,18 +5,21 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from './Accordion';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const meta = {
   title: 'Molecules/Accordion',
   component: Accordion,
-  tags: ['autodocs', 'ai-generated'],
+  tags: ['autodocs'],
   argTypes: {
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
     collapsible: { control: 'boolean' },
+    itemIcon: { control: 'text', tpIcon: true, name: 'item icon', description: 'TP icon shown before each item title' },
   },
   args: {
     type: 'single',
     collapsible: true,
+    itemIcon: 'info-circle-pro',
   },
 };
 
@@ -46,12 +49,17 @@ const items = [
 
 export const Playground = {
   args: { defaultValue: 'item-1' },
-  render: (args) => (
+  render: ({ itemIcon, ...args }) => (
     <Frame>
       <Accordion {...args}>
         {items.map((it) => (
           <AccordionItem key={it.value} value={it.value}>
-            <AccordionTrigger>{it.title}</AccordionTrigger>
+            <AccordionTrigger>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                {itemIcon ? <TPLibraryIcon name={itemIcon} size={18} /> : null}
+                {it.title}
+              </span>
+            </AccordionTrigger>
             <AccordionContent>{it.body}</AccordionContent>
           </AccordionItem>
         ))}
@@ -314,7 +322,7 @@ export const MedicationHistory = {
             {[
               { drug: 'Metoprolol 25 mg', freq: 'Twice daily', stopped: 'Jan 2026', reason: 'Bradycardia' },
               { drug: 'Ramipril 5 mg', freq: 'Once daily', stopped: 'Mar 2026', reason: 'Persistent cough' },
-            ].map(({ drug, freq, stopped, reason }) => (
+            ].map(({ drug, stopped, reason }) => (
               <div key={drug} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #F0F0F6', fontSize: 14 }}>
                 <div>
                   <div style={{ fontWeight: 600, color: '#54545C', textDecoration: 'line-through' }}>{drug}</div>

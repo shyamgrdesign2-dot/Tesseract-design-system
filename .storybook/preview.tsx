@@ -1,10 +1,16 @@
 import type { Preview } from '@storybook/react-vite'
-import '../src/tp-tailwind.css'
 import '../src/tp-tokens.css'
 import '../src/tp-base.css'
 
 const preview: Preview = {
   parameters: {
+    // Design System docs first, then Atoms → Molecules, then the rest.
+    options: {
+      storySort: {
+        order: ['Design System', ['Overview', 'Component Standards', 'Using in Your Product'], 'Atoms', 'Molecules', '*'],
+      },
+    },
+
     controls: {
       matchers: {
        color: /(background|color)$/i,
@@ -33,14 +39,18 @@ const preview: Preview = {
       },
     },
 
+    // Storybook 9/10 backgrounds API: keyed options + globals selection.
     backgrounds: {
-      default: 'light',
-      values: [
-        { name: 'light', value: '#ffffff' },
-        { name: 'surface', value: '#F7F7FB' },
-        { name: 'dark', value: '#161558' },
-      ],
+      options: {
+        light:   { name: 'Light',   value: '#ffffff' },
+        surface: { name: 'Surface', value: '#F7F7FB' },
+        dark:    { name: 'Dark',    value: '#161558' },
+      },
     },
+  },
+
+  initialGlobals: {
+    backgrounds: { value: 'light' },
   },
 };
 

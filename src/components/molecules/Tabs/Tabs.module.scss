@@ -1,42 +1,130 @@
-/* Tabs.module.scss */
+/* Tabs.module.scss — scalable tabs: L/R icons, right-side tag, rounded
+   active indicator (curved, not a hard cut), hover states, sizes. */
 
 .list {
   display: flex;
-  gap: 0;
+  flex-wrap: nowrap;
+  gap: 4px;
   border-bottom: 1px solid var(--tp-slate-200, #e2e2ea);
+  /* On narrow screens the row scrolls horizontally instead of wrapping. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tp-slate-200, #e2e2ea) transparent;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--tp-slate-200, #e2e2ea);
+    border-radius: 999px;
+  }
 }
 
 .trigger {
-  padding: 10px 16px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0; /* keep natural width so the row scrolls rather than squishes */
+  gap: 8px;
+  padding: 10px 14px;
   font-size: 14px;
   font-weight: 600;
-  font-family: Inter, sans-serif;
+  font-family: Inter, var(--font-sans, sans-serif);
   color: var(--tp-slate-500, #717179);
   background-color: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  corner-shape: round;
   cursor: pointer;
-  transition: color 150ms ease, border-color 150ms ease;
   white-space: nowrap;
   outline: none;
+  transition: color 150ms ease, background-color 150ms ease;
 
-  &[data-state="active"] {
-    color: var(--tp-blue-500, #4b4ad5);
-    border-bottom-color: var(--tp-blue-500, #4b4ad5);
+  /* Rounded indicator bar — curved top corners, inset from the padding so the
+     ends read as a soft bar rather than a full-width hard cut. */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    corner-shape: round;
+    background-color: transparent;
+    transition: background-color 150ms ease;
   }
 
-  &:hover:not([data-state="active"]) {
+  /* Active tab + indicator use TP blue; the icon inherits it via currentColor. */
+  &[data-state="active"] {
+    color: var(--tp-blue-600, #3c3bb5);
+    &::after { background-color: var(--tp-blue-600, #3c3bb5); }
+  }
+
+  &:hover:not([data-state="active"]):not(:disabled) {
     color: var(--tp-slate-700, #454551);
+    background-color: var(--tp-slate-50, #f8fafc);
+    &::after { background-color: var(--tp-slate-200, #e2e2ea); }
   }
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--tp-blue-300, #9b9aec);
+    box-shadow: inset 0 0 0 2px var(--tp-blue-300, #8e8de8);
   }
 
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;
   }
+}
+
+/* ── Sizes ── (trigger density + tag scale with the tab size) */
+.list[data-size="sm"] .trigger { padding: 7px 10px;  font-size: 13px; gap: 6px; }
+.list[data-size="lg"] .trigger { padding: 13px 18px; font-size: 15px; gap: 10px; }
+
+.list[data-size="sm"] .tag { min-width: 14px; height: 14px; padding: 0 4px; font-size: 10px; }
+.list[data-size="lg"] .tag { min-width: 18px; height: 18px; padding: 0 6px; font-size: 12px; }
+
+/* ── Parts ── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Right-side tag / count pill (sized with the tab — md ≈ 16px tall). */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px;
+  border-radius: 999px;
+  corner-shape: round;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &[data-tone="neutral"] { background-color: var(--tp-slate-100, #f0f0f6); color: var(--tp-slate-600, #52525b); }
+  &[data-tone="primary"] { background-color: var(--tp-blue-50, #eeeeff);   color: var(--tp-blue-600, #3c3bb5); }
+  &[data-tone="success"] { background-color: var(--tp-success-50, #e7f9f0); color: var(--tp-success-700, #15803d); }
+  &[data-tone="warning"] { background-color: var(--tp-warning-50, #fff7ed); color: var(--tp-warning-700, #b45309); }
+  &[data-tone="error"]   { background-color: var(--tp-error-50, #fee2e2);   color: var(--tp-error-700, #b91c1c); }
+}
+
+/* A neutral tag on the active tab sits a shade darker (stays neutral). */
+.trigger[data-state="active"] .tag[data-tone="neutral"] {
+  background-color: var(--tp-slate-200, #e2e2ea);
+  color: var(--tp-slate-800, #27272a);
 }
 
 .content {

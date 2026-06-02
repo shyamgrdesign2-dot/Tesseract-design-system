@@ -13,15 +13,15 @@ export function Slider({
   step = 1,
   onChange,
   disabled = false,
-  marks,
-  valueLabelDisplay,
   color = "primary",
+  size = "md",
   className,
   style: styleProp,
 }) {
   const accentColor = color === "error" ? "var(--tp-error-500)" :
     color === "success" ? "var(--tp-success-500)" :
     "var(--tp-blue-500)";
+  const trackHeight = size === "sm" ? 3 : size === "lg" ? 6 : 4;
 
   return (
     <input
@@ -37,7 +37,7 @@ export function Slider({
       style={{
         width: "100%",
         accentColor,
-        height: 4,
+        height: trackHeight,
         cursor: disabled ? "not-allowed" : "pointer",
         ...styleProp,
       }}

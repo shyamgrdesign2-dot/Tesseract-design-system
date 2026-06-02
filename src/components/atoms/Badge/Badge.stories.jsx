@@ -2,6 +2,7 @@ import { Badge } from './Badge';
 
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
 const VARIANTS = ['solid', 'soft', 'outline', 'dot'];
+const SIZES = ['sm', 'md', 'lg'];
 
 const meta = {
   title: 'Atoms/Badge',
@@ -10,11 +11,13 @@ const meta = {
   argTypes: {
     variant: { control: 'select', options: VARIANTS },
     color: { control: 'select', options: COLORS },
+    size: { control: 'inline-radio', options: SIZES },
     children: { control: 'text' },
   },
   args: {
     variant: 'soft',
     color: 'primary',
+    size: 'md',
     children: 'Badge',
   },
 };
@@ -28,6 +31,16 @@ const Row = ({ children }) => (
 );
 
 export const Playground = {};
+
+export const Sizes = {
+  render: (args) => (
+    <Row>
+      {SIZES.map((size) => (
+        <Badge key={size} {...args} size={size}>{size.toUpperCase()}</Badge>
+      ))}
+    </Row>
+  ),
+};
 
 export const Variants = {
   render: (args) => (

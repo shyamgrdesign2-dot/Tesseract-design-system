@@ -7,6 +7,7 @@ const meta = {
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
     color: { control: 'inline-radio', options: ['primary', 'success', 'error'] },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     min: { control: 'number' },
     max: { control: 'number' },
     step: { control: 'number' },
@@ -14,6 +15,7 @@ const meta = {
   },
   args: {
     color: 'primary',
+    size: 'md',
     min: 0,
     max: 100,
     step: 1,
@@ -28,6 +30,16 @@ const Stack = ({ children }) => (
     {children}
   </div>
 );
+
+export const Sizes = {
+  render: () => (
+    <Stack>
+      {['sm', 'md', 'lg'].map((size) => (
+        <Slider key={size} size={size} defaultValue={50} />
+      ))}
+    </Stack>
+  ),
+};
 
 export const Playground = {
   render: (args) => {

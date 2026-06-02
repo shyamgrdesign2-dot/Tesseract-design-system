@@ -29,6 +29,7 @@ export const Checkbox = React.forwardRef(function Checkbox(
     required,
     name,
     value = "on",
+    size = "md",
     className = "",
     style,
     onClick,
@@ -82,6 +83,7 @@ export const Checkbox = React.forwardRef(function Checkbox(
       aria-required={required || undefined}
       data-slot="checkbox"
       data-state={stateAttr}
+      data-size={size}
       data-disabled={disabled || undefined}
       disabled={disabled}
       ref={ref}

@@ -1,0 +1,107 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Using in Your Product" />
+
+# Using the library in your product
+
+This is a **copy-in** component library, not an npm package. You drop a few
+folders into your app, import three CSS files once, and use the components. No
+build step of ours, no published version to track — the source *is* the library.
+
+---
+
+## 1. Prerequisites
+
+- **React 18 or 19** (the only runtime deps are `react` + `react-dom`).
+- A bundler that handles **CSS Modules** and **SCSS** (Vite, Next.js, etc.).
+- **No Tailwind, no UI libraries, no icon packages.** Every component is pure
+  CSS Modules + TP tokens; icons are hand-rolled inline SVGs or the vendored TP set.
+- A path alias **`@` → your project root** (the imports use `@/src/...`). If you
+  don't want the alias, do a find-and-replace to relative paths.
+
+---
+
+## 2. What to copy
+
+| Copy from this repo | To your app | Why |
+|---|---|---|
+| `src/components/` | `src/components/` | The atoms + molecules (includes the vendored TP icon set). |
+| `src/hooks/ui/` + `src/hooks/utils.js` | same path | Shared primitives: `Portal`, `Slot`, `usePosition`, `useEscape`, `useClickOutside`, `cn`. |
+| `src/tp-tokens.css` | anywhere | Design tokens (`--tp-*`). Import once. |
+| `src/tp-base.css` | anywhere | Squircle corners + base resets. Import once. |
+| `public/tp-icons/` | your `public/` | The full 6,769-icon library, served statically for `TPLibraryIcon` (~100 MB — see note 3). |
+
+That's it. There's no `.storybook` to copy — that's authoring-only.
+
+---
+
+## 3. Wire it up
+
+1. **Alias** — add `@` → project root (Vite: `resolve.alias['@'] = __dirname`;
+   Next/tsconfig: `"paths": { "@/*": ["./*"] }`).
+2. **Global CSS** — import once at your app entry / root layout, in this order:
+   ```js
+   import "@/src/tp-tokens.css";
+   import "@/src/tp-base.css";
+   ```
+3. **Fonts** — load **Mulish** (H1 page titles) and **Inter** (everything else)
+   once. A Google Fonts `<link>` is simplest; self-hosting works too:
+   ```html
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Mulish:wght@600;700;800&display=swap" rel="stylesheet" />
+   ```
+   The families resolve via `--font-heading` / `--font-sans` (set in
+   `tp-tokens.css`); if you skip this, text falls back to the system sans stack.
+4. **Icons** — copy `public/tp-icons/` so `TPLibraryIcon` (and the icon picker)
+   can fetch `/tp-icons/<style>/<name>.svg`. The curated `<TPIcon>` set is bundled
+   and needs nothing extra.
+
+---
+
+## 4. Use them
+
+```jsx
+import { Button, Tag, TPInput } from "@/src/components/atoms";
+import { DataTable, DataCell, Tabs, TabsList, TabsTrigger, Tooltip } from "@/src/components/molecules";
+import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
+
+<Button variant="solid" leftIcon={<TPIcon name="plus" size={16} />}>New</Button>
+```
+
+Every component is **config-driven** and exposes its full surface as props — see
+each component's **Playground** story for the complete control set, and
+[Component Standards](?path=/docs/design-system-component-standards--docs) for the API contract.
+
+---
+
+## 5. Migration prompt (paste into your other repo's AI agent)
+
+> I'm adopting the **TatvaPractice design system** (copied into `src/components`,
+> `src/hooks/ui`, `src/hooks/utils.js`, the `tp-*.css` files imported at root, and
+> `public/tp-icons`). Replace this app's ad-hoc UI with these components **one
+> surface at a time**, without changing behaviour or data flow:
+>
+> 1. **Inventory** every place that renders a button, input, table, tabs, modal,
+>    toast, tooltip, chip/tag/badge, accordion, date picker, or filter.
+> 2. For each, swap the old element for the TP component, mapping props to the TP
+>    API (`variant` / `size` / `theme` / `tone`, config objects for tables/tabs/
+>    filters, `leftIcon`/`rightIcon` slots with `<TPIcon>` / `<TPLibraryIcon>`).
+> 3. Use **TP tokens** (`var(--tp-*)`) for any remaining custom styling — never
+>    raw hex. Use **TP icons only**.
+> 4. Keep one PR per surface; verify each visually before moving on. Don't touch
+>    business logic — only the presentation layer.
+>
+> Start by listing the inventory and proposing the first surface to migrate.
+
+---
+
+## 6. Gotchas
+
+- **Icon library is static**, not bundled: if `TPLibraryIcon` shows blank, you
+  haven't copied `public/tp-icons/` (or your static path differs).
+- **Tokens first**: components read `var(--tp-*)`; without `tp-tokens.css` colors
+  fall back to inline hex but theming breaks. Always import it.
+- **Squircle corners** come from `tp-base.css` (`corner-shape`); harmless on
+  unsupported browsers (falls back to normal radius).
+- **No third-party UI deps** — overlays/tooltips/tables are hand-rolled, so there's
+  nothing else to install beyond React.

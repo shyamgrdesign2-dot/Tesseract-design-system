@@ -1,0 +1,71 @@
+/* Tooltip.module.scss — TP tooltip surface (dark default, light variant). */
+
+.content {
+  padding: 6px 10px;
+  border-radius: 8px;
+  corner-shape: round;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Inter, var(--font-sans, sans-serif);
+  line-height: 1.4;
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: center;
+  z-index: 700;
+  box-shadow: 0 6px 16px -4px rgba(23, 23, 37, 0.24);
+  animation: tp-tooltip-in 140ms ease;
+}
+
+.content[data-variant="dark"] {
+  color: var(--tp-slate-0, #ffffff);
+  background-color: var(--tp-slate-900, #171725);
+}
+
+.content[data-variant="light"] {
+  color: var(--tp-slate-900, #171725);
+  background-color: var(--tp-slate-0, #ffffff);
+  border: 1px solid var(--tp-slate-200, #e5e7eb);
+}
+
+/* Inner layout — leading icon · body · dismiss.
+   Single line → centered; multi-line → top-aligned icon + ×. */
+.inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+
+  &[data-multiline] { align-items: flex-start; }
+}
+.ttIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
+.ttBody { min-width: 0; }
+
+/* Square × dismiss (lighter tint of the surface color — works dark + light). */
+.ttDismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  corner-shape: round;
+  cursor: pointer;
+  color: currentColor;
+  background-color: color-mix(in srgb, currentColor 16%, transparent);
+  transition: background-color 120ms ease;
+
+  &:hover { background-color: color-mix(in srgb, currentColor 28%, transparent); }
+  &:focus-visible { outline: 2px solid color-mix(in srgb, currentColor 40%, transparent); outline-offset: 1px; }
+}
+
+@keyframes tp-tooltip-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content { animation: none; }
+}

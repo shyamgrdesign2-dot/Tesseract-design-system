@@ -11,7 +11,7 @@
  * Props:
  *   checked / defaultChecked / onCheckedChange  (controlled or uncontrolled)
  *   disabled, required, name, value             (form integration)
- *   size: "sm" | "md"
+ *   size: "sm" | "md" | "lg"
  */
 
 import * as React from "react";

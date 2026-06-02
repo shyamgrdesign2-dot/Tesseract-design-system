@@ -7,7 +7,6 @@
  * node on first run. SSR-safe (returns null on the server pass).
  */
 
-import * as React from "react";
 import { createPortal } from "react-dom";
 
 export function Portal({ children, container }) {

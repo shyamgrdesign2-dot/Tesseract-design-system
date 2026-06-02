@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // TatvaPractice Atoms — Barrel Export
 // All atomic UI primitives available from a single import path:
-//   import { Button, Icon, Badge } from "@/src/components/atoms"
+//   import { Button, Badge } from "@/src/components/atoms"
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Actions
@@ -10,27 +10,20 @@ export { Button } from "./Button";
 // Display
 export { MedicalIcon } from "./MedicalIcon";
 export { Badge } from "./Badge";
-export { Avatar } from "./Avatar";
 export { Divider } from "./Divider";
 export { Skeleton } from "./Skeleton";
-export { Spinner } from "./Spinner";
+
+// Feedback
+export { LoadingIndicator } from "./LoadingIndicator";
 
 // Form
-export { Input } from "./Input";
+export { TPInput } from "./Input";
 export { Checkbox } from "./Checkbox";
 export { Switch } from "./Switch";
-export { Select } from "./Select";
-
-// Overlay
-export { Tooltip } from "./Tooltip";
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./Popover";
 
 // Form — extended
 export { Radio, RadioGroup, FormControlLabel } from "./Radio";
 export { Slider } from "./Slider";
-
-// Feedback
-export { Progress } from "./Progress";
 
 // Data Display
 export { Chip } from "./Chip";
@@ -39,6 +32,11 @@ export { Tag } from "./Tag";
 // Medical
 export { TPMedicalIcon, tpMedicalIconRegistry, tpMedicalIconNames, resolveTPMedicalIconName } from "./MedicalIcon";
 
+// Icons (vendored TP_Icons — 6 styles)
+export { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./icons/tp";
+
 // Animation / Decorative
 export { TutorialPlayIcon } from "./TutorialPlayIcon";
+export { ShinyText } from "./ShinyText";
 export { NoiseOverlay } from "./NoiseOverlay";
+export { AnimatedGrid } from "./AnimatedGrid";

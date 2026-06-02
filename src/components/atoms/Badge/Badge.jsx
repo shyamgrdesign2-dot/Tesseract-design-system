@@ -22,6 +22,7 @@ import styles from "./Badge.module.scss";
 export function Badge({
   variant = "soft",
   color = "primary",
+  size = "md",
   children,
   className,
   style: styleProp
@@ -33,6 +34,7 @@ export function Badge({
         className={cls}
         style={styleProp}
         data-color={color}
+        data-size={size}
         aria-hidden />);
 
 
@@ -44,8 +46,9 @@ export function Badge({
       className={cls}
       style={styleProp}
       data-variant={variant}
-      data-color={color}>
-      
+      data-color={color}
+      data-size={size}>
+
       {children}
     </span>);
 
