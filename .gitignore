@@ -26,3 +26,7 @@ dist-ssr
 *storybook.log
 storybook-static
 .gstack/
+
+# Vendored TP icon library (~102MB, 25k files). Distributed separately and
+# copied into public/ per the adoption guide — kept out of git history.
+public/tp-icons/
