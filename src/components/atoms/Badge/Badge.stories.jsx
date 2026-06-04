@@ -2,7 +2,7 @@ import { Badge } from './Badge';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
-const VARIANTS = ['solid', 'soft', 'outline', 'dot'];
+const VARIANTS = ['solid', 'soft', 'outline', 'gradient', 'dot'];
 const SIZES = ['sm', 'md', 'lg'];
 const ICON_SIDES = ['none', 'left', 'right', 'both'];
 const ICON_PX = { sm: 12, md: 14, lg: 16 };
@@ -85,6 +85,19 @@ export const Variants = {
           {variant}
         </Badge>
       ))}
+    </Row>
+  ),
+};
+
+/** Gradient variant — white text on a color ramp (red / green / orange / brand). */
+export const Gradients = {
+  render: (args) => (
+    <Row>
+      <Badge {...args} variant="gradient" color="warning">Trial</Badge>
+      <Badge {...args} variant="gradient" color="error">Expired</Badge>
+      <Badge {...args} variant="gradient" color="success">New</Badge>
+      <Badge {...args} variant="gradient" color="primary">Pro</Badge>
+      <Badge {...args} variant="gradient" color="violet">VIP</Badge>
     </Row>
   ),
 };

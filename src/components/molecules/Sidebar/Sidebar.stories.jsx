@@ -2,7 +2,7 @@ import React from 'react';
 import { Sidebar } from './Sidebar';
 
 // Icons are TP library icon NAMES — the Sidebar renders them linear at rest and
-// bold when active (the icon picker fix lets the variant switch through).
+// bold when active.
 const ITEMS = [
   { id: 'appointments', label: 'Appointments', icon: 'calendar-2' },
   { id: 'all-patients', label: 'All Patients', icon: 'profile-2user' },
@@ -13,6 +13,9 @@ const ITEMS = [
   { id: 'daycare', label: 'Daycare', icon: 'building-4' },
   { id: 'bulk-messages', label: 'Bulk Messages', icon: 'message-programming' },
 ];
+const IDS = ITEMS.map((i) => i.id);
+const TAG_VARIANTS = ['gradient', 'solid', 'soft', 'outline'];
+const TAG_COLORS = ['warning', 'error', 'success', 'primary', 'neutral', 'violet'];
 
 const meta = {
   title: 'Molecules/Sidebar',
@@ -20,17 +23,29 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    docs: { description: { component: 'Primary 80px navigation rail. Each item is a 32×32 rounded icon chip (grey at rest, blue when active) over a 1–2 line label. The icon is a TP library icon that switches linear→bold on select and tints slate-700→white. Active rows get a faint blue tint + a 3px rounded left bar; an optional orange Trial tag pins to the right edge, centered on the icon. No logo / patient footer by default; a bottom white fade hints at overflow.' } },
+    docs: { description: { component: 'Primary 80px navigation rail. The icon chip reuses the Button atom (tonal/grey at rest, solid/blue when active); the icon is a library glyph that switches linear→bold on select. Tags reuse the Badge atom (incl. the gradient variant). Controls let you pick the active item, configure one item\'s tag (type / variant / color), and swap any item\'s icon.' } },
   },
   argTypes: {
-    activeId: { control: 'select', options: ITEMS.map((i) => i.id), name: 'active item', table: { category: 'State' } },
-    trialItem: { control: 'select', options: ['none', ...ITEMS.map((i) => i.id)], name: 'Trial tag on', table: { category: 'Content' } },
+    activeId: { control: 'select', options: IDS, name: 'active item', table: { category: 'State' } },
+    // Tag — configured on one chosen item; the same rule applies to any item.
+    tagItem: { control: 'select', options: ['none', ...IDS], name: 'tag · on item', table: { category: 'Tag' } },
+    tagText: { control: 'text', name: 'tag · text', table: { category: 'Tag' } },
+    tagVariant: { control: 'inline-radio', options: TAG_VARIANTS, name: 'tag · variant', table: { category: 'Tag' } },
+    tagColor: { control: 'select', options: TAG_COLORS, name: 'tag · color', table: { category: 'Tag' } },
+    // Icon swap — change any item's glyph (and it still switches linear/bold).
+    iconItem: { control: 'select', options: IDS, name: 'icon · on item', table: { category: 'Icon' } },
+    iconName: { control: 'text', tpIcon: true, name: 'icon · glyph', table: { category: 'Icon' } },
     bottomFade: { control: 'boolean', name: 'bottom fade', table: { category: 'Layout' } },
     width: { control: { type: 'range', min: 72, max: 110, step: 2 }, name: 'rail width', table: { category: 'Layout' } },
   },
   args: {
     activeId: 'appointments',
-    trialItem: 'opd-billing',
+    tagItem: 'opd-billing',
+    tagText: 'Trial',
+    tagVariant: 'gradient',
+    tagColor: 'warning',
+    iconItem: 'appointments',
+    iconName: '',
     bottomFade: true,
     width: 80,
   },
@@ -38,10 +53,14 @@ const meta = {
 
 export default meta;
 
-// Keyed by activeId so changing the control re-seeds the local selection.
-function SidebarDemo({ activeId, trialItem, bottomFade, width }) {
+function SidebarDemo({ activeId, tagItem, tagText, tagVariant, tagColor, iconItem, iconName, bottomFade, width }) {
   const [active, setActive] = React.useState(activeId);
-  const items = ITEMS.map((it) => (it.id === trialItem ? { ...it, badge: 'trial' } : it));
+  const items = ITEMS.map((it) => {
+    let next = it;
+    if (it.id === tagItem) next = { ...next, badge: { text: tagText || 'Trial', variant: tagVariant, color: tagColor } };
+    if (it.id === iconItem && iconName && iconName.trim()) next = { ...next, icon: iconName.trim() };
+    return next;
+  });
   return (
     <div style={{ display: 'flex', height: 600, background: 'var(--tp-slate-50, #f8fafc)' }}>
       <Sidebar items={items} activeId={active} onSelect={setActive} width={width} bottomFade={bottomFade} />
@@ -53,10 +72,10 @@ function SidebarDemo({ activeId, trialItem, bottomFade, width }) {
 }
 
 export const Playground = {
-  render: (args) => <SidebarDemo key={`${args.activeId}-${args.trialItem}`} {...args} />,
+  render: (args) => <SidebarDemo key={`${args.activeId}-${args.tagItem}-${args.iconItem}`} {...args} />,
 };
 
-/** Just the rail. */
+/** Just the rail, with the Trial tag on OPD Billing. */
 export const RailOnly = {
   render: () => {
     const [active, setActive] = React.useState('all-patients');

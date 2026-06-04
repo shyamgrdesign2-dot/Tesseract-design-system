@@ -2,46 +2,58 @@
 
 /**
  * Sidebar — the primary 80px navigation rail (VoiceRx redesign).
- * In-house, no external deps.
+ * In-house, composed from atoms (Button for the icon chip, Badge for tags).
  *
- * Each item is an icon "chip" (32×32 rounded square) over a label. The chip is
- * grey (slate-100) at rest and blue (blue-500) when active; the icon itself is a
- * TP library icon that renders LINEAR at rest and BOLD when active, tinting to
- * slate-700 / white via the `color` prop. Active items also get a faint blue row
- * tint and a 3px rounded left indicator bar. An optional Trial tag is pinned to
- * the right edge, vertically centered on the icon.
+ * Each item is an icon "chip" over a label. The chip reuses the Button atom in
+ * icon-only mode: tonal/neutral (grey) at rest, solid/primary (blue) when
+ * active. The icon is a TP library icon that renders LINEAR at rest and BOLD
+ * when active, inheriting the chip's text color (slate-700 → white) via
+ * currentColor. Active rows get a faint blue tint + a 3px rounded left bar.
+ *
+ * The row itself is the click target (role="button"); the inner Button chip is
+ * decorative (aria-hidden, not tab-focusable) so there are no nested tab stops.
  *
  * Props:
  *   items    [{ id, label, icon, badge?, disabled? }]
- *              icon  — TP library icon NAME (string) → switches linear/bold on
- *                      active; or a ReactNode escape hatch (no switch).
- *              badge — "trial" (orange gradient tag) | ReactNode
+ *              icon  — TP library icon NAME (string, switches linear/bold) OR a
+ *                      ReactNode escape hatch.
+ *              badge — "trial" (gradient/warning Badge) | { text, variant?, color? }
+ *                      | ReactNode. Reuses the Badge atom.
  *   activeId   id of the active item (controlled)
  *   onSelect   (id) => void
  *   width      rail width in px                                   default 80
  *   bottomFade show the bottom white fade overlay                 default true
- *   logo       optional ReactNode pinned to the top (off by default)
- *   footer     optional ReactNode pinned to the bottom (off by default)
+ *   logo / footer  optional ReactNodes (off by default)
  *   className
  */
 
 import * as React from "react";
+import { Button } from "@/src/components/atoms/Button";
+import { Badge } from "@/src/components/atoms/Badge";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { cn } from "@/src/hooks/utils";
 import styles from "./Sidebar.module.scss";
 
 function ItemIcon({ icon, active }) {
   if (typeof icon === "string") {
-    return (
-      <TPLibraryIcon
-        name={icon}
-        variant={active ? "bold" : "linear"}
-        size={20}
-        color={active ? "var(--tp-slate-0, #fff)" : "var(--tp-slate-700, #454551)"}
-      />
-    );
+    // No color → inherits the chip's currentColor (slate-700 rest / white active).
+    return <TPLibraryIcon name={icon} variant={active ? "bold" : "linear"} size={20} />;
   }
   return icon ?? null;
+}
+
+function ItemBadge({ badge }) {
+  if (badge == null) return null;
+  let cfg = badge;
+  if (badge === "trial") cfg = { text: "Trial", variant: "gradient", color: "warning" };
+  if (cfg && typeof cfg === "object" && cfg.text != null) {
+    return (
+      <span className={styles.badgeSlot}>
+        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="sm">{cfg.text}</Badge>
+      </span>
+    );
+  }
+  return <span className={styles.badgeSlot}>{badge}</span>;
 }
 
 export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = true, logo, footer, className }) {
@@ -56,21 +68,33 @@ export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = tr
       <div className={styles.scroll}>
         {items.map((it) => {
           const active = it.id === activeId;
+          const select = () => !it.disabled && onSelect?.(it.id);
           return (
-            <button
+            <div
               key={it.id}
-              type="button"
+              role="button"
+              tabIndex={it.disabled ? -1 : 0}
               className={styles.item}
               data-active={active || undefined}
               data-disabled={it.disabled || undefined}
               aria-current={active ? "page" : undefined}
-              disabled={it.disabled}
-              onClick={() => !it.disabled && onSelect?.(it.id)}
+              aria-disabled={it.disabled || undefined}
+              onClick={select}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } }}
             >
               <span className={styles.body}>
-                <span className={styles.iconChip}>
-                  <ItemIcon icon={it.icon} active={active} />
-                </span>
+                {/* Icon chip reuses the Button atom (icon-only). Decorative — the
+                    row owns the click — so it's aria-hidden and not tab-focusable. */}
+                <Button
+                  className={styles.chip}
+                  aria-hidden
+                  tabIndex={-1}
+                  size="sm"
+                  variant={active ? "solid" : "tonal"}
+                  theme={active ? "primary" : "neutral"}
+                  icon={<ItemIcon icon={it.icon} active={active} />}
+                  style={{ width: 32, height: 32 }}
+                />
                 <span
                   className={styles.label}
                   data-multiline={typeof it.label === "string" && it.label.trim().includes(" ") ? "" : undefined}
@@ -80,10 +104,8 @@ export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = tr
               </span>
 
               {active && <span className={styles.bar} aria-hidden />}
-              {it.badge === "trial"
-                ? <span className={styles.trial}>Trial</span>
-                : it.badge != null && <span className={styles.badge}>{it.badge}</span>}
-            </button>
+              <ItemBadge badge={it.badge} />
+            </div>
           );
         })}
         {bottomFade && <div className={styles.spacer} aria-hidden />}

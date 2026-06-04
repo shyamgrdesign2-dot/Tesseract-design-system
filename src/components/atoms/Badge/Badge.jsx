@@ -5,7 +5,8 @@
  * Styling: Badge.module.scss (data-variant / data-color selectors).
  *
  * Props:
- *   variant  "solid" | "soft" | "outline" | "dot"   default "soft"
+ *   variant  "solid" | "soft" | "outline" | "gradient" | "dot"   default "soft"
+ *            (gradient → white text on a color ramp; color picks the ramp)
  *   color    "primary" | "success" | "warning" | "error" | "neutral" | "violet"
  *   size     "sm" | "md" | "lg"                       default "md"
  *   icon       ReactNode — leading icon (inherits the badge color via currentColor)

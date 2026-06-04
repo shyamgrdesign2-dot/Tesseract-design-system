@@ -1,5 +1,5 @@
 /* Sidebar.module.scss — primary 80px navigation rail (VoiceRx redesign).
-   Ported 1:1 from the app navbar onto TP tokens. */
+   The icon chip is the Button atom; tags are the Badge atom. */
 
 .rail {
   position: relative;
@@ -31,7 +31,6 @@
   &::-webkit-scrollbar { display: none; width: 0; }
 }
 
-/* Bottom spacer so the last item clears the fade overlay. */
 .spacer { height: 96px; flex-shrink: 0; }
 
 .item {
@@ -39,15 +38,19 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  width: 80px;
-  border: none;
-  background-color: transparent;
+  width: 100%;
   cursor: pointer;
   isolation: isolate;
   transition: background-color 120ms ease;
 
   &:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--tp-blue-200, #b5b4f2); }
   &[data-disabled] { opacity: 0.45; cursor: not-allowed; }
+
+  /* Hover (inactive): faint neutral row tint. */
+  &:not([data-active]):hover { background-color: rgba(69, 69, 81, 0.08); }
+
+  /* Active: faint blue row tint + left indicator bar. */
+  &[data-active] { background-color: rgba(75, 74, 213, 0.12); }
 }
 
 .body {
@@ -59,57 +62,45 @@
   align-items: center;
   gap: 6px;
   padding: 12px 6px;
+  min-width: 0;
 }
 
-/* Icon chip — grey at rest, blue when active. */
-.iconChip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  corner-shape: round;
-  background-color: var(--tp-slate-100, #f1f1f5);
-  transition: background-color 120ms ease, transform 120ms ease;
-}
-.item:hover .iconChip { transform: scale(1.02); }
+/* Icon chip = Button atom (icon-only); size forced to 32 via inline style.
+   A subtle lift on row hover. */
+.chip { transition: transform 120ms ease; }
+.item:hover .chip { transform: scale(1.02); }
 
 .label {
   width: 68px;
   max-width: 68px;
+  padding-inline: 2px;
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: 0.1px;
   color: var(--tp-slate-700, #454551);
   text-align: center;
-  /* Single-word labels: one line, ellipsis. */
+
+  /* Single-word labels: one line, ellipsis when too long. */
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  /* Multi-word labels: clamp to two lines. */
+  /* Multi-word labels: wrap at word boundaries first (word 1 → line 1,
+     word 2 → line 2); break a single over-long word only if it must; clamp to
+     two lines and ellipsis the overflow. */
   &[data-multiline] {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
-    text-overflow: clip;
-    word-break: break-word;
+    text-overflow: ellipsis;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 }
-
-/* Hover (inactive only): row tint + chip a shade darker. */
-.item:not([data-active]):hover { background-color: rgba(69, 69, 81, 0.08); }
-.item:not([data-active]):hover .iconChip { background-color: var(--tp-slate-200, #e2e2ea); }
-
-/* Active: faint blue row tint + blue chip + left indicator bar. */
-.item[data-active] { background-color: rgba(75, 74, 213, 0.12); }
-.item[data-active] .iconChip { background-color: var(--tp-blue-500, #4b4ad5); }
 
 .bar {
   position: absolute;
@@ -124,32 +115,16 @@
   corner-shape: round;
 }
 
-/* Trial tag — orange gradient pill attached to the right edge, centered on the
-   icon (icon center ≈ 12px pad + 16px half = 28px from the top). */
-.trial {
+/* Tag (Badge atom) pinned to the right edge, centered on the icon chip. */
+.badgeSlot {
   position: absolute;
   z-index: 3;
-  top: 20px;
+  top: 16px;
   right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--tp-slate-0, #fff);
-  background-image: linear-gradient(257.32deg, #f15223 0%, #ff987a 47.22%, #f15223 94.44%);
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-  corner-shape: round;
-  padding: 4px 2px 4px 4px;
 }
-
-.badge { position: absolute; z-index: 3; top: 16px; right: 6px; }
 
 .footer { margin-top: auto; padding: 12px 6px; flex-shrink: 0; z-index: 2; }
 
-/* Bottom white fade — hints at more scrollable items. */
 .fade {
   position: absolute;
   left: 0;
