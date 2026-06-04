@@ -387,9 +387,9 @@ export const AutoGrowAndWidth = {
         fullWidth
       />
       <InputBox
-        label="Width clamp (min 160 / max 320)"
-        defaultValue="Adapts between 160px and 320px"
-        minWidth={160}
+        label="Width clamp (min 100 / max 320)"
+        defaultValue="Adapts between 100px and 320px"
+        minWidth={100}
         maxWidth={320}
       />
     </Stack>
