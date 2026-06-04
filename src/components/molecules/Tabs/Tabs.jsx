@@ -27,6 +27,7 @@
  */
 
 import * as React from "react";
+import { Badge } from "@/src/components/atoms/Badge";
 import styles from "./Tabs.module.scss";
 
 const TabsContext = React.createContext(null);
@@ -141,7 +142,8 @@ export function TabsTrigger({
     >
       {leftIcon != null && <span className={styles.icon}>{withIconProps(leftIcon)}</span>}
       {children != null && <span className={styles.label}>{children}</span>}
-      {tag != null && <span className={styles.tag} data-tone={tagTone}>{tag}</span>}
+      {/* Reuse the Badge atom for the count/status pill (soft tone). */}
+      {tag != null && <Badge variant="soft" color={tagTone} size={ctx?.size === "lg" ? "md" : "sm"}>{tag}</Badge>}
       {rightIcon != null && <span className={styles.icon}>{withIconProps(rightIcon)}</span>}
     </button>
   );

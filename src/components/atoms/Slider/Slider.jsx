@@ -18,9 +18,15 @@ export function Slider({
   className,
   style: styleProp,
 }) {
-  const accentColor = color === "error" ? "var(--tp-error-500)" :
-    color === "success" ? "var(--tp-success-500)" :
-    "var(--tp-blue-500)";
+  // TP tokens with hex fallbacks; every tone the stories use must be mapped here
+  // (warning was previously missing and silently fell back to blue).
+  const ACCENT = {
+    primary: "var(--tp-blue-500, #4b4ad5)",
+    success: "var(--tp-success-500, #10b981)",
+    warning: "var(--tp-warning-500, #f59e0b)",
+    error:   "var(--tp-error-500, #f43f5e)",
+  };
+  const accentColor = ACCENT[color] ?? ACCENT.primary;
   const trackHeight = size === "sm" ? 3 : size === "lg" ? 6 : 4;
 
   return (

@@ -6,9 +6,13 @@ const meta = {
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
     opacity: { control: { type: 'range', min: 0, max: 1, step: 0.01 } },
+    baseFrequency: { control: { type: 'range', min: 0.1, max: 1.5, step: 0.05 }, name: 'grain frequency' },
+    blendMode: { control: 'select', options: ['overlay', 'soft-light', 'multiply', 'screen', 'normal', 'color-dodge'] },
   },
   args: {
     opacity: 0.06,
+    baseFrequency: 0.65,
+    blendMode: 'overlay',
   },
 };
 

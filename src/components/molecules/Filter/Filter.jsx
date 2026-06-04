@@ -19,6 +19,7 @@ import * as React from "react";
 import { cn } from "@/src/hooks/utils";
 import { useClickOutside } from "@/src/hooks/ui/use-overlay";
 import { Chip } from "@/src/components/atoms/Chip";
+import { Checkbox } from "@/src/components/atoms/Checkbox";
 import styles from "./Filter.module.scss";
 
 function Chevron() {
@@ -53,17 +54,23 @@ function FilterDropdown({ group, selected, onToggle }) {
         <div className={styles.menu} role="listbox" aria-multiselectable="true">
           {group.options.map((o) => {
             const on = selected.includes(o.value);
+            const pick = () => onToggle(o.value);
             return (
-              <button key={o.value} type="button" className={styles.option} role="option" aria-selected={on} onClick={() => onToggle(o.value)}>
-                <span className={styles.check} data-on={on || undefined}>
-                  {on && (
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                  )}
+              <div
+                key={o.value}
+                role="option"
+                aria-selected={on}
+                tabIndex={0}
+                className={styles.option}
+                onClick={pick}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }}
+              >
+                {/* Reuse the Checkbox atom (decorative — the row owns the click). */}
+                <span className={styles.control} aria-hidden>
+                  <Checkbox size="sm" checked={on} tabIndex={-1} />
                 </span>
                 {o.label}
-              </button>
+              </div>
             );
           })}
         </div>

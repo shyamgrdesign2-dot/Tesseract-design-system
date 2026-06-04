@@ -168,28 +168,7 @@
 /* ── Empty state ── */
 .empty { padding: 48px 16px; text-align: center; color: var(--tp-slate-400, #a1a1aa); }
 
-/* ── Shimmer skeleton (lazy-load) ── */
-.shimmer {
-  display: block;
-  height: 12px;
-  border-radius: 6px;
-  corner-shape: round;
-  background: linear-gradient(
-    90deg,
-    var(--tp-slate-100, #f0f0f6) 25%,
-    var(--tp-slate-200, #e2e2ea) 37%,
-    var(--tp-slate-100, #f0f0f6) 63%
-  );
-  background-size: 400% 100%;
-  animation: tp-dt-shimmer 1.4s ease infinite;
-}
-@keyframes tp-dt-shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: 0 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .shimmer { animation: none; }
-}
+/* Lazy-load skeleton rows now reuse the Skeleton atom (see DataTable.jsx). */
 
 /* ── Tag cell (type: "tag") ── */
 // Non-actionable tags compose the Badge atom; actionable ones compose the Chip

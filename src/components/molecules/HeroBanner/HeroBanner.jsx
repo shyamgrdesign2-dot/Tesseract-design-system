@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedGrid } from "@/src/components/atoms/AnimatedGrid/AnimatedGrid";
+import { Button } from "@/src/components/atoms/Button";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 
 const BACKGROUND =
@@ -104,40 +105,30 @@ export function HeroBanner({
           {/* Heading line: back button + title, centered together */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
             {showBackButton && (
-              <button
-                type="button"
+              // Reuse the Button atom (dark-surface, ghost, icon-only) instead of
+              // a hand-rolled <button> with inline styles.
+              <Button
+                surface="dark"
+                variant="tonal"
+                theme="neutral"
+                size={ts === "sm" ? "sm" : "md"}
                 aria-label="Go back"
                 onClick={onBack}
-                style={{
-                  flexShrink: 0,
-                  width: backSize,
-                  height: backSize,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: 0,
-                  border: "none",
-                  borderRadius: 10,
-                  background: "rgba(255,255,255,0.12)",
-                  color: "#fff",
-                  cursor: "pointer",
-                  transition: "background-color 150ms ease",
-                }}
-              >
-                {/* Same chevron as the accordion arrow, pointing left. */}
-                <svg
-                  width={BACK_ICON[ts]}
-                  height={BACK_ICON[ts]}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  aria-hidden
-                >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
+                icon={
+                  <svg
+                    width={BACK_ICON[ts]}
+                    height={BACK_ICON[ts]}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                }
+              />
             )}
 
             {/* Title truncates when the CTAs squeeze the row; the full text

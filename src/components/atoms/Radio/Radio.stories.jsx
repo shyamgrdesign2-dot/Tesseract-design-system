@@ -33,14 +33,9 @@ const Group = ({ size, orientation, disabled, disabledOption, ...args }) => {
     { value: 'push', label: 'Push notification' },
   ];
   return (
-    <RadioGroup
-      {...args}
-      value={value}
-      onChange={setValue}
-      style={orientation === 'horizontal' ? { flexDirection: 'row', gap: 24 } : undefined}
-    >
+    <RadioGroup {...args} value={value} onChange={setValue} orientation={orientation} size={size}>
       {opts.map((o) => (
-        <Radio key={o.value} value={o.value} label={o.label} size={size} disabled={disabled || disabledOption === o.value} />
+        <Radio key={o.value} value={o.value} label={o.label} disabled={disabled || disabledOption === o.value} />
       ))}
     </RadioGroup>
   );

@@ -79,12 +79,9 @@
   }
 }
 
-/* ── Sizes ── (trigger density + tag scale with the tab size) */
+/* ── Sizes ── (trigger density; the tag/count pill is the Badge atom) */
 .list[data-size="sm"] .trigger { padding: 7px 10px;  font-size: 13px; gap: 6px; }
 .list[data-size="lg"] .trigger { padding: 13px 18px; font-size: 15px; gap: 10px; }
-
-.list[data-size="sm"] .tag { min-width: 14px; height: 14px; padding: 0 4px; font-size: 10px; }
-.list[data-size="lg"] .tag { min-width: 18px; height: 18px; padding: 0 6px; font-size: 12px; }
 
 /* ── Parts ── */
 .icon {
@@ -99,33 +96,6 @@
   min-width: 0;
 }
 
-/* Right-side tag / count pill (sized with the tab — md ≈ 16px tall). */
-.tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 5px;
-  border-radius: 999px;
-  corner-shape: round;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  transition: background-color 150ms ease, color 150ms ease;
-
-  &[data-tone="neutral"] { background-color: var(--tp-slate-100, #f0f0f6); color: var(--tp-slate-600, #52525b); }
-  &[data-tone="primary"] { background-color: var(--tp-blue-50, #eeeeff);   color: var(--tp-blue-600, #3c3bb5); }
-  &[data-tone="success"] { background-color: var(--tp-success-50, #e7f9f0); color: var(--tp-success-700, #15803d); }
-  &[data-tone="warning"] { background-color: var(--tp-warning-50, #fff7ed); color: var(--tp-warning-700, #b45309); }
-  &[data-tone="error"]   { background-color: var(--tp-error-50, #fee2e2);   color: var(--tp-error-700, #b91c1c); }
-}
-
-/* A neutral tag on the active tab sits a shade darker (stays neutral). */
-.trigger[data-state="active"] .tag[data-tone="neutral"] {
-  background-color: var(--tp-slate-200, #e2e2ea);
-  color: var(--tp-slate-800, #27272a);
-}
 
 .content {
   padding: 16px 0;

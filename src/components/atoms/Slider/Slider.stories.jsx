@@ -6,7 +6,7 @@ const meta = {
   component: Slider,
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
-    color: { control: 'inline-radio', options: ['primary', 'success', 'error'] },
+    color: { control: 'inline-radio', options: ['primary', 'success', 'warning', 'error'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     min: { control: 'number' },
     max: { control: 'number' },

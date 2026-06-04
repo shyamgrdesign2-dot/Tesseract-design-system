@@ -6,13 +6,13 @@ const meta = {
   component: Checkbox,
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
-    checked: { control: 'boolean' },
-    defaultChecked: { control: 'boolean' },
+    state: { control: 'inline-radio', options: ['unchecked', 'checked', 'indeterminate'], description: 'Tri-state value (indeterminate is reachable here, not just via boolean)' },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
   },
   args: {
+    state: 'unchecked',
     size: 'md',
     disabled: false,
     required: false,
@@ -43,11 +43,16 @@ const Label = ({ children, ...props }) => (
   </label>
 );
 
+// Keyed by `state` so changing the control re-initialises the local value
+// (no set-state-in-effect needed).
+function CheckboxDemo({ state, ...args }) {
+  const initial = state === 'checked' ? true : state === 'indeterminate' ? 'indeterminate' : false;
+  const [checked, setChecked] = React.useState(initial);
+  return <Checkbox {...args} checked={checked} onCheckedChange={setChecked} />;
+}
+
 export const Playground = {
-  render: (args) => {
-    const [checked, setChecked] = React.useState(false);
-    return <Checkbox {...args} checked={checked} onCheckedChange={setChecked} />;
-  },
+  render: (args) => <CheckboxDemo key={args.state} {...args} />,
 };
 
 export const Uncontrolled = {

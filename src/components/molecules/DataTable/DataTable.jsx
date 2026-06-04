@@ -41,6 +41,7 @@ import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { Badge } from "@/src/components/atoms/Badge";
 import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
+import { Skeleton } from "@/src/components/atoms/Skeleton";
 import styles from "./DataTable.module.scss";
 
 // Badge tones map 1:1; Chip uses "default" where Badge uses "neutral".
@@ -448,14 +449,14 @@ export function DataTable({
             {loading &&
               Array.from({ length: lazyRows }).map((_, r) => (
                 <tr key={`sk-${r}`} className={styles.row} aria-hidden>
-                  {selectable && <td className={cn(styles.td, styles.selectCell)}><span className={styles.shimmer} style={{ width: 16, height: 16, display: "block" }} /></td>}
+                  {selectable && <td className={cn(styles.td, styles.selectCell)}><Skeleton variant="rect" width={16} height={16} radius={5} style={{ display: "block" }} /></td>}
                   {columns.map((col, c) => (
                     <td
                       key={col.id}
                       className={cn(styles.td, col.sticky === "right" && styles.sticky)}
                       data-align={col.align || "left"}
                     >
-                      <span className={styles.shimmer} style={{ width: `${55 + ((r * 7 + c * 13) % 35)}%` }} />
+                      <Skeleton variant="text" width={`${55 + ((r * 7 + c * 13) % 35)}%`} />
                     </td>
                   ))}
                 </tr>

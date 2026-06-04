@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 /**
  * AnimatedGrid — Decorative SVG grid with light "comet" pulses that travel
  * along the lattice lines. Ported from the TP marketing site for use as a
@@ -255,7 +257,7 @@ const ALL_EDGES_D = EDGES
   .map(([x1, y1, x2, y2]) => `M${x1},${y1}L${x2},${y2}`)
   .join("");
 
-function LanePulse({ lane }) {
+function LanePulse({ lane, gradId }) {
   const { sx, sy, ex, ey } = lane;
   const dx = ex - sx, dy = ey - sy;
   const len = Math.hypot(dx, dy);
@@ -274,7 +276,7 @@ function LanePulse({ lane }) {
       y={-COMET_T / 2}
       width={COMET_LEN}
       height={COMET_T}
-      fill="url(#cometGrad)"
+      fill={`url(#${gradId})`}
     >
       <animateMotion
         dur={`${CYCLE}s`}
@@ -289,7 +291,22 @@ function LanePulse({ lane }) {
   );
 }
 
-export function AnimatedGrid({ className, style }) {
+/**
+ * @param {{ className?: string, style?: object,
+ *   lineColor?: string,   // lattice stroke (default faint white for dark surfaces)
+ *   cometColor?: string   // travelling pulse color (default white)
+ * }} props
+ */
+export function AnimatedGrid({
+  className,
+  style,
+  lineColor = "rgba(255,255,255,0.14)",
+  cometColor = "white",
+}) {
+  // Scope the clip/gradient ids per instance so two differently-themed grids on
+  // one page never share (and clobber) each other's definitions.
+  const uid = useId().replace(/:/g, "");
+  const gradId = `${uid}-comet`;
   return (
     <svg
       className={className}
@@ -302,31 +319,31 @@ export function AnimatedGrid({ className, style }) {
     >
       <defs>
         {LANES.map((lane, i) => (
-          <clipPath key={i} id={`lc${i}`} clipPathUnits="userSpaceOnUse">
+          <clipPath key={i} id={`${uid}-lc${i}`} clipPathUnits="userSpaceOnUse">
             <path d={lane.clipD} />
           </clipPath>
         ))}
 
-        <linearGradient id="cometGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="white" stopOpacity="0" />
-          <stop offset="0.55" stopColor="white" stopOpacity="0.5" />
-          <stop offset="0.9" stopColor="white" stopOpacity="0.95" />
-          <stop offset="1" stopColor="white" stopOpacity="1" />
+        <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor={cometColor} stopOpacity="0" />
+          <stop offset="0.55" stopColor={cometColor} stopOpacity="0.5" />
+          <stop offset="0.9" stopColor={cometColor} stopOpacity="0.95" />
+          <stop offset="1" stopColor={cometColor} stopOpacity="1" />
         </linearGradient>
       </defs>
 
       <g>
         <path
           d={ALL_EDGES_D}
-          stroke="rgba(255,255,255,0.14)"
+          stroke={lineColor}
           strokeWidth={LINE_T}
           strokeLinecap="square"
           fill="none"
         />
 
         {LANES.map((lane, i) => (
-          <g key={i} clipPath={`url(#lc${i})`}>
-            <LanePulse lane={lane} />
+          <g key={i} clipPath={`url(#${uid}-lc${i})`}>
+            <LanePulse lane={lane} gradId={gradId} />
           </g>
         ))}
       </g>
