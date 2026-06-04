@@ -199,18 +199,11 @@
   svg { width: 11px; height: 11px; }
 }
 
-// ─── Loading spinner ───────────────────────────────────────────────────────────
-.spinner {
-  flex-shrink:     0;
-  width:           var(--icon, 18px);
-  height:          var(--icon, 18px);
-  border:          2px solid var(--tp-slate-200, #E2E2EA);
-  border-top-color: var(--accent);
-  border-radius:   9999px;
-  animation:       tp-input-spin 0.7s linear infinite;
+// ─── Loading (reuses the LoadingIndicator atom; tinted to the field accent) ────
+.loader {
+  flex-shrink: 0;
+  color: var(--accent);
 }
-
-@keyframes tp-input-spin { to { transform: rotate(360deg); } }
 
 // ─── Addons (pinned left/right blocks) ────────────────────────────────────────
 // Structural only: full-height, flush to the edge. The content owns its own

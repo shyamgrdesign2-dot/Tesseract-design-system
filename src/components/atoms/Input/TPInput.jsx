@@ -1,7 +1,10 @@
 "use client";
 
 import { forwardRef, useId, useRef, useState } from "react";
+import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import styles from "./TPInput.module.scss";
+
+const LOADER_PX = { sm: 16, md: 18, lg: 20 };
 
 /**
  * TPInput — comprehensive, scalable input atom.
@@ -204,7 +207,9 @@ export const TPInput = forwardRef(function TPInput(
 
               {rightIcon && <span className={styles.iconRight} aria-hidden>{rightIcon}</span>}
 
-              {loading && <span className={styles.spinner} role="status" aria-label="Loading" />}
+              {loading && (
+                <LoadingIndicator type="line-simple" size={LOADER_PX[size] ?? 18} className={styles.loader} />
+              )}
 
               {showStatus && (
                 <span className={styles.statusIcon} aria-hidden>
