@@ -31,7 +31,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Button.module.scss";
-import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { useIsClient } from "@/src/hooks/use-is-client";
@@ -239,7 +238,7 @@ export const Button = forwardRef(function Button(
                   {action.shortcut ? (
                     <span className={styles.menuItemShortcut}>{action.shortcut}</span>
                   ) : (
-                    <TPIcon name="chevron-right" variant="linear" size={16} className={styles.menuItemChevron} />
+                    <TPLibraryIcon name="arrow-right-02" size={16} className={styles.menuItemChevron} />
                   )}
                 </button>
               ))}
