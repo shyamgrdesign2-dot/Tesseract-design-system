@@ -1,22 +1,29 @@
 "use client";
 
 /**
- * Avatar — user/profile image atom with an initial fallback and an optional
- * gradient ring. In-house, no deps.
+ * Avatar — always-circular user/profile mark. Three content types:
+ *   • image   — pass `src`
+ *   • initials — pass `name` (first+last initials; single name → first two letters)
+ *   • icon    — pass `icon` (a TP library icon NAME or a ReactNode)
+ * Resolution order: icon → image → initials.
  *
  * Props:
- *   src      image URL (falls back to the name's initial when absent/broken)
- *   name     used for the alt text + initial fallback
+ *   src      image URL (falls back to initials if it fails to load)
+ *   name     used for alt + the initials fallback
+ *   icon     TP library icon name (string) or a ReactNode
  *   size     px                                              default 40
- *   shape    "circle" | "square"                            default "circle"
  *   ring     boolean (brand gradient ring) | CSS string (custom ring)
  *   onClick  when set, renders as a <button>
  *   className, style
+ *
+ * The avatar is ALWAYS circular (no square variant).
  */
 
 import * as React from "react";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 
 const DEFAULT_RING = "linear-gradient(#ffde00, #fd5900)";
+const CIRCLE = { borderRadius: "50%", cornerShape: "round" };
 
 // Initials: first letter of the first + last name; a single name → its first two
 // letters. e.g. "Ramesh Kumar" → "RK", "Ramesh" → "RA".
@@ -27,14 +34,21 @@ function initialsOf(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = false, onClick, className, style }) {
+export function Avatar({ src, name, alt, icon, size = 40, ring = false, onClick, className, style }) {
   const [broken, setBroken] = React.useState(false);
-  const radius = shape === "square" ? Math.round(size * 0.28) : "50%";
-  const showImg = src && !broken;
-  const initial = initialsOf(name);
-
   const ringBg = ring ? (typeof ring === "string" ? ring : DEFAULT_RING) : undefined;
   const Tag = onClick ? "button" : "span";
+
+  let content;
+  if (icon != null) {
+    content = typeof icon === "string"
+      ? <TPLibraryIcon name={icon} size={Math.round(size * 0.5)} color="var(--tp-slate-600, #717179)" />
+      : icon;
+  } else if (src && !broken) {
+    content = <img src={src} alt={alt || name || "User"} onError={() => setBroken(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
+  } else {
+    content = initialsOf(name);
+  }
 
   return (
     <Tag
@@ -44,6 +58,7 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
       className={className}
       style={{
         boxSizing: "border-box",
+        ...CIRCLE,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
@@ -52,8 +67,6 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
         flexShrink: 0,
         padding: ring ? 2 : 0,
         border: "none",
-        borderRadius: radius,
-        cornerShape: "round",
         background: ringBg || "transparent",
         cursor: onClick ? "pointer" : "default",
         ...style,
@@ -62,13 +75,13 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
       <span
         style={{
           boxSizing: "border-box",
+          ...CIRCLE,
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
           height: "100%",
           overflow: "hidden",
-          borderRadius: radius,
           border: ring ? "1px solid var(--tp-slate-0, #fff)" : "none",
           background: "var(--tp-slate-100, #f1f1f5)",
           color: "var(--tp-slate-600, #717179)",
@@ -77,9 +90,7 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
           fontSize: Math.round(size * 0.4),
         }}
       >
-        {showImg
-          ? <img src={src} alt={alt || name || "User"} onError={() => setBroken(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : initial}
+        {content}
       </span>
     </Tag>
   );
