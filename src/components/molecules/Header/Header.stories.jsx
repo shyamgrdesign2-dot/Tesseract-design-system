@@ -1,11 +1,11 @@
 import React from 'react';
 import { Header } from './Header';
 
-// Token-driven wordmark stand-in for the brand logo (no asset dependency).
+// Real TatvaPractice logo — symbol + wordmark SVGs served from /public/brand.
 const Logo = () => (
-  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: 'Inter, sans-serif' }}>
-    <span style={{ width: 28, height: 28, borderRadius: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #4b4ad5, #6c4f90)', color: '#fff', fontWeight: 800, fontSize: 15 }}>T</span>
-    <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--tp-slate-900, #171725)' }}>TatvaPractice</span>
+  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+    <img src="/brand/tatvapractice-symbol.svg" alt="" style={{ height: 26, width: 'auto', display: 'block' }} />
+    <img src="/brand/tatvapractice-wordmark.svg" alt="TatvaPractice" style={{ height: 18, width: 'auto', display: 'block' }} />
   </span>
 );
 

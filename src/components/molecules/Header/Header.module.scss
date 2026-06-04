@@ -90,10 +90,13 @@
 
 /* ── Icon button + badge dot ── */
 .iconWrap { position: relative; display: inline-flex; flex-shrink: 0; }
-.dot { position: absolute; top: -2px; right: -2px; pointer-events: none; }
+/* Notification dot — pinned to the very top-right corner of the icon. */
+.dot { position: absolute; top: 0; right: 0; line-height: 0; pointer-events: none; z-index: 1; }
 .dot :global(*) { box-shadow: 0 0 0 2px var(--tp-slate-0, #fff); border-radius: 50%; }
 
-.dropLabel { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; }
+/* Single-line CTA label: centered, ellipsis. display:block (not inline-block)
+   avoids the baseline shift that pushed the text a few px above center. */
+.dropLabel { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center; }
 
 /* ── Tutorial play-circle ── */
 .tutorial {
