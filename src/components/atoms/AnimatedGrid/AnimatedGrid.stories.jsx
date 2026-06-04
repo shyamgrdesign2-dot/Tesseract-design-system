@@ -5,8 +5,8 @@ const meta = {
   component: AnimatedGrid,
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen',
-    docs: { description: { component: 'Decorative SVG lattice with travelling "comet" pulses. Render absolutely-positioned behind content (used by HeroBanner). Themeable via `lineColor` + `cometColor`; ids are scoped per instance so multiple grids can be themed independently on one page.' } },
+    layout: 'centered',
+    docs: { description: { component: 'Standalone decorative atom: a geometric lattice with travelling "comet" pulses. It is its own component (the HeroBanner just reuses it) — drop it behind any surface. Themeable via `lineColor` + `cometColor`, so it works on both dark and light backgrounds. The viewBox is square, so in a square area the full grid is visible.' } },
   },
   argTypes: {
     lineColor: { control: 'color', description: 'Lattice stroke color' },
@@ -20,35 +20,47 @@ const meta = {
 
 export default meta;
 
-// Helper: place the grid on a tinted panel so the pulses are visible.
-const Panel = ({ bg, children }) => (
-  <div style={{ position: 'relative', height: 220, width: '100%', overflow: 'hidden', background: bg, borderRadius: 12 }}>
+// A square stage so the entire (square) grid is visible.
+const Square = ({ bg, children }) => (
+  <div style={{ position: 'relative', width: 360, height: 360, overflow: 'hidden', borderRadius: 16, background: bg }}>
     {children}
   </div>
 );
 
+const fill = { position: 'absolute', inset: 0, width: '100%', height: '100%' };
+
 export const Playground = {
   render: (args) => (
-    <Panel bg="radial-gradient(99% 60% at 50% 55%, #46286C 0%, #25113E 60%, #6C4F90 100%)">
-      <AnimatedGrid {...args} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
-    </Panel>
+    <Square bg={args.cometColor === '#ffffff' || args.lineColor.includes('255') ? '#171725' : '#fff'}>
+      <AnimatedGrid {...args} style={fill} />
+    </Square>
   ),
 };
 
-/** Default (dark surface) vs a re-themed grid on a light surface. */
-export const Theming = {
+/** The full grid on a dark surface (default white lines/comets). */
+export const OnDark = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Panel bg="#171725">
-        <AnimatedGrid style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
-      </Panel>
-      <Panel bg="#F1F1F5">
-        <AnimatedGrid
-          lineColor="rgba(75,74,213,0.18)"
-          cometColor="#4b4ad5"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-        />
-      </Panel>
+    <Square bg="radial-gradient(120% 120% at 50% 0%, #46286C 0%, #25113E 60%, #6C4F90 100%)">
+      <AnimatedGrid style={fill} />
+    </Square>
+  ),
+};
+
+/** The full grid re-themed for a light surface. */
+export const OnLight = {
+  render: () => (
+    <Square bg="#F7F7FB">
+      <AnimatedGrid lineColor="rgba(75,74,213,0.16)" cometColor="#4b4ad5" style={fill} />
+    </Square>
+  ),
+};
+
+/** Dark and light side by side. */
+export const Backgrounds = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+      <Square bg="#171725"><AnimatedGrid style={fill} /></Square>
+      <Square bg="#F7F7FB"><AnimatedGrid lineColor="rgba(75,74,213,0.16)" cometColor="#4b4ad5" style={fill} /></Square>
     </div>
   ),
 };

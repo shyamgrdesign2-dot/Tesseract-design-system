@@ -86,8 +86,11 @@ export function Avatar({ src, name, alt, icon, size = 40, ring = false, onClick,
           background: "var(--tp-slate-100, #f1f1f5)",
           color: "var(--tp-slate-600, #717179)",
           fontFamily: "Inter, sans-serif",
-          fontWeight: 700,
-          fontSize: Math.round(size * 0.4),
+          fontWeight: 800,
+          fontSize: Math.round(size * 0.36),
+          lineHeight: 1,
+          textAlign: "center",
+          letterSpacing: "0.01em",
         }}
       >
         {content}
