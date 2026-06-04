@@ -34,6 +34,7 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
       aria-label={onClick ? (name || "Profile") : undefined}
       className={className}
       style={{
+        boxSizing: "border-box",
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
@@ -51,6 +52,7 @@ export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = fal
     >
       <span
         style={{
+          boxSizing: "border-box",
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
