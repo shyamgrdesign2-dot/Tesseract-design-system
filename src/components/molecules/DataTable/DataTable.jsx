@@ -39,6 +39,7 @@ import * as React from "react";
 import { cn } from "@/src/hooks/utils";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { Badge } from "@/src/components/atoms/Badge";
+import { Checkbox } from "@/src/components/atoms/Checkbox";
 import styles from "./DataTable.module.scss";
 
 // ── Sort icon (TP up/down "sort" glyph) — the active direction's arrow is
@@ -220,6 +221,9 @@ export function DataTable({
   hasMore = false,
   onLoadMore,
   lazyRows = 3,
+  selectable = false,
+  selectedKeys,
+  onSelectionChange,
 }) {
   const [sort, setSort] = React.useState(defaultSort);
   const [page, setPage] = React.useState(0);
@@ -260,6 +264,31 @@ export function DataTable({
   // Clamp the page during render when the data/page-size shrinks the range.
   if (page > safePage) setPage(safePage);
   const rows = ps ? sorted.slice(safePage * ps, (safePage + 1) * ps) : sorted;
+
+  // ── Row selection (optional leading checkbox column) ──
+  const selControlled = selectedKeys !== undefined;
+  const [internalSel, setInternalSel] = React.useState(() => new Set());
+  const selectedSet = selControlled ? new Set(selectedKeys) : internalSel;
+  const setSelection = (nextSet) => {
+    if (!selControlled) setInternalSel(nextSet);
+    onSelectionChange?.([...nextSet]);
+  };
+  const allKeys = React.useMemo(() => sorted.map((r, i) => rowKey(r, i)), [sorted, rowKey]);
+  const selectedCount = allKeys.filter((k) => selectedSet.has(k)).length;
+  const allSelected = allKeys.length > 0 && selectedCount === allKeys.length;
+  const headerChecked = allSelected ? true : selectedCount > 0 ? "indeterminate" : false;
+  const toggleAll = () => {
+    const next = new Set(selectedSet);
+    if (allSelected) allKeys.forEach((k) => next.delete(k));
+    else allKeys.forEach((k) => next.add(k));
+    setSelection(next);
+  };
+  const toggleRow = (key) => {
+    const next = new Set(selectedSet);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    setSelection(next);
+  };
+  const colCount = columns.length + (selectable ? 1 : 0);
 
   // Three-state cycle per column: ascending → descending → unsorted → ascending…
   const toggleSort = (col) => {
@@ -313,6 +342,16 @@ export function DataTable({
         <table className={styles.table} data-density={rowHeight} data-zebra={zebra || undefined} data-hoverable={hoverable || undefined}>
           <thead>
             <tr className={styles.headRow} data-sticky-header={stickyHeader || undefined}>
+              {selectable && (
+                <th className={cn(styles.th, styles.selectCell)} data-align="center">
+                  <Checkbox
+                    size="sm"
+                    checked={headerChecked}
+                    onCheckedChange={toggleAll}
+                    aria-label={allSelected ? "Deselect all" : "Select all"}
+                  />
+                </th>
+              )}
               {columns.map((col) => {
                 const isSticky = col.sticky === "right";
                 const canSort = sortable && col.sortable;
@@ -341,14 +380,29 @@ export function DataTable({
           <tbody>
             {rows.length === 0 && !loading ? (
               <tr>
-                <td colSpan={columns.length} className={styles.empty}>{emptyState || "No data"}</td>
+                <td colSpan={colCount} className={styles.empty}>{emptyState || "No data"}</td>
               </tr>
             ) : (
-              rows.map((row, i) => (
+              rows.map((row, i) => {
+                const gIdx = (ps ? safePage * ps : 0) + i;
+                const key = rowKey(row, gIdx);
+                const rowSelected = selectable && selectedSet.has(key);
+                return (
                 <tr
-                  key={rowKey(row, i)}
-                  className={cn(styles.row, typeof rowClassName === "function" ? rowClassName(row, i) : rowClassName)}
+                  key={key}
+                  className={cn(styles.row, typeof rowClassName === "function" ? rowClassName(row, gIdx) : rowClassName)}
+                  data-selected={rowSelected || undefined}
                 >
+                  {selectable && (
+                    <td className={cn(styles.td, styles.selectCell)} data-align="center">
+                      <Checkbox
+                        size="sm"
+                        checked={rowSelected}
+                        onCheckedChange={() => toggleRow(key)}
+                        aria-label="Select row"
+                      />
+                    </td>
+                  )}
                   {columns.map((col) => {
                     const isSticky = col.sticky === "right";
                     return (
@@ -363,12 +417,14 @@ export function DataTable({
                     );
                   })}
                 </tr>
-              ))
+                );
+              })
             )}
             {/* Shimmer skeleton rows while lazy-loading */}
             {loading &&
               Array.from({ length: lazyRows }).map((_, r) => (
                 <tr key={`sk-${r}`} className={styles.row} aria-hidden>
+                  {selectable && <td className={cn(styles.td, styles.selectCell)}><span className={styles.shimmer} style={{ width: 16, height: 16, display: "block" }} /></td>}
                   {columns.map((col, c) => (
                     <td
                       key={col.id}

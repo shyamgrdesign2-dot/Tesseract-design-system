@@ -104,6 +104,17 @@
 }
 .row:last-child .td { border-bottom: none; }
 
+/* Selection checkbox column (leading) + selected-row highlight */
+.selectCell {
+  width: 44px;
+  padding-left: 14px;
+  padding-right: 0;
+  text-align: center;
+}
+.selectCell > * { display: inline-flex; vertical-align: middle; }
+.row[data-selected] .td { background-color: var(--tp-blue-50, #eeeeff); }
+.row[data-selected]:hover .td { background-color: color-mix(in srgb, var(--tp-blue-100, #d8d8fa) 60%, #fff); }
+
 /* Density (row height + vertical padding) */
 .table[data-density="xs"] .td, .table[data-density="xs"] .th { padding-top: 4px;  padding-bottom: 4px;  }
 .table[data-density="sm"] .td, .table[data-density="sm"] .th { padding-top: 7px;  padding-bottom: 7px;  }

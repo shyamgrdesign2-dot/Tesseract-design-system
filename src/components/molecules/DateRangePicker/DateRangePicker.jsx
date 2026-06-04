@@ -65,16 +65,28 @@ function formatInputDate(d) {
   return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-// ─── Presets (range mode) ───────────────────────────────────────────────────────
+function startOfWeek(d) {
+  const s = startOfDay(d);
+  const dow = (s.getDay() + 6) % 7; // Monday = 0
+  return addDays(s, -dow);
+}
+function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+function endOfMonth(d) { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
+function startOfYear(d) { return new Date(d.getFullYear(), 0, 1); }
+function endOfYear(d) { return new Date(d.getFullYear(), 11, 31); }
+
+// ─── Presets (range mode) — adapted from the Untitled UI date-picker set ──────
 
 const PRESETS = [
-  { id: "till-date", label: "Till Date", getRange: () => ({ start: null, end: startOfDay(new Date()) }) },
   { id: "today", label: "Today", getRange: () => { const t = startOfDay(new Date()); return { start: t, end: t }; } },
   { id: "yesterday", label: "Yesterday", getRange: () => { const y = addDays(startOfDay(new Date()), -1); return { start: y, end: y }; } },
-  { id: "past-3-months", label: "Past 3 Months", getRange: () => ({ start: addMonths(startOfDay(new Date()), -3), end: startOfDay(new Date()) }) },
-  { id: "past-4-months", label: "Past 4 Months", getRange: () => ({ start: addMonths(startOfDay(new Date()), -4), end: startOfDay(new Date()) }) },
-  { id: "next-3-months", label: "Next 3 Months", getRange: () => ({ start: startOfDay(new Date()), end: addMonths(startOfDay(new Date()), 3) }) },
-  { id: "next-4-months", label: "Next 4 Months", getRange: () => ({ start: startOfDay(new Date()), end: addMonths(startOfDay(new Date()), 4) }) },
+  { id: "this-week", label: "This week", getRange: () => ({ start: startOfWeek(new Date()), end: startOfDay(new Date()) }) },
+  { id: "last-week", label: "Last week", getRange: () => { const s = addDays(startOfWeek(new Date()), -7); return { start: s, end: addDays(s, 6) }; } },
+  { id: "this-month", label: "This month", getRange: () => ({ start: startOfMonth(new Date()), end: startOfDay(new Date()) }) },
+  { id: "last-month", label: "Last month", getRange: () => { const lm = addMonths(new Date(), -1); return { start: startOfMonth(lm), end: endOfMonth(lm) }; } },
+  { id: "this-year", label: "This year", getRange: () => ({ start: startOfYear(new Date()), end: startOfDay(new Date()) }) },
+  { id: "last-year", label: "Last year", getRange: () => { const ly = new Date(new Date().getFullYear() - 1, 0, 1); return { start: startOfYear(ly), end: endOfYear(ly) }; } },
+  { id: "all-time", label: "All time", getRange: () => ({ start: null, end: startOfDay(new Date()) }) },
 ];
 
 // ─── Calendar grid ────────────────────────────────────────────────────────────
@@ -169,7 +181,6 @@ function CalendarMonth({ viewDate, stagedStart, stagedEnd, pendingStart, hoverDa
  *   onChange     (result) => void
  *                single → { mode:"single", date, label }
  *                range  → { mode:"range", presetId, range:{start,end}, start, end, label }
- *   hideFuturePresets  boolean
  *   icon         ReactNode — trigger icon
  *
  * The popover is portal-rendered and positioned adaptively: it aligns under the
@@ -180,7 +191,6 @@ export function DateRangePicker({
   value,
   onChange,
   className,
-  hideFuturePresets,
   icon,
   mode = "range",
   months: monthsProp,
@@ -213,7 +223,7 @@ export function DateRangePicker({
     if (value instanceof Date) return formatInputDate(value);
     const preset = PRESETS.find((p) => p.id === value);
     if (preset) return preset.label;
-    return isSingle ? "Select date" : "Till Date";
+    return isSingle ? "Select date" : "Select range";
   })();
 
   // Sync staged state from the committed value (adjust-during-render on change).
@@ -277,6 +287,13 @@ export function DateRangePicker({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  // Move the visible months so a range is actually in view (fixes "selection
+  // not showing" when a preset's range sits in an off-screen month).
+  function goToRange(range) {
+    const anchor = range?.start ?? range?.end ?? new Date();
+    setLeftViewDate(startOfMonth(anchor));
+  }
+
   function openPicker() {
     const s = deriveStaged(value);
     setStagedPreset(s.preset);
@@ -284,6 +301,7 @@ export function DateRangePicker({
     setStagedEnd(s.end);
     setPendingStart(null);
     setHoverDate(null);
+    if (s.start || s.end) goToRange({ start: s.start, end: s.end });
     setPopoverStyle({ position: "fixed", top: 0, left: 0, visibility: "hidden" });
     setOpen(true);
   }
@@ -294,6 +312,7 @@ export function DateRangePicker({
     setStagedStart(range.start);
     setStagedEnd(range.end);
     setPendingStart(null);
+    goToRange(range);
   }
 
   function handleDayClick(day) {
@@ -356,38 +375,21 @@ export function DateRangePicker({
   const popoverContent = (
     <div ref={popoverRef} className={styles.popover} style={popoverStyle} data-mode={mode}>
       <div className={styles.body}>
-        {/* Quick-select presets (range only, opt-in for single) */}
+        {/* Quick-select preset rail (range only). Highlights by id so a preset
+            with an open lower bound (e.g. "All time") still shows as active. */}
         {showPresets && (
           <div className={styles.presets}>
-            <p className={styles.groupLabel}>Past</p>
-            {PRESETS.filter((p) => !p.id.startsWith("next")).map((preset) => (
+            {PRESETS.map((preset) => (
               <button
                 key={preset.id}
                 type="button"
                 onClick={() => handlePresetClick(preset)}
                 className={styles.preset}
-                data-selected={preset.id === stagedPreset && stagedStart && stagedEnd ? "true" : undefined}
+                data-selected={preset.id === stagedPreset ? "true" : undefined}
               >
                 {preset.label}
               </button>
             ))}
-            {!hideFuturePresets && (
-              <>
-                <div className={styles.presetDivider} />
-                <p className={styles.groupLabel}>Upcoming</p>
-                {PRESETS.filter((p) => p.id.startsWith("next")).map((preset) => (
-                  <button
-                    key={preset.id}
-                    type="button"
-                    onClick={() => handlePresetClick(preset)}
-                    className={styles.preset}
-                    data-selected={preset.id === stagedPreset && stagedStart && stagedEnd ? "true" : undefined}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </>
-            )}
             {pendingStart && <p className={styles.pendingHint}>Click a second date to complete the range</p>}
           </div>
         )}

@@ -10,27 +10,25 @@ const meta = {
     mode: { control: 'inline-radio', options: ['range', 'single'], description: 'Range (start–end) or a single date', table: { category: 'Type' } },
     months: { control: 'inline-radio', options: [1, 2], description: 'Number of calendars shown (max 2)', table: { category: 'Type' } },
     showPresets: { control: 'boolean', name: 'show presets', description: 'Quick-select preset rail (range only)', table: { category: 'Type' } },
-    hideFuturePresets: { control: 'boolean', description: 'Hide presets that reference future dates', table: { category: 'Type' } },
     iconName: { control: 'text', tpIcon: true, name: 'trigger icon', description: 'TP icon shown in the trigger', table: { category: 'Content' } },
     value: { control: false },
     onChange: { control: false },
   },
-  args: { mode: 'range', months: 2, showPresets: true, hideFuturePresets: false, iconName: 'calendar-1' },
+  args: { mode: 'range', months: 2, showPresets: true, iconName: 'calendar-1' },
 };
 
 export default meta;
 
 /** Every type in one place — switch `mode`, `months`, and `show presets` in Controls. */
 export const Playground = {
-  render: ({ iconName, mode, months, showPresets, hideFuturePresets }) => {
-    const [value, setValue] = React.useState('till-date');
+  render: ({ iconName, mode, months, showPresets }) => {
+    const [value, setValue] = React.useState('this-month');
     return (
       <div style={{ width: 280 }}>
         <DateRangePicker
           mode={mode}
           months={months}
           showPresets={showPresets}
-          hideFuturePresets={hideFuturePresets}
           value={value}
           onChange={(r) => setValue(r.mode === 'single' ? r.date : r.presetId)}
           icon={iconName ? <TPLibraryIcon name={iconName} size={16} /> : undefined}
@@ -64,26 +62,13 @@ export const SingleMonthRange = {
   },
 };
 
-
-/** Pre-selected "Today" preset. */
-export const TodayPreset = {
+/** Pre-selected preset — clicking a preset jumps the calendar to its range. */
+export const PresetSelected = {
   render: () => {
-    const [value, setValue] = React.useState('today');
+    const [value, setValue] = React.useState('last-month');
     return (
       <div style={{ width: 280 }}>
         <DateRangePicker value={value} onChange={(r) => setValue(r.presetId)} />
-      </div>
-    );
-  },
-};
-
-/** Past-only presets (future presets hidden). */
-export const PastPresetsOnly = {
-  render: () => {
-    const [value, setValue] = React.useState('past-3-months');
-    return (
-      <div style={{ width: 280 }}>
-        <DateRangePicker value={value} hideFuturePresets onChange={(r) => setValue(r.presetId)} />
       </div>
     );
   },
@@ -97,18 +82,18 @@ const Label = ({ children }) => (
   </span>
 );
 
-/** Appointments dashboard filter — shows the picker alongside a label and result count. */
+/** Appointments dashboard filter — picker alongside a label and result count. */
 export const AppointmentFilter = {
   name: '📅 Appointments Dashboard Filter',
   render: () => {
     const [value, setValue] = React.useState('today');
-    const countMap = { 'today': 18, 'yesterday': 14, 'past-3-months': 312, 'till-date': 1048 };
+    const countMap = { today: 18, yesterday: 14, 'this-week': 96, 'this-month': 312, 'all-time': 1048 };
     const count = countMap[value] ?? '—';
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
         <Label>Appointments — Date Range</Label>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <DateRangePicker value={value} hideFuturePresets onChange={(r) => setValue(r.presetId)} />
+          <DateRangePicker value={value} onChange={(r) => setValue(r.presetId)} />
           <div style={{ fontSize: 14, color: '#54545C' }}>
             <span style={{ fontWeight: 700, fontSize: 24, color: '#171725', marginRight: 4 }}>{count}</span>
             appointments
@@ -119,11 +104,11 @@ export const AppointmentFilter = {
   },
 };
 
-/** Revenue analytics — future presets visible for forecasting. */
+/** Revenue analytics — shows the selected preset id below. */
 export const RevenueAnalytics = {
-  name: '💰 Revenue Analytics (future presets)',
+  name: '💰 Revenue Analytics',
   render: () => {
-    const [value, setValue] = React.useState('past-3-months');
+    const [value, setValue] = React.useState('this-year');
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
         <Label>Revenue Period</Label>
@@ -136,19 +121,15 @@ export const RevenueAnalytics = {
   },
 };
 
-/** Follow-up tracker — past only, shows the selected date range in text. */
+/** Follow-up tracker — shows the selected date range in text. */
 export const FollowUpTracker = {
   name: '🔄 Follow-up Tracker',
   render: () => {
-    const [range, setRange] = React.useState({ presetId: 'past-3-months', start: null, end: null });
+    const [range, setRange] = React.useState({ presetId: 'this-month', start: null, end: null });
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
         <Label>Follow-up Date Range</Label>
-        <DateRangePicker
-          value={range.presetId}
-          hideFuturePresets
-          onChange={(r) => setRange(r)}
-        />
+        <DateRangePicker value={range.presetId} onChange={(r) => setRange(r)} />
         {range.start && (
           <div style={{ fontSize: 13, color: '#454551', background: '#F7F7FB', borderRadius: 8, padding: '10px 14px', border: '1px solid #E2E2EA' }}>
             <strong>Range:</strong>{' '}
@@ -162,21 +143,21 @@ export const FollowUpTracker = {
   },
 };
 
-/** Shows two pickers side-by-side — different presets active independently. */
+/** Two pickers side-by-side — different presets active independently. */
 export const SideBySide = {
   name: '↔ Side by Side',
   render: () => {
     const [a, setA] = React.useState('today');
-    const [b, setB] = React.useState('past-3-months');
+    const [b, setB] = React.useState('last-month');
     return (
       <div style={{ display: 'flex', gap: 32, fontFamily: 'Inter, sans-serif' }}>
         <div>
           <Label>Primary period</Label>
-          <DateRangePicker value={a} hideFuturePresets onChange={(r) => setA(r.presetId)} />
+          <DateRangePicker value={a} onChange={(r) => setA(r.presetId)} />
         </div>
         <div>
           <Label>Compare period</Label>
-          <DateRangePicker value={b} hideFuturePresets onChange={(r) => setB(r.presetId)} />
+          <DateRangePicker value={b} onChange={(r) => setB(r.presetId)} />
         </div>
       </div>
     );

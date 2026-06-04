@@ -281,3 +281,36 @@ export const DeclarativeColumns = {
     return <DataTable columns={columns} data={ROWS.slice(0, 7)} sortable defaultSort={{ id: 'appt', dir: 'asc' }} />;
   },
 };
+
+// ── Row selection — leading checkbox column + header select-all ───────────────
+export const RowSelection = {
+  name: 'Row Selection (checkboxes)',
+  render: () => {
+    const columns = [
+      { id: 'patient', header: 'Patient', type: 'text', minWidth: 220,
+        primary: (r) => r.name, secondary: (r) => r.mrn,
+        leftIcon: <TPIcon name="profile" variant="bulk" size={18} />, subLeftIcon: <TPIcon name="clipboard" size={12} /> },
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 190,
+        primary: (r) => r.appt, secondary: (r) => r.doctor, leftIcon: <TPIcon name="calendar" size={16} /> },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 130, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+    ];
+    const [selected, setSelected] = React.useState(['MRN-10232']);
+    return (
+      <div style={{ maxWidth: 760, display: 'flex', flexDirection: 'column', gap: 12, fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ fontSize: 13, color: '#454551' }}>
+          <strong style={{ color: '#171725' }}>{selected.length}</strong> selected
+          {selected.length > 0 && <span style={{ color: '#717179' }}> — {selected.join(', ')}</span>}
+        </div>
+        <DataTable
+          columns={columns}
+          data={ROWS.slice(0, 8)}
+          rowKey={(r) => r.mrn}
+          selectable
+          selectedKeys={selected}
+          onSelectionChange={setSelected}
+          pageSize={6}
+        />
+      </div>
+    );
+  },
+};
