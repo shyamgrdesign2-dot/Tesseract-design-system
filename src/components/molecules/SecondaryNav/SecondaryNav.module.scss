@@ -1,0 +1,107 @@
+/* SecondaryNav.module.scss — RxPad blue secondary rail (ported from .snv-rail). */
+
+.rail {
+  position: relative;
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  height: 100%;
+  flex: 0 0 80px;
+  overflow: hidden;
+  font-family: Inter, var(--font-sans, sans-serif);
+  /* Navy → blue gradient (approximates the original radial sweep). */
+  background: radial-gradient(125% 125% at 0% 0%, #161558 0%, #232277 28%, #313097 52%, #4b4ad5 100%);
+}
+
+.scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { width: 0; display: none; }
+}
+
+.item {
+  position: relative;
+  width: 100%;
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 180ms ease;
+
+  &:hover { background-color: rgba(255, 255, 255, 0.12); }
+  &:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5); }
+  &[data-active] { background-color: rgba(255, 255, 255, 0.2); }
+  &[data-disabled] { opacity: 0.45; cursor: not-allowed; }
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 6px;
+}
+
+/* Icon pill — translucent white at rest, solid white (blue icon) when active. */
+.pill {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  corner-shape: round;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background-color 180ms ease, transform 160ms ease;
+}
+.item:hover .pill { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
+.pill[data-active] { background: #ffffff; }
+
+/* Red signal dot on the pill (Badge atom), top-right. */
+.signal { position: absolute; top: -3px; right: -3px; line-height: 0; pointer-events: none; }
+.signal :global(*) { box-shadow: 0 0 0 2px rgba(22, 21, 88, 0.6); border-radius: 50%; }
+
+.label {
+  width: 68px;
+  max-width: 68px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.1px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* White active indicator bar (rounded right). */
+.bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  z-index: 2;
+  background: #fff;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  corner-shape: round;
+}
