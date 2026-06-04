@@ -2,7 +2,8 @@ import { Chip } from './index.js';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['default', 'primary', 'success', 'warning', 'error'];
-const VARIANTS = ['filled', 'outlined'];
+const VARIANTS = ['solid', 'soft', 'outline'];
+const ICON_SIDES = ['none', 'left', 'right', 'both'];
 const SIZES = ['sm', 'md', 'lg'];
 const ICON_PX = { sm: 12, md: 14, lg: 16 };
 
@@ -18,19 +19,21 @@ const meta = {
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
+    iconSide: { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Icons' } },
     leftIconName: { control: 'text', tpIcon: true, name: 'left icon', table: { category: 'Icons' } },
     rightIconName: { control: 'text', tpIcon: true, name: 'right icon', table: { category: 'Icons' } },
   },
   args: {
     label: 'Chip',
-    color: 'default',
-    variant: 'filled',
+    color: 'primary',
+    variant: 'soft',
     size: 'md',
     disabled: false,
     removable: false,
     removePosition: 'right',
-    leftIconName: '',
-    rightIconName: '',
+    iconSide: 'left',
+    leftIconName: 'star-1',
+    rightIconName: 'arrow-down-1',
   },
 };
 
@@ -43,13 +46,15 @@ const Row = ({ children }) => (
 );
 
 export const Playground = {
-  render: ({ leftIconName, rightIconName, removable, ...args }) => {
+  render: ({ leftIconName, rightIconName, removable, iconSide, ...args }) => {
     const px = ICON_PX[args.size] || 14;
+    const showLeft = iconSide === 'left' || iconSide === 'both';
+    const showRight = iconSide === 'right' || iconSide === 'both';
     return (
       <Chip
         {...args}
-        icon={leftIconName ? <TPLibraryIcon name={leftIconName} size={px} /> : undefined}
-        rightIcon={rightIconName ? <TPLibraryIcon name={rightIconName} size={px} /> : undefined}
+        icon={showLeft && leftIconName ? <TPLibraryIcon name={leftIconName} size={px} /> : undefined}
+        rightIcon={showRight && rightIconName ? <TPLibraryIcon name={rightIconName} size={px} /> : undefined}
         onDelete={removable ? () => {} : undefined}
       />
     );

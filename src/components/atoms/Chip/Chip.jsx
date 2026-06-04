@@ -7,7 +7,8 @@
  * Props:
  *   label     ReactNode
  *   color     "default" | "primary" | "success" | "warning" | "error"   default "default"
- *   variant   "filled" | "outlined"                                      default "filled"
+ *   variant   "solid" | "soft" | "outline"   default "soft"
+ *             (aliases: "filled" → soft, "outlined" → outline)
  *   size      "sm" | "md" | "lg"                                         default "md"
  *   icon          ReactNode    leading icon
  *   rightIcon     ReactNode    trailing icon
@@ -67,8 +68,17 @@ export function TPChip({
 }) {
   const c = TONES[color] ?? TONES.default;
   const s = SIZES[size] ?? SIZES.md;
-  const outlined = variant === "outlined" || variant === "outline";
   const interactive = !!onClick && !disabled;
+
+  // Variants mirror the Badge atom: solid (filled) · soft (wash) · outline.
+  // Back-compat aliases: "filled" → soft, "outlined" → outline.
+  const v = variant === "filled" ? "soft" : variant === "outlined" ? "outline" : variant;
+  const variantStyle =
+    v === "solid"
+      ? { color: "#fff", backgroundColor: c, border: `1px solid ${c}` }
+      : v === "outline"
+        ? { color: c, backgroundColor: "transparent", border: `1px solid color-mix(in srgb, ${c} 40%, transparent)` }
+        : { color: c, backgroundColor: `color-mix(in srgb, ${c} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${c} 22%, transparent)` };
 
   const removeBtn = onDelete && (
     <button
@@ -118,9 +128,7 @@ export function TPChip({
         fontWeight: 500,
         fontFamily: "Inter, sans-serif",
         lineHeight: 1,
-        color: c,
-        backgroundColor: outlined ? "transparent" : `color-mix(in srgb, ${c} 12%, transparent)`,
-        border: `1px solid color-mix(in srgb, ${c} ${outlined ? "40%" : "22%"}, transparent)`,
+        ...variantStyle,
         cursor: interactive ? "pointer" : "default",
         opacity: disabled ? 0.5 : 1,
         whiteSpace: "nowrap",
