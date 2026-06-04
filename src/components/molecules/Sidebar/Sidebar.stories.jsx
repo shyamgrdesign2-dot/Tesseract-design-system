@@ -1,8 +1,12 @@
 import React from 'react';
 import { Sidebar } from './Sidebar';
 
-// Icons are TP library icon NAMES — the Sidebar renders them linear at rest and
-// bold when active.
+// ── Item schema ───────────────────────────────────────────────────────────────
+// Every nav option is the SAME shape, so adding one is just another entry here
+// and it inherits all the same configurability (name, icon, active state, tag):
+//   { id, label, icon, badge?, disabled? }
+//     icon  — TP library icon name (string) → switches linear→bulk on active
+//     badge — "trial" | { text, variant, color, sticky } | ReactNode
 const ITEMS = [
   { id: 'appointments', label: 'Appointments', icon: 'calendar-1' },
   { id: 'all-patients', label: 'All Patients', icon: 'profile-2user' },
@@ -23,44 +27,50 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    docs: { description: { component: 'Primary 80px navigation rail. The icon chip reuses the Button atom (tonal/grey at rest, solid/blue when active); the icon is a library glyph that switches linear→bold on select. Tags reuse the Badge atom (incl. the gradient variant). Controls let you pick the active item, configure one item\'s tag (type / variant / color), and swap any item\'s icon.' } },
+    docs: { description: { component: 'Primary 80px navigation rail (width flexes 72–100px). The icon chip reuses the Button atom (tonal/grey at rest, solid/blue when active); the icon switches linear→bulk on select. Tags reuse the Badge atom (incl. gradient + sticky). Every item shares one config schema `{ id, label, icon, badge }` — the Playground lets you pick ONE item and fully configure it (rename, swap icon, add/shape its tag); every other item is just another entry with the same fields.' } },
   },
   argTypes: {
-    activeId: { control: 'select', options: IDS, name: 'active item', table: { category: 'State' } },
-    // Tag — configured on one chosen item; the same rule applies to any item.
-    tagItem: { control: 'select', options: ['none', ...IDS], name: 'tag · on item', table: { category: 'Tag' } },
-    tagText: { control: 'text', name: 'tag · text', table: { category: 'Tag' } },
-    tagVariant: { control: 'inline-radio', options: TAG_VARIANTS, name: 'tag · variant', table: { category: 'Tag' } },
-    tagColor: { control: 'select', options: TAG_COLORS, name: 'tag · color', table: { category: 'Tag' } },
-    tagSticky: { control: 'inline-radio', options: ['right', 'left', 'none'], name: 'tag · sticky', table: { category: 'Tag' } },
-    // Icon swap — change any item's glyph (and it still switches linear/bold).
-    iconItem: { control: 'select', options: IDS, name: 'icon · on item', table: { category: 'Icon' } },
-    iconName: { control: 'text', tpIcon: true, name: 'icon · glyph', table: { category: 'Icon' } },
-    bottomFade: { control: 'boolean', name: 'bottom fade', table: { category: 'Layout' } },
-    width: { control: { type: 'range', min: 72, max: 110, step: 2 }, name: 'rail width', table: { category: 'Layout' } },
+    activeId: { control: 'select', options: IDS, name: 'active item', table: { category: 'Rail' } },
+    bottomFade: { control: 'boolean', name: 'bottom fade', table: { category: 'Rail' } },
+    width: { control: { type: 'range', min: 72, max: 100, step: 2 }, name: 'rail width', table: { category: 'Rail' } },
+
+    // ── Configure ONE item — the same controls every item supports ──
+    editItem: { control: 'select', options: IDS, name: 'item to edit', table: { category: 'Selected item' } },
+    label: { control: 'text', name: 'name (blank = keep)', table: { category: 'Selected item' } },
+    icon: { control: 'text', tpIcon: true, name: 'icon (blank = keep)', table: { category: 'Selected item' } },
+    withTag: { control: 'boolean', name: 'add tag', table: { category: 'Selected item · tag' } },
+    tagText: { control: 'text', name: 'tag · text', table: { category: 'Selected item · tag' } },
+    tagVariant: { control: 'inline-radio', options: TAG_VARIANTS, name: 'tag · variant', table: { category: 'Selected item · tag' } },
+    tagColor: { control: 'select', options: TAG_COLORS, name: 'tag · color', table: { category: 'Selected item · tag' } },
+    tagSticky: { control: 'inline-radio', options: ['right', 'left', 'none'], name: 'tag · sticky', table: { category: 'Selected item · tag' } },
   },
   args: {
     activeId: 'appointments',
-    tagItem: 'opd-billing',
+    bottomFade: true,
+    width: 80,
+    editItem: 'opd-billing',
+    label: '',
+    icon: '',
+    withTag: true,
     tagText: 'Trial',
     tagVariant: 'gradient',
     tagColor: 'warning',
     tagSticky: 'right',
-    iconItem: 'appointments',
-    iconName: '',
-    bottomFade: true,
-    width: 80,
   },
 };
 
 export default meta;
 
-function SidebarDemo({ activeId, tagItem, tagText, tagVariant, tagColor, tagSticky, iconItem, iconName, bottomFade, width }) {
+function SidebarDemo({ activeId, bottomFade, width, editItem, label, icon, withTag, tagText, tagVariant, tagColor, tagSticky }) {
   const [active, setActive] = React.useState(activeId);
+  // Apply the per-item config to the selected item only; blank fields keep the
+  // item's defaults. Every other item is left as its base entry — same schema.
   const items = ITEMS.map((it) => {
-    let next = it;
-    if (it.id === tagItem) next = { ...next, badge: { text: tagText || 'Trial', variant: tagVariant, color: tagColor, sticky: tagSticky === 'none' ? undefined : tagSticky } };
-    if (it.id === iconItem && iconName && iconName.trim()) next = { ...next, icon: iconName.trim() };
+    if (it.id !== editItem) return it;
+    const next = { ...it };
+    if (label && label.trim()) next.label = label.trim();
+    if (icon && icon.trim()) next.icon = icon.trim();
+    if (withTag) next.badge = { text: tagText || 'Trial', variant: tagVariant, color: tagColor, sticky: tagSticky === 'none' ? undefined : tagSticky };
     return next;
   });
   return (
@@ -68,13 +78,17 @@ function SidebarDemo({ activeId, tagItem, tagText, tagVariant, tagColor, tagStic
       <Sidebar items={items} activeId={active} onSelect={setActive} width={width} bottomFade={bottomFade} />
       <div style={{ flex: 1, padding: 24, fontFamily: 'Inter, sans-serif', color: 'var(--tp-slate-600, #717179)' }}>
         Active: <strong style={{ color: 'var(--tp-slate-900, #171725)' }}>{active}</strong>
+        <p style={{ fontSize: 13, marginTop: 12, maxWidth: 420, lineHeight: 1.5 }}>
+          Editing <strong>{editItem}</strong>. Pick any item in <em>item to edit</em> to configure its
+          name, icon, and tag — every option uses the same controls.
+        </p>
       </div>
     </div>
   );
 }
 
 export const Playground = {
-  render: (args) => <SidebarDemo key={`${args.activeId}-${args.tagItem}-${args.iconItem}`} {...args} />,
+  render: (args) => <SidebarDemo key={args.editItem} {...args} />,
 };
 
 /** Just the rail, with the Trial tag on OPD Billing. */
