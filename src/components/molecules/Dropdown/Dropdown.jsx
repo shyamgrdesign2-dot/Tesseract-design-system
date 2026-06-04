@@ -25,7 +25,13 @@
  *   searchable boolean
  *   showShortcuts boolean — per-item shortcut hints (option.shortcut)
  *   footerHint boolean — common "↑↓ navigate · ↵ select · esc close" bar
- *   primaryAction / secondaryAction  { label, onClick } — footer CTAs (Button atom)
+ *   primaryAction / secondaryAction / tertiaryAction  — up to 3 footer CTAs, each
+ *     composing the Button atom. Each accepts:
+ *       { label, onClick, variant?, theme?, icon?, iconPosition?: "left"|"right",
+ *         ariaLabel?, disabled? }
+ *     Role defaults: primary → solid/primary, secondary → outline/neutral,
+ *     tertiary → ghost/neutral. `icon` with no `label` renders an icon-only CTA
+ *     (pass `ariaLabel`). Rendered tertiary · secondary · primary (primary last).
  *   actionsAlign "left" | "center" | "right" | "full"  default "right"
  *                  (full → CTAs share the footer width equally)
  *   width     "trigger" | "auto" | number            default "trigger"
@@ -63,6 +69,31 @@ function SearchIcon() {
   );
 }
 
+// Per-role variant/theme defaults; each can be overridden by the action config.
+const CTA_DEFAULTS = {
+  primary:   { variant: "solid",   theme: "primary" },
+  secondary: { variant: "outline", theme: "neutral" },
+  tertiary:  { variant: "ghost",   theme: "neutral" },
+};
+
+// One footer CTA → the Button atom. `icon` only → icon-only; `icon` + `label` →
+// leading/trailing icon by `iconPosition`; otherwise plain text.
+function FooterCta({ action, role }) {
+  if (!action) return null;
+  const d = CTA_DEFAULTS[role];
+  const { label, onClick, icon, iconPosition = "left", variant, theme, ariaLabel, disabled } = action;
+  const common = { size: "sm", variant: variant ?? d.variant, theme: theme ?? d.theme, onClick, disabled };
+  if (icon && !label) return <Button {...common} aria-label={ariaLabel || "action"} icon={icon} />;
+  if (icon) {
+    return (
+      <Button {...common} leftIcon={iconPosition === "left" ? icon : undefined} rightIcon={iconPosition === "right" ? icon : undefined}>
+        {label}
+      </Button>
+    );
+  }
+  return <Button {...common}>{label}</Button>;
+}
+
 export function Dropdown({
   options = [],
   value,
@@ -75,6 +106,7 @@ export function Dropdown({
   footerHint = false,
   primaryAction,
   secondaryAction,
+  tertiaryAction,
   actionsAlign = "right",
   width = "trigger",
   placeholder = "Select…",
@@ -287,7 +319,7 @@ export function Dropdown({
         })}
       </div>
 
-      {(footerHint || primaryAction || secondaryAction) && (
+      {(footerHint || primaryAction || secondaryAction || tertiaryAction) && (
         <div className={styles.footer}>
           {footerHint && (
             <div className={styles.hint}>
@@ -296,18 +328,11 @@ export function Dropdown({
               <span><kbd className={styles.fkbd}>esc</kbd> close</span>
             </div>
           )}
-          {(primaryAction || secondaryAction) && (
+          {(primaryAction || secondaryAction || tertiaryAction) && (
             <div className={styles.actions} data-align={actionsAlign}>
-              {secondaryAction && (
-                <Button variant="outline" theme="neutral" size="sm" onClick={secondaryAction.onClick}>
-                  {secondaryAction.label}
-                </Button>
-              )}
-              {primaryAction && (
-                <Button variant="solid" theme="primary" size="sm" onClick={primaryAction.onClick}>
-                  {primaryAction.label}
-                </Button>
-              )}
+              <FooterCta action={tertiaryAction} role="tertiary" />
+              <FooterCta action={secondaryAction} role="secondary" />
+              <FooterCta action={primaryAction} role="primary" />
             </div>
           )}
         </div>

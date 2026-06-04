@@ -24,6 +24,39 @@ const SIMPLE = [
   { value: 'completed', label: 'Completed' },
 ];
 
+// ── Footer CTA model ──────────────────────────────────────────────────────────
+// Up to three footer CTAs (Primary / Secondary / Tertiary), each composing the
+// Button atom. Per CTA you pick the variant (or "none" to hide it), the shape
+// (text or icon-only), whether a text CTA carries a leading icon, the glyph, and
+// the label — the same Button knobs used everywhere else.
+const CTA_VARIANTS = ['none', 'solid', 'outline', 'ghost', 'tonal', 'link'];
+const CTA_SHAPES = ['text', 'icon'];
+
+const ctaArgTypes = (role, n) => ({
+  [`${role}Variant`]:  { control: 'select', options: CTA_VARIANTS, name: `${n} · variant`, table: { category: `${n} CTA` } },
+  [`${role}Shape`]:    { control: 'inline-radio', options: CTA_SHAPES, name: `${n} · shape`, table: { category: `${n} CTA` } },
+  [`${role}WithIcon`]: { control: 'boolean', name: `${n} · with icon`, table: { category: `${n} CTA` } },
+  [`${role}IconName`]: { control: 'text', tpIcon: true, name: `${n} · icon`, table: { category: `${n} CTA` } },
+  [`${role}Label`]:    { control: 'text', name: `${n} · label`, table: { category: `${n} CTA` } },
+});
+const ctaArgs = (role, o) => ({
+  [`${role}Variant`]: o.variant, [`${role}Shape`]: o.shape || 'text',
+  [`${role}WithIcon`]: o.withIcon ?? false, [`${role}IconName`]: o.iconName || '',
+  [`${role}Label`]: o.label || '',
+});
+
+// Build a Dropdown action config from the flat per-CTA controls.
+function actionFromArgs(a, role, onClick) {
+  const variant = a[`${role}Variant`];
+  if (!variant || variant === 'none') return undefined;
+  const shape = a[`${role}Shape`] || 'text';
+  const name = (a[`${role}IconName`] || '').trim();
+  const glyph = name ? <TPLibraryIcon name={name} size={16} /> : undefined;
+  const label = a[`${role}Label`] || role;
+  if (shape === 'icon') return { icon: glyph, ariaLabel: label, variant, onClick };
+  return { label, icon: a[`${role}WithIcon`] ? glyph : undefined, variant, onClick };
+}
+
 const meta = {
   title: 'Molecules/Dropdown',
   component: Dropdown,
@@ -38,6 +71,9 @@ const meta = {
     footerHint: { control: 'boolean', name: 'footer shortcut bar', table: { category: 'Behaviour' } },
     withActions: { control: 'boolean', name: 'footer CTAs', table: { category: 'Footer' } },
     actionsAlign: { control: 'inline-radio', options: ['left', 'center', 'right', 'full'], name: 'CTA align', table: { category: 'Footer' } },
+    ...ctaArgTypes('primary', 'Primary'),
+    ...ctaArgTypes('secondary', 'Secondary'),
+    ...ctaArgTypes('tertiary', 'Tertiary'),
     width: { control: 'inline-radio', options: ['trigger', 'auto', 320], table: { category: 'Layout' } },
     twoLine: { control: 'boolean', name: 'title + subtitle', table: { category: 'Content' } },
     withIcons: { control: 'boolean', name: 'item icons', table: { category: 'Content' } },
@@ -56,6 +92,9 @@ const meta = {
     footerHint: false,
     withActions: false,
     actionsAlign: 'right',
+    ...ctaArgs('primary', { variant: 'solid', label: 'Apply', withIcon: true, iconName: 'tick-circle' }),
+    ...ctaArgs('secondary', { variant: 'outline', label: 'Clear' }),
+    ...ctaArgs('tertiary', { variant: 'none', label: 'Reset' }),
     width: 'trigger',
     twoLine: true,
     withIcons: true,
@@ -87,8 +126,9 @@ export const Playground = {
           options={options}
           value={value}
           onChange={setVal}
-          primaryAction={withActions ? { label: 'Apply', onClick: () => {} } : undefined}
-          secondaryAction={withActions ? { label: 'Clear', onClick: () => setVal(mode === 'multi' ? [] : '') } : undefined}
+          primaryAction={withActions ? actionFromArgs(args, 'primary', () => {}) : undefined}
+          secondaryAction={withActions ? actionFromArgs(args, 'secondary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
+          tertiaryAction={withActions ? actionFromArgs(args, 'tertiary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
         />
       </Frame>
     );
@@ -186,6 +226,29 @@ export const FooterShortcutsAndActions = {
           footerHint
           primaryAction={{ label: 'Apply', onClick: () => {} }}
           secondaryAction={{ label: 'Clear', onClick: () => setV([]) }}
+        />
+      </Frame>
+    );
+  },
+};
+
+// ── Three footer CTAs — primary · secondary · tertiary, each with an icon ──────
+export const ThreeFooterCtas = {
+  name: 'Footer: three CTAs (primary · secondary · tertiary)',
+  render: () => {
+    const [v, setV] = React.useState(['cardio']);
+    return (
+      <Frame w={340}>
+        <Dropdown
+          label="Assign departments"
+          mode="multi"
+          optionControl="checkbox"
+          options={DEPTS}
+          value={v}
+          onChange={setV}
+          tertiaryAction={{ label: 'Reset', variant: 'link', icon: ic('refresh'), onClick: () => setV([]) }}
+          secondaryAction={{ label: 'Clear', icon: ic('close-circle'), onClick: () => setV([]) }}
+          primaryAction={{ label: 'Apply', icon: ic('tick-circle'), onClick: () => {} }}
         />
       </Frame>
     );
