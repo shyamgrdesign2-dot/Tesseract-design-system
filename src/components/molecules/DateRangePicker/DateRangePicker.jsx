@@ -323,9 +323,11 @@ export function DateRangePicker({
       return;
     }
     if (!pendingStart) {
+      // First click is a complete selection on its own (single day = start===end);
+      // a second click extends it into a range. Never force a second click.
       setPendingStart(day);
       setStagedStart(day);
-      setStagedEnd(null);
+      setStagedEnd(day);
       setStagedPreset(null);
     } else {
       const [start, end] = pendingStart <= day ? [pendingStart, day] : [day, pendingStart];
@@ -370,7 +372,8 @@ export function DateRangePicker({
     setPendingStart(null);
   }
 
-  const applyDisabled = isSingle ? !stagedStart : !stagedStart || !stagedEnd;
+  // A single day is valid in both modes (range first-click sets start===end).
+  const applyDisabled = !stagedStart;
 
   const popoverContent = (
     <div ref={popoverRef} className={styles.popover} style={popoverStyle} data-mode={mode}>
@@ -390,7 +393,7 @@ export function DateRangePicker({
                 {preset.label}
               </button>
             ))}
-            {pendingStart && <p className={styles.pendingHint}>Click a second date to complete the range</p>}
+            {pendingStart && <p className={styles.pendingHint}>Tip: click another day to make a range</p>}
           </div>
         )}
 
@@ -402,22 +405,22 @@ export function DateRangePicker({
               <div className={styles.inputCol}>
                 <p className={styles.inputLabel}>Date</p>
                 <div className={styles.inputBox} data-filled={stagedStart ? "true" : undefined}>
-                  {stagedStart ? formatInputDate(stagedStart) : "Select date"}
+                  {stagedStart ? formatInputDate(stagedStart) : "Pick a date"}
                 </div>
               </div>
             ) : (
               <>
                 <div className={styles.inputCol}>
-                  <p className={styles.inputLabel}>Start Date</p>
+                  <p className={styles.inputLabel}>Start</p>
                   <div className={styles.inputBox} data-filled={stagedStart ? "true" : undefined}>
-                    {stagedStart ? formatInputDate(stagedStart) : "Select start date"}
+                    {stagedStart ? formatInputDate(stagedStart) : "Start date"}
                   </div>
                 </div>
                 <div className={styles.inputDash} />
                 <div className={styles.inputCol}>
-                  <p className={styles.inputLabel}>End Date</p>
+                  <p className={styles.inputLabel}>End</p>
                   <div className={styles.inputBox} data-filled={stagedEnd ? "true" : undefined}>
-                    {stagedEnd ? formatInputDate(stagedEnd) : pendingStart ? "Click to set end date" : "Select end date"}
+                    {stagedEnd ? formatInputDate(stagedEnd) : "End date"}
                   </div>
                 </div>
               </>
@@ -474,6 +477,24 @@ export function DateRangePicker({
                 </div>
               );
             })}
+          </div>
+
+          {/* Selected-date preview — space is always reserved so layout never jumps */}
+          <div className={styles.preview}>
+            {stagedStart ? (
+              <>
+                <span className={styles.previewIcon} aria-hidden>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="3" /><path d="M3 9h18M8 2v4M16 2v4" />
+                  </svg>
+                </span>
+                {isSingle || (stagedEnd && isSameDay(stagedStart, stagedEnd))
+                  ? formatDate(stagedStart)
+                  : `${formatDate(stagedStart)} – ${stagedEnd ? formatDate(stagedEnd) : "…"}`}
+              </>
+            ) : (
+              <span className={styles.previewEmpty}>{isSingle ? "No date selected" : "No range selected"}</span>
+            )}
           </div>
 
           {/* Action row: Clear | Cancel + Apply */}

@@ -156,6 +156,7 @@
 
 .inputCol {
   flex: 1;
+  min-width: 0;
 }
 
 .inputLabel {
@@ -178,6 +179,10 @@
   background: var(--tp-slate-50);
   font-size: 12px;
   color: var(--tp-slate-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 
   &[data-filled="true"] {
     border-color: var(--tp-blue-200);
@@ -187,11 +192,13 @@
 }
 
 .inputDash {
-  width: 12px;
-  height: 1px;
-  margin-bottom: 4px;
+  width: 10px;
+  height: 1.5px;
   flex-shrink: 0;
+  align-self: flex-end;
+  margin-bottom: 14px; // sits on the vertical centre-line of the 30px input boxes
   background: var(--tp-slate-300);
+  border-radius: 2px;
 }
 
 // ─── Calendars ────────────────────────────────────────────────────────────────
@@ -356,13 +363,27 @@
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
+// Selected-date preview — divides the footer from the calendars; reserved height.
+.preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--tp-slate-100);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tp-slate-800);
+}
+.previewIcon { display: inline-flex; color: var(--tp-slate-400); flex-shrink: 0; }
+.previewEmpty { font-weight: 400; color: var(--tp-slate-400); }
+
 .actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--tp-slate-100);
+  margin-top: 10px;
 }
 
 // Clear / Cancel / Apply compose the Button atom (see DateRangePicker.jsx).
