@@ -39,8 +39,12 @@ import * as React from "react";
 import { cn } from "@/src/hooks/utils";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { Badge } from "@/src/components/atoms/Badge";
+import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import styles from "./DataTable.module.scss";
+
+// Badge tones map 1:1; Chip uses "default" where Badge uses "neutral".
+const CHIP_COLOR = { neutral: "default", primary: "primary", success: "success", warning: "warning", error: "error" };
 
 // ── Sort icon (TP up/down "sort" glyph) — the active direction's arrow is
 // highlighted: ascending → top arrow, descending → bottom arrow; idle → both faint.
@@ -101,17 +105,37 @@ export function DataCell({
 }
 DataCell.displayName = "DataCell";
 
-/** CellTag — status pill for `type: "tag"` columns. Composes the Badge atom
- *  (soft variant). tone: neutral|primary|success|warning|error */
-export function CellTag({ label, tone = "neutral" }) {
-  return <Badge variant="soft" color={tone}>{label}</Badge>;
+/** CellTag — status pill for `type: "tag"` columns. tone: neutral|primary|success|warning|error
+ *
+ *  Two flavours:
+ *   • non-actionable (default) → Badge atom (soft) — a static label.
+ *   • actionable (`actionable`/`onClick`) → Chip atom — gains a hover + click
+ *     (press) effect and is keyboard/clickable. Use for filter-style tags.
+ *  Optional leading `icon`. */
+export function CellTag({ label, tone = "neutral", actionable = false, onClick, icon, variant = "soft" }) {
+  if (actionable || onClick) {
+    return (
+      <Chip
+        label={label}
+        color={CHIP_COLOR[tone] ?? "default"}
+        variant={variant}
+        size="sm"
+        icon={icon}
+        onClick={onClick || (() => {})}
+        className={styles.actionableTag}
+      />
+    );
+  }
+  return <Badge variant={variant} color={tone}>{label}</Badge>;
 }
 CellTag.displayName = "CellTag";
 
 // Declarative cell rendering — driven by `col.type` so columns map straight onto
 // backend data. `col.cell(row, i)` is always the escape hatch when present.
 //   type: "text"   → primary (+ optional secondary), icons, truncation rules
-//   type: "tag"    → col.tag(row) → { label, tone } | array of them
+//   type: "tag"    → col.tag(row) → { label, tone, actionable?, icon?, onClick? }
+//                    | array of them. actionable/onClick → Chip (hover+press);
+//                    otherwise a static Badge.
 //   type: "action" → col.actions(row, i)
 function renderCell(col, row, i) {
   if (typeof col.cell === "function") return col.cell(row, i);

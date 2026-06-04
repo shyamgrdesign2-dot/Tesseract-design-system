@@ -192,8 +192,24 @@
 }
 
 /* ── Tag cell (type: "tag") ── */
-// Tag cells compose the Badge atom (see CellTag in DataTable.jsx).
+// Non-actionable tags compose the Badge atom; actionable ones compose the Chip
+// atom + this class for the hover/press feedback (see CellTag in DataTable.jsx).
 .tagRow { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+
+// Chip sets bg/color inline; hover/press use filter + shadow + transform so they
+// layer on top of any tone without fighting the inline styles.
+.actionableTag {
+  transition: filter 120ms ease, box-shadow 120ms ease, transform 80ms ease;
+
+  &:hover { filter: brightness(0.96); box-shadow: 0 1px 4px rgba(23, 23, 37, 0.16); }
+  &:active { transform: scale(0.96); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8b8af0); outline-offset: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actionableTag { transition: none; }
+  .actionableTag:active { transform: none; }
+}
 
 /* ── Pagination ── */
 /* Universal, neutral pagination — rows-per-page + range (left), pager (right). */

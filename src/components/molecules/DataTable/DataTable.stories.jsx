@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataTable, DataCell } from './DataTable';
+import { DataTable, DataCell, CellTag } from './DataTable';
 import { Button } from '@/src/components/atoms/Button';
 import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
@@ -310,6 +310,111 @@ export const RowSelection = {
           onSelectionChange={setSelected}
           pageSize={6}
         />
+      </div>
+    );
+  },
+};
+
+// ── Column Configurator ───────────────────────────────────────────────────────
+// One fully configurable column: its content can be TEXT, a TAG, or ACTION
+// BUTTONS, with an optional subline that is independently text or a tag. Tags can
+// be non-actionable (Badge) or actionable (Chip — hover + press). Text/subtext
+// can carry a left or right icon. The same column config applies to every column;
+// this story exposes it for a single column to keep the Controls panel readable.
+const TONES = ['neutral', 'primary', 'success', 'warning', 'error'];
+
+// One text line with an optional left/right icon (composes nothing extra — plain
+// inline layout matching the DataCell line metrics).
+function TextLine({ text, icon, side, kind }) {
+  const ic = icon ? <span style={{ display: 'inline-flex', flexShrink: 0, color: 'var(--tp-slate-400)' }}>{icon}</span> : null;
+  const secondary = kind === 'secondary';
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0, maxWidth: '100%',
+      fontSize: secondary ? 12 : 14, fontWeight: secondary ? 400 : 500,
+      color: secondary ? 'var(--tp-slate-500)' : 'var(--tp-slate-900)',
+    }}>
+      {side === 'left' && ic}
+      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{text}</span>
+      {side === 'right' && ic}
+    </span>
+  );
+}
+
+// Build the configurable cell from the flat control args.
+function configCell(row, a) {
+  if (a.kind === 'actions') return <Actions />;
+
+  const primary = a.kind === 'tag'
+    ? <CellTag label={fieldVal(row, a.field)} tone={a.tagTone} actionable={a.tagActionable} icon={a.tagIcon === 'left' ? lib(a.iconName, 14) : undefined} />
+    : <TextLine text={fieldVal(row, a.field)} icon={lib(a.iconName, 16)} side={a.primaryIcon} kind="primary" />;
+
+  let sub = null;
+  if (a.withSub) {
+    sub = a.subKind === 'tag'
+      ? <CellTag label={fieldVal(row, a.subField)} tone={a.subTagTone} actionable={a.subTagActionable} />
+      : <TextLine text={fieldVal(row, a.subField)} icon={lib(a.subIconName, 12)} side={a.subIcon} kind="secondary" />;
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 }}>
+      {primary}
+      {sub}
+    </div>
+  );
+}
+
+export const ColumnConfigurator = {
+  name: 'Column Configurator (text · tag · actions)',
+  args: {
+    headerLabel: 'Patient',
+    kind: 'text',
+    field: 'name',
+    primaryIcon: 'left',
+    iconName: 'profile',
+    tagTone: 'primary',
+    tagActionable: false,
+    tagIcon: 'none',
+    withSub: true,
+    subKind: 'text',
+    subField: 'mrn',
+    subIcon: 'left',
+    subIconName: 'clipboard',
+    subTagTone: 'neutral',
+    subTagActionable: false,
+  },
+  argTypes: {
+    headerLabel:      { control: 'text', name: 'column header', table: { category: 'Column' } },
+    kind:             { control: 'inline-radio', options: ['text', 'tag', 'actions'], name: 'cell content', table: { category: 'Column' } },
+    field:            { control: 'select', options: FIELDS, name: 'value field', table: { category: 'Column' } },
+
+    primaryIcon:      { control: 'inline-radio', options: ['none', 'left', 'right'], name: 'text · icon side', table: { category: 'Text' } },
+    iconName:         { control: 'text', tpIcon: true, name: 'text · icon', table: { category: 'Text' } },
+
+    tagTone:          { control: 'select', options: TONES, name: 'tag · tone', table: { category: 'Tag' } },
+    tagActionable:    { control: 'boolean', name: 'tag · actionable (Chip)', table: { category: 'Tag' } },
+    tagIcon:          { control: 'inline-radio', options: ['none', 'left'], name: 'tag · icon', table: { category: 'Tag' } },
+
+    withSub:          { control: 'boolean', name: 'subline · enabled', table: { category: 'Subline' } },
+    subKind:          { control: 'inline-radio', options: ['text', 'tag'], name: 'subline · type', table: { category: 'Subline' } },
+    subField:         { control: 'select', options: FIELDS, name: 'subline · field', table: { category: 'Subline' } },
+    subIcon:          { control: 'inline-radio', options: ['none', 'left', 'right'], name: 'subline text · icon side', table: { category: 'Subline' } },
+    subIconName:      { control: 'text', tpIcon: true, name: 'subline text · icon', table: { category: 'Subline' } },
+    subTagTone:       { control: 'select', options: TONES, name: 'subline tag · tone', table: { category: 'Subline' } },
+    subTagActionable: { control: 'boolean', name: 'subline tag · actionable', table: { category: 'Subline' } },
+  },
+  render: (a) => {
+    const columns = [
+      // The fully configurable column.
+      { id: 'config', header: a.headerLabel, minWidth: 240, align: a.kind === 'actions' ? 'right' : 'left', cell: (r) => configCell(r, a) },
+      // Static context columns so the table reads like a real surface.
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 190,
+        primary: (r) => r.appt, secondary: (r) => r.doctor, leftIcon: <TPIcon name="calendar-1" size={16} /> },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 130, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+    ];
+    return (
+      <div style={{ maxWidth: 820 }}>
+        <DataTable columns={columns} data={ROWS.slice(0, 8)} rowKey={(r) => r.mrn} hoverable />
       </div>
     );
   },

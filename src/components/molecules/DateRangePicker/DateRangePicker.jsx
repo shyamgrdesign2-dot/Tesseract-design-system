@@ -479,25 +479,8 @@ export function DateRangePicker({
             })}
           </div>
 
-          {/* Selected-date preview — space is always reserved so layout never jumps */}
-          <div className={styles.preview}>
-            {stagedStart ? (
-              <>
-                <span className={styles.previewIcon} aria-hidden>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="3" /><path d="M3 9h18M8 2v4M16 2v4" />
-                  </svg>
-                </span>
-                {isSingle || (stagedEnd && isSameDay(stagedStart, stagedEnd))
-                  ? formatDate(stagedStart)
-                  : `${formatDate(stagedStart)} – ${stagedEnd ? formatDate(stagedEnd) : "…"}`}
-              </>
-            ) : (
-              <span className={styles.previewEmpty}>{isSingle ? "No date selected" : "No range selected"}</span>
-            )}
-          </div>
-
-          {/* Action row: Clear | Cancel + Apply */}
+          {/* Action row: Clear | Cancel + Apply — selected dates already show in
+              the inputs above, so no separate preview line here. */}
           <div className={styles.actions}>
             <Button variant="link" theme="warning" size="sm" onClick={handleClear}>
               Clear

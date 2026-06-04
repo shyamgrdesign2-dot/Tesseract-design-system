@@ -3,7 +3,8 @@
 .toast {
   display: flex;
   align-items: center;
-  gap: 12px;
+  /* Tight icon↔text gap; action/dismiss restore their own breathing room below. */
+  gap: 8px;
   padding: 12px 14px;
   border-radius: 10px;
   corner-shape: round;
@@ -68,14 +69,16 @@
   overflow: hidden;
 }
 
-/* ── Action slot ── */
+/* ── Action slot ── (keep clear of the text, unlike the tight icon gap) */
 .action {
   flex-shrink: 0;
+  margin-left: 4px;
 }
 
 /* ── Square solid dismiss (lighter tint of the confirm-dialog close) ── */
 .dismiss {
   flex-shrink: 0;
+  margin-left: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

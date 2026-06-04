@@ -25,6 +25,9 @@
   color: var(--tp-slate-900, #171725);
   background-color: var(--tp-slate-0, #ffffff);
   border: 1px solid var(--tp-slate-200, #e5e7eb);
+  /* No heavy glow on the white surface — the 1px border defines the edge.
+     A crisp, shallow shadow just lifts it off the page. */
+  box-shadow: 0 2px 6px -3px rgba(23, 23, 37, 0.18);
 }
 
 /* Inner layout — leading icon · body · dismiss.
@@ -32,7 +35,8 @@
 .inner {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  /* Tight icon↔text gap; the dismiss restores its own spacing below. */
+  gap: 6px;
   text-align: left;
 
   &[data-multiline] { align-items: flex-start; }
@@ -46,6 +50,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-left: 4px; /* keep the × clear of the text (icon gap stays tight) */
   width: 18px;
   height: 18px;
   padding: 0;
