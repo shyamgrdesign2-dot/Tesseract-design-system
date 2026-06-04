@@ -35,6 +35,7 @@ export { Dropdown } from "./Dropdown";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";
+export { Header } from "./Header";
 
 /* ── Composite / feature ── */
 export { DateRangePicker } from "./DateRangePicker";
