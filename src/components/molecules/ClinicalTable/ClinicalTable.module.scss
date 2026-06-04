@@ -98,8 +98,14 @@
   &[data-align="right"]  { text-align: right; }
 }
 
-/* Combobox cell — chevron flips up when open. */
-.cellCombo .cellInput { padding-right: 28px; }
+/* Combobox cell — chevron flips up when open (only the `select` cells have one;
+   a `search` cell is a plain search with no chevron). */
+.hasChevron .cellInput { padding-right: 28px; }
+
+/* Locked cell — until the row's primary key (first column) is filled. */
+.cell[data-disabled] { background: color-mix(in srgb, var(--tp-slate-50, #f8fafc) 70%, transparent); }
+.cell[data-disabled] .cellInput { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; }
+.cell[data-disabled] .cellChevron { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; }
 .cellChevron {
   position: absolute;
   right: 6px;

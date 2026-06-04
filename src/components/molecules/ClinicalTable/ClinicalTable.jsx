@@ -32,7 +32,6 @@ import styles from "./ClinicalTable.module.scss";
 
 let _rowSeq = 0;
 const makeEmptyRow = () => ({ id: `ct-${++_rowSeq}` });
-const isBlankRow = (row, cols) => cols.every((c) => c.type === "action" || !String(row?.[c.id] ?? "").trim());
 
 function DragDots() {
   return (
@@ -46,15 +45,16 @@ function DragDots() {
 }
 
 // ── Free-text cell — bordered input box (focus/status stroke via the wrapper) ──
-function TextCell({ value, placeholder, align, status, onChange }) {
+function TextCell({ value, placeholder, align, status, disabled, onChange }) {
   const [focused, setFocused] = React.useState(false);
   return (
-    <div className={styles.cell} data-active={focused || undefined} data-status={!focused ? status : undefined}>
+    <div className={styles.cell} data-disabled={disabled || undefined} data-active={focused && !disabled ? "" : undefined} data-status={!focused ? status : undefined}>
       <input
         className={styles.cellInput}
         data-align={align}
         value={value ?? ""}
-        placeholder={placeholder}
+        placeholder={disabled ? "" : placeholder}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
@@ -67,7 +67,7 @@ function TextCell({ value, placeholder, align, status, onChange }) {
 // `search` allows free typing + custom-add; `select` is pick-from-list. Both:
 // show frequently-used options on focus, filter on type, keyboard nav, and a
 // chevron that flips up when open. Active (focused/open) shows the blue stroke.
-function ComboCell({ value, options = [], placeholder, align, status, allowCustom, onChange }) {
+function ComboCell({ value, options = [], placeholder, align, status, allowCustom, showChevron = true, disabled, onChange }) {
   const wrapRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   const [focused, setFocused] = React.useState(false);
@@ -111,24 +111,27 @@ function ComboCell({ value, options = [], placeholder, align, status, allowCusto
     else if (e.key === "Escape") { setOpen(false); }
   };
 
-  const active = focused || open;
+  const active = (focused || open) && !disabled;
   return (
-    <div ref={wrapRef} className={cn(styles.cell, styles.cellCombo)} data-active={active || undefined} data-status={!active ? status : undefined}>
+    <div ref={wrapRef} className={cn(styles.cell, styles.cellCombo, showChevron && styles.hasChevron)} data-disabled={disabled || undefined} data-active={active ? "" : undefined} data-status={!active ? status : undefined}>
       <input
         className={styles.cellInput}
         data-align={align}
         value={value ?? ""}
-        placeholder={placeholder}
+        placeholder={disabled ? "" : placeholder}
         readOnly={!allowCustom}
+        disabled={disabled}
         onChange={(e) => { onChange(e.target.value); if (!open) setOpen(true); }}
-        onFocus={() => { setFocused(true); setOpen(true); setActiveIdx(-1); }}
+        onFocus={() => { if (disabled) return; setFocused(true); setOpen(true); setActiveIdx(-1); }}
         onBlur={() => setFocused(false)}
         onKeyDown={onKeyDown}
       />
-      <button type="button" className={styles.cellChevron} data-open={open || undefined} aria-label="Toggle options" tabIndex={-1} onMouseDown={(e) => { e.preventDefault(); setOpen((o) => !o); }}>
-        <TPLibraryIcon name="arrow-down-02" size={14} />
-      </button>
-      {open && mounted && pos && items.length > 0 && createPortal(
+      {showChevron && (
+        <button type="button" className={styles.cellChevron} data-open={open || undefined} aria-label="Toggle options" tabIndex={-1} disabled={disabled} onMouseDown={(e) => { e.preventDefault(); if (!disabled) setOpen((o) => !o); }}>
+          <TPLibraryIcon name="arrow-down-02" size={14} />
+        </button>
+      )}
+      {open && !disabled && mounted && pos && items.length > 0 && createPortal(
         <div className={styles.menu} style={{ position: "fixed", top: pos.top, left: pos.left, minWidth: pos.width, zIndex: 3000 }} role="listbox">
           {items.map((item, idx) => (
             <button
@@ -166,17 +169,26 @@ export function ClinicalTable({
   const baseRows = controlled ? rowsProp : internal;
   const commit = (next) => { if (!controlled) setInternal(next); onChange?.(next); };
 
+  // The first non-action column is the PRIMARY key: a row's other cells stay
+  // locked until it's filled, and the next (draft) row only opens after it.
+  const primaryColId = (columns.find((c) => c.type !== "action") ?? columns[0])?.id;
+
   const [draft, setDraft] = React.useState(makeEmptyRow);
-  const showDraft = autoRow && (!baseRows.length || !isBlankRow(baseRows[baseRows.length - 1], columns));
-  const rendered = showDraft ? [...baseRows, draft] : baseRows;
+  const rendered = autoRow ? [...baseRows, draft] : baseRows;
 
   const [dragIndex, setDragIndex] = React.useState(null);
 
   const updateCell = (rowId, colId, val) => {
     if (rowId === draft.id) {
-      const committedRow = { ...draft, [colId]: val };
-      setDraft(makeEmptyRow());
-      commit([...baseRows, committedRow]);
+      // Only the primary cell is editable on the empty draft; filling it commits
+      // the row (same id → input keeps focus) and spawns a fresh draft below.
+      if (colId === primaryColId && String(val).trim()) {
+        const committedRow = { ...draft, [colId]: val };
+        setDraft(makeEmptyRow());
+        commit([...baseRows, committedRow]);
+      } else {
+        setDraft({ ...draft, [colId]: val });
+      }
     } else {
       commit(baseRows.map((r) => (r.id === rowId ? { ...r, [colId]: val } : r)));
     }
@@ -238,6 +250,7 @@ export function ClinicalTable({
         <tbody>
           {rendered.map((row, i) => {
             const isDraft = row.id === draft.id;
+            const primaryFilled = Boolean(String(row[primaryColId] ?? "").trim());
             return (
               <tr
                 key={row.id}
@@ -257,10 +270,12 @@ export function ClinicalTable({
 
                 {columns.map((c) => {
                   const status = c.validate ? c.validate(row[c.id], row) : undefined;
+                  // Non-primary cells are locked until the primary key is filled.
+                  const locked = c.type !== "action" && c.id !== primaryColId && !primaryFilled;
                   return (
                     <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={stickyStyle(c)} data-shadow={c.id === firstStickyColId ? "true" : undefined}>
                       {c.type === "action" ? (
-                        <div className={styles.actionCell}>{c.render ? c.render(row) : null}</div>
+                        <div className={styles.actionCell}>{primaryFilled && c.render ? c.render(row) : null}</div>
                       ) : c.type === "select" || c.type === "search" ? (
                         <ComboCell
                           value={row[c.id]}
@@ -269,6 +284,8 @@ export function ClinicalTable({
                           align={c.align}
                           status={status}
                           allowCustom={c.type === "search" || c.allowCustom}
+                          showChevron={c.type === "select"}
+                          disabled={locked}
                           onChange={(v) => updateCell(row.id, c.id, v)}
                         />
                       ) : (
@@ -277,6 +294,7 @@ export function ClinicalTable({
                           placeholder={c.placeholder}
                           align={c.align}
                           status={status}
+                          disabled={locked}
                           onChange={(v) => updateCell(row.id, c.id, v)}
                         />
                       )}
