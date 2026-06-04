@@ -28,6 +28,7 @@ export {
 
 /* ── Data table ── */
 export { DataTable, DataCell } from "./DataTable";
+export { ClinicalTable } from "./ClinicalTable";
 export { Filter } from "./Filter";
 
 /* ── Form / selection ── */
