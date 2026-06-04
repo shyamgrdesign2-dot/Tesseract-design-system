@@ -231,6 +231,7 @@
   height: 28px;
   border: none;
   border-radius: 9999px;
+  corner-shape: round;
   background: transparent;
   color: var(--tp-slate-600);
   cursor: pointer;
@@ -314,6 +315,7 @@
   justify-content: center;
   border: none;
   border-radius: 9999px;
+  corner-shape: round;
   background: transparent;
   font-size: 13px;
   font-weight: 500;
@@ -359,6 +361,7 @@
   height: 2px;
   transform: translateX(-50%);
   border-radius: 9999px;
+  corner-shape: round;
   background: var(--tp-blue-400);
 }
 

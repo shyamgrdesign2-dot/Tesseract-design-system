@@ -46,7 +46,10 @@ const Row = ({ children }) => (
 );
 
 export const Playground = {
-  render: ({ leftIconName, rightIconName, removable, iconSide, ...args }) => {
+  args: {
+    leftIconName: "add-protection"
+  },
+  render:({ leftIconName, rightIconName, removable, iconSide, ...args }) => {
     const px = ICON_PX[args.size] || 14;
     const showLeft = iconSide === 'left' || iconSide === 'both';
     const showRight = iconSide === 'right' || iconSide === 'both';
@@ -58,7 +61,7 @@ export const Playground = {
         onDelete={removable ? () => {} : undefined}
       />
     );
-  },
+  }
 };
 
 export const Sizes = {
