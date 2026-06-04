@@ -30,6 +30,9 @@ export {
 export { DataTable, DataCell } from "./DataTable";
 export { Filter } from "./Filter";
 
+/* ── Form / selection ── */
+export { Dropdown } from "./Dropdown";
+
 /* ── Composite / feature ── */
 export { DateRangePicker } from "./DateRangePicker";
 export { HeroBanner } from "./HeroBanner";

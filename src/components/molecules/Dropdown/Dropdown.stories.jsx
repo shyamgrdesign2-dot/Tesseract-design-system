@@ -1,0 +1,173 @@
+import React from 'react';
+import { Dropdown } from './Dropdown';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+
+const ic = (name) => <TPLibraryIcon name={name} size={16} />;
+
+// Department options — title + subtitle + left icon + keyboard shortcut.
+const DEPTS = [
+  { value: 'cardio', label: 'Cardiology', subtitle: 'Dr. Ananya Mehta', icon: ic('user'), shortcut: '⌘1' },
+  { value: 'neuro', label: 'Neurology', subtitle: 'Dr. Rohan Verma', icon: ic('user'), shortcut: '⌘2' },
+  { value: 'ortho', label: 'Orthopaedics', subtitle: 'Dr. Priya Nair', icon: ic('user'), shortcut: '⌘3' },
+  { value: 'paeds', label: 'Paediatrics', subtitle: 'Dr. Sameer Khan', icon: ic('user'), shortcut: '⌘4' },
+  { value: 'derma', label: 'Dermatology', subtitle: 'Dr. Aisha Patel', icon: ic('user'), disabled: true },
+  { value: 'radio', label: 'Radiology', subtitle: 'Dr. Vikram Rao', icon: ic('user') },
+  { value: 'ent', label: 'ENT', subtitle: 'Dr. Meera Iyer', icon: ic('user') },
+  { value: 'gastro', label: 'Gastroenterology', subtitle: 'Dr. Arjun Das', icon: ic('user') },
+];
+
+// Plain single-line options.
+const SIMPLE = [
+  { value: 'active', label: 'Active' },
+  { value: 'waiting', label: 'Waiting' },
+  { value: 'noshow', label: 'No-show' },
+  { value: 'completed', label: 'Completed' },
+];
+
+const meta = {
+  title: 'Molecules/Dropdown',
+  component: Dropdown,
+  tags: ['autodocs'],
+  parameters: { layout: 'padded' },
+  argTypes: {
+    mode: { control: 'inline-radio', options: ['single', 'multi'], table: { category: 'Selection' } },
+    optionControl: { control: 'inline-radio', options: ['none', 'checkbox', 'radio'], name: 'row control', table: { category: 'Selection' } },
+    chips: { control: 'boolean', description: 'Multi: show selected as removable chips in the trigger', table: { category: 'Selection' } },
+    searchable: { control: 'boolean', table: { category: 'Behaviour' } },
+    showShortcuts: { control: 'boolean', name: 'show shortcuts', table: { category: 'Behaviour' } },
+    width: { control: 'inline-radio', options: ['trigger', 'auto', 320], table: { category: 'Layout' } },
+    twoLine: { control: 'boolean', name: 'title + subtitle', table: { category: 'Content' } },
+    withIcons: { control: 'boolean', name: 'item icons', table: { category: 'Content' } },
+    label: { control: 'text', table: { category: 'Content' } },
+    placeholder: { control: 'text', table: { category: 'Content' } },
+    disabled: { control: 'boolean', table: { category: 'State' } },
+    value: { control: false },
+    onChange: { control: false },
+  },
+  args: {
+    mode: 'single',
+    optionControl: 'none',
+    chips: false,
+    searchable: false,
+    showShortcuts: false,
+    width: 'trigger',
+    twoLine: true,
+    withIcons: true,
+    label: 'Department',
+    placeholder: 'Select department…',
+    disabled: false,
+  },
+};
+
+export default meta;
+
+const Frame = ({ w = 300, children }) => <div style={{ width: w }}>{children}</div>;
+
+// ── Playground — every capability wired to Controls ───────────────────────────
+export const Playground = {
+  render: ({ mode, twoLine, withIcons, ...args }) => {
+    const [val, setVal] = React.useState(mode === 'multi' ? [] : '');
+    const value = mode === 'multi' ? (Array.isArray(val) ? val : []) : (Array.isArray(val) ? '' : val);
+    const options = DEPTS.map((o) => ({
+      ...o,
+      subtitle: twoLine ? o.subtitle : undefined,
+      icon: withIcons ? o.icon : undefined,
+    }));
+    return (
+      <Frame>
+        <Dropdown {...args} mode={mode} options={options} value={value} onChange={setVal} />
+      </Frame>
+    );
+  },
+};
+
+export const SingleSelect = {
+  render: () => {
+    const [v, setV] = React.useState('cardio');
+    return <Frame><Dropdown label="Department" options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const MultiSelect = {
+  name: 'Multi-select (checkmarks)',
+  render: () => {
+    const [v, setV] = React.useState(['cardio', 'neuro']);
+    return <Frame><Dropdown label="Departments" mode="multi" options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const CheckboxOptions = {
+  name: 'Multi + checkboxes',
+  render: () => {
+    const [v, setV] = React.useState(['active', 'waiting']);
+    return <Frame><Dropdown label="Status" mode="multi" optionControl="checkbox" options={SIMPLE} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const RadioOptions = {
+  name: 'Single + radio',
+  render: () => {
+    const [v, setV] = React.useState('active');
+    return <Frame><Dropdown label="Status" optionControl="radio" options={SIMPLE} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const ChipsInTrigger = {
+  name: 'Multi → chips in trigger',
+  render: () => {
+    const [v, setV] = React.useState(['cardio', 'ortho', 'radio']);
+    return <Frame w={360}><Dropdown label="Departments" mode="multi" chips optionControl="checkbox" options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const Searchable = {
+  render: () => {
+    const [v, setV] = React.useState('');
+    return <Frame><Dropdown label="Department" searchable options={DEPTS} value={v} onChange={setV} placeholder="Search & select…" /></Frame>;
+  },
+};
+
+export const WithShortcuts = {
+  name: 'Keyboard shortcuts',
+  render: () => {
+    const [v, setV] = React.useState('cardio');
+    return <Frame><Dropdown label="Quick jump" showShortcuts options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const TwoLineItems = {
+  name: 'Title + subtitle',
+  render: () => {
+    const [v, setV] = React.useState('neuro');
+    return <Frame><Dropdown label="Assign to" options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const ItemIcons = {
+  name: 'Left + right item icons',
+  render: () => {
+    const [v, setV] = React.useState('verified');
+    const opts = [
+      { value: 'verified', label: 'Verified', icon: ic('user'), iconRight: ic('tick-circle') },
+      { value: 'pending', label: 'Pending review', icon: ic('user'), iconRight: ic('clock') },
+      { value: 'flagged', label: 'Flagged', icon: ic('user'), iconRight: ic('flag') },
+    ];
+    return <Frame><Dropdown label="Record state" options={opts} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const Widths = {
+  name: 'Adjustable width',
+  render: () => {
+    const [a, setA] = React.useState('cardio');
+    const [b, setB] = React.useState('cardio');
+    const [c, setC] = React.useState('cardio');
+    return (
+      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <Frame w={200}><Dropdown label='width="trigger"' options={DEPTS} value={a} onChange={setA} /></Frame>
+        <Frame w={200}><Dropdown label='width="auto"' width="auto" options={DEPTS} value={b} onChange={setB} /></Frame>
+        <Frame w={200}><Dropdown label="width={360}" width={360} options={DEPTS} value={c} onChange={setC} /></Frame>
+      </div>
+    );
+  },
+};
