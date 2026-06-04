@@ -1,0 +1,104 @@
+/* Sidebar.module.scss — primary navigation rail. Ported from the VoiceRx
+   .SidebarDoctor styles onto TP tokens. */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  max-width: 100px;
+  height: 100%;
+  padding: 20px 0 0;
+  background-color: var(--tp-slate-0, #fff);
+  box-shadow: 1px 0 0 var(--tp-slate-100, #f1f1f5), 4px 0 14px -10px rgba(23, 23, 37, 0.18);
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: Inter, var(--font-sans, sans-serif);
+
+  &::-webkit-scrollbar { width: 0; }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px 18px;
+  flex-shrink: 0;
+}
+
+.items { display: flex; flex-direction: column; }
+
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 10px 6px;
+  margin-bottom: 6px;
+  border: none;
+  background: transparent;
+  color: var(--tp-slate-500, #717179);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition: color 120ms ease, background-color 120ms ease;
+
+  /* Left active-indicator bar (rounded on the right). */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 4px;
+    background-color: transparent;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    corner-shape: round;
+    transition: background-color 120ms ease;
+  }
+
+  &:hover { color: var(--tp-blue-600, #3c3bb5); background-color: rgba(75, 74, 213, 0.06); }
+  &:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--tp-blue-200, #b5b4f2); }
+
+  &[data-active] {
+    color: var(--tp-blue-600, #3c3bb5);
+    background-color: rgba(75, 74, 213, 0.08);
+    &::before { background-color: var(--tp-blue-500, #4b4ad5); }
+  }
+
+  &[data-disabled] { opacity: 0.45; cursor: not-allowed; }
+}
+
+/* Icons are atoms rendered in currentColor, so they inherit the item color
+   (blue when active) with no separate active asset. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 12px 6px;
+  flex-shrink: 0;
+}

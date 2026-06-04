@@ -33,6 +33,9 @@ export { Filter } from "./Filter";
 /* ── Form / selection ── */
 export { Dropdown } from "./Dropdown";
 
+/* ── Navigation ── */
+export { Sidebar } from "./Sidebar";
+
 /* ── Composite / feature ── */
 export { DateRangePicker } from "./DateRangePicker";
 export { HeroBanner } from "./HeroBanner";
