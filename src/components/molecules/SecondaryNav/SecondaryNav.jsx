@@ -25,7 +25,8 @@ import styles from "./SecondaryNav.module.scss";
 
 function PillIcon({ icon, active }) {
   if (typeof icon === "string") {
-    return <TPLibraryIcon name={icon} variant="linear" size={20} color={active ? "var(--tp-blue-500, #4b4ad5)" : "#ffffff"} />;
+    // Selected → bulk (two-tone) style in blue; rest → linear in white.
+    return <TPLibraryIcon name={icon} variant={active ? "bulk" : "linear"} size={20} color={active ? "var(--tp-blue-500, #4b4ad5)" : "#ffffff"} />;
   }
   return icon ?? null;
 }

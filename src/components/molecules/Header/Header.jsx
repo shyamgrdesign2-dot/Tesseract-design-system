@@ -15,9 +15,9 @@
  * RIGHT cluster — `actions`: an ordered list (max 8) of typed items. Only
  * `tutorial` and `avatar` are special; everything else is a CTA (the Button
  * atom), and dividers are placed explicitly wherever you want them:
- *   { type: "cta", label?, icon?, variant?, theme?, onClick, menu?, dropdown?, badge?, ariaLabel? }
+ *   { type: "cta", label?, icon?, variant?, theme?, onClick, menu?, badge?, ariaLabel? }
  *       label + icon → text CTA; icon only (no label) → icon button;
- *       dropdown:true → trailing chevron; menu → split button;
+ *       menu → split button (the only Button shape with a dropdown side);
  *       badge:{color} → a notification dot on an icon CTA.
  *   { type: "avatar", src?, name?, ring?, onClick }
  *   { type: "select", options, value, onClick→onChange, icon?, searchable?, width? }
@@ -80,8 +80,9 @@ function UserBlock({ name, meta, avatar, dropdown }) {
   );
 }
 
-// One CTA → the Button atom. Covers text / icon-only / dropdown / split, with an
-// optional notification dot (Badge) for icon CTAs.
+// One CTA → the Button atom. Covers text / icon-only / split (the only Button
+// shapes), with an optional notification dot (Badge) for icon CTAs. For a real
+// dropdown use the `select` action (the Dropdown molecule).
 function Cta({ item }) {
   const glyph = item.icon ? icon(item.icon) : undefined;
   const iconOnly = !!glyph && item.label == null;
@@ -95,7 +96,6 @@ function Cta({ item }) {
       aria-label={iconOnly ? (item.ariaLabel || item.label) : undefined}
       icon={iconOnly || item.menu ? glyph : undefined}
       leftIcon={!iconOnly && !item.menu ? glyph : undefined}
-      rightIcon={item.dropdown ? <Chevron /> : item.rightIcon}
       style={iconOnly ? { width: 42, height: 42 } : { height: 42 }}
     >
       {iconOnly ? undefined : <span className={styles.ctaLabel}>{item.label}</span>}

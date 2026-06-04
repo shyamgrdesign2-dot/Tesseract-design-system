@@ -82,19 +82,29 @@ export const RxPad = {
 };
 
 /** Print header — back + patient + Print Settings / English / Done. */
-export const Print = {
-  render: () => (
+const LANGUAGES = [
+  { value: 'en', label: 'English', icon: <TPLibraryIcon name="global" size={16} /> },
+  { value: 'hi', label: 'Hindi', icon: <TPLibraryIcon name="global" size={16} /> },
+  { value: 'ta', label: 'Tamil', icon: <TPLibraryIcon name="global" size={16} /> },
+  { value: 'te', label: 'Telugu', icon: <TPLibraryIcon name="global" size={16} /> },
+];
+
+function PrintHeader() {
+  const [lang, setLang] = React.useState('en');
+  return (
     <Header
       back
       user={{ name: 'Ramesh Kumar', meta: 'Male | 76y' }}
       actions={[
         { type: 'cta', label: 'Print Settings', icon: 'setting-4', variant: 'tonal', theme: 'neutral' },
-        { type: 'cta', label: 'English', icon: 'global', variant: 'tonal', theme: 'neutral', dropdown: true },
+        { type: 'select', icon: 'global', options: LANGUAGES, value: lang, onChange: setLang, width: 150 },
         { type: 'cta', label: 'Done', variant: 'solid', theme: 'primary' },
       ]}
     />
-  ),
-};
+  );
+}
+
+export const Print = { render: () => <PrintHeader /> };
 
 /** Title + subtext leading (e.g. the home "Welcome" header). */
 export const TitleWithSubtext = {
@@ -122,7 +132,7 @@ function slotArgTypes() {
     t[`c${i}Variant`] = { control: 'select', options: CTA_VARIANTS, name: `#${i} · variant (none = off)`, table: { category } };
     t[`c${i}Label`] = { control: 'text', name: `#${i} · label (blank = icon only)`, table: { category } };
     t[`c${i}Icon`] = { control: 'text', tpIcon: true, name: `#${i} · icon`, table: { category } };
-    t[`c${i}Dropdown`] = { control: 'boolean', name: `#${i} · dropdown chevron`, table: { category } };
+    t[`c${i}Split`] = { control: 'boolean', name: `#${i} · split (menu)`, table: { category } };
     t[`c${i}Divider`] = { control: 'boolean', name: `#${i} · divider before`, table: { category } };
   }
   return t;
@@ -153,12 +163,12 @@ export const Playground = {
     tutorial: true,
     clinic: true,
     avatar: true,
-    c1Variant: 'tonal', c1Label: '', c1Icon: 'bell-2', c1Dropdown: false, c1Divider: true,
-    c2Variant: 'tonal', c2Label: 'Rajeshwar Eye Clinic', c2Icon: 'building', c2Dropdown: true, c2Divider: true,
-    c3Variant: 'none', c3Label: '', c3Icon: '', c3Dropdown: false, c3Divider: false,
-    c4Variant: 'none', c4Label: '', c4Icon: '', c4Dropdown: false, c4Divider: false,
-    c5Variant: 'none', c5Label: '', c5Icon: '', c5Dropdown: false, c5Divider: false,
-    c6Variant: 'none', c6Label: '', c6Icon: '', c6Dropdown: false, c6Divider: false,
+    c1Variant: 'tonal', c1Label: '', c1Icon: 'bell-2', c1Split: false, c1Divider: true,
+    c2Variant: 'solid', c2Label: 'End Visit', c2Icon: 'clipboard-export', c2Split: true, c2Divider: true,
+    c3Variant: 'none', c3Label: '', c3Icon: '', c3Split: false, c3Divider: false,
+    c4Variant: 'none', c4Label: '', c4Icon: '', c4Split: false, c4Divider: false,
+    c5Variant: 'none', c5Label: '', c5Icon: '', c5Split: false, c5Divider: false,
+    c6Variant: 'none', c6Label: '', c6Icon: '', c6Split: false, c6Divider: false,
   },
   render: (a) => <HeaderPlaygroundDemo {...a} />,
 };
@@ -180,7 +190,7 @@ function HeaderPlaygroundDemo(a) {
       label: label || undefined,
       icon: ic || undefined,
       ariaLabel: label || `Action ${i}`,
-      dropdown: a[`c${i}Dropdown`],
+      menu: a[`c${i}Split`] ? END_VISIT_MENU : undefined,
     });
   }
   if (a.clinic) actions.push({ type: 'select', icon: 'building', options: CLINICS, value: clinic, onChange: setClinic });

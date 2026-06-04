@@ -9,7 +9,7 @@ const ITEMS = [
   { id: 'history', label: 'History', icon: 'clipboard-text' },
   { id: 'labResults', label: 'Lab Results', icon: 'flask' },
   { id: 'records', label: 'Records', icon: 'folder-2' },
-  { id: 'gynec', label: 'Gynec', icon: 'dna' },
+  { id: 'gynec', label: 'Gynec', icon: 'woman' },
   { id: 'obstetric', label: 'Obstetric', icon: 'baby' },
   { id: 'vaccine', label: 'Vaccine', icon: 'syringe' },
   { id: 'growth', label: 'Growth', icon: 'ruler-pen' },
