@@ -29,20 +29,56 @@
 .caret { color: var(--tp-slate-400, #a1a1aa); transition: transform 150ms ease; }
 .trigger[aria-expanded="true"] .caret { transform: rotate(180deg); }
 
-.menu {
+/* Single grouped panel — sections scroll, footer is pinned. */
+.panel {
   position: absolute;
   z-index: 800;
   top: calc(100% + 6px);
   left: 0;
-  min-width: 200px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+  max-height: 360px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
   border-radius: 12px;
   corner-shape: round;
   background-color: var(--tp-slate-0, #fff);
   box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
+}
+.sections { overflow-y: auto; padding: 6px; }
+
+/* Each group is a labelled section; a hairline separates adjacent sections. */
+.section + .section { margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--tp-slate-100, #f1f1f5); }
+.sectionTitle {
+  padding: 4px 10px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tp-slate-400, #a1a1aa);
+}
+
+.panelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px solid var(--tp-slate-100, #f1f1f5);
+}
+.done {
+  border: none;
+  border-radius: 8px;
+  corner-shape: round;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--tp-slate-0, #fff);
+  background-color: var(--tp-blue-500, #4b4ad5);
+
+  &:hover { background-color: var(--tp-blue-600, #3c3bb5); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tp-blue-100, #d8d8fa); }
 }
 
 .option {
@@ -86,6 +122,7 @@
   corner-shape: round;
 
   &:hover { color: var(--tp-error-700, #9F1239); background-color: var(--tp-error-50, #FFF1F2); }
+  &:disabled { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; background: transparent; }
 }
 
 /* ── Active selection: bordered bar — chips on the left, Clear all on the right ── */

@@ -24,13 +24,27 @@ import { TP_ICON_REGISTRY, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./registry";
 const ALIAS = { "dual-tone": "twotone", dualtone: "twotone", "two-tone": "twotone" };
 const FALLBACK = { broken: "linear", outline: "linear", twotone: "bulk", bold: "linear", bulk: "linear" };
 
+const STYLES = ["bold", "broken", "bulk", "linear", "outline", "twotone"];
+
 export function TPIcon({ name, variant = "linear", size = 20, color, className, style, ...props }) {
-  const entry = TP_ICON_REGISTRY[name];
+  // The icon picker may encode the chosen style as "variant/name"; honour it so
+  // a picked style reaches the rendered icon. Explicit `variant` still wins for
+  // plain names.
+  let resolvedVariant = variant;
+  let resolvedName = name;
+  if (typeof name === "string") {
+    const slash = name.indexOf("/");
+    if (slash > 0 && STYLES.includes(name.slice(0, slash))) {
+      resolvedVariant = name.slice(0, slash);
+      resolvedName = name.slice(slash + 1);
+    }
+  }
+  const entry = TP_ICON_REGISTRY[resolvedName];
   if (!entry) {
-    if (typeof console !== "undefined") console.warn(`TPIcon: unknown icon "${name}"`);
+    if (typeof console !== "undefined") console.warn(`TPIcon: unknown icon "${resolvedName}"`);
     return null;
   }
-  const v = ALIAS[variant] || variant;
+  const v = ALIAS[resolvedVariant] || resolvedVariant;
   const Comp =
     entry[v] || entry[FALLBACK[v]] || entry.linear || entry.bold || Object.values(entry)[0];
   if (!Comp) return null;

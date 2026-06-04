@@ -10,11 +10,12 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: { description: { component: 'Chip-based multi-select filter bar. Each group is a dropdown; chosen options become removable chips. The group set changes per table — pass a different `groups` config. Pairs with DataTable to filter rows.' } },
+    docs: { description: { component: 'A single "Filter" entry point that opens one panel with grouped, multi-select sections (Status · Doctors · Types). Chosen options become removable chips below. The section set changes per table — pass a different `groups` config. Pairs with DataTable to filter rows.' } },
   },
   argTypes: {
-    groups: { control: 'object', description: 'Filter groups: [{ id, label, options: [{ value, label }] }]' },
-    groupIcon: { control: 'text', tpIcon: true, name: 'group icon', description: 'TP icon shown on each filter dropdown' },
+    groups: { control: 'object', description: 'Filter sections: [{ id, label, options: [{ value, label }] }]' },
+    label: { control: 'text', description: 'Trigger label' },
+    triggerIcon: { control: 'text', tpIcon: true, name: 'trigger icon', description: 'TP icon on the Filter trigger (defaults to a funnel)' },
   },
 };
 
@@ -36,15 +37,18 @@ const GROUPS = [
 ];
 
 export const Playground = {
-  args: { groups: GROUPS, groupIcon: 'colorfilter' },
-  render: ({ groups, groupIcon }) => {
+  args: { groups: GROUPS, label: 'Filter', triggerIcon: '' },
+  render: ({ groups, label, triggerIcon }) => {
     const [value, setValue] = React.useState({ status: ['Waiting'] });
-    const withIcon = groupIcon
-      ? groups.map((g) => ({ ...g, icon: <TPLibraryIcon name={groupIcon} size={16} /> }))
-      : groups;
     return (
       <div style={{ maxWidth: 720 }}>
-        <Filter groups={withIcon} value={value} onChange={setValue} />
+        <Filter
+          groups={groups}
+          label={label}
+          icon={triggerIcon ? <TPLibraryIcon name={triggerIcon} size={16} /> : undefined}
+          value={value}
+          onChange={setValue}
+        />
         <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
       </div>
     );

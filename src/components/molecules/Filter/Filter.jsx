@@ -1,17 +1,20 @@
 "use client";
 
 /**
- * Filter — chip-based multi-select filter bar. In-house, no external deps.
+ * Filter — a single "Filter" entry point that opens one panel with grouped,
+ * multi-select sections (e.g. Status · Doctors · Types). In-house, no deps.
  *
- * Each filter group is a dropdown of options; chosen options appear as removable
- * chips below the bar. Pairs with DataTable (filter the data by the selection),
- * and the group set changes per table — just pass a different `groups` config.
+ * Chosen options appear as removable chips below the bar. Pairs with DataTable
+ * (filter the data by the selection); the section set changes per table — just
+ * pass a different `groups` config.
  *
  * Props:
  *   groups       [{ id, label, options: [{ value, label }] }]
  *   value        { [groupId]: string[] }     controlled selection
  *   defaultValue { [groupId]: string[] }     uncontrolled initial selection
  *   onChange     (selection) => void
+ *   label        trigger label                default "Filter"
+ *   icon         ReactNode — trigger icon     default a funnel glyph
  *   className
  */
 
@@ -30,56 +33,16 @@ function Chevron() {
   );
 }
 
-function FilterDropdown({ group, selected, onToggle }) {
-  const [open, setOpen] = React.useState(false);
-  const ref = React.useRef(null);
-  useClickOutside(ref, () => setOpen(false), open);
-
+// Inline funnel — structural glyph, no icon dependency.
+function FunnelIcon() {
   return (
-    <div ref={ref} className={styles.ddRoot}>
-      <button
-        type="button"
-        className={styles.trigger}
-        data-active={selected.length > 0 || undefined}
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        onClick={() => setOpen((o) => !o)}
-      >
-        {group.icon != null && <span className={styles.triggerIcon}>{group.icon}</span>}
-        {group.label}
-        {selected.length > 0 ? ` (${selected.length})` : ""}
-        <Chevron />
-      </button>
-      {open && (
-        <div className={styles.menu} role="listbox" aria-multiselectable="true">
-          {group.options.map((o) => {
-            const on = selected.includes(o.value);
-            const pick = () => onToggle(o.value);
-            return (
-              <div
-                key={o.value}
-                role="option"
-                aria-selected={on}
-                tabIndex={0}
-                className={styles.option}
-                onClick={pick}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }}
-              >
-                {/* Reuse the Checkbox atom (decorative — the row owns the click). */}
-                <span className={styles.control} aria-hidden>
-                  <Checkbox size="sm" checked={on} tabIndex={-1} />
-                </span>
-                {o.label}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 5h18l-7 8v6l-4 2v-8z" />
+    </svg>
   );
 }
 
-export function Filter({ groups = [], value, defaultValue, onChange, className }) {
+export function Filter({ groups = [], value, defaultValue, onChange, label = "Filter", icon, className }) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(defaultValue || {});
   const sel = isControlled ? value : internal;
@@ -87,6 +50,10 @@ export function Filter({ groups = [], value, defaultValue, onChange, className }
     if (!isControlled) setInternal(next);
     onChange?.(next);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+  useClickOutside(ref, () => setOpen(false), open);
 
   const toggle = (gid, val) => {
     const cur = sel[gid] || [];
@@ -96,6 +63,8 @@ export function Filter({ groups = [], value, defaultValue, onChange, className }
   const removeChip = (gid, val) => commit({ ...sel, [gid]: (sel[gid] || []).filter((v) => v !== val) });
   const clearAll = () => commit({});
 
+  const totalSelected = groups.reduce((n, g) => n + (sel[g.id]?.length || 0), 0);
+
   const chips = groups.flatMap((g) =>
     (sel[g.id] || []).map((v) => ({ gid: g.id, value: v, group: g.label, label: g.options.find((o) => o.value === v)?.label ?? v })),
   );
@@ -103,9 +72,62 @@ export function Filter({ groups = [], value, defaultValue, onChange, className }
   return (
     <div className={cn(styles.root, className)}>
       <div className={styles.bar}>
-        {groups.map((g) => (
-          <FilterDropdown key={g.id} group={g} selected={sel[g.id] || []} onToggle={(v) => toggle(g.id, v)} />
-        ))}
+        <div ref={ref} className={styles.ddRoot}>
+          <button
+            type="button"
+            className={styles.trigger}
+            data-active={totalSelected > 0 || undefined}
+            aria-expanded={open}
+            aria-haspopup="dialog"
+            onClick={() => setOpen((o) => !o)}
+          >
+            <span className={styles.triggerIcon}>{icon ?? <FunnelIcon />}</span>
+            {label}
+            {totalSelected > 0 ? ` (${totalSelected})` : ""}
+            <Chevron />
+          </button>
+
+          {open && (
+            <div className={styles.panel} role="dialog" aria-label={label}>
+              <div className={styles.sections}>
+                {groups.map((g) => (
+                  <div key={g.id} className={styles.section}>
+                    <div className={styles.sectionTitle}>{g.label}</div>
+                    {g.options.map((o) => {
+                      const on = (sel[g.id] || []).includes(o.value);
+                      const pick = () => toggle(g.id, o.value);
+                      return (
+                        <div
+                          key={o.value}
+                          role="option"
+                          aria-selected={on}
+                          tabIndex={0}
+                          className={styles.option}
+                          onClick={pick}
+                          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }}
+                        >
+                          {/* Reuse the Checkbox atom (decorative — the row owns the click). */}
+                          <span className={styles.control} aria-hidden>
+                            <Checkbox size="sm" checked={on} tabIndex={-1} />
+                          </span>
+                          {o.label}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+              <div className={styles.panelFooter}>
+                <button type="button" className={styles.clear} onClick={clearAll} disabled={totalSelected === 0}>
+                  Clear all
+                </button>
+                <button type="button" className={styles.done} onClick={() => setOpen(false)}>
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {chips.length > 0 && (

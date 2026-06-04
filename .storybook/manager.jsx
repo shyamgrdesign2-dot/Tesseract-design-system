@@ -114,9 +114,22 @@ function Panel() {
         </span>
       </div>
       <div style={{ flex: 1, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(76px, 1fr))", gap: 4, padding: 10 }}>
-        {shown.map((n) => (
-          <Cell key={n} name={n} style={style} active={args[target] === n} onPick={(name) => updateArgs({ [target]: name })} />
-        ))}
+        {shown.map((n) => {
+          // Encode the chosen style into the value as "style/name" (plain name
+          // for linear) so the rendered icon honours the picked style.
+          const cur = args[target] || "";
+          const curName = cur.includes("/") ? cur.slice(cur.indexOf("/") + 1) : cur;
+          const curStyle = cur.includes("/") ? cur.slice(0, cur.indexOf("/")) : "linear";
+          return (
+            <Cell
+              key={n}
+              name={n}
+              style={style}
+              active={curName === n && curStyle === style}
+              onPick={(name) => updateArgs({ [target]: style === "linear" ? name : `${style}/${name}` })}
+            />
+          );
+        })}
         {!filtered.length && <div style={{ gridColumn: "1 / -1", padding: 24, textAlign: "center", opacity: 0.5, fontSize: 12 }}>No icons match “{q}”.</div>}
       </div>
     </div>

@@ -31,12 +31,23 @@ const MED_STYLE = { linear: "line", outline: "line", broken: "line", bulk: "bulk
 
 export function TPLibraryIcon({ name, variant = "linear", size = 20, color, title, className, style }) {
   if (!name) return null;
+  // The icon picker encodes the chosen style into the value as "variant/name"
+  // (e.g. "bulk/search") so the picked style reaches the rendered icon without
+  // every story having to thread a separate variant prop. Parse it here; an
+  // explicit `variant` on a plain name still works as before.
+  let v = variant;
+  let n = name;
+  const slash = name.indexOf("/");
+  if (slash > 0 && STYLES.includes(name.slice(0, slash))) {
+    v = name.slice(0, slash);
+    n = name.slice(slash + 1);
+  }
   // Unified namespace: medical icons resolve from /icons/medical/, everything
   // else from the full /tp-icons/ library — one searchable, pickable set.
-  const med = tpMedicalIconRegistry[name];
+  const med = tpMedicalIconRegistry[n];
   const url = med
-    ? (med[MED_STYLE[variant] || "line"] || med.line)
-    : `/tp-icons/${STYLES.includes(variant) ? variant : "linear"}/${encodeURIComponent(name)}.svg`;
+    ? (med[MED_STYLE[v] || "line"] || med.line)
+    : `/tp-icons/${STYLES.includes(v) ? v : "linear"}/${encodeURIComponent(n)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
 
   return (
