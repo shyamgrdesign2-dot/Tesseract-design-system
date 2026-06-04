@@ -1,21 +1,27 @@
 import React from "react";
 import { addons, types, useArgs, useArgTypes } from "storybook/manager-api";
+import { tpMedicalIconRegistry } from "../src/components/atoms/MedicalIcon/registry";
 
 const ADDON_ID = "tp-icons";
 const PANEL_ID = `${ADDON_ID}/panel`;
 const STYLES = ["linear", "bold", "bulk", "broken", "outline", "twotone"];
 const CAP = 300; // cap rendered previews; search narrows the rest
 
-// Manifest is fetched once and cached across renders.
+// Medical icons share the same picker namespace (rendered from /icons/medical/).
+const MEDICAL_NAMES = Object.keys(tpMedicalIconRegistry);
+const MED_STYLE = { linear: "line", outline: "line", broken: "line", bulk: "bulk", twotone: "bulk", bold: "solid" };
+
+// Manifest is fetched once and cached across renders. Medical names are always
+// included up front so they surface even before the manifest resolves.
 let _manifest = null;
 function useIconNames() {
-  const [names, setNames] = React.useState(_manifest || []);
+  const [names, setNames] = React.useState(_manifest || MEDICAL_NAMES);
   React.useEffect(() => {
     if (_manifest) return;
     fetch("/tp-icons/manifest.json")
       .then((r) => r.json())
       .then((d) => {
-        _manifest = d.map((m) => m.n);
+        _manifest = [...MEDICAL_NAMES, ...d.map((m) => m.n)];
         setNames(_manifest);
       })
       .catch(() => {});
@@ -24,7 +30,10 @@ function useIconNames() {
 }
 
 function maskStyle(name, style, color) {
-  const url = `/tp-icons/${style}/${encodeURIComponent(name)}.svg`;
+  const med = tpMedicalIconRegistry[name];
+  const url = med
+    ? (med[MED_STYLE[style] || "line"] || med.line)
+    : `/tp-icons/${style}/${encodeURIComponent(name)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
   return { WebkitMask: mask, mask, backgroundColor: color };
 }
@@ -81,7 +90,7 @@ function Panel() {
   }
 
   const ql = q.trim().toLowerCase();
-  const filtered = ql ? names.filter((n) => n.includes(ql)) : names;
+  const filtered = ql ? names.filter((n) => n.toLowerCase().includes(ql)) : names;
   const shown = filtered.slice(0, CAP);
 
   return (
@@ -99,7 +108,7 @@ function Panel() {
             <option key={s} value={s}>{s}</option>
           ))}
         </select>
-        <input style={{ ...inputStyle, flex: 1, minWidth: 160 }} placeholder="Search 6,769 TP icons…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <input style={{ ...inputStyle, flex: 1, minWidth: 160 }} placeholder="Search TP + medical icons…" value={q} onChange={(e) => setQ(e.target.value)} />
         <span style={{ fontSize: 11, opacity: 0.6 }}>
           {filtered.length} matches{filtered.length > CAP ? ` (showing ${CAP})` : ""}
         </span>

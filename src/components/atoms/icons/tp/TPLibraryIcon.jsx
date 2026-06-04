@@ -22,13 +22,21 @@
  */
 
 import * as React from "react";
+import { tpMedicalIconRegistry } from "@/src/components/atoms/MedicalIcon/registry";
 
 const STYLES = ["bold", "broken", "bulk", "linear", "outline", "twotone"];
+// The medical set ships 3 styles; map the 6 library variants onto them so a
+// medical icon picked from the unified search still honours the chosen variant.
+const MED_STYLE = { linear: "line", outline: "line", broken: "line", bulk: "bulk", twotone: "bulk", bold: "solid" };
 
 export function TPLibraryIcon({ name, variant = "linear", size = 20, color, title, className, style }) {
   if (!name) return null;
-  const st = STYLES.includes(variant) ? variant : "linear";
-  const url = `/tp-icons/${st}/${encodeURIComponent(name)}.svg`;
+  // Unified namespace: medical icons resolve from /icons/medical/, everything
+  // else from the full /tp-icons/ library — one searchable, pickable set.
+  const med = tpMedicalIconRegistry[name];
+  const url = med
+    ? (med[MED_STYLE[variant] || "line"] || med.line)
+    : `/tp-icons/${STYLES.includes(variant) ? variant : "linear"}/${encodeURIComponent(name)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
 
   return (
