@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header } from './Header';
 import { Logo } from '@/src/components/atoms/Logo';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 // Header logo — the actual gradient wordmark, min height 32px (width auto).
 const HeaderLogo = () => <Logo variant="wordmark" tone="gradient" height={32} />;
@@ -9,6 +10,25 @@ const END_VISIT_MENU = [
   { id: 'save', label: 'Save & exit' },
   { id: 'discard', label: 'Discard visit' },
 ];
+
+// Clinic options for the clinic switcher (single-select; >5 → searchable).
+const clinicIcon = () => <TPLibraryIcon name="building" size={16} />;
+const CLINICS = [
+  { value: 'rajeshwar', label: 'Rajeshwar Eye Clinic', icon: clinicIcon() },
+  { value: 'apex', label: 'Apex Ortho Clinic', icon: clinicIcon() },
+  { value: 'sunrise', label: 'Sunrise Multispeciality', icon: clinicIcon() },
+  { value: 'citycare', label: 'City Care Hospital', icon: clinicIcon() },
+  { value: 'lotus', label: 'Lotus Dental & Skin', icon: clinicIcon() },
+  { value: 'green', label: 'Green Valley Clinic', icon: clinicIcon() },
+  { value: 'metro', label: 'Metro Heart Institute', icon: clinicIcon() },
+];
+
+// Stateful clinic switcher used in presets.
+function ClinicHeader({ children, ...props }) {
+  const [clinic, setClinic] = React.useState('rajeshwar');
+  const clinicAction = { type: 'select', icon: 'building', options: CLINICS, value: clinic, onChange: setClinic };
+  return <Header {...props} actions={props.actions.map((a) => (a === '__clinic__' ? clinicAction : a))} />;
+}
 
 const meta = {
   title: 'Molecules/Header',
@@ -24,18 +44,18 @@ export default meta;
 
 // ── Presets that reproduce the real app headers ──────────────────────────────
 
-/** Home / shell header — logo + tutorial · notifications · clinic · avatar. */
+/** Home / shell header — logo + tutorial · notifications · clinic select · avatar. */
 export const Shell = {
   render: () => (
-    <Header
+    <ClinicHeader
       logo={<HeaderLogo />}
       actions={[
         { type: 'tutorial' },
         { type: 'divider' },
         { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral', badge: { color: 'error' } },
         { type: 'divider' },
-        { type: 'cta', icon: 'building', label: 'Rajeshwar Eye Clinic', variant: 'tonal', theme: 'neutral', dropdown: true },
-        { type: 'avatar', name: 'DS', ring: true },
+        '__clinic__',
+        { type: 'avatar', name: 'Dr Sheela', ring: true },
       ]}
     />
   ),
@@ -118,6 +138,7 @@ export const Playground = {
     userMeta: { control: 'text', name: 'user · meta', table: { category: 'Left' } },
     userDropdown: { control: 'boolean', name: 'user · dropdown', table: { category: 'Left' } },
     tutorial: { control: 'boolean', name: 'tutorial (first)', table: { category: 'Right' } },
+    clinic: { control: 'boolean', name: 'clinic select', table: { category: 'Right' } },
     avatar: { control: 'boolean', name: 'avatar (last)', table: { category: 'Right' } },
     ...slotArgTypes(),
   },
@@ -130,6 +151,7 @@ export const Playground = {
     userMeta: 'Male | 76y',
     userDropdown: true,
     tutorial: true,
+    clinic: true,
     avatar: true,
     c1Variant: 'tonal', c1Label: '', c1Icon: 'bell-2', c1Dropdown: false, c1Divider: true,
     c2Variant: 'tonal', c2Label: 'Rajeshwar Eye Clinic', c2Icon: 'building', c2Dropdown: true, c2Divider: true,
@@ -138,36 +160,40 @@ export const Playground = {
     c5Variant: 'none', c5Label: '', c5Icon: '', c5Dropdown: false, c5Divider: false,
     c6Variant: 'none', c6Label: '', c6Icon: '', c6Dropdown: false, c6Divider: false,
   },
-  render: (a) => {
-    const actions = [];
-    if (a.tutorial) actions.push({ type: 'tutorial' });
-    for (const i of SLOTS) {
-      const variant = a[`c${i}Variant`];
-      if (!variant || variant === 'none') continue;
-      if (a[`c${i}Divider`]) actions.push({ type: 'divider' });
-      const label = (a[`c${i}Label`] || '').trim();
-      const ic = (a[`c${i}Icon`] || '').trim();
-      actions.push({
-        type: 'cta',
-        variant,
-        theme: variant === 'solid' ? 'primary' : 'neutral',
-        label: label || undefined,
-        icon: ic || undefined,
-        ariaLabel: label || `Action ${i}`,
-        dropdown: a[`c${i}Dropdown`],
-      });
-    }
-    if (a.avatar) actions.push({ type: 'avatar', name: 'DS', ring: true });
-
-    const left = {};
-    if (a.leading === 'logo') left.logo = <HeaderLogo />;
-    else if (a.leading === 'title') { left.title = a.title; if (a.subtitle && a.subtitle.trim()) left.subtitle = a.subtitle; }
-    else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
-
-    return (
-      <div style={{ background: 'var(--tp-slate-50, #f8fafc)', minHeight: 200 }}>
-        <Header back={a.showBack} {...left} actions={actions} />
-      </div>
-    );
-  },
+  render: (a) => <HeaderPlaygroundDemo {...a} />,
 };
+
+function HeaderPlaygroundDemo(a) {
+  const [clinic, setClinic] = React.useState('rajeshwar');
+  const actions = [];
+  if (a.tutorial) actions.push({ type: 'tutorial' });
+  for (const i of SLOTS) {
+    const variant = a[`c${i}Variant`];
+    if (!variant || variant === 'none') continue;
+    if (a[`c${i}Divider`]) actions.push({ type: 'divider' });
+    const label = (a[`c${i}Label`] || '').trim();
+    const ic = (a[`c${i}Icon`] || '').trim();
+    actions.push({
+      type: 'cta',
+      variant,
+      theme: variant === 'solid' ? 'primary' : 'neutral',
+      label: label || undefined,
+      icon: ic || undefined,
+      ariaLabel: label || `Action ${i}`,
+      dropdown: a[`c${i}Dropdown`],
+    });
+  }
+  if (a.clinic) actions.push({ type: 'select', icon: 'building', options: CLINICS, value: clinic, onChange: setClinic });
+  if (a.avatar) actions.push({ type: 'avatar', name: 'Dr Sheela', ring: true });
+
+  const left = {};
+  if (a.leading === 'logo') left.logo = <HeaderLogo />;
+  else if (a.leading === 'title') { left.title = a.title; if (a.subtitle && a.subtitle.trim()) left.subtitle = a.subtitle; }
+  else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
+
+  return (
+    <div style={{ background: 'var(--tp-slate-50, #f8fafc)', minHeight: 320 }}>
+      <Header back={a.showBack} {...left} actions={actions} />
+    </div>
+  );
+}

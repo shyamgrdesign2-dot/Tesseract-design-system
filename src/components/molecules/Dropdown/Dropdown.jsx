@@ -104,6 +104,7 @@ export function Dropdown({
   searchable = false,
   showShortcuts = false,
   footerHint = false,
+  leadingIcon,
   primaryAction,
   secondaryAction,
   tertiaryAction,
@@ -354,6 +355,7 @@ export function Dropdown({
         onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={onKeyDown}
       >
+        {leadingIcon && <span className={styles.triggerLead}>{leadingIcon}</span>}
         {triggerContent}
         <Chevron className={styles.chevron} data-open={open ? "true" : undefined} />
       </button>

@@ -18,11 +18,20 @@ import * as React from "react";
 
 const DEFAULT_RING = "linear-gradient(#ffde00, #fd5900)";
 
+// Initials: first letter of the first + last name; a single name → its first two
+// letters. e.g. "Ramesh Kumar" → "RK", "Ramesh" → "RA".
+function initialsOf(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 export function Avatar({ src, name, alt, size = 40, shape = "circle", ring = false, onClick, className, style }) {
   const [broken, setBroken] = React.useState(false);
   const radius = shape === "square" ? Math.round(size * 0.28) : "50%";
   const showImg = src && !broken;
-  const initial = (name || "?").trim().charAt(0).toUpperCase() || "?";
+  const initial = initialsOf(name);
 
   const ringBg = ring ? (typeof ring === "string" ? ring : DEFAULT_RING) : undefined;
   const Tag = onClick ? "button" : "span";

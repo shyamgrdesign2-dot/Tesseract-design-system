@@ -20,6 +20,9 @@
  *       dropdown:true → trailing chevron; menu → split button;
  *       badge:{color} → a notification dot on an icon CTA.
  *   { type: "avatar", src?, name?, ring?, onClick }
+ *   { type: "select", options, value, onClick→onChange, icon?, searchable?, width? }
+ *       — single-select dropdown that reads like a CTA (e.g. clinic switcher);
+ *         auto-searchable past 5 options. Composes the Dropdown molecule.
  *   { type: "tutorial", onClick }
  *   { type: "divider" }       — vertical gradient Divider atom
  *   { type: "node", node }    — custom
@@ -34,6 +37,7 @@ import { Button } from "@/src/components/atoms/Button";
 import { Badge } from "@/src/components/atoms/Badge";
 import { Avatar } from "@/src/components/atoms/Avatar";
 import { Divider } from "@/src/components/atoms/Divider";
+import { Dropdown } from "@/src/components/molecules/Dropdown";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { cn } from "@/src/hooks/utils";
 import styles from "./Header.module.scss";
@@ -116,6 +120,21 @@ function Action({ item }) {
       return <TutorialButton onClick={item.onClick} />;
     case "avatar":
       return <Avatar src={item.src} name={item.name} ring={item.ring} size={42} onClick={item.onClick || (() => {})} />;
+    case "select":
+      // A single-select dropdown that reads like a CTA (clinic switcher).
+      // Auto-searchable past 5 options.
+      return (
+        <Dropdown
+          mode="single"
+          options={item.options || []}
+          value={item.value}
+          onChange={item.onChange}
+          searchable={item.searchable ?? ((item.options || []).length > 5)}
+          leadingIcon={item.icon ? icon(item.icon, 18) : undefined}
+          width={item.width || "auto"}
+          placeholder={item.placeholder || "Select"}
+        />
+      );
     case "node":
       return item.node ?? null;
     case "cta":

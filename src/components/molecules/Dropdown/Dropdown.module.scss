@@ -46,6 +46,9 @@
   &:disabled { background: var(--tp-slate-50, #FAFAFB); color: var(--tp-slate-400, #A2A2A8); cursor: not-allowed; }
 }
 
+/* Optional leading icon inside the trigger (e.g. the clinic glyph). */
+.triggerLead { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--tp-slate-600, #717179); }
+
 .triggerText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .placeholder { color: var(--tp-slate-400, #A2A2A8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
