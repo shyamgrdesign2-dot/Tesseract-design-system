@@ -4,11 +4,12 @@ import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 // ── CTA model ────────────────────────────────────────────────────────────────
-// Up to three generic CTAs (CTA 1 / 2 / 3 — no fixed roles). The banner reuses
-// the same dark-surface <Button>; the Playground exposes that Button's knobs per
-// CTA — variant, shape (text · icon-only · split), icon (which glyph + on/off),
-// label — so you can place and configure each one however you want. The banner
-// is dark-only, so every CTA is surface="dark".
+// Up to THREE generic CTAs (CTA 1 / 2 / 3 — no fixed roles, no separate trailing
+// "end icon"). Each is the same dark-surface <Button>; the Playground exposes that
+// Button's knobs per CTA — variant, shape (text · icon-only · split), icon (which
+// glyph + on/off), label — so a CTA can be text, text-with-icon, or fully
+// icon-only, placed however you want. The banner is dark-only, so every CTA is
+// surface="dark".
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'ghost', 'tonal', 'link'];
 const CTA_SHAPES = ['text', 'icon', 'split'];
 
@@ -59,29 +60,6 @@ function buildCta(key, { variant, shape, label, withIcon, iconName, ctaSize, ico
   );
 }
 
-// Trailing icon-only Button. The "more" three-dots uses the bold variant
-// rotated 90° → a vertical kebab (⋮). Toggle it off via endIcon: 'none'.
-function EndIconButton({ name, size, iconSize }) {
-  const isMore = name === 'more';
-  return (
-    <Button
-      surface="dark"
-      variant="ghost"
-      theme="neutral"
-      size={size}
-      aria-label={isMore ? 'More options' : name}
-      icon={
-        <TPIcon
-          name={isMore ? 'more-horizontal' : name}
-          size={iconSize + 2}
-          style={isMore ? { transform: 'rotate(90deg)' } : undefined}
-        />
-      }
-    />
-  );
-}
-
-const END_ICONS = ['none', 'more', 'search', 'settings', 'filter', 'printer'];
 // Placement — which CTA sits first / second / third in the row.
 const CTA_ORDERS = ['1, 2, 3', '3, 2, 1', '2, 1, 3', '3, 1, 2'];
 
@@ -104,12 +82,11 @@ const meta = {
     bottomRadius: { control: { type: 'range', min: 0, max: 32, step: 1 }, name: 'bottom radius (L + R)', table: { category: 'Appearance' } },
     pattern:      { control: 'boolean', name: 'with pattern', table: { category: 'Appearance' } },
 
-    // ── Actions — up to 3 CTAs (each a dark-surface Button) + a trailing icon ──
+    // ── Actions — up to 3 CTAs, each a dark-surface Button (text / icon / split) ──
     // Shared
     ctaSize:  { control: 'inline-radio', options: ['sm', 'md'], name: 'CTA size', table: { category: 'Actions' } },
     iconSize: { control: { type: 'range', min: 12, max: 24, step: 1 }, name: 'icon size', table: { category: 'Actions' } },
     ctaOrder: { control: 'select', options: CTA_ORDERS, name: 'placement (order)', table: { category: 'Actions' } },
-    endIcon:  { control: 'select', options: END_ICONS, name: 'end icon', description: 'trailing icon-only Button', table: { category: 'Actions' } },
 
     // CTA 1
     cta1Variant:  { control: 'select', options: CTA_VARIANTS, name: 'CTA 1 · variant', table: { category: 'CTA 1' } },
@@ -150,7 +127,6 @@ const meta = {
     ctaSize: 'sm',
     iconSize: 16,
     ctaOrder: '1, 2, 3',
-    endIcon: 'more',
 
     cta1Variant: 'outline',
     cta1Shape: 'text',
@@ -164,11 +140,13 @@ const meta = {
     cta2IconName: 'plus',
     cta2Label: 'New appointment',
 
-    cta3Variant: 'none',
-    cta3Shape: 'text',
+    // Third CTA defaults to an icon-only Button (a "more" kebab) — replaces the
+    // old separate end-icon: it is just another configurable CTA.
+    cta3Variant: 'ghost',
+    cta3Shape: 'icon',
     cta3Icon: true,
-    cta3IconName: 'download',
-    cta3Label: 'Export',
+    cta3IconName: 'more',
+    cta3Label: 'More options',
   },
 };
 
@@ -184,10 +162,8 @@ function renderActions(a) {
   const order = (a.ctaOrder || '1, 2, 3').split(',').map((s) => s.trim());
 
   const ctas = order.map((n) => buildCta(`cta${n}`, slots[n])).filter(Boolean);
-  const end = a.endIcon && a.endIcon !== 'none' ? <EndIconButton name={a.endIcon} size={a.ctaSize} iconSize={a.iconSize} /> : null;
-
-  if (!ctas.length && !end) return undefined;
-  return <>{ctas}{end}</>;
+  if (!ctas.length) return undefined;
+  return <>{ctas}</>;
 }
 
 export const Playground = {
@@ -297,20 +273,19 @@ export const ActionsWithSplitButton = {
   ),
 };
 
-/** Three CTAs (tertiary + secondary + primary) plus a trailing more (•••) icon. */
-export const ThreeCtasWithEndIcon = {
-  name: 'CTAs · Three + end icon',
+/** Three CTAs — text + text + a fully icon-only CTA (the kebab is just a CTA). */
+export const ThreeCtas = {
+  name: 'CTAs · Three (incl. icon-only)',
   render: () => (
     <HeroBanner
       size="lg"
       title="Appointments"
-      subtitle="Tertiary · secondary · primary, then a trailing icon"
+      subtitle="Two text CTAs and a third icon-only CTA — max three"
       actions={
         <>
-          <Button surface="dark" variant="ghost" size="sm" leftIcon={<TPIcon name="download" size={16} />}>Export</Button>
           <Button surface="dark" variant="outline" size="sm" leftIcon={<TPIcon name="filter" size={16} />}>Filter</Button>
           <Button surface="dark" variant="solid" size="sm" leftIcon={<PlusIcon size={16} />}>New appointment</Button>
-          <EndIconButton name="more" size="sm" iconSize={16} />
+          <Button surface="dark" variant="ghost" theme="neutral" size="sm" aria-label="More options" icon={<TPIcon name="more-horizontal" size={18} />} />
         </>
       }
     />
