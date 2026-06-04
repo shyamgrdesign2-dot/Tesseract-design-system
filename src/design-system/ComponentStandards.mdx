@@ -72,11 +72,11 @@ import and compose it instead of re-implementing its markup — so styling,
 tokens, sizing, and a11y live in exactly one place.
 
 - Status pill → **Badge**  ·  removable/selectable pill → **Chip**
-- CTA / action button → **Button**  ·  checkbox → **Checkbox**  ·  text field → **TPInput**
+- CTA / action button → **Button**  ·  checkbox → **Checkbox**  ·  text field → **InputBox**
 - Icons → **TPIcon** / **TPLibraryIcon**
 
 In practice: `Filter` active selections render `Chip`; `DataTable` `type:"tag"`
-cells render `Badge`; `ConfirmDialog` and `TPBanner` actions render `Button`;
+cells render `Badge`; `ConfirmDialog` and `HeroBanner` actions render `Button`;
 `ConfirmDialog`'s "don't show again" uses `Checkbox`. A molecule re-styling its
 own pill/button is a smell — reach for the atom.
 
@@ -104,7 +104,7 @@ Before a component is "done":
 - Every option is a Storybook control; a Playground + focused stories exist.
 - Overflow truncates + tooltips; layout is responsive (scroll, not squish).
 - Keyboard + ARIA + focus-visible + reduced-motion handled.
-- Reuses atoms (Badge / Chip / Button / Checkbox / TPInput / TPIcon) — never
+- Reuses atoms (Badge / Chip / Button / Checkbox / InputBox / TPIcon) — never
       reimplements an atom inside a molecule.
 - No third-party UI libraries; built on shared primitives.
 
@@ -123,6 +123,6 @@ Before a component is "done":
     <tr><td><code>DateRangePicker</code></td><td>range selection, presets, controlled value</td></tr>
     <tr><td><code>Button</code></td><td>text / icon-only / split (<code>menu</code>); <code>variant</code> / <code>size</code> / <code>theme</code> / <code>surface</code>; loading + disabled</td></tr>
     <tr><td><code>Tooltip</code></td><td>wrapper + compound; side/align/offset; dark/light; arrow; <code>whenTruncated</code></td></tr>
-    <tr><td><code>TPBanner</code></td><td>size, bottom radius, title/subtitle sizes, back button, pattern, up to 3 config-driven CTAs + end icon</td></tr>
+    <tr><td><code>HeroBanner</code></td><td>size, bottom radius, title/subtitle sizes, back button, pattern, up to 3 config-driven CTAs + end icon</td></tr>
   </tbody>
 </table>

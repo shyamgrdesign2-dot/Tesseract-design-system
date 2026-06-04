@@ -1,1 +1,0 @@
-export { TPBanner } from "./TPBanner";

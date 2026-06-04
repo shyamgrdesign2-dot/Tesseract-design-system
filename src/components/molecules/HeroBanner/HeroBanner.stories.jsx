@@ -1,4 +1,4 @@
-import { TPBanner } from './TPBanner';
+import { HeroBanner } from './HeroBanner';
 import { Button } from '@/src/components/atoms/Button';
 import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
@@ -86,8 +86,8 @@ const END_ICONS = ['none', 'more', 'search', 'settings', 'filter', 'printer'];
 const CTA_ORDERS = ['1, 2, 3', '3, 2, 1', '2, 1, 3', '3, 1, 2'];
 
 const meta = {
-  title: 'Molecules/TPBanner',
-  component: TPBanner,
+  title: 'Molecules/HeroBanner',
+  component: HeroBanner,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   argTypes: {
@@ -192,7 +192,7 @@ function renderActions(a) {
 
 export const Playground = {
   render: (args) => (
-    <TPBanner
+    <HeroBanner
       size={args.size}
       bottomRadius={args.bottomRadius}
       title={args.title}
@@ -209,22 +209,22 @@ export const Playground = {
 export const Sizes = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <TPBanner size="sm" title="Small Banner (80px)" />
-      <TPBanner size="md" title="Medium Banner (120px)" />
-      <TPBanner size="lg" title="Large Banner (160px)" />
+      <HeroBanner size="sm" title="Small Banner (80px)" />
+      <HeroBanner size="md" title="Medium Banner (120px)" />
+      <HeroBanner size="lg" title="Large Banner (160px)" />
     </div>
   ),
 };
 
 export const WithSubtitle = {
   render: () => (
-    <TPBanner title="Appointments" subtitle="Manage your daily patient schedule" />
+    <HeroBanner title="Appointments" subtitle="Manage your daily patient schedule" />
   ),
 };
 
 export const WithBackButton = {
   render: () => (
-    <TPBanner showBackButton title="Patient Details" subtitle="UHID 2048871 · 42y · Male" />
+    <HeroBanner showBackButton title="Patient Details" subtitle="UHID 2048871 · 42y · Male" />
   ),
 };
 
@@ -236,7 +236,7 @@ export const WithBackButton = {
 export const ActionsWithButtons = {
   name: 'CTAs · Text',
   render: () => (
-    <TPBanner
+    <HeroBanner
       title="Appointments"
       subtitle="32 scheduled today · 4 awaiting confirmation"
       actions={
@@ -257,7 +257,7 @@ export const ActionsWithButtons = {
 export const ActionsWithIconButtons = {
   name: 'CTAs · Icon-only',
   render: () => (
-    <TPBanner
+    <HeroBanner
       title="Appointments"
       subtitle="Compact, icon-only quick actions"
       actions={
@@ -275,7 +275,7 @@ export const ActionsWithIconButtons = {
 export const ActionsWithSplitButton = {
   name: 'CTAs · Split',
   render: () => (
-    <TPBanner
+    <HeroBanner
       title="Appointments"
       subtitle="Primary action with a grouped dropdown"
       actions={
@@ -301,7 +301,7 @@ export const ActionsWithSplitButton = {
 export const ThreeCtasWithEndIcon = {
   name: 'CTAs · Three + end icon',
   render: () => (
-    <TPBanner
+    <HeroBanner
       size="lg"
       title="Appointments"
       subtitle="Tertiary · secondary · primary, then a trailing icon"
@@ -321,7 +321,7 @@ export const ThreeCtasWithEndIcon = {
 export const AllCtaTypes = {
   name: 'CTAs · All Shapes',
   render: () => (
-    <TPBanner
+    <HeroBanner
       size="lg"
       titleSize="md"
       title="Appointments"
@@ -354,8 +354,8 @@ export const TitleSizes = {
   name: 'Title Sizes (18 / 24)',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <TPBanner size="md" titleSize="sm" title="Small Title (18px)" subtitle="With a supporting subtext" showBackButton />
-      <TPBanner size="md" titleSize="md" title="Medium Title (24px)" subtitle="With a supporting subtext" showBackButton />
+      <HeroBanner size="md" titleSize="sm" title="Small Title (18px)" subtitle="With a supporting subtext" showBackButton />
+      <HeroBanner size="md" titleSize="md" title="Medium Title (24px)" subtitle="With a supporting subtext" showBackButton />
     </div>
   ),
 };
@@ -363,16 +363,16 @@ export const TitleSizes = {
 export const BottomRadius = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <TPBanner bottomRadius={0} title="No Bottom Radius (0)" />
-      <TPBanner title="Default — md size (18)" />
-      <TPBanner bottomRadius={32} title="Large Bottom Radius (32)" />
+      <HeroBanner bottomRadius={0} title="No Bottom Radius (0)" />
+      <HeroBanner title="Default — md size (18)" />
+      <HeroBanner bottomRadius={32} title="Large Bottom Radius (32)" />
     </div>
   ),
 };
 
 export const FullFeatured = {
   render: () => (
-    <TPBanner
+    <HeroBanner
       size="lg"
       title="Outpatient Appointments"
       subtitle="Cardiology · OPD Block B"

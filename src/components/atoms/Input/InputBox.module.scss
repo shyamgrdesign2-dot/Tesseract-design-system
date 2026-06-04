@@ -1,4 +1,4 @@
-// TPInput.module.scss
+// InputBox.module.scss
 // World-class, fully token-driven input. All interaction states owned by CSS.
 // Colors come from TP tokens (var(--tp-*)) with safe hex fallbacks.
 
@@ -89,6 +89,22 @@
     &:hover { border-color: var(--tp-slate-200, #E2E2EA); }
     &:focus-within { box-shadow: none; border-color: var(--tp-slate-200, #E2E2EA); }
   }
+
+  // Read-only — neutral surface, no hover/focus affordance (looks disabled,
+  // but the value stays selectable for copy).
+  [data-readonly] & {
+    background:   var(--tp-slate-50, #FAFAFB);
+    border-color: var(--tp-slate-200, #E2E2EA);
+    cursor:       default;
+    &:hover { border-color: var(--tp-slate-200, #E2E2EA); }
+    &:focus-within { box-shadow: none; border-color: var(--tp-slate-200, #E2E2EA); }
+  }
+}
+
+// Read-only input text is non-interactive (default cursor, muted).
+[data-readonly] .input {
+  cursor: default;
+  color: var(--tp-slate-600, #545460);
 }
 
 // ─── Core input ───────────────────────────────────────────────────────────────
@@ -126,6 +142,45 @@
   // Trim input padding on whichever side carries an adornment.
   &:has(.iconLeft) .input  { padding-left:  6px; }
   &:has(.trailing) .input  { padding-right: 4px; }
+}
+
+// ─── Tag-input variant (chips inside the field) ───────────────────────────────
+// `wrap` (default) grows the field height as tags wrap; `scroll` keeps one row
+// with horizontal scroll. Chips reuse the Chip atom.
+.tagChip { flex-shrink: 0; }
+
+.fieldRow[data-tags] {
+  height: auto;
+  min-height: var(--h, 42px);
+
+  .inputWrap {
+    gap: 4px;
+    padding: 5px var(--px, 12px);
+  }
+  .iconLeft { margin-left: 0; }
+  .input { padding: 0; min-width: 90px; }
+}
+
+.fieldRow[data-tags="wrap"] .inputWrap {
+  flex-wrap: wrap;
+  overflow: visible;
+
+  .input { flex: 1 1 90px; }
+}
+
+.fieldRow[data-tags="scroll"] {
+  height: var(--h, 42px);
+  min-height: 0;
+
+  .inputWrap {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+
+    .input { flex: 1 0 90px; }
+  }
 }
 
 // ─── Icons ────────────────────────────────────────────────────────────────────

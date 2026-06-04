@@ -1,2 +1,2 @@
-export { TPInput } from "./TPInput";
-export { TPInput as default } from "./TPInput";
+export { InputBox } from "./InputBox";
+export { InputBox as default } from "./InputBox";

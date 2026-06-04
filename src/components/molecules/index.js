@@ -32,4 +32,4 @@ export { Filter } from "./Filter";
 
 /* ── Composite / feature ── */
 export { DateRangePicker } from "./DateRangePicker";
-export { TPBanner } from "./TPBanner";
+export { HeroBanner } from "./HeroBanner";

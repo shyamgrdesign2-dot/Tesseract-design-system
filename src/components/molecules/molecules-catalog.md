@@ -44,7 +44,7 @@ molecule could ship in a generic UI library.
 
 | Molecule | Purpose |
 |---|---|
-| `TPBanner` | The page hero banner. Dark radial gradient + animated lattice (`AnimatedGrid`), optional back button, title/subtitle, chips, and a flexible `actions` slot that takes dark-surface `Button`s in any shape (text / icon-only / split). |
+| `HeroBanner` | The page hero banner. Dark radial gradient + animated lattice (`AnimatedGrid`), optional back button, title/subtitle, chips, and a flexible `actions` slot that takes dark-surface `Button`s in any shape (text / icon-only / split). |
 
 ## Patterns to know
 
@@ -75,7 +75,7 @@ The recording-confirm and back-confirm dialogs follow a fixed pattern:
 |---|---|
 | Modal "are you sure?" with destructive flow | `ConfirmDialog` |
 | Inline status message (dark toast) | `Toast` |
-| Page hero with CTAs | `TPBanner` |
+| Page hero with CTAs | `HeroBanner` |
 | Tabbed content | `Tabs` |
 | Collapsible disclosure | `Accordion` |
 | Any data / list table | `DataTable` |

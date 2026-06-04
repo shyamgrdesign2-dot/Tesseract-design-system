@@ -17,7 +17,7 @@ export { Skeleton } from "./Skeleton";
 export { LoadingIndicator } from "./LoadingIndicator";
 
 // Form
-export { TPInput } from "./Input";
+export { InputBox } from "./Input";
 export { Checkbox } from "./Checkbox";
 export { Switch } from "./Switch";
 

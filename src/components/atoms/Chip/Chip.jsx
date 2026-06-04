@@ -9,9 +9,11 @@
  *   color     "default" | "primary" | "success" | "warning" | "error"   default "default"
  *   variant   "filled" | "outlined"                                      default "filled"
  *   size      "sm" | "md" | "lg"                                         default "md"
- *   icon      ReactNode    leading icon
- *   onDelete  fn           shows a remove (×) button
- *   onClick   fn           makes the chip act as a button
+ *   icon          ReactNode    leading icon
+ *   rightIcon     ReactNode    trailing icon
+ *   onDelete      fn           shows a remove (×) button
+ *   removePosition "left" | "right"   side for the × button   default "right"
+ *   onClick       fn           makes the chip act as a button
  *   disabled  boolean
  */
 
@@ -57,6 +59,7 @@ export function TPChip({
   icon,
   rightIcon,
   onDelete,
+  removePosition = "right",
   onClick,
   disabled = false,
   className,
@@ -66,6 +69,35 @@ export function TPChip({
   const s = SIZES[size] ?? SIZES.md;
   const outlined = variant === "outlined" || variant === "outline";
   const interactive = !!onClick && !disabled;
+
+  const removeBtn = onDelete && (
+    <button
+      type="button"
+      aria-label="Remove"
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!disabled) onDelete(e);
+      }}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: s.icon,
+        height: s.icon,
+        marginRight: removePosition === "right" ? -2 : 0,
+        marginLeft: removePosition === "left" ? -2 : 0,
+        padding: 0,
+        border: "none",
+        background: "none",
+        color: "inherit",
+        opacity: 0.7,
+        cursor: "pointer",
+        flexShrink: 0,
+      }}
+    >
+      <X size={s.icon - 2} />
+    </button>
+  );
 
   return (
     <span
@@ -96,36 +128,11 @@ export function TPChip({
         ...styleProp,
       }}
     >
+      {removePosition === "left" && removeBtn}
       {icon && <span style={{ display: "inline-flex", flexShrink: 0 }}>{icon}</span>}
       <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
       {rightIcon && <span style={{ display: "inline-flex", flexShrink: 0 }}>{rightIcon}</span>}
-      {onDelete && (
-        <button
-          type="button"
-          aria-label="Remove"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!disabled) onDelete(e);
-          }}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: s.icon,
-            height: s.icon,
-            marginRight: -2,
-            padding: 0,
-            border: "none",
-            background: "none",
-            color: "inherit",
-            opacity: 0.7,
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
-        >
-          <X size={s.icon - 2} />
-        </button>
-      )}
+      {removePosition === "right" && removeBtn}
     </span>
   );
 }

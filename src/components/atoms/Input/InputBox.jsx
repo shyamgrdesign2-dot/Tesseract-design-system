@@ -2,12 +2,13 @@
 
 import { forwardRef, useId, useRef, useState } from "react";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
-import styles from "./TPInput.module.scss";
+import { Chip } from "@/src/components/atoms/Chip";
+import styles from "./InputBox.module.scss";
 
 const LOADER_PX = { sm: 16, md: 18, lg: 20 };
 
 /**
- * TPInput — comprehensive, scalable input atom.
+ * InputBox — comprehensive, scalable input atom.
  *
  * Interaction states (hover/focus/disabled) are owned by CSS. JS handles
  * controlled value, character filtering, clear, and derived aria attributes.
@@ -25,11 +26,17 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  *   unit        string — fixed suffix inside the right edge (e.g. "kg")
  *   counter     boolean — +/- stepper buttons (use with type="number")
  *   clearable   boolean — shows an × to clear the field when it has a value
- *   loading     boolean — shows a spinner on the trailing edge
+ *   loading     boolean — shows the LoadingIndicator on the trailing edge
  *   showCount   boolean — shows a character counter (pairs with maxLength)
+ *   tags        Array<{ id?, label, icon?, color?, variant? }> — render chips
+ *               inside the field (file/upload tokens, multi-select values).
+ *   onRemoveTag (id) => void — shows a × on each tag
+ *   tagsScroll  boolean — single-row horizontal scroll instead of wrapping
+ *               (default: tags wrap and the field grows in height)
  *   fullWidth   boolean
  *   disabled    boolean
- *   readOnly    boolean
+ *   readOnly    boolean — neutral, non-interactive surface (like disabled, but
+ *               the value stays focusable/selectable for copy)
  *   All native <input> props are forwarded (type, maxLength, pattern, …).
  */
 
@@ -49,7 +56,7 @@ function setNativeValue(el, value) {
   desc?.set?.call(el, value);
 }
 
-export const TPInput = forwardRef(function TPInput(
+export const InputBox = forwardRef(function InputBox(
   {
     size       = "md",
     status     = "default",
@@ -68,6 +75,9 @@ export const TPInput = forwardRef(function TPInput(
     fullWidth  = false,
     disabled   = false,
     readOnly   = false,
+    tags,
+    onRemoveTag,
+    tagsScroll = false,
     id: idProp,
     className  = "",
     onChange,
@@ -134,6 +144,7 @@ export const TPInput = forwardRef(function TPInput(
   const showStatus = status !== "default" && !loading;
   const hasTrailing = Boolean(unit || showClear || rightIcon || showStatus || loading);
   const showFooter = Boolean(helperText || (showCount));
+  const hasTags = Array.isArray(tags) && tags.length > 0;
 
   return (
     <div
@@ -141,6 +152,7 @@ export const TPInput = forwardRef(function TPInput(
       data-size={size}
       data-status={status !== "default" ? status : undefined}
       data-disabled={disabled || undefined}
+      data-readonly={readOnly || undefined}
     >
       {/* Label */}
       {label && (
@@ -151,7 +163,10 @@ export const TPInput = forwardRef(function TPInput(
       )}
 
       {/* Field row */}
-      <div className={styles.fieldRow}>
+      <div
+        className={styles.fieldRow}
+        data-tags={hasTags ? (tagsScroll ? "scroll" : "wrap") : undefined}
+      >
 
         {/* Left addon (country code, prefix dropdown, CTA, …) */}
         {leftAddon && <div className={styles.addonLeft}>{leftAddon}</div>}
@@ -170,9 +185,23 @@ export const TPInput = forwardRef(function TPInput(
           </button>
         )}
 
-        {/* Input wrapper (icons + native input + trailing cluster) */}
+        {/* Input wrapper (icons + tags + native input + trailing cluster) */}
         <div className={styles.inputWrap}>
           {leftIcon && <span className={styles.iconLeft} aria-hidden>{leftIcon}</span>}
+
+          {/* Tag chips (file/upload tokens, multi-select values, …) — reuse the Chip atom */}
+          {hasTags && tags.map((t) => (
+            <Chip
+              key={t.id ?? t.label}
+              size="sm"
+              color={t.color ?? "primary"}
+              variant={t.variant ?? "filled"}
+              icon={t.icon}
+              label={t.label}
+              onDelete={onRemoveTag && !disabled && !readOnly ? () => onRemoveTag(t.id ?? t.label) : undefined}
+              className={styles.tagChip}
+            />
+          ))}
 
           <input
             ref={setRefs}
@@ -261,8 +290,8 @@ export const TPInput = forwardRef(function TPInput(
   );
 });
 
-TPInput.displayName = "TPInput";
-export default TPInput;
+InputBox.displayName = "InputBox";
+export default InputBox;
 
 // ─── Inline micro-icons (zero extra deps) ──────────────────────────────────────
 function PlusIcon()  { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>; }

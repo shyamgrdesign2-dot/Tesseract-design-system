@@ -1,5 +1,5 @@
 /**
- * TPInput — comprehensive, configurable input. Every capability is a control:
+ * InputBox — comprehensive, configurable input. Every capability is a control:
  * size · status (default/success/error/warning) · allow filter (numeric/alpha/
  * alphanumeric) · icon side (left/right/both) · clearable · loading · unit ·
  * counter (+/-) · character count · left/right add-ons (dropdown · CTA · text).
@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { TPInput } from './TPInput';
+import { InputBox } from './InputBox';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const SIZES = ['sm', 'md', 'lg'];
@@ -55,15 +55,17 @@ const TextAddon = ({ children }) => (
   </span>
 );
 
-const CtaAddon = ({ label, variant = 'solid', iconName }) => (
+// CTA add-on — neutral on both sides (matches the prefix/dropdown add-ons), so
+// the field reads as one cohesive control rather than a coloured button bolted on.
+const CtaAddon = ({ label, iconName }) => (
   <button
     type="button"
     style={{
       height: '100%', padding: '0 16px', border: 'none', cursor: 'pointer',
       display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
       fontSize: 13, fontWeight: 600, fontFamily: 'Inter, sans-serif',
-      background: variant === 'solid' ? 'var(--tp-blue-500, #4B4AD5)' : 'var(--tp-slate-50, #FAFAFB)',
-      color: variant === 'solid' ? '#fff' : 'var(--tp-slate-700, #454551)',
+      background: 'var(--tp-slate-50, #FAFAFB)',
+      color: 'var(--tp-slate-700, #454551)',
     }}
   >
     {iconName && <TPLibraryIcon name={iconName} size={16} />}
@@ -88,8 +90,8 @@ const rightAddonNode = (kind) => {
 };
 
 export default {
-  title: 'Atoms/TPInput',
-  component: TPInput,
+  title: 'Atoms/InputBox',
+  component: InputBox,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
@@ -155,7 +157,7 @@ export const Playground = {
     const showRight = a.iconSide === 'right' || a.iconSide === 'both';
     return (
       <div style={{ maxWidth: 440 }}>
-        <TPInput
+        <InputBox
           size={a.size}
           status={a.status}
           allow={a.allow}
@@ -193,7 +195,7 @@ export const Sizes = {
   render: () => (
     <Stack>
       {SIZES.map((s) => (
-        <TPInput key={s} size={s} label={`Size ${s}`} placeholder={`${s} input`} leftIcon={<TPLibraryIcon name="search-normal" size={ICON_PX[s]} />} fullWidth />
+        <InputBox key={s} size={s} label={`Size ${s}`} placeholder={`${s} input`} leftIcon={<TPLibraryIcon name="search-normal" size={ICON_PX[s]} />} fullWidth />
       ))}
     </Stack>
   ),
@@ -203,12 +205,12 @@ export const Sizes = {
 export const Statuses = {
   render: () => (
     <Stack>
-      <TPInput label="Default" placeholder="Placeholder…" leftIcon={<TPLibraryIcon name="sms" size={18} />} helperText="Helper text" fullWidth />
-      <TPInput label="Success" status="success" defaultValue="john@example.com" helperText="Email verified" fullWidth />
-      <TPInput label="Warning" status="warning" defaultValue="admin@example" helperText="Double-check this address" fullWidth />
-      <TPInput label="Error" status="error" defaultValue="invalid@@email" helperText="Enter a valid email address" fullWidth />
-      <TPInput label="Loading" loading defaultValue="Checking availability…" leftIcon={<TPLibraryIcon name="user" size={18} />} fullWidth />
-      <TPInput label="Disabled" disabled defaultValue="Not editable" fullWidth />
+      <InputBox label="Default" placeholder="Placeholder…" leftIcon={<TPLibraryIcon name="sms" size={18} />} helperText="Helper text" fullWidth />
+      <InputBox label="Success" status="success" defaultValue="john@example.com" helperText="Email verified" fullWidth />
+      <InputBox label="Warning" status="warning" defaultValue="admin@example" helperText="Double-check this address" fullWidth />
+      <InputBox label="Error" status="error" defaultValue="invalid@@email" helperText="Enter a valid email address" fullWidth />
+      <InputBox label="Loading" loading defaultValue="Checking availability…" leftIcon={<TPLibraryIcon name="user" size={18} />} fullWidth />
+      <InputBox label="Disabled" disabled defaultValue="Not editable" fullWidth />
     </Stack>
   ),
 };
@@ -218,10 +220,10 @@ export const AllowedTypes = {
   name: 'Allowed Types (filtering)',
   render: () => (
     <Stack>
-      <TPInput label="Numbers only" allow="numeric" placeholder="98765 43210" helperText="Strips anything that isn’t a digit" leftIcon={<TPLibraryIcon name="call" size={18} />} fullWidth />
-      <TPInput label="Letters only" allow="alpha" placeholder="Ananya Sharma" helperText="Strips digits & symbols" leftIcon={<TPLibraryIcon name="user" size={18} />} fullWidth />
-      <TPInput label="Alphanumeric" allow="alphanumeric" placeholder="AB12CD34" helperText="Letters + numbers, no symbols" leftIcon={<TPLibraryIcon name="card" size={18} />} fullWidth />
-      <TPInput label="Anything (default)" allow="any" placeholder="Type anything…" fullWidth />
+      <InputBox label="Numbers only" allow="numeric" placeholder="98765 43210" helperText="Strips anything that isn’t a digit" leftIcon={<TPLibraryIcon name="call" size={18} />} fullWidth />
+      <InputBox label="Letters only" allow="alpha" placeholder="Ananya Sharma" helperText="Strips digits & symbols" leftIcon={<TPLibraryIcon name="user" size={18} />} fullWidth />
+      <InputBox label="Alphanumeric" allow="alphanumeric" placeholder="AB12CD34" helperText="Letters + numbers, no symbols" leftIcon={<TPLibraryIcon name="card" size={18} />} fullWidth />
+      <InputBox label="Anything (default)" allow="any" placeholder="Type anything…" fullWidth />
     </Stack>
   ),
 };
@@ -230,10 +232,10 @@ export const AllowedTypes = {
 export const Icons = {
   render: () => (
     <Stack>
-      <TPInput label="Left icon" placeholder="Search patients…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
-      <TPInput label="Right icon" placeholder="Pick a date" rightIcon={<TPLibraryIcon name="calendar-1" size={18} />} fullWidth />
-      <TPInput label="Both icons" type="password" defaultValue="secret123" leftIcon={<TPLibraryIcon name="lock" size={18} />} rightIcon={<TPLibraryIcon name="eye-slash" size={18} />} fullWidth />
-      <TPInput label="Clearable" clearable defaultValue="Clear me" leftIcon={<TPLibraryIcon name="edit-2" size={18} />} fullWidth />
+      <InputBox label="Left icon" placeholder="Search patients…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="Right icon" placeholder="Pick a date" rightIcon={<TPLibraryIcon name="calendar-1" size={18} />} fullWidth />
+      <InputBox label="Both icons" type="password" defaultValue="secret123" leftIcon={<TPLibraryIcon name="lock" size={18} />} rightIcon={<TPLibraryIcon name="eye-slash" size={18} />} fullWidth />
+      <InputBox label="Clearable" clearable defaultValue="Clear me" leftIcon={<TPLibraryIcon name="edit-2" size={18} />} fullWidth />
     </Stack>
   ),
 };
@@ -242,8 +244,8 @@ export const Icons = {
 export const CharacterCount = {
   render: () => (
     <Stack>
-      <TPInput label="Bio" placeholder="Tell us about yourself" maxLength={80} showCount defaultValue="Cardiologist, 12 years" fullWidth />
-      <TPInput label="Username" allow="alphanumeric" maxLength={20} showCount defaultValue="dr_ananya" fullWidth helperText="Letters & numbers only" />
+      <InputBox label="Bio" placeholder="Tell us about yourself" maxLength={80} showCount defaultValue="Cardiologist, 12 years" fullWidth />
+      <InputBox label="Username" allow="alphanumeric" maxLength={20} showCount defaultValue="dr_ananya" fullWidth helperText="Letters & numbers only" />
     </Stack>
   ),
 };
@@ -253,11 +255,11 @@ export const AffixesAndAddons = {
   name: 'Affixes & Add-ons',
   render: () => (
     <Stack>
-      <TPInput label="Unit suffix" type="number" defaultValue={72} unit="kg" fullWidth />
-      <TPInput label="Counter (stepper)" type="number" defaultValue={1} counter fullWidth />
-      <TPInput label="Left dropdown add-on" placeholder="98765 43210" allow="numeric" leftAddon={<CountryAddon />} fullWidth />
-      <TPInput label="Right dropdown add-on" type="number" defaultValue={72} rightAddon={<UnitDropdown />} fullWidth />
-      <TPInput label="Prefix add-on" placeholder="your-site" leftAddon={<TextAddon>https://</TextAddon>} rightAddon={<TextAddon>.com</TextAddon>} fullWidth />
+      <InputBox label="Unit suffix" type="number" defaultValue={72} unit="kg" fullWidth />
+      <InputBox label="Counter (stepper)" type="number" defaultValue={1} counter fullWidth />
+      <InputBox label="Left dropdown add-on" placeholder="98765 43210" allow="numeric" leftAddon={<CountryAddon />} fullWidth />
+      <InputBox label="Right dropdown add-on" type="number" defaultValue={72} rightAddon={<UnitDropdown />} fullWidth />
+      <InputBox label="Prefix add-on" placeholder="your-site" leftAddon={<TextAddon>https://</TextAddon>} rightAddon={<TextAddon>.com</TextAddon>} fullWidth />
     </Stack>
   ),
 };
@@ -267,10 +269,57 @@ export const AddonsAsCTAs = {
   name: 'Add-ons as CTAs',
   render: () => (
     <Stack w={440}>
-      <TPInput label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} rightAddon={<CtaAddon label="Search" iconName="search-normal" />} fullWidth />
-      <TPInput label="Newsletter" placeholder="you@example.com" leftIcon={<TPLibraryIcon name="sms" size={18} />} rightAddon={<CtaAddon label="Subscribe" />} fullWidth />
-      <TPInput label="Upload path" placeholder="No file selected" leftAddon={<CtaAddon label="Browse" variant="ghost" iconName="document-upload" />} fullWidth />
-      <TPInput label="Both-side CTAs" placeholder="0.00" leftAddon={<CtaAddon label="$" variant="ghost" />} rightAddon={<CtaAddon label="Convert" />} fullWidth />
+      <InputBox label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} rightAddon={<CtaAddon label="Search" iconName="search-normal" />} fullWidth />
+      <InputBox label="Newsletter" placeholder="you@example.com" leftIcon={<TPLibraryIcon name="sms" size={18} />} rightAddon={<CtaAddon label="Subscribe" />} fullWidth />
+      <InputBox label="Upload path" placeholder="No file selected" leftAddon={<CtaAddon label="Browse" iconName="document-upload" />} fullWidth />
+      <InputBox label="Both-side CTAs" placeholder="0.00" leftAddon={<CtaAddon label="$" />} rightAddon={<CtaAddon label="Convert" />} fullWidth />
     </Stack>
   ),
+};
+
+// ── Read-only (neutral, non-interactive) ──────────────────────────────────────
+export const ReadOnly = {
+  render: () => (
+    <Stack>
+      <InputBox label="Read-only" readOnly defaultValue="MRN-10231 · Aarav Sharma" leftIcon={<TPLibraryIcon name="user" size={18} />} helperText="Looks disabled; value stays selectable for copy" fullWidth />
+      <InputBox label="Disabled (for comparison)" disabled defaultValue="Not editable" fullWidth />
+    </Stack>
+  ),
+};
+
+// ── Tag input — chips inside the field (file uploads, multi-select tokens) ─────
+export const TagInput = {
+  name: 'Tag Input (chips)',
+  render: () => {
+    const fileIcon = (name) => <TPLibraryIcon name={name} size={12} />;
+    const [files, setFiles] = React.useState([
+      { id: 'a', label: 'lab-report.pdf', icon: fileIcon('document-text'), color: 'error' },
+      { id: 'b', label: 'scan-front.png', icon: fileIcon('gallery'), color: 'primary' },
+      { id: 'c', label: 'scan-back.png', icon: fileIcon('gallery'), color: 'primary' },
+    ]);
+    const remove = (id) => setFiles((f) => f.filter((x) => x.id !== id));
+    const many = Array.from({ length: 8 }, (_, i) => ({ id: i, label: `tag-${i + 1}`, color: 'default' }));
+    return (
+      <Stack w={460}>
+        <InputBox
+          label="Attachments (wraps — field grows)"
+          tags={files}
+          onRemoveTag={remove}
+          placeholder={files.length ? 'Add more…' : 'Attach files…'}
+          leftIcon={<TPLibraryIcon name="paperclip-2" size={18} />}
+          helperText={`${files.length} file${files.length === 1 ? '' : 's'} attached`}
+          fullWidth
+        />
+        <InputBox
+          label="Recipients (horizontal scroll)"
+          tags={many}
+          onRemoveTag={() => {}}
+          tagsScroll
+          placeholder="Add…"
+          fullWidth
+        />
+        <InputBox label="Read-only tags" tags={files} readOnly fullWidth helperText="No × when read-only" />
+      </Stack>
+    );
+  },
 };

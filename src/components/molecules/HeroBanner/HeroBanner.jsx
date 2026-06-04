@@ -18,7 +18,7 @@ const BACK_SIZE = { sm: 20, md: 24 };
 const BACK_ICON = { sm: 14, md: 18 };
 
 /**
- * TPBanner — The page hero banner. Dark radial-gradient surface with an
+ * HeroBanner — The page hero banner. Dark radial-gradient surface with an
  * animated geometric lattice accent (right side, partly off-canvas), an
  * optional back button, and a top-aligned title + subtitle. This is the
  * only banner.
@@ -35,7 +35,7 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   pattern       boolean                      default true — animated lattice accent
  *   className     string
  */
-export function TPBanner({
+export function HeroBanner({
   size = "md",
   bottomRadius,
   title,
