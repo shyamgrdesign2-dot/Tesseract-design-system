@@ -3,19 +3,23 @@
 /**
  * ClinicalTable — an EDITABLE table for RxPad modules (symptoms, vitals, …).
  *
- * Like DataTable, but every cell is editable inline: a free-text input or a
- * combobox dropdown (type a value or pick from `options`). Optional side columns
- * for drag-to-reorder and row delete, and an auto-appended empty row so there's
- * always a place to add the next entry. In-house, no external deps.
+ * Like DataTable, but every cell is its own input box: a free-text input, a
+ * dropdown (pick), a search combobox (type / filter / custom-add), or an action
+ * cell. Each cell shows a focus stroke (blue) and per-cell status strokes
+ * (success / error / warning). Columns are fully UI-configurable; the data shape
+ * stays backend-driven.
  *
  * Props:
- *   columns   [{ id, header, type?: "text" | "select", options?, placeholder?,
- *               width?, minWidth?, maxWidth?, align? }]   type default "text"
- *   rows / defaultRows  [{ id, [colId]: value }]          controlled / uncontrolled
+ *   columns   [{ id, header, type?: "text"|"select"|"search"|"action",
+ *               options?, placeholder?, width?, minWidth?, maxWidth?, align?,
+ *               allowCustom?: bool (search), sticky?: "right" (usually action),
+ *               render?: (row) => ReactNode (action), validate?: (value, row) =>
+ *               "success"|"error"|"warning"|undefined }]            type default "text"
+ *   rows / defaultRows  [{ id, [colId]: value }]                    controlled / uncontrolled
  *   onChange  (rows) => void
- *   reorderable  boolean  drag handle + reorder            default true
- *   deletable    boolean  trailing delete button           default true
- *   autoRow      boolean  keep one empty row to type into  default true
+ *   reorderable  boolean  drag handle + reorder                     default true
+ *   deletable    boolean  built-in trailing delete column          default true
+ *   autoRow      boolean  keep one empty row to type into          default true
  *   className
  */
 
@@ -28,7 +32,7 @@ import styles from "./ClinicalTable.module.scss";
 
 let _rowSeq = 0;
 const makeEmptyRow = () => ({ id: `ct-${++_rowSeq}` });
-const isBlankRow = (row, columns) => columns.every((c) => !String(row?.[c.id] ?? "").trim());
+const isBlankRow = (row, cols) => cols.every((c) => c.type === "action" || !String(row?.[c.id] ?? "").trim());
 
 function DragDots() {
   return (
@@ -41,12 +45,41 @@ function DragDots() {
   );
 }
 
-// Combobox cell: type freely or pick from `options` (portal popover, filtered).
-function CellSelect({ value, options = [], placeholder, onChange, align }) {
+// ── Free-text cell — bordered input box (focus/status stroke via the wrapper) ──
+function TextCell({ value, placeholder, align, status, onChange }) {
+  const [focused, setFocused] = React.useState(false);
+  return (
+    <div className={styles.cell} data-active={focused || undefined} data-status={!focused ? status : undefined}>
+      <input
+        className={styles.cellInput}
+        data-align={align}
+        value={value ?? ""}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
+    </div>
+  );
+}
+
+// ── Dropdown / search combobox cell ──
+// `search` allows free typing + custom-add; `select` is pick-from-list. Both:
+// show frequently-used options on focus, filter on type, keyboard nav, and a
+// chevron that flips up when open. Active (focused/open) shows the blue stroke.
+function ComboCell({ value, options = [], placeholder, align, status, allowCustom, onChange }) {
   const wrapRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
+  const [focused, setFocused] = React.useState(false);
+  const [activeIdx, setActiveIdx] = React.useState(-1);
   const [pos, setPos] = React.useState(null);
   const mounted = useIsClient();
+
+  const q = String(value ?? "").trim().toLowerCase();
+  const filtered = q ? options.filter((o) => String(o).toLowerCase().includes(q)) : options;
+  const exact = options.some((o) => String(o).toLowerCase() === q);
+  const showCustom = allowCustom && q && !exact;
+  const items = showCustom ? [{ custom: true, label: value }, ...filtered.map((o) => ({ label: o }))] : filtered.map((o) => ({ label: o }));
 
   const place = React.useCallback(() => {
     const el = wrapRef.current;
@@ -69,34 +102,46 @@ function CellSelect({ value, options = [], placeholder, onChange, align }) {
     };
   }, [open, place]);
 
-  const q = String(value ?? "").trim().toLowerCase();
-  const filtered = q ? options.filter((o) => String(o).toLowerCase().includes(q)) : options;
+  const choose = (item) => { onChange(item.custom ? item.label : item.label); setOpen(false); };
 
+  const onKeyDown = (e) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); if (!open) setOpen(true); setActiveIdx((i) => Math.min((i < 0 ? -1 : i) + 1, items.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActiveIdx((i) => Math.max(i - 1, 0)); }
+    else if (e.key === "Enter") { if (open && activeIdx >= 0 && items[activeIdx]) { e.preventDefault(); choose(items[activeIdx]); } }
+    else if (e.key === "Escape") { setOpen(false); }
+  };
+
+  const active = focused || open;
   return (
-    <div ref={wrapRef} className={styles.cellSelect}>
+    <div ref={wrapRef} className={cn(styles.cell, styles.cellCombo)} data-active={active || undefined} data-status={!active ? status : undefined}>
       <input
         className={styles.cellInput}
         data-align={align}
         value={value ?? ""}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setOpen(true)}
+        readOnly={!allowCustom}
+        onChange={(e) => { onChange(e.target.value); if (!open) setOpen(true); }}
+        onFocus={() => { setFocused(true); setOpen(true); setActiveIdx(-1); }}
+        onBlur={() => setFocused(false)}
+        onKeyDown={onKeyDown}
       />
-      <button type="button" className={styles.cellChevron} aria-label="Toggle options" tabIndex={-1} onClick={() => setOpen((o) => !o)}>
+      <button type="button" className={styles.cellChevron} data-open={open || undefined} aria-label="Toggle options" tabIndex={-1} onMouseDown={(e) => { e.preventDefault(); setOpen((o) => !o); }}>
         <TPLibraryIcon name="arrow-down-02" size={14} />
       </button>
-      {open && mounted && pos && filtered.length > 0 && createPortal(
+      {open && mounted && pos && items.length > 0 && createPortal(
         <div className={styles.menu} style={{ position: "fixed", top: pos.top, left: pos.left, minWidth: pos.width, zIndex: 3000 }} role="listbox">
-          {filtered.map((opt) => (
+          {items.map((item, idx) => (
             <button
-              key={opt}
+              key={item.custom ? `__custom__${item.label}` : item.label}
               type="button"
               role="option"
-              aria-selected={opt === value}
-              className={styles.menuItem}
-              onMouseDown={(e) => { e.preventDefault(); onChange(opt); setOpen(false); }}
+              aria-selected={!item.custom && item.label === value}
+              className={cn(styles.menuItem, item.custom && styles.menuItemCustom)}
+              data-active={idx === activeIdx || undefined}
+              onMouseEnter={() => setActiveIdx(idx)}
+              onMouseDown={(e) => { e.preventDefault(); choose(item); }}
             >
-              {opt}
+              {item.custom ? <>Add &ldquo;<strong>{item.label}</strong>&rdquo;</> : item.label}
             </button>
           ))}
         </div>,
@@ -121,7 +166,6 @@ export function ClinicalTable({
   const baseRows = controlled ? rowsProp : internal;
   const commit = (next) => { if (!controlled) setInternal(next); onChange?.(next); };
 
-  // Stable draft row kept at the tail when autoRow is on.
   const [draft, setDraft] = React.useState(makeEmptyRow);
   const showDraft = autoRow && (!baseRows.length || !isBlankRow(baseRows[baseRows.length - 1], columns));
   const rendered = showDraft ? [...baseRows, draft] : baseRows;
@@ -147,18 +191,48 @@ export function ClinicalTable({
     commit(next);
   };
 
+  // Horizontal-overflow detection → left fade/shadow on the sticky column.
+  const scrollerRef = React.useRef(null);
+  const [overflow, setOverflow] = React.useState(false);
+  React.useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return undefined;
+    const update = () => setOverflow(el.scrollWidth > el.clientWidth + 1);
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    window.addEventListener("resize", update);
+    return () => { el.removeEventListener("scroll", update); ro?.disconnect(); window.removeEventListener("resize", update); };
+  }, [columns.length]);
+
   const colStyle = (c) => ({ width: c.width, minWidth: c.minWidth, maxWidth: c.maxWidth });
 
+  // Sticky-right action column sits left of the built-in delete column; the
+  // leftmost sticky cell carries the overflow fade/shadow.
+  const firstStickyColId = columns.find((c) => c.sticky === "right")?.id ?? null;
+  const hasActionSticky = firstStickyColId != null;
+  const actionRight = deletable ? 40 : 0;
+  const stickyStyle = (c) => (c.sticky === "right" ? { ...colStyle(c), right: actionRight } : colStyle(c));
+
   return (
-    <div className={cn(styles.wrap, className)}>
+    <div ref={scrollerRef} className={cn(styles.wrap, className)} data-overflow={overflow || undefined}>
       <table className={styles.table}>
         <thead>
           <tr className={styles.headRow}>
             {reorderable && <th className={cn(styles.th, styles.sideCol)} aria-hidden />}
             {columns.map((c) => (
-              <th key={c.id} className={styles.th} style={colStyle(c)} data-align={c.align}>{c.header}</th>
+              <th
+                key={c.id}
+                className={cn(styles.th, c.sticky === "right" && styles.sticky)}
+                style={stickyStyle(c)}
+                data-align={c.align}
+                data-shadow={c.id === firstStickyColId ? "true" : undefined}
+              >
+                {c.type === "action" ? "" : c.header}
+              </th>
             ))}
-            {deletable && <th className={cn(styles.th, styles.sideCol)} aria-hidden />}
+            {deletable && <th className={cn(styles.th, styles.sideCol, styles.stickyEnd)} data-shadow={!hasActionSticky ? "true" : undefined} aria-hidden />}
           </tr>
         </thead>
         <tbody>
@@ -174,44 +248,44 @@ export function ClinicalTable({
                 {reorderable && (
                   <td className={cn(styles.td, styles.sideCol)}>
                     {!isDraft && (
-                      <button
-                        type="button"
-                        className={styles.dragHandle}
-                        draggable
-                        onDragStart={() => setDragIndex(i)}
-                        onDragEnd={() => setDragIndex(null)}
-                        aria-label="Drag to reorder row"
-                      >
+                      <button type="button" className={styles.dragHandle} draggable onDragStart={() => setDragIndex(i)} onDragEnd={() => setDragIndex(null)} aria-label="Drag to reorder row">
                         <DragDots />
                       </button>
                     )}
                   </td>
                 )}
 
-                {columns.map((c) => (
-                  <td key={c.id} className={styles.td} style={colStyle(c)}>
-                    {c.type === "select" ? (
-                      <CellSelect
-                        value={row[c.id]}
-                        options={c.options}
-                        placeholder={c.placeholder}
-                        align={c.align}
-                        onChange={(v) => updateCell(row.id, c.id, v)}
-                      />
-                    ) : (
-                      <input
-                        className={styles.cellInput}
-                        data-align={c.align}
-                        value={row[c.id] ?? ""}
-                        placeholder={c.placeholder}
-                        onChange={(e) => updateCell(row.id, c.id, e.target.value)}
-                      />
-                    )}
-                  </td>
-                ))}
+                {columns.map((c) => {
+                  const status = c.validate ? c.validate(row[c.id], row) : undefined;
+                  return (
+                    <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={stickyStyle(c)} data-shadow={c.id === firstStickyColId ? "true" : undefined}>
+                      {c.type === "action" ? (
+                        <div className={styles.actionCell}>{c.render ? c.render(row) : null}</div>
+                      ) : c.type === "select" || c.type === "search" ? (
+                        <ComboCell
+                          value={row[c.id]}
+                          options={c.options}
+                          placeholder={c.placeholder}
+                          align={c.align}
+                          status={status}
+                          allowCustom={c.type === "search" || c.allowCustom}
+                          onChange={(v) => updateCell(row.id, c.id, v)}
+                        />
+                      ) : (
+                        <TextCell
+                          value={row[c.id]}
+                          placeholder={c.placeholder}
+                          align={c.align}
+                          status={status}
+                          onChange={(v) => updateCell(row.id, c.id, v)}
+                        />
+                      )}
+                    </td>
+                  );
+                })}
 
                 {deletable && (
-                  <td className={cn(styles.td, styles.sideCol)}>
+                  <td className={cn(styles.td, styles.sideCol, styles.stickyEnd)} data-shadow={!hasActionSticky ? "true" : undefined}>
                     {!isDraft && (
                       <button type="button" className={styles.deleteBtn} aria-label="Delete row" onClick={() => deleteRow(row.id)}>
                         <TPLibraryIcon name="trash" size={18} />

@@ -29,12 +29,12 @@
   text-transform: uppercase;
   color: var(--tp-slate-500, #717179);
   border-right: 1px solid var(--tp-slate-100, #f1f1f5);
+  background: var(--tp-slate-50, #f8fafc);
   &[data-align="center"] { text-align: center; }
   &[data-align="right"]  { text-align: right; }
   &:last-child { border-right: none; }
 }
 
-/* Narrow side columns (drag handle / delete). */
 .sideCol { width: 40px; min-width: 40px; padding: 0; text-align: center; }
 
 /* ── Rows ── */
@@ -48,11 +48,36 @@
   padding: 0;
   vertical-align: middle;
   border-right: 1px solid var(--tp-slate-100, #f1f1f5);
+  background: var(--tp-slate-0, #fff);
   &:last-child { border-right: none; }
 }
 
-/* ── Editable cell input ── */
+/* ── Editable cell (own input box: focus + status stroke) ── */
+.cell {
+  position: relative;
+  height: 52px;
+}
+.cell::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 7px;
+  corner-shape: round;
+  box-shadow: 0 0 0 1.5px transparent;
+  pointer-events: none;
+  transition: box-shadow 120ms ease;
+  z-index: 1;
+}
+.cell[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tp-success-500, #10b981); }
+.cell[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tp-warning-500, #f59e0b); }
+.cell[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tp-error-500, #e11d48); }
+/* Active (focused / open) — blue stroke + faint fill, like the CTA selected state. */
+.cell[data-active] { background: color-mix(in srgb, var(--tp-blue-50, #eeeeff) 35%, transparent); }
+.cell[data-active]::after { box-shadow: 0 0 0 1.5px var(--tp-blue-500, #4b4ad5); }
+
 .cellInput {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 52px;
   border: none;
@@ -68,19 +93,19 @@
   white-space: nowrap;
 
   &::placeholder { color: var(--tp-slate-400, #a2a2a8); }
-  &:focus { background: color-mix(in srgb, var(--tp-blue-50, #eeeeff) 50%, transparent); }
+  &:read-only { cursor: pointer; }
   &[data-align="center"] { text-align: center; }
   &[data-align="right"]  { text-align: right; }
 }
 
-/* ── Select (combobox) cell ── */
-.cellSelect { position: relative; height: 52px; }
-.cellSelect .cellInput { padding-right: 28px; }
+/* Combobox cell — chevron flips up when open. */
+.cellCombo .cellInput { padding-right: 28px; }
 .cellChevron {
   position: absolute;
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -90,6 +115,38 @@
   background: transparent;
   color: var(--tp-slate-500, #717179);
   cursor: pointer;
+  > * { transition: transform 160ms ease; }
+  &[data-open] {
+    color: var(--tp-blue-500, #4b4ad5);
+    > * { transform: rotate(180deg); }
+  }
+}
+
+/* ── Action cell ── */
+.actionCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 52px;
+  padding: 0 8px;
+}
+
+/* ── Sticky columns (action / delete) + overflow shadow ── */
+.sticky { position: sticky; right: 0; z-index: 1; }
+.stickyEnd { position: sticky; right: 0; z-index: 2; }
+.headRow .sticky, .headRow .stickyEnd { z-index: 3; }
+/* Left fade/shadow on the leftmost sticky cell when the table overflows. */
+.wrap[data-overflow] [data-shadow="true"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 18px;
+  transform: translateX(-100%);
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(23, 23, 37, 0.12), transparent);
 }
 
 /* ── Side-column buttons ── */
@@ -145,6 +202,12 @@
   font-size: 13px;
   color: var(--tp-slate-700, #454551);
   cursor: pointer;
-  &:hover { background: var(--tp-slate-50, #f8fafc); }
+  &[data-active] { background: var(--tp-slate-50, #f8fafc); }
   &[aria-selected="true"] { color: var(--tp-blue-600, #3c3bb5); font-weight: 600; }
+}
+.menuItemCustom {
+  color: var(--tp-blue-600, #3c3bb5);
+  border-bottom: 1px solid var(--tp-slate-100, #f1f1f5);
+  margin-bottom: 2px;
+  strong { font-weight: 700; }
 }
