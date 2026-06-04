@@ -10,6 +10,7 @@ export { Button } from "./Button";
 // Display
 export { MedicalIcon } from "./MedicalIcon";
 export { Logo } from "./Logo";
+export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
 export { Divider } from "./Divider";
 export { Skeleton } from "./Skeleton";

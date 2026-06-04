@@ -2,33 +2,38 @@
 
 /**
  * Header — the single configurable top bar (home shell, RxPad, print, …).
- * In-house, composed from atoms (Button for CTAs, Badge for dots/tags).
+ * Composed from atoms: Button (every CTA), Avatar, Divider, Badge (dot), Logo.
  *
  * LEFT cluster (in order, all optional):
- *   back   boolean            — bordered 80px back button (onBack)
- *   logo   ReactNode          — brand mark
- *   user   { name, meta, avatar?, dropdown? }  — patient / user details block
- *   title  ReactNode          — plain leading text
- *   leading ReactNode         — fully custom left content (escape hatch)
+ *   back    boolean   — full-height 40px back button (onBack)
+ *   logo    ReactNode — brand mark (use the Logo atom)
+ *   user    { name, meta, avatar?, dropdown? } — patient / user details block
+ *   title   ReactNode — leading title (+ optional `subtitle` for title + subtext)
+ *   subtitle ReactNode
+ *   leading ReactNode — fully custom left content (escape hatch)
  *
- * RIGHT cluster — `actions`: an ordered list (up to ~8) of typed items, so any
- * header is just data. Each item is one of:
- *   { type: "icon",     icon, label, onClick, variant?, theme?, badge? }   icon-only Button
- *   { type: "dropdown", label, icon?, onClick, variant? }                  text + chevron Button
- *   { type: "cta",      label, icon?, variant?, theme?, onClick, menu? }   Button (split if menu)
- *   { type: "avatar",   src?, name?, ring? }                               profile avatar
- *   { type: "tutorial", onClick }                                          play-circle button
- *   { type: "divider" }                                                    vertical gradient rule
- *   { type: "node",     node }                                             custom
+ * RIGHT cluster — `actions`: an ordered list (max 8) of typed items. Only
+ * `tutorial` and `avatar` are special; everything else is a CTA (the Button
+ * atom), and dividers are placed explicitly wherever you want them:
+ *   { type: "cta", label?, icon?, variant?, theme?, onClick, menu?, dropdown?, badge?, ariaLabel? }
+ *       label + icon → text CTA; icon only (no label) → icon button;
+ *       dropdown:true → trailing chevron; menu → split button;
+ *       badge:{color} → a notification dot on an icon CTA.
+ *   { type: "avatar", src?, name?, ring?, onClick }
+ *   { type: "tutorial", onClick }
+ *   { type: "divider" }       — vertical gradient Divider atom
+ *   { type: "node", node }    — custom
  *     icon — TP library icon NAME (string) or a ReactNode.
  *
- * Props: back, onBack, logo, user, title, leading, actions, height (default 62),
- *        bordered (default true), className.
+ * Props: back, onBack, logo, user, title, subtitle, leading, actions,
+ *        height (default 62), bordered (default true), className.
  */
 
 import * as React from "react";
 import { Button } from "@/src/components/atoms/Button";
 import { Badge } from "@/src/components/atoms/Badge";
+import { Avatar } from "@/src/components/atoms/Avatar";
+import { Divider } from "@/src/components/atoms/Divider";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { cn } from "@/src/hooks/utils";
 import styles from "./Header.module.scss";
@@ -56,26 +61,13 @@ function TutorialButton({ onClick }) {
   );
 }
 
-function Avatar({ src, name, ring = true }) {
-  const inner = src
-    ? <img src={src} alt={name || "User"} className={styles.avatarImg} />
-    : <span className={styles.avatarFallback}>{(name || "?").trim().charAt(0).toUpperCase()}</span>;
-  return (
-    <button type="button" className={cn(styles.avatar, ring && styles.avatarRing)} aria-label={name || "Profile"}>
-      <span className={styles.avatarInner}>{inner}</span>
-    </button>
-  );
-}
-
 function UserBlock({ name, meta, avatar, dropdown }) {
   return (
     <button type="button" className={styles.user} aria-haspopup={dropdown ? "menu" : undefined}>
       {avatar !== false && (
-        <span className={styles.userAvatar}>
-          {typeof avatar === "string"
-            ? <img src={avatar} alt={name} className={styles.avatarImg} />
-            : avatar || <TPLibraryIcon name="profile" variant="bulk" size={22} color="var(--tp-slate-600, #717179)" />}
-        </span>
+        typeof avatar === "string"
+          ? <Avatar src={avatar} name={name} size={40} />
+          : avatar || <Avatar name={name} size={40} />
       )}
       <span className={styles.userText}>
         <span className={styles.userName}>
@@ -88,71 +80,55 @@ function UserBlock({ name, meta, avatar, dropdown }) {
   );
 }
 
+// One CTA → the Button atom. Covers text / icon-only / dropdown / split, with an
+// optional notification dot (Badge) for icon CTAs.
+function Cta({ item }) {
+  const glyph = item.icon ? icon(item.icon) : undefined;
+  const iconOnly = !!glyph && item.label == null;
+  const btn = (
+    <Button
+      variant={item.variant || "solid"}
+      theme={item.theme || "primary"}
+      size="md"
+      onClick={item.onClick}
+      menu={item.menu}
+      aria-label={iconOnly ? (item.ariaLabel || item.label) : undefined}
+      icon={iconOnly || item.menu ? glyph : undefined}
+      leftIcon={!iconOnly && !item.menu ? glyph : undefined}
+      rightIcon={item.dropdown ? <Chevron /> : item.rightIcon}
+      style={iconOnly ? { width: 42, height: 42 } : { height: 42 }}
+    >
+      {iconOnly ? undefined : <span className={styles.ctaLabel}>{item.label}</span>}
+    </Button>
+  );
+  if (item.badge) {
+    return (
+      <span className={styles.iconWrap}>
+        {btn}
+        <span className={styles.dot}><Badge variant="dot" color={item.badge.color || "error"} size="md" /></span>
+      </span>
+    );
+  }
+  return btn;
+}
+
 function Action({ item }) {
   switch (item.type) {
     case "divider":
-      return <span className={styles.divider} aria-hidden />;
+      return <Divider orientation="vertical" variant="gradient" color="#d0d5dd" style={{ height: 42, opacity: 0.8 }} />;
     case "tutorial":
       return <TutorialButton onClick={item.onClick} />;
     case "avatar":
-      return <Avatar src={item.src} name={item.name} ring={item.ring} />;
-    case "icon":
-      return (
-        <span className={styles.iconWrap}>
-          <Button
-            className={styles.iconBtn}
-            icon={icon(item.icon)}
-            aria-label={item.label}
-            variant={item.variant || "tonal"}
-            theme={item.theme || "neutral"}
-            size="md"
-            onClick={item.onClick}
-            style={{ width: 42, height: 42 }}
-          />
-          {item.badge && (
-            <span className={styles.dot}>
-              <Badge variant="dot" color={item.badge.color || "error"} size="md" />
-            </span>
-          )}
-        </span>
-      );
-    case "dropdown":
-      return (
-        <Button
-          variant={item.variant || "tonal"}
-          theme="neutral"
-          size="md"
-          leftIcon={item.icon ? icon(item.icon) : undefined}
-          rightIcon={<Chevron />}
-          onClick={item.onClick}
-          style={{ height: 42 }}
-          className={styles.dropBtn}
-        >
-          <span className={styles.dropLabel}>{item.label}</span>
-        </Button>
-      );
+      return <Avatar src={item.src} name={item.name} ring={item.ring} size={42} onClick={item.onClick || (() => {})} />;
     case "node":
       return item.node ?? null;
     case "cta":
     default:
-      return (
-        <Button
-          variant={item.variant || "solid"}
-          theme={item.theme || "primary"}
-          size="md"
-          leftIcon={item.icon && !item.menu ? icon(item.icon) : undefined}
-          icon={item.icon && item.menu ? icon(item.icon) : undefined}
-          menu={item.menu}
-          onClick={item.onClick}
-          style={{ height: 42 }}
-        >
-          {item.label}
-        </Button>
-      );
+      return <Cta item={item} />;
   }
 }
 
-export function Header({ back, onBack, logo, user, title, leading, actions = [], height = 62, bordered = true, className }) {
+export function Header({ back, onBack, logo, user, title, subtitle, leading, actions = [], height = 62, bordered = true, className }) {
   return (
     <header className={cn(styles.header, className)} data-bordered={bordered || undefined} style={{ height }}>
       <div className={styles.left}>
@@ -163,7 +139,12 @@ export function Header({ back, onBack, logo, user, title, leading, actions = [],
         )}
         {logo != null && <div className={styles.logo}>{logo}</div>}
         {user && <UserBlock {...user} />}
-        {title != null && <div className={styles.title}>{title}</div>}
+        {title != null && (
+          <div className={styles.titleBlock}>
+            <div className={styles.title}>{title}</div>
+            {subtitle != null && <div className={styles.subtitle}>{subtitle}</div>}
+          </div>
+        )}
         {leading}
       </div>
 

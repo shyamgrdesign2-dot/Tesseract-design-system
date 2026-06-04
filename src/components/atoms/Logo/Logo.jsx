@@ -4,8 +4,12 @@
  * Logo — the TatvaPractice brand mark. Renders the shared SVGs (served from
  * /public/brand) as CSS masks so the same asset can be recoloured per surface.
  *
+ * Two SEPARATE marks (never combined into one lockup):
+ *   variant "wordmark" — the full TatvaPractice logo (the actual logo)  default
+ *   variant "symbol"   — the monochrome symbol on its own
+ *
  * Props:
- *   variant  "lockup" (symbol + wordmark) | "symbol" | "wordmark"   default "lockup"
+ *   variant  "wordmark" | "symbol"                                  default "wordmark"
  *   tone     "gradient" (brand violet→purple) | "dark" (slate-900, for light
  *            surfaces) | "light" (white, for dark surfaces) | "violet" | "blue"
  *            default "gradient"
@@ -41,31 +45,14 @@ function mark(src, w, h, tone) {
   };
 }
 
-export function Logo({ variant = "lockup", tone = "gradient", height = 32, title = "TatvaPractice", className, style }) {
+export function Logo({ variant = "wordmark", tone = "gradient", height = 32, title = "TatvaPractice", className, style }) {
   const wrap = { display: "inline-flex", alignItems: "center", ...style };
-
-  if (variant === "symbol") {
-    return (
-      <span role="img" aria-label={title} className={className} style={wrap}>
-        <span aria-hidden style={mark(SYMBOL, Math.round(height * SYMBOL_AR), height, tone)} />
-      </span>
-    );
-  }
-  if (variant === "wordmark") {
-    return (
-      <span role="img" aria-label={title} className={className} style={wrap}>
-        <span aria-hidden style={mark(WORDMARK, Math.round(height * WORDMARK_AR), height, tone)} />
-      </span>
-    );
-  }
-
-  // Lockup — symbol at full height, wordmark scaled to read alongside it.
-  const symH = height;
-  const wmH = Math.round(height * 0.62);
+  const isSymbol = variant === "symbol";
+  const src = isSymbol ? SYMBOL : WORDMARK;
+  const w = Math.round(height * (isSymbol ? SYMBOL_AR : WORDMARK_AR));
   return (
-    <span role="img" aria-label={title} className={className} style={{ ...wrap, gap: Math.round(height * 0.26) }}>
-      <span aria-hidden style={mark(SYMBOL, Math.round(symH * SYMBOL_AR), symH, tone)} />
-      <span aria-hidden style={mark(WORDMARK, Math.round(wmH * WORDMARK_AR), wmH, tone)} />
+    <span role="img" aria-label={title} className={className} style={wrap}>
+      <span aria-hidden style={mark(src, w, height, tone)} />
     </span>
   );
 }

@@ -16,7 +16,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    docs: { description: { component: 'One configurable top bar. Left cluster: optional back button, logo, user/patient block, or title. Right cluster: an ordered `actions` list (up to ~8) of typed items — icon button, dropdown, CTA (solid/outline/tonal/split), avatar, tutorial, and gradient dividers you place anywhere. Everything composes the Button + Badge atoms. The three presets reproduce the real Shell, RxPad and Print headers; the Playground assembles one from controls.' } },
+    docs: { description: { component: 'One configurable top bar. Left: full-height back button, logo, user/patient block, or title (+ optional subtext). Right: an ordered `actions` list (max 8) where only `tutorial` and `avatar` are special — everything else is a CTA (the Button atom), and dividers (the Divider atom) are placed explicitly wherever you want them. Reuses Button / Avatar / Divider / Badge / Logo atoms.' } },
   },
 };
 
@@ -32,9 +32,9 @@ export const Shell = {
       actions={[
         { type: 'tutorial' },
         { type: 'divider' },
-        { type: 'icon', icon: 'bell-2', label: 'Notifications', badge: { color: 'error' } },
+        { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral', badge: { color: 'error' } },
         { type: 'divider' },
-        { type: 'dropdown', icon: 'building', label: 'Rajeshwar Eye Clinic' },
+        { type: 'cta', icon: 'building', label: 'Rajeshwar Eye Clinic', variant: 'tonal', theme: 'neutral', dropdown: true },
         { type: 'avatar', name: 'DS', ring: true },
       ]}
     />
@@ -50,12 +50,12 @@ export const RxPad = {
       actions={[
         { type: 'tutorial' },
         { type: 'divider' },
-        { type: 'icon', icon: 'task-square', label: 'Template' },
-        { type: 'icon', icon: 'setting-4', label: 'Customisation' },
+        { type: 'cta', icon: 'task-square', ariaLabel: 'Template', variant: 'tonal', theme: 'neutral' },
+        { type: 'cta', icon: 'setting-4', ariaLabel: 'Customisation', variant: 'tonal', theme: 'neutral' },
         { type: 'divider' },
         { type: 'cta', label: 'Preview', icon: 'eye-tp', variant: 'outline', theme: 'primary' },
         { type: 'cta', label: 'End Visit', icon: 'clipboard-export', variant: 'solid', theme: 'primary', menu: END_VISIT_MENU },
-        { type: 'icon', icon: 'more', label: 'More options', variant: 'ghost' },
+        { type: 'cta', icon: 'more', ariaLabel: 'More options', variant: 'ghost', theme: 'neutral' },
       ]}
     />
   ),
@@ -69,8 +69,22 @@ export const Print = {
       user={{ name: 'Ramesh Kumar', meta: 'Male | 76y' }}
       actions={[
         { type: 'cta', label: 'Print Settings', icon: 'setting-4', variant: 'tonal', theme: 'neutral' },
-        { type: 'dropdown', icon: 'global', label: 'English' },
+        { type: 'cta', label: 'English', icon: 'global', variant: 'tonal', theme: 'neutral', dropdown: true },
         { type: 'cta', label: 'Done', variant: 'solid', theme: 'primary' },
+      ]}
+    />
+  ),
+};
+
+/** Title + subtext leading (e.g. the home "Welcome" header). */
+export const TitleWithSubtext = {
+  render: () => (
+    <Header
+      title="Welcome Dr. Sheela BR!"
+      subtitle="Your Appointments"
+      actions={[
+        { type: 'cta', label: 'Add New Appointment', icon: 'add-square', variant: 'outline', theme: 'primary' },
+        { type: 'cta', label: 'Start Walk-in Consultation', variant: 'solid', theme: 'primary' },
       ]}
     />
   ),
@@ -78,73 +92,81 @@ export const Print = {
 
 // ── Configurable Playground ──────────────────────────────────────────────────
 
-const CTA_VARIANTS = ['solid', 'outline', 'tonal', 'ghost', 'link'];
-const CTA_THEMES = ['primary', 'neutral', 'error', 'success', 'warning'];
+const CTA_VARIANTS = ['none', 'solid', 'outline', 'tonal', 'ghost', 'link'];
+const SLOTS = [1, 2, 3, 4, 5, 6]; // up to 8 supported by the API; 6 wired here
+
+function slotArgTypes() {
+  const t = {};
+  for (const i of SLOTS) {
+    const category = `CTA ${i}`;
+    t[`c${i}Variant`] = { control: 'select', options: CTA_VARIANTS, name: `#${i} · variant (none = off)`, table: { category } };
+    t[`c${i}Label`] = { control: 'text', name: `#${i} · label (blank = icon only)`, table: { category } };
+    t[`c${i}Icon`] = { control: 'text', tpIcon: true, name: `#${i} · icon`, table: { category } };
+    t[`c${i}Dropdown`] = { control: 'boolean', name: `#${i} · dropdown chevron`, table: { category } };
+    t[`c${i}Divider`] = { control: 'boolean', name: `#${i} · divider before`, table: { category } };
+  }
+  return t;
+}
 
 export const Playground = {
   argTypes: {
-    // Left cluster
     showBack: { control: 'boolean', name: 'back button', table: { category: 'Left' } },
-    leading: { control: 'inline-radio', options: ['logo', 'user', 'title', 'none'], name: 'leading', table: { category: 'Left' } },
+    leading: { control: 'inline-radio', options: ['logo', 'title', 'user', 'none'], name: 'leading', table: { category: 'Left' } },
     title: { control: 'text', table: { category: 'Left' } },
+    subtitle: { control: 'text', name: 'subtext (blank = title only)', table: { category: 'Left' } },
     userName: { control: 'text', name: 'user · name', table: { category: 'Left' } },
     userMeta: { control: 'text', name: 'user · meta', table: { category: 'Left' } },
     userDropdown: { control: 'boolean', name: 'user · dropdown', table: { category: 'Left' } },
-    // Right cluster — toggles for common items + dividers
-    tutorial: { control: 'boolean', name: 'tutorial', table: { category: 'Right' } },
-    notify: { control: 'boolean', name: 'notification icon', table: { category: 'Right' } },
-    clinic: { control: 'text', name: 'clinic dropdown (blank = off)', table: { category: 'Right' } },
-    avatar: { control: 'boolean', name: 'avatar', table: { category: 'Right' } },
-    dividers: { control: 'boolean', name: 'auto dividers', table: { category: 'Right' } },
-    // One fully configurable CTA (the same controls every CTA supports)
-    ctaLabel: { control: 'text', name: 'CTA · label (blank = off)', table: { category: 'Right · CTA' } },
-    ctaVariant: { control: 'inline-radio', options: CTA_VARIANTS, name: 'CTA · variant', table: { category: 'Right · CTA' } },
-    ctaTheme: { control: 'select', options: CTA_THEMES, name: 'CTA · theme', table: { category: 'Right · CTA' } },
-    ctaIcon: { control: 'text', tpIcon: true, name: 'CTA · icon', table: { category: 'Right · CTA' } },
-    ctaSplit: { control: 'boolean', name: 'CTA · split (menu)', table: { category: 'Right · CTA' } },
+    tutorial: { control: 'boolean', name: 'tutorial (first)', table: { category: 'Right' } },
+    avatar: { control: 'boolean', name: 'avatar (last)', table: { category: 'Right' } },
+    ...slotArgTypes(),
   },
   args: {
     showBack: false,
     leading: 'logo',
-    title: 'Appointments',
+    title: 'Welcome Dr. Sheela BR!',
+    subtitle: 'Your Appointments',
     userName: 'Ramesh Kumar',
     userMeta: 'Male | 76y',
     userDropdown: true,
     tutorial: true,
-    notify: true,
-    clinic: 'Rajeshwar Eye Clinic',
     avatar: true,
-    dividers: true,
-    ctaLabel: '',
-    ctaVariant: 'solid',
-    ctaTheme: 'primary',
-    ctaIcon: '',
-    ctaSplit: false,
+    c1Variant: 'tonal', c1Label: '', c1Icon: 'bell-2', c1Dropdown: false, c1Divider: true,
+    c2Variant: 'tonal', c2Label: 'Rajeshwar Eye Clinic', c2Icon: 'building', c2Dropdown: true, c2Divider: true,
+    c3Variant: 'none', c3Label: '', c3Icon: '', c3Dropdown: false, c3Divider: false,
+    c4Variant: 'none', c4Label: '', c4Icon: '', c4Dropdown: false, c4Divider: false,
+    c5Variant: 'none', c5Label: '', c5Icon: '', c5Dropdown: false, c5Divider: false,
+    c6Variant: 'none', c6Label: '', c6Icon: '', c6Dropdown: false, c6Divider: false,
   },
   render: (a) => {
     const actions = [];
-    const div = () => a.dividers && actions.push({ type: 'divider' });
     if (a.tutorial) actions.push({ type: 'tutorial' });
-    if (a.notify) { div(); actions.push({ type: 'icon', icon: 'bell-2', label: 'Notifications', badge: { color: 'error' } }); }
-    if (a.ctaLabel && a.ctaLabel.trim()) {
-      div();
+    for (const i of SLOTS) {
+      const variant = a[`c${i}Variant`];
+      if (!variant || variant === 'none') continue;
+      if (a[`c${i}Divider`]) actions.push({ type: 'divider' });
+      const label = (a[`c${i}Label`] || '').trim();
+      const ic = (a[`c${i}Icon`] || '').trim();
       actions.push({
-        type: 'cta', label: a.ctaLabel.trim(), variant: a.ctaVariant, theme: a.ctaTheme,
-        icon: a.ctaIcon && a.ctaIcon.trim() ? a.ctaIcon.trim() : undefined,
-        menu: a.ctaSplit ? END_VISIT_MENU : undefined,
+        type: 'cta',
+        variant,
+        theme: variant === 'solid' ? 'primary' : 'neutral',
+        label: label || undefined,
+        icon: ic || undefined,
+        ariaLabel: label || `Action ${i}`,
+        dropdown: a[`c${i}Dropdown`],
       });
     }
-    if (a.clinic && a.clinic.trim()) { div(); actions.push({ type: 'dropdown', icon: 'building', label: a.clinic.trim() }); }
     if (a.avatar) actions.push({ type: 'avatar', name: 'DS', ring: true });
 
-    const leftProps = {};
-    if (a.leading === 'logo') leftProps.logo = <HeaderLogo />;
-    else if (a.leading === 'user') leftProps.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
-    else if (a.leading === 'title') leftProps.title = a.title;
+    const left = {};
+    if (a.leading === 'logo') left.logo = <HeaderLogo />;
+    else if (a.leading === 'title') { left.title = a.title; if (a.subtitle && a.subtitle.trim()) left.subtitle = a.subtitle; }
+    else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
 
     return (
       <div style={{ background: 'var(--tp-slate-50, #f8fafc)', minHeight: 200 }}>
-        <Header back={a.showBack} {...leftProps} actions={actions} />
+        <Header back={a.showBack} {...left} actions={actions} />
       </div>
     );
   },
