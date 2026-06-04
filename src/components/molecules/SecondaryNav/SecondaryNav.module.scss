@@ -68,8 +68,11 @@
   background: rgba(255, 255, 255, 0.12);
   transition: background-color 180ms ease, transform 160ms ease;
 }
-.item:hover .pill { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
+/* Hover only restyles the INACTIVE pill; the active pill stays solid white
+   (a subtle lift only) so the blue icon never dims. */
+.item:not([data-active]):hover .pill { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
 .pill[data-active] { background: #ffffff; }
+.item[data-active]:hover .pill { background: #ffffff; transform: scale(1.02); }
 
 /* Red signal dot on the pill (Badge atom), top-right. */
 .signal { position: absolute; top: -3px; right: -3px; line-height: 0; pointer-events: none; }

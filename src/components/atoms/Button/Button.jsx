@@ -32,6 +32,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Button.module.scss";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { useIsClient } from "@/src/hooks/use-is-client";
 
@@ -193,10 +194,10 @@ export const Button = forwardRef(function Button(
           data-split-part="trigger"
           {...splitDataAttrs}
         >
-          {/* Chevron from the icon library (same set as every other icon). */}
-          <TPIcon
-            name="chevron-down"
-            variant="linear"
+          {/* Accordion-style chevron (the same library glyph the Accordion +
+              dropdowns use) — a clean caret, not an arrow with a shaft. */}
+          <TPLibraryIcon
+            name="arrow-down-02"
             size={ICON_SIZE[size]}
             style={{
               transition: "transform 200ms ease",

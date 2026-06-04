@@ -5,6 +5,7 @@
   display: inline-block;
   vertical-align: middle;
   border-radius: 50%;
+  corner-shape: round; /* true circle, not the global squircle */
   flex-shrink: 0;
 
   &[data-size="xs"] { width: 5px;  height: 5px;  }

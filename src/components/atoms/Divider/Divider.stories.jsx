@@ -26,13 +26,23 @@ const Label = ({ children }) => (
 
 // ─── Playground ───────────────────────────────────────────────────────────────
 export const Playground = {
-  render: (args) => (
-    <div style={{ width: 360, display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Text>Above</Text>
-      <Divider {...args} />
-      <Text>Below</Text>
-    </div>
-  ),
+  render: (args) =>
+    args.orientation === 'vertical' ? (
+      // Vertical needs a row container with a height to stretch into.
+      <div style={{ display: 'flex', alignItems: 'center', height: 64, gap: 16 }}>
+        <Text>Left</Text>
+        <Divider {...args} />
+        <Text>Middle</Text>
+        <Divider {...args} />
+        <Text>Right</Text>
+      </div>
+    ) : (
+      <div style={{ width: 360, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Text>Above</Text>
+        <Divider {...args} />
+        <Text>Below</Text>
+      </div>
+    ),
 };
 
 // ─── Solid ────────────────────────────────────────────────────────────────────
