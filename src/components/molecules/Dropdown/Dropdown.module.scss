@@ -104,6 +104,8 @@
 
 // ─── List (scrollable, with a visible scroll indicator) ───────────────────────
 .list {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 6px;
@@ -144,19 +146,11 @@
   &[data-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
 }
 
-// Checkbox indicator (visual only — the row owns the click).
-.checkbox {
+// Wraps the composed Checkbox atom; decorative (the row handles the click).
+.control {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--tp-slate-300, #D0D5DD);
-  border-radius: 5px;
-  corner-shape: round;
-  color: #fff;
-  &[data-on="true"] { background: var(--tp-blue-500, #4B4AD5); border-color: var(--tp-blue-500, #4B4AD5); }
+  pointer-events: none;
 }
 
 // Radio indicator (visual only).
@@ -200,3 +194,50 @@
 }
 
 .check { display: inline-flex; color: var(--tp-blue-600, #3C3BB5); }
+
+// ─── Footer (shortcut hint bar + CTAs) ────────────────────────────────────────
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--tp-slate-100, #F1F1F5);
+}
+
+.hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--tp-slate-400, #A2A2A8);
+
+  span { display: inline-flex; align-items: center; gap: 4px; }
+}
+
+.fkbd {
+  font-family: var(--font-sans, "Inter", sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 16px;
+  text-align: center;
+  padding: 3px 5px;
+  border-radius: 5px;
+  corner-shape: round;
+  background: var(--tp-slate-100, #F1F1F5);
+  color: var(--tp-slate-500, #717179);
+  border: 1px solid var(--tp-slate-200, #E2E2EA);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+
+  &[data-align="full"] {
+    > * { flex: 1; }
+  }
+}

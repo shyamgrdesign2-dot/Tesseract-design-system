@@ -23,7 +23,10 @@
  *   optionControl "none" | "checkbox" | "radio"      row indicator; default "none"
  *   chips     boolean — multi: render selected as removable chips in the trigger
  *   searchable boolean
- *   showShortcuts boolean
+ *   showShortcuts boolean — per-item shortcut hints (option.shortcut)
+ *   footerHint boolean — common "↑↓ navigate · ↵ select · esc close" bar
+ *   primaryAction / secondaryAction  { label, onClick } — footer CTAs (Button atom)
+ *   actionsAlign "right" | "full"                     default "right"
  *   width     "trigger" | "auto" | number            default "trigger"
  *   placeholder, label, disabled, className
  */
@@ -31,6 +34,8 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Chip } from "@/src/components/atoms/Chip";
+import { Checkbox } from "@/src/components/atoms/Checkbox";
+import { Button } from "@/src/components/atoms/Button";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import styles from "./Dropdown.module.scss";
 
@@ -65,6 +70,10 @@ export function Dropdown({
   chips = false,
   searchable = false,
   showShortcuts = false,
+  footerHint = false,
+  primaryAction,
+  secondaryAction,
+  actionsAlign = "right",
   width = "trigger",
   placeholder = "Select…",
   label,
@@ -249,8 +258,10 @@ export function Dropdown({
               onClick={() => commit(opt)}
             >
               {optionControl === "checkbox" && (
-                <span className={styles.checkbox} data-on={sel ? "true" : undefined} aria-hidden>
-                  {sel && <CheckIcon size={11} />}
+                // Reuse the Checkbox atom (shows a real tick). It's decorative
+                // here — the row owns the click — so pointer-events are off.
+                <span className={styles.control} aria-hidden>
+                  <Checkbox size="sm" checked={sel} tabIndex={-1} disabled={opt.disabled} />
                 </span>
               )}
               {optionControl === "radio" && (
@@ -272,6 +283,32 @@ export function Dropdown({
           );
         })}
       </div>
+
+      {(footerHint || primaryAction || secondaryAction) && (
+        <div className={styles.footer}>
+          {footerHint && (
+            <div className={styles.hint}>
+              <span><kbd className={styles.fkbd}>↑</kbd><kbd className={styles.fkbd}>↓</kbd> navigate</span>
+              <span><kbd className={styles.fkbd}>↵</kbd> select</span>
+              <span><kbd className={styles.fkbd}>esc</kbd> close</span>
+            </div>
+          )}
+          {(primaryAction || secondaryAction) && (
+            <div className={styles.actions} data-align={actionsAlign}>
+              {secondaryAction && (
+                <Button variant="outline" theme="neutral" size="sm" onClick={secondaryAction.onClick}>
+                  {secondaryAction.label}
+                </Button>
+              )}
+              {primaryAction && (
+                <Button variant="solid" theme="primary" size="sm" onClick={primaryAction.onClick}>
+                  {primaryAction.label}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 

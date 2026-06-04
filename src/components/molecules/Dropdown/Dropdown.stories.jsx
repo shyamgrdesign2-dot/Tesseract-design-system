@@ -34,7 +34,10 @@ const meta = {
     optionControl: { control: 'inline-radio', options: ['none', 'checkbox', 'radio'], name: 'row control', table: { category: 'Selection' } },
     chips: { control: 'boolean', description: 'Multi: show selected as removable chips in the trigger', table: { category: 'Selection' } },
     searchable: { control: 'boolean', table: { category: 'Behaviour' } },
-    showShortcuts: { control: 'boolean', name: 'show shortcuts', table: { category: 'Behaviour' } },
+    showShortcuts: { control: 'boolean', name: 'item shortcuts', table: { category: 'Behaviour' } },
+    footerHint: { control: 'boolean', name: 'footer shortcut bar', table: { category: 'Behaviour' } },
+    withActions: { control: 'boolean', name: 'footer CTAs', table: { category: 'Footer' } },
+    actionsAlign: { control: 'inline-radio', options: ['right', 'full'], name: 'CTA align', table: { category: 'Footer' } },
     width: { control: 'inline-radio', options: ['trigger', 'auto', 320], table: { category: 'Layout' } },
     twoLine: { control: 'boolean', name: 'title + subtitle', table: { category: 'Content' } },
     withIcons: { control: 'boolean', name: 'item icons', table: { category: 'Content' } },
@@ -50,6 +53,9 @@ const meta = {
     chips: false,
     searchable: false,
     showShortcuts: false,
+    footerHint: false,
+    withActions: false,
+    actionsAlign: 'right',
     width: 'trigger',
     twoLine: true,
     withIcons: true,
@@ -65,7 +71,7 @@ const Frame = ({ w = 300, children }) => <div style={{ width: w }}>{children}</d
 
 // ── Playground — every capability wired to Controls ───────────────────────────
 export const Playground = {
-  render: ({ mode, twoLine, withIcons, ...args }) => {
+  render: ({ mode, twoLine, withIcons, withActions, ...args }) => {
     const [val, setVal] = React.useState(mode === 'multi' ? [] : '');
     const value = mode === 'multi' ? (Array.isArray(val) ? val : []) : (Array.isArray(val) ? '' : val);
     const options = DEPTS.map((o) => ({
@@ -75,7 +81,15 @@ export const Playground = {
     }));
     return (
       <Frame>
-        <Dropdown {...args} mode={mode} options={options} value={value} onChange={setVal} />
+        <Dropdown
+          {...args}
+          mode={mode}
+          options={options}
+          value={value}
+          onChange={setVal}
+          primaryAction={withActions ? { label: 'Apply', onClick: () => {} } : undefined}
+          secondaryAction={withActions ? { label: 'Clear', onClick: () => setVal(mode === 'multi' ? [] : '') } : undefined}
+        />
       </Frame>
     );
   },
@@ -153,6 +167,28 @@ export const ItemIcons = {
       { value: 'flagged', label: 'Flagged', icon: ic('user'), iconRight: ic('flag') },
     ];
     return <Frame><Dropdown label="Record state" options={opts} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+export const FooterShortcutsAndActions = {
+  name: 'Footer: shortcut bar + CTAs',
+  render: () => {
+    const [v, setV] = React.useState(['cardio']);
+    return (
+      <Frame w={320}>
+        <Dropdown
+          label="Assign departments"
+          mode="multi"
+          optionControl="checkbox"
+          options={DEPTS}
+          value={v}
+          onChange={setV}
+          footerHint
+          primaryAction={{ label: 'Apply', onClick: () => {} }}
+          secondaryAction={{ label: 'Clear', onClick: () => setV([]) }}
+        />
+      </Frame>
+    );
   },
 };
 
