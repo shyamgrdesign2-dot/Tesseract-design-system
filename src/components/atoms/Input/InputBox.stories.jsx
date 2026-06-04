@@ -368,3 +368,30 @@ export const InFieldCTA = {
     </Stack>
   ),
 };
+
+/** Auto-grow textarea (grows with text up to maxHeight, then scrolls) + width clamps. */
+export const AutoGrowAndWidth = {
+  name: 'Auto-grow & width',
+  render: () => (
+    <Stack w={460}>
+      <InputBox
+        label="Single line (default)"
+        defaultValue="One line; long content scrolls within the field."
+        fullWidth
+      />
+      <InputBox
+        label="Auto-grow up to 140px, then scroll"
+        autoGrow
+        maxHeight={140}
+        defaultValue={'Notes grow with the text.\nAdd more lines and the field expands\nup to the max height, then it scrolls.'}
+        fullWidth
+      />
+      <InputBox
+        label="Width clamp (min 160 / max 320)"
+        defaultValue="Adapts between 160px and 320px"
+        minWidth={160}
+        maxWidth={320}
+      />
+    </Stack>
+  ),
+};

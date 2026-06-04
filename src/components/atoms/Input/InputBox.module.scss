@@ -131,6 +131,19 @@
   &[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 }
 
+// ─── Auto-grow (textarea) variant ─────────────────────────────────────────────
+// The field grows with the text (JS sets the height up to maxHeight, then scrolls).
+.textarea {
+  height: auto;
+  resize: none;
+  overflow-y: hidden;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  line-height: 1.45;
+}
+.wrap[data-autogrow] .fieldRow { height: auto; min-height: var(--h, 42px); align-items: stretch; }
+.wrap[data-autogrow] .inputWrap { align-items: stretch; }
+
 // ─── Input wrap (icons + input + trailing cluster) ────────────────────────────
 .inputWrap {
   display:     flex;

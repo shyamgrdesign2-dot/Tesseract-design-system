@@ -35,6 +35,11 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  *               (default: tags wrap and the field grows in height)
  *   action      ReactNode — an in-field CTA at the right end (compose a Button
  *               atom: icon-only / small text / link). Not a bordered add-on.
+ *   minWidth / maxWidth  number|string — clamp the field width (adapts to the
+ *               screen between the two); long single-line content scrolls/ellipses.
+ *   autoGrow    boolean — render a textarea that grows with the text…
+ *   maxHeight   number|string — …up to this height, then scrolls. Without
+ *               autoGrow the field is a single line.
  *   fullWidth   boolean
  *   disabled    boolean
  *   readOnly    boolean — neutral, non-interactive surface (like disabled, but
@@ -81,6 +86,11 @@ export const InputBox = forwardRef(function InputBox(
     onRemoveTag,
     tagsScroll = false,
     action,
+    minWidth,
+    maxWidth,
+    autoGrow   = false,
+    maxHeight,
+    type,
     id: idProp,
     className  = "",
     onChange,
@@ -95,8 +105,20 @@ export const InputBox = forwardRef(function InputBox(
   const id = idProp ?? autoId;
 
   const innerRef = useRef(null);
+
+  // Auto-grow the textarea with its content, up to maxHeight (then scroll).
+  const maxH = maxHeight == null ? null : (typeof maxHeight === "number" ? maxHeight : parseInt(maxHeight, 10));
+  const autoResize = (el) => {
+    if (!el || !autoGrow) return;
+    el.style.height = "auto";
+    let h = el.scrollHeight;
+    if (maxH != null) { el.style.overflowY = h > maxH ? "auto" : "hidden"; h = Math.min(h, maxH); }
+    el.style.height = `${h}px`;
+  };
+
   const setRefs = (node) => {
     innerRef.current = node;
+    autoResize(node);
     if (typeof ref === "function") ref(node);
     else if (ref) ref.current = node;
   };
@@ -124,6 +146,7 @@ export const InputBox = forwardRef(function InputBox(
     }
     setHasContent(Boolean(e.target.value));
     setCount(e.target.value.length);
+    autoResize(e.target);
     onChange?.(e);
   }
 
@@ -156,6 +179,8 @@ export const InputBox = forwardRef(function InputBox(
       data-status={status !== "default" ? status : undefined}
       data-disabled={disabled || undefined}
       data-readonly={readOnly || undefined}
+      data-autogrow={autoGrow || undefined}
+      style={minWidth != null || maxWidth != null ? { minWidth, maxWidth } : undefined}
     >
       {/* Label */}
       {label && (
@@ -206,20 +231,39 @@ export const InputBox = forwardRef(function InputBox(
             />
           ))}
 
-          <input
-            ref={setRefs}
-            id={id}
-            className={styles.input}
-            disabled={disabled}
-            readOnly={readOnly}
-            onChange={handleChange}
-            value={value}
-            defaultValue={defaultValue}
-            maxLength={maxLength}
-            inputMode={filter?.inputMode}
-            aria-invalid={status === "error" || undefined}
-            {...props}
-          />
+          {autoGrow ? (
+            <textarea
+              ref={setRefs}
+              id={id}
+              rows={1}
+              className={`${styles.input} ${styles.textarea}`}
+              disabled={disabled}
+              readOnly={readOnly}
+              onChange={handleChange}
+              value={value}
+              defaultValue={defaultValue}
+              maxLength={maxLength}
+              inputMode={filter?.inputMode}
+              aria-invalid={status === "error" || undefined}
+              {...props}
+            />
+          ) : (
+            <input
+              ref={setRefs}
+              id={id}
+              type={type}
+              className={styles.input}
+              disabled={disabled}
+              readOnly={readOnly}
+              onChange={handleChange}
+              value={value}
+              defaultValue={defaultValue}
+              maxLength={maxLength}
+              inputMode={filter?.inputMode}
+              aria-invalid={status === "error" || undefined}
+              {...props}
+            />
+          )}
 
           {hasTrailing && (
             <span className={styles.trailing}>
