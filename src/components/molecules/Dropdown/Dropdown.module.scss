@@ -153,20 +153,6 @@
   pointer-events: none;
 }
 
-// Radio indicator (visual only).
-.radio {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--tp-slate-300, #D0D5DD);
-  border-radius: 9999px;
-  &[data-on="true"] { border-color: var(--tp-blue-500, #4B4AD5); }
-}
-.radioDot { width: 8px; height: 8px; border-radius: 9999px; background: var(--tp-blue-500, #4B4AD5); }
-
 .optIcon, .optIconR {
   display: inline-flex;
   align-items: center;

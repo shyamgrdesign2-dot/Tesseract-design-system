@@ -25,9 +25,11 @@ const RADIO_SIZES = {
   lg: { box: 18, font: 15 },
 };
 
-export function Radio({ value, label, disabled, size = "md", className, style: styleProp }) {
+export function Radio({ value, label, checked, disabled, size = "md", className, style: styleProp }) {
   const ctx = useContext(RadioGroupCtx);
-  const checked = ctx.value === value;
+  // Controlled standalone mode when `checked` is passed (e.g. as a decorative
+  // indicator inside a Dropdown option); otherwise derive from the group.
+  const isChecked = checked !== undefined ? checked : ctx.value === value;
   const s = RADIO_SIZES[size] ?? RADIO_SIZES.md;
 
   return (
@@ -49,7 +51,7 @@ export function Radio({ value, label, disabled, size = "md", className, style: s
         type="radio"
         name={ctx.name}
         value={value}
-        checked={checked}
+        checked={isChecked}
         disabled={disabled}
         onChange={() => ctx.onChange?.(value)}
         style={{

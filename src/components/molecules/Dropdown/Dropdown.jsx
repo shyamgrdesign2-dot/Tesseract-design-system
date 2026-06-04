@@ -35,6 +35,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "re
 import { createPortal } from "react-dom";
 import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
+import { Radio } from "@/src/components/atoms/Radio";
 import { Button } from "@/src/components/atoms/Button";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import styles from "./Dropdown.module.scss";
@@ -265,8 +266,9 @@ export function Dropdown({
                 </span>
               )}
               {optionControl === "radio" && (
-                <span className={styles.radio} data-on={sel ? "true" : undefined} aria-hidden>
-                  {sel && <span className={styles.radioDot} />}
+                // Reuse the Radio atom (decorative — the row owns the click).
+                <span className={styles.control} aria-hidden>
+                  <Radio checked={sel} size="sm" />
                 </span>
               )}
               {opt.icon && <span className={styles.optIcon}>{opt.icon}</span>}
