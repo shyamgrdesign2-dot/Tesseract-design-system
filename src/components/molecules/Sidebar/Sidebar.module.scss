@@ -1,104 +1,162 @@
-/* Sidebar.module.scss — primary navigation rail. Ported from the VoiceRx
-   .SidebarDoctor styles onto TP tokens. */
+/* Sidebar.module.scss — primary 80px navigation rail (VoiceRx redesign).
+   Ported 1:1 from the app navbar onto TP tokens. */
 
 .rail {
-  display: flex;
-  flex-direction: column;
-  width: 100px;
-  max-width: 100px;
-  height: 100%;
-  padding: 20px 0 0;
-  background-color: var(--tp-slate-0, #fff);
-  box-shadow: 1px 0 0 var(--tp-slate-100, #f1f1f5), 4px 0 14px -10px rgba(23, 23, 37, 0.18);
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-family: Inter, var(--font-sans, sans-serif);
-
-  &::-webkit-scrollbar { width: 0; }
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 8px 18px;
-  flex-shrink: 0;
-}
-
-.items { display: flex; flex-direction: column; }
-
-.item {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  height: 100%;
+  background-color: var(--tp-slate-0, #fff);
+  overflow-x: clip;
+  font-family: Inter, var(--font-sans, sans-serif);
+}
+
+.logo { display: flex; align-items: center; justify-content: center; padding: 12px 6px; flex-shrink: 0; }
+
+.scroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   width: 100%;
-  padding: 10px 6px;
-  margin-bottom: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; width: 0; }
+}
+
+/* Bottom spacer so the last item clears the fade overlay. */
+.spacer { height: 96px; flex-shrink: 0; }
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 80px;
   border: none;
-  background: transparent;
-  color: var(--tp-slate-500, #717179);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: center;
+  background-color: transparent;
   cursor: pointer;
-  transition: color 120ms ease, background-color 120ms ease;
+  isolation: isolate;
+  transition: background-color 120ms ease;
 
-  /* Left active-indicator bar (rounded on the right). */
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 6px;
-    bottom: 6px;
-    width: 4px;
-    background-color: transparent;
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    corner-shape: round;
-    transition: background-color 120ms ease;
-  }
-
-  &:hover { color: var(--tp-blue-600, #3c3bb5); background-color: rgba(75, 74, 213, 0.06); }
   &:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--tp-blue-200, #b5b4f2); }
-
-  &[data-active] {
-    color: var(--tp-blue-600, #3c3bb5);
-    background-color: rgba(75, 74, 213, 0.08);
-    &::before { background-color: var(--tp-blue-500, #4b4ad5); }
-  }
-
   &[data-disabled] { opacity: 0.45; cursor: not-allowed; }
 }
 
-/* Icons are atoms rendered in currentColor, so they inherit the item color
-   (blue when active) with no separate active asset. */
-.icon {
-  display: inline-flex;
+.body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+}
+
+/* Icon chip — grey at rest, blue when active. */
+.iconChip {
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
   flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  corner-shape: round;
+  background-color: var(--tp-slate-100, #f1f1f5);
+  transition: background-color 120ms ease, transform 120ms ease;
 }
+.item:hover .iconChip { transform: scale(1.02); }
 
 .label {
-  max-width: 100%;
+  width: 68px;
+  max-width: 68px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.1px;
+  color: var(--tp-slate-700, #454551);
+  text-align: center;
+  /* Single-word labels: one line, ellipsis. */
+  display: block;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+
+  /* Multi-word labels: clamp to two lines. */
+  &[data-multiline] {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    text-overflow: clip;
+    word-break: break-word;
+  }
 }
 
-.badge {
+/* Hover (inactive only): row tint + chip a shade darker. */
+.item:not([data-active]):hover { background-color: rgba(69, 69, 81, 0.08); }
+.item:not([data-active]):hover .iconChip { background-color: var(--tp-slate-200, #e2e2ea); }
+
+/* Active: faint blue row tint + blue chip + left indicator bar. */
+.item[data-active] { background-color: rgba(75, 74, 213, 0.12); }
+.item[data-active] .iconChip { background-color: var(--tp-blue-500, #4b4ad5); }
+
+.bar {
   position: absolute;
-  top: 4px;
-  right: 8px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 3px;
+  background-color: var(--tp-blue-500, #4b4ad5);
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  corner-shape: round;
 }
 
-.footer {
-  margin-top: auto;
-  padding: 12px 6px;
-  flex-shrink: 0;
+/* Trial tag — orange gradient pill attached to the right edge, centered on the
+   icon (icon center ≈ 12px pad + 16px half = 28px from the top). */
+.trial {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--tp-slate-0, #fff);
+  background-image: linear-gradient(257.32deg, #f15223 0%, #ff987a 47.22%, #f15223 94.44%);
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  corner-shape: round;
+  padding: 4px 2px 4px 4px;
+}
+
+.badge { position: absolute; z-index: 3; top: 16px; right: 6px; }
+
+.footer { margin-top: auto; padding: 12px 6px; flex-shrink: 0; z-index: 2; }
+
+/* Bottom white fade — hints at more scrollable items. */
+.fade {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--tp-slate-0, #fff) 80.62%);
 }
