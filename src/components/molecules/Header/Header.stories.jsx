@@ -1,13 +1,9 @@
 import React from 'react';
 import { Header } from './Header';
+import { Logo } from '@/src/components/atoms/Logo';
 
-// Real TatvaPractice logo — symbol + wordmark SVGs served from /public/brand.
-const Logo = () => (
-  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-    <img src="/brand/tatvapractice-symbol.svg" alt="" style={{ height: 26, width: 'auto', display: 'block' }} />
-    <img src="/brand/tatvapractice-wordmark.svg" alt="TatvaPractice" style={{ height: 18, width: 'auto', display: 'block' }} />
-  </span>
-);
+// Header logo — the actual gradient wordmark, min height 32px (width auto).
+const HeaderLogo = () => <Logo variant="wordmark" tone="gradient" height={32} />;
 
 const END_VISIT_MENU = [
   { id: 'save', label: 'Save & exit' },
@@ -32,7 +28,7 @@ export default meta;
 export const Shell = {
   render: () => (
     <Header
-      logo={<Logo />}
+      logo={<HeaderLogo />}
       actions={[
         { type: 'tutorial' },
         { type: 'divider' },
@@ -142,7 +138,7 @@ export const Playground = {
     if (a.avatar) actions.push({ type: 'avatar', name: 'DS', ring: true });
 
     const leftProps = {};
-    if (a.leading === 'logo') leftProps.logo = <Logo />;
+    if (a.leading === 'logo') leftProps.logo = <HeaderLogo />;
     else if (a.leading === 'user') leftProps.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
     else if (a.leading === 'title') leftProps.title = a.title;
 
