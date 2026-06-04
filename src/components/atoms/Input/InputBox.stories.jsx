@@ -9,6 +9,8 @@
 import React from 'react';
 import { InputBox } from './InputBox';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { Button } from '@/src/components/atoms/Button';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
 const SIZES = ['sm', 'md', 'lg'];
 const STATUSES = ['default', 'success', 'error', 'warning'];
@@ -95,9 +97,11 @@ export default {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
+    showLabel:   { control: 'boolean', name: 'show label', table: { category: 'Content' } },
     label:       { control: 'text', table: { category: 'Content' } },
-    placeholder: { control: 'text', table: { category: 'Content' } },
+    showHelper:  { control: 'boolean', name: 'show helper text', table: { category: 'Content' } },
     helperText:  { control: 'text', table: { category: 'Content' } },
+    placeholder: { control: 'text', table: { category: 'Content' } },
     required:    { control: 'boolean', table: { category: 'Content' } },
 
     size:        { control: 'inline-radio', options: SIZES, table: { category: 'Appearance' } },
@@ -125,7 +129,9 @@ export default {
     rightIcon: { table: { disable: true } },
   },
   args: {
+    showLabel: true,
     label: 'Email address',
+    showHelper: true,
     placeholder: 'you@example.com',
     helperText: 'We’ll never share it.',
     required: false,
@@ -161,9 +167,9 @@ export const Playground = {
           size={a.size}
           status={a.status}
           allow={a.allow}
-          label={a.label}
+          label={a.showLabel ? a.label : undefined}
           placeholder={a.placeholder}
-          helperText={a.helperText}
+          helperText={a.showHelper ? a.helperText : undefined}
           required={a.required}
           fullWidth={a.fullWidth}
           clearable={a.clearable}
@@ -322,4 +328,43 @@ export const TagInput = {
       </Stack>
     );
   },
+};
+
+// ── In-field CTA — an actual button inside the field (not a bordered add-on) ──
+// Composes the Button atom: icon-only (tick/cross), small solid, or link.
+export const InFieldCTA = {
+  name: 'In-field CTA',
+  render: () => (
+    <Stack w={440}>
+      <InputBox
+        label="One-time code"
+        placeholder="6-digit code"
+        allow="numeric"
+        maxLength={6}
+        action={<Button size="sm" variant="solid" theme="primary">Verify</Button>}
+        fullWidth
+      />
+      <InputBox
+        label="Promo code"
+        defaultValue="TATVA20"
+        status="success"
+        action={<Button size="sm" variant="ghost" theme="success" icon={<TPIcon name="success" size={18} />} aria-label="Apply code" />}
+        fullWidth
+      />
+      <InputBox
+        label="Coupon"
+        defaultValue="EXPIRED99"
+        status="error"
+        action={<Button size="sm" variant="ghost" theme="error" icon={<TPIcon name="close" size={18} />} aria-label="Remove coupon" />}
+        fullWidth
+      />
+      <InputBox
+        label="Referral link"
+        defaultValue="tatva.care/r/ana8x2"
+        readOnly
+        action={<Button size="sm" variant="link" theme="primary">Copy</Button>}
+        fullWidth
+      />
+    </Stack>
+  ),
 };

@@ -7,6 +7,7 @@ const meta = {
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    shape: { control: 'inline-radio', options: ['rounded', 'square'], description: 'Pill toggle vs squared toggle' },
     checked: { control: 'boolean' },
     defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -14,6 +15,7 @@ const meta = {
   },
   args: {
     size: 'md',
+    shape: 'rounded',
     disabled: false,
     required: false,
   },
@@ -40,6 +42,16 @@ export const Sizes = {
       <Switch {...args} size="sm" defaultChecked aria-label="small" />
       <Switch {...args} size="md" defaultChecked aria-label="medium" />
       <Switch {...args} size="lg" defaultChecked aria-label="large" />
+    </Row>
+  ),
+};
+
+/** Rounded pill toggle vs squared toggle (track + thumb). */
+export const Shapes = {
+  render: (args) => (
+    <Row>
+      <Switch {...args} shape="rounded" defaultChecked aria-label="rounded" />
+      <Switch {...args} shape="square" defaultChecked aria-label="square" />
     </Row>
   ),
 };

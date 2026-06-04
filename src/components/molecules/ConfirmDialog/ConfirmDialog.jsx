@@ -86,7 +86,7 @@ function Callout({ tone = "warning", icon = true, customIcon, children }) {
 }
 
 // One footer CTA: wraps Button in Close so it dismisses, then runs the handler.
-function FooterButton({ label, onClick, variant, theme, disabled, autoClose = true }) {
+function FooterButton({ label, onClick, variant, theme, disabled, autoClose = true, fullWidth = false }) {
   if (!label) return null;
   const btn = (
     <Button
@@ -94,6 +94,7 @@ function FooterButton({ label, onClick, variant, theme, disabled, autoClose = tr
       theme={theme}
       size="sm"
       disabled={disabled}
+      style={fullWidth ? { flex: 1 } : undefined}
       onClick={(e) => {
         if (disabled) { e.preventDefault(); return; }
         if (!autoClose) e.preventDefault();
@@ -141,6 +142,9 @@ export function ConfirmDialog({
   onTertiary,
   tertiaryVariant = "link",
   tertiaryTheme = "neutral",
+  // Footer CTA layout
+  actionsAlign = "right",     // "left" | "right" — which side primary/secondary sit
+  actionsFullWidth = false,   // true → primary/secondary stretch to equal width
   // ── Legacy aliases ──
   warning,
   primaryTone,
@@ -207,13 +211,13 @@ export function ConfirmDialog({
           )}
 
           {/* Footer */}
-          <div className={styles.footer}>
+          <div className={styles.footer} data-align={actionsAlign} data-full={actionsFullWidth || undefined}>
             <div className={styles.footerLeft}>
               <FooterButton label={tertiaryLabel} onClick={onTertiary} variant={tertiaryVariant} theme={tertiaryTheme} />
             </div>
             <div className={styles.footerRight}>
-              <FooterButton label={sLabel} onClick={sOnClick} variant={secondaryVariant} theme={sTheme} disabled={secondaryDisabled} />
-              <FooterButton label={pLabel} onClick={pOnClick} variant={primaryVariant} theme={pTheme} disabled={pDisabled} autoClose={primaryAutoClose && !pDisabled} />
+              <FooterButton label={sLabel} onClick={sOnClick} variant={secondaryVariant} theme={sTheme} disabled={secondaryDisabled} fullWidth={actionsFullWidth} />
+              <FooterButton label={pLabel} onClick={pOnClick} variant={primaryVariant} theme={pTheme} disabled={pDisabled} autoClose={primaryAutoClose && !pDisabled} fullWidth={actionsFullWidth} />
             </div>
           </div>
         </Alert.Content>

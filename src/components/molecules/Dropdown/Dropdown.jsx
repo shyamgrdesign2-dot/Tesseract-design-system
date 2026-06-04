@@ -26,7 +26,8 @@
  *   showShortcuts boolean — per-item shortcut hints (option.shortcut)
  *   footerHint boolean — common "↑↓ navigate · ↵ select · esc close" bar
  *   primaryAction / secondaryAction  { label, onClick } — footer CTAs (Button atom)
- *   actionsAlign "right" | "full"                     default "right"
+ *   actionsAlign "left" | "center" | "right" | "full"  default "right"
+ *                  (full → CTAs share the footer width equally)
  *   width     "trigger" | "auto" | number            default "trigger"
  *   placeholder, label, disabled, className
  */

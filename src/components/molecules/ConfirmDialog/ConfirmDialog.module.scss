@@ -141,3 +141,10 @@
 }
 .footerLeft { display: flex; align-items: center; gap: 10px; }
 .footerRight { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+
+/* Left-align the primary/secondary group */
+.footer[data-align="left"] .footerRight { margin-left: 0; margin-right: auto; }
+
+/* Full-width: primary/secondary stretch to equal width across the dialog */
+.footer[data-full] .footerRight { flex: 1; }
+.footer[data-full] .footerLeft:empty { display: none; }

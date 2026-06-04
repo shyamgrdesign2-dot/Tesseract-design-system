@@ -26,9 +26,8 @@ use-overlay). New atoms should default to hand-rolled.
 
 Atoms in this folder:
 `Badge`, `Button`, `Checkbox`, `Chip`, `Divider`, `Input`, `MedicalIcon`,
-`Radio`, `ShinyText`, `Skeleton`, `Slider`, `Switch`, `Tag`,
-`TutorialPlayIcon`, plus decorative helpers `NoiseOverlay` and
-`AnimatedGrid`.
+`Radio`, `Skeleton`, `Slider`, `Switch`, plus decorative helpers
+`NoiseOverlay` and `AnimatedGrid`.
 
 `Button` is the single CTA — one component covers text, with-icons,
 icon-only, and split (primary + dropdown `menu`) shapes across every
@@ -46,12 +45,9 @@ variant × theme × size × surface.
 | `Input` | Single-line text field. Supports leading/trailing icons. | size sm/md/lg; states default/error/disabled. |
 | `MedicalIcon` (`TPMedicalIcon`) | Mask-painted medical glyph (ECG, virus, syringe, etc.). | name, variant: linear/bulk, size, color. |
 | `Radio` | Single-select control in a radio group. | size: sm/md/lg · states match Checkbox. |
-| `ShinyText` | Animated gradient text for AI captions. | gradient, speed. |
 | `Skeleton` | Pulsing placeholder block while loading. | width, height, radius. |
 | `Slider` | Value slider with track + thumb. | size: sm/md/lg · min, max, step, color. |
-| `Switch` | Toggle (on/off). | size: sm/md/lg · checked, disabled. |
-| `Tag` | Static label with bg + border. | color: blue/violet/amber/success/error/warning/slate · variant: light/medium/filled/outline · size: sm/md/lg · onRemove/icon · 10px radius. |
-| `TutorialPlayIcon` | Branded play-button glyph that points to a tutorial. | size. |
+| `Switch` | Toggle (on/off). | size: sm/md/lg · shape: rounded/square · checked, disabled. |
 | `NoiseOverlay` | Subtle film-grain texture for premium surfaces. | opacity. |
 | `AnimatedGrid` | Decorative animated SVG lattice with comet pulses (banner/hero background). | className, style. |
 
@@ -63,13 +59,11 @@ variant × theme × size × surface.
 | Icon-only / primary+menu CTA | `Button` with `icon` (+ `aria-label`) / `Button` with `menu` |
 | Status text + color in a small pill | `Badge` |
 | Removable filter or multi-select pill | `Chip` |
-| A non-removable label pill | `Tag` |
 | A single-line text field | `Input` |
 | Boolean toggle | `Switch` (immediate effect) or `Checkbox` (form field) |
 | Single-select in a group | `Radio` |
 | Loading: shape | `Skeleton` |
 | Medical glyph | `MedicalIcon` (TPMedicalIcon) |
-| AI/processing flair | `ShinyText` |
 
 ## Adding an atom
 

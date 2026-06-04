@@ -27,7 +27,6 @@ export { Slider } from "./Slider";
 
 // Data Display
 export { Chip } from "./Chip";
-export { Tag } from "./Tag";
 
 // Medical
 export { TPMedicalIcon, tpMedicalIconRegistry, tpMedicalIconNames, resolveTPMedicalIconName } from "./MedicalIcon";
@@ -36,7 +35,5 @@ export { TPMedicalIcon, tpMedicalIconRegistry, tpMedicalIconNames, resolveTPMedi
 export { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./icons/tp";
 
 // Animation / Decorative
-export { TutorialPlayIcon } from "./TutorialPlayIcon";
-export { ShinyText } from "./ShinyText";
 export { NoiseOverlay } from "./NoiseOverlay";
 export { AnimatedGrid } from "./AnimatedGrid";

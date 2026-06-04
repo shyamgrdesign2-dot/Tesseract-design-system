@@ -37,7 +37,7 @@ const meta = {
     showShortcuts: { control: 'boolean', name: 'item shortcuts', table: { category: 'Behaviour' } },
     footerHint: { control: 'boolean', name: 'footer shortcut bar', table: { category: 'Behaviour' } },
     withActions: { control: 'boolean', name: 'footer CTAs', table: { category: 'Footer' } },
-    actionsAlign: { control: 'inline-radio', options: ['right', 'full'], name: 'CTA align', table: { category: 'Footer' } },
+    actionsAlign: { control: 'inline-radio', options: ['left', 'center', 'right', 'full'], name: 'CTA align', table: { category: 'Footer' } },
     width: { control: 'inline-radio', options: ['trigger', 'auto', 320], table: { category: 'Layout' } },
     twoLine: { control: 'boolean', name: 'title + subtitle', table: { category: 'Content' } },
     withIcons: { control: 'boolean', name: 'item icons', table: { category: 'Content' } },
@@ -188,6 +188,32 @@ export const FooterShortcutsAndActions = {
           secondaryAction={{ label: 'Clear', onClick: () => setV([]) }}
         />
       </Frame>
+    );
+  },
+};
+
+export const FooterCtaAlignment = {
+  name: 'Footer: CTA alignment',
+  render: () => {
+    const aligns = ['left', 'center', 'right', 'full'];
+    return (
+      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        {aligns.map((a) => (
+          <Frame key={a} w={260}>
+            <Dropdown
+              label={`align: ${a}`}
+              mode="multi"
+              optionControl="checkbox"
+              options={DEPTS}
+              value={['cardio']}
+              onChange={() => {}}
+              actionsAlign={a}
+              primaryAction={{ label: 'Apply', onClick: () => {} }}
+              secondaryAction={{ label: 'Clear', onClick: () => {} }}
+            />
+          </Frame>
+        ))}
+      </div>
     );
   },
 };

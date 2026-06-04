@@ -54,6 +54,9 @@ export const Playground = {
     tertiaryLabel: '',
     tertiaryVariant: 'link',
     tertiaryTheme: 'neutral',
+    // Footer layout
+    actionsAlign: 'right',
+    actionsFullWidth: false,
   },
   argTypes: {
     title:            { control: 'text', table: { category: 'Header' } },
@@ -79,6 +82,9 @@ export const Playground = {
     tertiaryLabel:    { control: 'text', name: 'tertiary · label', table: { category: 'Tertiary CTA' } },
     tertiaryVariant:  { control: 'select', options: VARIANTS, name: 'tertiary · variant', table: { category: 'Tertiary CTA' } },
     tertiaryTheme:    { control: 'select', options: THEMES, name: 'tertiary · color', table: { category: 'Tertiary CTA' } },
+
+    actionsAlign:     { control: 'inline-radio', options: ['left', 'right'], name: 'align', table: { category: 'Footer layout' } },
+    actionsFullWidth: { control: 'boolean', name: 'full width (equal)', table: { category: 'Footer layout' } },
   },
   render: (a) => (
     <Demo
@@ -99,6 +105,8 @@ export const Playground = {
       tertiaryLabel={a.tertiaryLabel || undefined}
       tertiaryVariant={a.tertiaryVariant}
       tertiaryTheme={a.tertiaryTheme}
+      actionsAlign={a.actionsAlign}
+      actionsFullWidth={a.actionsFullWidth}
     />
   ),
 };
@@ -159,6 +167,18 @@ export const CalloutLineScaling = {
       <Demo trigger="1 line" title="Heads up" callout="This cannot be undone." calloutTone="warning" primaryLabel="OK" secondaryLabel="Cancel" />
       <Demo trigger="2 lines" title="Heads up" callout="This action is permanent and will remove all linked visit records for this patient." calloutTone="warning" primaryLabel="OK" secondaryLabel="Cancel" />
       <Demo trigger="3 lines" title="Heads up" callout="This action is permanent. It removes the patient record, every linked visit, all prescriptions, and any uploaded reports — and it cannot be undone afterwards." calloutTone="error" primaryLabel="Keep" secondaryLabel="Delete" secondaryTheme="error" secondaryVariant="solid" />
+    </div>
+  ),
+};
+
+// ── Footer CTA layout — align + full-width ────────────────────────────────────
+export const ActionLayout = {
+  name: 'Footer · CTA Layout',
+  render: () => (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <Demo trigger="Right (default)" title="Save changes?" description="Right-aligned CTAs are the default." primaryLabel="Save" secondaryLabel="Cancel" secondaryVariant="outline" actionsAlign="right" />
+      <Demo trigger="Left aligned" title="Save changes?" description="Primary and secondary pinned to the left." primaryLabel="Save" secondaryLabel="Cancel" secondaryVariant="outline" actionsAlign="left" />
+      <Demo trigger="Full width (equal)" title="Save changes?" description="Two CTAs share the dialog width equally." primaryLabel="Save" secondaryLabel="Cancel" secondaryVariant="outline" actionsFullWidth />
     </div>
   ),
 };

@@ -12,6 +12,8 @@
  *   checked / defaultChecked / onCheckedChange  (controlled or uncontrolled)
  *   disabled, required, name, value             (form integration)
  *   size: "sm" | "md" | "lg"
+ *   shape: "rounded" (pill track + circular thumb) | "square" (squared track +
+ *          rounded-square thumb)   default "rounded"
  */
 
 import * as React from "react";
@@ -20,6 +22,7 @@ import styles from "./Switch.module.scss";
 export const Switch = React.forwardRef(function Switch(
   {
     size = "md",
+    shape = "rounded",
     checked,
     defaultChecked,
     onCheckedChange,
@@ -75,6 +78,7 @@ export const Switch = React.forwardRef(function Switch(
       data-slot="switch"
       data-state={isOn ? "checked" : "unchecked"}
       data-size={size}
+      data-shape={shape}
       data-disabled={disabled || undefined}
       disabled={disabled}
       ref={ref}

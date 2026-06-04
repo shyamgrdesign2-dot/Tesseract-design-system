@@ -20,6 +20,10 @@
     background-color: var(--tp-blue-500, #4b4ad5);
   }
 
+  /* Square shape — squared track corners (default is a rounded pill) */
+  &[data-shape="square"] { border-radius: 7px; corner-shape: round; }
+  &[data-size="sm"][data-shape="square"] { border-radius: 6px; }
+
   /* Focus */
   &:focus-visible {
     box-shadow: 0 0 0 3px var(--tp-blue-200, #b5b4f2);
@@ -36,6 +40,9 @@
   display: block;
   border-radius: 50%;
   background-color: var(--tp-slate-0, #ffffff);
+
+  /* Square shape — rounded-square thumb */
+  .root[data-shape="square"] & { border-radius: 4px; corner-shape: round; }
   box-shadow: 0 1px 3px rgba(23, 23, 37, 0.12);
   transition: transform 150ms ease;
   will-change: transform;

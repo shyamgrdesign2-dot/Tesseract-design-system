@@ -33,6 +33,8 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  *   onRemoveTag (id) => void — shows a × on each tag
  *   tagsScroll  boolean — single-row horizontal scroll instead of wrapping
  *               (default: tags wrap and the field grows in height)
+ *   action      ReactNode — an in-field CTA at the right end (compose a Button
+ *               atom: icon-only / small text / link). Not a bordered add-on.
  *   fullWidth   boolean
  *   disabled    boolean
  *   readOnly    boolean — neutral, non-interactive surface (like disabled, but
@@ -78,6 +80,7 @@ export const InputBox = forwardRef(function InputBox(
     tags,
     onRemoveTag,
     tagsScroll = false,
+    action,
     id: idProp,
     className  = "",
     onChange,
@@ -142,7 +145,7 @@ export const InputBox = forwardRef(function InputBox(
 
   const showClear  = clearable && hasContent && !disabled && !readOnly && !loading;
   const showStatus = status !== "default" && !loading;
-  const hasTrailing = Boolean(unit || showClear || rightIcon || showStatus || loading);
+  const hasTrailing = Boolean(unit || showClear || rightIcon || showStatus || loading || action);
   const showFooter = Boolean(helperText || (showCount));
   const hasTags = Array.isArray(tags) && tags.length > 0;
 
@@ -247,6 +250,10 @@ export const InputBox = forwardRef(function InputBox(
                   {status === "warning" && <AlertTriangleIcon />}
                 </span>
               )}
+
+              {/* In-field CTA at the right end (compose a Button atom: icon /
+                  text / link). Not a bordered add-on — sits inside the field. */}
+              {action && <span className={styles.action}>{action}</span>}
             </span>
           )}
         </div>

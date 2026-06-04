@@ -1,7 +1,11 @@
 import { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from './TPIcon';
+import { TPLibraryIcon } from './TPLibraryIcon';
+import { tpMedicalIconRegistry } from '@/src/components/atoms/MedicalIcon/registry';
+
+const MEDICAL_NAMES = Object.keys(tpMedicalIconRegistry);
 
 const meta = {
-  title: 'Atoms/TPIcon',
+  title: 'Atoms/Icons',
   component: TPIcon,
   tags: ['autodocs'],
   argTypes: {
@@ -54,4 +58,23 @@ export const SixStyles = {
     </div>
   ),
   args: { name: 'health' },
+};
+
+/**
+ * Medical icons live in the same icon namespace — render them through the
+ * unified renderer with any TP variant (mapped onto the medical line/bulk/solid
+ * set). The "TP Icons" picker panel searches these alongside the full library.
+ */
+export const MedicalIcons = {
+  name: 'Medical (same namespace)',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10, fontFamily: 'Inter, sans-serif' }}>
+      {MEDICAL_NAMES.map((name) => (
+        <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: 10, border: '1px solid #F1F1F5', borderRadius: 10 }}>
+          <span style={{ color: '#3c3bb5' }}><TPLibraryIcon name={name} size={26} /></span>
+          <span style={{ fontSize: 10, color: '#54545C', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{name}</span>
+        </div>
+      ))}
+    </div>
+  ),
 };

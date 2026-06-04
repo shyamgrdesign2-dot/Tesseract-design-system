@@ -4,26 +4,44 @@ import { Radio, RadioGroup } from './Radio';
 const meta = {
   title: 'Atoms/Radio',
   component: RadioGroup,
-  tags: ['autodocs', 'ai-generated'],
+  tags: ['autodocs'],
   argTypes: {
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], table: { category: 'Style' } },
+    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'], table: { category: 'Style' } },
+    disabled: { control: 'boolean', name: 'disable all', table: { category: 'State' } },
+    disabledOption: { control: 'inline-radio', options: ['none', 'email', 'sms', 'push'], name: 'disable one', table: { category: 'State' } },
+    name: { control: 'text', table: { category: 'Content' } },
     value: { control: false },
     onChange: { control: false },
-    name: { control: 'text' },
   },
   args: {
+    size: 'md',
+    orientation: 'vertical',
+    disabled: false,
+    disabledOption: 'none',
     name: 'demo-group',
   },
 };
 
 export default meta;
 
-const Group = (args) => {
+const Group = ({ size, orientation, disabled, disabledOption, ...args }) => {
   const [value, setValue] = React.useState('email');
+  const opts = [
+    { value: 'email', label: 'Email' },
+    { value: 'sms', label: 'SMS' },
+    { value: 'push', label: 'Push notification' },
+  ];
   return (
-    <RadioGroup {...args} value={value} onChange={setValue}>
-      <Radio value="email" label="Email" />
-      <Radio value="sms" label="SMS" />
-      <Radio value="push" label="Push notification" />
+    <RadioGroup
+      {...args}
+      value={value}
+      onChange={setValue}
+      style={orientation === 'horizontal' ? { flexDirection: 'row', gap: 24 } : undefined}
+    >
+      {opts.map((o) => (
+        <Radio key={o.value} value={o.value} label={o.label} size={size} disabled={disabled || disabledOption === o.value} />
+      ))}
     </RadioGroup>
   );
 };
