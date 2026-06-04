@@ -21,6 +21,7 @@ const meta = {
     children: { control: 'text', table: { category: 'Content' } },
     iconSide: { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Content' } },
     iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'Pick a TP icon (or type a name)', table: { category: 'Content' } },
+    sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
     variant: 'soft',
@@ -29,16 +30,18 @@ const meta = {
     children: 'Badge',
     iconSide: 'left',
     iconName: 'verify',
+    sticky: 'none',
   },
 };
 
 export default meta;
 
-// Inject icons from the controls into either/both sides.
-const withIcons = ({ iconSide, iconName, ...args }) => {
+// Inject icons from the controls into either/both sides; normalise sticky.
+const withIcons = ({ iconSide, iconName, sticky, ...args }) => {
   const glyph = glyphFor(iconName, args.size);
   return {
     ...args,
+    sticky: sticky && sticky !== 'none' ? sticky : undefined,
     icon: iconSide === 'left' || iconSide === 'both' ? glyph : undefined,
     rightIcon: iconSide === 'right' || iconSide === 'both' ? glyph : undefined,
   };
@@ -100,6 +103,37 @@ export const Gradients = {
       <Badge {...args} variant="gradient" color="violet">VIP</Badge>
     </Row>
   ),
+};
+
+/** Sticky badges — corners on the stuck edge are squared so the pill sits flush
+ *  against a container edge (e.g. the Trial tag pinned to a nav item). */
+export const Sticky = {
+  render: () => {
+    const Box = ({ children }) => (
+      <div style={{ position: 'relative', width: 120, height: 64, borderRadius: 12, border: '1px solid var(--tp-slate-200, #e2e2ea)', background: 'var(--tp-slate-50, #f8fafc)' }}>
+        {children}
+      </div>
+    );
+    return (
+      <Row>
+        <Box>
+          <span style={{ position: 'absolute', top: 12, right: 0 }}>
+            <Badge variant="gradient" color="warning" size="sm" sticky="right">Trial</Badge>
+          </span>
+        </Box>
+        <Box>
+          <span style={{ position: 'absolute', top: 12, left: 0 }}>
+            <Badge variant="gradient" color="success" size="sm" sticky="left">New</Badge>
+          </span>
+        </Box>
+        <Box>
+          <span style={{ position: 'absolute', top: 12, right: 0 }}>
+            <Badge variant="solid" color="error" size="sm" sticky="right">3</Badge>
+          </span>
+        </Box>
+      </Row>
+    );
+  },
 };
 
 export const Colors = {

@@ -66,13 +66,18 @@
     border: none;
     color: var(--tp-slate-0, #fff);
 
-    &[data-color="primary"] { background-image: linear-gradient(257.32deg, #4b4ad5 0%, #6c4f90 47.22%, #4b4ad5 94.44%); }
+    /* base → light (shiny highlight) → base */
+    &[data-color="primary"] { background-image: linear-gradient(257.32deg, #4b4ad5 0%, #a9a8f2 47.22%, #4b4ad5 94.44%); }
     &[data-color="success"] { background-image: linear-gradient(257.32deg, #0f9b6c 0%, #34d399 47.22%, #0f9b6c 94.44%); }
     &[data-color="warning"] { background-image: linear-gradient(257.32deg, #f15223 0%, #ff987a 47.22%, #f15223 94.44%); }
     &[data-color="error"]   { background-image: linear-gradient(257.32deg, #c8102e 0%, #f43f5e 47.22%, #c8102e 94.44%); }
-    &[data-color="neutral"] { background-image: linear-gradient(257.32deg, #454551 0%, #717179 47.22%, #454551 94.44%); }
-    &[data-color="violet"]  { background-image: linear-gradient(257.32deg, #7c3aed 0%, #a461d8 47.22%, #7c3aed 94.44%); }
+    &[data-color="neutral"] { background-image: linear-gradient(257.32deg, #454551 0%, #9a9aa3 47.22%, #454551 94.44%); }
+    &[data-color="violet"]  { background-image: linear-gradient(257.32deg, #7c3aed 0%, #cda9f3 47.22%, #7c3aed 94.44%); }
   }
+
+  /* ── Sticky — flatten the corners on the edge the badge sticks to ── */
+  &[data-sticky="right"] { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  &[data-sticky="left"]  { border-top-left-radius: 0; border-bottom-left-radius: 0; }
 
   /* Leading / trailing icon — inherits currentColor (tints to the badge color).
      The consumer sizes the icon to match the badge size. */

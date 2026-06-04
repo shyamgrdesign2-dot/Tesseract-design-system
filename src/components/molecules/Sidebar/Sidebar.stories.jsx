@@ -4,7 +4,7 @@ import { Sidebar } from './Sidebar';
 // Icons are TP library icon NAMES — the Sidebar renders them linear at rest and
 // bold when active.
 const ITEMS = [
-  { id: 'appointments', label: 'Appointments', icon: 'calendar-2' },
+  { id: 'appointments', label: 'Appointments', icon: 'calendar-1' },
   { id: 'all-patients', label: 'All Patients', icon: 'profile-2user' },
   { id: 'follow-ups', label: 'Follow-ups', icon: 'calendar-tick' },
   { id: 'opd-billing', label: 'OPD Billing', icon: 'receipt-text' },
@@ -32,6 +32,7 @@ const meta = {
     tagText: { control: 'text', name: 'tag · text', table: { category: 'Tag' } },
     tagVariant: { control: 'inline-radio', options: TAG_VARIANTS, name: 'tag · variant', table: { category: 'Tag' } },
     tagColor: { control: 'select', options: TAG_COLORS, name: 'tag · color', table: { category: 'Tag' } },
+    tagSticky: { control: 'inline-radio', options: ['right', 'left', 'none'], name: 'tag · sticky', table: { category: 'Tag' } },
     // Icon swap — change any item's glyph (and it still switches linear/bold).
     iconItem: { control: 'select', options: IDS, name: 'icon · on item', table: { category: 'Icon' } },
     iconName: { control: 'text', tpIcon: true, name: 'icon · glyph', table: { category: 'Icon' } },
@@ -44,6 +45,7 @@ const meta = {
     tagText: 'Trial',
     tagVariant: 'gradient',
     tagColor: 'warning',
+    tagSticky: 'right',
     iconItem: 'appointments',
     iconName: '',
     bottomFade: true,
@@ -53,11 +55,11 @@ const meta = {
 
 export default meta;
 
-function SidebarDemo({ activeId, tagItem, tagText, tagVariant, tagColor, iconItem, iconName, bottomFade, width }) {
+function SidebarDemo({ activeId, tagItem, tagText, tagVariant, tagColor, tagSticky, iconItem, iconName, bottomFade, width }) {
   const [active, setActive] = React.useState(activeId);
   const items = ITEMS.map((it) => {
     let next = it;
-    if (it.id === tagItem) next = { ...next, badge: { text: tagText || 'Trial', variant: tagVariant, color: tagColor } };
+    if (it.id === tagItem) next = { ...next, badge: { text: tagText || 'Trial', variant: tagVariant, color: tagColor, sticky: tagSticky === 'none' ? undefined : tagSticky } };
     if (it.id === iconItem && iconName && iconName.trim()) next = { ...next, icon: iconName.trim() };
     return next;
   });

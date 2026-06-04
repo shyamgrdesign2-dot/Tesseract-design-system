@@ -37,7 +37,8 @@ import styles from "./Sidebar.module.scss";
 function ItemIcon({ icon, active }) {
   if (typeof icon === "string") {
     // No color → inherits the chip's currentColor (slate-700 rest / white active).
-    return <TPLibraryIcon name={icon} variant={active ? "bold" : "linear"} size={20} />;
+    // Selected state uses the bulk (two-tone) style; rest is linear.
+    return <TPLibraryIcon name={icon} variant={active ? "bulk" : "linear"} size={20} />;
   }
   return icon ?? null;
 }
@@ -45,11 +46,11 @@ function ItemIcon({ icon, active }) {
 function ItemBadge({ badge }) {
   if (badge == null) return null;
   let cfg = badge;
-  if (badge === "trial") cfg = { text: "Trial", variant: "gradient", color: "warning" };
+  if (badge === "trial") cfg = { text: "Trial", variant: "gradient", color: "warning", sticky: "right" };
   if (cfg && typeof cfg === "object" && cfg.text != null) {
     return (
       <span className={styles.badgeSlot}>
-        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="sm">{cfg.text}</Badge>
+        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="sm" sticky={cfg.sticky}>{cfg.text}</Badge>
       </span>
     );
   }
@@ -60,7 +61,7 @@ export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = tr
   return (
     <nav
       className={cn(styles.rail, className)}
-      style={width ? { width, minWidth: width, maxWidth: width } : undefined}
+      style={width ? { width } : undefined}
       aria-label="Primary"
     >
       {logo != null && <div className={styles.logo}>{logo}</div>}

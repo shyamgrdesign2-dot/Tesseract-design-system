@@ -11,6 +11,8 @@
  *   size     "sm" | "md" | "lg"                       default "md"
  *   icon       ReactNode — leading icon (inherits the badge color via currentColor)
  *   rightIcon  ReactNode — trailing icon
+ *   sticky     "left" | "right" — squares the corners on that edge so the badge
+ *              can sit flush against a container edge
  *   children   label
  */
 
@@ -34,6 +36,7 @@ export function Badge({
   size = "md",
   icon,
   rightIcon,
+  sticky,
   children,
   className,
   style: styleProp
@@ -60,7 +63,8 @@ export function Badge({
       style={styleProp}
       data-variant={variant}
       data-color={color}
-      data-size={size}>
+      data-size={size}
+      data-sticky={sticky || undefined}>
 
       {icon != null && <span className={styles.icon}>{icon}</span>}
       {children != null && <span>{children}</span>}
