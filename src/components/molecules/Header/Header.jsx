@@ -40,13 +40,9 @@ import styles from "./Header.module.scss";
 
 const icon = (g, size = 20) => (typeof g === "string" ? <TPLibraryIcon name={g} size={size} /> : g);
 
+// Chevrons come from the Iconsax library (arrow-*-02), like every other icon.
 function Chevron({ dir = "down", size = 18 }) {
-  const d = dir === "left" ? "m15 18-6-6 6-6" : "m6 9 6 6 6-6";
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d={d} />
-    </svg>
-  );
+  return <TPLibraryIcon name={dir === "left" ? "arrow-left-02" : "arrow-down-02"} size={size} />;
 }
 
 function TutorialButton({ onClick }) {

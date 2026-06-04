@@ -76,8 +76,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  max-width: 68px;
+  /* Grows with the rail width so a wider rail shows more text before truncating. */
+  width: 100%;
+  max-width: 100%;
   min-height: 36px; /* 2 × 18px line-height */
   padding-inline: 2px;
 }

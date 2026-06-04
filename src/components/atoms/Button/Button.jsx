@@ -193,25 +193,16 @@ export const Button = forwardRef(function Button(
           data-split-part="trigger"
           {...splitDataAttrs}
         >
-          {/* Accordion-style chevron — same glyph the Accordion uses. */}
-          <svg
-            width={ICON_SIZE[size]}
-            height={ICON_SIZE[size]}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-            focusable="false"
+          {/* Chevron from the icon library (same set as every other icon). */}
+          <TPIcon
+            name="chevron-down"
+            variant="linear"
+            size={ICON_SIZE[size]}
             style={{
               transition: "transform 200ms ease",
               transform: open ? "rotate(180deg)" : "rotate(0deg)",
             }}
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+          />
         </button>
 
         {open &&

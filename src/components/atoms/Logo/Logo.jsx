@@ -21,8 +21,8 @@
 
 const SYMBOL = "/brand/tatvapractice-symbol.svg";
 const WORDMARK = "/brand/tatvapractice-wordmark.svg";
-const SYMBOL_AR = 78 / 112;   // width / height
-const WORDMARK_AR = 117 / 20; // width / height
+const SYMBOL_AR = 78 / 112;     // width / height
+const WORDMARK_AR = 2910 / 500; // width / height (high-quality wordmark)
 
 const TONES = {
   gradient: "linear-gradient(90deg, #5347d8 0%, #9d2af7 100%)",

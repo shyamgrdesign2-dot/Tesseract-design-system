@@ -16,6 +16,7 @@
  */
 
 import * as React from "react";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Accordion.module.scss";
 
 const AccordionContext = React.createContext(null);
@@ -126,18 +127,8 @@ export const AccordionTrigger = React.forwardRef(function AccordionTrigger(
         onClick={handleClick}
         {...props}>
         {children}
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className={styles.chevron}
-          aria-hidden>
-          <path d="m6 9 6 6 6-6" />
-        </svg>
+        {/* Chevron from the Iconsax library; rotates on open via .chevron. */}
+        <TPLibraryIcon name="arrow-down-02" size={16} className={styles.chevron} />
       </button>
     </h3>
   );
