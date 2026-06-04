@@ -3,9 +3,9 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
 const VARIANTS = ['solid', 'soft', 'outline', 'gradient', 'dot'];
-const SIZES = ['sm', 'md', 'lg'];
+const SIZES = ['xs', 'sm', 'md', 'lg'];
 const ICON_SIDES = ['none', 'left', 'right', 'both'];
-const ICON_PX = { sm: 12, md: 14, lg: 16 };
+const ICON_PX = { xs: 10, sm: 12, md: 14, lg: 16 };
 
 // Resolve the icon node for a side, sized to the badge.
 const glyphFor = (name, size) => (name ? <TPLibraryIcon name={name} size={ICON_PX[size] || 14} /> : null);

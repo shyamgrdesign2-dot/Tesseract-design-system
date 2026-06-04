@@ -50,7 +50,7 @@ function ItemBadge({ badge }) {
   if (cfg && typeof cfg === "object" && cfg.text != null) {
     return (
       <span className={styles.badgeSlot}>
-        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="sm" sticky={cfg.sticky}>{cfg.text}</Badge>
+        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="xs" sticky={cfg.sticky}>{cfg.text}</Badge>
       </span>
     );
   }
@@ -96,11 +96,13 @@ export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = tr
                   icon={<ItemIcon icon={it.icon} active={active} />}
                   style={{ width: 32, height: 32 }}
                 />
-                <span
-                  className={styles.label}
-                  data-multiline={typeof it.label === "string" && it.label.trim().includes(" ") ? "" : undefined}
-                >
-                  {it.label}
+                <span className={styles.label}>
+                  <span
+                    className={styles.labelText}
+                    data-multiline={typeof it.label === "string" && it.label.trim().includes(" ") ? "" : undefined}
+                  >
+                    {it.label}
+                  </span>
                 </span>
               </span>
 

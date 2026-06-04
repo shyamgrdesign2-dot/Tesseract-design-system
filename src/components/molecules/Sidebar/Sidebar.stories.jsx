@@ -32,7 +32,7 @@ const meta = {
   argTypes: {
     activeId: { control: 'select', options: IDS, name: 'active item', table: { category: 'Rail' } },
     bottomFade: { control: 'boolean', name: 'bottom fade', table: { category: 'Rail' } },
-    width: { control: { type: 'range', min: 72, max: 100, step: 2 }, name: 'rail width', table: { category: 'Rail' } },
+    width: { control: { type: 'range', min: 80, max: 100, step: 2 }, name: 'rail width', table: { category: 'Rail' } },
 
     // ── Configure ONE item — the same controls every item supports ──
     editItem: { control: 'select', options: IDS, name: 'item to edit', table: { category: 'Selected item' } },

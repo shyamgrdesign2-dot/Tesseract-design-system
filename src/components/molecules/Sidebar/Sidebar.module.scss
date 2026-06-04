@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   width: 80px;
-  min-width: 72px;
+  min-width: 80px;
   max-width: 100px;
   height: 100%;
   background-color: var(--tp-slate-0, #fff);
@@ -70,10 +70,19 @@
 .chip { transition: transform 120ms ease; }
 .item:hover .chip { transform: scale(1.02); }
 
+/* Fixed two-line label area so every item is the same height (even rhythm),
+   with the text vertically centered whether it's one or two lines. */
 .label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 68px;
   max-width: 68px;
+  min-height: 36px; /* 2 × 18px line-height */
   padding-inline: 2px;
+}
+
+.labelText {
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
@@ -83,6 +92,7 @@
 
   /* Single-word labels: one line, ellipsis when too long. */
   display: block;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
