@@ -3,6 +3,14 @@
 /**
  * Badge — Status / count indicator atom.
  * Styling: Badge.module.scss (data-variant / data-color selectors).
+ *
+ * Props:
+ *   variant  "solid" | "soft" | "outline" | "dot"   default "soft"
+ *   color    "primary" | "success" | "warning" | "error" | "neutral" | "violet"
+ *   size     "sm" | "md" | "lg"                       default "md"
+ *   icon       ReactNode — leading icon (inherits the badge color via currentColor)
+ *   rightIcon  ReactNode — trailing icon
+ *   children   label
  */
 
 
@@ -23,6 +31,8 @@ export function Badge({
   variant = "soft",
   color = "primary",
   size = "md",
+  icon,
+  rightIcon,
   children,
   className,
   style: styleProp
@@ -41,6 +51,8 @@ export function Badge({
   }
 
   const cls = [styles.badge, className].filter(Boolean).join(" ");
+  // Icons inherit the badge's text color via currentColor, so they tint to
+  // match the variant/color automatically.
   return (
     <span
       className={cls}
@@ -49,7 +61,9 @@ export function Badge({
       data-color={color}
       data-size={size}>
 
-      {children}
+      {icon != null && <span className={styles.icon}>{icon}</span>}
+      {children != null && <span>{children}</span>}
+      {rightIcon != null && <span className={styles.icon}>{rightIcon}</span>}
     </span>);
 
 }

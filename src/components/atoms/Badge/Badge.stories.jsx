@@ -1,8 +1,14 @@
 import { Badge } from './Badge';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
 const VARIANTS = ['solid', 'soft', 'outline', 'dot'];
 const SIZES = ['sm', 'md', 'lg'];
+const ICON_SIDES = ['none', 'left', 'right', 'both'];
+const ICON_PX = { sm: 12, md: 14, lg: 16 };
+
+// Resolve the icon node for a side, sized to the badge.
+const glyphFor = (name, size) => (name ? <TPLibraryIcon name={name} size={ICON_PX[size] || 14} /> : null);
 
 const meta = {
   title: 'Atoms/Badge',
@@ -12,17 +18,31 @@ const meta = {
     variant: { control: 'select', options: VARIANTS },
     color: { control: 'select', options: COLORS },
     size: { control: 'inline-radio', options: SIZES },
-    children: { control: 'text' },
+    children: { control: 'text', table: { category: 'Content' } },
+    iconSide: { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Content' } },
+    iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'Pick a TP icon (or type a name)', table: { category: 'Content' } },
   },
   args: {
     variant: 'soft',
     color: 'primary',
     size: 'md',
     children: 'Badge',
+    iconSide: 'left',
+    iconName: 'verify',
   },
 };
 
 export default meta;
+
+// Inject icons from the controls into either/both sides.
+const withIcons = ({ iconSide, iconName, ...args }) => {
+  const glyph = glyphFor(iconName, args.size);
+  return {
+    ...args,
+    icon: iconSide === 'left' || iconSide === 'both' ? glyph : undefined,
+    rightIcon: iconSide === 'right' || iconSide === 'both' ? glyph : undefined,
+  };
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -30,7 +50,22 @@ const Row = ({ children }) => (
   </div>
 );
 
-export const Playground = {};
+export const Playground = {
+  render: (args) => <Badge {...withIcons(args)} />,
+};
+
+/** Leading / trailing icons — they inherit the badge color via currentColor. */
+export const WithIcons = {
+  render: (args) => (
+    <Row>
+      <Badge {...args} color="success" icon={glyphFor('tick-circle', args.size)}>Verified</Badge>
+      <Badge {...args} color="warning" icon={glyphFor('clock-2', args.size)}>Pending</Badge>
+      <Badge {...args} color="error" icon={glyphFor('close-circle', args.size)}>Failed</Badge>
+      <Badge {...args} color="primary" rightIcon={glyphFor('arrow-right-01', args.size)}>Next</Badge>
+      <Badge {...args} variant="outline" color="violet" icon={glyphFor('star', args.size)} rightIcon={glyphFor('star', args.size)}>VIP</Badge>
+    </Row>
+  ),
+};
 
 export const Sizes = {
   render: (args) => (

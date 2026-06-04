@@ -61,6 +61,14 @@
     &[data-color="violet"]  { background-color: var(--tp-violet-50,  #faf5fe); color: var(--tp-violet-500,  #a461d8); }
   }
 
+  /* Leading / trailing icon — inherits currentColor (tints to the badge color).
+     The consumer sizes the icon to match the badge size. */
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
   /* ── OUTLINE ── */
   &[data-variant="outline"] {
     background-color: transparent;
