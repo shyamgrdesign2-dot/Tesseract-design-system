@@ -4,7 +4,6 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
 const VARIANTS = ['solid', 'soft', 'outline', 'gradient', 'dot'];
 const SIZES = ['xs', 'sm', 'md', 'lg'];
-const ICON_SIDES = ['none', 'left', 'right', 'both'];
 const ICON_PX = { xs: 10, sm: 12, md: 14, lg: 16 };
 
 // Resolve the icon node for a side, sized to the badge.
@@ -19,8 +18,10 @@ const meta = {
     color: { control: 'select', options: COLORS },
     size: { control: 'inline-radio', options: SIZES },
     children: { control: 'text', table: { category: 'Content' } },
-    iconSide: { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Content' } },
-    iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'Pick a TP icon (or type a name)', table: { category: 'Content' } },
+    // Left and right icons are independent — pick a different TP glyph for each
+    // ("" = no icon on that side).
+    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', description: 'TP icon for the left side ("" = none)', table: { category: 'Content' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon for the right side ("" = none)', table: { category: 'Content' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -28,24 +29,21 @@ const meta = {
     color: 'primary',
     size: 'md',
     children: 'Badge',
-    iconSide: 'left',
-    iconName: 'verify',
+    leftIconName: 'verify',
+    rightIconName: '',
     sticky: 'none',
   },
 };
 
 export default meta;
 
-// Inject icons from the controls into either/both sides; normalise sticky.
-const withIcons = ({ iconSide, iconName, sticky, ...args }) => {
-  const glyph = glyphFor(iconName, args.size);
-  return {
-    ...args,
-    sticky: sticky && sticky !== 'none' ? sticky : undefined,
-    icon: iconSide === 'left' || iconSide === 'both' ? glyph : undefined,
-    rightIcon: iconSide === 'right' || iconSide === 'both' ? glyph : undefined,
-  };
-};
+// Inject the independent left/right icons from the controls; normalise sticky.
+const withIcons = ({ leftIconName, rightIconName, sticky, ...args }) => ({
+  ...args,
+  sticky: sticky && sticky !== 'none' ? sticky : undefined,
+  icon: glyphFor(leftIconName, args.size),
+  rightIcon: glyphFor(rightIconName, args.size),
+});
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>

@@ -26,8 +26,8 @@ use-overlay). New atoms should default to hand-rolled.
 
 Atoms in this folder:
 `Badge`, `Button`, `Checkbox`, `Chip`, `Divider`, `Input`, `MedicalIcon`,
-`Radio`, `Skeleton`, `Slider`, `Switch`, plus decorative helpers
-`NoiseOverlay` and `AnimatedGrid`.
+`Radio`, `Skeleton`, `Slider`, `Toggle`, plus the decorative helper
+`AnimatedGrid`.
 
 `Button` is the single CTA — one component covers text, with-icons,
 icon-only, and split (primary + dropdown `menu`) shapes across every
@@ -47,8 +47,7 @@ variant × theme × size × surface.
 | `Radio` | Single-select control in a radio group. | size: sm/md/lg · states match Checkbox. |
 | `Skeleton` | Pulsing placeholder block while loading. | width, height, radius. |
 | `Slider` | Value slider with track + thumb. | size: sm/md/lg · min, max, step, color. |
-| `Switch` | Toggle (on/off). | size: sm/md/lg · shape: rounded/square · checked, disabled. |
-| `NoiseOverlay` | Subtle film-grain texture for premium surfaces. | opacity. |
+| `Toggle` | On/off toggle switch. | size: sm/md/lg · shape: rounded/square · checked, disabled. |
 | `AnimatedGrid` | Decorative animated SVG lattice with comet pulses (banner/hero background). | className, style. |
 
 ## When to use what
@@ -60,7 +59,7 @@ variant × theme × size × surface.
 | Status text + color in a small pill | `Badge` |
 | Removable filter or multi-select pill | `Chip` |
 | A single-line text field | `Input` |
-| Boolean toggle | `Switch` (immediate effect) or `Checkbox` (form field) |
+| Boolean toggle | `Toggle` (immediate effect) or `Checkbox` (form field) |
 | Single-select in a group | `Radio` |
 | Loading: shape | `Skeleton` |
 | Medical glyph | `MedicalIcon` (TPMedicalIcon) |

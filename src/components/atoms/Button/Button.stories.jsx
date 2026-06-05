@@ -81,8 +81,11 @@ const meta = {
       description: 'Demo only — which Button shape to render',
       table: { category: 'Shape (demo)' },
     },
-    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'TP icon ("" = none)', table: { category: 'Icons' } },
-    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon ("" = none)', table: { category: 'Icons' } },
+    // Which side(s) carry an icon on the text shape; the glyphs come from the
+    // two TP-library pickers below.
+    icons:         { control: 'inline-radio', options: ['none', 'left', 'right', 'both'], name: 'icons (side)', description: 'Leading / trailing / both icon on the text shape', table: { category: 'Icons' } },
+    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'TP icon for the left side', table: { category: 'Icons' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon for the right side', table: { category: 'Icons' } },
     iconName:      { control: 'text', tpIcon: true, name: 'icon (icon-only / split)', table: { category: 'Icons' } },
   },
   args: {
@@ -95,8 +98,9 @@ const meta = {
     loading:  false,
     disabled: false,
     shape:     'text',
-    leftIconName:  '',
-    rightIconName: '',
+    icons:         'left',
+    leftIconName:  'plus',
+    rightIconName: 'arrow-right-02',
     iconName:      'plus',
   },
 };
@@ -111,10 +115,12 @@ export const Playground = {
   name: '🎛 Playground',
   // For surface="dark", switch the canvas background via the Storybook
   // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
-  render: ({ shape, leftIconName, rightIconName, iconName, radius, children, ...args }) => {
+  render: ({ shape, icons, leftIconName, rightIconName, iconName, radius, children, ...args }) => {
     const px = ICON_FOR(args.size);
     const style = { '--tp-btn-radius': `${radius}px` };
     const lib = (name) => (name ? <TPLibraryIcon name={name} size={px} /> : undefined);
+    const showLeft  = icons === 'left'  || icons === 'both';
+    const showRight = icons === 'right' || icons === 'both';
 
     if (shape === 'icon-only') {
       return <Button {...args} style={style} aria-label={children || 'Action'} icon={lib(iconName) || <TPLibraryIcon name="plus" size={px} />} />;
@@ -130,7 +136,7 @@ export const Playground = {
 
     // text
     return (
-      <Button {...args} style={style} leftIcon={lib(leftIconName)} rightIcon={lib(rightIconName)}>
+      <Button {...args} style={style} leftIcon={showLeft ? lib(leftIconName) : undefined} rightIcon={showRight ? lib(rightIconName) : undefined}>
         {children}
       </Button>
     );

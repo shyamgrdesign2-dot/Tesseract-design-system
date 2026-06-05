@@ -264,7 +264,7 @@ export const inputTokens = {
 // ─── COMPONENT: CHECKBOX / RADIO / SWITCH ─────────────────────
 
 export const toggleTokens = {
-  component: "Checkbox, Radio & Switch",
+  component: "Checkbox, Radio & Toggle",
   category: "input",
   description: "Selection control tokens for checkbox, radio, and toggle switch",
   tokens: [

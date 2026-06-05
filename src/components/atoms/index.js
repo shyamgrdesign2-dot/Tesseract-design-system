@@ -21,7 +21,7 @@ export { LoadingIndicator } from "./LoadingIndicator";
 // Form
 export { InputBox } from "./Input";
 export { Checkbox } from "./Checkbox";
-export { Switch } from "./Switch";
+export { Toggle } from "./Toggle";
 
 // Form — extended
 export { Radio, RadioGroup, FormControlLabel } from "./Radio";
@@ -37,5 +37,4 @@ export { TPMedicalIcon, tpMedicalIconRegistry, tpMedicalIconNames, resolveTPMedi
 export { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./icons/tp";
 
 // Animation / Decorative
-export { NoiseOverlay } from "./NoiseOverlay";
 export { AnimatedGrid } from "./AnimatedGrid";

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Switch — Toggle switch atom.
+ * Toggle — on/off toggle switch atom.
  *
  * Hand-rolled (no Radix). Renders a <button role="switch"> + a hidden
  * checkbox for native form participation. Preserves the same data-state
@@ -17,9 +17,9 @@
  */
 
 import * as React from "react";
-import styles from "./Switch.module.scss";
+import styles from "./Toggle.module.scss";
 
-export const Switch = React.forwardRef(function Switch(
+export const Toggle = React.forwardRef(function Toggle(
   {
     size = "md",
     shape = "rounded",
@@ -112,5 +112,5 @@ export const Switch = React.forwardRef(function Switch(
   );
 });
 
-Switch.displayName = "Switch";
-export default Switch;
+Toggle.displayName = "Toggle";
+export default Toggle;
