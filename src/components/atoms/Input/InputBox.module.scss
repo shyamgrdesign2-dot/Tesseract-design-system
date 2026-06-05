@@ -107,6 +107,58 @@
   color: var(--tp-slate-600, #545460);
 }
 
+// ─── Seamless variant (borderless — fills a table cell, inset focus/status ring) ─
+// The cell border lives as an inset pseudo-ring (3px in, rounded) so a row of
+// these reads as one input box per cell. Active (focus) wins over status colour.
+.wrap[data-variant="seamless"] {
+  position:  relative;
+  display:   flex;
+  width:     100%;
+  height:    100%;
+  gap:       0;
+
+  .fieldRow {
+    border:        none;
+    background:    transparent;
+    border-radius: 0;
+    height:        100%;
+    box-shadow:    none;
+    overflow:      visible;
+    position:      relative;
+    z-index:       1;
+    &:hover:not(:focus-within):not(:has(input:disabled)) { border: none; }
+    &:focus-within { border: none; box-shadow: none; }
+  }
+  // Neutralise the idle status border (we draw a ring instead).
+  &[data-status] .fieldRow { border: none; }
+  &[data-disabled] .fieldRow,
+  &[data-readonly] .fieldRow { background: transparent; }
+
+  // Inset fill (behind text) + ring (above), both 3px in with rounded corners.
+  &::before, &::after {
+    content:        "";
+    position:       absolute;
+    inset:          3px;
+    border-radius:  7px;
+    corner-shape:   round;
+    pointer-events: none;
+  }
+  &::before { z-index: 0; background: transparent; transition: background 120ms ease; }
+  &::after  { z-index: 2; box-shadow: 0 0 0 1.5px transparent; transition: box-shadow 120ms ease; }
+
+  // Idle status ring.
+  &[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tp-success-500, #10B981); }
+  &[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tp-warning-500, #F59E0B); }
+  &[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tp-error-500, #E11D48); }
+
+  // Active (focus) — blue ring + faint blue fill, wins over status.
+  &:focus-within::after  { box-shadow: 0 0 0 1.5px var(--tp-blue-500, #4B4AD5); }
+  &:focus-within::before { background: color-mix(in srgb, var(--tp-blue-50, #EEEEFF) 35%, transparent); }
+
+  // Disabled (locked) cell — dimmed, no ring.
+  &[data-disabled]::after { box-shadow: none; }
+}
+
 // ─── Core input ───────────────────────────────────────────────────────────────
 .input {
   flex:        1 1 0;

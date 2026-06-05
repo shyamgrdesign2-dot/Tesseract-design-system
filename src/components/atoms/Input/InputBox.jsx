@@ -16,6 +16,9 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  * Props:
  *   size        "sm" | "md" | "lg"                                  default "md"
  *   status      "default" | "success" | "error" | "warning"         default "default"
+ *   variant     "default" | "seamless" — seamless is borderless and fills its
+ *               container, drawing an inset focus/status ring (table-cell use)
+ *               default "default"
  *   allow       "any" | "numeric" | "alpha" | "alphanumeric"         live character filter
  *   label       string — field label
  *   helperText  string — hint / status message below the field
@@ -67,6 +70,7 @@ export const InputBox = forwardRef(function InputBox(
   {
     size       = "md",
     status     = "default",
+    variant    = "default",
     allow      = "any",
     label,
     helperText,
@@ -176,6 +180,7 @@ export const InputBox = forwardRef(function InputBox(
     <div
       className={wrapCls}
       data-size={size}
+      data-variant={variant !== "default" ? variant : undefined}
       data-status={status !== "default" ? status : undefined}
       data-disabled={disabled || undefined}
       data-readonly={readOnly || undefined}

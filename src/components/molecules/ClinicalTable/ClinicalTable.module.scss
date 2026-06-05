@@ -1,4 +1,7 @@
-/* ClinicalTable.module.scss — editable RxPad table. */
+/* ClinicalTable.module.scss — editable RxPad table.
+   Each cell hosts a seamless atom (InputBox / Dropdown) that owns its own
+   input chrome + focus/status ring; this file owns the table grid, the sticky
+   action column, and the row-action menu. */
 
 .wrap {
   position: relative;
@@ -45,105 +48,29 @@
   &:hover { background: color-mix(in srgb, var(--tp-slate-50, #f8fafc) 60%, transparent); }
 }
 .td {
+  height: 52px;
   padding: 0;
+  position: relative;
   vertical-align: middle;
   border-right: 1px solid var(--tp-slate-100, #f1f1f5);
   background: var(--tp-slate-0, #fff);
   &:last-child { border-right: none; }
 }
+/* The seamless atom fills the cell box. */
+.td > * { height: 100%; width: 100%; }
 
-/* ── Editable cell (own input box: focus + status stroke) ── */
-.cell {
-  position: relative;
-  height: 52px;
+/* ── Sticky action column ── */
+.actionCol { width: 92px; min-width: 92px; }
+.sticky {
+  position: sticky;
+  right: 0;
+  z-index: 5; /* above scrolling body cells so content slides UNDER it */
+  background: var(--tp-slate-0, #fff);
 }
-.cell::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border-radius: 7px;
-  corner-shape: round;
-  box-shadow: 0 0 0 1.5px transparent;
-  pointer-events: none;
-  transition: box-shadow 120ms ease;
-  z-index: 1;
-}
-.cell[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tp-success-500, #10b981); }
-.cell[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tp-warning-500, #f59e0b); }
-.cell[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tp-error-500, #e11d48); }
-/* Active (focused / open) — blue stroke + faint fill, like the CTA selected state. */
-.cell[data-active] { background: color-mix(in srgb, var(--tp-blue-50, #eeeeff) 35%, transparent); }
-.cell[data-active]::after { box-shadow: 0 0 0 1.5px var(--tp-blue-500, #4b4ad5); }
+.headRow .sticky { background: var(--tp-slate-50, #f8fafc); z-index: 6; }
 
-.cellInput {
-  position: relative;
-  z-index: 0;
-  width: 100%;
-  height: 52px;
-  border: none;
-  background: transparent;
-  padding: 0 12px;
-  font: inherit;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--tp-slate-700, #454551);
-  outline: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  &::placeholder { color: var(--tp-slate-400, #a2a2a8); }
-  &:read-only { cursor: pointer; }
-  &[data-align="center"] { text-align: center; }
-  &[data-align="right"]  { text-align: right; }
-}
-
-/* Combobox cell — chevron flips up when open (only the `select` cells have one;
-   a `search` cell is a plain search with no chevron). */
-.hasChevron .cellInput { padding-right: 28px; }
-
-/* Locked cell — until the row's primary key (first column) is filled. */
-.cell[data-disabled] { background: color-mix(in srgb, var(--tp-slate-50, #f8fafc) 70%, transparent); }
-.cell[data-disabled] .cellInput { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; }
-.cell[data-disabled] .cellChevron { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; }
-.cellChevron {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border: none;
-  background: transparent;
-  color: var(--tp-slate-500, #717179);
-  cursor: pointer;
-  > * { transition: transform 160ms ease; }
-  &[data-open] {
-    color: var(--tp-blue-500, #4b4ad5);
-    > * { transform: rotate(180deg); }
-  }
-}
-
-/* ── Action cell ── */
-.actionCell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: 52px;
-  padding: 0 8px;
-}
-
-/* ── Sticky columns (action / delete) + overflow shadow ── */
-.sticky { position: sticky; right: 0; z-index: 1; }
-.stickyEnd { position: sticky; right: 0; z-index: 2; }
-.headRow .sticky, .headRow .stickyEnd { z-index: 3; }
-/* Left fade/shadow on the leftmost sticky cell when the table overflows. */
-.wrap[data-overflow] [data-shadow="true"]::before {
+/* Left fade — ONLY while content is scrolled behind the sticky column. */
+.wrap[data-behind] .sticky[data-shadow]::before {
   content: "";
   position: absolute;
   top: 0;
@@ -155,7 +82,17 @@
   background: linear-gradient(to left, rgba(23, 23, 37, 0.12), transparent);
 }
 
-/* ── Side-column buttons ── */
+.actionCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 52px;
+  padding: 0 6px;
+}
+.moreAnchor { display: inline-flex; }
+
+/* ── Side-column drag handle ── */
 .dragHandle {
   display: inline-flex;
   align-items: center;
@@ -170,24 +107,10 @@
   &:hover { background: var(--tp-slate-100, #f1f1f5); color: var(--tp-slate-600, #717179); }
   &:active { cursor: grabbing; }
 }
-.deleteBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 52px;
-  border: none;
-  background: transparent;
-  color: var(--tp-slate-500, #717179);
-  cursor: pointer;
-  transition: background-color 120ms ease, color 120ms ease;
-  &:hover { background: var(--tp-error-50, #fff1f2); color: var(--tp-error-600, #c8102e); }
-}
 
-/* ── Combobox popover ── */
+/* ── Row "⋯" action menu (portal) ── */
 .menu {
-  max-height: 240px;
-  overflow-y: auto;
+  min-width: 168px;
   padding: 4px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
   border-radius: 10px;
@@ -196,7 +119,9 @@
   box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
 }
 .menuItem {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   text-align: left;
   padding: 8px 10px;
@@ -208,12 +133,11 @@
   font-size: 13px;
   color: var(--tp-slate-700, #454551);
   cursor: pointer;
-  &[data-active] { background: var(--tp-slate-50, #f8fafc); }
-  &[aria-selected="true"] { color: var(--tp-blue-600, #3c3bb5); font-weight: 600; }
+  &:hover { background: var(--tp-slate-50, #f8fafc); }
 }
-.menuItemCustom {
-  color: var(--tp-blue-600, #3c3bb5);
-  border-bottom: 1px solid var(--tp-slate-100, #f1f1f5);
-  margin-bottom: 2px;
-  strong { font-weight: 700; }
+.menuItemIcon { display: inline-flex; align-items: center; color: var(--tp-slate-500, #717179); }
+.menuItemDanger {
+  color: var(--tp-error-600, #c8102e);
+  .menuItemIcon { color: var(--tp-error-600, #c8102e); }
+  &:hover { background: var(--tp-error-50, #fff1f2); }
 }

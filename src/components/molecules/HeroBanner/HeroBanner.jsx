@@ -8,8 +8,10 @@ const BACKGROUND =
   "radial-gradient(99.09% 59.99% at 50% 55.44%, #46286C 0%, #25113E 39.08%, #372153 78.16%, #6C4F90 100%)";
 
 const SIZE_HEIGHT = { sm: 80, md: 120, lg: 160 };
-// Default bottom corner radius scales with size (md = 18px).
-const SIZE_RADIUS = { sm: 14, md: 18, lg: 22 };
+// Default bottom corner radius scales with size (md = 24px). Soft, generous
+// corners; the practical ceiling is 42px.
+const SIZE_RADIUS = { sm: 20, md: 24, lg: 32 };
+const MAX_RADIUS = 42;
 
 // Headings come in exactly two sizes: 18px and 24px.
 const TITLE_FONT_SIZE = { sm: 18, md: 24 };
@@ -26,7 +28,7 @@ const BACK_ICON = { sm: 14, md: 18 };
  *
  * Props:
  *   size          "sm" | "md" | "lg"          banner height; default "md"
- *   bottomRadius  number                       overrides the size default (sm 14 / md 18 / lg 22)
+ *   bottomRadius  number                       overrides the size default (sm 20 / md 24 / lg 32); max 42
  *   title         string                       required
  *   subtitle      string                       optional
  *   titleSize     "sm" (18px) | "md" (24px)    default "md"
@@ -52,8 +54,9 @@ export function HeroBanner({
   const height = SIZE_HEIGHT[size] ?? SIZE_HEIGHT.md;
   const ts = TITLE_FONT_SIZE[titleSize] ? titleSize : "md";
   const backSize = BACK_SIZE[ts];
-  // Explicit bottomRadius wins; otherwise it scales with size (md = 16px).
-  const radius = bottomRadius ?? SIZE_RADIUS[size] ?? SIZE_RADIUS.md;
+  // Explicit bottomRadius wins; otherwise it scales with size (md = 24px).
+  // Clamped to a 42px ceiling so the banner corners stay sane.
+  const radius = Math.min(MAX_RADIUS, bottomRadius ?? SIZE_RADIUS[size] ?? SIZE_RADIUS.md);
 
   return (
     <div

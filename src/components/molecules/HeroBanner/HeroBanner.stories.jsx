@@ -79,7 +79,7 @@ const meta = {
 
     // ── Appearance ──  (pattern opacity is fixed at 100%, no control)
     size:         { control: 'select', options: ['sm', 'md', 'lg'], description: 'height 80 / 120 / 160', table: { category: 'Appearance' } },
-    bottomRadius: { control: { type: 'range', min: 0, max: 32, step: 1 }, name: 'bottom radius (L + R)', table: { category: 'Appearance' } },
+    bottomRadius: { control: { type: 'range', min: 0, max: 42, step: 1 }, name: 'bottom radius (L + R)', table: { category: 'Appearance' } },
     pattern:      { control: 'boolean', name: 'with pattern', table: { category: 'Appearance' } },
 
     // ── Actions — up to 3 CTAs, each a dark-surface Button (text / icon / split) ──
@@ -121,7 +121,7 @@ const meta = {
     showBackButton: false,
 
     size: 'md',
-    bottomRadius: 18,
+    bottomRadius: 24,
     pattern: true,
 
     ctaSize: 'sm',
@@ -339,8 +339,8 @@ export const BottomRadius = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <HeroBanner bottomRadius={0} title="No Bottom Radius (0)" />
-      <HeroBanner title="Default — md size (18)" />
-      <HeroBanner bottomRadius={32} title="Large Bottom Radius (32)" />
+      <HeroBanner title="Default — md size (24)" />
+      <HeroBanner bottomRadius={42} title="Max Bottom Radius (42)" />
     </div>
   ),
 };

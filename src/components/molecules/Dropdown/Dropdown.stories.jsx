@@ -281,6 +281,44 @@ export const FooterCtaAlignment = {
   },
 };
 
+/** Grouped sections — pass `options` as `[{ heading, options:[…] }]`. Each
+ *  section renders its own heading; search filters within sections and hides any
+ *  that empty out; keyboard nav flows across all sections. */
+export const GroupedSections = {
+  name: 'Sections with headings',
+  render: () => {
+    const [v, setV] = React.useState('chest-pain');
+    const grouped = [
+      { heading: 'Frequently used', options: [
+        { value: 'chest-pain', label: 'Chest pain' },
+        { value: 'fever', label: 'Fever' },
+        { value: 'cough', label: 'Cough' },
+      ] },
+      { heading: 'Respiratory', options: [
+        { value: 'breathless', label: 'Shortness of breath' },
+        { value: 'wheeze', label: 'Wheezing' },
+      ] },
+      { heading: 'Cardiac', options: [
+        { value: 'palpitations', label: 'Palpitations' },
+        { value: 'syncope', label: 'Syncope' },
+      ] },
+    ];
+    return <Frame><Dropdown label="Symptom" searchable options={grouped} value={v} onChange={setV} placeholder="Search symptoms…" /></Frame>;
+  },
+};
+
+/** Editable combobox — the trigger itself is a typeahead input. With
+ *  `allowCustom` it offers "Add ‹query›"; `groupLabel` adds a single header. Used
+ *  inside ClinicalTable search cells (with `variant="seamless"`, `chevron={false}`). */
+export const EditableCombobox = {
+  name: 'Editable combobox (+ add custom)',
+  render: () => {
+    const [v, setV] = React.useState('');
+    const opts = ['Fever', 'Cough', 'Chest pain', 'Headache', 'Fatigue', 'Nausea'];
+    return <Frame><Dropdown label="Symptom" editable allowCustom chevron={false} groupLabel="Frequently used" footerHint="keys" options={opts.map((o) => ({ value: o, label: o }))} value={v} onChange={setV} placeholder="Search & add…" /></Frame>;
+  },
+};
+
 export const Widths = {
   name: 'Adjustable width',
   render: () => {

@@ -46,6 +46,38 @@
   &:disabled { background: var(--tp-slate-50, #FAFAFB); color: var(--tp-slate-400, #A2A2A8); cursor: not-allowed; }
 }
 
+/* Editable (combobox) trigger — the trigger itself is a typeahead input. */
+.trigger[data-editable] { cursor: text; }
+.editInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tp-slate-900, #171725);
+  &::placeholder { color: var(--tp-slate-400, #A2A2A8); }
+  &:disabled { color: var(--tp-slate-400, #A2A2A8); cursor: not-allowed; }
+}
+.chevronBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--tp-slate-400, #A2A2A8);
+  cursor: pointer;
+  > svg { transition: transform 200ms ease; }
+  &[data-open="true"] > svg { transform: rotate(180deg); }
+  &:disabled { cursor: not-allowed; }
+}
+
 /* Optional leading icon inside the trigger (e.g. the clinic glyph). */
 .triggerLead { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--tp-slate-600, #717179); }
 
@@ -68,6 +100,53 @@
   color: var(--tp-slate-400, #A2A2A8);
   transition: transform 200ms ease;
   &[data-open="true"] { transform: rotate(180deg); }
+}
+
+// ─── Seamless variant (borderless — fills a table cell, inset focus/status ring) ─
+.root.seamless {
+  width: 100%;
+  height: 100%;
+  gap: 0;
+  position: relative;
+
+  .trigger {
+    border: none;
+    background: transparent;
+    border-radius: 7px;
+    corner-shape: round;
+    min-height: 0;
+    height: 100%;
+    padding: 0 12px;
+    box-shadow: none;
+    &:hover:not(:disabled) { border: none; }
+    &[data-open="true"], &:focus-visible { border: none; box-shadow: none; }
+    &:disabled { background: transparent; }
+  }
+  .chevronBtn[data-open="true"] { color: var(--tp-blue-500, #4B4AD5); }
+
+  // Inset ring (mirrors the InputBox seamless cell). Faint fill behind the text.
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 7px;
+    corner-shape: round;
+    pointer-events: none;
+  }
+  &::before { z-index: 0; background: transparent; transition: background 120ms ease; }
+  &::after  { z-index: 2; box-shadow: 0 0 0 1.5px transparent; transition: box-shadow 120ms ease; }
+
+  &[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tp-success-500, #10B981); }
+  &[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tp-warning-500, #F59E0B); }
+  &[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tp-error-500, #E11D48); }
+
+  // Active (open / focused) — blue ring + faint blue fill, wins over status.
+  &[data-open="true"]::after,
+  &:focus-within::after { box-shadow: 0 0 0 1.5px var(--tp-blue-500, #4B4AD5); }
+  &[data-open="true"]::before,
+  &:focus-within::before { background: color-mix(in srgb, var(--tp-blue-50, #EEEEFF) 35%, transparent); }
+
+  .trigger, .editInput { position: relative; z-index: 1; }
 }
 
 // ─── Menu (portal) ────────────────────────────────────────────────────────────
@@ -103,6 +182,17 @@
   font-family: inherit;
   color: var(--tp-slate-900, #171725);
   &::placeholder { color: var(--tp-slate-400, #A2A2A8); }
+}
+
+// ─── Group label (sticky header above the list, e.g. "Frequently used") ───────
+.groupLabel {
+  flex-shrink: 0;
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tp-slate-400, #A2A2A8);
 }
 
 // ─── List (scrollable, with a visible scroll indicator) ───────────────────────
@@ -147,6 +237,22 @@
   &[data-selected="true"] { color: var(--tp-blue-700, #2E2D96); }
   &[data-selected="true"] .optTitle { font-weight: 600; }
   &[data-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+}
+
+// Custom-add row ("Add ‹query›") — leads the list when typing an unknown value.
+.optionCustom {
+  color: var(--tp-blue-600, #3C3BB5);
+  font-weight: 500;
+  strong { font-weight: 700; }
+}
+.optAddIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--tp-blue-600, #3C3BB5);
 }
 
 // Wraps the composed Checkbox atom; decorative (the row handles the click).

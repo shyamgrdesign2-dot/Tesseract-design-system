@@ -3,28 +3,47 @@
 /**
  * ClinicalTable — an EDITABLE table for RxPad modules (symptoms, vitals, …).
  *
- * Like DataTable, but every cell is its own input box: a free-text input, a
- * dropdown (pick), a search combobox (type / filter / custom-add), or an action
- * cell. Each cell shows a focus stroke (blue) and per-cell status strokes
- * (success / error / warning). Columns are fully UI-configurable; the data shape
- * stays backend-driven.
+ * Every cell is its OWN input box, composed from the design-system atoms:
+ *   • free text / numeric  → the InputBox atom (variant="seamless")
+ *   • dropdown (pick)      → the Dropdown molecule (variant="seamless", chevron)
+ *   • search combobox      → the Dropdown molecule (editable, no chevron, a
+ *                            "Frequently used" header + "Add ‹custom›")
+ * Each cell shows a blue focus ring and per-cell status rings (success / error /
+ * warning) via `column.validate`.
+ *
+ * Fixed skeleton (always present, in order):
+ *   [drag-reorder] · NAME (primary search) · …configurable columns… · NOTES
+ *   (free text) · ACTION (⋯ menu + delete)
+ * The NAME and NOTES columns are mandatory; everything between them is fully
+ * configurable from `columns`. NAME is the PRIMARY KEY — a row's other cells stay
+ * locked until it is filled, and the next (draft) row only opens after it.
  *
  * Props:
- *   columns   [{ id, header, type?: "text"|"select"|"search"|"action",
- *               options?, placeholder?, width?, minWidth?, maxWidth?, align?,
- *               allowCustom?: bool (search), sticky?: "right" (usually action),
- *               render?: (row) => ReactNode (action), validate?: (value, row) =>
- *               "success"|"error"|"warning"|undefined }]            type default "text"
- *   rows / defaultRows  [{ id, [colId]: value }]                    controlled / uncontrolled
+ *   rows / defaultRows  [{ id, [colId]: value }]                 controlled / uncontrolled
  *   onChange  (rows) => void
- *   reorderable  boolean  drag handle + reorder                     default true
- *   deletable    boolean  built-in trailing delete column          default true
- *   autoRow      boolean  keep one empty row to type into          default true
+ *   columns   the CONFIGURABLE middle columns (between Name and Notes). Each:
+ *     { id, header, type?: "text"|"number"|"select"|"search",
+ *       options?: string[]|{value,label,icon?}[], placeholder?, width?, minWidth?,
+ *       maxWidth?, align?, allow?: "numeric"|"alpha"|"alphanumeric" (text),
+ *       icon?: ReactNode, frequentlyUsedLabel?: string, allowCustom?: bool (search),
+ *       searchable?: bool (select), editable?: bool (default true),
+ *       validate?: (value, row) => "success"|"error"|"warning"|undefined }
+ *   name      override config for the primary Name column (defaults provided)
+ *   notes     override config for the Notes column (defaults provided)
+ *   reorderable  boolean  drag handle + reorder                  default true
+ *   deletable    boolean  delete button in the action column     default true
+ *   rowMenu      Array<{ label, icon?, onClick?: (row) => void, danger?: bool }>
+ *                  extra "⋯" row actions. `onClick` omitted → built-in
+ *                  "Duplicate" duplicates the row.                default [Duplicate]
+ *   autoRow      boolean  keep one empty draft row to type into  default true
  *   className
  */
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { InputBox } from "@/src/components/atoms/Input/InputBox";
+import { Dropdown } from "@/src/components/molecules/Dropdown";
+import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import { cn } from "@/src/hooks/utils";
@@ -32,6 +51,20 @@ import styles from "./ClinicalTable.module.scss";
 
 let _rowSeq = 0;
 const makeEmptyRow = () => ({ id: `ct-${++_rowSeq}` });
+const toOptions = (opts) => (opts ?? []).map((o) => (typeof o === "string" ? { value: o, label: o } : o));
+
+// Adoptable min/max widths per cell type — keeps columns scalable without each
+// one declaring widths. A column may still override with width/minWidth/maxWidth.
+//   number  short values (doses, counts)           84–120
+//   select  short picks (1-0-1, Mild, 2 days)     120–180
+//   text    free notes                            140–260
+//   search  long names (a primary key / medicine) 200–320
+const TYPE_WIDTHS = {
+  number: { minWidth: 84,  maxWidth: 120 },
+  select: { minWidth: 120, maxWidth: 180 },
+  text:   { minWidth: 140, maxWidth: 260 },
+  search: { minWidth: 200, maxWidth: 320 },
+};
 
 function DragDots() {
   return (
@@ -44,54 +77,24 @@ function DragDots() {
   );
 }
 
-// ── Free-text cell — bordered input box (focus/status stroke via the wrapper) ──
-function TextCell({ value, placeholder, align, status, disabled, onChange }) {
-  const [focused, setFocused] = React.useState(false);
-  return (
-    <div className={styles.cell} data-disabled={disabled || undefined} data-active={focused && !disabled ? "" : undefined} data-status={!focused ? status : undefined}>
-      <input
-        className={styles.cellInput}
-        data-align={align}
-        value={value ?? ""}
-        placeholder={disabled ? "" : placeholder}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
-    </div>
-  );
-}
-
-// ── Dropdown / search combobox cell ──
-// `search` allows free typing + custom-add; `select` is pick-from-list. Both:
-// show frequently-used options on focus, filter on type, keyboard nav, and a
-// chevron that flips up when open. Active (focused/open) shows the blue stroke.
-function ComboCell({ value, options = [], placeholder, align, status, allowCustom, showChevron = true, disabled, onChange }) {
-  const wrapRef = React.useRef(null);
+// ── Row "⋯" menu — a small portal of row actions (reuses the Button atom for the
+// trigger; renders its own lightweight popover). ──
+function MoreMenu({ items, row }) {
   const [open, setOpen] = React.useState(false);
-  const [focused, setFocused] = React.useState(false);
-  const [activeIdx, setActiveIdx] = React.useState(-1);
+  const anchorRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
   const mounted = useIsClient();
 
-  const q = String(value ?? "").trim().toLowerCase();
-  const filtered = q ? options.filter((o) => String(o).toLowerCase().includes(q)) : options;
-  const exact = options.some((o) => String(o).toLowerCase() === q);
-  const showCustom = allowCustom && q && !exact;
-  const items = showCustom ? [{ custom: true, label: value }, ...filtered.map((o) => ({ label: o }))] : filtered.map((o) => ({ label: o }));
-
-  const place = React.useCallback(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    setPos({ top: r.bottom + 4, left: r.left, width: r.width });
-  }, []);
-
   React.useEffect(() => {
     if (!open) return undefined;
+    const place = () => {
+      const el = anchorRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setPos({ top: r.bottom + 4, right: window.innerWidth - r.right });
+    };
     place();
-    const onDoc = (e) => { if (!wrapRef.current?.contains(e.target) && !e.target.closest?.(`.${styles.menu}`)) setOpen(false); };
+    const onDoc = (e) => { if (!anchorRef.current?.contains(e.target) && !e.target.closest?.(`.${styles.menu}`)) setOpen(false); };
     window.addEventListener("scroll", place, true);
     window.addEventListener("resize", place);
     document.addEventListener("mousedown", onDoc);
@@ -100,67 +103,49 @@ function ComboCell({ value, options = [], placeholder, align, status, allowCusto
       window.removeEventListener("resize", place);
       document.removeEventListener("mousedown", onDoc);
     };
-  }, [open, place]);
+  }, [open]);
 
-  const choose = (item) => { onChange(item.custom ? item.label : item.label); setOpen(false); };
-
-  const onKeyDown = (e) => {
-    if (e.key === "ArrowDown") { e.preventDefault(); if (!open) setOpen(true); setActiveIdx((i) => Math.min((i < 0 ? -1 : i) + 1, items.length - 1)); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); setActiveIdx((i) => Math.max(i - 1, 0)); }
-    else if (e.key === "Enter") { if (open && activeIdx >= 0 && items[activeIdx]) { e.preventDefault(); choose(items[activeIdx]); } }
-    else if (e.key === "Escape") { setOpen(false); }
-  };
-
-  const active = (focused || open) && !disabled;
   return (
-    <div ref={wrapRef} className={cn(styles.cell, styles.cellCombo, showChevron && styles.hasChevron)} data-disabled={disabled || undefined} data-active={active ? "" : undefined} data-status={!active ? status : undefined}>
-      <input
-        className={styles.cellInput}
-        data-align={align}
-        value={value ?? ""}
-        placeholder={disabled ? "" : placeholder}
-        readOnly={!allowCustom}
-        disabled={disabled}
-        onChange={(e) => { onChange(e.target.value); if (!open) setOpen(true); }}
-        onFocus={() => { if (disabled) return; setFocused(true); setOpen(true); setActiveIdx(-1); }}
-        onBlur={() => setFocused(false)}
-        onKeyDown={onKeyDown}
+    <span ref={anchorRef} className={styles.moreAnchor}>
+      <Button
+        variant="ghost"
+        theme="neutral"
+        size="sm"
+        aria-label="More actions"
+        icon={<TPLibraryIcon name="more" size={16} />}
+        onClick={() => setOpen((o) => !o)}
       />
-      {showChevron && (
-        <button type="button" className={styles.cellChevron} data-open={open || undefined} aria-label="Toggle options" tabIndex={-1} disabled={disabled} onMouseDown={(e) => { e.preventDefault(); if (!disabled) setOpen((o) => !o); }}>
-          <TPLibraryIcon name="arrow-down-02" size={14} />
-        </button>
-      )}
-      {open && !disabled && mounted && pos && items.length > 0 && createPortal(
-        <div className={styles.menu} style={{ position: "fixed", top: pos.top, left: pos.left, minWidth: pos.width, zIndex: 3000 }} role="listbox">
-          {items.map((item, idx) => (
+      {open && mounted && pos && createPortal(
+        <div className={styles.menu} style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 3000 }} role="menu">
+          {items.map((it, i) => (
             <button
-              key={item.custom ? `__custom__${item.label}` : item.label}
+              key={i}
               type="button"
-              role="option"
-              aria-selected={!item.custom && item.label === value}
-              className={cn(styles.menuItem, item.custom && styles.menuItemCustom)}
-              data-active={idx === activeIdx || undefined}
-              onMouseEnter={() => setActiveIdx(idx)}
-              onMouseDown={(e) => { e.preventDefault(); choose(item); }}
+              role="menuitem"
+              className={cn(styles.menuItem, it.danger && styles.menuItemDanger)}
+              onClick={() => { setOpen(false); it.onClick?.(row); }}
             >
-              {item.custom ? <>Add &ldquo;<strong>{item.label}</strong>&rdquo;</> : item.label}
+              {it.icon && <span className={styles.menuItemIcon}>{it.icon}</span>}
+              {it.label}
             </button>
           ))}
         </div>,
         document.body,
       )}
-    </div>
+    </span>
   );
 }
 
 export function ClinicalTable({
   columns = [],
+  name,
+  notes,
   rows: rowsProp,
   defaultRows = [],
   onChange,
   reorderable = true,
   deletable = true,
+  rowMenu,
   autoRow = true,
   className,
 }) {
@@ -169,9 +154,37 @@ export function ClinicalTable({
   const baseRows = controlled ? rowsProp : internal;
   const commit = (next) => { if (!controlled) setInternal(next); onChange?.(next); };
 
-  // The first non-action column is the PRIMARY key: a row's other cells stay
-  // locked until it's filled, and the next (draft) row only opens after it.
-  const primaryColId = (columns.find((c) => c.type !== "action") ?? columns[0])?.id;
+  // ── Fixed skeleton: NAME (primary search) · …middle… · NOTES (free text) ──
+  const nameCol = {
+    id: "name",
+    header: "Name",
+    type: "search",
+    placeholder: "Search & add",
+    frequentlyUsedLabel: "Frequently used",
+    allowCustom: true,
+    minWidth: 220,
+    maxWidth: 320,
+    ...name,
+  };
+  const notesCol = {
+    id: "notes",
+    header: "Notes",
+    type: "text",
+    placeholder: "Notes",
+    minWidth: 140,
+    maxWidth: 240,
+    ...notes,
+  };
+  const dataColumns = [nameCol, ...columns, notesCol];
+  const primaryColId = nameCol.id;
+
+  // The "⋯" menu items — default to a single "Duplicate" action.
+  const menuItems = (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name="copy" size={15} /> }]).map((it) => ({
+    ...it,
+    onClick: it.onClick ?? (it.label === "Duplicate" ? (row) => duplicateRow(row) : undefined),
+  }));
+  const hasMenu = menuItems.length > 0;
+  const hasAction = deletable || hasMenu;
 
   const [draft, setDraft] = React.useState(makeEmptyRow);
   const rendered = autoRow ? [...baseRows, draft] : baseRows;
@@ -194,6 +207,14 @@ export function ClinicalTable({
     }
   };
   const deleteRow = (rowId) => commit(baseRows.filter((r) => r.id !== rowId));
+  const duplicateRow = (row) => {
+    const idx = baseRows.findIndex((r) => r.id === row.id);
+    if (idx < 0) return;
+    const clone = { ...row, id: `ct-${++_rowSeq}` };
+    const next = [...baseRows];
+    next.splice(idx + 1, 0, clone);
+    commit(next);
+  };
   const reorder = (to) => {
     if (dragIndex == null || dragIndex === to) return;
     const next = [...baseRows];
@@ -203,13 +224,17 @@ export function ClinicalTable({
     commit(next);
   };
 
-  // Horizontal-overflow detection → left fade/shadow on the sticky column.
+  // ── Horizontal-overflow → left fade ONLY while content is scrolled behind the
+  // sticky action column (i.e. not scrolled fully right). ──
   const scrollerRef = React.useRef(null);
-  const [overflow, setOverflow] = React.useState(false);
+  const [behind, setBehind] = React.useState(false);
   React.useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return undefined;
-    const update = () => setOverflow(el.scrollWidth > el.clientWidth + 1);
+    const update = () => {
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      setBehind(maxScroll > 1 && el.scrollLeft < maxScroll - 1);
+    };
     update();
     el.addEventListener("scroll", update, { passive: true });
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
@@ -218,33 +243,69 @@ export function ClinicalTable({
     return () => { el.removeEventListener("scroll", update); ro?.disconnect(); window.removeEventListener("resize", update); };
   }, [columns.length]);
 
-  const colStyle = (c) => ({ width: c.width, minWidth: c.minWidth, maxWidth: c.maxWidth });
+  const colStyle = (c) => {
+    const d = TYPE_WIDTHS[c.type] ?? TYPE_WIDTHS.text;
+    return { width: c.width, minWidth: c.minWidth ?? d.minWidth, maxWidth: c.maxWidth ?? d.maxWidth };
+  };
 
-  // Sticky-right action column sits left of the built-in delete column; the
-  // leftmost sticky cell carries the overflow fade/shadow.
-  const firstStickyColId = columns.find((c) => c.sticky === "right")?.id ?? null;
-  const hasActionSticky = firstStickyColId != null;
-  const actionRight = deletable ? 40 : 0;
-  const stickyStyle = (c) => (c.sticky === "right" ? { ...colStyle(c), right: actionRight } : colStyle(c));
+  // ── One editable cell — picks the right atom for the column type. A plain
+  // function (NOT a nested component) so the atoms keep a stable tree position
+  // and don't remount / lose focus on each parent render. ──
+  const renderCell = (c, row, locked) => {
+    const status = c.validate ? c.validate(row[c.id], row) : undefined;
+    const readOnly = c.editable === false;
+    if (c.type === "select" || c.type === "search") {
+      const isSearch = c.type === "search";
+      return (
+        <Dropdown
+          variant="seamless"
+          editable={isSearch}
+          chevron={!isSearch}
+          searchable={!isSearch && c.searchable}
+          allowCustom={isSearch && c.allowCustom !== false}
+          groupLabel={c.frequentlyUsedLabel}
+          footerHint="keys"
+          options={toOptions(c.options)}
+          value={row[c.id]}
+          placeholder={locked ? "" : c.placeholder}
+          status={!locked ? status : undefined}
+          leadingIcon={c.icon}
+          disabled={locked || readOnly}
+          onChange={(v) => updateCell(row.id, c.id, v)}
+        />
+      );
+    }
+    // text / number
+    return (
+      <InputBox
+        variant="seamless"
+        fullWidth
+        allow={c.type === "number" ? "numeric" : c.allow ?? "any"}
+        value={row[c.id] ?? ""}
+        placeholder={locked ? "" : c.placeholder}
+        status={!locked ? status ?? "default" : "default"}
+        leftIcon={c.icon}
+        disabled={locked}
+        readOnly={readOnly}
+        onChange={(e) => updateCell(row.id, c.id, e.target.value)}
+      />
+    );
+  };
 
   return (
-    <div ref={scrollerRef} className={cn(styles.wrap, className)} data-overflow={overflow || undefined}>
+    <div ref={scrollerRef} className={cn(styles.wrap, className)} data-behind={behind || undefined}>
       <table className={styles.table}>
         <thead>
           <tr className={styles.headRow}>
             {reorderable && <th className={cn(styles.th, styles.sideCol)} aria-hidden />}
-            {columns.map((c) => (
-              <th
-                key={c.id}
-                className={cn(styles.th, c.sticky === "right" && styles.sticky)}
-                style={stickyStyle(c)}
-                data-align={c.align}
-                data-shadow={c.id === firstStickyColId ? "true" : undefined}
-              >
-                {c.type === "action" ? "" : c.header}
+            {dataColumns.map((c) => (
+              <th key={c.id} className={styles.th} style={colStyle(c)} data-align={c.align}>
+                {c.header}
               </th>
             ))}
-            {deletable && <th className={cn(styles.th, styles.sideCol, styles.stickyEnd)} data-shadow={!hasActionSticky ? "true" : undefined} aria-hidden />}
+            {hasAction && (
+              <th className={cn(styles.th, styles.actionCol, styles.sticky)} data-shadow="true" aria-hidden />
+            )}
           </tr>
         </thead>
         <tbody>
@@ -268,46 +329,32 @@ export function ClinicalTable({
                   </td>
                 )}
 
-                {columns.map((c) => {
-                  const status = c.validate ? c.validate(row[c.id], row) : undefined;
+                {dataColumns.map((c) => {
                   // Non-primary cells are locked until the primary key is filled.
-                  const locked = c.type !== "action" && c.id !== primaryColId && !primaryFilled;
+                  const locked = c.id !== primaryColId && !primaryFilled;
                   return (
-                    <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={stickyStyle(c)} data-shadow={c.id === firstStickyColId ? "true" : undefined}>
-                      {c.type === "action" ? (
-                        <div className={styles.actionCell}>{primaryFilled && c.render ? c.render(row) : null}</div>
-                      ) : c.type === "select" || c.type === "search" ? (
-                        <ComboCell
-                          value={row[c.id]}
-                          options={c.options}
-                          placeholder={c.placeholder}
-                          align={c.align}
-                          status={status}
-                          allowCustom={c.type === "search" || c.allowCustom}
-                          showChevron={c.type === "select"}
-                          disabled={locked}
-                          onChange={(v) => updateCell(row.id, c.id, v)}
-                        />
-                      ) : (
-                        <TextCell
-                          value={row[c.id]}
-                          placeholder={c.placeholder}
-                          align={c.align}
-                          status={status}
-                          disabled={locked}
-                          onChange={(v) => updateCell(row.id, c.id, v)}
-                        />
-                      )}
+                    <td key={c.id} className={styles.td} style={colStyle(c)}>
+                      {renderCell(c, row, locked)}
                     </td>
                   );
                 })}
 
-                {deletable && (
-                  <td className={cn(styles.td, styles.sideCol, styles.stickyEnd)} data-shadow={!hasActionSticky ? "true" : undefined}>
-                    {!isDraft && (
-                      <button type="button" className={styles.deleteBtn} aria-label="Delete row" onClick={() => deleteRow(row.id)}>
-                        <TPLibraryIcon name="trash" size={18} />
-                      </button>
+                {hasAction && (
+                  <td className={cn(styles.td, styles.actionCol, styles.sticky)} data-shadow="true">
+                    {primaryFilled && (
+                      <div className={styles.actionCell}>
+                        {hasMenu && <MoreMenu items={menuItems} row={row} />}
+                        {deletable && (
+                          <Button
+                            variant="ghost"
+                            theme="neutral"
+                            size="sm"
+                            aria-label="Delete row"
+                            icon={<TPLibraryIcon name="trash" size={16} />}
+                            onClick={() => deleteRow(row.id)}
+                          />
+                        )}
+                      </div>
                     )}
                   </td>
                 )}
