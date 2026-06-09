@@ -157,7 +157,12 @@ export default {
 
 // ── Playground — every capability wired to Controls ───────────────────────────
 export const Playground = {
-  render: (a) => {
+  args: {
+    required: true,
+    clearable: false,
+    maxLength: 24
+  },
+  render:(a) => {
     const px = ICON_PX[a.size] || 18;
     const showLeft = a.iconSide === 'left' || a.iconSide === 'both';
     const showRight = a.iconSide === 'right' || a.iconSide === 'both';
@@ -189,7 +194,7 @@ export const Playground = {
         />
       </div>
     );
-  },
+  }
 };
 
 const Stack = ({ children, w = 380 }) => (

@@ -30,7 +30,11 @@ const fromArgs = ({ type, name, src, iconName, size, ring }) => ({
 });
 
 export const Playground = {
-  render: (args) => <Avatar {...fromArgs(args)} />,
+  args: {
+    type: "icon",
+    iconName: "bulk/user"
+  },
+  render:(args) => <Avatar {...fromArgs(args)} />
 };
 
 const Row = ({ children }) => <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>{children}</div>;
