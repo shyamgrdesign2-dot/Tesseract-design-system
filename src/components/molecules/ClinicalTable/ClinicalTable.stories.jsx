@@ -25,20 +25,12 @@ const FREQUENT_SYMPTOMS = ['Fever', 'Cough', 'Chest pain', 'Shortness of breath'
 const SINCE = ['1 day', '2 days', '3 days', '1 week', '2 weeks', '1 month'];
 const STATUS = ['Mild', 'Moderate', 'Severe', 'Improving', 'Worsening'];
 
-// Status validation → per-cell stroke colour (success / warning / error).
-const statusStroke = (v) => {
-  if (v === 'Severe' || v === 'Worsening') return 'error';
-  if (v === 'Moderate') return 'warning';
-  if (v === 'Mild' || v === 'Improving') return 'success';
-  return undefined;
-};
-
 // The primary "Name" + trailing "Notes" columns are part of the fixed skeleton —
 // pass only the CONFIGURABLE middle columns here.
 const SYMPTOM_NAME = { header: 'Symptoms Name', options: FREQUENT_SYMPTOMS, frequentlyUsedLabel: 'Frequently used' };
 const MIDDLE_COLUMNS = [
   { id: 'since', header: 'Since', type: 'select', placeholder: 'Select', options: SINCE, minWidth: 120, maxWidth: 140 },
-  { id: 'status', header: 'Status', type: 'select', placeholder: 'Select', options: STATUS, minWidth: 135, maxWidth: 170, validate: statusStroke },
+  { id: 'status', header: 'Status', type: 'select', placeholder: 'Select', options: STATUS, minWidth: 135, maxWidth: 170 },
 ];
 
 const SEED = [
@@ -73,7 +65,7 @@ export const ColumnTypes = {
       { id: 'dose', header: 'Dose (mg)', type: 'number', placeholder: '0', align: 'right', minWidth: 96, maxWidth: 110 },
       { id: 'freq', header: 'Frequency', type: 'select', searchable: true, placeholder: 'e.g. 1-0-1', options: ['1-0-0', '0-0-1', '1-0-1', '1-1-1'], minWidth: 120, maxWidth: 140 },
       { id: 'since', header: 'Since', type: 'select', placeholder: 'Select', options: SINCE, icon: <TPLibraryIcon name="calendar-1" size={15} />, minWidth: 140, maxWidth: 160 },
-      { id: 'status', header: 'Status', type: 'select', placeholder: 'Select', options: STATUS, minWidth: 135, maxWidth: 170, validate: statusStroke },
+      { id: 'status', header: 'Status', type: 'select', placeholder: 'Select', options: STATUS, minWidth: 135, maxWidth: 170 },
     ];
     return (
       <div style={{ maxWidth: 900 }}>
