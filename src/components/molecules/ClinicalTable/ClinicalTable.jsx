@@ -105,6 +105,37 @@ export function ClinicalTable({
   const movedTimer = React.useRef(null);
   React.useEffect(() => () => clearTimeout(movedTimer.current), []);
 
+  // ── FLIP: rows physically glide to their new position on reorder/delete/dup.
+  // Capture each row's top BEFORE the reorder commit; the layout effect reads the
+  // new tops and plays the inverted delta back to zero. ──
+  const rowEls = React.useRef(new Map());
+  const flipFrom = React.useRef(null);
+  const captureFlip = () => {
+    const m = new Map();
+    rowEls.current.forEach((el, id) => { if (el && el.isConnected) m.set(id, el.getBoundingClientRect().top); });
+    flipFrom.current = m;
+  };
+  React.useLayoutEffect(() => {
+    const prev = flipFrom.current;
+    if (!prev) return;
+    flipFrom.current = null;
+    rowEls.current.forEach((el, id) => {
+      const prevTop = prev.get(id);
+      if (!el || prevTop == null) return;
+      const delta = prevTop - el.getBoundingClientRect().top;
+      if (Math.abs(delta) < 0.5) return;
+      el.style.transition = "none";
+      el.style.transform = `translateY(${delta}px)`;
+      el.getBoundingClientRect(); // force reflow so the invert sticks
+      requestAnimationFrame(() => {
+        el.style.transition = "transform 220ms cubic-bezier(.2,.8,.2,1)";
+        el.style.transform = "";
+        const clear = () => { el.style.transition = ""; el.removeEventListener("transitionend", clear); };
+        el.addEventListener("transitionend", clear);
+      });
+    });
+  });
+
   // ── Mutations ──
   const updateCell = (rowId, colId, val) => {
     if (rowId === draft.id) {
@@ -121,12 +152,13 @@ export function ClinicalTable({
       commit(baseRows.map((r) => (r.id === rowId ? { ...r, [colId]: val } : r)));
     }
   };
-  const deleteRow = (rowId) => commit(baseRows.filter((r) => r.id !== rowId));
+  const deleteRow = (rowId) => { captureFlip(); commit(baseRows.filter((r) => r.id !== rowId)); };
   const duplicateRow = (row) => {
     const idx = baseRows.findIndex((r) => r.id === row.id);
     if (idx < 0) return;
     const next = [...baseRows];
     next.splice(idx + 1, 0, { ...row, id: `ct-${++_rowSeq}` });
+    captureFlip();
     commit(next);
   };
   // Begin dragging a row from its handle. Suppress the native drag ghost (a 1×1
@@ -148,6 +180,7 @@ export function ClinicalTable({
     const next = [...baseRows];
     const [moved] = next.splice(from, 1);
     next.splice(overIdx, 0, moved);
+    captureFlip();
     commit(next);
   };
   const endDrag = () => {
@@ -209,6 +242,7 @@ export function ClinicalTable({
             return (
               <tr
                 key={row.id}
+                ref={(el) => { if (el) rowEls.current.set(row.id, el); else rowEls.current.delete(row.id); }}
                 className={styles.row}
                 data-dragging={row.id === dragId || undefined}
                 data-moved={row.id === movedId || undefined}
