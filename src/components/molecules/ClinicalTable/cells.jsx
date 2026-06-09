@@ -26,7 +26,7 @@ import { toOptions, showsKeyHints, resolveStatus } from "./columns";
 import styles from "./ClinicalTable.module.scss";
 
 // ── EditableCell ──────────────────────────────────────────────────────────────
-export function EditableCell({ column: c, value, row, locked, onChange }) {
+export function EditableCell({ column: c, value, row, locked, onChange, onCommit }) {
   const status = locked ? undefined : resolveStatus(c, value, row);
   const readOnly = c.editable === false;
 
@@ -48,6 +48,7 @@ export function EditableCell({ column: c, value, row, locked, onChange }) {
         leadingIcon={c.icon}
         disabled={locked || readOnly}
         onChange={onChange}
+        onCommit={onCommit}
       />
     );
   }

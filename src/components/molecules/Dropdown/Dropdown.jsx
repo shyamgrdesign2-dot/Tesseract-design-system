@@ -32,7 +32,8 @@
  *                   [{ heading, options: [{ value, label, … }] }]
  *             (single-header convenience: pass flat options + `groupLabel`)
  *   value     string (single) | string[] (multi)
- *   onChange  (next) => void
+ *   onChange  (next) => void   — every value change (incl. live typing)
+ *   onCommit  (value) => void  — only on a deliberate pick (option / custom-add / Enter)
  *   mode      "single" | "multi"                     default "single"
  *   optionControl "none" | "checkbox" | "radio"      row indicator; default "none"
  *   chips     boolean — multi: render selected as removable chips in the trigger
@@ -127,6 +128,7 @@ export function Dropdown({
   options = [],
   value,
   onChange,
+  onCommit,
   mode = "single",
   optionControl = "none",
   chips = false,
@@ -208,14 +210,19 @@ export function Dropdown({
 
   const optionCount = listItems.filter((i) => !i.__heading && !i.__custom).length;
 
+  // `onChange` fires for every value change (incl. live typing in editable mode);
+  // `onCommit` fires only on a DELIBERATE pick — an option chosen, a custom value
+  // added, or Enter — so callers can tell "confirmed" from "still typing".
   function commit(item) {
     if (item.disabled) return;
-    if (item.__custom) { onChange?.(item.value); setOpen(false); return; }
+    if (item.__custom) { onChange?.(item.value); onCommit?.(item.value); setOpen(false); return; }
     if (isMulti) {
       const next = isSelected(item.value) ? selectedArr.filter((v) => v !== item.value) : [...selectedArr, item.value];
       onChange?.(next);
+      onCommit?.(next);
     } else {
       onChange?.(item.value);
+      onCommit?.(item.value);
       setOpen(false);
     }
   }
@@ -481,6 +488,9 @@ export function Dropdown({
             placeholder={placeholder}
             onChange={(e) => { onChange?.(e.target.value); if (!open) setOpen(true); setActiveIdx(-1); }}
             onFocus={() => { if (!disabled) { setOpen(true); setActiveIdx(-1); } }}
+            // Re-open on click too — focus alone doesn't fire when the input is
+            // already focused (e.g. clicking back right after a pick/Escape).
+            onClick={() => { if (!disabled && !open) { setOpen(true); setActiveIdx(-1); } }}
             onKeyDown={onKeyDown}
           />
           {chevron && (

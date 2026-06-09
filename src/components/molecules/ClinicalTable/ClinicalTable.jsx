@@ -137,20 +137,25 @@ export function ClinicalTable({
   });
 
   // ── Mutations ──
+  // Live value change. On the draft row this only updates the in-progress value
+  // (so the dropdown can show "Add ‹typed›") — it does NOT commit or spawn a new
+  // row. The draft is finalised only on a deliberate confirm (commitDraft).
   const updateCell = (rowId, colId, val) => {
     if (rowId === draft.id) {
-      // Only the primary cell is editable on the empty draft; filling it commits
-      // the row (same id → input keeps focus) and spawns a fresh draft below.
-      if (colId === primaryColId && String(val).trim()) {
-        const committedRow = { ...draft, [colId]: val };
-        setDraft(makeEmptyRow());
-        commit([...baseRows, committedRow]);
-      } else {
-        setDraft({ ...draft, [colId]: val });
-      }
+      setDraft({ ...draft, [colId]: val });
     } else {
       commit(baseRows.map((r) => (r.id === rowId ? { ...r, [colId]: val } : r)));
     }
+  };
+  // Finalise the draft once its NAME is confirmed (option picked / custom added /
+  // Enter). The committed row keeps the draft's id (so its input keeps focus) and
+  // a fresh empty draft opens below — this is the only path that adds a row.
+  const commitDraft = (val) => {
+    const v = String(val ?? "").trim();
+    if (!v) return;
+    const committedRow = { ...draft, [primaryColId]: v };
+    setDraft(makeEmptyRow());
+    commit([...baseRows, committedRow]);
   };
   const deleteRow = (rowId) => { captureFlip(); commit(baseRows.filter((r) => r.id !== rowId)); };
   const duplicateRow = (row) => {
@@ -256,18 +261,28 @@ export function ClinicalTable({
                 )}
 
                 {dataColumns.map((c) => {
-                  // Non-primary cells are locked until the primary key is filled.
-                  const locked = c.id !== primaryColId && !primaryFilled;
+                  const isPrimary = c.id === primaryColId;
+                  // The draft only lets you edit the NAME; its other cells stay
+                  // locked until the name is confirmed (and the row becomes real).
+                  // Committed rows lock a non-primary cell only if the name is empty.
+                  const locked = !isPrimary && (isDraft || !primaryFilled);
                   return (
                     <td key={c.id} className={styles.td} style={columnWidthStyle(c)}>
-                      <EditableCell column={c} value={row[c.id]} row={row} locked={locked} onChange={(v) => updateCell(row.id, c.id, v)} />
+                      <EditableCell
+                        column={c}
+                        value={row[c.id]}
+                        row={row}
+                        locked={locked}
+                        onChange={(v) => updateCell(row.id, c.id, v)}
+                        onCommit={isDraft && isPrimary ? commitDraft : undefined}
+                      />
                     </td>
                   );
                 })}
 
                 {hasAction && (
                   <td className={cn(styles.td, styles.actionCol, styles.sticky)} data-shadow="true">
-                    {primaryFilled && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} />}
+                    {!isDraft && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} />}
                   </td>
                 )}
               </tr>
