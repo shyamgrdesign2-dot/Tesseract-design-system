@@ -24,7 +24,7 @@
  *   rows / defaultRows  [{ id, [colId]: value }]                 controlled / uncontrolled
  *   onChange  (rows) => void
  *   columns   the CONFIGURABLE middle columns (between Name and Notes). Each:
- *     { id, header, type?: "text"|"number"|"select"|"search",
+ *     { id, header, type?: "text"|"number"|"date"|"select"|"search",
  *       options?: string[]|{value,label,icon?}[], placeholder?, width?, minWidth?,
  *       maxWidth?, expand?: bool (drop the max — absorb leftover width, e.g. Notes),
  *       align?, allow?: "numeric"|"alpha"|"alphanumeric" (text),
@@ -36,6 +36,7 @@
  *   notes     override config for the Notes column (defaults provided)
  *   reorderable  boolean  drag handle + reorder                  default true
  *   deletable    boolean  delete button in the action column     default true
+ *   showRowMenu  boolean  the "⋯" row-actions menu (independent of delete) default true
  *   rowMenu      Array<{ label, icon?, onClick?: (row) => void, danger?: bool }>
  *                  extra "⋯" row actions. `onClick` omitted on "Duplicate" →
  *                  built-in duplicate.                            default [Duplicate]
@@ -53,6 +54,15 @@ import styles from "./ClinicalTable.module.scss";
 let _rowSeq = 0;
 const makeEmptyRow = () => ({ id: `ct-${++_rowSeq}` });
 
+// A 1×1 transparent image used as the drag ghost so the native preview doesn't
+// trail the cursor outside the table during a reorder.
+const BLANK_IMG = (() => {
+  if (typeof document === "undefined") return null;
+  const img = new Image(1, 1);
+  img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  return img;
+})();
+
 export function ClinicalTable({
   columns = [],
   name,
@@ -62,6 +72,7 @@ export function ClinicalTable({
   onChange,
   reorderable = true,
   deletable = true,
+  showRowMenu = true,
   rowMenu,
   autoRow = true,
   className,
@@ -86,7 +97,13 @@ export function ClinicalTable({
 
   const [draft, setDraft] = React.useState(makeEmptyRow);
   const rendered = autoRow ? [...baseRows, draft] : baseRows;
-  const [dragIndex, setDragIndex] = React.useState(null);
+
+  // Drag-reorder: track the row BEING dragged + the one that just landed (for the
+  // settle animation). Rows reorder live as you drag over them — no native ghost.
+  const [dragId, setDragId] = React.useState(null);
+  const [movedId, setMovedId] = React.useState(null);
+  const movedTimer = React.useRef(null);
+  React.useEffect(() => () => clearTimeout(movedTimer.current), []);
 
   // ── Mutations ──
   const updateCell = (rowId, colId, val) => {
@@ -112,20 +129,44 @@ export function ClinicalTable({
     next.splice(idx + 1, 0, { ...row, id: `ct-${++_rowSeq}` });
     commit(next);
   };
-  const reorder = (to) => {
-    if (dragIndex == null || dragIndex === to) return;
+  // Begin dragging a row from its handle. Suppress the native drag ghost (a 1×1
+  // transparent image) so nothing trails the cursor outside the table — the
+  // feedback is the lifted row + the live reorder beneath the pointer.
+  const startDrag = (e, rowId) => {
+    setDragId(rowId);
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+      if (BLANK_IMG) e.dataTransfer.setDragImage(BLANK_IMG, 0, 0);
+    }
+  };
+  // Live reorder: as the dragged row passes over row `overIdx`, move it there.
+  const dragOverRow = (e, overIdx) => {
+    e.preventDefault();
+    if (dragId == null || overIdx >= baseRows.length) return;
+    const from = baseRows.findIndex((r) => r.id === dragId);
+    if (from < 0 || from === overIdx) return;
     const next = [...baseRows];
-    const [moved] = next.splice(dragIndex, 1);
-    next.splice(to, 0, moved);
-    setDragIndex(null);
+    const [moved] = next.splice(from, 1);
+    next.splice(overIdx, 0, moved);
     commit(next);
+  };
+  const endDrag = () => {
+    if (dragId != null) {
+      const landed = dragId;
+      setMovedId(landed);
+      clearTimeout(movedTimer.current);
+      movedTimer.current = setTimeout(() => setMovedId(null), 650);
+    }
+    setDragId(null);
   };
 
   // ── Action column (⋯ menu + delete) ──
-  const menuItems = (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name="copy" size={15} /> }]).map((it) => ({
-    ...it,
-    onClick: it.onClick ?? (it.label === "Duplicate" ? duplicateRow : undefined),
-  }));
+  const menuItems = !showRowMenu
+    ? []
+    : (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name="copy" size={15} /> }]).map((it) => ({
+        ...it,
+        onClick: it.onClick ?? (it.label === "Duplicate" ? duplicateRow : undefined),
+      }));
   const hasAction = deletable || menuItems.length > 0;
 
   // ── Horizontal-overflow → left fade ONLY while content is scrolled behind the
@@ -169,12 +210,14 @@ export function ClinicalTable({
               <tr
                 key={row.id}
                 className={styles.row}
-                onDragOver={reorderable && !isDraft ? (e) => e.preventDefault() : undefined}
-                onDrop={reorderable && !isDraft ? () => reorder(i) : undefined}
+                data-dragging={row.id === dragId || undefined}
+                data-moved={row.id === movedId || undefined}
+                onDragOver={reorderable && !isDraft ? (e) => dragOverRow(e, i) : undefined}
+                onDrop={reorderable ? endDrag : undefined}
               >
                 {reorderable && (
                   <td className={cn(styles.td, styles.sideCol)}>
-                    {!isDraft && <DragHandle onDragStart={() => setDragIndex(i)} onDragEnd={() => setDragIndex(null)} />}
+                    {!isDraft && <DragHandle onDragStart={(e) => startDrag(e, row.id)} onDragEnd={endDrag} />}
                   </td>
                 )}
 

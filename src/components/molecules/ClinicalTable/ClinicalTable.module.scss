@@ -63,6 +63,26 @@
 /* The seamless atom fills the cell box. */
 .td > * { height: 100%; width: 100%; }
 
+/* ── Drag-reorder feedback ──
+   The grabbed row reads as "selected/lifted"; the row it lands on pulses once. */
+.row[data-dragging] {
+  cursor: grabbing;
+  .td { background: color-mix(in srgb, var(--tp-blue-50, #eeeeff) 70%, var(--tp-slate-0, #fff)); }
+  /* left accent bar marks the moving row */
+  td:first-child::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--tp-blue-500, #4b4ad5);
+  }
+}
+@keyframes ctRowSettle {
+  0%   { background: color-mix(in srgb, var(--tp-blue-100, #e0e0ff) 80%, var(--tp-slate-0, #fff)); }
+  100% { background: var(--tp-slate-0, #fff); }
+}
+.row[data-moved] .td { animation: ctRowSettle 650ms ease; }
+
 /* ── Sticky action column ── */
 .actionCol { width: 92px; min-width: 92px; max-width: 92px; }
 .sticky {

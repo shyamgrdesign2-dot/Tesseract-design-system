@@ -52,11 +52,14 @@ export function EditableCell({ column: c, value, row, locked, onChange }) {
     );
   }
 
-  // text / number
+  // text / number / date — all reuse the InputBox atom. New scalar types slot in
+  // here (the dispatch above + this block is the single place to extend).
+  const inputType = c.type === "date" ? "date" : undefined; // number stays text + numeric filter
   return (
     <InputBox
       variant="seamless"
       fullWidth
+      type={inputType}
       allow={c.type === "number" ? "numeric" : c.allow ?? "any"}
       value={value ?? ""}
       placeholder={locked ? "" : c.placeholder}

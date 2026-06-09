@@ -14,6 +14,7 @@ export const toOptions = (opts) => (opts ?? []).map((o) => (typeof o === "string
 //   search  long names (a primary key / medicine)  200–320
 export const TYPE_WIDTHS = {
   number: { minWidth: 84,  maxWidth: 120 },
+  date:   { minWidth: 140, maxWidth: 180 },
   select: { minWidth: 120, maxWidth: 180 },
   text:   { minWidth: 140, maxWidth: 260 },
   search: { minWidth: 200, maxWidth: 320 },
