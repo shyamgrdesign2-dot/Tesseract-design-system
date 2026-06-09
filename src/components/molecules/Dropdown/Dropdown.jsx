@@ -231,21 +231,30 @@ export function Dropdown({
       const m = menuRef.current;
       if (!t || !m) return;
       const tr = t.getBoundingClientRect();
-      let w;
-      if (width === "trigger") w = tr.width;
-      else if (typeof width === "number") w = width;
-      else w = m.offsetWidth; // "auto"
-      m.style.width = width === "auto" ? "" : `${w}px`;
+      const vw = window.innerWidth, vh = window.innerHeight, pad = 8, gap = 6;
+      const seamless = variant === "seamless";
+      const cap = vw - 2 * pad;
+      // Width. Seamless (table-cell) menus are NOT locked to the narrow cell —
+      // they size to content with a floor of ~1.45× the cell (min 200px) so long
+      // options stay readable; capped to the viewport.
+      if (typeof width === "number") {
+        m.style.width = `${Math.min(cap, width)}px`;
+      } else if (width === "trigger" && !seamless) {
+        m.style.width = `${tr.width}px`;
+      } else {
+        m.style.width = ""; // measure intrinsic content width
+        const floor = seamless ? Math.max(tr.width * 1.45, 200) : tr.width;
+        m.style.width = `${Math.min(cap, Math.max(m.offsetWidth, floor))}px`;
+      }
       const mw = m.offsetWidth;
       const mh = m.offsetHeight;
-      const vw = window.innerWidth, vh = window.innerHeight, pad = 8, gap = 6;
       let left = tr.left;
       if (left + mw > vw - pad) left = vw - pad - mw;
       if (left < pad) left = pad;
       let top = tr.bottom + gap;
       if (top + mh > vh - pad && tr.top - gap - mh >= pad) top = tr.top - gap - mh;
       if (top < pad) top = pad;
-      setMenuStyle({ position: "fixed", top, left, zIndex: 9999, minWidth: width === "auto" ? tr.width : undefined });
+      setMenuStyle({ position: "fixed", top, left, zIndex: 9999 });
     };
     place();
     window.addEventListener("resize", place);
@@ -254,7 +263,7 @@ export function Dropdown({
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
     };
-  }, [open, width, listItems.length, chips]);
+  }, [open, width, variant, listItems.length, chips]);
 
   // ── Close on outside click ──
   useEffect(() => {

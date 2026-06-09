@@ -14,8 +14,9 @@ const meta = {
     reorderable: { control: 'boolean' },
     deletable: { control: 'boolean' },
     autoRow: { control: 'boolean', name: 'auto empty row' },
+    flagCustom: { control: 'boolean', name: 'flag custom names', description: 'Ring the Symptoms Name cell when the entry is not in the frequently-used list (a custom / off-database value)' },
   },
-  args: { reorderable: true, deletable: true, autoRow: true },
+  args: { reorderable: true, deletable: true, autoRow: true, flagCustom: false },
 };
 
 export default meta;
@@ -47,11 +48,14 @@ const SEED = [
 ];
 
 export const Playground = {
-  render: (args) => {
+  render: ({ flagCustom, ...args }) => {
     const [rows, setRows] = React.useState(SEED);
+    // `flagCustom` is opt-in: when on, a Name not in the frequently-used list
+    // (custom / off-database) gets a warning ring.
+    const nameCol = { ...SYMPTOM_NAME, flagCustom: flagCustom ? 'warning' : undefined };
     return (
       <div style={{ maxWidth: 820 }}>
-        <ClinicalTable {...args} name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} />
+        <ClinicalTable {...args} name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} />
         <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>{JSON.stringify(rows, null, 2)}</pre>
       </div>
     );
@@ -99,5 +103,20 @@ export const Empty = {
   render: () => {
     const [rows, setRows] = React.useState([]);
     return <div style={{ maxWidth: 820 }}><ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} /></div>;
+  },
+};
+
+/** Opt-in custom-entry flag — set `flagCustom` on the search column to ring any
+ *  Name that isn't in the frequently-used list (a custom / off-database value).
+ *  Here "Chest pain" is known (no ring) while "Random ache xyz" is flagged. */
+export const FlaggedCustomEntry = {
+  name: 'Flag custom (off-database) names',
+  render: () => {
+    const [rows, setRows] = React.useState([
+      { id: 'f1', name: 'Chest pain', since: '2 days', status: 'Moderate', notes: '' },
+      { id: 'f2', name: 'Random ache xyz', since: '1 day', status: 'Mild', notes: 'Not in list' },
+    ]);
+    const nameCol = { ...SYMPTOM_NAME, flagCustom: 'warning' };
+    return <div style={{ maxWidth: 820 }}><ClinicalTable name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} /></div>;
   },
 };
