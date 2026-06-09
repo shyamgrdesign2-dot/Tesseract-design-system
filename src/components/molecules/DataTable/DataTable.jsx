@@ -24,11 +24,17 @@
  *   emptyState   ReactNode
  *
  * Column object:
- *   { id, header, width?, minWidth?, maxWidth?, align?, headerAlign?, sticky?: "right",
- *     sortable?: boolean, sortAccessor?: (row) => comparable,
+ *   { id, header, width?, minWidth?, maxWidth?, expand?, align?, headerAlign?,
+ *     sticky?: "right", sortable?: boolean, sortAccessor?: (row) => comparable,
  *     headerClassName?, cellClassName?, cell: (row, i) => ReactNode }
  *   Headers are left-aligned by default (set `headerAlign` to override); `align`
  *   only affects the body cells.
+ *
+ * Responsive widths: the table is fluid (width: 100%, auto layout). Every column
+ * gets a min-width (own `minWidth`, else a sane default) so it never collapses;
+ * on a narrow screen columns shrink to their mins and the table scrolls
+ * horizontally. `maxWidth` caps a column; `expand: true` lets a column absorb the
+ * leftover width (its max becomes the screen) — use it for the free-text column.
  *
  * Rich cells: use <DataCell> for primary/secondary text with optional left/right
  * icons per line. Truncation rule: with subtext the primary clamps to ONE line;
@@ -43,6 +49,18 @@ import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { Skeleton } from "@/src/components/atoms/Skeleton";
 import styles from "./DataTable.module.scss";
+
+// Default minimum so a column never collapses below a readable width when the
+// table flexes. A column may override with its own `minWidth` (incl. smaller).
+const DEFAULT_MIN_WIDTH = 88;
+
+// Responsive per-column sizing. `expand` drops the max so the column soaks up the
+// leftover width (its ceiling becomes the screen); otherwise `maxWidth` caps it.
+const colStyle = (col) => ({
+  width: col.width,
+  minWidth: col.minWidth ?? DEFAULT_MIN_WIDTH,
+  maxWidth: col.expand ? undefined : col.maxWidth,
+});
 
 // Badge tones map 1:1; Chip uses "default" where Badge uses "neutral".
 const CHIP_COLOR = { neutral: "default", primary: "primary", success: "success", warning: "warning", error: "error" };
@@ -386,7 +404,7 @@ export function DataTable({
                     key={col.id}
                     className={cn(styles.th, isSticky && styles.sticky, col.headerClassName)}
                     data-align={col.headerAlign || "left"}
-                    style={{ width: col.width, minWidth: col.minWidth, maxWidth: col.maxWidth }}
+                    style={colStyle(col)}
                     aria-sort={active ? (sort.dir === "asc" ? "ascending" : "descending") : undefined}
                   >
                     {canSort ? (
@@ -435,7 +453,7 @@ export function DataTable({
                         key={col.id}
                         className={cn(styles.td, isSticky && styles.sticky, col.cellClassName)}
                         data-align={col.align || "left"}
-                        style={{ width: col.width, minWidth: col.minWidth, maxWidth: col.maxWidth }}
+                        style={colStyle(col)}
                       >
                         {renderCell(col, row, i)}
                       </td>
@@ -455,6 +473,7 @@ export function DataTable({
                       key={col.id}
                       className={cn(styles.td, col.sticky === "right" && styles.sticky)}
                       data-align={col.align || "left"}
+                      style={colStyle(col)}
                     >
                       <Skeleton variant="text" width={`${55 + ((r * 7 + c * 13) % 35)}%`} />
                     </td>

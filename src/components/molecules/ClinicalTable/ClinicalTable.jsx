@@ -26,7 +26,8 @@
  *   columns   the CONFIGURABLE middle columns (between Name and Notes). Each:
  *     { id, header, type?: "text"|"number"|"select"|"search",
  *       options?: string[]|{value,label,icon?}[], placeholder?, width?, minWidth?,
- *       maxWidth?, align?, allow?: "numeric"|"alpha"|"alphanumeric" (text),
+ *       maxWidth?, expand?: bool (drop the max — absorb leftover width, e.g. Notes),
+ *       align?, allow?: "numeric"|"alpha"|"alphanumeric" (text),
  *       icon?: ReactNode, frequentlyUsedLabel?: string, allowCustom?: bool (search),
  *       flagCustom?: true|"warning"|"error" (search — ring custom entries),
  *       searchable?: bool (select), editable?: bool (default true),
@@ -77,7 +78,7 @@ export function ClinicalTable({
     ...name,
   };
   const notesCol = {
-    id: "notes", header: "Notes", type: "text", placeholder: "Notes", minWidth: 140, maxWidth: 240,
+    id: "notes", header: "Notes", type: "text", placeholder: "Notes", minWidth: 160, expand: true,
     ...notes,
   };
   const dataColumns = [nameCol, ...columns, notesCol];

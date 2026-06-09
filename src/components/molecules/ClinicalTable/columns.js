@@ -19,9 +19,16 @@ export const TYPE_WIDTHS = {
   search: { minWidth: 200, maxWidth: 320 },
 };
 
+// Responsive per-column sizing. The table is fluid (auto layout): each column
+// flexes between min and max. An `expand` column (e.g. Notes) carries NO max so
+// it absorbs the leftover width up to the screen; every other column is capped.
 export const columnWidthStyle = (c) => {
   const d = TYPE_WIDTHS[c.type] ?? TYPE_WIDTHS.text;
-  return { width: c.width, minWidth: c.minWidth ?? d.minWidth, maxWidth: c.maxWidth ?? d.maxWidth };
+  return {
+    width: c.width,
+    minWidth: c.minWidth ?? d.minWidth,
+    maxWidth: c.expand ? undefined : (c.maxWidth ?? d.maxWidth),
+  };
 };
 
 // Whether a dropdown column shows the ↑↓↵esc key hints: only the interactive

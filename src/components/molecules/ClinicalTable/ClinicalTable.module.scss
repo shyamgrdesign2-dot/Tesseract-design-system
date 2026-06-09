@@ -13,10 +13,14 @@
   font-family: Inter, var(--font-sans, sans-serif);
 }
 
+/* Fluid + responsive: the table fills its container and auto-layout flexes each
+   column between its min-width and max-width. Columns shrink toward their mins as
+   the screen narrows; below the sum of mins the table overflows and `.wrap`
+   scrolls horizontally. The free-text column (expand) carries no max so it soaks
+   up the leftover width. */
 .table {
-  width: max-content;
-  min-width: 100%;
-  table-layout: fixed;
+  width: 100%;
+  table-layout: auto;
   border-collapse: collapse;
   font-size: 14px;
 }
@@ -38,7 +42,7 @@
   &:last-child { border-right: none; }
 }
 
-.sideCol { width: 40px; min-width: 40px; padding: 0; text-align: center; }
+.sideCol { width: 40px; min-width: 40px; max-width: 40px; padding: 0; text-align: center; }
 
 /* ── Rows ── */
 .row {
@@ -60,7 +64,7 @@
 .td > * { height: 100%; width: 100%; }
 
 /* ── Sticky action column ── */
-.actionCol { width: 92px; min-width: 92px; }
+.actionCol { width: 92px; min-width: 92px; max-width: 92px; }
 .sticky {
   position: sticky;
   right: 0;
