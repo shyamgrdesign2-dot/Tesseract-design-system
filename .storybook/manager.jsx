@@ -1,6 +1,7 @@
 import React from "react";
 import { addons, types, useArgs, useArgTypes } from "storybook/manager-api";
 import { tpMedicalIconNames } from "../src/components/atoms/MedicalIcon/registry";
+import { getIconBaseUrl } from "../src/components/atoms/icons/tp/iconBase";
 import tpTheme from "./theme";
 
 // TatvaPractice-branded Storybook chrome (sidebar logo, brand colours, fonts).
@@ -31,7 +32,7 @@ function useIconNames() {
 }
 
 function maskStyle(name, style, color) {
-  const url = `/tp-icons/${style}/${encodeURIComponent(name)}.svg`;
+  const url = `${getIconBaseUrl()}/${style}/${encodeURIComponent(name)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
   return { WebkitMask: mask, mask, backgroundColor: color };
 }

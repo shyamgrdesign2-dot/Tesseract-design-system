@@ -3,10 +3,15 @@
 // so foundation + component tokens are available in JS, and is the base that a
 // product's partial `theme` is deep-merged over.
 
+import { ICON_BASE_DEFAULT } from "../components/atoms/icons/tp/iconBase";
+
 const ramp = (a) => ({ 50: a[0], 100: a[1], 200: a[2], 300: a[3], 400: a[4], 500: a[5], 600: a[6], 700: a[7], 800: a[8], 900: a[9] });
 
 export const defaultTheme = {
   colorScheme: "light",
+
+  // Where icon SVGs load from (CDN by default). See setIconBaseUrl / iconBase.js.
+  iconBaseUrl: ICON_BASE_DEFAULT,
 
   // Responsive breakpoints (min-width, px). useBreakpoint() resolves the active one.
   breakpoints: { mobile: 0, tablet: 768, desktop: 1280 },

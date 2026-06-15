@@ -28,6 +28,7 @@
 import * as React from "react";
 import { ThemeContext } from "./context";
 import { defaultTheme } from "./defaultTheme";
+import { setIconBaseUrl } from "../components/atoms/icons/tp/iconBase";
 
 const isObj = (x) => x && typeof x === "object" && !Array.isArray(x);
 function deepMerge(base, over) {
@@ -124,6 +125,11 @@ export function TPThemeProvider({
 }) {
   const [override, setOverride] = React.useState(null);
   const resolved = useResolvedScheme(override ?? colorScheme);
+
+  // Point the icon resolver at the theme's CDN base (global; set once per app).
+  React.useEffect(() => {
+    if (themeProp?.iconBaseUrl) setIconBaseUrl(themeProp.iconBaseUrl);
+  }, [themeProp?.iconBaseUrl]);
 
   const theme = React.useMemo(() => deepMerge(defaultTheme, { ...themeProp, colorScheme: resolved }), [themeProp, resolved]);
   const breakpoint = useActiveBreakpoint(theme.breakpoints);

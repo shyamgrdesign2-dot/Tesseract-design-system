@@ -22,6 +22,7 @@
  */
 
 import * as React from "react";
+import { getIconBaseUrl } from "./iconBase";
 
 // One icon library, three styles. Legacy names map onto them.
 const STYLES = ["linear", "bulk", "bold"];
@@ -42,7 +43,7 @@ export function TPLibraryIcon({ name, variant = "linear", size = 20, color, titl
   }
   v = STYLE_ALIAS[v] || v;
   const st = STYLES.includes(v) ? v : "linear";
-  const url = `/tp-icons/${st}/${encodeURIComponent(n)}.svg`;
+  const url = `${getIconBaseUrl()}/${st}/${encodeURIComponent(n)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
 
   return (

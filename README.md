@@ -37,20 +37,23 @@ export function Example() {
 
 ## Static assets (important)
 
-A few components load SVGs at runtime from **absolute URLs** rather than bundling
-them, so those assets must be served from your app's web root:
+A few components load SVGs at runtime rather than bundling them:
 
-| Component | Expects to fetch |
-|---|---|
-| `Logo` | `/brand/*.svg` |
-| `MedicalIcon` (`TPMedicalIcon`) | `/icons/medical/*.svg` |
-| `TPLibraryIcon` | `/tp-icons/<style>/<name>.svg` (the full ~25k-icon set) |
+- **Icons** (`TPLibraryIcon`, `TPMedicalIcon`) load from the design-system **CDN**
+  by default — `https://pmdoctorportal.tatvacare.in/design-system-assets/icons/<style>/<name>.svg`
+  (style = `linear` | `bulk` | `bold`). No hosting needed. To self-host, point the
+  base elsewhere once at app start:
 
-These are **not** included in the npm package (the icon set alone is ~100 MB).
-To use those components, copy the asset folders into your app's `public/`
-directory (so they resolve at `/brand`, `/icons`, `/tp-icons`). All other
-components — Button, Badge, Dropdown, DataTable, ClinicalTable, etc. — work with
-no extra assets (they use inline SVGs).
+  ```js
+  import { setIconBaseUrl } from "tp-ui";
+  setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TPThemeProvider iconBaseUrl
+  ```
+
+- **`Logo`** still fetches `/brand/*.svg` — copy `public/brand/` into your app's
+  web root (tiny, ~20 KB).
+
+All other components — Button, Badge, Dropdown, DataTable, ClinicalTable, etc. —
+use inline SVGs and need no extra assets.
 
 ## Design tokens & fonts
 

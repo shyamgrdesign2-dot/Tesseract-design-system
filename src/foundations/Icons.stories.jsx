@@ -23,7 +23,7 @@ const Tile = ({ children, label }) => (
 export const Overview = {
   render: () => (
     <Page>
-      <Title sub={<>One unified icon library served from <Code>/tp-icons/</Code> in three styles — <strong>linear · bulk · bold</strong>. Health icons are merged in (no separate set). Render any by name with <Code>&lt;TPLibraryIcon name="heart-add" /&gt;</Code>; pick from the full set in the <strong>TP Icons</strong> addon panel.</>}>Icons</Title>
+      <Title sub={<>One unified icon library served from the design-system CDN (<Code>setIconBaseUrl()</Code> to self-host) in three styles — <strong>linear · bulk · bold</strong>. Health icons are merged in (no separate set). Render any by name with <Code>&lt;TPLibraryIcon name="heart-add" /&gt;</Code>; pick from the full set in the <strong>TP Icons</strong> addon panel.</>}>Icons</Title>
 
       <Section>Styles — one glyph, three styles</Section>
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>

@@ -19,3 +19,6 @@ export * from "./components/molecules";
 
 // Runtime theming — foundation + component tokens, breakpoints, light/dark.
 export { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme } from "./theme";
+
+// Icon CDN base (default = TatvaPractice CDN); override to self-host.
+export { getIconBaseUrl, setIconBaseUrl, ICON_BASE_DEFAULT } from "./components/atoms/icons/tp/iconBase";
