@@ -1,7 +1,7 @@
 /* Button.module.scss
  * All variant × theme × size × state styles for the Button atom.
  * Uses data-* attributes already set on the element — no className toggling needed.
- * Token fallbacks match src/design-system/tokens/_colors.scss exactly.
+ * Token fallbacks match the CSS-variable tokens in src/tp-tokens.css exactly.
  */
 
 /* ── Base ── */
