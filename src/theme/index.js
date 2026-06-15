@@ -1,2 +1,3 @@
 export { TPThemeProvider, default } from "./TPThemeProvider";
-export { useTheme } from "./context";
+export { useTheme, useBreakpoint, useComponentTokens } from "./context";
+export { defaultTheme } from "./defaultTheme";

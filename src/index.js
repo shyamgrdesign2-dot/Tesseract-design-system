@@ -17,5 +17,5 @@ import "./tp-typography.css";
 export * from "./components/atoms";
 export * from "./components/molecules";
 
-// Runtime theming (token overrides + light/dark).
-export { TPThemeProvider, useTheme } from "./theme";
+// Runtime theming — foundation + component tokens, breakpoints, light/dark.
+export { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme } from "./theme";

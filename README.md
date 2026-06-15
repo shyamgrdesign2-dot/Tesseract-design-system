@@ -70,24 +70,32 @@ Load them in your app (Google Fonts or self-host), e.g.:
 
 ## Theming
 
-`TPThemeProvider` scopes token overrides (and light/dark) onto a subtree as CSS
-variables — components rebrand or invert with no prop changes, since they read
-`var(--tp-*)`:
+`TPThemeProvider` is the single theming surface — it carries the whole theme
+(foundation tokens, component tokens, breakpoints, colour scheme), provides it via
+context, and scopes the matching CSS variables so components re-theme with no prop
+changes (they read `var(--tp-*)`):
 
 ```jsx
-import { TPThemeProvider, useTheme } from "tp-ui";
+import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tp-ui";
 
-<TPThemeProvider colorScheme="dark">            {/* light | dark | system */}
+<TPThemeProvider
+  colorScheme="dark"                       // light | dark | system
+  theme={{
+    foundation: { colors: { blue: { 500: "#0EA5E9" } } },
+    components: { button: { radius: "14px" } },
+    breakpoints: { tablet: 720 },
+  }}
+>
   <App />
 </TPThemeProvider>
 
-<TPThemeProvider tokens={{ "blue-500": "#0EA5E9", "radius-10": "14px" }}>
-  <Region />                                      {/* rebrand a subtree */}
-</TPThemeProvider>
+const { theme, colorScheme, setColorScheme } = useTheme();
+const bp  = useBreakpoint();               // "mobile" | "tablet" | "desktop"
+const btn = useComponentTokens("button");  // { radius, height, … }
 ```
 
-`useTheme()` → `{ colorScheme, setColorScheme, tokens }`. Providers nest. See
-**Foundations → Theming** in Storybook for a live playground.
+Providers nest (a region layers its own overrides). See **Foundations → Theme
+Provider** in Storybook for a live playground.
 
 ## Peer dependencies
 

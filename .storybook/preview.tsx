@@ -10,7 +10,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Design System', ['Overview', 'Component Standards', 'Using in Your Product'],
-          'Foundations', ['Colors', 'Typography', 'Spacing & Grid', 'Shadow & Radius', 'Icons', 'Theming'],
+          'Foundations', ['Colors', 'Typography', 'Spacing & Grid', 'Shadow & Radius', 'Icons', 'Theme Provider'],
           'Atoms', 'Molecules', '*',
         ],
       },
