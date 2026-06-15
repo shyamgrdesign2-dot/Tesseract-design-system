@@ -68,6 +68,27 @@ Load them in your app (Google Fonts or self-host), e.g.:
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Mulish:wght@600;700;800&display=swap" rel="stylesheet" />
 ```
 
+## Theming
+
+`TPThemeProvider` scopes token overrides (and light/dark) onto a subtree as CSS
+variables — components rebrand or invert with no prop changes, since they read
+`var(--tp-*)`:
+
+```jsx
+import { TPThemeProvider, useTheme } from "tp-ui";
+
+<TPThemeProvider colorScheme="dark">            {/* light | dark | system */}
+  <App />
+</TPThemeProvider>
+
+<TPThemeProvider tokens={{ "blue-500": "#0EA5E9", "radius-10": "14px" }}>
+  <Region />                                      {/* rebrand a subtree */}
+</TPThemeProvider>
+```
+
+`useTheme()` → `{ colorScheme, setColorScheme, tokens }`. Providers nest. See
+**Foundations → Theming** in Storybook for a live playground.
+
 ## Peer dependencies
 
 `react >= 18`, `react-dom >= 18` (uses `useId`, `createPortal`).

@@ -58,7 +58,7 @@
   corner-shape:  round; // accurate arc (override global squircle)
   overflow:      hidden;
   border:        1.5px solid var(--tp-slate-200, #E2E2EA);
-  background:    #fff;
+  background:    var(--tp-slate-0, #fff);
   transition:    border-color 140ms ease, box-shadow 140ms ease;
 
   // Hover — only when NOT focused, so the focused stroke always wins.
