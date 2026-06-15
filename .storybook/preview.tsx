@@ -5,10 +5,14 @@ import '../src/tp-typography.css'
 
 const preview: Preview = {
   parameters: {
-    // Design System docs first, then Atoms → Molecules, then the rest.
+    // Design System docs first, then Foundations, then Atoms → Molecules.
     options: {
       storySort: {
-        order: ['Design System', ['Overview', 'Component Standards', 'Using in Your Product'], 'Atoms', 'Molecules', '*'],
+        order: [
+          'Design System', ['Overview', 'Component Standards', 'Using in Your Product'],
+          'Foundations', ['Colors', 'Typography', 'Spacing & Grid', 'Shadow & Radius', 'Icons'],
+          'Atoms', 'Molecules', '*',
+        ],
       },
     },
 

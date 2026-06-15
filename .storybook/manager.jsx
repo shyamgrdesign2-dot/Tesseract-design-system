@@ -1,6 +1,10 @@
 import React from "react";
 import { addons, types, useArgs, useArgTypes } from "storybook/manager-api";
 import { tpMedicalIconRegistry } from "../src/components/atoms/MedicalIcon/registry";
+import tpTheme from "./theme";
+
+// TatvaPractice-branded Storybook chrome (sidebar logo, brand colours, fonts).
+addons.setConfig({ theme: tpTheme });
 
 const ADDON_ID = "tp-icons";
 const PANEL_ID = `${ADDON_ID}/panel`;
