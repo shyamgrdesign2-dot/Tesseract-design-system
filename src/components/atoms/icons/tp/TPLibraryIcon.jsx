@@ -42,8 +42,8 @@ export function TPLibraryIcon({ name, variant = "linear", size = 20, color, titl
     v = name.slice(0, slash);
     n = name.slice(slash + 1);
   }
-  // Unified namespace: medical icons resolve from /icons/medical/, everything
-  // else from the full /tp-icons/ library — one searchable, pickable set.
+  // One unified icon root under /tp-icons/: the curated medical set resolves
+  // from /tp-icons/medical/ (3 styles), everything else from the full library.
   const med = tpMedicalIconRegistry[n];
   const url = med
     ? (med[MED_STYLE[v] || "line"] || med.line)

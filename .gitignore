@@ -29,4 +29,8 @@ storybook-static
 
 # Vendored TP icon library (~102MB, 25k files). Distributed separately and
 # copied into public/ per the adoption guide — kept out of git history.
-public/tp-icons/
+# EXCEPT the curated medical + dr-agent sets, which live under the same root
+# (one icon system) but ARE tracked + shipped.
+public/tp-icons/*
+!public/tp-icons/medical/
+!public/tp-icons/dr-agent/
