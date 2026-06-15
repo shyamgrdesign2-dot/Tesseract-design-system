@@ -155,7 +155,7 @@
   flex-direction: column;
   max-height: min(340px, calc(100vh - 24px));
   border: 1px solid var(--tp-slate-200, #E2E2EA);
-  border-radius: var(--tp-radius-12, 12px);
+  border-radius: var(--tp-dropdown-radius, var(--tp-radius-12, 12px)); // theme: components.dropdown.radius
   corner-shape: round;
   background: var(--tp-slate-0, #fff);
   box-shadow: 0 16px 32px -8px rgba(23, 23, 37, 0.16);

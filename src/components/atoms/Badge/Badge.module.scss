@@ -28,7 +28,7 @@
   justify-content: center;
   vertical-align: middle;
   gap: 4px;
-  border-radius: var(--tp-radius-full, 9999px); /* always a full pill (circular ends), never square */
+  border-radius: var(--tp-badge-radius, var(--tp-radius-full, 9999px)); /* theme: components.badge.radius (default full pill) */
   corner-shape: round;
   font-weight: 600;
   font-family: Inter, sans-serif;

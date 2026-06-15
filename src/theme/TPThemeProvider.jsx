@@ -54,6 +54,9 @@ const DARK_VARS = (() => {
 function componentVars(components) {
   const v = {};
   if (components?.button?.radius) v["--tp-btn-radius"] = components.button.radius;
+  if (components?.input?.radius) v["--tp-input-radius"] = components.input.radius;
+  if (components?.dropdown?.radius) v["--tp-dropdown-radius"] = components.dropdown.radius;
+  if (components?.badge?.radius) v["--tp-badge-radius"] = components.badge.radius;
   return v;
 }
 

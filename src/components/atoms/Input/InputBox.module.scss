@@ -54,7 +54,7 @@
   align-items:   stretch;
   height:        var(--h, 42px);
   width:         100%;
-  border-radius: var(--r, 10px);
+  border-radius: var(--tp-input-radius, var(--r, 10px)); // theme: components.input.radius
   corner-shape:  round; // accurate arc (override global squircle)
   overflow:      hidden;
   border:        1.5px solid var(--tp-slate-200, #E2E2EA);
