@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# tp-ui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TatvaPractice UI — an in-house React component library (atoms + molecules) built
+with **zero runtime dependencies**. The only externals are `react` and
+`react-dom`, declared as **peer dependencies** (never bundled).
 
-Currently, two official plugins are available:
+## Install
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install tp-ui
+# peers (if not already in your app)
+npm install react react-dom
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usage
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```jsx
+import { Button, Badge, Dropdown, DataTable, ClinicalTable, Logo } from "tp-ui";
+import "tp-ui/styles.css"; // one stylesheet for the whole library
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+export function Example() {
+  return <Button variant="solid" theme="primary">Save</Button>;
+}
+```
+
+- **ESM + CJS**: `import` resolves to `dist/tp-ui.js`, `require` to `dist/tp-ui.cjs`.
+- **Types**: `dist/index.d.ts` ships with the package.
+- **Styles**: import `tp-ui/styles.css` once at your app root.
+
+## What's inside
+
+- **Atoms**: Button, Badge, Chip, Checkbox, Radio, Toggle, Slider, InputBox,
+  Avatar, Divider, Skeleton, LoadingIndicator, AnimatedGrid, Logo, icon components.
+- **Molecules**: Dropdown, DataTable, ClinicalTable, Filter, Accordion, Tabs,
+  Tooltip, Toast, ConfirmDialog, DateRangePicker, HeroBanner, Sidebar,
+  SecondaryNav, Header.
+
+## Static assets (important)
+
+A few components load SVGs at runtime from **absolute URLs** rather than bundling
+them, so those assets must be served from your app's web root:
+
+| Component | Expects to fetch |
+|---|---|
+| `Logo` | `/brand/*.svg` |
+| `MedicalIcon` (`TPMedicalIcon`) | `/icons/medical/*.svg` |
+| `TPLibraryIcon` | `/tp-icons/<style>/<name>.svg` (the full ~25k-icon set) |
+
+These are **not** included in the npm package (the icon set alone is ~100 MB).
+To use those components, copy the asset folders into your app's `public/`
+directory (so they resolve at `/brand`, `/icons`, `/tp-icons`). All other
+components — Button, Badge, Dropdown, DataTable, ClinicalTable, etc. — work with
+no extra assets (they use inline SVGs).
+
+## Peer dependencies
+
+`react >= 18`, `react-dom >= 18` (uses `useId`, `createPortal`).
+
+## Build (maintainers)
+
+```bash
+npm run build:lib   # vite lib build (ESM+CJS+CSS) + d.ts via tsc
 ```
