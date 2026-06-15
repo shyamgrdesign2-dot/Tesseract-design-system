@@ -1,8 +1,9 @@
-import { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from './TPIcon';
+import { TPIcon, TP_ICON_NAMES } from './TPIcon';
+import { TP_ICON_VARIANTS } from './constants';
 import { TPLibraryIcon } from './TPLibraryIcon';
-import { tpMedicalIconRegistry } from '@/src/components/atoms/MedicalIcon/registry';
+import { tpMedicalIconNames } from '@/src/components/atoms/MedicalIcon/registry';
 
-const MEDICAL_NAMES = Object.keys(tpMedicalIconRegistry);
+const MEDICAL_NAMES = tpMedicalIconNames;
 
 const meta = {
   title: 'Atoms/Icons',

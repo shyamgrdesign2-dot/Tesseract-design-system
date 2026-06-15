@@ -9,22 +9,24 @@
  *
  * Props:
  *   name     icon name (see TP_ICON_NAMES)
- *   variant  "bold" | "broken" | "bulk" | "linear" | "outline" | "twotone"
- *            (aliases: "dual-tone" / "dualtone" → "twotone")    default "linear"
+ *   variant  "linear" | "bulk" | "bold"    default "linear"
+ *            (legacy "solid"→bold, "line"→linear, broken/outline→linear,
+ *             twotone/"dual-tone"→bulk are accepted and mapped)
  *   size     number (px, sets width+height)                      default 20
  *   color    any CSS color — icons render in currentColor
  *
- * Icons render with currentColor, so they inherit text color by default.
- * TP medical icons ship only 3 styles (linear/bulk/bold); missing styles
- * fall back gracefully.
+ * The icon system uses three styles everywhere — linear / bulk / bold. Legacy
+ * style names map onto them so older usages keep working.
  */
 
-import { TP_ICON_REGISTRY, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./registry";
+import { TP_ICON_REGISTRY, TP_ICON_NAMES } from "./registry";
+import { TP_ICON_VARIANTS } from "./constants";
 
-const ALIAS = { "dual-tone": "twotone", dualtone: "twotone", "two-tone": "twotone" };
-const FALLBACK = { broken: "linear", outline: "linear", twotone: "bulk", bold: "linear", bulk: "linear" };
+// Legacy / removed styles map onto the three public variants.
+const ALIAS = { "dual-tone": "bulk", dualtone: "bulk", "two-tone": "bulk", twotone: "bulk", solid: "bold", line: "linear", broken: "linear", outline: "linear" };
+const FALLBACK = { bulk: "linear", bold: "linear" };
 
-const STYLES = ["bold", "broken", "bulk", "linear", "outline", "twotone"];
+const STYLES = TP_ICON_VARIANTS;
 
 export function TPIcon({ name, variant = "linear", size = 20, color, className, style, ...props }) {
   // The icon picker may encode the chosen style as "variant/name"; honour it so
@@ -64,5 +66,5 @@ export function TPIcon({ name, variant = "linear", size = 20, color, className, 
 }
 
 TPIcon.displayName = "TPIcon";
-export { TP_ICON_NAMES, TP_ICON_VARIANTS };
+export { TP_ICON_NAMES };
 export default TPIcon;

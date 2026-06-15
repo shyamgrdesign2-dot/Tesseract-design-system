@@ -22,12 +22,10 @@
  */
 
 import * as React from "react";
-import { tpMedicalIconRegistry } from "@/src/components/atoms/MedicalIcon/registry";
 
-const STYLES = ["bold", "broken", "bulk", "linear", "outline", "twotone"];
-// The medical set ships 3 styles; map the 6 library variants onto them so a
-// medical icon picked from the unified search still honours the chosen variant.
-const MED_STYLE = { linear: "line", outline: "line", broken: "line", bulk: "bulk", twotone: "bulk", bold: "solid" };
+// One icon library, three styles. Legacy names map onto them.
+const STYLES = ["linear", "bulk", "bold"];
+const STYLE_ALIAS = { line: "linear", solid: "bold", outline: "linear", broken: "linear", twotone: "bulk" };
 
 export function TPLibraryIcon({ name, variant = "linear", size = 20, color, title, className, style }) {
   if (!name) return null;
@@ -38,16 +36,13 @@ export function TPLibraryIcon({ name, variant = "linear", size = 20, color, titl
   let v = variant;
   let n = name;
   const slash = name.indexOf("/");
-  if (slash > 0 && STYLES.includes(name.slice(0, slash))) {
-    v = name.slice(0, slash);
-    n = name.slice(slash + 1);
+  if (slash > 0) {
+    const prefix = STYLE_ALIAS[name.slice(0, slash)] || name.slice(0, slash);
+    if (STYLES.includes(prefix)) { v = prefix; n = name.slice(slash + 1); }
   }
-  // One unified icon root under /tp-icons/: the curated medical set resolves
-  // from /tp-icons/medical/ (3 styles), everything else from the full library.
-  const med = tpMedicalIconRegistry[n];
-  const url = med
-    ? (med[MED_STYLE[v] || "line"] || med.line)
-    : `/tp-icons/${STYLES.includes(v) ? v : "linear"}/${encodeURIComponent(n)}.svg`;
+  v = STYLE_ALIAS[v] || v;
+  const st = STYLES.includes(v) ? v : "linear";
+  const url = `/tp-icons/${st}/${encodeURIComponent(n)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
 
   return (

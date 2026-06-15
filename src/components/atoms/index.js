@@ -31,7 +31,7 @@ export { Slider } from "./Slider";
 export { Chip } from "./Chip";
 
 // Medical
-export { TPMedicalIcon, tpMedicalIconRegistry, tpMedicalIconNames, resolveTPMedicalIconName } from "./MedicalIcon";
+export { TPMedicalIcon, tpMedicalIconNames, resolveTPMedicalIconName } from "./MedicalIcon";
 
 // Icons (vendored TP_Icons — 6 styles)
 export { TPIcon, TP_ICON_NAMES, TP_ICON_VARIANTS } from "./icons/tp";

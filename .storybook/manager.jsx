@@ -1,6 +1,6 @@
 import React from "react";
 import { addons, types, useArgs, useArgTypes } from "storybook/manager-api";
-import { tpMedicalIconRegistry } from "../src/components/atoms/MedicalIcon/registry";
+import { tpMedicalIconNames } from "../src/components/atoms/MedicalIcon/registry";
 import tpTheme from "./theme";
 
 // TatvaPractice-branded Storybook chrome (sidebar logo, brand colours, fonts).
@@ -8,24 +8,21 @@ addons.setConfig({ theme: tpTheme });
 
 const ADDON_ID = "tp-icons";
 const PANEL_ID = `${ADDON_ID}/panel`;
-const STYLES = ["linear", "bold", "bulk", "broken", "outline", "twotone"];
+const STYLES = ["linear", "bulk", "bold"];
 const CAP = 300; // cap rendered previews; search narrows the rest
 
-// Medical icons share the same picker namespace (rendered from /icons/medical/).
-const MEDICAL_NAMES = Object.keys(tpMedicalIconRegistry);
-const MED_STYLE = { linear: "line", outline: "line", broken: "line", bulk: "bulk", twotone: "bulk", bold: "solid" };
-
-// Manifest is fetched once and cached across renders. Medical names are always
-// included up front so they surface even before the manifest resolves.
+// Manifest is fetched once and cached across renders. The curated health names
+// seed the list so they surface before the manifest resolves (they're part of
+// the one library now, so the manifest also contains them).
 let _manifest = null;
 function useIconNames() {
-  const [names, setNames] = React.useState(_manifest || MEDICAL_NAMES);
+  const [names, setNames] = React.useState(_manifest || tpMedicalIconNames);
   React.useEffect(() => {
     if (_manifest) return;
     fetch("/tp-icons/manifest.json")
       .then((r) => r.json())
       .then((d) => {
-        _manifest = [...MEDICAL_NAMES, ...d.map((m) => m.n)];
+        _manifest = d.map((m) => m.n);
         setNames(_manifest);
       })
       .catch(() => {});
@@ -34,10 +31,7 @@ function useIconNames() {
 }
 
 function maskStyle(name, style, color) {
-  const med = tpMedicalIconRegistry[name];
-  const url = med
-    ? (med[MED_STYLE[style] || "line"] || med.line)
-    : `/tp-icons/${style}/${encodeURIComponent(name)}.svg`;
+  const url = `/tp-icons/${style}/${encodeURIComponent(name)}.svg`;
   const mask = `url("${url}") no-repeat center / contain`;
   return { WebkitMask: mask, mask, backgroundColor: color };
 }
