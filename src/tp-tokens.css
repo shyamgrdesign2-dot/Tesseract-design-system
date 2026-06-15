@@ -104,9 +104,107 @@
   --tp-error-900: #4C0519;
   --core-primary-900: #161558;
 
-  /* Type families. Mulish is reserved for the H1 page title; Inter carries
-     every other heading, all body copy, and UI text. Each stack ends in a
-     system fallback so text never collapses to the browser default serif. */
+  /* Type families. Mulish carries headings (display + h1–h6); Inter carries all
+     body copy and UI text. Each stack ends in a system fallback so text never
+     collapses to the browser default serif. */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-heading: "Mulish", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --tp-font-heading: var(--font-heading);
+  --tp-font-body: var(--font-sans);
+  --tp-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* ── Font weights ── */
+  --tp-weight-regular: 400;
+  --tp-weight-medium: 500;
+  --tp-weight-semibold: 600;
+  --tp-weight-bold: 700;
+  --tp-weight-extrabold: 800;
+
+  /* ── Type scale (size / line-height pairs, from the token spec) ──
+     headings (Mulish): display-xl…h6 · body/label/caption (Inter) · micro. */
+  --tp-text-display-xl: 56px;  --tp-text-display-xl-lh: 64px;
+  --tp-text-display: 48px;     --tp-text-display-lh: 56px;
+  --tp-text-h1: 36px;          --tp-text-h1-lh: 44px;
+  --tp-text-h2: 30px;          --tp-text-h2-lh: 38px;
+  --tp-text-h3: 24px;          --tp-text-h3-lh: 32px;
+  --tp-text-h4: 20px;          --tp-text-h4-lh: 28px;
+  --tp-text-h5: 16px;          --tp-text-h5-lh: 24px;
+  --tp-text-h6: 14px;          --tp-text-h6-lh: 20px;
+  --tp-text-body-xl: 20px;     --tp-text-body-xl-lh: 32px;
+  --tp-text-body-lg: 18px;     --tp-text-body-lg-lh: 28px;
+  --tp-text-body-base: 16px;   --tp-text-body-base-lh: 24px;
+  --tp-text-body-sm: 14px;     --tp-text-body-sm-lh: 20px;
+  --tp-text-body-xs: 12px;     --tp-text-body-xs-lh: 18px;
+  --tp-text-caption-lg: 13px;  --tp-text-caption-lg-lh: 18px;
+  --tp-text-caption: 12px;     --tp-text-caption-lh: 16px;
+  --tp-text-caption-sm: 11px;  --tp-text-caption-sm-lh: 14px;
+  --tp-text-micro: 10px;       --tp-text-micro-lh: 12px;
+
+  /* ── Spacing scale (4pt base) ── */
+  --tp-space-0-25: 1px;
+  --tp-space-0-5: 2px;
+  --tp-space-1: 4px;
+  --tp-space-1-5: 6px;
+  --tp-space-2: 8px;
+  --tp-space-2-5: 10px;
+  --tp-space-3: 12px;
+  --tp-space-3-5: 14px;
+  --tp-space-4: 16px;
+  --tp-space-4-5: 18px;
+  --tp-space-5: 20px;
+  --tp-space-5-5: 22px;
+  --tp-space-6: 24px;
+  --tp-space-7: 28px;
+  --tp-space-8: 32px;
+  --tp-space-9: 36px;
+  --tp-space-10: 40px;
+  --tp-space-10-5: 42px;
+  --tp-space-12: 48px;
+  --tp-space-16: 64px;
+
+  /* ── Sizing scale (icons, controls) ── */
+  --tp-size-2: 2px;   --tp-size-4: 4px;   --tp-size-6: 6px;   --tp-size-8: 8px;
+  --tp-size-10: 10px; --tp-size-12: 12px; --tp-size-14: 14px; --tp-size-16: 16px;
+  --tp-size-18: 18px; --tp-size-20: 20px; --tp-size-22: 22px; --tp-size-24: 24px;
+  --tp-size-28: 28px; --tp-size-32: 32px; --tp-size-36: 36px; --tp-size-40: 40px;
+  --tp-size-42: 42px;
+
+  /* ── Corner radius ── */
+  --tp-radius-0: 0;
+  --tp-radius-2: 2px;
+  --tp-radius-4: 4px;
+  --tp-radius-6: 6px;
+  --tp-radius-8: 8px;
+  --tp-radius-10: 10px;
+  --tp-radius-12: 12px;
+  --tp-radius-14: 14px;
+  --tp-radius-16: 16px;
+  --tp-radius-18: 18px;
+  --tp-radius-20: 20px;
+  --tp-radius-22: 22px;
+  --tp-radius-24: 24px;
+  --tp-radius-42: 42px;
+  --tp-radius-84: 84px;
+  --tp-radius-full: 9999px;
+
+  /* ── Elevation (drop shadows) ── */
+  --tp-shadow-xs: 0 1px 2px 0 rgba(23, 23, 37, 0.04);
+  --tp-shadow-sm: 0 1px 3px 0 rgba(23, 23, 37, 0.08);
+  --tp-shadow-md: 0 4px 8px -2px rgba(23, 23, 37, 0.08);
+  --tp-shadow-lg: 0 12px 24px -4px rgba(23, 23, 37, 0.08);
+  --tp-shadow-xl: 0 20px 40px -8px rgba(23, 23, 37, 0.12);
+  --tp-shadow-2xl: 0 32px 64px -12px rgba(23, 23, 37, 0.20);
+  /* Focus rings (3px spread) */
+  --tp-focus-primary: 0 0 0 3px #b5b4f2;
+  --tp-focus-error: 0 0 0 3px #fda4af;
+  --tp-focus-neutral: 0 0 0 3px #d0d5dd;
+
+  /* ── Brand gradients (TP Blue Depth / TP Violet Depth / AI surface) ── */
+  --tp-gradient-primary-hero: radial-gradient(101.06% 60.94% at 50% 55.44%, #4b4ad5 0%, #161558 39.08%, #2e2d96 78.16%, #4b4ad5 100%);
+  --tp-gradient-primary-card: radial-gradient(101.06% 60.94% at 50% 55.44%, #6c6bde 0%, #212077 39.08%, #3c3bb5 78.16%, #6c6bde 100%);
+  --tp-gradient-primary-subtle: radial-gradient(101.06% 60.94% at 50% 55.44%, #b5b4f2 0%, #6c6bde 39.08%, #8e8de8 78.16%, #b5b4f2 100%);
+  --tp-gradient-secondary-hero: radial-gradient(99.09% 59.99% at 50% 55.44%, #8a4dbb 0%, #3e1c64 39.08%, #572a81 78.16%, #a461d8 100%);
+  --tp-gradient-secondary-card: radial-gradient(99.09% 59.99% at 50% 55.44%, #ba7de9 0%, #572a81 39.08%, #703a9e 78.16%, #ba7de9 100%);
+  --tp-gradient-ai-hero: linear-gradient(91deg, #d565ea 3.04%, #673aac 66.74%, #1a1994 130.45%);
+  --tp-gradient-ai-card: linear-gradient(91deg, #e08bf0 3.04%, #8a5dc2 66.74%, #3c3bb5 130.45%);
 }

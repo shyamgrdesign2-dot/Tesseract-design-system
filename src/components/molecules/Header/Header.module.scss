@@ -52,7 +52,7 @@
   padding: 4px 6px;
   border: none;
   background: transparent;
-  border-radius: 10px;
+  border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
   cursor: pointer;
   text-align: left;

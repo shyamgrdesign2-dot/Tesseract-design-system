@@ -7,7 +7,7 @@
   position: relative;
   overflow-x: auto;
   border: 1px solid var(--tp-slate-100, #f1f1f5);
-  border-radius: 10px;
+  border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
   background: var(--tp-slate-0, #fff);
   font-family: Inter, var(--font-sans, sans-serif);
@@ -137,7 +137,7 @@
   min-width: 168px;
   padding: 4px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 10px;
+  border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
   background: var(--tp-slate-0, #fff);
   box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
@@ -150,7 +150,7 @@
   text-align: left;
   padding: 8px 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
   background: transparent;
   font: inherit;

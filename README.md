@@ -52,6 +52,22 @@ directory (so they resolve at `/brand`, `/icons`, `/tp-icons`). All other
 components — Button, Badge, Dropdown, DataTable, ClinicalTable, etc. — work with
 no extra assets (they use inline SVGs).
 
+## Design tokens & fonts
+
+`tp-ui/styles.css` includes the full foundational token layer as CSS variables —
+colours (`--tp-blue-500`…), typography scale, radius (`--tp-radius-10`), shadows
+(`--tp-shadow-md`), spacing (`--tp-space-4`), sizing, and gradients — plus
+ready-to-use type classes (`.tp-h1`, `.tp-body-base`, …). Components consume
+these tokens, and you can use them in your own styles. Browse them under
+**Design System → Foundations** in Storybook.
+
+Fonts: the type tokens reference **Inter** (body/UI) and **Mulish** (headings).
+Load them in your app (Google Fonts or self-host), e.g.:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Mulish:wght@600;700;800&display=swap" rel="stylesheet" />
+```
+
 ## Peer dependencies
 
 `react >= 18`, `react-dom >= 18` (uses `useId`, `createPortal`).

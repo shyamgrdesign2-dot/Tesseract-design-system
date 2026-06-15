@@ -616,7 +616,7 @@
       color: var(--tp-blue-500, #4b4ad5);
 
       &:hover:not(:disabled) { color: var(--tp-blue-600, #3c3bb5); }
-      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-blue-200, #b5b4f2); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-blue-200, #b5b4f2); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: var(--tp-slate-400, #a2a2a8); }
     }
 
@@ -624,7 +624,7 @@
       color: var(--tp-slate-700, #454551);
 
       &:hover:not(:disabled) { color: var(--tp-slate-900, #171725); }
-      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-slate-300, #d0d5dd); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-slate-300, #d0d5dd); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: var(--tp-slate-400, #a2a2a8); }
     }
 
@@ -632,7 +632,7 @@
       color: var(--tp-error-500, #e11d48);
 
       &:hover:not(:disabled) { color: var(--tp-error-600, #c8102e); }
-      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-error-300, #fda4af); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px var(--tp-error-300, #fda4af); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: var(--tp-slate-400, #a2a2a8); }
     }
 
@@ -640,14 +640,14 @@
       color: var(--tp-success-600, #059669);
 
       &:hover:not(:disabled) { color: var(--tp-success-700, #047857); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-success-600) 30%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-success-600) 30%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: var(--tp-slate-400, #a2a2a8); }
     }
 
     &[data-theme="warning"] {
       color: var(--tp-warning-600, #d97706);
       &:hover:not(:disabled) { color: var(--tp-warning-800, #92400e); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-warning-600) 35%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-warning-600) 35%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: var(--tp-slate-400, #a2a2a8); }
     }
 
@@ -656,7 +656,7 @@
       color: color-mix(in srgb, var(--tp-slate-0) 88%, transparent);
 
       &:hover:not(:disabled) { color: #ffffff; }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-slate-0) 30%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-slate-0) 30%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: color-mix(in srgb, var(--tp-slate-0) 30%, transparent); }
     }
 
@@ -664,7 +664,7 @@
       color: color-mix(in srgb, var(--tp-slate-0) 60%, transparent);
 
       &:hover:not(:disabled) { color: color-mix(in srgb, var(--tp-slate-0) 85%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-slate-0) 20%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-slate-0) 20%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: color-mix(in srgb, var(--tp-slate-0) 25%, transparent); }
     }
 
@@ -672,7 +672,7 @@
       color: var(--tp-error-300, #fda4af);
 
       &:hover:not(:disabled) { color: var(--tp-error-300, #fda4af); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-error-300) 30%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-error-300) 30%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: color-mix(in srgb, var(--tp-error-300) 35%, transparent); }
     }
 
@@ -680,7 +680,7 @@
       color: var(--tp-success-600, #059669);
 
       &:hover:not(:disabled) { color: var(--tp-success-600, #059669); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-success-600) 30%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-success-600) 30%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: color-mix(in srgb, var(--tp-success-600) 35%, transparent); }
     }
 
@@ -688,7 +688,7 @@
       color: var(--tp-warning-600, #d97706);
 
       &:hover:not(:disabled) { color: var(--tp-warning-600, #d97706); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-warning-600) 30%, transparent); border-radius: 2px; }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tp-warning-600) 30%, transparent); border-radius: var(--tp-radius-2, 2px); }
       &:disabled { color: color-mix(in srgb, var(--tp-warning-600) 35%, transparent); }
     }
   }
@@ -793,7 +793,7 @@
   min-width: 180px;
   background: var(--tp-slate-0, #ffffff);
   border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 12px;
+  border-radius: var(--tp-radius-12, 12px);
   box-shadow: 0 12px 24px -4px color-mix(in srgb, var(--tp-slate-900) 8%, transparent),
     0 4px 8px -4px color-mix(in srgb, var(--tp-slate-900) 4%, transparent);
   overflow: hidden;
@@ -806,7 +806,7 @@
   width: 100%;
   padding: 8px 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   background: transparent;
   color: var(--tp-slate-700, #454551);
   font: 500 14px/1.4 Inter, sans-serif;

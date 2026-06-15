@@ -12,7 +12,7 @@
   gap: 6px;
   padding: 7px 12px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 10px;
+  border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
   background-color: var(--tp-slate-0, #fff);
   color: var(--tp-slate-700, #454551);
@@ -40,7 +40,7 @@
   min-width: 240px;
   max-height: 360px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 12px;
+  border-radius: var(--tp-radius-12, 12px);
   corner-shape: round;
   background-color: var(--tp-slate-0, #fff);
   box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
@@ -68,7 +68,7 @@
 }
 .done {
   border: none;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
   padding: 6px 14px;
   font-size: 13px;
@@ -88,7 +88,7 @@
   width: 100%;
   padding: 8px 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   background: transparent;
   color: var(--tp-slate-700, #454551);
   font-size: 13px;
@@ -118,7 +118,7 @@
   font-weight: 600;
   cursor: pointer;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
 
   &:hover { color: var(--tp-error-700, #9F1239); background-color: var(--tp-error-50, #FFF1F2); }
@@ -133,7 +133,7 @@
   gap: 12px;
   padding: 8px 8px 8px 12px;
   border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 12px;
+  border-radius: var(--tp-radius-12, 12px);
   corner-shape: round;
   background-color: var(--tp-slate-0, #fff);
 }

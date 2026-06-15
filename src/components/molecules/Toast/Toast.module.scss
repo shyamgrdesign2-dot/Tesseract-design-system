@@ -6,7 +6,7 @@
   /* Tight icon↔text gap; action/dismiss restore their own breathing room below. */
   gap: 8px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
   background-color: var(--tp-slate-900, #171725);
   color: var(--tp-slate-0, #ffffff);
@@ -86,7 +86,7 @@
   height: 24px;
   padding: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--tp-radius-6, 6px);
   corner-shape: round;
   background-color: color-mix(in srgb, var(--tp-slate-0, #fff) 12%, transparent);
   color: color-mix(in srgb, var(--tp-slate-0, #fff) 80%, transparent);

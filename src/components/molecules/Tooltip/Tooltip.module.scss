@@ -2,7 +2,7 @@
 
 .content {
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
   font-size: 12px;
   font-weight: 500;

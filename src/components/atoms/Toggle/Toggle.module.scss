@@ -1,7 +1,7 @@
 /* Switch.module.scss */
 
 .root {
-  border-radius: 9999px;
+  border-radius: var(--tp-radius-full, 9999px);
   corner-shape: round; /* true pill (not the global squircle) */
   border: none;
   padding: 2px;
@@ -23,7 +23,7 @@
 
   /* Square shape — squared track corners (default is a rounded pill) */
   &[data-shape="square"] { border-radius: 7px; corner-shape: round; }
-  &[data-size="sm"][data-shape="square"] { border-radius: 6px; }
+  &[data-size="sm"][data-shape="square"] { border-radius: var(--tp-radius-6, 6px); }
 
   /* Focus */
   &:focus-visible {
@@ -44,7 +44,7 @@
   background-color: var(--tp-slate-0, #ffffff);
 
   /* Square shape — rounded-square thumb */
-  .root[data-shape="square"] & { border-radius: 4px; corner-shape: round; }
+  .root[data-shape="square"] & { border-radius: var(--tp-radius-4, 4px); corner-shape: round; }
   box-shadow: 0 1px 3px rgba(23, 23, 37, 0.12);
   transition: transform 150ms ease;
   will-change: transform;

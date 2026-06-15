@@ -76,7 +76,7 @@
   user-select: none;
 
   &:hover { color: var(--tp-slate-900, #171725); }
-  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8e8de8); outline-offset: 2px; border-radius: 4px; }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8e8de8); outline-offset: 2px; border-radius: var(--tp-radius-4, 4px); }
 }
 .th[data-align="right"] .sortBtn { flex-direction: row-reverse; }
 
@@ -252,7 +252,7 @@
   height: 26px;
   padding: 0 6px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--tp-radius-6, 6px);
   corner-shape: round;
   background-color: transparent;
   color: var(--tp-slate-600, #52525b);
