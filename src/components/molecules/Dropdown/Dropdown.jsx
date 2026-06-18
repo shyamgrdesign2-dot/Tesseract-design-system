@@ -67,34 +67,21 @@ import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { Radio } from "@/src/components/atoms/Radio";
 import { Button } from "@/src/components/atoms/Button";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useIsClient } from "@/src/hooks/use-is-client";
+import { useAnalytics } from "@/src/analytics/context";
 import styles from "./Dropdown.module.scss";
 
-function Chevron(props) {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden {...props}>
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
+// Icons from the CDN (no inline SVG). Chevron forwards props (className/data-open).
+const Chevron = (props) => <TPLibraryIcon name="chevron-down" size={14} {...props} />;
+const SearchIcon = () => <TPLibraryIcon name="search" size={15} />;
+const PlusIcon = () => <TPLibraryIcon name="add" size={14} />;
+// Plain checkmark — the CDN only ships circled/squared ticks, so the selected
+// indicator keeps a bare inline ✓ (the one glyph with no clean library match).
 function CheckIcon({ size = 14 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-function SearchIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" />
-    </svg>
-  );
-}
-function PlusIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M12 5v14M5 12h14" />
     </svg>
   );
 }
@@ -151,8 +138,10 @@ export function Dropdown({
   placeholder = "Select…",
   label,
   disabled = false,
+  analyticsId,
   className,
 }) {
+  const { track } = useAnalytics();
   const isMulti = mode === "multi";
   const selectedArr = isMulti ? (Array.isArray(value) ? value : []) : value != null ? [value] : [];
 
@@ -215,14 +204,18 @@ export function Dropdown({
   // added, or Enter — so callers can tell "confirmed" from "still typing".
   function commit(item) {
     if (item.disabled) return;
-    if (item.__custom) { onChange?.(item.value); onCommit?.(item.value); setOpen(false); return; }
+    const emit = (value, extra) => { if (analyticsId) track({ component: "Dropdown", id: analyticsId, action: "select", value, ...extra }); };
+    if (item.__custom) { onChange?.(item.value); onCommit?.(item.value); emit(item.value, { custom: true }); setOpen(false); return; }
     if (isMulti) {
-      const next = isSelected(item.value) ? selectedArr.filter((v) => v !== item.value) : [...selectedArr, item.value];
+      const wasSelected = isSelected(item.value);
+      const next = wasSelected ? selectedArr.filter((v) => v !== item.value) : [...selectedArr, item.value];
       onChange?.(next);
       onCommit?.(next);
+      emit(item.value, { label: item.label, selected: !wasSelected, count: next.length });
     } else {
       onChange?.(item.value);
       onCommit?.(item.value);
+      emit(item.value, { label: item.label });
       setOpen(false);
     }
   }
@@ -415,6 +408,7 @@ export function Dropdown({
       {searchable && !editable && (
         <div className={styles.search}>
           <span className={styles.searchIcon}><SearchIcon /></span>
+          {/* Intentional structural input host (seamless typeahead/search nested in the popover), not a standalone field — do not convert to InputBox. */}
           <input
             ref={searchRef}
             className={styles.searchInput}
@@ -476,6 +470,7 @@ export function Dropdown({
       {editable ? (
         <div ref={triggerRef} className={styles.trigger} data-editable="true" data-open={open ? "true" : undefined}>
           {leadingIcon && <span className={styles.triggerLead}>{leadingIcon}</span>}
+          {/* Intentional structural input host (seamless combobox typeahead nested in the styled trigger), not a standalone field — do not convert to InputBox. */}
           <input
             ref={inputRef}
             className={styles.editInput}

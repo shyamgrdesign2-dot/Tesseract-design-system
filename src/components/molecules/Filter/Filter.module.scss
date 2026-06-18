@@ -1,103 +1,89 @@
 /* Filter.module.scss — chip-based multi-select filter bar. */
 
-.root { display: flex; flex-direction: column; gap: 10px; font-family: Inter, var(--font-sans, sans-serif); }
+.root { display: flex; flex-direction: column; gap: var(--tp-space-2-5); font-family: var(--tp-font-body); }
 
-.bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bar { display: flex; align-items: center; gap: var(--tp-space-2); flex-wrap: wrap; }
 
 .ddRoot { position: relative; display: inline-block; }
 
 .trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: var(--tp-radius-10, 10px);
+  gap: var(--tp-space-1-5);
+  padding: var(--tp-space-2) var(--tp-space-3);
+  border: 1px solid var(--tp-slate-200);
+  border-radius: var(--tp-radius-10);
   corner-shape: round;
-  background-color: var(--tp-slate-0, #fff);
-  color: var(--tp-slate-700, #454551);
-  font-size: 13px;
-  font-weight: 600;
+  background-color: var(--tp-slate-0);
+  color: var(--tp-slate-700);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
   cursor: pointer;
   transition: border-color 120ms ease, background-color 120ms ease;
 
-  &:hover { border-color: var(--tp-slate-300, #d4d4d8); }
-  &[data-active] { border-color: var(--tp-blue-400, #6c6bde); color: var(--tp-blue-600, #3c3bb5); background-color: var(--tp-blue-50, #eeeeff); }
-  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tp-blue-100, #d8d8fa); }
+  &:hover { border-color: var(--tp-slate-300); }
+  &[data-active] { border-color: var(--tp-blue-400); color: var(--tp-blue-600); background-color: var(--tp-blue-50); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tp-blue-100); }
 }
 .triggerIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
-.caret { color: var(--tp-slate-400, #a1a1aa); transition: transform 150ms ease; }
+.caret { color: var(--tp-slate-400); transition: transform 150ms ease; }
 .trigger[aria-expanded="true"] .caret { transform: rotate(180deg); }
 
 /* Single grouped panel — sections scroll, footer is pinned. */
 .panel {
   position: absolute;
   z-index: 800;
-  top: calc(100% + 6px);
+  top: calc(100% + var(--tp-space-1-5));
   left: 0;
   display: flex;
   flex-direction: column;
   min-width: 240px;
   max-height: 360px;
-  border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: var(--tp-radius-12, 12px);
+  border: 1px solid var(--tp-slate-200);
+  border-radius: var(--tp-radius-12);
   corner-shape: round;
-  background-color: var(--tp-slate-0, #fff);
-  box-shadow: 0 12px 28px -8px rgba(23, 23, 37, 0.24);
+  background-color: var(--tp-slate-0);
+  box-shadow: 0 12px 28px -8px color-mix(in srgb, var(--tp-slate-900) 24%, transparent);
 }
-.sections { overflow-y: auto; padding: 6px; }
+.sections { overflow-y: auto; padding: var(--tp-space-1-5); }
 
 /* Each group is a labelled section; a hairline separates adjacent sections. */
-.section + .section { margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--tp-slate-100, #f1f1f5); }
+.section + .section { margin-top: var(--tp-space-1); padding-top: var(--tp-space-1-5); border-top: 1px solid var(--tp-slate-100); }
 .sectionTitle {
-  padding: 4px 10px 6px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: var(--tp-space-1) var(--tp-space-2-5) var(--tp-space-1-5);
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-bold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--tp-slate-400, #a1a1aa);
+  color: var(--tp-slate-400);
 }
 
 .panelFooter {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 8px;
-  border-top: 1px solid var(--tp-slate-100, #f1f1f5);
-}
-.done {
-  border: none;
-  border-radius: var(--tp-radius-8, 8px);
-  corner-shape: round;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--tp-slate-0, #fff);
-  background-color: var(--tp-blue-500, #4b4ad5);
-
-  &:hover { background-color: var(--tp-blue-600, #3c3bb5); }
-  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tp-blue-100, #d8d8fa); }
+  gap: var(--tp-space-2);
+  padding: var(--tp-space-2);
+  border-top: 1px solid var(--tp-slate-100);
 }
 
 .option {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--tp-space-2-5);
   width: 100%;
-  padding: 8px 10px;
+  padding: var(--tp-space-2) var(--tp-space-2-5);
   border: none;
-  border-radius: var(--tp-radius-8, 8px);
+  border-radius: var(--tp-radius-8);
   background: transparent;
-  color: var(--tp-slate-700, #454551);
-  font-size: 13px;
+  color: var(--tp-slate-700);
+  font-size: var(--tp-text-body-sm);
   text-align: left;
   cursor: pointer;
   transition: background-color 120ms ease;
 
-  &:hover { background-color: var(--tp-slate-50, #f8fafc); }
-  &[aria-selected="true"] { color: var(--tp-blue-600, #3c3bb5); font-weight: 600; }
+  &:hover { background-color: var(--tp-slate-50); }
+  &[aria-selected="true"] { color: var(--tp-blue-600); font-weight: var(--tp-weight-semibold); }
 }
 
 /* Decorative wrapper around the reused Checkbox atom — the option row owns the
@@ -109,37 +95,27 @@
   pointer-events: none;
 }
 
-.clear {
-  flex-shrink: 0;
-  border: none;
-  background: transparent;
-  color: var(--tp-error-600, #C8102E);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 6px 8px;
-  border-radius: var(--tp-radius-8, 8px);
-  corner-shape: round;
-
-  &:hover { color: var(--tp-error-700, #9F1239); background-color: var(--tp-error-50, #FFF1F2); }
-  &:disabled { color: var(--tp-slate-300, #d4d4d8); cursor: not-allowed; background: transparent; }
-}
-
-/* ── Active selection: bordered bar — chips on the left, Clear all on the right ── */
+/* ── Active selection: subtle grey bar — "Filter:" label, chips, then Clear all ── */
 .activeBar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 8px 8px 12px;
-  border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: var(--tp-radius-12, 12px);
+  gap: var(--tp-space-2-5);
+  padding: var(--tp-space-2) var(--tp-space-2) var(--tp-space-2) var(--tp-space-3);
+  border: 1px solid var(--tp-slate-100, #F1F1F5);
+  border-radius: var(--tp-radius-12);
   corner-shape: round;
-  background-color: var(--tp-slate-0, #fff);
+  background-color: var(--tp-slate-50, #fafafb);
+}
+
+.activeLabel {
+  flex-shrink: 0;
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  color: var(--tp-slate-400, #a2a2a8);
 }
 
 // Active chips reuse the Chip atom (composed in Filter.jsx). Only the group
 // prefix ("Status:") needs a lighter weight inside the chip label.
-.chips { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.chips { display: flex; align-items: center; gap: var(--tp-space-1-5); flex-wrap: wrap; flex: 1; min-width: 0; }
 
-.chipGroup { font-weight: 500; opacity: 0.7; }
+.chipGroup { font-weight: var(--tp-weight-medium); opacity: 0.7; }

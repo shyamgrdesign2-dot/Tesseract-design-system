@@ -13,11 +13,13 @@ export const toOptions = (opts) => (opts ?? []).map((o) => (typeof o === "string
 //   text    free notes                             140–260
 //   search  long names (a primary key / medicine)  200–320
 export const TYPE_WIDTHS = {
-  number: { minWidth: 84,  maxWidth: 120 },
-  date:   { minWidth: 140, maxWidth: 180 },
-  select: { minWidth: 120, maxWidth: 180 },
-  text:   { minWidth: 140, maxWidth: 260 },
-  search: { minWidth: 200, maxWidth: 320 },
+  number:      { minWidth: 84,  maxWidth: 120 },
+  date:        { minWidth: 140, maxWidth: 180 },
+  select:      { minWidth: 120, maxWidth: 180 },
+  multiselect: { minWidth: 160, maxWidth: 260 },
+  combo:       { minWidth: 140, maxWidth: 220 },
+  text:        { minWidth: 140, maxWidth: 260 },
+  search:      { minWidth: 200, maxWidth: 320 },
 };
 
 // Responsive per-column sizing. The table is fluid (auto layout): each column

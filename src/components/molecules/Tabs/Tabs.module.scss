@@ -4,20 +4,20 @@
 .list {
   display: flex;
   flex-wrap: nowrap;
-  gap: 4px;
-  border-bottom: 1px solid var(--tp-slate-200, #e2e2ea);
+  gap: var(--tp-space-1);
+  border-bottom: 1px solid var(--tp-slate-200, var(--tp-slate-200));
   /* On narrow screens the row scrolls horizontally instead of wrapping. */
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: thin;
-  scrollbar-color: var(--tp-slate-200, #e2e2ea) transparent;
+  scrollbar-color: var(--tp-slate-200, var(--tp-slate-200)) transparent;
   -webkit-overflow-scrolling: touch;
 
-  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar { height: var(--tp-size-6); }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background-color: var(--tp-slate-200, #e2e2ea);
-    border-radius: 999px;
+    background-color: var(--tp-slate-200, var(--tp-slate-200));
+    border-radius: var(--tp-radius-full, 9999px);
   }
 }
 
@@ -26,16 +26,16 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0; /* keep natural width so the row scrolls rather than squishes */
-  gap: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: Inter, var(--font-sans, sans-serif);
-  color: var(--tp-slate-500, #717179);
+  gap: var(--tp-space-2);
+  padding: var(--tp-space-2-5) var(--tp-space-3-5);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  font-family: var(--tp-font-body);
+  color: var(--tp-slate-500, var(--tp-slate-500));
   background-color: transparent;
   border: none;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: var(--tp-radius-8);
+  border-top-right-radius: var(--tp-radius-8);
   corner-shape: round;
   cursor: pointer;
   white-space: nowrap;
@@ -47,11 +47,11 @@
   &::after {
     content: "";
     position: absolute;
-    left: 10px;
-    right: 10px;
+    left: var(--tp-space-2-5);
+    right: var(--tp-space-2-5);
     bottom: 0;
-    height: 3px;
-    border-radius: 3px 3px 0 0;
+    height: var(--tp-size-2);
+    border-radius: var(--tp-radius-2) var(--tp-radius-2) 0 0;
     corner-shape: round;
     background-color: transparent;
     transition: background-color 150ms ease;
@@ -59,18 +59,18 @@
 
   /* Active tab + indicator use TP blue; the icon inherits it via currentColor. */
   &[data-state="active"] {
-    color: var(--tp-blue-600, #3c3bb5);
-    &::after { background-color: var(--tp-blue-600, #3c3bb5); }
+    color: var(--tp-blue-600, var(--tp-blue-600));
+    &::after { background-color: var(--tp-blue-600, var(--tp-blue-600)); }
   }
 
   &:hover:not([data-state="active"]):not(:disabled) {
-    color: var(--tp-slate-700, #454551);
-    background-color: var(--tp-slate-50, #f8fafc);
-    &::after { background-color: var(--tp-slate-200, #e2e2ea); }
+    color: var(--tp-slate-700, var(--tp-slate-700));
+    background-color: var(--tp-slate-50, var(--tp-slate-50));
+    &::after { background-color: var(--tp-slate-200, var(--tp-slate-200)); }
   }
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--tp-blue-300, #8e8de8);
+    box-shadow: inset 0 0 0 2px var(--tp-blue-300, var(--tp-blue-300));
   }
 
   &:disabled {
@@ -80,8 +80,8 @@
 }
 
 /* ── Sizes ── (trigger density; the tag/count pill is the Badge atom) */
-.list[data-size="sm"] .trigger { padding: 7px 10px;  font-size: 13px; gap: 6px; }
-.list[data-size="lg"] .trigger { padding: 13px 18px; font-size: 15px; gap: 10px; }
+.list[data-size="sm"] .trigger { padding: var(--tp-space-2) var(--tp-space-2-5);  font-size: var(--tp-text-body-xs); gap: var(--tp-space-1-5); }
+.list[data-size="lg"] .trigger { padding: var(--tp-space-3-5) var(--tp-space-4-5); font-size: var(--tp-text-body-base); gap: var(--tp-space-2-5); }
 
 /* ── Parts ── */
 .icon {
@@ -98,6 +98,6 @@
 
 
 .content {
-  padding: 16px 0;
+  padding: var(--tp-space-4) 0;
   outline: none;
 }

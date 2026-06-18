@@ -12,7 +12,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: { description: { component: 'Header · Body · Footer confirmation modal. Convention (developer decides): the **primary** CTA is the safe/non-destructive action; the **destructive** action goes on the **secondary** CTA. CTA colors come from the Button `theme` (TP blue + warning/error/success/neutral).' } },
+    docs: { description: { component: 'Header · Body · Footer confirmation modal. Convention (developer decides): the **primary** CTA is the safe/non-destructive action; the **destructive** action goes on the **secondary** CTA. CTA colors come from the Button `theme` (Tesseract blue + warning/error/success/neutral).' } },
   },
 };
 
@@ -66,7 +66,7 @@ export const Playground = {
     callout:          { control: 'text', name: 'callout text', table: { category: 'Body' } },
     calloutTone:      { control: 'inline-radio', options: ['neutral', 'warning', 'error'], name: 'callout tone', table: { category: 'Body' } },
     calloutIcon:      { control: 'boolean', name: 'callout icon', table: { category: 'Body' } },
-    calloutIconName:  { control: 'text', tpIcon: true, name: 'callout icon (override)', description: 'Pick a TP icon to override the callout icon', table: { category: 'Body' } },
+    calloutIconName:  { control: 'text', tpIcon: true, name: 'callout icon (override)', description: 'Pick a Tesseract icon to override the callout icon', table: { category: 'Body' } },
     calloutPlacement: { control: 'inline-radio', options: ['above', 'below'], name: 'callout vs text', table: { category: 'Body' } },
     withCheckbox:     { control: 'boolean', name: 'with checkbox', table: { category: 'Body' } },
     checkboxLabel:    { control: 'text', name: 'checkbox label', table: { category: 'Body' } },

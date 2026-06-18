@@ -17,6 +17,7 @@
  */
 
 import * as React from "react";
+import { useAnalytics, resolveTrack } from "@/src/analytics/context";
 import styles from "./Toggle.module.scss";
 
 export const Toggle = React.forwardRef(function Toggle(
@@ -34,6 +35,7 @@ export const Toggle = React.forwardRef(function Toggle(
     style,
     onClick,
     onKeyDown,
+    track,
     ...rest
   },
   ref,
@@ -41,15 +43,18 @@ export const Toggle = React.forwardRef(function Toggle(
   const isControlled = checked !== undefined;
   const [internal, setInternal] = React.useState(Boolean(defaultChecked));
   const isOn = isControlled ? Boolean(checked) : internal;
+  const { track: emit } = useAnalytics();
 
   const toggle = React.useCallback(
     (e) => {
       if (disabled) return;
       const next = !isOn;
       if (!isControlled) setInternal(next);
+      const t = resolveTrack(track);
+      if (t) emit({ component: "Toggle", action: "toggle", value: next, ...t });
       onCheckedChange?.(next, e);
     },
-    [disabled, isOn, isControlled, onCheckedChange],
+    [disabled, isOn, isControlled, onCheckedChange, track, emit],
   );
 
   const handleClick = (e) => {

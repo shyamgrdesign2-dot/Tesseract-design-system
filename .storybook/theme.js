@@ -1,14 +1,14 @@
 import { create } from 'storybook/theming';
 
-// TatvaPractice-branded Storybook UI.
+// Tesseract Design System — branded Storybook UI.
 export default create({
   base: 'light',
-  brandTitle: 'TatvaPractice UI',
+  brandTitle: 'Tesseract Design System',
   brandUrl: '/',
-  brandImage: './brand/tatvapractice-wordmark.svg',
+  brandImage: './brand/tesseract-wordmark.svg',
   brandTarget: '_self',
 
-  colorPrimary: '#4B4AD5',   // TP blue 500
+  colorPrimary: '#4B4AD5',   // Tesseract blue 500
   colorSecondary: '#4B4AD5',
 
   appBg: '#F1F1F5',          // slate 100

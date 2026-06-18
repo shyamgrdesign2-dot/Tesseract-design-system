@@ -3,7 +3,7 @@
  * size · status (default/success/error/warning) · allow filter (numeric/alpha/
  * alphanumeric) · icon side (left/right/both) · clearable · loading · unit ·
  * counter (+/-) · character count · left/right add-ons (dropdown · CTA · text).
- * TP icons + TP tokens only, zero dependencies.
+ * Tesseract icons + Tesseract tokens only, zero dependencies.
  */
 
 import React from 'react';

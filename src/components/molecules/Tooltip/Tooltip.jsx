@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Tooltip — TatvaPractice tooltip molecule. In-house, no external deps
+ * Tooltip — Tesseract tooltip molecule. First-party, no external deps
  * (built on the shared Portal / Slot / usePosition / useEscape / useClickOutside).
  *
  * Two consumption styles:
@@ -25,6 +25,7 @@ import * as React from "react";
 import { Slot } from "@/src/hooks/ui/Slot";
 import { Portal } from "@/src/hooks/ui/Portal";
 import { usePosition, useEscape, useClickOutside } from "@/src/hooks/ui/use-overlay";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Tooltip.module.scss";
 
 const ProviderContext = React.createContext({ delayDuration: 200 });
@@ -220,9 +221,7 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
           <span ref={bodyRef} className={styles.ttBody}>{children}</span>
           {ctx.dismissible && (
             <button type="button" className={styles.ttDismiss} aria-label="Dismiss" onClick={() => ctx.setOpen(false)}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
+              <TPLibraryIcon name="close-square" variant="bold" size={14} aria-hidden />
             </button>
           )}
         </span>

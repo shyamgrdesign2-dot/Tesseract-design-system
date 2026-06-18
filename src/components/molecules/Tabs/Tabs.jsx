@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Tabs — TatvaPractice tab navigation. In-house, no external deps.
+ * Tabs — Tesseract tab navigation. First-party, no external deps.
  *
  * Compound API (Radix-shaped, so callers don't change):
  *   <Tabs value | defaultValue onValueChange size="md">
@@ -28,6 +28,7 @@
 
 import * as React from "react";
 import { Badge } from "@/src/components/atoms/Badge";
+import { useAnalytics } from "@/src/analytics/context";
 import styles from "./Tabs.module.scss";
 
 const TabsContext = React.createContext(null);
@@ -35,17 +36,19 @@ const TabsContext = React.createContext(null);
 // Icon size is driven by the tab size (md = 18px).
 const ICON_SIZE = { sm: 16, md: 18, lg: 20 };
 
-export function Tabs({ value, defaultValue, onValueChange, size = "md", className = "", children, ...props }) {
+export function Tabs({ value, defaultValue, onValueChange, size = "md", analyticsId, className = "", children, ...props }) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(defaultValue);
   const current = isControlled ? value : internal;
+  const { track } = useAnalytics();
 
   const setValue = React.useCallback(
     (next) => {
       if (!isControlled) setInternal(next);
+      if (analyticsId) track({ component: "Tabs", id: analyticsId, action: "tab_change", value: next });
       onValueChange?.(next);
     },
-    [isControlled, onValueChange],
+    [isControlled, onValueChange, analyticsId, track],
   );
 
   const ctx = React.useMemo(() => ({ value: current, setValue, size }), [current, setValue, size]);

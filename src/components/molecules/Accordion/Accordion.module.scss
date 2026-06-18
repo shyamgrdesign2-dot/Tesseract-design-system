@@ -1,7 +1,7 @@
 /* Accordion.module.scss */
 
 .item {
-  border-bottom: 1px solid var(--tp-slate-100, #f1f1f5);
+  border-bottom: 1px solid var(--tp-slate-100);
 }
 
 .trigger {
@@ -9,23 +9,23 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 12px 0;
+  padding: var(--tp-space-3) 0;
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: Inter, var(--font-sans, sans-serif);
-  color: var(--tp-slate-700, #454551);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  font-family: var(--tp-font-body), var(--font-sans, sans-serif);
+  color: var(--tp-slate-700);
   line-height: 1.43;
   outline: none;
   text-align: left;
   transition: color 150ms ease;
 
-  &:hover { color: var(--tp-slate-900, #171725); }
+  &:hover { color: var(--tp-slate-900); }
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--tp-blue-300, #9b9aec);
+    box-shadow: inset 0 0 0 2px var(--tp-blue-300);
     border-radius: var(--tp-radius-4, 4px);
   }
 
@@ -37,20 +37,20 @@
 
 .chevron {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  color: var(--tp-slate-400, #a2a2a8);
+  width: var(--tp-size-16);
+  height: var(--tp-size-16);
+  color: var(--tp-slate-400);
   transition: transform 200ms ease;
 }
 
 .content {
   overflow: hidden;
-  font-size: 14px;
-  font-family: Inter, var(--font-sans, sans-serif);
-  color: var(--tp-slate-600, #585861);
+  font-size: var(--tp-text-body-sm);
+  font-family: var(--tp-font-body), var(--font-sans, sans-serif);
+  color: var(--tp-slate-600);
   line-height: 1.57;
 }
 
 .contentInner {
-  padding-bottom: 12px;
+  padding-bottom: var(--tp-space-3);
 }

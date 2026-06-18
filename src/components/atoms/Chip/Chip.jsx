@@ -2,7 +2,7 @@
 
 /**
  * Chip — removable / selectable label pill (filters, multi-select).
- * Auto-layout (inline-flex + gap), TP color tokens, sm/md/lg sizes, 10px radius.
+ * Auto-layout (inline-flex + gap), Tesseract color tokens, sm/md/lg sizes, 10px radius.
  *
  * Props:
  *   label     ReactNode
@@ -15,27 +15,17 @@
  *   onDelete      fn           shows a remove (×) button
  *   removePosition "left" | "right"   side for the × button   default "right"
  *   onClick       fn           makes the chip act as a button
+ *   track     string | { id, … }  opt-in action tracking (emits on click to the
+ *                                  nearest TPAnalyticsProvider; no-op without one)
  *   disabled  boolean
  */
 
-// Inline dismiss glyph — no external icon dependency.
-function X({ size = 12 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
-  );
-}
+import { useAnalytics, resolveTrack } from "@/src/analytics/context";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import styles from "./Chip.module.scss";
+
+// Dismiss glyph from the icon CDN (no inline SVG).
+const X = ({ size = 12 }) => <TPLibraryIcon name="close-square" variant="bold" size={size} />;
 
 // One color token per tone; bg/border are translucent washes derived from it.
 const TONES = {
@@ -47,9 +37,9 @@ const TONES = {
 };
 
 const SIZES = {
-  sm: { height: 20, padX: 8,  font: 11, gap: 4, icon: 12 },
-  md: { height: 24, padX: 10, font: 12, gap: 4, icon: 14 },
-  lg: { height: 28, padX: 12, font: 13, gap: 6, icon: 16 },
+  sm: { height: 20, padX: 8,  font: "var(--tp-text-micro)",   gap: 4, icon: 12 },
+  md: { height: 24, padX: 10, font: "var(--tp-text-body-xs)", gap: 4, icon: 14 },
+  lg: { height: 28, padX: 12, font: "var(--tp-text-body-sm)", gap: 6, icon: 16 },
 };
 
 export function TPChip({
@@ -62,6 +52,7 @@ export function TPChip({
   onDelete,
   removePosition = "right",
   onClick,
+  track,
   disabled = false,
   className,
   style: styleProp,
@@ -69,24 +60,45 @@ export function TPChip({
   const c = TONES[color] ?? TONES.default;
   const s = SIZES[size] ?? SIZES.md;
   const interactive = !!onClick && !disabled;
+  // Hover affordance applies to any interactive chip — clickable OR dismissible.
+  const hoverable = (!!onClick || !!onDelete) && !disabled;
+  const { track: emit } = useAnalytics();
+  const handleClick = (e) => {
+    if (disabled) return;
+    const t = resolveTrack(track);
+    if (t) emit({ component: "Chip", action: "click", label: typeof label === "string" ? label : undefined, ...t });
+    onClick?.(e);
+  };
 
   // Variants mirror the Badge atom: solid (filled) · soft (wash) · outline.
   // Back-compat aliases: "filled" → soft, "outlined" → outline.
   const v = variant === "filled" ? "soft" : variant === "outlined" ? "outline" : variant;
   const variantStyle =
     v === "solid"
-      ? { color: "#fff", backgroundColor: c, border: `1px solid ${c}` }
+      ? { color: "var(--tp-slate-0, #fff)", backgroundColor: c, border: `1px solid ${c}` }
       : v === "outline"
         ? { color: c, backgroundColor: "transparent", border: `1px solid color-mix(in srgb, ${c} 40%, transparent)` }
         : { color: c, backgroundColor: `color-mix(in srgb, ${c} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${c} 22%, transparent)` };
 
+  // The remove control is a span (role="button"), NOT a <button> — chips are
+  // often rendered inside a button trigger (Dropdown/ClinicalTable), and a
+  // <button> nested in a <button> is invalid HTML (and warns in React).
   const removeBtn = onDelete && (
-    <button
-      type="button"
+    <span
+      role="button"
       aria-label="Remove"
+      className={styles.remove}
+      tabIndex={disabled ? undefined : 0}
       onClick={(e) => {
         e.stopPropagation();
         if (!disabled) onDelete(e);
+      }}
+      onKeyDown={(e) => {
+        if ((e.key === "Enter" || e.key === " ") && !disabled) {
+          e.preventDefault();
+          e.stopPropagation();
+          onDelete(e);
+        }
       }}
       style={{
         display: "inline-flex",
@@ -106,15 +118,15 @@ export function TPChip({
       }}
     >
       <X size={s.icon - 2} />
-    </button>
+    </span>
   );
 
   return (
     <span
       role={onClick ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
-      onClick={disabled ? undefined : onClick}
-      className={className}
+      onClick={disabled ? undefined : handleClick}
+      className={[hoverable && styles.interactive, className].filter(Boolean).join(" ") || undefined}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -122,11 +134,11 @@ export function TPChip({
         gap: s.gap,
         height: s.height,
         padding: `0 ${s.padX}px`,
-        borderRadius: 10,
+        borderRadius: "var(--tp-radius-10)",
         cornerShape: "round",
         fontSize: s.font,
-        fontWeight: 500,
-        fontFamily: "Inter, sans-serif",
+        fontWeight: "var(--tp-weight-medium)",
+        fontFamily: "var(--tp-font-body)",
         lineHeight: 1,
         ...variantStyle,
         cursor: interactive ? "pointer" : "default",

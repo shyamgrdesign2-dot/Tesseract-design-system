@@ -202,7 +202,7 @@ function HeaderPlaygroundDemo(a) {
   else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
 
   return (
-    <div style={{ background: 'var(--tp-slate-50, #f8fafc)', minHeight: 320 }}>
+    <div style={{ background: 'var(--tp-slate-50, #FAFAFB)', minHeight: 320 }}>
       <Header back={a.showBack} {...left} actions={actions} />
     </div>
   );

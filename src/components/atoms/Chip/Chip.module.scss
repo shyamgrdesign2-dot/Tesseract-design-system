@@ -1,0 +1,24 @@
+/* Chip — hover/press affordances for interactive (clickable / dismissible) chips.
+   The fill is set inline (dynamic per tone), so hover uses filter + shadow so it
+   layers over any color without fighting the inline styles. */
+.interactive {
+  transition: filter 120ms ease, box-shadow 120ms ease, transform 80ms ease;
+
+  &:hover { filter: brightness(0.95); box-shadow: 0 1px 4px color-mix(in srgb, var(--tp-slate-900) 14%, transparent); }
+  &:active { transform: scale(0.97); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8E8DE8); outline-offset: 2px; }
+}
+
+/* The remove (×) control fades up to full opacity on hover/focus. */
+.remove {
+  transition: opacity 120ms ease, background-color 120ms ease;
+  border-radius: var(--tp-radius-full);
+
+  &:hover { opacity: 1 !important; background-color: color-mix(in srgb, currentColor 16%, transparent); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8E8DE8); outline-offset: 1px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive { transition: none; }
+  .interactive:active { transform: none; }
+}

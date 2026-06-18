@@ -14,7 +14,7 @@ const meta = {
   argTypes: {
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
     collapsible: { control: 'boolean' },
-    itemIcon: { control: 'text', tpIcon: true, name: 'item icon', description: 'TP icon shown before each item title' },
+    itemIcon: { control: 'text', tpIcon: true, name: 'item icon', description: 'Tesseract icon shown before each item title' },
   },
   args: {
     type: 'single',

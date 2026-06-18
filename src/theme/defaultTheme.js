@@ -1,4 +1,4 @@
-// The default TatvaPractice theme — the structured object products read through
+// The default Tesseract theme — the structured object products read through
 // TPThemeProvider / useTheme(). It mirrors the CSS-variable tokens (tp-tokens.css)
 // so foundation + component tokens are available in JS, and is the base that a
 // product's partial `theme` is deep-merged over.

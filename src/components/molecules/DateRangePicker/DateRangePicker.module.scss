@@ -1,39 +1,75 @@
 // DateRangePicker — two-month range calendar with preset rail.
 // Zero dependencies: TP color tokens only. Replaces the prior Tailwind classes.
 
-// ─── Trigger ──────────────────────────────────────────────────────────────────
+// ─── Field (label · trigger · helper) ──────────────────────────────────────────
 .root {
   position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--tp-space-1-5);
+}
+.root.fullWidth { display: flex; width: 100%; }
+
+.fieldLabel {
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  color: var(--tp-slate-700);
+}
+.req { margin-left: var(--tp-space-0-5); color: var(--tp-error-500, #e11d48); }
+
+.helper {
+  margin: 0;
+  font-size: var(--tp-text-body-xs);
+  color: var(--tp-slate-500);
+
+  &[data-status="error"]   { color: var(--tp-error-600, #c8102e); }
+  &[data-status="success"] { color: var(--tp-success-600, #059669); }
+  &[data-status="warning"] { color: var(--tp-warning-700, #b45309); }
 }
 
 .trigger {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: var(--tp-space-1-5);
   width: 100%;
-  height: 38px;
-  padding: 0 12px;
+  height: var(--tp-size-40);
+  padding: 0 var(--tp-space-3);
   border: 1px solid var(--tp-slate-200);
   border-radius: var(--tp-radius-10, 10px);
   corner-shape: round;
-  background: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--tp-slate-700);
+  background: var(--tp-slate-0);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-medium);
+  color: var(--tp-slate-800);
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
 
-  &:hover {
-    border-color: var(--tp-slate-300);
-    background: var(--tp-slate-50);
+  &:hover { border-color: var(--tp-slate-300); }
+  &[data-open="true"] {
+    border-color: var(--tp-blue-500);
+    box-shadow: 0 0 0 3px var(--tp-blue-100, #d8d8fa);
   }
+  &[data-placeholder="true"] { color: var(--tp-slate-400); }
+  &[data-placeholder="true"] .triggerText { font-weight: var(--tp-weight-regular); }
+
+  // Sizes
+  &[data-size="sm"] { height: 34px; font-size: var(--tp-text-body-xs); padding: 0 var(--tp-space-2-5); }
+  &[data-size="lg"] { height: 46px; font-size: var(--tp-text-body-base); padding: 0 var(--tp-space-3-5); }
+
+  // Status rings
+  &[data-status="error"]   { border-color: var(--tp-error-400, #fb7185); }
+  &[data-status="error"][data-open="true"]   { box-shadow: 0 0 0 3px var(--tp-error-50, #fff1f2); }
+  &[data-status="success"] { border-color: var(--tp-success-400, #34d399); }
+  &[data-status="warning"] { border-color: var(--tp-warning-400, #fbbf24); }
+
+  &:disabled { cursor: not-allowed; opacity: 0.55; background: var(--tp-slate-50); }
 }
 
 .triggerLabel {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--tp-space-1-5);
   min-width: 0;
 }
 
@@ -67,8 +103,9 @@
   border: 1px solid var(--tp-slate-200);
   border-radius: var(--tp-radius-16, 16px);
   corner-shape: round;
-  background: #fff;
-  box-shadow: 0 16px 40px -8px rgba(23, 23, 37, 0.18);
+  background: var(--tp-slate-0);
+  box-shadow: 0 16px 40px -8px color-mix(in srgb, var(--tp-slate-900) 18%, transparent);
+  outline: none;
 }
 
 .body {
@@ -79,18 +116,18 @@
 .presets {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--tp-space-0-5);
   width: 152px;
   flex-shrink: 0;
-  padding: 12px 10px;
+  padding: var(--tp-space-3) var(--tp-space-2-5);
   border-right: 1px solid var(--tp-slate-100);
 }
 
 .groupLabel {
   margin: 0;
-  padding: 4px 8px 2px;
-  font-size: 10px;
-  font-weight: 600;
+  padding: var(--tp-space-1) var(--tp-space-2) var(--tp-space-0-5);
+  font-size: var(--tp-text-micro);
+  font-weight: var(--tp-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.025em;
   color: var(--tp-slate-400);
@@ -100,14 +137,14 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 9px 12px;
+  padding: var(--tp-space-2-5) var(--tp-space-3);
   border: none;
   border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
   background: transparent;
   text-align: left;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-medium);
   color: var(--tp-slate-700);
   cursor: pointer;
   transition: background-color 150ms ease, color 150ms ease;
@@ -118,23 +155,23 @@
 
   &[data-selected="true"] {
     background: var(--tp-blue-500);
-    color: #fff;
+    color: var(--tp-slate-0);
   }
 }
 
 .presetDivider {
   height: 1px;
-  margin: 6px 4px;
+  margin: var(--tp-space-1-5) var(--tp-space-1);
   background: var(--tp-slate-100);
 }
 
 .pendingHint {
-  margin: 8px 0 0;
-  padding: 6px 8px;
+  margin: var(--tp-space-2) 0 0;
+  padding: var(--tp-space-1-5) var(--tp-space-2);
   border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
   background: var(--tp-amber-50);
-  font-size: 10px;
+  font-size: var(--tp-text-micro);
   line-height: 1.25;
   color: var(--tp-warning-700);
 }
@@ -144,121 +181,167 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 16px;
+  padding: var(--tp-space-4);
+  // Floor width so the footer (Clear · Cancel · Apply) always has room, even in
+  // the compact month / year / time modes.
+  min-width: 288px;
 }
 
-.inputs {
+// ─── Time panel (hours · minutes · AM/PM) ──────────────────────────────────────
+.timeWrap {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  margin-bottom: 12px;
+  justify-content: center;
 }
-
-.inputCol {
-  flex: 1;
-  min-width: 0;
-}
-
-.inputLabel {
-  margin: 0 0 4px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  color: var(--tp-slate-400);
-}
-
-.inputBox {
+.timePanel {
   display: flex;
-  align-items: center;
-  height: 36px;
-  padding: 0 12px;
-  border: 1px solid var(--tp-slate-200);
-  border-radius: var(--tp-radius-8, 8px);
-  corner-shape: round;
-  background: var(--tp-slate-50);
-  font-size: 13px;
-  color: var(--tp-slate-400);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-
-  &[data-filled="true"] {
-    border-color: var(--tp-blue-200);
-    background: var(--tp-blue-50);
-    color: var(--tp-blue-700);
-  }
+  align-items: stretch;
+  gap: var(--tp-space-1-5);
+  height: 200px;
 }
 
-.inputDash {
-  width: 10px;
-  height: 1.5px;
-  flex-shrink: 0;
-  align-self: flex-end;
-  margin-bottom: 17px; // sits on the vertical centre-line of the 36px input boxes
-  background: var(--tp-slate-300);
-  border-radius: var(--tp-radius-2, 2px);
-}
-
-// ─── Calendars ────────────────────────────────────────────────────────────────
-.calendars {
+// datetime → calendar + time side by side (grows width, never height). The time
+// columns are capped to the calendar's height and scroll inside, so the popover
+// stays one calendar tall regardless of how many time options exist.
+.dtRow { display: flex; align-items: flex-start; gap: 0; }
+.dtCal { display: flex; flex-direction: column; }
+.timeSide {
   display: flex;
+  margin-left: var(--tp-space-4);
+  padding-left: var(--tp-space-4);
+  border-left: 1px solid var(--tp-slate-100);
 }
-
-// Each month column; a divider precedes every month after the first.
-.calCol {
-  display: flex;
-}
-
-.calBody {
+.timeSide .timePanel { height: auto; }
+.timeSide .timeCol { max-height: 288px; }
+.timeCol {
+  position: relative;
   display: flex;
   flex-direction: column;
-}
+  gap: var(--tp-space-0-5);
+  width: 60px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scroll-snap-type: y proximity;
+  padding: var(--tp-space-0-5);
 
+  &::-webkit-scrollbar { width: var(--tp-size-6); }
+  &::-webkit-scrollbar-thumb { background: var(--tp-slate-200); border-radius: var(--tp-radius-full, 9999px); }
+}
+.timeItem {
+  flex-shrink: 0;
+  height: var(--tp-size-36);
+  scroll-snap-align: center;
+  border: none;
+  border-radius: var(--tp-radius-10);
+  corner-shape: round;
+  background: transparent;
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--tp-slate-700);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover { background: var(--tp-slate-100); }
+  &[data-selected="true"] { background: var(--tp-blue-500); color: var(--tp-slate-0); }
+}
+.timeSep { align-self: center; font-size: var(--tp-text-body-lg); font-weight: var(--tp-weight-bold); color: var(--tp-slate-400); }
+
+// ─── Shared header nav (month/year stepping + jump-to picker) ──────────────────
 .navRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  gap: var(--tp-space-2);
+  margin-bottom: var(--tp-space-2);
+}
+
+.headLabels {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--tp-space-2);
+}
+
+.monthBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-1);
+  padding: var(--tp-space-1) var(--tp-space-2);
+  border: none;
+  border-radius: var(--tp-radius-8, 8px);
+  corner-shape: round;
+  background: transparent;
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  color: var(--tp-slate-800);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover { background: var(--tp-slate-100); color: var(--tp-slate-900); }
+  & svg { color: var(--tp-slate-400); }
 }
 
 .navBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--tp-radius-full, 9999px);
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--tp-slate-200);
+  border-radius: var(--tp-radius-8, 8px);
   corner-shape: round;
-  background: transparent;
+  background: var(--tp-slate-0);
   color: var(--tp-slate-600);
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 
-  &:hover {
-    background: var(--tp-slate-100);
-    color: var(--tp-slate-900);
-  }
+  &:hover:not(:disabled) { background: var(--tp-slate-50); border-color: var(--tp-slate-300); color: var(--tp-slate-900); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
-.navSpacer {
-  width: 28px;
-  height: 28px;
-}
-
-.monthLabel {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tp-slate-800);
-}
+// ─── Calendars ────────────────────────────────────────────────────────────────
+.calendars { display: flex; }
+.calCol { display: flex; }
 
 .calDivider {
   flex-shrink: 0;
   width: 1px;
-  margin: 0 16px;
+  margin: 0 var(--tp-space-4);
   background: var(--tp-slate-100);
+}
+
+// ─── Month / year quick-pick panel ─────────────────────────────────────────────
+.mypanel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--tp-space-1);
+}
+.mygrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--tp-space-1-5);
+  width: 100%;
+}
+.mycell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tp-size-42);
+  border: 1px solid transparent;
+  border-radius: var(--tp-radius-10, 10px);
+  corner-shape: round;
+  background: var(--tp-slate-50);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-medium);
+  color: var(--tp-slate-700);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+
+  &:hover:not(:disabled) { background: var(--tp-slate-100); }
+  &[data-selected="true"] { background: var(--tp-blue-500); color: var(--tp-slate-0); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
 // ─── Calendar month grid ─────────────────────────────────────────────────────
@@ -269,14 +352,14 @@
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 2px;
+  margin-bottom: var(--tp-space-0-5);
 }
 
 .weekday {
-  padding: 6px 0;
+  padding: var(--tp-space-1-5) 0;
   text-align: center;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-semibold);
   color: var(--tp-slate-400);
 }
 
@@ -296,12 +379,12 @@
     background: var(--tp-blue-50);
   }
   &[data-start="true"] {
-    border-top-left-radius: 9999px;
-    border-bottom-left-radius: 9999px;
+    border-top-left-radius: var(--tp-radius-10);
+    border-bottom-left-radius: var(--tp-radius-10);
   }
   &[data-end="true"] {
-    border-top-right-radius: 9999px;
-    border-bottom-right-radius: 9999px;
+    border-top-right-radius: var(--tp-radius-10);
+    border-bottom-right-radius: var(--tp-radius-10);
   }
 }
 
@@ -314,11 +397,11 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: var(--tp-radius-full, 9999px);
+  border-radius: var(--tp-radius-10);
   corner-shape: round;
   background: transparent;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-medium);
   color: var(--tp-slate-700);
   cursor: pointer;
   transition: background-color 150ms ease, color 150ms ease;
@@ -338,14 +421,24 @@
 
   // Today (not edge, not in range)
   &[data-today="true"] {
-    font-weight: 700;
+    font-weight: var(--tp-weight-bold);
     color: var(--tp-blue-500);
+  }
+
+  // Keyboard-focused day — ring (doesn't fight the fill states)
+  &[data-focused="true"] { box-shadow: inset 0 0 0 2px var(--tp-blue-400, #6c6bde); }
+
+  // Disabled day — muted, non-interactive
+  &[data-disabled="true"] {
+    color: var(--tp-slate-300);
+    cursor: not-allowed;
+    &:hover { background: transparent; }
   }
 
   // Range edges + single selected day — solid accent, wins over the above
   &[data-edge="true"] {
     background: var(--tp-blue-500);
-    color: #fff;
+    color: var(--tp-slate-0);
 
     &:hover {
       background: var(--tp-blue-500);
@@ -357,8 +450,8 @@
   position: absolute;
   bottom: 2px;
   left: 50%;
-  width: 2px;
-  height: 2px;
+  width: var(--tp-size-2);
+  height: var(--tp-size-2);
   transform: translateX(-50%);
   border-radius: var(--tp-radius-full, 9999px);
   corner-shape: round;
@@ -371,8 +464,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: var(--tp-space-3);
+  padding-top: var(--tp-space-3);
   border-top: 1px solid var(--tp-slate-100);
 }
 
@@ -380,5 +473,5 @@
 .actionsRight {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--tp-space-2);
 }

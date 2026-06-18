@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Component Standards
 
-The contract every TP component follows. New components and changes are reviewed
+The contract every Tesseract component follows. New components and changes are reviewed
 against this. The goal: a contributor can build a new component and it will feel
 identical in API, theming, and behaviour to everything else.
 
@@ -13,80 +13,94 @@ identical in API, theming, and behaviour to everything else.
 ## 1. API shape
 
 - **Config over markup.** Repeating-but-varying structure is data: `columns`
-  for tables, a `tabs`/`groups` array for tabs/filters. Consumers pass config +
-  data, not hand-built rows.
+ for tables, a `tabs`/`groups` array for tabs/filters. Consumers pass config +
+ data, not hand-built rows.
 - **Variants & sizes are props**, never one-off classes: `variant`, `size`,
-  `tone`/`status`, `surface`. Same vocabulary across components
-  (`sm | md | lg`, semantic tones `neutral | primary | success | warning | error`).
+ `tone`/`status`, `surface`. Same vocabulary across components
+ (`sm | md | lg`, semantic tones `neutral | primary | success | warning | error`).
 - **Compound parts when structure varies**: `Tabs / TabsList / TabsTrigger /
-  TabsContent`, `Tooltip / TooltipTrigger / TooltipContent`.
-  Simple cases keep a flat wrapper API too.
+ TabsContent`, `Tooltip / TooltipTrigger / TooltipContent`.
+ Simple cases keep a flat wrapper API too.
 - **Controlled + uncontrolled**: accept `value` + `defaultValue` + `onChange`.
 - **Slots accept `ReactNode`** (icons, actions, cells) so callers compose freely.
 
 ## 2. Theming
 
 - Colors/radius/spacing only via `var(--tp-*)`. No raw hex except as a token
-  fallback (`var(--tp-slate-900, #171725)`).
+ fallback (`var(--tp-slate-900, #171725)`).
 - Radius uses `corner-shape: round` where the squircle base would distort it.
 - Dark surfaces use `surface="dark"` variants, not ad-hoc overrides.
 
 ## 3. Icons
 
-- TP icons only. `TPIcon` for the curated set; `TPLibraryIcon` for the full
-  library (mask-themed, tints to `currentColor`).
-- Any configurable icon slot is a `tpIcon: true` argType so the **TP Icons**
-  panel can pick it. Never hard-code an icon a caller might want to change.
+- **No inline SVGs.** Every glyph renders through `TPLibraryIcon` (or `TPIcon`
+ for the curated set) from the icon CDN, never a hand-written `<svg>`. The path
+ is `<base>/<corner>/<style>/<family>/<name>.svg`; family resolves from the name.
+ (Only stateful/generative visuals, the sort indicator, `AnimatedGrid`, the
+ spinner, are exempt, since they aren't single library glyphs.)
+- For disclosure / nav affordances use the semantic **`chevron-down/up/left/right`**
+ names (they alias to the centered CDN chevrons) rather than inlining a chevron.
+- Any configurable icon slot is a `tpIcon: true` argType so the **Tesseract Icons**
+ panel can pick it. Never hard-code an icon a caller might want to change.
+
+## 3a. Theming & tracking
+
+- **Theme** strictly through `var(--tp-*)`; a product re-themes via
+ `TPThemeProvider`, seed a full theme with `createTheme({ brand })`. Don't read
+ raw colours in JS.
+- **Tracking** is opt-in: atoms take a `track` prop, containers take an
+ `analyticsId`, and both emit through `useAnalytics()` to the nearest
+ `TPAnalyticsProvider`. With no provider it's a no-op, never hard-wire analytics.
 
 ## 4. Controls coverage
 
 - Every variant, state, and per-part option is a Storybook control.
 - Group related controls with `table: { category }`.
 - Provide a **Playground** that exercises the full surface, plus focused stories
-  per feature (sorting, pagination, truncation, …).
+ per feature (sorting, pagination, truncation, …).
 
 ## 5. Content & overflow rules
 
 - **Truncate, then tooltip.** Clamp overflowing text and show the full value in
-  our `Tooltip` (`whenTruncated`) on hover — never let text break layout.
+ our `Tooltip` (`whenTruncated`) on hover, never let text break layout.
 - **Truncation rule** (cells): with subtext → primary clamps to 1 line; without
-  subtext → up to 2 lines; subtext → 1 line.
+ subtext → up to 2 lines; subtext → 1 line.
 - **Responsive width**: respect `minWidth`/`maxWidth`; on small screens
-  **scroll horizontally** rather than squish. Sticky columns/headers show a
-  neutral gradient shadow while content is hidden beneath them.
+ **scroll horizontally** rather than squish. Sticky columns/headers show a
+ neutral gradient shadow while content is hidden beneath them.
 
 ## 6. Behaviour & a11y
 
 - Keyboard: arrow-key nav for tab/menu rows, `Escape` closes overlays,
-  `focus-visible` rings everywhere.
+ `focus-visible` rings everywhere.
 - Correct roles/ARIA: `role="tab"`/`tablist`, `aria-sort`, `aria-selected`,
-  `aria-describedby` for tooltips, `aria-live` for toasts.
+ `aria-describedby` for tooltips, `aria-live` for toasts.
 - Motion respects `prefers-reduced-motion`.
 - Async surfaces (tables) support a **loading** state / lazy-load with a
-  `LoadingIndicator`.
+ `LoadingIndicator`.
 
-## 7. Compose atoms — don't reinvent
+## 7. Compose atoms, don't reinvent
 
 Molecules are assembled from atoms. If an atom already renders a piece of UI,
-import and compose it instead of re-implementing its markup — so styling,
+import and compose it instead of re-implementing its markup, so styling,
 tokens, sizing, and a11y live in exactly one place.
 
-- Status pill → **Badge**  ·  removable/selectable pill → **Chip**
-- CTA / action button → **Button**  ·  checkbox → **Checkbox**  ·  text field → **InputBox**
+- Status pill → **Badge** · removable/selectable pill → **Chip**
+- CTA / action button → **Button** · checkbox → **Checkbox** · text field → **InputBox**
 - Icons → **TPIcon** / **TPLibraryIcon**
 
 In practice: `Filter` active selections render `Chip`; `DataTable` `type:"tag"`
 cells render `Badge`; `ConfirmDialog` and `HeroBanner` actions render `Button`;
 `ConfirmDialog`'s "don't show again" uses `Checkbox`. A molecule re-styling its
-own pill/button is a smell — reach for the atom.
+own pill/button is a smell, reach for the atom.
 
 ## 8. No third-party UI deps
 
 Build on the shared primitives in `@/src/hooks/ui/` (`Portal`, `Slot`,
 `usePosition`, `useEscape`, `useClickOutside`) and `@/src/hooks/utils` (`cn`).
-**Zero styling/UI dependencies** — no Tailwind, no icon packages, no component
+**Zero styling/UI dependencies**, no Tailwind, no icon packages, no component
 libraries. All styling is CSS Modules + `var(--tp-*)` tokens; all icons are
-inline SVG or the vendored TP set. Runtime deps stay limited to `react` /
+inline SVG or the vendored Tesseract set. Runtime deps stay limited to `react` /
 `react-dom`. Headings: **Mulish** for the H1 page title, **Inter** everywhere else.
 
 ---
@@ -96,16 +110,16 @@ inline SVG or the vendored TP set. Runtime deps stay limited to `react` /
 Before a component is "done":
 
 - Config-driven API (data in, not bespoke markup) with controlled +
-      uncontrolled support.
+ uncontrolled support.
 - `variant` / `size` / `tone` use the shared vocabulary.
 - Colors, radius, spacing from `var(--tp-*)` only.
 - Icons via `TPIcon` / `TPLibraryIcon`; configurable slots flagged
-      `tpIcon: true`.
+ `tpIcon: true`.
 - Every option is a Storybook control; a Playground + focused stories exist.
 - Overflow truncates + tooltips; layout is responsive (scroll, not squish).
 - Keyboard + ARIA + focus-visible + reduced-motion handled.
-- Reuses atoms (Badge / Chip / Button / Checkbox / InputBox / TPIcon) — never
-      reimplements an atom inside a molecule.
+- Reuses atoms (Badge / Chip / Button / Checkbox / InputBox / TPIcon), never
+ reimplements an atom inside a molecule.
 - No third-party UI libraries; built on shared primitives.
 
 ---
@@ -113,16 +127,16 @@ Before a component is "done":
 ## Configurability matrix
 
 <table>
-  <thead><tr><th>Component</th><th>Key configuration</th></tr></thead>
-  <tbody>
-    <tr><td><code>DataTable</code></td><td>per-column sort / sticky / align / min-max width / rich <code>DataCell</code> (icons L+R, subtext, truncation→tooltip); pagination, infinite lazy-load, sticky header, density, zebra, scroll + sticky shadow</td></tr>
-    <tr><td><code>Filter</code></td><td>chip-based multi-select; <code>groups</code> config changes per table; controlled selection; active selections render in a bordered bar (<code>Chip</code> atoms on the left, red <em>Clear all</em> in the right corner)</td></tr>
-    <tr><td><code>Tabs</code></td><td>compound parts; <code>size</code>; per-tab left/right icon + tag + tone; object-array for arbitrary tabs; horizontal scroll; active icon <code>linear → bulk</code></td></tr>
-    <tr><td><code>Toast</code></td><td><code>status</code> tone, title + subtext, action slot, dismiss, icon toggle, line/truncation rules</td></tr>
-    <tr><td><code>ConfirmDialog</code></td><td>Header · Body · Footer; tri-tone callout (neutral/warning/error) with placement above/below the text; up to 3 CTA slots (primary/secondary/tertiary), each with variant + color theme. Convention: safe action = primary, destructive = secondary.</td></tr>
-    <tr><td><code>DateRangePicker</code></td><td>range selection, presets, controlled value</td></tr>
-    <tr><td><code>Button</code></td><td>text / icon-only / split (<code>menu</code>); <code>variant</code> / <code>size</code> / <code>theme</code> / <code>surface</code>; loading + disabled</td></tr>
-    <tr><td><code>Tooltip</code></td><td>wrapper + compound; side/align/offset; dark/light; arrow; <code>whenTruncated</code></td></tr>
-    <tr><td><code>HeroBanner</code></td><td>size, bottom radius, title/subtitle sizes, back button, pattern, up to 3 config-driven CTAs + end icon</td></tr>
-  </tbody>
+ <thead><tr><th>Component</th><th>Key configuration</th></tr></thead>
+ <tbody>
+ <tr><td><code>DataTable</code></td><td>per-column sort / sticky / align / min-max width / rich <code>DataCell</code> (icons L+R, subtext, truncation→tooltip); pagination, infinite lazy-load, sticky header, density, zebra, scroll + sticky shadow</td></tr>
+ <tr><td><code>Filter</code></td><td>chip-based multi-select; <code>groups</code> config changes per table; controlled selection; active selections render in a bordered bar (<code>Chip</code> atoms on the left, red <em>Clear all</em> in the right corner)</td></tr>
+ <tr><td><code>Tabs</code></td><td>compound parts; <code>size</code>; per-tab left/right icon + tag + tone; object-array for arbitrary tabs; horizontal scroll; active icon <code>linear → bulk</code></td></tr>
+ <tr><td><code>Toast</code></td><td><code>status</code> tone, title + subtext, action slot, dismiss, icon toggle, line/truncation rules</td></tr>
+ <tr><td><code>ConfirmDialog</code></td><td>Header · Body · Footer; tri-tone callout (neutral/warning/error) with placement above/below the text; up to 3 CTA slots (primary/secondary/tertiary), each with variant + color theme. Convention: safe action = primary, destructive = secondary.</td></tr>
+ <tr><td><code>DateRangePicker</code></td><td>range selection, presets, controlled value</td></tr>
+ <tr><td><code>Button</code></td><td>text / icon-only / split (<code>menu</code>); <code>variant</code> / <code>size</code> / <code>theme</code> / <code>surface</code>; loading + disabled</td></tr>
+ <tr><td><code>Tooltip</code></td><td>wrapper + compound; side/align/offset; dark/light; arrow; <code>whenTruncated</code></td></tr>
+ <tr><td><code>HeroBanner</code></td><td>size, bottom radius, title/subtitle sizes, back button, pattern, up to 3 config-driven CTAs + end icon</td></tr>
+ </tbody>
 </table>

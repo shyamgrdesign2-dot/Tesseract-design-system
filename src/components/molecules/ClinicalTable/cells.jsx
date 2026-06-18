@@ -30,17 +30,38 @@ export function EditableCell({ column: c, value, row, locked, onChange, onCommit
   const status = locked ? undefined : resolveStatus(c, value, row);
   const readOnly = c.editable === false;
 
-  if (c.type === "select" || c.type === "search") {
-    const isSearch = c.type === "search";
+  if (c.type === "multiselect") {
     return (
       <Dropdown
         variant="seamless"
-        editable={isSearch}
-        chevron={!isSearch}
-        searchable={!isSearch && c.searchable}
-        allowCustom={isSearch && c.allowCustom !== false}
+        mode="multi"
+        chips={c.chips !== false}
+        chevron
+        searchable={c.searchable}
+        optionControl={c.optionControl || "none"}
+        footerHint={c.footerHint ? "keys" : showsKeyHints(c) ? "keys" : false}
+        options={toOptions(c.options)}
+        value={Array.isArray(value) ? value : []}
+        placeholder={locked ? "" : c.placeholder}
+        status={status}
+        leadingIcon={c.icon}
+        disabled={locked || readOnly}
+        onChange={onChange}
+      />
+    );
+  }
+
+  if (c.type === "combo") {
+    return (
+      <Dropdown
+        variant="seamless"
+        editable
+        chevron={c.chevron !== false}
+        allowCustom={c.allowCustom !== false}
+        searchable={c.searchable}
         groupLabel={c.frequentlyUsedLabel}
-        footerHint={showsKeyHints(c) ? "keys" : false}
+        optionControl={c.optionControl || "none"}
+        footerHint={c.footerHint ? "keys" : showsKeyHints(c) ? "keys" : false}
         options={toOptions(c.options)}
         value={value}
         placeholder={locked ? "" : c.placeholder}
@@ -53,15 +74,39 @@ export function EditableCell({ column: c, value, row, locked, onChange, onCommit
     );
   }
 
-  // text / number / date — all reuse the InputBox atom. New scalar types slot in
-  // here (the dispatch above + this block is the single place to extend).
-  const inputType = c.type === "date" ? "date" : undefined; // number stays text + numeric filter
+  if (c.type === "select" || c.type === "search") {
+    const isSearch = c.type === "search";
+    return (
+      <Dropdown
+        variant="seamless"
+        editable={isSearch}
+        chevron={!isSearch}
+        searchable={!isSearch && c.searchable}
+        allowCustom={isSearch && c.allowCustom !== false}
+        groupLabel={c.frequentlyUsedLabel}
+        optionControl={c.optionControl || "none"}
+        footerHint={c.footerHint ? "keys" : showsKeyHints(c) ? "keys" : false}
+        options={toOptions(c.options)}
+        value={value}
+        placeholder={locked ? "" : c.placeholder}
+        status={status}
+        leadingIcon={c.icon}
+        disabled={locked || readOnly}
+        onChange={onChange}
+        onCommit={onCommit}
+      />
+    );
+  }
+
+  const inputType = c.type === "date" ? "date" : undefined;
   return (
     <InputBox
       variant="seamless"
       fullWidth
       type={inputType}
       allow={c.type === "number" ? "numeric" : c.allow ?? "any"}
+      counter={c.counter}
+      clearable={c.clearable}
       value={value ?? ""}
       placeholder={locked ? "" : c.placeholder}
       status={status ?? "default"}
@@ -84,16 +129,16 @@ function DragDots() {
     </svg>
   );
 }
-export function DragHandle({ onDragStart, onDragEnd }) {
+export function DragHandle({ icon, onDragStart, onDragEnd }) {
   return (
     <button type="button" className={styles.dragHandle} draggable onDragStart={onDragStart} onDragEnd={onDragEnd} aria-label="Drag to reorder row">
-      <DragDots />
+      {icon ? <TPLibraryIcon name={icon} size={18} /> : <DragDots />}
     </button>
   );
 }
 
 // ── Row "⋯" menu (portal of row actions) ──────────────────────────────────────
-function MoreMenu({ items, row }) {
+function MoreMenu({ items, row, moreIcon }) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
@@ -126,7 +171,7 @@ function MoreMenu({ items, row }) {
         theme="neutral"
         size="sm"
         aria-label="More actions"
-        icon={<TPLibraryIcon name="more" size={16} />}
+        icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant="bold" corner="straight" size={16} />}
         onClick={() => setOpen((o) => !o)}
       />
       {open && mounted && pos && createPortal(
@@ -151,17 +196,17 @@ function MoreMenu({ items, row }) {
 }
 
 // ── RowActions ────────────────────────────────────────────────────────────────
-export function RowActions({ row, deletable, menuItems, onDelete }) {
+export function RowActions({ row, deletable, menuItems, onDelete, moreIcon, deleteIcon }) {
   return (
     <div className={styles.actionCell}>
-      {menuItems.length > 0 && <MoreMenu items={menuItems} row={row} />}
+      {menuItems.length > 0 && <MoreMenu items={menuItems} row={row} moreIcon={moreIcon} />}
       {deletable && (
         <Button
           variant="ghost"
           theme="neutral"
           size="sm"
           aria-label="Delete row"
-          icon={<TPLibraryIcon name="trash" size={16} />}
+          icon={<TPLibraryIcon name={deleteIcon || "trash"} size={16} />}
           onClick={() => onDelete(row.id)}
         />
       )}

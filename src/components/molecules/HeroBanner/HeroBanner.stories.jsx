@@ -92,28 +92,28 @@ const meta = {
     cta1Variant:  { control: 'select', options: CTA_VARIANTS, name: 'CTA 1 · variant', table: { category: 'CTA 1' } },
     cta1Shape:    { control: 'inline-radio', options: CTA_SHAPES, name: 'CTA 1 · shape', table: { category: 'CTA 1' } },
     cta1Icon:     { control: 'boolean', name: 'CTA 1 · with icon', table: { category: 'CTA 1' } },
-    cta1IconName: { control: 'text', tpIcon: true, name: 'CTA 1 · icon', description: 'Pick from the TP Icons panel (or type a name)', table: { category: 'CTA 1' } },
+    cta1IconName: { control: 'text', tpIcon: true, name: 'CTA 1 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)', table: { category: 'CTA 1' } },
     cta1Label:    { control: 'text', name: 'CTA 1 · label', table: { category: 'CTA 1' } },
 
     // CTA 2
     cta2Variant:  { control: 'select', options: CTA_VARIANTS, name: 'CTA 2 · variant', table: { category: 'CTA 2' } },
     cta2Shape:    { control: 'inline-radio', options: CTA_SHAPES, name: 'CTA 2 · shape', table: { category: 'CTA 2' } },
     cta2Icon:     { control: 'boolean', name: 'CTA 2 · with icon', table: { category: 'CTA 2' } },
-    cta2IconName: { control: 'text', tpIcon: true, name: 'CTA 2 · icon', description: 'Pick from the TP Icons panel (or type a name)', table: { category: 'CTA 2' } },
+    cta2IconName: { control: 'text', tpIcon: true, name: 'CTA 2 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)', table: { category: 'CTA 2' } },
     cta2Label:    { control: 'text', name: 'CTA 2 · label', table: { category: 'CTA 2' } },
 
     // CTA 3
     cta3Variant:  { control: 'select', options: CTA_VARIANTS, name: 'CTA 3 · variant', table: { category: 'CTA 3' } },
     cta3Shape:    { control: 'inline-radio', options: CTA_SHAPES, name: 'CTA 3 · shape', table: { category: 'CTA 3' } },
     cta3Icon:     { control: 'boolean', name: 'CTA 3 · with icon', table: { category: 'CTA 3' } },
-    cta3IconName: { control: 'text', tpIcon: true, name: 'CTA 3 · icon', description: 'Pick from the TP Icons panel (or type a name)', table: { category: 'CTA 3' } },
+    cta3IconName: { control: 'text', tpIcon: true, name: 'CTA 3 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)', table: { category: 'CTA 3' } },
     cta3Label:    { control: 'text', name: 'CTA 3 · label', table: { category: 'CTA 3' } },
 
     // synthetic-only — keep the real props out of the table
     actions: { table: { disable: true } },
   },
   args: {
-    title: 'Appointments',
+    title: 'Your Appointments',
     titleSize: 'md',
     showSubtitle: true,
     subtitle: '32 scheduled today · 4 awaiting confirmation',
@@ -126,19 +126,21 @@ const meta = {
 
     ctaSize: 'sm',
     iconSize: 16,
-    ctaOrder: '1, 2, 3',
+    // Default = the production header CTAs: Add Appointment (secondary) +
+    // Start Walk-in (primary). Add the 3rd CTA back via controls if needed.
+    ctaOrder: '1, 2',
 
     cta1Variant: 'outline',
     cta1Shape: 'text',
     cta1Icon: true,
-    cta1IconName: 'colorfilter',
-    cta1Label: 'Filter',
+    cta1IconName: 'add',
+    cta1Label: 'Add Appointment',
 
     cta2Variant: 'solid',
     cta2Shape: 'text',
     cta2Icon: true,
-    cta2IconName: 'plus',
-    cta2Label: 'New appointment',
+    cta2IconName: 'flash',
+    cta2Label: 'Start Walk-in',
 
     // Third CTA defaults to an icon-only Button (a "more" kebab) — replaces the
     // old separate end-icon: it is just another configurable CTA.
@@ -167,7 +169,10 @@ function renderActions(a) {
 }
 
 export const Playground = {
-  render: (args) => (
+  args: {
+    cta1IconName: "calendar-2"
+  },
+  render:(args) => (
     <HeroBanner
       size={args.size}
       bottomRadius={args.bottomRadius}
@@ -179,7 +184,7 @@ export const Playground = {
       pattern={args.pattern}
       actions={renderActions(args)}
     />
-  ),
+  )
 };
 
 export const Sizes = {

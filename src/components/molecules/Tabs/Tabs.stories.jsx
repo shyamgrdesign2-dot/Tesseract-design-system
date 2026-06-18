@@ -8,7 +8,7 @@ const meta = {
   component: Tabs,
   tags: ['autodocs'],
   parameters: {
-    docs: { description: { component: 'Scalable tabs with optional left/right TP icons, a right-side tag (count/status), a rounded active indicator, hover states, and three sizes.' } },
+    docs: { description: { component: 'Scalable tabs with optional left/right Tesseract icons, a right-side tag (count/status), a rounded active indicator, hover states, and three sizes.' } },
   },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'Trigger density' },
@@ -42,9 +42,9 @@ export const Playground = {
     withRightIcon: { control: 'boolean', name: 'right icon' },
     withTag:       { control: 'boolean', name: 'right tag' },
     tagTone:       { control: 'inline-radio', options: ['neutral', 'primary', 'success', 'warning', 'error'], name: 'tag tone' },
-    tab1Icon:      { control: 'text', tpIcon: true, name: 'tab 1 · icon', description: 'Pick from the TP Icons panel (or type a name)' },
-    tab2Icon:      { control: 'text', tpIcon: true, name: 'tab 2 · icon', description: 'Pick from the TP Icons panel (or type a name)' },
-    tab3Icon:      { control: 'text', tpIcon: true, name: 'tab 3 · icon', description: 'Pick from the TP Icons panel (or type a name)' },
+    tab1Icon:      { control: 'text', tpIcon: true, name: 'tab 1 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)' },
+    tab2Icon:      { control: 'text', tpIcon: true, name: 'tab 2 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)' },
+    tab3Icon:      { control: 'text', tpIcon: true, name: 'tab 3 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)' },
   },
   render: ({ size, withLeftIcon, withRightIcon, withTag, tagTone, tab1Icon, tab2Icon, tab3Icon }) => {
     const tabsMeta = [
@@ -84,7 +84,7 @@ export const Playground = {
 export const CustomTabs = {
   name: 'Custom Tabs (add your own)',
   parameters: {
-    docs: { description: { story: 'Edit the `tabs` array in Controls to add, remove, or reorder tabs. Every tab uses the same trigger UI — set `label`, `icon` (any TP library name), `tag`, and `tone`. With many tabs the row scrolls horizontally.' } },
+    docs: { description: { story: 'Edit the `tabs` array in Controls to add, remove, or reorder tabs. Every tab uses the same trigger UI — set `label`, `icon` (any Tesseract library name), `tag`, and `tone`. With many tabs the row scrolls horizontally.' } },
   },
   args: {
     size: 'md',
@@ -180,7 +180,7 @@ export const Sizes = {
   ),
 };
 
-// ── Left icons (TP Icons) ─────────────────────────────────────────────────────
+// ── Left icons (Tesseract Icons) ─────────────────────────────────────────────────────
 export const WithLeftIcons = {
   name: 'Icons · Left',
   render: () => (

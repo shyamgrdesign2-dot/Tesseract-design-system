@@ -8,12 +8,12 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: { description: { component: 'In-house, collision-aware tooltip. Hover or click trigger, optional dismiss (×), optional leading icon, dark/light surfaces, arrow, controlled state, and a `whenTruncated` mode. Wrapper mode (`content`) or compound parts.' } },
+    docs: { description: { component: 'First-party, collision-aware tooltip. Hover or click trigger, optional dismiss (×), optional leading icon, dark/light surfaces, arrow, controlled state, and a `whenTruncated` mode. Wrapper mode (`content`) or compound parts.' } },
   },
   argTypes: {
     content:       { control: 'text', table: { category: 'Content' } },
     withIcon:      { control: 'boolean', name: 'with icon', table: { category: 'Content' } },
-    iconName:      { control: 'text', tpIcon: true, name: 'icon', description: 'Leading TP icon (needs "with icon" on)', table: { category: 'Content' } },
+    iconName:      { control: 'text', tpIcon: true, name: 'icon', description: 'Leading Tesseract icon (needs "with icon" on)', table: { category: 'Content' } },
     trigger:       { control: 'inline-radio', options: ['hover', 'click'], table: { category: 'Behaviour' } },
     dismissible:   { control: 'boolean', name: 'with dismiss (×)', table: { category: 'Behaviour' } },
     side:          { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'], table: { category: 'Placement' } },

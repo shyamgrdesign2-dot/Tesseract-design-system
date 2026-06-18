@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Button — the single TatvaPractice button atom.
+ * Button — the single Tesseract button atom.
  *
  * One component covers every shape:
  *   • Text button            <Button>Save</Button>
@@ -26,14 +26,20 @@
  *             — when present the button renders as a split button (primary + dropdown).
  *               Split supports solid / outline / tonal only; ghost & link fall back to outline.
  *   open / onOpenChange      — controlled split-menu open state (optional)
+ *   track     string | { id, action?, label?, meta? }
+ *             — opt-in action tracking. On click, emits an event to the nearest
+ *               <TPAnalyticsProvider> ({ component:"Button", action:"click", … }).
+ *               No-op when there is no provider. Split menu items take their own
+ *               `track` on each `menu[]` entry.
  */
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Button.module.scss";
-import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useIsClient } from "@/src/hooks/use-is-client";
+import { useAnalytics, resolveTrack } from "@/src/analytics/context";
 
 const ICON_SIZE = { sm: 18, md: 20, lg: 22 };
 const LOADER_PX = { sm: 16, md: 18, lg: 20 };
@@ -64,6 +70,7 @@ export const Button = forwardRef(function Button(
     children,
     style: styleProp,
     onClick,
+    track,
     ...props
   },
   ref
@@ -71,6 +78,21 @@ export const Button = forwardRef(function Button(
   const isSplit = Array.isArray(menu) && menu.length > 0;
   const iconOnly = !!icon && children == null && !isSplit;
   const isDisabled = disabled || loading;
+
+  // ── Action tracking (opt-in via `track`; no-op without a TPAnalyticsProvider) ──
+  const { track: emit } = useAnalytics();
+  const handleClick = (e) => {
+    const t = resolveTrack(track);
+    if (t) {
+      emit({
+        component: "Button",
+        action: "click",
+        label: typeof children === "string" ? children : (props["aria-label"] || undefined),
+        ...t,
+      });
+    }
+    onClick?.(e);
+  };
 
   // Split buttons only support filled/bordered variants — ghost/link have no
   // container to host the divider + dropdown trigger, so fall back to outline.
@@ -173,7 +195,7 @@ export const Button = forwardRef(function Button(
         <button
           type="button"
           disabled={isDisabled}
-          onClick={onClick}
+          onClick={handleClick}
           className={styles.button}
           data-split-part="primary"
           {...splitDataAttrs}
@@ -193,15 +215,10 @@ export const Button = forwardRef(function Button(
           data-split-part="trigger"
           {...splitDataAttrs}
         >
-          {/* Accordion-style chevron (the same library glyph the Accordion +
-              dropdowns use) — a clean caret, not an arrow with a shaft. */}
           <TPLibraryIcon
-            name="arrow-down-02"
+            name="chevron-down"
             size={ICON_SIZE[size]}
-            style={{
-              transition: "transform 200ms ease",
-              transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            }}
+            style={{ transition: "transform 200ms ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
           />
         </button>
 
@@ -229,6 +246,8 @@ export const Button = forwardRef(function Button(
                   data-danger={action.danger || undefined}
                   className={styles.menuItem}
                   onClick={() => {
+                    const it = resolveTrack(action.track);
+                    if (it) emit({ component: "Button", action: "menu_select", label: action.label, ...it });
                     action.onClick?.();
                     setOpen(false);
                   }}
@@ -238,7 +257,7 @@ export const Button = forwardRef(function Button(
                   {action.shortcut ? (
                     <span className={styles.menuItemShortcut}>{action.shortcut}</span>
                   ) : (
-                    <TPLibraryIcon name="arrow-right-02" size={16} className={styles.menuItemChevron} />
+                    <TPLibraryIcon name="chevron-right" size={16} className={styles.menuItemChevron} />
                   )}
                 </button>
               ))}
@@ -258,7 +277,7 @@ export const Button = forwardRef(function Button(
       className={[styles.button, className].filter(Boolean).join(" ")}
       style={styleProp}
       data-icon-only={iconOnly || undefined}
-      onClick={onClick}
+      onClick={handleClick}
       {...dataAttrs}
       {...props}
     >

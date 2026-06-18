@@ -1,49 +1,62 @@
 "use client";
 
 /**
- * TPLibraryIcon — renders any icon from the full TP_Icons library (6,769 icons
- * × 6 styles), served as static SVGs from `/tp-icons/<style>/<name>.svg`.
+ * TPLibraryIcon — renders any icon from the Tesseract icon CDN.
  *
- * The SVG is applied as a CSS mask and filled with `currentColor`, so every
- * icon tints to the surrounding text color regardless of how the source SVG is
- * painted (white stroke / fill / two-tone opacity all map through the mask's
- * alpha). Nothing is bundled — the icons are fetched on demand by the browser.
+ * Icons are served as static SVGs from the design-system CDN:
+ *   <base>/<corner>/<style>/<family>/<name>.svg
+ * e.g. https://pmdoctorportal.tatvacare.in/tp-icons/rounded/linear/ai/ai-3d-box.svg
  *
- * For the curated, hand-tuned set used inside components (Button, Toast, Tabs…)
- * keep using <TPIcon/>. Use this for free-form library browsing / picking.
+ * The family segment is resolved from the icon name via the bundled manifest, so
+ * callers only pass a name (+ optional style/corner). The source SVGs are painted
+ * white, so they're applied as a CSS mask filled with `currentColor` — every icon
+ * tints to the surrounding text colour (or an explicit `color`) regardless of how
+ * it was painted. Nothing is bundled; the browser fetches each SVG on demand.
  *
  * Props:
- *   name      library icon name (see TP_LIBRARY_ICONS / manifest.json)
- *   variant   "linear" | "bold" | "bulk" | "broken" | "outline" | "twotone"  (default "linear")
+ *   name      icon name (e.g. "search"); also accepts "<style>/<name>" from the picker
+ *   variant   "linear" | "bold" | "bulk" | "broken" | "twotone" | "outline" (default "linear")
+ *   corner    "rounded" | "straight" (default "rounded")
+ *   family    optional explicit family override (else resolved from the manifest)
  *   size      px (default 20)
- *   color     CSS color (default currentColor)
+ *   color     CSS colour (default currentColor)
  *   title     accessible label (otherwise aria-hidden)
  *   className, style
  */
 
 import * as React from "react";
 import { getIconBaseUrl } from "./iconBase";
+import { iconPath, normStyle } from "./icon-resolve";
 
-// One icon library, three styles. Legacy names map onto them.
-const STYLES = ["linear", "bulk", "bold"];
-const STYLE_ALIAS = { line: "linear", solid: "bold", outline: "linear", broken: "linear", twotone: "bulk" };
-
-export function TPLibraryIcon({ name, variant = "linear", size = 20, color, title, className, style }) {
+export function TPLibraryIcon({
+  name,
+  variant = "linear",
+  corner = "rounded",
+  family,
+  size = 20,
+  color,
+  title,
+  className,
+  style,
+  ...rest
+}) {
   if (!name) return null;
-  // The icon picker encodes the chosen style into the value as "variant/name"
-  // (e.g. "bulk/search") so the picked style reaches the rendered icon without
-  // every story having to thread a separate variant prop. Parse it here; an
-  // explicit `variant` on a plain name still works as before.
+
+  // The icon picker encodes the chosen style into the value as "<style>/<name>"
+  // (e.g. "bulk/search"); parse it so the picked style reaches the URL without
+  // every story threading a separate variant prop.
   let v = variant;
   let n = name;
   const slash = name.indexOf("/");
   if (slash > 0) {
-    const prefix = STYLE_ALIAS[name.slice(0, slash)] || name.slice(0, slash);
-    if (STYLES.includes(prefix)) { v = prefix; n = name.slice(slash + 1); }
+    v = name.slice(0, slash);
+    n = name.slice(slash + 1);
   }
-  v = STYLE_ALIAS[v] || v;
-  const st = STYLES.includes(v) ? v : "linear";
-  const url = `${getIconBaseUrl()}/${st}/${encodeURIComponent(n)}.svg`;
+
+  const rel = iconPath({ name: n, style: v, corner, family });
+  if (!rel) return null; // unknown name — render nothing rather than a broken box
+
+  const url = `${getIconBaseUrl()}/${rel}`;
   const mask = `url("${url}") no-repeat center / contain`;
 
   return (
@@ -51,6 +64,7 @@ export function TPLibraryIcon({ name, variant = "linear", size = 20, color, titl
       role={title ? "img" : undefined}
       aria-label={title || undefined}
       aria-hidden={title ? undefined : true}
+      data-tp-icon={`${n}/${normStyle(v)}`}
       className={className}
       style={{
         display: "inline-block",
@@ -62,6 +76,7 @@ export function TPLibraryIcon({ name, variant = "linear", size = 20, color, titl
         mask: mask,
         ...style,
       }}
+      {...rest}
     />
   );
 }

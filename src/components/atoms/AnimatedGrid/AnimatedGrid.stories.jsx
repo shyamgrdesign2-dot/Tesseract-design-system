@@ -11,10 +11,21 @@ const meta = {
   argTypes: {
     lineColor: { control: 'color', description: 'Lattice stroke color' },
     cometColor: { control: 'color', description: 'Travelling pulse color' },
+    edgeFade: {
+      control: { type: 'range', min: 0, max: 1, step: 0.05 },
+      description: 'Edge-fade strength — drag up to dissolve the edges more (0 = none, 1 = strong)',
+    },
+    surface: {
+      control: 'inline-radio',
+      options: ['dark', 'light'],
+      description: 'Preview backdrop (demo only — not a component prop)',
+    },
   },
   args: {
     lineColor: 'rgba(255,255,255,0.14)',
     cometColor: '#ffffff',
+    edgeFade: 0.6,
+    surface: 'dark',
   },
 };
 
@@ -22,7 +33,7 @@ export default meta;
 
 // A square stage so the entire (square) grid is visible.
 const Square = ({ bg, children }) => (
-  <div style={{ position: 'relative', width: 360, height: 360, overflow: 'hidden', borderRadius: 16, background: bg }}>
+  <div style={{ position: 'relative', width: 360, height: 360, overflow: 'hidden', borderRadius: 'var(--tp-radius-16)', background: bg }}>
     {children}
   </div>
 );
@@ -30,9 +41,9 @@ const Square = ({ bg, children }) => (
 const fill = { position: 'absolute', inset: 0, width: '100%', height: '100%' };
 
 export const Playground = {
-  render: (args) => (
-    <Square bg={args.cometColor === '#ffffff' || args.lineColor.includes('255') ? '#171725' : '#fff'}>
-      <AnimatedGrid {...args} style={fill} />
+  render: ({ surface, ...grid }) => (
+    <Square bg={surface === 'light' ? '#F7F7FB' : '#171725'}>
+      <AnimatedGrid {...grid} style={fill} />
     </Square>
   ),
 };
@@ -58,7 +69,7 @@ export const OnLight = {
 /** Dark and light side by side. */
 export const Backgrounds = {
   render: () => (
-    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--tp-space-5)', flexWrap: 'wrap' }}>
       <Square bg="#171725"><AnimatedGrid style={fill} /></Square>
       <Square bg="#F7F7FB"><AnimatedGrid lineColor="rgba(75,74,213,0.16)" cometColor="#4b4ad5" style={fill} /></Square>
     </div>

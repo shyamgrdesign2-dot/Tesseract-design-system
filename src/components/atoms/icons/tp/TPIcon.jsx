@@ -1,68 +1,61 @@
 "use client";
 
 /**
- * TPIcon — single entry point to the vendored TP_Icons set
- * (github:shyamgrdesign2-dot/TP_Icons). One icon, six styles.
+ * TPIcon — single entry point for component icons. Now CDN-backed.
  *
  *   <TPIcon name="search" variant="linear" size={20} />
  *   <TPIcon name="warning" variant="bulk" color="var(--tp-warning-500)" />
  *
- * Props:
- *   name     icon name (see TP_ICON_NAMES)
- *   variant  "linear" | "bulk" | "bold"    default "linear"
- *            (legacy "solid"→bold, "line"→linear, broken/outline→linear,
- *             twotone/"dual-tone"→bulk are accepted and mapped)
- *   size     number (px, sets width+height)                      default 20
- *   color    any CSS color — icons render in currentColor
+ * Icons resolve from the Tesseract icon CDN via <TPLibraryIcon/> (one icon,
+ * six styles, served from `<base>/<corner>/<style>/<family>/<name>.svg`). A small
+ * set of app-specific icons that aren't in the catalog (e.g. appt-type,
+ * patient-gender) fall back to the vendored inline-SVG components so nothing
+ * breaks. Icons render in `currentColor` either way.
  *
- * The icon system uses three styles everywhere — linear / bulk / bold. Legacy
- * style names map onto them so older usages keep working.
+ * Props:
+ *   name     icon name (see TP_ICON_NAMES); also accepts "<style>/<name>"
+ *   variant  "linear" | "bold" | "bulk" | "broken" | "twotone" | "outline"  default "linear"
+ *            (legacy "solid"→bold, "line"→linear, "dual-tone"→bulk accepted)
+ *   corner   "rounded" | "straight"   default "rounded"
+ *   size     number (px)              default 20
+ *   color    any CSS color
  */
 
+import { TPLibraryIcon } from "./TPLibraryIcon";
+import { hasIcon, ICON_STYLES } from "./icon-resolve";
 import { TP_ICON_REGISTRY, TP_ICON_NAMES } from "./registry";
-import { TP_ICON_VARIANTS } from "./constants";
 
-// Legacy / removed styles map onto the three public variants.
+// Legacy / removed styles map onto catalog variants (used by the vendored fallback).
 const ALIAS = { "dual-tone": "bulk", dualtone: "bulk", "two-tone": "bulk", twotone: "bulk", solid: "bold", line: "linear", broken: "linear", outline: "linear" };
 const FALLBACK = { bulk: "linear", bold: "linear" };
 
-const STYLES = TP_ICON_VARIANTS;
-
-export function TPIcon({ name, variant = "linear", size = 20, color, className, style, ...props }) {
-  // The icon picker may encode the chosen style as "variant/name"; honour it so
-  // a picked style reaches the rendered icon. Explicit `variant` still wins for
-  // plain names.
-  let resolvedVariant = variant;
-  let resolvedName = name;
+export function TPIcon({ name, variant = "linear", corner = "rounded", size = 20, color, className, style, ...props }) {
+  // The picker may encode the chosen style as "<style>/<name>"; honour it.
+  let v = variant;
+  let n = name;
   if (typeof name === "string") {
     const slash = name.indexOf("/");
-    if (slash > 0 && STYLES.includes(name.slice(0, slash))) {
-      resolvedVariant = name.slice(0, slash);
-      resolvedName = name.slice(slash + 1);
+    if (slash > 0 && ICON_STYLES.includes(name.slice(0, slash))) {
+      v = name.slice(0, slash);
+      n = name.slice(slash + 1);
     }
   }
-  const entry = TP_ICON_REGISTRY[resolvedName];
+
+  // Catalog icon → load from the CDN (themed via currentColor mask).
+  if (hasIcon(n)) {
+    return <TPLibraryIcon name={n} variant={v} corner={corner} size={size} color={color} className={className} style={style} />;
+  }
+
+  // App-specific icons not in the catalog → vendored inline SVG fallback.
+  const entry = TP_ICON_REGISTRY[n];
   if (!entry) {
-    if (typeof console !== "undefined") console.warn(`TPIcon: unknown icon "${resolvedName}"`);
+    if (typeof console !== "undefined") console.warn(`TPIcon: unknown icon "${n}"`);
     return null;
   }
-  const v = ALIAS[resolvedVariant] || resolvedVariant;
-  const Comp =
-    entry[v] || entry[FALLBACK[v]] || entry.linear || entry.bold || Object.values(entry)[0];
+  const av = ALIAS[v] || v;
+  const Comp = entry[av] || entry[FALLBACK[av]] || entry.linear || entry.bold || Object.values(entry)[0];
   if (!Comp) return null;
-
-  return (
-    <Comp
-      width={size}
-      height={size}
-      color={color}
-      className={className}
-      style={style}
-      aria-hidden
-      focusable={false}
-      {...props}
-    />
-  );
+  return <Comp width={size} height={size} color={color} className={className} style={style} aria-hidden focusable={false} {...props} />;
 }
 
 TPIcon.displayName = "TPIcon";

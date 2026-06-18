@@ -2,7 +2,7 @@
 
 /**
  * Filter — a single "Filter" entry point that opens one panel with grouped,
- * multi-select sections (e.g. Status · Doctors · Types). In-house, no deps.
+ * multi-select sections (e.g. Status · Doctors · Types). First-party, no deps.
  *
  * Chosen options appear as removable chips below the bar. Pairs with DataTable
  * (filter the data by the selection); the section set changes per table — just
@@ -23,24 +23,13 @@ import { cn } from "@/src/hooks/utils";
 import { useClickOutside } from "@/src/hooks/ui/use-overlay";
 import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
+import { Button } from "@/src/components/atoms/Button";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Filter.module.scss";
 
-function Chevron() {
-  return (
-    <svg className={styles.caret} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-// Inline funnel — structural glyph, no icon dependency.
-function FunnelIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 5h18l-7 8v6l-4 2v-8z" />
-    </svg>
-  );
-}
+// Caret + funnel from the icon CDN (no inline SVG).
+const Chevron = () => <TPLibraryIcon name="chevron-down" size={14} className={styles.caret} />;
+const FunnelIcon = () => <TPLibraryIcon name="filter-2" size={15} />;
 
 export function Filter({ groups = [], value, defaultValue, onChange, label = "Filter", icon, className }) {
   const isControlled = value !== undefined;
@@ -118,12 +107,12 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
                 ))}
               </div>
               <div className={styles.panelFooter}>
-                <button type="button" className={styles.clear} onClick={clearAll} disabled={totalSelected === 0}>
+                <Button variant="ghost" theme="warning" size="sm" onClick={clearAll} disabled={totalSelected === 0}>
                   Clear all
-                </button>
-                <button type="button" className={styles.done} onClick={() => setOpen(false)}>
+                </Button>
+                <Button variant="solid" theme="primary" size="sm" onClick={() => setOpen(false)}>
                   Done
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -132,6 +121,7 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
 
       {chips.length > 0 && (
         <div className={styles.activeBar}>
+          <span className={styles.activeLabel}>{label}:</span>
           <div className={styles.chips}>
             {chips.map((c) => (
               <Chip
@@ -142,7 +132,7 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
               />
             ))}
           </div>
-          <button type="button" className={styles.clear} onClick={clearAll}>Clear all</button>
+          <Button variant="ghost" theme="warning" size="sm" onClick={clearAll}>Clear all</Button>
         </div>
       )}
     </div>

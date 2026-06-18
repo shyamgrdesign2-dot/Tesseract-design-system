@@ -3,8 +3,8 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-family: Inter, var(--font-sans, sans-serif);
+  gap: var(--tp-space-3);
+  font-family: var(--tp-font-body);
 }
 
 /* Horizontal scroll container. On overflow the row scrolls; columns keep their
@@ -15,42 +15,42 @@
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: thin;
-  scrollbar-color: var(--tp-slate-200, #e2e2ea) transparent;
+  scrollbar-color: var(--tp-slate-200, var(--tp-slate-200)) transparent;
   -webkit-overflow-scrolling: touch;
 
-  &::-webkit-scrollbar { height: 8px; }
+  &::-webkit-scrollbar { height: var(--tp-size-8); }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background-color: var(--tp-slate-200, #e2e2ea); border-radius: 999px; }
+  &::-webkit-scrollbar-thumb { background-color: var(--tp-slate-200, var(--tp-slate-200)); border-radius: var(--tp-radius-full, 9999px); }
 }
 
 .table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 14px;
-  color: var(--tp-slate-800, #27272a);
+  font-size: var(--tp-text-body-sm);
+  color: var(--tp-slate-800, var(--tp-slate-800));
 }
 
 /* ── Header ── */
-.headRow { background-color: var(--tp-slate-100, #f0f0f6); }
+.headRow { background-color: var(--tp-slate-100, var(--tp-slate-100)); }
 
 .th {
-  padding: 12px 14px;
+  padding: var(--tp-space-3) var(--tp-space-3-5);
   text-align: left;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-semibold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--tp-slate-700, #454551);
+  color: var(--tp-slate-700, var(--tp-slate-700));
   white-space: nowrap;
-  background-color: var(--tp-slate-100, #f0f0f6);
+  background-color: var(--tp-slate-100, var(--tp-slate-100));
   vertical-align: middle;
 
   &[data-align="right"]  { text-align: right; }
   &[data-align="center"] { text-align: center; }
 
-  &:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
-  &:last-child  { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+  &:first-child { border-top-left-radius: var(--tp-radius-10); border-bottom-left-radius: var(--tp-radius-10); }
+  &:last-child  { border-top-right-radius: var(--tp-radius-10); border-bottom-right-radius: var(--tp-radius-10); }
 }
 
 .headRow[data-sticky-header="true"] .th {
@@ -63,7 +63,7 @@
 .sortBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--tp-space-1-5);
   border: none;
   background: transparent;
   padding: 0;
@@ -75,8 +75,8 @@
   cursor: pointer;
   user-select: none;
 
-  &:hover { color: var(--tp-slate-900, #171725); }
-  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8e8de8); outline-offset: 2px; border-radius: var(--tp-radius-4, 4px); }
+  &:hover { color: var(--tp-slate-900, var(--tp-slate-900)); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, var(--tp-blue-300)); outline-offset: 2px; border-radius: var(--tp-radius-4, 4px); }
 }
 .th[data-align="right"] .sortBtn { flex-direction: row-reverse; }
 
@@ -84,77 +84,208 @@
 
 /* Both arrows faint by default; the active direction's arrow goes dark neutral. */
 .sortUp,
-.sortDown { fill: var(--tp-slate-300, #d4d4d8); transition: fill 120ms ease; }
+.sortDown { fill: var(--tp-slate-300, var(--tp-slate-300)); transition: fill 120ms ease; }
 
 .sortBtn:hover .sortUp,
-.sortBtn:hover .sortDown { fill: var(--tp-slate-400, #a1a1aa); }
+.sortBtn:hover .sortDown { fill: var(--tp-slate-400, var(--tp-slate-400)); }
 
-.sortBtn[data-dir="asc"]  .sortUp   { fill: var(--tp-slate-900, #171725); }
-.sortBtn[data-dir="desc"] .sortDown { fill: var(--tp-slate-900, #171725); }
+.sortBtn[data-dir="asc"]  .sortUp   { fill: var(--tp-slate-900, var(--tp-slate-900)); }
+.sortBtn[data-dir="desc"] .sortDown { fill: var(--tp-slate-900, var(--tp-slate-900)); }
 
-/* ── Body ── */
+/* ── Body ──
+   Every row exposes its resolved background through `--row-bg`, so sticky cells
+   (which paint over scrolling content) can repaint with the exact same fill no
+   matter the zebra / hover / selected / state combination. */
+.row { --row-bg: var(--tp-slate-0, #fff); }
+
 .td {
-  padding: 12px 14px;
+  padding: var(--tp-space-3) var(--tp-space-3-5);
   vertical-align: middle;
-  border-bottom: 1px solid var(--tp-slate-100, #f0f0f6);
-  background-color: var(--tp-slate-0, #ffffff);
+  border-bottom: 1px solid var(--tp-slate-100, var(--tp-slate-100));
+  background-color: var(--row-bg);
 
   &[data-align="right"]  { text-align: right; }
   &[data-align="center"] { text-align: center; }
 }
 .row:last-child .td { border-bottom: none; }
 
-/* Selection checkbox column (leading) + selected-row highlight */
+/* Selection control column (leading checkbox / radio). Fixed, snug width with
+   symmetric padding so the control sits close to the first data column — no
+   dead gap, and it lines up exactly with the measured sticky offset. */
 .selectCell {
-  width: 44px;
-  padding-left: 14px;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  padding-left: 0;
   padding-right: 0;
   text-align: center;
 }
 .selectCell > * { display: inline-flex; vertical-align: middle; }
-.row[data-selected] .td { background-color: var(--tp-blue-50, #eeeeff); }
-.row[data-selected]:hover .td { background-color: color-mix(in srgb, var(--tp-blue-100, #d8d8fa) 60%, #fff); }
+
+/* Single-select uses the Radio atom (see DataTable.jsx) — no bespoke radio CSS. */
 
 /* Density (row height + vertical padding) */
-.table[data-density="xs"] .td, .table[data-density="xs"] .th { padding-top: 4px;  padding-bottom: 4px;  }
-.table[data-density="sm"] .td, .table[data-density="sm"] .th { padding-top: 7px;  padding-bottom: 7px;  }
-.table[data-density="md"] .td { padding-top: 10px; padding-bottom: 10px; }
-.table[data-density="lg"] .td { padding-top: 14px; padding-bottom: 14px; }
-.table[data-density="xl"] .td { padding-top: 18px; padding-bottom: 18px; }
+.table[data-density="xs"] .td, .table[data-density="xs"] .th { padding-top: var(--tp-space-1);  padding-bottom: var(--tp-space-1);  }
+.table[data-density="sm"] .td, .table[data-density="sm"] .th { padding-top: var(--tp-space-2);  padding-bottom: var(--tp-space-2);  }
+.table[data-density="md"] .td { padding-top: var(--tp-space-2-5); padding-bottom: var(--tp-space-2-5); }
+.table[data-density="lg"] .td { padding-top: var(--tp-space-3-5); padding-bottom: var(--tp-space-3-5); }
+.table[data-density="xl"] .td { padding-top: var(--tp-space-4-5); padding-bottom: var(--tp-space-4-5); }
 
-.table[data-zebra="true"] .row:nth-child(even) .td { background-color: var(--tp-slate-50, #f8fafc); }
-.table[data-hoverable="true"] .row:hover .td { background-color: var(--tp-slate-50, #f8fafc); }
+/* Row background precedence (source order = priority, low → high):
+   zebra → nested depth → semantic state → disabled → hover → selected.
+   Each rule just reassigns --row-bg; .td/.sticky read it. */
 
-/* ── Sticky right column (e.g. Actions) ── */
+/* 1 · zebra */
+.table[data-zebra="true"] .row:nth-child(even) { --row-bg: var(--tp-slate-50, #fafafb); }
+
+/* 2 · nested-row depth — a faint tint so the tree reads at a glance */
+.row[data-depth] { --row-bg: var(--tp-slate-50, #fafafb); }
+
+/* 3 · semantic state (background tint + a leading accent bar) */
+.row[data-state="info"]    { --row-bg: var(--tp-blue-50, #eef4ff); }
+.row[data-state="success"] { --row-bg: var(--tp-success-50, #ecfdf3); }
+.row[data-state="warning"] { --row-bg: var(--tp-warning-50, #fffaeb); }
+.row[data-state="error"]   { --row-bg: var(--tp-error-50, #fef3f2); }
+.row[data-state="reference"] { --row-bg: var(--tp-slate-50, #fafafb); }
+.row[data-state="reference"] .td:first-child { box-shadow: inset 3px 0 0 0 var(--tp-slate-400, #9c9caa); }
+.row[data-state="info"]    .td:first-child { box-shadow: inset 3px 0 0 0 var(--tp-blue-400, #5b8def); }
+.row[data-state="success"] .td:first-child { box-shadow: inset 3px 0 0 0 var(--tp-success-400, #32d583); }
+.row[data-state="warning"] .td:first-child { box-shadow: inset 3px 0 0 0 var(--tp-warning-400, #fdb022); }
+.row[data-state="error"]   .td:first-child { box-shadow: inset 3px 0 0 0 var(--tp-error-400, #f97066); }
+
+/* 4 · disabled — muted, non-interactive */
+.row[data-disabled] { --row-bg: var(--tp-slate-50, #fafafb); }
+.row[data-disabled] .td { color: var(--tp-slate-400, #9c9caa); }
+.row[data-disabled] .primary { color: var(--tp-slate-400, #9c9caa); }
+
+/* 5 · hover */
+.table[data-hoverable="true"] .row:not([data-disabled]):hover { --row-bg: var(--tp-slate-100, #f1f1f4); }
+
+/* 6 · selected (wins over everything) */
+.row[data-selected] { --row-bg: var(--tp-blue-50, #eef4ff); }
+.table[data-hoverable="true"] .row[data-selected]:hover { --row-bg: color-mix(in srgb, var(--tp-blue-100, #dbe7ff) 60%, var(--tp-slate-0, #fff)); }
+
+/* ── Sticky columns (left or right) — offset set inline via style ──
+   .sticky just turns on stickiness + repaints with --row-bg. The `data-edge`
+   attribute marks the column on the inner boundary of its band; it casts a
+   divider shadow towards the scrolling content, shown only while there's hidden
+   content on that side. */
 .sticky {
   position: sticky;
-  right: 0;
   z-index: 10;
   white-space: nowrap;
+  background-color: var(--row-bg);
 }
-.th.sticky { z-index: 31; }
+/* Header sticky cells live outside a .row, so paint them with the header fill. */
+.th.sticky { z-index: 31; background-color: var(--tp-slate-100, #f1f1f4); }
+/* Group header sticky control cell uses the group fill. */
+.groupRow .sticky { background-color: var(--tp-slate-100, #f1f1f4); }
 
-/* Linear neutral "shadow" to the LEFT of the sticky column — only while there
-   is content hidden underneath (horizontal overflow, not scrolled to the end). */
-.scroller[data-overflow="true"] .sticky::before {
+.sticky[data-edge]::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
+  width: var(--tp-size-18);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+.sticky[data-edge="left"]::after {
+  right: 0;
+  transform: translateX(100%);
+  background: linear-gradient(to right, color-mix(in srgb, var(--tp-slate-900, #171725) 12%, transparent), transparent);
+}
+.sticky[data-edge="right"]::after {
   left: 0;
-  width: 18px;
   transform: translateX(-100%);
   background: linear-gradient(to left, color-mix(in srgb, var(--tp-slate-900, #171725) 12%, transparent), transparent);
-  pointer-events: none;
+}
+.scroller[data-overflow-left="true"]  .sticky[data-edge="left"]::after  { opacity: 1; }
+.scroller[data-overflow-right="true"] .sticky[data-edge="right"]::after { opacity: 1; }
+
+/* ── Grouping (collapsible group header rows) ── */
+.groupRow .groupCell {
+  background-color: var(--tp-slate-100, #f1f1f4);
+  border-bottom: 1px solid var(--tp-slate-200, #e2e2ea);
+  padding-top: var(--tp-space-2);
+  padding-bottom: var(--tp-space-2);
+}
+.groupToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--tp-slate-800, #2c2c38);
+  cursor: pointer;
+
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #9cc0ff); outline-offset: 2px; border-radius: var(--tp-radius-4, 4px); }
+}
+.groupLabel { font-size: var(--tp-text-body-sm); font-weight: var(--tp-weight-bold); }
+.groupCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tp-size-20);
+  height: var(--tp-size-18);
+  padding: 0 var(--tp-space-1-5);
+  border-radius: var(--tp-radius-full, 9999px);
+  background: var(--tp-slate-200, #e2e2ea);
+  color: var(--tp-slate-600, #56566a);
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-bold);
+  font-variant-numeric: tabular-nums;
 }
 
+/* ── Nesting (expandable sub-rows) ── */
+.expandWrap { display: flex; align-items: center; gap: var(--tp-space-1-5); min-width: 0; }
+.expandBody { min-width: 0; flex: 1; }
+.expander {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tp-size-22);
+  height: var(--tp-size-22);
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--tp-radius-6, 6px);
+  background: transparent;
+  color: var(--tp-slate-500, #717185);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+
+  &:hover { background: var(--tp-slate-100, #f1f1f4); color: var(--tp-slate-800, #2c2c38); }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, #9cc0ff); outline-offset: 1px; }
+}
+.expanderSpacer { width: var(--tp-size-22); height: 1px; flex-shrink: 0; }
+.chevron { transition: transform 160ms cubic-bezier(.2,.8,.2,1); }
+.chevron[data-open] { transform: rotate(90deg); }
+
+/* Clickable rows (onRowClick) */
+.row[data-clickable] { cursor: pointer; }
+
+/* Action cluster (TableActions) — flex row of CTA + icon buttons. */
+.actionCluster { display: inline-flex; align-items: center; gap: var(--tp-space-1-5); }
+.actionCluster[data-align="right"]  { justify-content: flex-end; width: 100%; }
+.actionCluster[data-align="center"] { justify-content: center; width: 100%; }
+.actionCluster[data-align="left"]   { justify-content: flex-start; }
+
+/* ── Bordered variant (outer frame + column rules) ── */
+.table[data-bordered="true"] { border: 1px solid var(--tp-slate-200, #e2e2ea); border-radius: var(--tp-radius-10); }
+.table[data-bordered="true"] .th:not(:last-child),
+.table[data-bordered="true"] .td:not(:last-child) { border-right: 1px solid var(--tp-slate-100, #f1f1f4); }
+.table[data-bordered="true"] .headRow .th { border-bottom: 1px solid var(--tp-slate-200, #e2e2ea); }
+
 /* ── Rich cell (DataCell) ── */
-.cell { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cell { display: flex; flex-direction: column; gap: var(--tp-space-0-5); min-width: 0; }
 .cell[data-align="right"]  { align-items: flex-end; text-align: right; }
 .cell[data-align="center"] { align-items: center; text-align: center; }
 
-.cellLine { display: flex; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
-.cellIcon { display: inline-flex; flex-shrink: 0; color: var(--tp-slate-400, #a1a1aa); }
+.cellLine { display: flex; align-items: center; gap: var(--tp-space-1-5); min-width: 0; max-width: 100%; }
+.cellIcon { display: inline-flex; flex-shrink: 0; color: var(--tp-slate-400, var(--tp-slate-400)); }
 
 .clamp {
   min-width: 0;
@@ -162,27 +293,27 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
-.primary   { font-size: 14px; color: var(--tp-slate-800, #27272a); }
-.secondary { font-size: 12px; color: var(--tp-slate-500, #717179); }
+.primary   { font-size: var(--tp-text-body-sm); color: var(--tp-slate-800, var(--tp-slate-800)); }
+.secondary { font-size: var(--tp-text-body-xs); color: var(--tp-slate-500, var(--tp-slate-500)); }
 
 /* ── Empty state ── */
-.empty { padding: 48px 16px; text-align: center; color: var(--tp-slate-400, #a1a1aa); }
+.empty { padding: var(--tp-space-12) var(--tp-space-4); text-align: center; color: var(--tp-slate-400, var(--tp-slate-400)); }
 
 /* Lazy-load skeleton rows now reuse the Skeleton atom (see DataTable.jsx). */
 
 /* ── Tag cell (type: "tag") ── */
 // Non-actionable tags compose the Badge atom; actionable ones compose the Chip
 // atom + this class for the hover/press feedback (see CellTag in DataTable.jsx).
-.tagRow { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.tagRow { display: inline-flex; flex-wrap: wrap; gap: var(--tp-space-1); }
 
 // Chip sets bg/color inline; hover/press use filter + shadow + transform so they
 // layer on top of any tone without fighting the inline styles.
 .actionableTag {
   transition: filter 120ms ease, box-shadow 120ms ease, transform 80ms ease;
 
-  &:hover { filter: brightness(0.96); box-shadow: 0 1px 4px rgba(23, 23, 37, 0.16); }
+  &:hover { filter: brightness(0.96); box-shadow: 0 1px 4px color-mix(in srgb, var(--tp-slate-900) 16%, transparent); }
   &:active { transform: scale(0.96); }
-  &:focus-visible { outline: 2px solid var(--tp-blue-300, #8b8af0); outline-offset: 2px; }
+  &:focus-visible { outline: 2px solid var(--tp-blue-300, var(--tp-blue-300)); outline-offset: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -196,22 +327,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--tp-space-4);
   flex-wrap: wrap;
-  padding-top: 4px;
-  font-size: 12px;
-  color: var(--tp-slate-500, #717179);
+  padding-top: var(--tp-space-1);
+  font-size: var(--tp-text-body-xs);
+  color: var(--tp-slate-500, var(--tp-slate-500));
 }
 
-.pageLeft { display: flex; align-items: center; gap: 14px; }
+.pageLeft { display: flex; align-items: center; gap: var(--tp-space-3-5); }
 .pageInfo { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 /* Rows-per-page selector (neutral) */
 .rpp {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: var(--tp-slate-500, #717179);
+  gap: var(--tp-space-1-5);
+  color: var(--tp-slate-500, var(--tp-slate-500));
   white-space: nowrap;
 }
 .rppSelectWrap { position: relative; display: inline-flex; align-items: center; }
@@ -219,28 +350,28 @@
   appearance: none;
   -webkit-appearance: none;
   height: 26px;
-  padding: 0 24px 0 8px;
-  border: 1px solid var(--tp-slate-200, #e2e2ea);
-  border-radius: 7px;
+  padding: 0 var(--tp-space-6) 0 var(--tp-space-2);
+  border: 1px solid var(--tp-slate-200, var(--tp-slate-200));
+  border-radius: var(--tp-radius-8);
   corner-shape: round;
-  background-color: var(--tp-slate-0, #fff);
-  color: var(--tp-slate-700, #454551);
-  font-size: 12px;
-  font-weight: 600;
+  background-color: var(--tp-slate-0, var(--tp-slate-0));
+  color: var(--tp-slate-700, var(--tp-slate-700));
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-semibold);
   font-family: inherit;
   cursor: pointer;
   transition: border-color 120ms ease, box-shadow 120ms ease;
 
-  &:hover { border-color: var(--tp-slate-300, #d4d4d8); }
-  &:focus-visible { outline: none; border-color: var(--tp-slate-400, #a1a1aa); box-shadow: 0 0 0 3px var(--tp-slate-100, #f0f0f6); }
+  &:hover { border-color: var(--tp-slate-300, var(--tp-slate-300)); }
+  &:focus-visible { outline: none; border-color: var(--tp-slate-400, var(--tp-slate-400)); box-shadow: 0 0 0 3px var(--tp-slate-100, var(--tp-slate-100)); }
 }
-.rppCaret { position: absolute; right: 7px; pointer-events: none; color: var(--tp-slate-400, #a1a1aa); }
+.rppCaret { position: absolute; right: 7px; pointer-events: none; color: var(--tp-slate-400, var(--tp-slate-400)); }
 
 /* Pager group — no outer frame, just the controls. */
 .pager {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--tp-space-0-5);
 }
 
 .pageBtn,
@@ -250,28 +381,28 @@
   justify-content: center;
   min-width: 26px;
   height: 26px;
-  padding: 0 6px;
+  padding: 0 var(--tp-space-1-5);
   border: none;
   border-radius: var(--tp-radius-6, 6px);
   corner-shape: round;
   background-color: transparent;
-  color: var(--tp-slate-600, #52525b);
-  font-size: 12px;
-  font-weight: 600;
+  color: var(--tp-slate-600, var(--tp-slate-600));
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-semibold);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   transition: background-color 120ms ease, color 120ms ease;
 
-  &:hover:not(:disabled) { background-color: var(--tp-slate-100, #f0f0f6); color: var(--tp-slate-900, #171725); }
+  &:hover:not(:disabled) { background-color: var(--tp-slate-100, var(--tp-slate-100)); color: var(--tp-slate-900, var(--tp-slate-900)); }
   &:disabled { opacity: 0.35; cursor: not-allowed; }
 }
 
 /* Active page — light neutral chip (no brand color, no heavy black). */
 .pageBtn[data-active="true"] {
-  background-color: var(--tp-slate-100, #f0f0f6);
-  color: var(--tp-slate-900, #171725);
-  font-weight: 700;
+  background-color: var(--tp-slate-100, var(--tp-slate-100));
+  color: var(--tp-slate-900, var(--tp-slate-900));
+  font-weight: var(--tp-weight-bold);
 }
-.pageBtn[data-active="true"]:hover { background-color: var(--tp-slate-200, #e2e2ea); color: var(--tp-slate-900, #171725); }
+.pageBtn[data-active="true"]:hover { background-color: var(--tp-slate-200, var(--tp-slate-200)); color: var(--tp-slate-900, var(--tp-slate-900)); }
 
-.ellipsis { padding: 0 2px; color: var(--tp-slate-400, #a1a1aa); font-size: 12px; align-self: center; }
+.ellipsis { padding: 0 var(--tp-space-0-5); color: var(--tp-slate-400, var(--tp-slate-400)); font-size: var(--tp-text-body-xs); align-self: center; }

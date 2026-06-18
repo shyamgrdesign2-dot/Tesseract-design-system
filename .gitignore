@@ -33,3 +33,13 @@ storybook-static
 # tracked. (Medical icons are now merged into the library's linear/bulk/bold.)
 public/tp-icons/*
 !public/tp-icons/dr-agent/
+
+# Secrets / local config — never commit
+.mcp.json
+.env
+.env.*
+*.local
+.npmrc
+
+# Stray scratch file
+Untitled

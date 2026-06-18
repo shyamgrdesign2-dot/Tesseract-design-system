@@ -1,3 +1,4 @@
+import React from 'react';
 import { Toast } from './Toast';
 import { Button } from '@/src/components/atoms';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
@@ -12,7 +13,7 @@ const meta = {
     withSubtext: { control: 'boolean', name: 'with subtext', table: { category: 'Content' } },
     subtext:     { control: 'text', table: { category: 'Content' } },
     showIcon:    { control: 'boolean', name: 'with icon', table: { category: 'Parts' } },
-    iconName:    { control: 'text', tpIcon: true, name: 'icon (override)', description: 'Pick a TP icon to override the status icon', table: { category: 'Parts' } },
+    iconName:    { control: 'text', tpIcon: true, name: 'icon (override)', description: 'Pick a Tesseract icon to override the status icon', table: { category: 'Parts' } },
     dismissible: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'Parts' } },
     // Nested CTA — toggle it on/off, then choose its Button variant + label.
     withCTA:     { control: 'boolean', name: 'with CTA', table: { category: 'Action' } },
@@ -25,7 +26,7 @@ const meta = {
     status: 'warning',
     title: 'License expiring soon',
     withSubtext: true,
-    subtext: 'Your TP Enterprise license expires on 15 June 2026.',
+    subtext: 'Your TatvaPractice Enterprise license expires on 15 June 2026.',
     showIcon: true,
     iconName: '',
     dismissible: true,
@@ -133,7 +134,7 @@ export const WithAction = {
         dismissible
         action={<Button surface="dark" variant="solid" size="sm">Renew</Button>}
       >
-        Your TP Enterprise license expires on 15 June 2026.
+        Your TatvaPractice Enterprise license expires on 15 June 2026.
       </Toast>
       <Toast
         status="info"
@@ -155,7 +156,7 @@ export const SystemAlerts = {
       </Toast>
       <Toast status="warning" title="License expiring soon" dismissible
         action={<Button surface="dark" variant="solid" size="sm">Renew</Button>}>
-        Your TP Enterprise license expires on 15 June 2026.
+        Your TatvaPractice Enterprise license expires on 15 June 2026.
       </Toast>
       <Toast status="info" title="New ABDM guidelines effective 1 June 2026" dismissible>
         Review the updated consent and data-sharing flow.
@@ -166,4 +167,29 @@ export const SystemAlerts = {
       </Toast>
     </Stack>
   ),
+};
+
+/** Auto-dismiss — pass `duration` (ms) to auto-hide. The timer pauses on hover.
+ *  Click "Show toast" to fire one that disappears after 4 s. */
+export const AutoDismiss = {
+  name: 'Auto-dismiss (duration)',
+  render: () => {
+    const [seq, setSeq] = React.useState(0);
+    const [count, setCount] = React.useState(0);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <Button variant="solid" size="sm" onClick={() => setSeq((s) => s + 1)}>Show toast</Button>
+          <span style={{ fontSize: 13, color: '#54545C' }}>Dismissed: <strong style={{ color: '#171725' }}>{count}</strong></span>
+        </div>
+        <div style={{ minHeight: 64 }}>
+          {seq > 0 && (
+            <Toast key={seq} status="success" title="Saved" dismissible duration={4000} onDismiss={() => setCount((c) => c + 1)}>
+              This toast auto-dismisses in 4 seconds (hover to pause).
+            </Toast>
+          )}
+        </div>
+      </div>
+    );
+  },
 };

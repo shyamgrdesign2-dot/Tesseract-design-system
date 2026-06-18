@@ -18,10 +18,8 @@ const meta = {
     color: { control: 'select', options: COLORS },
     size: { control: 'inline-radio', options: SIZES },
     children: { control: 'text', table: { category: 'Content' } },
-    // Left and right icons are independent — pick a different TP glyph for each
-    // ("" = no icon on that side).
-    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', description: 'TP icon for the left side ("" = none)', table: { category: 'Content' } },
-    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon for the right side ("" = none)', table: { category: 'Content' } },
+    iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'Tesseract icon glyph', table: { category: 'Content' } },
+    iconPosition: { control: 'inline-radio', options: ['none', 'left', 'right', 'both'], name: 'icon position', table: { category: 'Content' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -29,21 +27,24 @@ const meta = {
     color: 'primary',
     size: 'md',
     children: 'Badge',
-    leftIconName: 'verify',
-    rightIconName: '',
+    iconName: 'verify',
+    iconPosition: 'left',
     sticky: 'none',
   },
 };
 
 export default meta;
 
-// Inject the independent left/right icons from the controls; normalise sticky.
-const withIcons = ({ leftIconName, rightIconName, sticky, ...args }) => ({
-  ...args,
-  sticky: sticky && sticky !== 'none' ? sticky : undefined,
-  icon: glyphFor(leftIconName, args.size),
-  rightIcon: glyphFor(rightIconName, args.size),
-});
+// Place the chosen icon on the left, right, or both sides per the control.
+const withIcons = ({ iconName, iconPosition, sticky, ...args }) => {
+  const g = glyphFor(iconName, args.size);
+  return {
+    ...args,
+    sticky: sticky && sticky !== 'none' ? sticky : undefined,
+    icon: iconPosition === 'left' || iconPosition === 'both' ? g : undefined,
+    rightIcon: iconPosition === 'right' || iconPosition === 'both' ? g : undefined,
+  };
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -78,14 +79,17 @@ export const Sizes = {
   ),
 };
 
+/** All five variants — solid · soft · outline · gradient · dot. */
 export const Variants = {
-  render: (args) => (
+  render: () => (
     <Row>
-      {['solid', 'soft', 'outline'].map((variant) => (
-        <Badge key={variant} {...args} variant={variant}>
-          {variant}
-        </Badge>
-      ))}
+      <Badge variant="solid" color="primary">solid</Badge>
+      <Badge variant="soft" color="primary">soft</Badge>
+      <Badge variant="outline" color="primary">outline</Badge>
+      <Badge variant="gradient" color="primary">gradient</Badge>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--tp-slate-500,#717179)' }}>
+        <Badge variant="dot" color="primary" /> dot
+      </span>
     </Row>
   ),
 };
@@ -108,7 +112,7 @@ export const Gradients = {
 export const Sticky = {
   render: () => {
     const Box = ({ children }) => (
-      <div style={{ position: 'relative', width: 120, height: 64, borderRadius: 12, border: '1px solid var(--tp-slate-200, #e2e2ea)', background: 'var(--tp-slate-50, #f8fafc)' }}>
+      <div style={{ position: 'relative', width: 120, height: 64, borderRadius: 12, border: '1px solid var(--tp-slate-200, #e2e2ea)', background: 'var(--tp-slate-50, #FAFAFB)' }}>
         {children}
       </div>
     );
@@ -172,7 +176,7 @@ export const Matrix = {
     <div style={{ display: 'grid', gap: 16 }}>
       {['solid', 'soft', 'outline'].map((variant) => (
         <div key={variant} style={{ display: 'grid', gap: 8 }}>
-          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
+          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
             {variant}
           </strong>
           <Row>

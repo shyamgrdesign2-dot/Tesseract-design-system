@@ -1,5 +1,5 @@
 /**
- * Button — the single TatvaPractice CTA.
+ * Button — the single Tesseract CTA.
  *
  * One component, every shape: text · with icons · icon-only · split (primary+menu).
  * Styling is data-attribute driven (Button.module.scss); the split menu is the
@@ -13,10 +13,6 @@
  */
 
 import { Button } from './Button';
-import {
-  Plus, ChevronRight, Download, Trash2, Check, Pencil, Search, Sparkles,
-  FileText, MoreVertical, Printer,
-} from '@/src/components/atoms/icons/lucide';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
@@ -42,21 +38,21 @@ const Section = ({ label, children }) => (
 
 function iconForSize(size) {
   const px = size === 'sm' ? 16 : size === 'lg' ? 20 : 18;
-  return <Plus size={px} strokeWidth={2} />;
+  return <TPLibraryIcon name="add" size={px} />;
 }
 
 function chevronForSize(size) {
   const px = size === 'sm' ? 14 : size === 'lg' ? 18 : 16;
-  return <ChevronRight size={px} strokeWidth={2} />;
+  return <TPLibraryIcon name="arrow-right" size={px} />;
 }
 
 // ─── Meta ──────────────────────────────────────────────────────────────────────
 
 // Demo menu for the split shape in the Playground.
 const DEMO_MENU = [
-  { id: 'view',     label: 'View details',  icon: <FileText size={16} strokeWidth={1.75} /> },
-  { id: 'download', label: 'Download PDF',  icon: <Download size={16} strokeWidth={1.75} /> },
-  { id: 'delete',   label: 'Delete record', icon: <Trash2 size={16} strokeWidth={1.75} />, danger: true },
+  { id: 'view',     label: 'View details',  icon: <TPLibraryIcon name="document-text" size={16} /> },
+  { id: 'download', label: 'Download PDF',  icon: <TPLibraryIcon name="import" size={16} /> },
+  { id: 'delete',   label: 'Delete record', icon: <TPLibraryIcon name="trash" size={16} />, danger: true },
 ];
 
 const meta = {
@@ -84,8 +80,8 @@ const meta = {
     // Which side(s) carry an icon on the text shape; the glyphs come from the
     // two TP-library pickers below.
     icons:         { control: 'inline-radio', options: ['none', 'left', 'right', 'both'], name: 'icons (side)', description: 'Leading / trailing / both icon on the text shape', table: { category: 'Icons' } },
-    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'TP icon for the left side', table: { category: 'Icons' } },
-    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'TP icon for the right side', table: { category: 'Icons' } },
+    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'Tesseract icon for the left side', table: { category: 'Icons' } },
+    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'Tesseract icon for the right side', table: { category: 'Icons' } },
     iconName:      { control: 'text', tpIcon: true, name: 'icon (icon-only / split)', table: { category: 'Icons' } },
   },
   args: {
@@ -165,14 +161,14 @@ export const Variants = {
       <Section label="Shape: icon-only (per variant)">
         <Row>
           {VARIANTS.filter((v) => v !== 'link').map((variant) => (
-            <Button key={variant} variant={variant} aria-label="Add" icon={<Plus size={20} />} />
+            <Button key={variant} variant={variant} aria-label="Add" icon={<TPLibraryIcon name="add" size={20} />} />
           ))}
         </Row>
       </Section>
       <Section label="Shape: split (per variant)">
         <Row gap={16}>
           {['solid', 'outline', 'tonal'].map((variant) => (
-            <Button key={variant} variant={variant} icon={<Plus size={16} />} menu={DEMO_MENU}>
+            <Button key={variant} variant={variant} icon={<TPLibraryIcon name="add" size={16} />} menu={DEMO_MENU}>
               {variant.charAt(0).toUpperCase() + variant.slice(1)}
             </Button>
           ))}
@@ -236,23 +232,23 @@ export const IconOnly = {
       <Section label="Variants (md)">
         <Row>
           {VARIANTS.filter((v) => v !== 'link').map((variant) => (
-            <Button key={variant} variant={variant} aria-label="Search" icon={<Search size={20} />} />
+            <Button key={variant} variant={variant} aria-label="Search" icon={<TPLibraryIcon name="search-normal" size={20} />} />
           ))}
         </Row>
       </Section>
       <Section label="Sizes (tonal / neutral)">
         <Row gap={16}>
           {SIZES.map((size) => (
-            <Button key={size} variant="tonal" theme="neutral" size={size} aria-label="Edit" icon={<Pencil size={size === 'sm' ? 18 : size === 'lg' ? 22 : 20} />} />
+            <Button key={size} variant="tonal" theme="neutral" size={size} aria-label="Edit" icon={<TPLibraryIcon name="edit-2" size={size === 'sm' ? 18 : size === 'lg' ? 22 : 20} />} />
           ))}
         </Row>
       </Section>
       <Section label="Common actions">
         <Row>
-          <Button variant="ghost" theme="neutral" aria-label="More" icon={<MoreVertical size={20} />} />
-          <Button variant="ghost" theme="neutral" aria-label="Print" icon={<Printer size={20} />} />
-          <Button variant="ghost" theme="error" aria-label="Delete" icon={<Trash2 size={20} />} />
-          <Button variant="solid" aria-label="Add" icon={<Plus size={20} />} />
+          <Button variant="ghost" theme="neutral" aria-label="More" icon={<TPLibraryIcon name="3-dots-more" size={20} />} />
+          <Button variant="ghost" theme="neutral" aria-label="Print" icon={<TPLibraryIcon name="printer" size={20} />} />
+          <Button variant="ghost" theme="error" aria-label="Delete" icon={<TPLibraryIcon name="trash" size={20} />} />
+          <Button variant="solid" aria-label="Add" icon={<TPLibraryIcon name="add" size={20} />} />
         </Row>
       </Section>
     </div>
@@ -355,9 +351,9 @@ export const WithIcons = {
       {VARIANTS.map((variant) => (
         <Section key={variant} label={`${variant}`}>
           <Row>
-            <Button variant={variant} leftIcon={<Plus size={16} strokeWidth={2} />}>Add Patient</Button>
-            <Button variant={variant} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>View Details</Button>
-            <Button variant={variant} leftIcon={<Download size={16} strokeWidth={2} />} rightIcon={<ChevronRight size={16} strokeWidth={2} />}>Export Report</Button>
+            <Button variant={variant} leftIcon={<TPLibraryIcon name="add" size={16} />}>Add Patient</Button>
+            <Button variant={variant} rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>View Details</Button>
+            <Button variant={variant} leftIcon={<TPLibraryIcon name="import" size={16} />} rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>Export Report</Button>
           </Row>
         </Section>
       ))}
@@ -374,7 +370,7 @@ export const Destructive = {
       <Section label="Error theme — all variants">
         <Row>
           {VARIANTS.map((variant) => (
-            <Button key={variant} variant={variant} theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete</Button>
+            <Button key={variant} variant={variant} theme="error" leftIcon={<TPLibraryIcon name="trash" size={16} />}>Delete</Button>
           ))}
         </Row>
       </Section>
@@ -385,10 +381,10 @@ export const Destructive = {
 // ─── 11. Split Button — All Variants ──────────────────────────────────────────
 
 const splitMenu = [
-  { id: 'view',     label: 'View details',  icon: <FileText size={16} strokeWidth={1.75} /> },
-  { id: 'download', label: 'Download PDF',  icon: <Download size={16} strokeWidth={1.75} /> },
-  { id: 'copy',     label: 'Duplicate',     icon: <Plus size={16} strokeWidth={1.75} /> },
-  { id: 'delete',   label: 'Delete record', icon: <Trash2 size={16} strokeWidth={1.75} />, danger: true },
+  { id: 'view',     label: 'View details',  icon: <TPLibraryIcon name="document-text" size={16} /> },
+  { id: 'download', label: 'Download PDF',  icon: <TPLibraryIcon name="import" size={16} /> },
+  { id: 'copy',     label: 'Duplicate',     icon: <TPLibraryIcon name="add" size={16} /> },
+  { id: 'delete',   label: 'Delete record', icon: <TPLibraryIcon name="trash" size={16} />, danger: true },
 ];
 
 export const SplitVariants = {
@@ -463,7 +459,7 @@ export const SplitDark = {
       {['solid', 'outline', 'tonal'].map((variant) => (
         <Section key={variant} label={<span style={{ color: 'rgba(255,255,255,0.45)' }}>{variant}</span>}>
           <Row gap={16}>
-            <Button variant={variant} surface="dark" icon={<Plus size={16} strokeWidth={1.75} />} menu={splitMenu}>Save Report</Button>
+            <Button variant={variant} surface="dark" icon={<TPLibraryIcon name="add" size={16} />} menu={splitMenu}>Save Report</Button>
             <Button variant={variant} surface="dark" theme="neutral" menu={splitMenu}>Neutral</Button>
           </Row>
         </Section>
@@ -480,27 +476,27 @@ export const UseCases = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <Section label="Patient actions">
         <Row>
-          <Button leftIcon={<Plus size={16} strokeWidth={2} />}>New Patient</Button>
-          <Button variant="outline" leftIcon={<Pencil size={16} strokeWidth={2} />}>Edit Profile</Button>
-          <Button variant="ghost" leftIcon={<Search size={16} strokeWidth={2} />}>Search Records</Button>
-          <Button variant="tonal" leftIcon={<Check size={16} strokeWidth={2} />}>Mark Complete</Button>
-          <Button variant="link" rightIcon={<ChevronRight size={16} strokeWidth={2} />}>View All Patients</Button>
+          <Button leftIcon={<TPLibraryIcon name="add" size={16} />}>New Patient</Button>
+          <Button variant="outline" leftIcon={<TPLibraryIcon name="edit-2" size={16} />}>Edit Profile</Button>
+          <Button variant="ghost" leftIcon={<TPLibraryIcon name="search-normal" size={16} />}>Search Records</Button>
+          <Button variant="tonal" leftIcon={<TPLibraryIcon name="tick-square" size={16} />}>Mark Complete</Button>
+          <Button variant="link" rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>View All Patients</Button>
         </Row>
       </Section>
       <Section label="Report actions (split + icon-only)">
         <Row>
           <Button
-            leftIcon={<Download size={16} strokeWidth={2} />}
+            leftIcon={<TPLibraryIcon name="import" size={16} />}
             menu={[
-              { id: 'pdf', label: 'Export as PDF', icon: <FileText size={16} strokeWidth={1.75} /> },
-              { id: 'csv', label: 'Export as CSV', icon: <Download size={16} strokeWidth={1.75} /> },
+              { id: 'pdf', label: 'Export as PDF', icon: <TPLibraryIcon name="document-text" size={16} /> },
+              { id: 'csv', label: 'Export as CSV', icon: <TPLibraryIcon name="import" size={16} /> },
             ]}
           >
             Export Report
           </Button>
-          <Button variant="outline" theme="error" leftIcon={<Trash2 size={16} strokeWidth={2} />}>Delete Report</Button>
-          <Button variant="ghost" leftIcon={<Sparkles size={16} strokeWidth={2} />}>AI Summary</Button>
-          <Button variant="ghost" theme="neutral" aria-label="More" icon={<MoreVertical size={20} />} />
+          <Button variant="outline" theme="error" leftIcon={<TPLibraryIcon name="trash" size={16} />}>Delete Report</Button>
+          <Button variant="ghost" leftIcon={<TPLibraryIcon name="magic-star" size={16} />}>AI Summary</Button>
+          <Button variant="ghost" theme="neutral" aria-label="More" icon={<TPLibraryIcon name="3-dots-more" size={20} />} />
         </Row>
       </Section>
     </div>

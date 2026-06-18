@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * LoadingIndicator — TatvaPractice loading spinner.
+ * LoadingIndicator — Tesseract loading spinner.
  *
  * Three glyphs, all drawn in `currentColor` so they adapt to context
  * (e.g. inside a Button they take the button's text color):

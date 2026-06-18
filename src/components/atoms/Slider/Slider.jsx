@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Slider — Range input atom with TP token styling.
+ * Slider — Range input atom with Tesseract token styling.
  * Uses native <input type="range"> with CSS accent-color.
  */
 
@@ -18,16 +18,16 @@ export function Slider({
   className,
   style: styleProp,
 }) {
-  // TP tokens with hex fallbacks; every tone the stories use must be mapped here
+  // Tesseract tokens with hex fallbacks; every tone the stories use must be mapped here
   // (warning was previously missing and silently fell back to blue).
   const ACCENT = {
     primary: "var(--tp-blue-500, #4b4ad5)",
     success: "var(--tp-success-500, #10b981)",
     warning: "var(--tp-warning-500, #f59e0b)",
-    error:   "var(--tp-error-500, #f43f5e)",
+    error:   "var(--tp-error-500, #E11D48)",
   };
   const accentColor = ACCENT[color] ?? ACCENT.primary;
-  const trackHeight = size === "sm" ? 3 : size === "lg" ? 6 : 4;
+  const trackHeight = size === "sm" ? 4 : size === "lg" ? 6 : 4;
 
   return (
     <input

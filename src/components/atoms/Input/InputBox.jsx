@@ -3,6 +3,7 @@
 import { forwardRef, useId, useRef, useState } from "react";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { Chip } from "@/src/components/atoms/Chip";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./InputBox.module.scss";
 
 const LOADER_PX = { sm: 16, md: 18, lg: 20 };
@@ -214,7 +215,7 @@ export const InputBox = forwardRef(function InputBox(
             aria-label="Decrease"
             tabIndex={-1}
           >
-            <MinusIcon />
+            <TPLibraryIcon name="minus" size={14} aria-hidden />
           </button>
         )}
 
@@ -282,7 +283,7 @@ export const InputBox = forwardRef(function InputBox(
                   aria-label="Clear"
                   tabIndex={-1}
                 >
-                  <ClearIcon />
+                  <TPLibraryIcon name="close-square" variant="bold" size={12} aria-hidden />
                 </button>
               )}
 
@@ -294,9 +295,9 @@ export const InputBox = forwardRef(function InputBox(
 
               {showStatus && (
                 <span className={styles.statusIcon} aria-hidden>
-                  {status === "success" && <CheckIcon />}
-                  {status === "error" && <AlertCircleIcon />}
-                  {status === "warning" && <AlertTriangleIcon />}
+                  {status === "success" && <TPLibraryIcon name="tick-circle" size={18} aria-hidden />}
+                  {status === "error" && <TPLibraryIcon name="danger" size={18} aria-hidden />}
+                  {status === "warning" && <TPLibraryIcon name="danger" size={18} aria-hidden />}
                 </span>
               )}
 
@@ -317,7 +318,7 @@ export const InputBox = forwardRef(function InputBox(
             aria-label="Increase"
             tabIndex={-1}
           >
-            <PlusIcon />
+            <TPLibraryIcon name="add" size={14} aria-hidden />
           </button>
         )}
 
@@ -330,8 +331,8 @@ export const InputBox = forwardRef(function InputBox(
         <div className={styles.footer}>
           {helperText && (
             <span className={styles.helper} role={status === "error" ? "alert" : undefined}>
-              {status === "error" && <AlertCircleIcon size={13} />}
-              {status === "warning" && <AlertTriangleIcon size={13} />}
+              {status === "error" && <TPLibraryIcon name="danger" size={13} aria-hidden />}
+              {status === "warning" && <TPLibraryIcon name="danger" size={13} aria-hidden />}
               {helperText}
             </span>
           )}
@@ -348,11 +349,3 @@ export const InputBox = forwardRef(function InputBox(
 
 InputBox.displayName = "InputBox";
 export default InputBox;
-
-// ─── Inline micro-icons (zero extra deps) ──────────────────────────────────────
-function PlusIcon()  { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>; }
-function MinusIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14" /></svg>; }
-function CheckIcon() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>; }
-function ClearIcon() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12" /></svg>; }
-function AlertCircleIcon({ size }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>; }
-function AlertTriangleIcon({ size }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>; }

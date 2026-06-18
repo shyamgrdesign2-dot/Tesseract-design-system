@@ -104,6 +104,52 @@
   --tp-error-900: #4C0519;
   --core-primary-900: #161558;
 
+  /* ── Semantic colour roles ──────────────────────────────────────────────
+     Role-based aliases onto the ramps above. Reach for these in product code
+     so intent stays consistent; because they reference the ramp via var(),
+     they follow any runtime ramp override (e.g. TPThemeProvider dark mode). */
+
+  /* Foreground / text */
+  --tp-fg-heading:     var(--tp-slate-900);  /* page & section titles            */
+  --tp-fg-primary:     var(--tp-slate-700);  /* default body copy                */
+  --tp-fg-secondary:   var(--tp-slate-600);  /* supporting copy                  */
+  --tp-fg-tertiary:    var(--tp-slate-500);  /* captions, metadata               */
+  --tp-fg-placeholder: var(--tp-slate-300);  /* empty input hints                */
+  --tp-fg-disabled:    var(--tp-slate-200);  /* disabled labels                  */
+  --tp-fg-inverse:     var(--tp-slate-0);    /* text on dark / coloured surfaces */
+  --tp-fg-link:        var(--tp-blue-500);   /* brand / links                    */
+  --tp-fg-success:     var(--tp-success-700);
+  --tp-fg-warning:     var(--tp-warning-600);
+  --tp-fg-error:       var(--tp-error-500);
+
+  /* Background — page canvas */
+  --tp-bg-page:        var(--tp-slate-50);   /* app canvas (soft)                */
+  --tp-bg-page-subtle: var(--tp-slate-100);  /* subtle / alt section background  */
+
+  /* Surface — raised containers (cards, sheets, menus, rows) + their states.
+     Hover/active live on the surface, not the page background. */
+  --tp-bg-surface:        var(--tp-slate-0);   /* card / surface                 */
+  --tp-bg-surface-hover:  var(--tp-slate-50);  /* hover on an interactive surface */
+  --tp-bg-surface-active: var(--tp-slate-100); /* pressed / active surface       */
+  --tp-bg-selected:    var(--tp-blue-50);    /* selected row / item              */
+  --tp-bg-inverse:     var(--tp-slate-900);  /* dark surfaces                    */
+
+  /* Background — semantic soft fills */
+  --tp-bg-brand-soft:  var(--tp-blue-50);
+  --tp-bg-success-soft: var(--tp-success-50);
+  --tp-bg-warning-soft: var(--tp-warning-50);
+  --tp-bg-error-soft:   var(--tp-error-50);
+
+  /* Border / stroke */
+  --tp-border-soft:    var(--tp-slate-100);  /* hairlines, dividers              */
+  --tp-border-neutral: var(--tp-slate-200);  /* default card / input border      */
+  --tp-border-strong:  var(--tp-slate-300);  /* emphasised border                */
+  --tp-border-focus:   var(--tp-blue-500);   /* focus ring                       */
+  --tp-border-primary: var(--tp-blue-500);
+  --tp-border-success: var(--tp-success-500);
+  --tp-border-warning: var(--tp-warning-500);
+  --tp-border-error:   var(--tp-error-500);
+
   /* Type families. Mulish carries headings (display + h1–h6); Inter carries all
      body copy and UI text. Each stack ends in a system fallback so text never
      collapses to the browser default serif. */

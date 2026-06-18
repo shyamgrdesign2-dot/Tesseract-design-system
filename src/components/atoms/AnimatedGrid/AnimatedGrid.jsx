@@ -4,7 +4,7 @@ import { useId } from "react";
 
 /**
  * AnimatedGrid — Decorative SVG grid with light "comet" pulses that travel
- * along the lattice lines. Ported from the TP marketing site for use as a
+ * along the lattice lines. Ported from the TatvaPractice marketing site for use as a
  * banner / hero background.
  *
  * The geometry is deterministic, so multiple instances on one page share the
@@ -294,23 +294,39 @@ function LanePulse({ lane, gradId }) {
 /**
  * @param {{ className?: string, style?: object,
  *   lineColor?: string,   // lattice stroke (default faint white for dark surfaces)
- *   cometColor?: string   // travelling pulse color (default white)
+ *   cometColor?: string,  // travelling pulse color (default white)
+ *   edgeFade?: number|boolean  // edge-fade strength 0..1 (true → 0.6, false → 0)
  * }} props
  */
 export function AnimatedGrid({
   className,
   style,
-  lineColor = "rgba(255,255,255,0.14)",
-  cometColor = "white",
+  lineColor = "color-mix(in srgb, var(--tp-slate-0) 14%, transparent)",
+  cometColor = "var(--tp-slate-0)",
+  edgeFade = true,
 }) {
   // Scope the clip/gradient ids per instance so two differently-themed grids on
   // one page never share (and clobber) each other's definitions.
   const uid = useId().replace(/:/g, "");
   const gradId = `${uid}-comet`;
+  // Radial edge fade: lines dissolve toward all four edges + the corners so the
+  // grid reads as an ambient texture, never a hard-cropped rectangle. `edgeFade`
+  // is the STRENGTH — 0 = no fade, 1 = strong (legacy booleans map: true → 0.6,
+  // false → 0). Higher values shrink the solid core and pull the falloff inward.
+  // A caller can still override the mask entirely via `style`.
+  const fadeAmount = edgeFade === true ? 0.6 : edgeFade === false ? 0 : Math.max(0, Math.min(1, Number(edgeFade) || 0));
+  let fadeStyle = null;
+  if (fadeAmount > 0) {
+    const core = (75 - 55 * fadeAmount).toFixed(0);
+    const edge = Math.min(100, 108 - 45 * fadeAmount).toFixed(0);
+    const mid = (Number(core) + (Number(edge) - Number(core)) * 0.55).toFixed(0);
+    const fadeMask = `radial-gradient(closest-side, #000 ${core}%, rgba(0,0,0,0.3) ${mid}%, transparent ${edge}%)`;
+    fadeStyle = { WebkitMaskImage: fadeMask, maskImage: fadeMask };
+  }
   return (
     <svg
       className={className}
-      style={style}
+      style={{ ...fadeStyle, ...style }}
       viewBox={`0 0 ${VB} ${VB}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

@@ -2,11 +2,11 @@
 
 /**
  * Sidebar — the primary 80px navigation rail (VoiceRx redesign).
- * In-house, composed from atoms (Button for the icon chip, Badge for tags).
+ * First-party, composed from atoms (Button for the icon chip, Badge for tags).
  *
  * Each item is an icon "chip" over a label. The chip reuses the Button atom in
  * icon-only mode: tonal/neutral (grey) at rest, solid/primary (blue) when
- * active. The icon is a TP library icon that renders LINEAR at rest and BOLD
+ * active. The icon is a Tesseract library icon that renders LINEAR at rest and BOLD
  * when active, inheriting the chip's text color (slate-700 → white) via
  * currentColor. Active rows get a faint blue tint + a 3px rounded left bar.
  *
@@ -15,7 +15,7 @@
  *
  * Props:
  *   items    [{ id, label, icon, badge?, disabled? }]
- *              icon  — TP library icon NAME (string, switches linear/bold) OR a
+ *              icon  — Tesseract library icon NAME (string, switches linear/bold) OR a
  *                      ReactNode escape hatch.
  *              badge — "trial" (gradient/warning Badge) | { text, variant?, color? }
  *                      | ReactNode. Reuses the Badge atom.
@@ -94,7 +94,7 @@ export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = tr
                   variant={active ? "solid" : "tonal"}
                   theme={active ? "primary" : "neutral"}
                   icon={<ItemIcon icon={it.icon} active={active} />}
-                  style={{ width: 32, height: 32 }}
+                  style={{ width: "var(--tp-size-32)", height: "var(--tp-size-32)" }}
                 />
                 <span className={styles.label}>
                   <span

@@ -9,7 +9,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          'Design System', ['Overview', 'Component Standards', 'Using in Your Product'],
+          'Design System', ['Introduction', 'Why Tesseract', 'Overview', 'Component Standards'],
           'Foundations', ['Colors', 'Typography', 'Spacing & Grid', 'Shadow & Radius', 'Icons', 'Theme Provider'],
           'Atoms', 'Molecules', '*',
         ],

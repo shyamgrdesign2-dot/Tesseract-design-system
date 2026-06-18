@@ -5,17 +5,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--tp-space-4);
   width: 100%;
-  padding: 0 16px;
-  background-color: var(--tp-slate-0, #fff);
-  font-family: Inter, var(--font-sans, sans-serif);
+  padding: 0 var(--tp-space-4);
+  background-color: var(--tp-slate-0);
+  font-family: var(--tp-font-body);
 
-  &[data-bordered] { border-bottom: 1px solid var(--tp-slate-100, #f1f1f5); }
+  &[data-bordered] { border-bottom: 1px solid var(--tp-slate-100); }
 }
 
-.left { display: flex; align-items: center; align-self: stretch; gap: 16px; min-width: 0; flex: 1; }
-.actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.left { display: flex; align-items: center; align-self: stretch; gap: var(--tp-space-4); min-width: 0; flex: 1; }
+.actions { display: flex; align-items: center; gap: var(--tp-space-3-5); flex-shrink: 0; }
 
 /* ── Back button — 62px square (full header height), bordered cell ── */
 .back {
@@ -27,29 +27,29 @@
   flex-shrink: 0;
   margin: 0 0 0 -16px;            /* bleed to the header's left edge */
   border: none;
-  border-right: 0.5px solid var(--tp-slate-100, #f1f1f5);
+  border-right: 0.5px solid var(--tp-slate-100);
   background-color: transparent;
-  color: var(--tp-slate-700, #454551);
+  color: var(--tp-slate-700);
   cursor: pointer;
   transition: background-color 120ms ease;
-  &:hover { background-color: var(--tp-slate-50, #f8fafc); }
+  &:hover { background-color: var(--tp-slate-50); }
 }
 
 .logo { display: flex; align-items: center; flex-shrink: 0; }
 
 /* ── Title (+ optional subtext) ── */
 .titleBlock { display: flex; flex-direction: column; min-width: 0; }
-.title { font-size: 16px; font-weight: 600; color: var(--tp-slate-900, #171725); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.subtitle { font-size: 12px; line-height: 18px; color: var(--tp-slate-600, #717179); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.title { font-size: var(--tp-text-body-base); font-weight: var(--tp-weight-semibold); color: var(--tp-slate-900); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.subtitle { font-size: var(--tp-text-body-xs); line-height: 18px; color: var(--tp-slate-600); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ── User / patient details block (avatar = Avatar atom) ── */
 .user {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--tp-space-2);
   min-width: 0;
   max-width: 220px;
-  padding: 4px 6px;
+  padding: var(--tp-space-1) var(--tp-space-1-5);
   border: none;
   background: transparent;
   border-radius: var(--tp-radius-10, 10px);
@@ -57,26 +57,26 @@
   cursor: pointer;
   text-align: left;
   transition: background-color 120ms ease;
-  &:hover { background-color: var(--tp-slate-50, #f8fafc); }
+  &:hover { background-color: var(--tp-slate-50); }
 }
 .userText { display: flex; flex-direction: column; min-width: 0; }
 .userName {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tp-slate-700, #454551);
+  gap: var(--tp-space-1-5);
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  color: var(--tp-slate-700);
   min-width: 0;
   > :first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
-.userMeta { font-size: 12px; line-height: 18px; letter-spacing: 0.1px; color: var(--tp-slate-600, #717179); white-space: nowrap; }
+.userMeta { font-size: var(--tp-text-body-xs); line-height: 18px; letter-spacing: 0.1px; color: var(--tp-slate-600); white-space: nowrap; }
 
 /* ── Icon CTA + notification dot ── */
 .iconWrap { position: relative; display: inline-flex; flex-shrink: 0; }
 /* Notification dot — pinned to the very top-right corner of the icon. */
 .dot { position: absolute; top: 0; right: 0; line-height: 0; pointer-events: none; z-index: 1; }
-.dot :global(*) { box-shadow: 0 0 0 2px var(--tp-slate-0, #fff); border-radius: 50%; }
+.dot :global(*) { box-shadow: 0 0 0 2px var(--tp-slate-0); border-radius: var(--tp-radius-full); }
 
 /* Single-line CTA label: centered, ellipsis. display:block (not inline-block)
    avoids the baseline shift that pushed text a few px above center. */
@@ -87,8 +87,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: var(--tp-size-42);
+  height: var(--tp-size-42);
   padding: 0;
   border: none;
   background: transparent;

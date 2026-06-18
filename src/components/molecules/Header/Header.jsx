@@ -26,7 +26,7 @@
  *   { type: "tutorial", onClick }
  *   { type: "divider" }       — vertical gradient Divider atom
  *   { type: "node", node }    — custom
- *     icon — TP library icon NAME (string) or a ReactNode.
+ *     icon — Tesseract library icon NAME (string) or a ReactNode.
  *
  * Props: back, onBack, logo, user, title, subtitle, leading, actions,
  *        height (default 62), bordered (default true), className.
@@ -52,10 +52,10 @@ function Chevron({ dir = "down", size = 18 }) {
 function TutorialButton({ onClick }) {
   return (
     <button type="button" className={styles.tutorial} aria-label="Play tutorial" onClick={onClick}>
-      <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden>
-        <circle cx="24" cy="24" r="21" stroke="#8A4DBB" strokeWidth="3.5" fill="none" />
-        <circle cx="24" cy="24" r="15" fill="#8A4DBB" />
-        <path d="M20.5 15L33 24L20.5 33V15Z" fill="white" />
+      <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden style={{ color: "var(--tp-violet-600)" }}>
+        <circle cx="24" cy="24" r="21" stroke="currentColor" strokeWidth="3.5" fill="none" />
+        <circle cx="24" cy="24" r="15" fill="currentColor" />
+        <path d="M20.5 15L33 24L20.5 33V15Z" style={{ fill: "var(--tp-slate-0)" }} />
       </svg>
     </button>
   );
@@ -96,7 +96,7 @@ function Cta({ item }) {
       aria-label={iconOnly ? (item.ariaLabel || item.label) : undefined}
       icon={iconOnly || item.menu ? glyph : undefined}
       leftIcon={!iconOnly && !item.menu ? glyph : undefined}
-      style={iconOnly ? { width: 42, height: 42 } : { height: 42 }}
+      style={iconOnly ? { width: "var(--tp-size-42)", height: "var(--tp-size-42)" } : { height: "var(--tp-size-42)" }}
     >
       {iconOnly ? undefined : <span className={styles.ctaLabel}>{item.label}</span>}
     </Button>
@@ -115,7 +115,7 @@ function Cta({ item }) {
 function Action({ item }) {
   switch (item.type) {
     case "divider":
-      return <Divider orientation="vertical" variant="gradient" color="#d0d5dd" style={{ height: 42, opacity: 0.8 }} />;
+      return <Divider orientation="vertical" variant="gradient" color="var(--tp-slate-300)" style={{ height: "var(--tp-size-42)", opacity: 0.8 }} />;
     case "tutorial":
       return <TutorialButton onClick={item.onClick} />;
     case "avatar":

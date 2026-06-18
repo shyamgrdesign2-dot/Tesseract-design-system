@@ -2,14 +2,14 @@
 
 /**
  * SecondaryNav — the RxPad secondary navigation rail (the blue rail).
- * In-house; reuses the TP icon library (TPLibraryIcon) + the Badge atom (signal
+ * First-party; reuses the Tesseract icon library (TPLibraryIcon) + the Badge atom (signal
  * dot). 80px blue-gradient rail of icon-pill-over-label items. The icon pill is
  * a translucent white chip at rest and turns SOLID WHITE with a blue icon when
  * active; the active row also gets a white tint + a 3px white left bar.
  *
  * Props:
  *   items    [{ id, label, icon, signal?, disabled? }]
- *              icon   — TP library icon NAME (string) or a ReactNode
+ *              icon   — Tesseract library icon NAME (string) or a ReactNode
  *              signal — boolean → red notification dot on the pill
  *   activeId   id of the active item (controlled)
  *   onSelect   (id) => void
@@ -26,7 +26,7 @@ import styles from "./SecondaryNav.module.scss";
 function PillIcon({ icon, active }) {
   if (typeof icon === "string") {
     // Selected → bulk (two-tone) style in blue; rest → linear in white.
-    return <TPLibraryIcon name={icon} variant={active ? "bulk" : "linear"} size={20} color={active ? "var(--tp-blue-500, #4b4ad5)" : "#ffffff"} />;
+    return <TPLibraryIcon name={icon} variant={active ? "bulk" : "linear"} size={20} color={active ? "var(--tp-blue-500, #4b4ad5)" : "var(--tp-slate-0, #ffffff)"} />;
   }
   return icon ?? null;
 }
@@ -61,6 +61,7 @@ export function SecondaryNav({ items = [], activeId, onSelect, width, className 
                 <span className={styles.label}>{it.label}</span>
               </span>
               {active && <span className={styles.bar} aria-hidden />}
+              {active && <span className={styles.pointer} aria-hidden />}
             </button>
           );
         })}

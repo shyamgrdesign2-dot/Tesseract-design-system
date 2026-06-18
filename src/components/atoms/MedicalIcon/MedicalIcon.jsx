@@ -21,6 +21,7 @@ export function MedicalIcon({ name, variant = "linear", size = 24, color, alt, c
     <TPLibraryIcon
       name={resolved}
       variant={VARIANT[variant] || "linear"}
+      family="medical"
       size={size}
       color={color}
       title={alt}

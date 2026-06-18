@@ -7,7 +7,7 @@
 .tp-loader {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--tp-space-2);
   color: inherit;
 }
 
@@ -33,8 +33,11 @@
 }
 
 .tp-loader__label {
-  font: 500 14px/1.4 Inter, sans-serif;
-  color: var(--tp-slate-600, #54545c);
+  font-weight: var(--tp-weight-medium);
+  font-size: var(--tp-text-body-sm);
+  line-height: 1.4;
+  font-family: var(--tp-font-body);
+  color: var(--tp-slate-600, #545460);
 }
 
 .tp-loader__sr {

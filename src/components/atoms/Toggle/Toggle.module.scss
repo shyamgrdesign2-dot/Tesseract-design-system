@@ -4,30 +4,30 @@
   border-radius: var(--tp-radius-full, 9999px);
   corner-shape: round; /* true pill (not the global squircle) */
   border: none;
-  padding: 2px;
+  padding: var(--tp-space-0-5);
   cursor: pointer;
   transition: background-color 150ms ease;
   flex-shrink: 0;
   outline: none;
-  background-color: var(--tp-slate-300, #d0d5dd);
+  background-color: var(--tp-slate-300);
 
   /* Sizes */
-  &[data-size="sm"] { width: 34px; height: 20px; }
-  &[data-size="md"] { width: 42px; height: 24px; }
-  &[data-size="lg"] { width: 50px; height: 28px; }
+  &[data-size="sm"] { width: 34px; height: var(--tp-size-20); }
+  &[data-size="md"] { width: var(--tp-size-42); height: var(--tp-size-24); }
+  &[data-size="lg"] { width: 50px; height: var(--tp-size-28); }
 
   /* Checked */
   &[data-state="checked"] {
-    background-color: var(--tp-blue-500, #4b4ad5);
+    background-color: var(--tp-blue-500);
   }
 
   /* Square shape — squared track corners (default is a rounded pill) */
-  &[data-shape="square"] { border-radius: 7px; corner-shape: round; }
+  &[data-shape="square"] { border-radius: var(--tp-radius-8); corner-shape: round; }
   &[data-size="sm"][data-shape="square"] { border-radius: var(--tp-radius-6, 6px); }
 
   /* Focus */
   &:focus-visible {
-    box-shadow: 0 0 0 3px var(--tp-blue-200, #b5b4f2);
+    box-shadow: 0 0 0 3px var(--tp-blue-200);
   }
 
   /* Disabled */
@@ -39,21 +39,21 @@
 
 .thumb {
   display: block;
-  border-radius: 50%;
+  border-radius: var(--tp-radius-full);
   corner-shape: round; /* true circle, not the global squircle */
-  background-color: var(--tp-slate-0, #ffffff);
+  background-color: var(--tp-slate-0);
 
   /* Square shape — rounded-square thumb */
   .root[data-shape="square"] & { border-radius: var(--tp-radius-4, 4px); corner-shape: round; }
-  box-shadow: 0 1px 3px rgba(23, 23, 37, 0.12);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--tp-slate-900) 12%, transparent);
   transition: transform 150ms ease;
   will-change: transform;
   transform: translateX(0);
 
   /* Sizes */
-  .root[data-size="sm"] & { width: 16px; height: 16px; }
-  .root[data-size="md"] & { width: 20px; height: 20px; }
-  .root[data-size="lg"] & { width: 24px; height: 24px; }
+  .root[data-size="sm"] & { width: var(--tp-size-16); height: var(--tp-size-16); }
+  .root[data-size="md"] & { width: var(--tp-size-20); height: var(--tp-size-20); }
+  .root[data-size="lg"] & { width: var(--tp-size-24); height: var(--tp-size-24); }
 
   /* Checked — size-specific translate */
   .root[data-size="sm"][data-state="checked"] & { transform: translateX(14px); }

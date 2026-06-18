@@ -127,8 +127,8 @@ export const AccordionTrigger = React.forwardRef(function AccordionTrigger(
         onClick={handleClick}
         {...props}>
         {children}
-        {/* Chevron from the Iconsax library; rotates on open via .chevron. */}
-        <TPLibraryIcon name="arrow-down-02" size={16} className={styles.chevron} />
+        {/* Disclosure chevron from the icon CDN; rotates on open via .chevron. */}
+        <TPLibraryIcon name="chevron-down" size={16} className={styles.chevron} />
       </button>
     </h3>
   );

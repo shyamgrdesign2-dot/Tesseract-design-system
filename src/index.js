@@ -1,10 +1,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// TatvaPractice UI — public entry point.
+// Tesseract UI — public entry point.
 //
 // Single import surface for consumers:
 //   import { Button, Badge, DataTable, Dropdown } from "tp-ui";
 //
-// Everything is built in-house with zero runtime dependencies beyond
+// Everything is built from scratch with zero runtime dependencies beyond
 // react / react-dom. Atoms are primitives; molecules compose atoms.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -18,7 +18,11 @@ export * from "./components/atoms";
 export * from "./components/molecules";
 
 // Runtime theming — foundation + component tokens, breakpoints, light/dark.
-export { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme } from "./theme";
+// `createTheme({ brand })` derives a full theme from a seed.
+export { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme, createTheme, ramp } from "./theme";
 
-// Icon CDN base (default = TatvaPractice CDN); override to self-host.
+// Action tracking — opt-in; no-op without a provider.
+export { TPAnalyticsProvider, useAnalytics, resolveTrack } from "./analytics";
+
+// Icon CDN base (default = Tesseract CDN); override to self-host.
 export { getIconBaseUrl, setIconBaseUrl, ICON_BASE_DEFAULT } from "./components/atoms/icons/tp/iconBase";

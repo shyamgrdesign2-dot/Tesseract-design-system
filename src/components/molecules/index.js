@@ -27,7 +27,7 @@ export {
 "./Tabs";
 
 /* ── Data table ── */
-export { DataTable, DataCell } from "./DataTable";
+export { DataTable, DataCell, CellTag, TableActions } from "./DataTable";
 export { ClinicalTable } from "./ClinicalTable";
 export { Filter } from "./Filter";
 
@@ -40,5 +40,6 @@ export { SecondaryNav } from "./SecondaryNav";
 export { Header } from "./Header";
 
 /* ── Composite / feature ── */
-export { DateRangePicker } from "./DateRangePicker";
+export { DatePicker, DateRangePicker } from "./DateRangePicker";
 export { HeroBanner } from "./HeroBanner";
+export { RxPadSection } from "./RxPadSection";

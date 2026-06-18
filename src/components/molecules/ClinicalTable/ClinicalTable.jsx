@@ -24,13 +24,15 @@
  *   rows / defaultRows  [{ id, [colId]: value }]                 controlled / uncontrolled
  *   onChange  (rows) => void
  *   columns   the CONFIGURABLE middle columns (between Name and Notes). Each:
- *     { id, header, type?: "text"|"number"|"date"|"select"|"search",
+ *     { id, header, type?: "text"|"number"|"date"|"select"|"search"|"multiselect"|"combo",
  *       options?: string[]|{value,label,icon?}[], placeholder?, width?, minWidth?,
  *       maxWidth?, expand?: bool (drop the max — absorb leftover width, e.g. Notes),
  *       align?, allow?: "numeric"|"alpha"|"alphanumeric" (text),
- *       icon?: ReactNode, frequentlyUsedLabel?: string, allowCustom?: bool (search),
+ *       icon?: ReactNode, frequentlyUsedLabel?: string, allowCustom?: bool (search/combo),
  *       flagCustom?: true|"warning"|"error" (search — ring custom entries),
- *       searchable?: bool (select), editable?: bool (default true),
+ *       searchable?: bool (select/multiselect/combo), editable?: bool (default true),
+ *       chips?: bool (multiselect — show chips, default true),
+ *       chevron?: bool (combo — show chevron, default true),
  *       validate?: (value, row) => "success"|"error"|"warning"|undefined }
  *   name      override config for the primary Name column (defaults provided)
  *   notes     override config for the Notes column (defaults provided)
@@ -75,6 +77,10 @@ export function ClinicalTable({
   showRowMenu = true,
   rowMenu,
   autoRow = true,
+  dragIcon,
+  moreIcon,
+  deleteIcon,
+  duplicateIcon,
   className,
 }) {
   const controlled = rowsProp !== undefined;
@@ -92,7 +98,13 @@ export function ClinicalTable({
     id: "notes", header: "Notes", type: "text", placeholder: "Notes", minWidth: 160, expand: true,
     ...notes,
   };
-  const dataColumns = [nameCol, ...columns, notesCol];
+  const rawDataColumns = [nameCol, ...columns, notesCol];
+  const dataColumns = React.useMemo(() => {
+    const normal = rawDataColumns.filter((c) => c.sticky !== "right");
+    const sticky = rawDataColumns.filter((c) => c.sticky === "right");
+    if (sticky.length <= 1) return [...normal, ...sticky];
+    return [...normal, ...sticky.slice(0, -1).map((c) => ({ ...c, sticky: undefined })), sticky[sticky.length - 1]];
+  }, [rawDataColumns]);
   const primaryColId = nameCol.id;
 
   const [draft, setDraft] = React.useState(makeEmptyRow);
@@ -199,9 +211,10 @@ export function ClinicalTable({
   };
 
   // ── Action column (⋯ menu + delete) ──
+  const dupIconName = duplicateIcon || "copy";
   const menuItems = !showRowMenu
     ? []
-    : (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name="copy" size={15} /> }]).map((it) => ({
+    : (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name={dupIconName} size={15} /> }]).map((it) => ({
         ...it,
         onClick: it.onClick ?? (it.label === "Duplicate" ? duplicateRow : undefined),
       }));
@@ -233,7 +246,7 @@ export function ClinicalTable({
           <tr className={styles.headRow}>
             {reorderable && <th className={cn(styles.th, styles.sideCol)} aria-hidden />}
             {dataColumns.map((c) => (
-              <th key={c.id} className={styles.th} style={columnWidthStyle(c)} data-align={c.align}>
+              <th key={c.id} className={cn(styles.th, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-align={c.align} data-shadow={c.sticky === "right" || undefined}>
                 {c.header}
               </th>
             ))}
@@ -256,7 +269,7 @@ export function ClinicalTable({
               >
                 {reorderable && (
                   <td className={cn(styles.td, styles.sideCol)}>
-                    {!isDraft && <DragHandle onDragStart={(e) => startDrag(e, row.id)} onDragEnd={endDrag} />}
+                    {!isDraft && <DragHandle icon={dragIcon} onDragStart={(e) => startDrag(e, row.id)} onDragEnd={endDrag} />}
                   </td>
                 )}
 
@@ -267,7 +280,7 @@ export function ClinicalTable({
                   // Committed rows lock a non-primary cell only if the name is empty.
                   const locked = !isPrimary && (isDraft || !primaryFilled);
                   return (
-                    <td key={c.id} className={styles.td} style={columnWidthStyle(c)}>
+                    <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={c.sticky === "right" || undefined}>
                       <EditableCell
                         column={c}
                         value={row[c.id]}
@@ -282,7 +295,7 @@ export function ClinicalTable({
 
                 {hasAction && (
                   <td className={cn(styles.td, styles.actionCol, styles.sticky)} data-shadow="true">
-                    {!isDraft && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} />}
+                    {!isDraft && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} moreIcon={moreIcon} deleteIcon={deleteIcon} />}
                   </td>
                 )}
               </tr>

@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * ConfirmDialog — TP confirmation modal. Three sections: Header · Body · Footer.
- * In-house (built on DialogPrimitive); footer actions use the Button atom.
+ * ConfirmDialog — Tesseract confirmation modal. Three sections: Header · Body · Footer.
+ * First-party (built on DialogPrimitive); footer actions use the Button atom.
  *
  * HEADER
  *   title        h2 text
@@ -20,7 +20,7 @@
  * FOOTER — up to three CTA slots: primary · secondary · tertiary.
  *   Each slot: <slot>Label, on<Slot>, <slot>Variant, <slot>Theme, <slot>Disabled.
  *   <slot>Variant: solid | outline | ghost | tonal | link
- *   <slot>Theme:   primary (TP blue) | neutral | warning | error | success
+ *   <slot>Theme:   primary (Tesseract blue) | neutral | warning | error | success
  *
  *   CONVENTION (not enforced — developer decides): the PRIMARY CTA is the safe,
  *   non-destructive action (e.g. "Keep editing" / "Close"); the destructive
@@ -37,6 +37,7 @@ import * as DialogPrimitive from "@/src/hooks/ui/DialogPrimitive";
 import { Button } from "@/src/components/atoms/Button";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
+import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./ConfirmDialog.module.scss";
 
 const Alert = {
@@ -77,7 +78,7 @@ function Callout({ tone = "warning", icon = true, customIcon, children }) {
     <div className={styles.callout} data-tone={tone}>
       {icon && (
         <span className={styles.calloutIcon}>
-          {customIcon ?? <TPIcon name={isNeutral ? "info" : "warning"} variant="bulk" size={iconSize} />}
+          {customIcon ?? <TPIcon name={isNeutral ? "info" : tone === "error" ? "danger" : "warning"} variant="bulk" size={iconSize} />}
         </span>
       )}
       <div ref={textRef} className={styles.calloutText}>{children}</div>
@@ -188,9 +189,7 @@ export function ConfirmDialog({
             <Alert.Title className={styles.title}>{title}</Alert.Title>
             <Alert.Close asChild>
               <button type="button" aria-label="Close" className={styles.closeBtn}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
+                <TPLibraryIcon name="close-square" variant="bold" size={24} />
               </button>
             </Alert.Close>
           </div>

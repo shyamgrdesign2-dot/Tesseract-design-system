@@ -1,6 +1,6 @@
 # tp-ui
 
-TatvaPractice UI — an in-house React component library (atoms + molecules) built
+Tesseract UI, a first-party React component library (atoms + molecules) built
 with **zero runtime dependencies**. The only externals are `react` and
 `react-dom`, declared as **peer dependencies** (never bundled).
 
@@ -19,7 +19,7 @@ import { Button, Badge, Dropdown, DataTable, ClinicalTable, Logo } from "tp-ui";
 import "tp-ui/styles.css"; // one stylesheet for the whole library
 
 export function Example() {
-  return <Button variant="solid" theme="primary">Save</Button>;
+ return <Button variant="solid" theme="primary">Save</Button>;
 }
 ```
 
@@ -30,36 +30,34 @@ export function Example() {
 ## What's inside
 
 - **Atoms**: Button, Badge, Chip, Checkbox, Radio, Toggle, Slider, InputBox,
-  Avatar, Divider, Skeleton, LoadingIndicator, AnimatedGrid, Logo, icon components.
+ Avatar, Divider, Skeleton, LoadingIndicator, AnimatedGrid, Logo, icon components.
 - **Molecules**: Dropdown, DataTable, ClinicalTable, Filter, Accordion, Tabs,
-  Tooltip, Toast, ConfirmDialog, DateRangePicker, HeroBanner, Sidebar,
-  SecondaryNav, Header.
+ Tooltip, Toast, ConfirmDialog, DateRangePicker, HeroBanner, Sidebar,
+ SecondaryNav, Header.
 
 ## Static assets (important)
 
 A few components load SVGs at runtime rather than bundling them:
 
 - **Icons** (`TPLibraryIcon`, `TPMedicalIcon`) load from the design-system **CDN**
-  by default — `https://pmdoctorportal.tatvacare.in/design-system-assets/icons/<style>/<name>.svg`
-  (style = `linear` | `bulk` | `bold`). No hosting needed. To self-host, point the
-  base elsewhere once at app start:
+ by default, `https://pmdoctorportal.tatvacare.in/design-system-assets/icons/<style>/<name>.svg`
+ (style = `linear` | `bulk` | `bold`). No hosting needed. To self-host, point the
+ base elsewhere once at app start:
 
-  ```js
-  import { setIconBaseUrl } from "tp-ui";
-  setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TPThemeProvider iconBaseUrl
-  ```
+ ```js
+ import { setIconBaseUrl } from "tp-ui";
+ setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TPThemeProvider iconBaseUrl
+ ```
 
-- **`Logo`** still fetches `/brand/*.svg` — copy `public/brand/` into your app's
-  web root (tiny, ~20 KB).
+- **`Logo`** still fetches `/brand/*.svg`, copy `public/brand/` into your app's
+ web root (tiny, ~20 KB).
 
-All other components — Button, Badge, Dropdown, DataTable, ClinicalTable, etc. —
-use inline SVGs and need no extra assets.
+All other components, Button, Badge, Dropdown, DataTable, ClinicalTable, etc., use inline SVGs and need no extra assets.
 
 ## Design tokens & fonts
 
-`tp-ui/styles.css` includes the full foundational token layer as CSS variables —
-colours (`--tp-blue-500`…), typography scale, radius (`--tp-radius-10`), shadows
-(`--tp-shadow-md`), spacing (`--tp-space-4`), sizing, and gradients — plus
+`tp-ui/styles.css` includes the full foundational token layer as CSS variables, colours (`--tp-blue-500`…), typography scale, radius (`--tp-radius-10`), shadows
+(`--tp-shadow-md`), spacing (`--tp-space-4`), sizing, and gradients, plus
 ready-to-use type classes (`.tp-h1`, `.tp-body-base`, …). Components consume
 these tokens, and you can use them in your own styles. Browse them under
 **Design System → Foundations** in Storybook.
@@ -73,7 +71,7 @@ Load them in your app (Google Fonts or self-host), e.g.:
 
 ## Theming
 
-`TPThemeProvider` is the single theming surface — it carries the whole theme
+`TPThemeProvider` is the single theming surface, it carries the whole theme
 (foundation tokens, component tokens, breakpoints, colour scheme), provides it via
 context, and scopes the matching CSS variables so components re-theme with no prop
 changes (they read `var(--tp-*)`):
@@ -82,19 +80,19 @@ changes (they read `var(--tp-*)`):
 import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tp-ui";
 
 <TPThemeProvider
-  colorScheme="dark"                       // light | dark | system
-  theme={{
-    foundation: { colors: { blue: { 500: "#0EA5E9" } } },
-    components: { button: { radius: "14px" } },
-    breakpoints: { tablet: 720 },
-  }}
+ colorScheme="dark" // light | dark | system
+ theme={{
+ foundation: { colors: { blue: { 500: "#0EA5E9" } } },
+ components: { button: { radius: "14px" } },
+ breakpoints: { tablet: 720 },
+ }}
 >
-  <App />
+ <App />
 </TPThemeProvider>
 
 const { theme, colorScheme, setColorScheme } = useTheme();
-const bp  = useBreakpoint();               // "mobile" | "tablet" | "desktop"
-const btn = useComponentTokens("button");  // { radius, height, … }
+const bp = useBreakpoint(); // "mobile" | "tablet" | "desktop"
+const btn = useComponentTokens("button"); // { radius, height, … }
 ```
 
 Providers nest (a region layers its own overrides). See **Foundations → Theme
@@ -107,5 +105,5 @@ Provider** in Storybook for a live playground.
 ## Build (maintainers)
 
 ```bash
-npm run build:lib   # vite lib build (ESM+CJS+CSS) + d.ts via tsc
+npm run build:lib # vite lib build (ESM+CJS+CSS) + d.ts via tsc
 ```

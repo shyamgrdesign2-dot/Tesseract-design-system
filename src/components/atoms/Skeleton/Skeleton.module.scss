@@ -7,7 +7,7 @@
 
 .skeleton {
   display: block;
-  background-color: var(--tp-slate-200, #e2e2ea);
+  background-color: var(--tp-slate-200);
   animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   /* Accurate arcs so the `circular` variant (border-radius: 50%) renders a true
      circle instead of the global squircle. */
