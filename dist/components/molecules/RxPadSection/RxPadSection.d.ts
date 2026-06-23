@@ -1,0 +1,40 @@
+export function RxPadSection({ title, icon, iconColor, mode, bodyType, columns, name, notes, fields, search, searchPlaceholder, frequentlyUsed, showRepeat, showTemplate, showSave, showClear, onRepeat, onTemplate, onSave, onClear, repeatIcon, templateIcon, saveIcon, clearIcon, searchIcon, dragIcon, moreIcon, deleteIcon, duplicateIcon, rows: rowsProp, defaultRows, onRowsChange, className, style, }: {
+    title?: string | undefined;
+    icon?: string | undefined;
+    iconColor?: string | undefined;
+    mode?: string | undefined;
+    bodyType?: string | undefined;
+    columns?: never[] | undefined;
+    name: any;
+    notes: any;
+    fields?: never[] | undefined;
+    search?: boolean | undefined;
+    searchPlaceholder: any;
+    frequentlyUsed?: never[] | undefined;
+    showRepeat?: boolean | undefined;
+    showTemplate?: boolean | undefined;
+    showSave?: boolean | undefined;
+    showClear?: boolean | undefined;
+    onRepeat: any;
+    onTemplate: any;
+    onSave: any;
+    onClear: any;
+    repeatIcon?: string | undefined;
+    templateIcon?: string | undefined;
+    saveIcon?: string | undefined;
+    clearIcon?: string | undefined;
+    searchIcon?: string | undefined;
+    dragIcon?: string | undefined;
+    moreIcon?: string | undefined;
+    deleteIcon?: string | undefined;
+    duplicateIcon?: string | undefined;
+    rows: any;
+    defaultRows?: never[] | undefined;
+    onRowsChange: any;
+    className: any;
+    style: any;
+}): import("react/jsx-runtime").JSX.Element;
+export namespace RxPadSection {
+    let displayName: string;
+}
+export default RxPadSection;

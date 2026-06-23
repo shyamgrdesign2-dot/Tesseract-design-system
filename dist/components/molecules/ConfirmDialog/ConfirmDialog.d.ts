@@ -1,0 +1,46 @@
+export function ConfirmDialog({ open, onOpenChange, title, description, callout, calloutTone, calloutIcon, calloutCustomIcon, calloutPlacement, children, checkboxLabel, checkboxChecked, defaultCheckboxChecked, onCheckboxChange, primaryLabel, onPrimary, primaryVariant, primaryTheme, primaryDisabled, primaryAutoClose, secondaryLabel, onSecondary, secondaryVariant, secondaryTheme, secondaryDisabled, tertiaryLabel, onTertiary, tertiaryVariant, tertiaryTheme, actionsAlign, actionsFullWidth, warning, primaryTone, confirmLabel, onConfirm, confirmTheme, confirmDisabled, cancelLabel, onCancel, secondaryTone, }: {
+    open: any;
+    onOpenChange: any;
+    title: any;
+    description: any;
+    callout: any;
+    calloutTone?: string | undefined;
+    calloutIcon?: boolean | undefined;
+    calloutCustomIcon: any;
+    calloutPlacement?: string | undefined;
+    children: any;
+    checkboxLabel: any;
+    checkboxChecked: any;
+    defaultCheckboxChecked?: boolean | undefined;
+    onCheckboxChange: any;
+    primaryLabel: any;
+    onPrimary: any;
+    primaryVariant?: string | undefined;
+    primaryTheme?: string | undefined;
+    primaryDisabled?: boolean | undefined;
+    primaryAutoClose?: boolean | undefined;
+    secondaryLabel: any;
+    onSecondary: any;
+    secondaryVariant?: string | undefined;
+    secondaryTheme?: string | undefined;
+    secondaryDisabled?: boolean | undefined;
+    tertiaryLabel: any;
+    onTertiary: any;
+    tertiaryVariant?: string | undefined;
+    tertiaryTheme?: string | undefined;
+    actionsAlign?: string | undefined;
+    actionsFullWidth?: boolean | undefined;
+    warning: any;
+    primaryTone: any;
+    confirmLabel: any;
+    onConfirm: any;
+    confirmTheme: any;
+    confirmDisabled: any;
+    cancelLabel: any;
+    onCancel: any;
+    secondaryTone: any;
+}): import("react/jsx-runtime").JSX.Element;
+export namespace ConfirmDialog {
+    let displayName: string;
+}
+export default ConfirmDialog;
