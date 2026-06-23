@@ -44,7 +44,7 @@ export default meta;
 
 // ── Presets that reproduce the real app headers ──────────────────────────────
 
-/** Home / shell header — logo + tutorial · notifications · clinic select · avatar. */
+/** Home / shell header — logo + tutorial · notifications · info tag · clinic select · avatar. */
 export const Shell = {
   render: () => (
     <ClinicHeader
@@ -54,6 +54,7 @@ export const Shell = {
         { type: 'divider' },
         { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral', badge: { color: 'error' } },
         { type: 'divider' },
+        { type: 'info', icon: 'hospital', label: 'Ward', value: 'W-204' },
         '__clinic__',
         { type: 'avatar', name: 'Dr Sheela', ring: true },
       ]}
@@ -61,13 +62,14 @@ export const Shell = {
   ),
 };
 
-/** RxPad header — back + patient + tools + Preview / End Visit (split) + kebab. */
+/** RxPad header — back + patient + info tag (doctor) + tools + Preview / End Visit (split) + kebab. */
 export const RxPad = {
   render: () => (
     <Header
       back
       user={{ name: 'Ramesh Kumar', meta: 'Male | 76y', dropdown: true }}
       actions={[
+        { type: 'info', icon: 'user-octagon', label: 'Doctor:', value: 'Dr. Sheela BR' },
         { type: 'tutorial' },
         { type: 'divider' },
         { type: 'cta', icon: 'task-square', ariaLabel: 'Template', variant: 'tonal', theme: 'neutral' },
@@ -117,6 +119,42 @@ export const TitleWithSubtext = {
         { type: 'cta', label: 'Start Walk-in Consultation', variant: 'solid', theme: 'primary' },
       ]}
     />
+  ),
+};
+
+/** Info Tags — non-clickable violet data badges in the action bar. */
+export const InfoTags = {
+  name: 'Info Tags',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Header
+        title="Icon Left (default)"
+        actions={[
+          { type: 'info', icon: 'hospital', label: 'Ward', value: 'W-204' },
+          { type: 'info', icon: 'user-octagon', label: 'Doctor:', value: 'Dr. Sheela BR' },
+        ]}
+      />
+      <Header
+        title="Icon Right"
+        actions={[
+          { type: 'info', icon: 'status-up', iconPosition: 'right', label: 'Status:', value: 'Current' },
+        ]}
+      />
+      <Header
+        title="No Icon"
+        actions={[
+          { type: 'info', label: 'Room:', value: '302-A' },
+          { type: 'info', value: 'Pending' },
+        ]}
+      />
+      <Header
+        title="Custom Radius"
+        actions={[
+          { type: 'info', icon: 'heart', label: 'BP:', value: '120/80 mmHg', radius: 'var(--tp-radius-full)' },
+          { type: 'info', icon: 'calendar', value: 'Jun 23, 2026', radius: '4px' },
+        ]}
+      />
+    </div>
   ),
 };
 

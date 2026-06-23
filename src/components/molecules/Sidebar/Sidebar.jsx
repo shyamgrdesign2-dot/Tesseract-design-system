@@ -1,44 +1,29 @@
 "use client";
 
-/**
- * Sidebar — the primary 80px navigation rail (VoiceRx redesign).
- * First-party, composed from atoms (Button for the icon chip, Badge for tags).
- *
- * Each item is an icon "chip" over a label. The chip reuses the Button atom in
- * icon-only mode: tonal/neutral (grey) at rest, solid/primary (blue) when
- * active. The icon is a Tesseract library icon that renders LINEAR at rest and BOLD
- * when active, inheriting the chip's text color (slate-700 → white) via
- * currentColor. Active rows get a faint blue tint + a 3px rounded left bar.
- *
- * The row itself is the click target (role="button"); the inner Button chip is
- * decorative (aria-hidden, not tab-focusable) so there are no nested tab stops.
- *
- * Props:
- *   items    [{ id, label, icon, badge?, disabled? }]
- *              icon  — Tesseract library icon NAME (string, switches linear/bold) OR a
- *                      ReactNode escape hatch.
- *              badge — "trial" (gradient/warning Badge) | { text, variant?, color? }
- *                      | ReactNode. Reuses the Badge atom.
- *   activeId   id of the active item (controlled)
- *   onSelect   (id) => void
- *   width      rail width in px                                   default 80
- *   bottomFade show the bottom white fade overlay                 default true
- *   logo / footer  optional ReactNodes (off by default)
- *   className
- */
-
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/src/components/atoms/Button";
 import { Badge } from "@/src/components/atoms/Badge";
-import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { cn } from "@/src/hooks/utils";
 import styles from "./Sidebar.module.scss";
 
-function ItemIcon({ icon, active }) {
+/* ── Helpers ── */
+const isLeaf = (item) => !item.children || item.children.length === 0;
+const hasActive = (item, activeId) =>
+  isLeaf(item)
+    ? item.id === activeId
+    : item.children.some((c) => c.id === activeId);
+
+function ItemIcon({ icon, active, size = 20, variant: variantOverride }) {
   if (typeof icon === "string") {
-    // No color → inherits the chip's currentColor (slate-700 rest / white active).
-    // Selected state uses the bulk (two-tone) style; rest is linear.
-    return <TPLibraryIcon name={icon} variant={active ? "bulk" : "linear"} size={20} />;
+    return (
+      <TPIcon
+        name={icon}
+        variant={variantOverride || (active ? "bulk" : "linear")}
+        size={size}
+      />
+    );
   }
   return icon ?? null;
 }
@@ -46,77 +31,496 @@ function ItemIcon({ icon, active }) {
 function ItemBadge({ badge }) {
   if (badge == null) return null;
   let cfg = badge;
-  if (badge === "trial") cfg = { text: "Trial", variant: "gradient", color: "warning", sticky: "right" };
+  if (badge === "trial")
+    cfg = {
+      text: "Trial",
+      variant: "gradient",
+      color: "warning",
+      sticky: "right",
+    };
+  if (badge === "soon")
+    cfg = { text: "Soon", variant: "soft", color: "violet" };
+  if (typeof badge === "string" && !cfg?.text) return null;
   if (cfg && typeof cfg === "object" && cfg.text != null) {
     return (
-      <span className={styles.badgeSlot}>
-        <Badge variant={cfg.variant || "gradient"} color={cfg.color || "warning"} size="xs" sticky={cfg.sticky}>{cfg.text}</Badge>
-      </span>
+      <Badge
+        variant={cfg.variant || "soft"}
+        color={cfg.color || "primary"}
+        size="xs"
+        sticky={cfg.sticky}
+      >
+        {cfg.text}
+      </Badge>
     );
   }
-  return <span className={styles.badgeSlot}>{badge}</span>;
+  return badge;
 }
 
-export function Sidebar({ items = [], activeId, onSelect, width, bottomFade = true, logo, footer, className }) {
+/* ── Flyout (portal, hover) ── */
+function Flyout({ anchor, children, offset = 10 }) {
+  const triggerRef = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+  const [coords, setCoords] = React.useState(null);
+  const closeTimer = React.useRef(null);
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+
+  const cancel = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+  };
+  const scheduleClose = () => {
+    cancel();
+    closeTimer.current = setTimeout(() => setOpen(false), 160);
+  };
+  const openNow = () => {
+    cancel();
+    if (triggerRef.current) {
+      const r = triggerRef.current.getBoundingClientRect();
+      setCoords({ left: r.right + offset, top: r.top });
+    }
+    setOpen(true);
+  };
+
+  React.useLayoutEffect(() => {
+    if (!open) return;
+    const update = () => {
+      if (triggerRef.current) {
+        const r = triggerRef.current.getBoundingClientRect();
+        setCoords({ left: r.right + offset, top: r.top });
+      }
+    };
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open, offset]);
+
+  const bind = {
+    onMouseEnter: openNow,
+    onMouseLeave: scheduleClose,
+    onFocus: openNow,
+    onBlur: scheduleClose,
+  };
+
   return (
-    <nav
-      className={cn(styles.rail, className)}
-      style={width ? { width } : undefined}
-      aria-label="Primary"
-    >
-      {logo != null && <div className={styles.logo}>{logo}</div>}
-
-      <div className={styles.scroll}>
-        {items.map((it) => {
-          const active = it.id === activeId;
-          const select = () => !it.disabled && onSelect?.(it.id);
-          return (
+    <>
+      {anchor(bind, triggerRef)}
+      {mounted && open && coords
+        ? createPortal(
             <div
-              key={it.id}
-              role="button"
-              tabIndex={it.disabled ? -1 : 0}
-              className={styles.item}
-              data-active={active || undefined}
-              data-disabled={it.disabled || undefined}
-              aria-current={active ? "page" : undefined}
-              aria-disabled={it.disabled || undefined}
-              onClick={select}
-              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(); } }}
+              className={styles.flyoutHost}
+              style={{
+                left: coords.left,
+                top: Math.max(8, coords.top - 4),
+              }}
+              onMouseEnter={openNow}
+              onMouseLeave={scheduleClose}
             >
-              <span className={styles.body}>
-                {/* Icon chip reuses the Button atom (icon-only). Decorative — the
-                    row owns the click — so it's aria-hidden and not tab-focusable. */}
-                <Button
-                  className={styles.chip}
-                  aria-hidden
-                  tabIndex={-1}
-                  size="sm"
-                  variant={active ? "solid" : "tonal"}
-                  theme={active ? "primary" : "neutral"}
-                  icon={<ItemIcon icon={it.icon} active={active} />}
-                  style={{ width: "var(--tp-size-32)", height: "var(--tp-size-32)" }}
-                />
-                <span className={styles.label}>
-                  <span
-                    className={styles.labelText}
-                    data-multiline={typeof it.label === "string" && it.label.trim().includes(" ") ? "" : undefined}
-                  >
-                    {it.label}
-                  </span>
-                </span>
-              </span>
+              {children}
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
+  );
+}
 
-              {active && <span className={styles.bar} aria-hidden />}
-              <ItemBadge badge={it.badge} />
-            </div>
+/* ── Flyout content ── */
+function FlyoutContent({ item, activeId, onSelect }) {
+  return (
+    <div className={styles.flyout}>
+      <p className={styles.flyoutTitle}>{item.label}</p>
+      <ul className={styles.flyoutList}>
+        {item.children.map((child) => {
+          const active = child.id === activeId;
+          return (
+            <li key={child.id}>
+              <button
+                type="button"
+                className={cn(styles.flyoutItem, active && styles.flyoutItemActive)}
+                onClick={() => onSelect(child.id)}
+              >
+                <span className={styles.flyoutItemIcon}>
+                  <ItemIcon icon={child.icon} active={active} size={18} />
+                </span>
+                <span className={styles.flyoutItemLabel}>{child.label}</span>
+                {child.badge && (
+                  <span className={styles.flyoutItemBadge}>
+                    <ItemBadge badge={child.badge} />
+                  </span>
+                )}
+              </button>
+            </li>
           );
         })}
-        {bottomFade && <div className={styles.spacer} aria-hidden />}
-      </div>
+      </ul>
+    </div>
+  );
+}
 
-      {footer != null && <div className={styles.footer}>{footer}</div>}
-      {bottomFade && <div className={styles.fade} aria-hidden />}
-    </nav>
+/* ── Collapsed rail item ── */
+function CollapsedItem({ item, activeId, onSelect }) {
+  const active = hasActive(item, activeId);
+
+  const renderTrigger = (bind, ref) => (
+    <button
+      type="button"
+      ref={ref}
+      className={cn(styles.railItem, active && styles.railItemActive)}
+      onClick={() => onSelect(isLeaf(item) ? item.id : null, item)}
+      title={item.label}
+      {...bind}
+    >
+      {active && <span className={styles.railBar} />}
+      <span className={cn(styles.chip, active && styles.chipActive)}>
+        <ItemIcon icon={item.icon} active={active} size={20} />
+      </span>
+      {item.badge && (
+        <span className={styles.railBadge}>
+          <ItemBadge badge={item.badge} />
+        </span>
+      )}
+      <span className={cn(styles.railLabel, active && styles.railLabelActive)}>
+        {item.label}
+      </span>
+    </button>
+  );
+
+  if (isLeaf(item)) return renderTrigger({}, null);
+
+  return (
+    <Flyout anchor={(bind, ref) => renderTrigger(bind, ref)}>
+      <FlyoutContent item={item} activeId={activeId} onSelect={onSelect} />
+    </Flyout>
+  );
+}
+
+/* ── Expanded section row ── */
+function ExpandedSection({
+  item,
+  activeId,
+  expanded,
+  onToggle,
+  onSelect,
+}) {
+  const leaf = isLeaf(item);
+  const active = leaf ? item.id === activeId : false;
+  const containsActive = !leaf && hasActive(item, activeId);
+
+  if (leaf) {
+    return (
+      <button
+        type="button"
+        className={cn(
+          styles.section,
+          active && styles.sectionActiveLeaf,
+        )}
+        onClick={() => onSelect(item.id)}
+        aria-current={active ? "page" : undefined}
+      >
+        <span
+          className={cn(
+            styles.chip,
+            active && styles.chipActive,
+          )}
+        >
+          <ItemIcon icon={item.icon} active={active} size={22} />
+        </span>
+        <span
+          className={cn(
+            styles.sectionLabel,
+            active && styles.sectionLabelActive,
+          )}
+        >
+          {item.label}
+        </span>
+        {item.badge && (
+          <span className={styles.sectionBadge}>
+            <ItemBadge badge={item.badge} />
+          </span>
+        )}
+      </button>
+    );
+  }
+
+  return (
+    <div className={styles.group}>
+      <button
+        type="button"
+        className={cn(
+          styles.section,
+          expanded && styles.sectionOpen,
+          !expanded && containsActive && styles.sectionAncestor,
+        )}
+        onClick={onToggle}
+        aria-expanded={expanded}
+      >
+        <span
+          className={cn(
+            styles.chip,
+            !expanded && containsActive && styles.chipActive,
+            expanded && styles.chipOpen,
+          )}
+        >
+          <ItemIcon
+            icon={item.icon}
+            active={!expanded && containsActive}
+            size={22}
+          />
+        </span>
+        <span
+          className={cn(
+            styles.sectionLabel,
+            !expanded && containsActive && styles.sectionLabelActive,
+          )}
+        >
+          {item.label}
+        </span>
+        {item.badge && (
+          <span className={styles.sectionBadge}>
+            <ItemBadge badge={item.badge} />
+          </span>
+        )}
+        <span className={cn(styles.caret, expanded && styles.caretOpen)}>
+          <TPIcon name="chevron-down" variant="linear" size={14} />
+        </span>
+      </button>
+      {expanded && (
+        <div className={styles.children}>
+          <span className={styles.childrenLine} />
+          <ul className={styles.childrenList}>
+            {item.children.map((child) => {
+              const childActive = child.id === activeId;
+              return (
+                <li key={child.id}>
+                  <button
+                    type="button"
+                    className={cn(
+                      styles.childItem,
+                      childActive && styles.childItemActive,
+                    )}
+                    onClick={() => onSelect(child.id)}
+                    aria-current={childActive ? "page" : undefined}
+                  >
+                    <span className={styles.childItemIcon}>
+                      <ItemIcon
+                        icon={child.icon}
+                        active={childActive}
+                        size={18}
+                      />
+                    </span>
+                    <span className={styles.childItemLabel}>{child.label}</span>
+                    {child.badge && (
+                      <span className={styles.childItemBadge}>
+                        <ItemBadge badge={child.badge} />
+                      </span>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Main Sidebar ── */
+export function Sidebar({
+  items = [],
+  activeId,
+  onSelect,
+  collapsed: controlledCollapsed,
+  defaultCollapsed = false,
+  onCollapsedChange,
+  search = false,
+  searchPlaceholder = "Search…",
+  showCollapseToggle = true,
+  expandedWidth = 236,
+  collapsedWidth = 80,
+  bottomFade = true,
+  logo,
+  footer,
+  className,
+}) {
+  const isControlled = controlledCollapsed !== undefined;
+  const [internalCollapsed, setInternalCollapsed] =
+    React.useState(defaultCollapsed);
+  const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
+
+  const [query, setQuery] = React.useState("");
+  const [openIds, setOpenIds] = React.useState(() => {
+    const owner = items.find((it) => hasActive(it, activeId));
+    return new Set(owner && !isLeaf(owner) ? [owner.id] : []);
+  });
+
+  React.useEffect(() => {
+    const owner = items.find((it) => hasActive(it, activeId));
+    if (owner && !isLeaf(owner)) {
+      setOpenIds((prev) =>
+        prev.has(owner.id) ? prev : new Set(prev).add(owner.id),
+      );
+    }
+  }, [activeId, items]);
+
+  const toggleCollapsed = () => {
+    const next = !collapsed;
+    if (!isControlled) setInternalCollapsed(next);
+    onCollapsedChange?.(next);
+  };
+
+  const handleSectionToggle = (item) => {
+    if (isLeaf(item)) {
+      onSelect?.(item.id);
+      return;
+    }
+    if (item.children?.length === 1) {
+      onSelect?.(item.children[0].id);
+      return;
+    }
+    if (collapsed) {
+      if (!isControlled) setInternalCollapsed(false);
+      onCollapsedChange?.(false);
+      setOpenIds((p) => new Set(p).add(item.id));
+      return;
+    }
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      next.has(item.id) ? next.delete(item.id) : next.add(item.id);
+      return next;
+    });
+  };
+
+  const handleSelect = (id, item) => {
+    if (id) {
+      onSelect?.(id);
+    } else if (item) {
+      handleSectionToggle(item);
+    }
+  };
+
+  const filtered = React.useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return items;
+    const out = [];
+    for (const s of items) {
+      if (s.label.toLowerCase().includes(q)) {
+        out.push(s);
+        continue;
+      }
+      if (isLeaf(s)) continue;
+      const children = s.children.filter((c) =>
+        c.label.toLowerCase().includes(q),
+      );
+      if (children.length) out.push({ ...s, children });
+    }
+    return out;
+  }, [items, query]);
+
+  return (
+    <aside
+      className={cn(
+        styles.root,
+        collapsed && styles.collapsed,
+        className,
+      )}
+      style={{ width: collapsed ? collapsedWidth : expandedWidth }}
+      aria-label="Navigation"
+    >
+      {/* Header */}
+      {collapsed ? (
+        <>
+          {showCollapseToggle && (
+            <div className={cn(styles.head, styles.headCollapsed)}>
+              <button
+                className={styles.toggleBtn}
+                onClick={toggleCollapsed}
+                title="Expand sidebar"
+                aria-label="Expand sidebar"
+              >
+                <TPIcon
+                  name="sidebar-left"
+                  variant="linear"
+                  size={20}
+                  className={styles.flipIcon}
+                />
+              </button>
+            </div>
+          )}
+          <span className={styles.divider} />
+        </>
+      ) : (
+        <div className={styles.head}>
+          {logo != null && <div className={styles.logo}>{logo}</div>}
+          {search && (
+            <div className={styles.search}>
+              <TPIcon
+                name="search-normal-1"
+                variant="linear"
+                size={16}
+              />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+              />
+            </div>
+          )}
+          {showCollapseToggle && (
+            <button
+              className={cn(styles.toggleBtn, styles.toggleBtnSm)}
+              onClick={toggleCollapsed}
+              title="Collapse sidebar"
+              aria-label="Collapse sidebar"
+            >
+              <TPIcon name="sidebar-left" variant="linear" size={20} />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Items */}
+      <nav className={styles.list}>
+        {filtered.length === 0 ? (
+          <p className={styles.empty}>No matches.</p>
+        ) : collapsed ? (
+          filtered.map((item) => (
+            <CollapsedItem
+              key={item.id}
+              item={item}
+              activeId={activeId}
+              onSelect={handleSelect}
+            />
+          ))
+        ) : (
+          filtered.map((item) => (
+            <ExpandedSection
+              key={item.id}
+              item={item}
+              activeId={activeId}
+              expanded={
+                !isLeaf(item) && (openIds.has(item.id) || !!query)
+              }
+              onToggle={() => handleSectionToggle(item)}
+              onSelect={(id) => onSelect?.(id)}
+            />
+          ))
+        )}
+      </nav>
+
+      {/* Footer */}
+      {footer != null && (
+        <div className={styles.footer}>{footer}</div>
+      )}
+      {bottomFade && !collapsed && (
+        <div className={styles.fade} aria-hidden />
+      )}
+    </aside>
   );
 }
 

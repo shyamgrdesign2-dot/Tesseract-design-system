@@ -36,7 +36,7 @@ export { Dropdown } from "./Dropdown";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";
-export { SecondaryNav } from "./SecondaryNav";
+export { SecondarySidebar } from "./SecondarySidebar";
 export { Header } from "./Header";
 
 /* ── Composite / feature ── */

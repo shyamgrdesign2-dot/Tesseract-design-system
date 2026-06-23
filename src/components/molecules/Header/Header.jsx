@@ -24,6 +24,9 @@
  *       — single-select dropdown that reads like a CTA (e.g. clinic switcher);
  *         auto-searchable past 5 options. Composes the Dropdown molecule.
  *   { type: "tutorial", onClick }
+ *   { type: "info", label?, value, icon?, iconPosition?, radius? }
+ *       — non-clickable violet data tag (ward number, doctor name, status);
+ *         icon left (default) or right; radius defaults to CTA radius.
  *   { type: "divider" }       — vertical gradient Divider atom
  *   { type: "node", node }    — custom
  *     icon — Tesseract library icon NAME (string) or a ReactNode.
@@ -112,6 +115,21 @@ function Cta({ item }) {
   return btn;
 }
 
+function InfoTag({ item }) {
+  const glyph = item.icon ? icon(item.icon, 18) : null;
+  const radiusStyle = item.radius ? { borderRadius: item.radius } : undefined;
+  return (
+    <div className={styles.infoTag} style={radiusStyle} role="status">
+      {glyph && item.iconPosition !== "right" && <span className={styles.infoTagIcon}>{glyph}</span>}
+      <span className={styles.infoTagBody}>
+        {item.label && <span className={styles.infoTagLabel}>{item.label}</span>}
+        <span className={styles.infoTagValue}>{item.value}</span>
+      </span>
+      {glyph && item.iconPosition === "right" && <span className={styles.infoTagIcon}>{glyph}</span>}
+    </div>
+  );
+}
+
 function Action({ item }) {
   switch (item.type) {
     case "divider":
@@ -121,8 +139,6 @@ function Action({ item }) {
     case "avatar":
       return <Avatar src={item.src} name={item.name} ring={item.ring} size={42} onClick={item.onClick || (() => {})} />;
     case "select":
-      // A single-select dropdown that reads like a CTA (clinic switcher).
-      // Auto-searchable past 5 options.
       return (
         <Dropdown
           mode="single"
@@ -135,6 +151,8 @@ function Action({ item }) {
           placeholder={item.placeholder || "Select"}
         />
       );
+    case "info":
+      return <InfoTag item={item} />;
     case "node":
       return item.node ?? null;
     case "cta":

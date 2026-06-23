@@ -82,6 +82,51 @@
    avoids the baseline shift that pushed text a few px above center. */
 .ctaLabel { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; text-align: center; }
 
+/* ── Info tag — non-clickable data badge (ward, doctor, status) ── */
+.infoTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tp-space-2);
+  height: var(--tp-size-42);
+  padding: 0 var(--tp-space-3-5);
+  background: var(--tp-violet-50);
+  border-radius: var(--tp-btn-radius, var(--tp-radius-10));
+  corner-shape: round;
+  flex-shrink: 0;
+  user-select: text;
+}
+
+.infoTagIcon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--tp-violet-500);
+}
+
+.infoTagBody {
+  display: flex;
+  align-items: center;
+  gap: var(--tp-space-1-5);
+  min-width: 0;
+}
+
+.infoTagLabel {
+  font-size: var(--tp-text-body-xs);
+  font-weight: var(--tp-weight-medium);
+  color: var(--tp-violet-400);
+  white-space: nowrap;
+}
+
+.infoTagValue {
+  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tp-weight-semibold);
+  color: var(--tp-violet-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
 /* ── Tutorial play-circle ── */
 .tutorial {
   display: inline-flex;

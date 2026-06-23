@@ -1,0 +1,129 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  background-color: var(--tp-slate-100);
+  border-radius: var(--tp-btn-radius, var(--tp-radius-10));
+  corner-shape: round;
+  padding: var(--tp-space-1);
+  gap: var(--tp-space-0-5);
+
+  &[data-variant="pill"] {
+    border-radius: var(--tp-radius-full, 9999px);
+    corner-shape: round;
+  }
+
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* ── Root sizes — match Button atom heights ── */
+.root[data-size="sm"] { height: var(--tp-size-36); }
+.root[data-size="md"] { height: var(--tp-size-42); }
+.root[data-size="lg"] { height: 48px; }
+
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+.indicator {
+  position: absolute;
+  top: var(--tp-space-1);
+  bottom: var(--tp-space-1);
+  left: 0;
+  background-color: var(--tp-slate-0);
+  border-radius: var(--tp-radius-8);
+  corner-shape: round;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--tp-slate-900) 10%, transparent);
+  transition: transform 200ms ease, width 200ms ease;
+  pointer-events: none;
+  z-index: 0;
+
+  .root[data-variant="pill"] & {
+    border-radius: var(--tp-radius-full, 9999px);
+    corner-shape: round;
+  }
+
+  .root[data-theme="primary"] & {
+    background-color: var(--tp-blue-500);
+    box-shadow: 0 1px 4px color-mix(in srgb, var(--tp-blue-500) 24%, transparent);
+  }
+}
+
+.item {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tp-space-1-5);
+  border: none;
+  background: transparent;
+  border-radius: var(--tp-radius-8);
+  corner-shape: round;
+  cursor: pointer;
+  font-family: var(--tp-font-body);
+  font-weight: var(--tp-weight-medium);
+  color: var(--tp-slate-500);
+  white-space: nowrap;
+  outline: none;
+  transition: color 150ms ease;
+  flex: 1 1 0%;
+
+  .root[data-variant="pill"] & {
+    border-radius: var(--tp-radius-full, 9999px);
+    corner-shape: round;
+  }
+
+  &[data-state="active"] {
+    color: var(--tp-slate-900);
+    font-weight: var(--tp-weight-semibold);
+  }
+
+  .root[data-theme="primary"] &[data-state="active"] {
+    color: var(--tp-slate-0);
+  }
+
+  &:hover:not([data-state="active"]):not(:disabled) {
+    color: var(--tp-slate-700);
+  }
+
+  &:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--tp-blue-300);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+/* ── Item sizes — match Button atom padding + font ── */
+.root[data-size="sm"] .item {
+  padding: 0 var(--tp-space-3-5);
+  font-size: var(--tp-text-body-xs);
+}
+
+.root[data-size="md"] .item {
+  padding: 0 var(--tp-space-4-5);
+  font-size: var(--tp-text-body-sm);
+}
+
+.root[data-size="lg"] .item {
+  padding: 0 var(--tp-space-5-5);
+  font-size: var(--tp-text-body-base);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+}
