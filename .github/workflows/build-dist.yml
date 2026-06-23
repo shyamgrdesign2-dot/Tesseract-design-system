@@ -1,0 +1,46 @@
+name: Publish build branch
+
+# Builds the library on every push to main and commits the prebuilt dist/ to a
+# `build` branch, so private consumers (e.g. Pm-Doctor-Portal) can install with:
+#   npm i github:DHSPL-Tatvacare/tesseract-design-system#build
+# No registry, no public npm — access is gated purely by access to this repo.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-branch
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build library (ESM + CJS + CSS + types)
+        run: npm run build:lib
+
+      - name: Commit dist to build branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # build branch = current main tree + the prebuilt dist/ committed on top
+          git checkout -B build
+          git add -f dist
+          git commit -m "build: dist for ${GITHUB_SHA::7}" || { echo "no dist changes"; exit 0; }
+          git push -f origin build

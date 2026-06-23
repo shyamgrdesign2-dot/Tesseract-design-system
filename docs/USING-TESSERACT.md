@@ -78,11 +78,48 @@ Verify the tools are live: `claude mcp list` (or ask Claude to "list Tesseract c
 
 ## 3. The `tesseract-ui` package (so you can import components)
 
-Pick ONE install path. The package is **private** (org `DHSPL-Tatvacare`), React
-`>=18`, ships a prebuilt bundle (`dist/`) — so a consuming app never deals with
-the SCSS/aliases.
+The package is **private** (org `DHSPL-Tatvacare`), React `>=18`, ships a prebuilt
+bundle (`dist/`) — so a consuming app never deals with the SCSS/aliases. It is
+**never published to public npm.** Access is gated by who can access this repo.
 
-### Option A — GitHub Packages (recommended for real use)
+### ✅ Internal install — Git + `build` branch (the chosen method)
+
+A GitHub Action (`.github/workflows/build-dist.yml`) builds the library on every
+push to `main` and commits the prebuilt `dist/` to a **`build`** branch. Consumers
+install straight from the private repo — no registry, no publish, no public npm.
+Only someone with **access to this repo** can install it.
+
+In **Pm-Doctor-Portal** `package.json`:
+```jsonc
+{
+  "dependencies": {
+    "tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#build"
+  }
+}
+```
+then `npm install`. (Or one-shot: `npm i github:DHSPL-Tatvacare/tesseract-design-system#build`.)
+
+- The installing machine just needs **Git access to the repo** (SSH key or a
+  GitHub token) — exactly the gate you want. In CI, add a deploy key or a PAT with
+  repo read.
+- Because `dist/` is prebuilt on the `build` branch and there's **no `prepare`
+  script**, the install is lightweight — it does **not** build or pull our dev
+  tools (Storybook/Playwright) into Pm-Doctor-Portal.
+- To pin a version, install from a tag instead of `#build` once you start tagging
+  releases (e.g. `#v0.1.0`).
+- After this is set up, the `build` branch refreshes automatically on every merge
+  to `main`. To pull updates in Pm-Doctor-Portal: `npm update tesseract-ui` (or
+  re-`npm install`).
+
+> CRA note: react-scripts 5 (webpack 5) resolves the package `exports`, so
+> `import "tesseract-ui/styles.css"` works. If a tool ever can't resolve the
+> subpath, fall back to `import "tesseract-ui/dist/tesseract-ui.css"`.
+
+---
+
+### Other options (not needed for the chosen setup)
+
+#### Option A — GitHub Packages (private registry)
 
 One-time in the **DS repo** (publishing is your call to run — it's outward-facing):
 1. Scope the name for GitHub Packages — set in `package.json`:
