@@ -20,7 +20,7 @@ const RAMPS = [
 
 // ── Resolve the live computed colour of a token → uppercase #RRGGBB ──────────
 // We read the rendered swatch's computed background, so the hex reflects any
-// runtime ramp override (e.g. a TPThemeProvider dark theme), not a hardcoded
+// runtime ramp override (e.g. a TesseractThemeProvider dark theme), not a hardcoded
 // guess. getComputedStyle returns rgb()/rgba(); we convert to canonical hex.
 function rgbToHex(rgb) {
   const m = rgb && rgb.match(/(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)(?:\s*,\s*(\d*\.?\d+))?/);

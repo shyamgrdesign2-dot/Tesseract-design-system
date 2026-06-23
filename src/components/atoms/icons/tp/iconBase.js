@@ -1,5 +1,5 @@
 // Where icon SVGs are fetched from. Defaults to the Tesseract CDN; override
-// at app start (or via TPThemeProvider `iconBaseUrl`) to point elsewhere — e.g.
+// at app start (or via TesseractThemeProvider `iconBaseUrl`) to point elsewhere — e.g.
 // a self-hosted /tp-icons copy.
 //
 //   import { setIconBaseUrl } from "tesseract-ui";

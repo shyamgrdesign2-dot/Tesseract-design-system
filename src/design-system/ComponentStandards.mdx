@@ -46,7 +46,7 @@ identical in API, theming, and behaviour to everything else.
 ## 3a. Theming & tracking
 
 - **Theme** strictly through `var(--tesseract-*)`; a product re-themes via
- `TPThemeProvider`, seed a full theme with `createTheme({ brand })`. Don't read
+ `TesseractThemeProvider`, seed a full theme with `createTheme({ brand })`. Don't read
  raw colours in JS.
 - **Tracking** is opt-in: atoms take a `track` prop, containers take an
  `analyticsId`, and both emit through `useAnalytics()` to the nearest

@@ -19,7 +19,7 @@ export * from "./components/molecules";
 
 // Runtime theming — foundation + component tokens, breakpoints, light/dark.
 // `createTheme({ brand })` derives a full theme from a seed.
-export { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme, createTheme, ramp } from "./theme";
+export { TesseractThemeProvider, useTheme, useBreakpoint, useComponentTokens, defaultTheme, createTheme, ramp } from "./theme";
 
 // Action tracking — opt-in; no-op without a provider.
 export { TPAnalyticsProvider, useAnalytics, resolveTrack } from "./analytics";

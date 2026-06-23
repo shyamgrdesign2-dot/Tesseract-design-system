@@ -49,7 +49,7 @@ A few components load SVGs at runtime rather than bundling them:
 
  ```js
  import { setIconBaseUrl } from "tesseract-ui";
- setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TPThemeProvider iconBaseUrl
+ setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TesseractThemeProvider iconBaseUrl
  ```
 
 - **`Logo`** still fetches `/brand/*.svg`, copy `public/brand/` into your app's
@@ -74,15 +74,15 @@ Load them in your app (Google Fonts or self-host), e.g.:
 
 ## Theming
 
-`TPThemeProvider` is the single theming surface, it carries the whole theme
+`TesseractThemeProvider` is the single theming surface, it carries the whole theme
 (foundation tokens, component tokens, breakpoints, colour scheme), provides it via
 context, and scopes the matching CSS variables so components re-theme with no prop
 changes (they read `var(--tesseract-*)`):
 
 ```jsx
-import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tesseract-ui";
+import { TesseractThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tesseract-ui";
 
-<TPThemeProvider
+<TesseractThemeProvider
  colorScheme="dark" // light | dark | system
  theme={{
  foundation: { colors: { blue: { 500: "#0EA5E9" } } },
@@ -91,7 +91,7 @@ import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "te
  }}
 >
  <App />
-</TPThemeProvider>
+</TesseractThemeProvider>
 
 const { theme, colorScheme, setColorScheme } = useTheme();
 const bp = useBreakpoint(); // "mobile" | "tablet" | "desktop"

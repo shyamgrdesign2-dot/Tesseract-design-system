@@ -3,11 +3,11 @@
 // Inspired by Razorpay Blade's createTheme: instead of hand-writing every token,
 // you pass a brand colour (and optionally a few accents / radius / fonts) and this
 // generates the full 50→900 colour ramps + component knobs. The result is a normal
-// deep-partial theme — feed it straight to <TPThemeProvider theme={…}>.
+// deep-partial theme — feed it straight to <TesseractThemeProvider theme={…}>.
 //
 //   import { createTheme } from "@/src/theme/createTheme";
 //   const theme = createTheme({ brand: "#0EA5E9", radius: 14 });
-//   <TPThemeProvider theme={theme}><App/></TPThemeProvider>
+//   <TesseractThemeProvider theme={theme}><App/></TesseractThemeProvider>
 //
 // Seed fields (all optional):
 //   brand     primary colour — single hex (ramp auto-generated) OR a full ramp

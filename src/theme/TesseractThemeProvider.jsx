@@ -1,18 +1,18 @@
 "use client";
 
 /**
- * TPThemeProvider — the single theming surface products consume. It carries the
+ * TesseractThemeProvider — the single theming surface products consume. It carries the
  * whole theme: foundation tokens (colours, type, spacing, radius, shadow),
  * component tokens, breakpoints, and the colour scheme. It provides them via
  * context (read with useTheme / useBreakpoint / useComponentTokens) AND scopes
  * the relevant CSS variables onto a wrapper, so existing components — which read
  * `var(--tesseract-*)` — re-theme with no prop changes.
  *
- *   <TPThemeProvider theme={{ foundation: { colors: { blue: { 500: "#0EA5E9" } } },
+ *   <TesseractThemeProvider theme={{ foundation: { colors: { blue: { 500: "#0EA5E9" } } },
  *                             components: { button: { radius: "14px" } } }}
  *                    colorScheme="dark">
  *     <App />
- *   </TPThemeProvider>
+ *   </TesseractThemeProvider>
  *
  * Props:
  *   theme        deep-partial of the default theme (foundation / components /
@@ -112,7 +112,7 @@ function useActiveBreakpoint(breakpoints) {
   return bp;
 }
 
-export function TPThemeProvider({
+export function TesseractThemeProvider({
   theme: themeProp,
   colorScheme = "light",
   tokens,
@@ -148,5 +148,5 @@ export function TPThemeProvider({
   );
 }
 
-TPThemeProvider.displayName = "TPThemeProvider";
-export default TPThemeProvider;
+TesseractThemeProvider.displayName = "TesseractThemeProvider";
+export default TesseractThemeProvider;

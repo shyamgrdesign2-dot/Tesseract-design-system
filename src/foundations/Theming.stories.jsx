@@ -1,5 +1,5 @@
 import React from "react";
-import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens, createTheme, ramp } from "@/src/theme";
+import { TesseractThemeProvider, useTheme, useBreakpoint, useComponentTokens, createTheme, ramp } from "@/src/theme";
 import { Button } from "@/src/components/atoms/Button";
 import { Badge } from "@/src/components/atoms/Badge";
 import { InputBox } from "@/src/components/atoms/Input/InputBox";
@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          "TPThemeProvider is the single theming surface products consume. " +
+          "TesseractThemeProvider is the single theming surface products consume. " +
           "It carries the full theme (foundation tokens, component tokens, breakpoints, colour scheme), " +
           "provides it via context, and scopes the matching CSS variables onto a wrapper so every " +
           "component re-themes with no prop changes.",
@@ -81,42 +81,42 @@ export const BasicSetup = {
     <div style={PAGE}>
       <h2 style={H2}>Basic Setup</h2>
       <p style={SUB}>
-        Wrap your app (or any subtree) with <code>&lt;TPThemeProvider&gt;</code>.
+        Wrap your app (or any subtree) with <code>&lt;TesseractThemeProvider&gt;</code>.
         It scopes CSS variables onto the wrapper and provides the theme via React context
         so every component re-themes automatically.
       </p>
-      <pre style={CODE_BLOCK}>{`import { TPThemeProvider } from "tesseract-ui";
+      <pre style={CODE_BLOCK}>{`import { TesseractThemeProvider } from "tesseract-ui";
 
 function App() {
   return (
-    <TPThemeProvider colorScheme="light">
+    <TesseractThemeProvider colorScheme="light">
       <YourApp />
-    </TPThemeProvider>
+    </TesseractThemeProvider>
   );
 }`}</pre>
       <div style={{ display: "grid", gap: 20, gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))" }}>
         <div>
           <div style={{ ...LABEL, marginBottom: 8 }}>Light (default)</div>
-          <TPThemeProvider colorScheme="light" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+          <TesseractThemeProvider colorScheme="light" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
             <SampleUI subtitle="Default light theme, no overrides." />
-          </TPThemeProvider>
+          </TesseractThemeProvider>
         </div>
         <div>
           <div style={{ ...LABEL, marginBottom: 8 }}>Dark</div>
-          <TPThemeProvider colorScheme="dark" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+          <TesseractThemeProvider colorScheme="dark" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
             <SampleUI subtitle="colorScheme='dark' reverses the neutral ramp." />
-          </TPThemeProvider>
+          </TesseractThemeProvider>
         </div>
       </div>
       <pre style={CODE_BLOCK}>{`// Toggle between light and dark
-<TPThemeProvider colorScheme="dark">
+<TesseractThemeProvider colorScheme="dark">
   <YourApp />
-</TPThemeProvider>
+</TesseractThemeProvider>
 
 // Follow the OS preference
-<TPThemeProvider colorScheme="system">
+<TesseractThemeProvider colorScheme="system">
   <YourApp />
-</TPThemeProvider>`}</pre>
+</TesseractThemeProvider>`}</pre>
     </div>
   ),
 };
@@ -172,7 +172,7 @@ export const CustomFoundationTokens = {
           <code> theme.foundation</code>. Partial overrides are deep-merged over the defaults
           so you only specify what changes.
         </p>
-        <pre style={CODE_BLOCK}>{`<TPThemeProvider
+        <pre style={CODE_BLOCK}>{`<TesseractThemeProvider
   theme={{
     foundation: {
       colors: {
@@ -187,9 +187,9 @@ export const CustomFoundationTokens = {
     },
   }}
 >`}</pre>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+        <TesseractThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle="Foundation tokens overridden via controls." />
-        </TPThemeProvider>
+        </TesseractThemeProvider>
       </div>
     );
   },
@@ -224,7 +224,7 @@ export const CustomComponentTokens = {
           <code> theme.components</code>. These map to CSS variables that atoms read
           directly. Drag the sliders to see components update live.
         </p>
-        <pre style={CODE_BLOCK}>{`<TPThemeProvider
+        <pre style={CODE_BLOCK}>{`<TesseractThemeProvider
   theme={{
     components: {
       button:   { radius: "${buttonRadius}px" },
@@ -247,9 +247,9 @@ export const CustomComponentTokens = {
             </div>
           ))}
         </div>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+        <TesseractThemeProvider colorScheme={colorScheme} theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle="Component tokens overridden via controls." />
-        </TPThemeProvider>
+        </TesseractThemeProvider>
       </div>
     );
   },
@@ -349,9 +349,9 @@ function MyComponent() {
 
   return <div style={{ borderRadius: btn.radius }}>...</div>;
 }`}</pre>
-      <TPThemeProvider style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
+      <TesseractThemeProvider style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
         <HookDemo />
-      </TPThemeProvider>
+      </TesseractThemeProvider>
     </div>
   ),
 };
@@ -420,7 +420,7 @@ export const ResponsiveTokens = {
           as you resize the window. Use <code>useBreakpoint()</code> in your components to
           adapt layout, density, or visibility.
         </p>
-        <pre style={CODE_BLOCK}>{`<TPThemeProvider
+        <pre style={CODE_BLOCK}>{`<TesseractThemeProvider
   theme={{
     breakpoints: {
       mobile:  0,
@@ -430,7 +430,7 @@ export const ResponsiveTokens = {
   }}
 >
   ...
-</TPThemeProvider>
+</TesseractThemeProvider>
 
 function Layout() {
   const bp = useBreakpoint();
@@ -438,9 +438,9 @@ function Layout() {
     ? <MobileNav />
     : <DesktopNav />;
 }`}</pre>
-        <TPThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
+        <TesseractThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
           <ResponsiveDemo />
-        </TPThemeProvider>
+        </TesseractThemeProvider>
       </div>
     );
   },
@@ -516,10 +516,10 @@ export const LiveExample = {
           Full playground: all foundation + component tokens combined. Use the Controls panel
           to tweak every token and see the components update live.
         </p>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+        <TesseractThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <LiveReadout />
           <SampleUI subtitle="Every token is driven by the Controls panel." />
-        </TPThemeProvider>
+        </TesseractThemeProvider>
       </div>
     );
   },
@@ -543,7 +543,7 @@ function RampStrip({ label, ramp: r }) {
 export const CreateThemeFn = {
   name: "createTheme() function",
   parameters: {
-    docs: { description: { story: "`createTheme({ brand, accent, radius })` derives the full 50→900 ramps + component radii from a tiny seed (Blade-style). The output is a normal deep-partial theme — pass it straight to `<TPThemeProvider theme={…}>`. Change the seed colours below and the entire UI + ramps regenerate." } },
+    docs: { description: { story: "`createTheme({ brand, accent, radius })` derives the full 50→900 ramps + component radii from a tiny seed (Blade-style). The output is a normal deep-partial theme — pass it straight to `<TesseractThemeProvider theme={…}>`. Change the seed colours below and the entire UI + ramps regenerate." } },
   },
   argTypes: {
     brand: { control: "color", table: { category: "Seed" } },
@@ -568,14 +568,14 @@ const theme = createTheme({
   radius: ${radius},
 });
 
-<TPThemeProvider theme={theme}>…</TPThemeProvider>`}</pre>
+<TesseractThemeProvider theme={theme}>…</TesseractThemeProvider>`}</pre>
         <div style={{ display: "grid", gap: 10, margin: "8px 0 20px" }}>
           <RampStrip label="brand → primary" ramp={ramp(brand)} />
           <RampStrip label="accent → violet" ramp={ramp(accent)} />
         </div>
-        <TPThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
+        <TesseractThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle={`Generated from brand ${brand}, radius ${radius}px.`} />
-        </TPThemeProvider>
+        </TesseractThemeProvider>
       </div>
     );
   },

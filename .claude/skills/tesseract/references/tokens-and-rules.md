@@ -8,8 +8,8 @@ Final compliance pass. A page is only "in our world" if it obeys all of this.
 
 1. **Tokens only — never raw values.** Every colour, spacing, radius, and type value comes from a `--tesseract-*` CSS variable. No hex, no `rgb()`, no magic px for colour. `color: var(--tesseract-fg-primary)`, not `color: #1e1e2d`.
 2. **No odd numbers in any dimension.** Width, height, padding, margin, gap, radius, font-size, line-height — all even. Use 4 / 8 / 10 / 12 / 14 / 16 / 18 / 20 / 24 / 28 / 32… Only exception: 1px hairline borders.
-3. **Never edit `src/tesseract-tokens.css`.** It is the source of truth. To re-theme, use `TPThemeProvider` overrides — never mutate the token file.
-4. **Keep the `--tesseract-` token prefix and the `TP*` component-name style** (e.g. `TPIcon`, `TPThemeProvider`). Tokens are `--tesseract-*`; component identifiers keep the `TP` style. The package is `tesseract-ui`. Do not introduce a third prefix.
+3. **Never edit `src/tesseract-tokens.css`.** It is the source of truth. To re-theme, use `TesseractThemeProvider` overrides — never mutate the token file.
+4. **Naming.** Tokens are `--tesseract-*`; package is `tesseract-ui`; theme provider is `TesseractThemeProvider`. The **icon components keep their `TP*` names** — `TPIcon`, `TPMedicalIcon`, `TPLibraryIcon` (they wrap the shared icon library). Don't introduce a third prefix or rename the icon components.
 5. **Barrel imports only.** `import { X } from "@/src/components/atoms"` / `"@/src/components/molecules"`. No deep relative paths into component internals from product code.
 6. **CSS Modules + `data-*` styling.** Component styling is `Name.module.scss`; variant/state is expressed via `data-*` attributes and targeted in SCSS (`[data-variant="solid"]`), not ad-hoc class soup.
 7. **Tesseract components only.** No Ant Design, MUI, Tailwind, or raw Radix in generated product pages. Compose missing primitives from existing atoms.
@@ -38,7 +38,7 @@ Final compliance pass. A page is only "in our world" if it obeys all of this.
 
 ## Theming
 
-Wrap the app once in `TPThemeProvider` to override ramps, component tokens (button/input/dropdown/badge radius), or set `colorScheme="light|dark|system"`. Hooks: `useTheme()`, `useBreakpoint()` ("mobile"|"tablet"|"desktop"), `useComponentTokens("button")`. Never theme by editing tokens or hardcoding values in components.
+Wrap the app once in `TesseractThemeProvider` to override ramps, component tokens (button/input/dropdown/badge radius), or set `colorScheme="light|dark|system"`. Hooks: `useTheme()`, `useBreakpoint()` ("mobile"|"tablet"|"desktop"), `useComponentTokens("button")`. Never theme by editing tokens or hardcoding values in components.
 
 ---
 

@@ -50,13 +50,13 @@ import "tesseract-ui/dist/tokens.css";                            // load tokens
 ```
 Then wrap the app root once in the theme provider so tokens + component overrides apply:
 ```jsx
-import { TPThemeProvider } from "tesseract-ui";
-<TPThemeProvider colorScheme="light">{/* app */}</TPThemeProvider>
+import { TesseractThemeProvider } from "tesseract-ui";
+<TesseractThemeProvider colorScheme="light">{/* app */}</TesseractThemeProvider>
 ```
 If you cannot tell which case you're in, check the project's `package.json` (is `tesseract-ui` a dependency?) and whether `src/components/atoms` exists locally. When unsure, ask the user which install they have.
 
 ### Either case
-- Wrap the app once in `TPThemeProvider` (theme overrides, `colorScheme`, breakpoints). Re-theme via provider overrides — **never** by editing tokens.
+- Wrap the app once in `TesseractThemeProvider` (theme overrides, `colorScheme`, breakpoints). Re-theme via provider overrides — **never** by editing tokens.
 - Load the token stylesheet exactly once at the root.
 - Recipes in this skill are written for **Case A** import paths; swap to the package name for Case B.
 
@@ -66,8 +66,8 @@ If you cannot tell which case you're in, check the project's `package.json` (is 
 
 1. Tokens only — no raw hex/rgb/magic colour values.
 2. No odd numbers in any dimension (1px hairline borders excepted).
-3. Never edit `tesseract-tokens.css`; theme via `TPThemeProvider`.
-4. Keep the `--tesseract-` token prefix and the `TP*` component-name style (e.g. `TPIcon`, `TPThemeProvider`); package is `tesseract-ui`.
+3. Never edit `tesseract-tokens.css`; theme via `TesseractThemeProvider`.
+4. Naming: tokens `--tesseract-*`, package `tesseract-ui`, theme provider `TesseractThemeProvider`. Icon components keep `TP*` names (`TPIcon`, `TPMedicalIcon`, `TPLibraryIcon`).
 5. Barrel/package imports only.
 6. CSS Modules + `data-*` styling.
 7. Tesseract components only — no Ant Design / MUI / Tailwind / raw Radix in product pages.

@@ -107,7 +107,7 @@
   /* ── Semantic colour roles ──────────────────────────────────────────────
      Role-based aliases onto the ramps above. Reach for these in product code
      so intent stays consistent; because they reference the ramp via var(),
-     they follow any runtime ramp override (e.g. TPThemeProvider dark mode). */
+     they follow any runtime ramp override (e.g. TesseractThemeProvider dark mode). */
 
   /* Foreground / text */
   --tesseract-fg-heading:     var(--tesseract-slate-900);  /* page & section titles            */
