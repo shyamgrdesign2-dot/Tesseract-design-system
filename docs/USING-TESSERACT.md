@@ -115,45 +115,12 @@ then `npm install`. (Or one-shot: `npm i github:DHSPL-Tatvacare/tesseract-design
 > `import "tesseract-ui/styles.css"` works. If a tool ever can't resolve the
 > subpath, fall back to `import "tesseract-ui/dist/tesseract-ui.css"`.
 
----
-
-### Other options (not needed for the chosen setup)
-
-#### Option A — GitHub Packages (private registry)
-
-One-time in the **DS repo** (publishing is your call to run — it's outward-facing):
-1. Scope the name for GitHub Packages — set in `package.json`:
-   `"name": "@dhspl-tatvacare/tesseract-ui"`, and add
-   `"publishConfig": { "registry": "https://npm.pkg.github.com" }`.
-2. Build + publish: `npm run build:lib && npm publish`
-   (or via a GitHub Actions workflow on tag).
-
-In the **consuming project**:
-```bash
-# .npmrc in the project root:
-echo "@dhspl-tatvacare:registry=https://npm.pkg.github.com" >> .npmrc
-echo "//npm.pkg.github.com/:_authToken=\${GITHUB_TOKEN}" >> .npmrc
-# then:
-npm install @dhspl-tatvacare/tesseract-ui react react-dom
-```
-(`GITHUB_TOKEN` = a PAT with `read:packages`; in CI use the provided token.)
-
-### Option B — Tarball (fastest, no registry — great to trial)
-
-```bash
-# in the DS repo:
-npm run build:lib && npm pack          # → tesseract-ui-0.1.0.tgz
-# in the consuming project:
-npm install /Users/shyamsundar/Desktop/TP_UI_Storybook/tesseract-ui-0.1.0.tgz react react-dom
-```
-
-### Option C — Install straight from GitHub
-
-Needs a one-time tweak in the DS repo (because `dist/` isn't committed): add
-`"prepare": "npm run build:lib"` to `scripts` in `package.json`. Then:
-```bash
-npm install git+https://github.com/DHSPL-Tatvacare/tesseract-design-system.git react react-dom
-```
+We deliberately do **not** use public npm (it would make the package public) or
+GitHub Packages (a private registry, but it needs per-consumer tokens and a
+publish step). The `build`-branch git install above keeps everything gated by
+this private repo's access — that's the whole point. For a quick local trial
+without touching a consumer repo, `npm run build:lib && npm pack` produces a
+`.tgz` you can `npm install <path>`.
 
 ---
 
