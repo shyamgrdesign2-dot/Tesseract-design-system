@@ -281,8 +281,9 @@ function parseTokens() {
 function parseIcons() {
   const dir = join(root, "src", "components", "atoms", "icons", "tp");
   const read = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : "");
-  const variants = stringArray((read("registry.js").match(/TP_ICON_VARIANTS\s*=\s*(\[[\s\S]*?\])/) || [])[1])
-    || ["linear", "bulk", "bold"];
+  // full CDN style set lives in icon-resolve.js (ICON_STYLES); registry.js is gone (CDN-only).
+  const variants = stringArray((read("icon-resolve.js").match(/ICON_STYLES\s*=\s*(\[[\s\S]*?\])/) || [])[1])
+    || ["linear", "bold", "bulk", "broken", "twotone", "outline"];
   const curatedVariants = stringArray((read("constants.js").match(/TP_ICON_VARIANTS\s*=\s*(\[[\s\S]*?\])/) || [])[1])
     || ["linear", "bulk", "bold"];
   // TP_LIBRARY_ICONS is a huge flat array — balanced bracket via indexOf (no nesting).

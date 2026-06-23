@@ -24,12 +24,12 @@
   ],
   "icons": {
     "variants": [
-      "bold",
-      "broken",
-      "bulk",
       "linear",
-      "outline",
-      "twotone"
+      "bold",
+      "bulk",
+      "broken",
+      "twotone",
+      "outline"
     ],
     "curatedVariants": [
       "linear",
