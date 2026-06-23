@@ -24,6 +24,7 @@ The server answers **only** from the manifest. It cannot return a prop or value 
 | `search_components` | Find components by keyword across name + description. |
 | `validate_usage` | **Guardrail.** Give it a component + the props you intend to set; it flags any prop that doesn't exist and any value outside the allowed set. Returns "did you mean" suggestions. |
 | `get_tokens` | Design tokens by family (`blue`, `space`, `radius`, `fg`, `bg`, …). Use instead of raw values. |
+| `get_icons` | **Icon guardrail.** Search/validate real icon names (4,724 in the library) and list the valid `variant`s, so you never invent an icon name. |
 | `get_rules` | The non-negotiable rules every page must follow. |
 
 ## Run
@@ -81,11 +82,17 @@ When generating a page with Tesseract components:
 3. Write the usage.
 4. `validate_usage` → confirm zero unknown props / out-of-range values before committing.
 
+## Coverage
+
+- **Components:** 31 (16 atoms, 15 molecules) — every public prop extracted.
+- **Allowed-value enums:** 29/31 components; the other two (`ClinicalTable`, `Filter`) have only object/function props with nothing to enumerate. Enums are resolved from storybook `argTypes` (including `options: CONST` references), with a small verified `ENUM_OVERRIDES` map for source-derived cases (e.g. `MedicalIcon.variant`).
+- **Tokens:** 216 CSS variables across all families.
+- **Icons:** 4,724 library names + 6 variants, searchable/validatable via `get_icons`.
+
 ## Gradual refinement (roadmap)
 
-- Fill value-enums for the few props whose options live in shared constants (currently 27/31 components have extracted enums; the rest expose prop names only).
-- Add `get_icons` (valid icon names) once the icon registry is wired in.
-- Add `get_page_recipe` to serve the skill's archetypes/recipes.
-- Optionally emit per-prop TypeScript types.
+- Add `get_page_recipe` to serve the `/tesseract` skill's archetypes/recipes.
+- Use `icon-availability.json` to validate name×variant pairs (which variants actually exist per icon).
+- Optionally emit per-prop TypeScript types and required/optional flags.
 
-The server stays stable; refinement happens in `build-manifest.mjs`.
+The server stays stable; refinement happens in `build-manifest.mjs` (and the curated `ENUM_OVERRIDES`).

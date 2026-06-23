@@ -30,7 +30,36 @@ if (!existsSync(join(root, "src", "components"))) {
 
 const LAYERS = ["atoms", "molecules"];
 
+// Curated enum supplements for props whose allowed values can't be auto-extracted
+// from stories (e.g. derived from a source map). Each value is verified against
+// component source. Keep this small; prefer auto-extraction.
+const ENUM_OVERRIDES = {
+  // MedicalIcon.jsx: const VARIANT = { line, linear, bulk, solid, bold }
+  MedicalIcon: { variant: ["line", "linear", "bulk", "solid", "bold"] },
+};
+
 /* ─────────────────────────── parsing helpers ─────────────────────────── */
+
+/** Remove // line and /* block comments (string-aware) so unbalanced parens/
+ *  braces inside comments don't corrupt brace/paren depth counting. */
+function stripComments(src) {
+  let out = "", i = 0, inStr = null, prev = "";
+  const n = src.length;
+  while (i < n) {
+    const ch = src[i], nx = src[i + 1];
+    if (inStr) {
+      out += ch;
+      if (ch === inStr && prev !== "\\") inStr = null;
+      prev = ch === "\\" && prev === "\\" ? "" : ch;
+      i++; continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") { inStr = ch; out += ch; prev = ch; i++; continue; }
+    if (ch === "/" && nx === "/") { i += 2; while (i < n && src[i] !== "\n") i++; continue; }
+    if (ch === "/" && nx === "*") { i += 2; while (i < n && !(src[i] === "*" && src[i + 1] === "/")) i++; i += 2; out += " "; continue; }
+    out += ch; prev = ch; i++;
+  }
+  return out;
+}
 
 /** Return the `{...}` substring (balanced) starting at/after `from`. */
 function balancedBraces(src, from) {
@@ -157,8 +186,15 @@ function destructureProps(fileSrc) {
 }
 
 /** Parse a stories file: argTypes (props+enums), args (defaults), story names. */
-function parseStories(storiesSrc) {
+function parseStories(storiesRaw) {
+  const storiesSrc = stripComments(storiesRaw);
   const result = { argTypes: {}, args: {}, stories: [] };
+  // top-level `const NAME = ['a','b']` arrays, so `options: NAME` can be resolved.
+  const constArrays = {};
+  for (const m of storiesSrc.matchAll(/const\s+([A-Za-z_$][\w$]*)\s*=\s*(\[[\s\S]*?\])/g)) {
+    const vals = stringArray(m[2]);
+    if (vals) constArrays[m[1]] = vals;
+  }
   // argTypes
   const atIdx = storiesSrc.search(/argTypes\s*:/);
   if (atIdx !== -1) {
@@ -166,7 +202,12 @@ function parseStories(storiesSrc) {
     if (obj) {
       for (const { key, value } of topLevelEntries(obj)) {
         const spec = {};
-        const optsArr = stringArray((value.match(/options\s*:\s*(\[[\s\S]*?\])/) || [])[1]);
+        // options as an inline array, or as a reference to a top-level const array
+        let optsArr = stringArray((value.match(/options\s*:\s*(\[[\s\S]*?\])/) || [])[1]);
+        if (!optsArr) {
+          const ref = (value.match(/options\s*:\s*([A-Za-z_$][\w$]*)/) || [])[1];
+          if (ref && constArrays[ref]) optsArr = constArrays[ref];
+        }
         if (optsArr) spec.options = optsArr;
         const ctrl = (value.match(/control\s*:\s*['"]([^'"]+)['"]/) || value.match(/control\s*:\s*\{[^}]*type\s*:\s*['"]([^'"]+)['"]/) || [])[1];
         if (ctrl) spec.control = ctrl;
@@ -235,6 +276,26 @@ function parseTokens() {
   return { families, count };
 }
 
+/* ─────────────────────────── icons ─────────────────────────── */
+
+function parseIcons() {
+  const dir = join(root, "src", "components", "atoms", "icons", "tp");
+  const read = (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : "");
+  const variants = stringArray((read("registry.js").match(/TP_ICON_VARIANTS\s*=\s*(\[[\s\S]*?\])/) || [])[1])
+    || ["linear", "bulk", "bold"];
+  const curatedVariants = stringArray((read("constants.js").match(/TP_ICON_VARIANTS\s*=\s*(\[[\s\S]*?\])/) || [])[1])
+    || ["linear", "bulk", "bold"];
+  // TP_LIBRARY_ICONS is a huge flat array — balanced bracket via indexOf (no nesting).
+  const lib = read("library-names.js");
+  let names = [];
+  const i = lib.indexOf("TP_LIBRARY_ICONS");
+  if (i !== -1) {
+    const open = lib.indexOf("[", i), close = lib.indexOf("]", open);
+    if (open !== -1 && close !== -1) names = [...lib.slice(open, close).matchAll(/['"]([^'"]+)['"]/g)].map((x) => x[1]);
+  }
+  return { variants, curatedVariants, names };
+}
+
 /* ─────────────────────────── component scan ─────────────────────────── */
 
 function componentNameForDir(dir, barrel) {
@@ -262,7 +323,7 @@ function scanLayer(layer) {
     let description = null;
     for (const f of mainFiles) {
       const src = readFileSync(join(dirPath, f), "utf8");
-      const fns = destructureProps(src);
+      const fns = destructureProps(stripComments(src));
       Object.assign(propsByFn, fns);
       if (!description) {
         const decl = src.search(/export\s+(?:const|function|default)/);
@@ -328,7 +389,14 @@ for (const layer of LAYERS) {
   const { comps } = scanLayer(layer);
   components.push(...comps);
 }
+// apply curated enum supplements
+for (const c of components) {
+  const ov = ENUM_OVERRIDES[c.name];
+  if (!ov) continue;
+  for (const p of c.props) if (ov[p.name] && !p.allowedValues) p.allowedValues = ov[p.name];
+}
 const tokens = parseTokens();
+const icons = parseIcons();
 
 const manifest = {
   $schema: "tesseract-component-manifest/v1",
@@ -348,6 +416,13 @@ const manifest = {
     "No odd numbers in dimensions. Never edit tp-tokens.css.",
     "Never substitute Ant Design / MUI / Tailwind / raw Radix.",
   ],
+  icons: {
+    variants: icons.variants,
+    curatedVariants: icons.curatedVariants,
+    libraryCount: icons.names.length,
+    namesFile: "icon-names.json",
+    note: "Search/validate icon names with the get_icons MCP tool. TPLibraryIcon accepts any of the libraryCount names; TPIcon uses a curated subset; `variant` must be one of `variants`.",
+  },
   components,
   tokenFamilies: Object.fromEntries(
     Object.entries(tokens.families).map(([fam, list]) => [fam, list.map((t) => t.name)])
@@ -360,7 +435,17 @@ mkdirSync(outDir, { recursive: true });
 const outPath = join(outDir, "component-manifest.json");
 writeFileSync(outPath, JSON.stringify(manifest, null, 2), "utf8");
 
+// icon names live in a sibling file to keep the component manifest lean
+const iconPath = join(outDir, "icon-names.json");
+writeFileSync(iconPath, JSON.stringify({
+  variants: icons.variants,
+  curatedVariants: icons.curatedVariants,
+  count: icons.names.length,
+  names: icons.names,
+}, null, 0), "utf8");
+
 console.log(`Wrote ${outPath}`);
-console.log(`Components: ${manifest.counts.components} (atoms ${manifest.counts.atoms}, molecules ${manifest.counts.molecules}) · tokens ${manifest.counts.tokens}`);
+console.log(`Wrote ${iconPath}`);
+console.log(`Components: ${manifest.counts.components} (atoms ${manifest.counts.atoms}, molecules ${manifest.counts.molecules}) · tokens ${manifest.counts.tokens} · icons ${icons.names.length}`);
 const withEnums = components.filter((c) => c.props.some((p) => p.allowedValues)).length;
 console.log(`Components with extracted allowed-value enums: ${withEnums}/${components.length}`);

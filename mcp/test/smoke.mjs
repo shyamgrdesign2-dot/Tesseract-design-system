@@ -40,5 +40,19 @@ console.log("\nvalidate_usage(Button, good) valid:", good.valid, "issues:", good
 
 console.log("\ntoken families:", (await call("get_tokens", {})).families.slice(0, 8).join(", "), "…");
 
+// enums now filled: Button + MedicalIcon
+const btn = await call("get_component", { name: "Button" });
+console.log("\nButton variant allowed:", btn.props.find((p) => p.name === "variant").allowedValues.join("|"));
+const mi = await call("get_component", { name: "MedicalIcon" });
+console.log("MedicalIcon variant allowed:", mi.props.find((p) => p.name === "variant").allowedValues.join("|"));
+
+// icons guardrail
+const iconsMeta = await call("get_icons", {});
+console.log("\nget_icons variants:", iconsMeta.variants.join("|"), "· library:", iconsMeta.libraryIconCount);
+const cal = await call("get_icons", { query: "calendar", limit: 5 });
+console.log("search 'calendar': matches", cal.totalMatches, "→", cal.names.join(", "));
+const bogus = await call("get_icons", { query: "definitely-not-an-icon" });
+console.log("validate bogus icon → isExactValidIconName:", bogus.isExactValidIconName, "(matches", bogus.totalMatches + ")");
+
 await client.close();
 console.log("\nOK");

@@ -22,6 +22,24 @@
     "No odd numbers in dimensions. Never edit tp-tokens.css.",
     "Never substitute Ant Design / MUI / Tailwind / raw Radix."
   ],
+  "icons": {
+    "variants": [
+      "bold",
+      "broken",
+      "bulk",
+      "linear",
+      "outline",
+      "twotone"
+    ],
+    "curatedVariants": [
+      "linear",
+      "bulk",
+      "bold"
+    ],
+    "libraryCount": 4724,
+    "namesFile": "icon-names.json",
+    "note": "Search/validate icon names with the get_icons MCP tool. TPLibraryIcon accepts any of the libraryCount names; TPIcon uses a curated subset; `variant` must be one of `variants`."
+  },
   "components": [
     {
       "name": "AnimatedGrid",
@@ -168,16 +186,37 @@
         {
           "name": "variant",
           "default": "\"soft\"",
+          "allowedValues": [
+            "solid",
+            "soft",
+            "outline",
+            "gradient",
+            "dot"
+          ],
           "control": "select"
         },
         {
           "name": "color",
           "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "success",
+            "warning",
+            "error",
+            "neutral",
+            "violet"
+          ],
           "control": "select"
         },
         {
           "name": "size",
           "default": "\"md\"",
+          "allowedValues": [
+            "xs",
+            "sm",
+            "md",
+            "lg"
+          ],
           "control": "inline-radio"
         },
         {
@@ -256,27 +295,56 @@
       "props": [
         {
           "name": "variant",
-          "default": "\"solid\""
+          "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "select"
         },
         {
           "name": "theme",
-          "default": "\"primary\""
+          "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "neutral",
+            "error",
+            "success",
+            "warning"
+          ],
+          "control": "select"
         },
         {
           "name": "size",
-          "default": "\"md\""
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
         },
         {
           "name": "surface",
-          "default": "\"light\""
+          "default": "\"light\"",
+          "allowedValues": [
+            "light",
+            "dark"
+          ],
+          "control": "inline-radio"
         },
         {
           "name": "loading",
-          "default": "false"
+          "default": "false",
+          "control": "boolean"
         },
         {
           "name": "disabled",
-          "default": "false"
+          "default": "false",
+          "control": "boolean"
         },
         {
           "name": "leftIcon"
@@ -302,7 +370,8 @@
         },
         {
           "name": "children",
-          "default": "'Button'"
+          "default": "'Button'",
+          "control": "text"
         },
         {
           "name": "style"
@@ -312,6 +381,51 @@
         },
         {
           "name": "track"
+        },
+        {
+          "name": "radius",
+          "control": "range",
+          "default": "10"
+        },
+        {
+          "name": "shape",
+          "allowedValues": [
+            "text",
+            "icon-only",
+            "split"
+          ],
+          "control": "inline-radio",
+          "description": "Demo only — which Button shape to render",
+          "default": "'text'"
+        },
+        {
+          "name": "icons",
+          "allowedValues": [
+            "none",
+            "left",
+            "right",
+            "both"
+          ],
+          "control": "inline-radio",
+          "description": "Leading / trailing / both icon on the text shape",
+          "default": "'left'"
+        },
+        {
+          "name": "leftIconName",
+          "control": "text",
+          "description": "Tesseract icon for the left side",
+          "default": "'plus'"
+        },
+        {
+          "name": "rightIconName",
+          "control": "text",
+          "description": "Tesseract icon for the right side",
+          "default": "'arrow-right-02'"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "default": "'plus'"
         }
       ],
       "stories": [
@@ -439,16 +553,33 @@
         {
           "name": "color",
           "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "primary",
+            "success",
+            "warning",
+            "error"
+          ],
           "control": "select"
         },
         {
           "name": "variant",
           "default": "\"filled\"",
+          "allowedValues": [
+            "solid",
+            "soft",
+            "outline"
+          ],
           "control": "inline-radio"
         },
         {
           "name": "size",
           "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
           "control": "inline-radio"
         },
         {
@@ -493,6 +624,12 @@
         },
         {
           "name": "iconSide",
+          "allowedValues": [
+            "none",
+            "left",
+            "right",
+            "both"
+          ],
           "control": "inline-radio",
           "default": "'left'"
         },
@@ -599,11 +736,22 @@
         {
           "name": "size",
           "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
           "control": "inline-radio"
         },
         {
           "name": "status",
           "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "success",
+            "error",
+            "warning"
+          ],
           "control": "inline-radio"
         },
         {
@@ -613,6 +761,12 @@
         {
           "name": "allow",
           "default": "\"any\"",
+          "allowedValues": [
+            "any",
+            "numeric",
+            "alpha",
+            "alphanumeric"
+          ],
           "control": "inline-radio",
           "description": "Restrict typed characters"
         },
@@ -770,6 +924,12 @@
         },
         {
           "name": "iconSide",
+          "allowedValues": [
+            "none",
+            "left",
+            "right",
+            "both"
+          ],
           "control": "inline-radio",
           "default": "'left'"
         },
@@ -936,7 +1096,14 @@
         },
         {
           "name": "variant",
-          "default": "\"linear\""
+          "default": "\"linear\"",
+          "allowedValues": [
+            "line",
+            "linear",
+            "bulk",
+            "solid",
+            "bold"
+          ]
         },
         {
           "name": "size",
@@ -1548,6 +1715,11 @@
           "control": "text"
         },
         {
+          "name": "description",
+          "default": "'Your unsaved edits to this prescription will be lost.'",
+          "control": "text"
+        },
+        {
           "name": "callout",
           "default": "'This action cannot be undone.'",
           "control": "text"
@@ -1583,6 +1755,11 @@
           "name": "children"
         },
         {
+          "name": "checkboxLabel",
+          "default": "\"Don't show this again\"",
+          "control": "text"
+        },
+        {
           "name": "checkboxChecked"
         },
         {
@@ -1593,16 +1770,35 @@
           "name": "onCheckboxChange"
         },
         {
+          "name": "primaryLabel",
+          "default": "'Keep editing'",
+          "control": "text"
+        },
+        {
           "name": "onPrimary"
         },
         {
           "name": "primaryVariant",
           "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
           "control": "select"
         },
         {
           "name": "primaryTheme",
           "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "neutral",
+            "warning",
+            "error",
+            "success"
+          ],
           "control": "select"
         },
         {
@@ -1614,16 +1810,35 @@
           "default": "true"
         },
         {
+          "name": "secondaryLabel",
+          "default": "'Discard'",
+          "control": "text"
+        },
+        {
           "name": "onSecondary"
         },
         {
           "name": "secondaryVariant",
           "default": "\"outline\"",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
           "control": "select"
         },
         {
           "name": "secondaryTheme",
           "default": "\"neutral\"",
+          "allowedValues": [
+            "primary",
+            "neutral",
+            "warning",
+            "error",
+            "success"
+          ],
           "control": "select"
         },
         {
@@ -1631,17 +1846,53 @@
           "default": "false"
         },
         {
+          "name": "tertiaryLabel",
+          "default": "''",
+          "control": "text"
+        },
+        {
           "name": "onTertiary"
         },
         {
           "name": "tertiaryVariant",
           "default": "\"link\"",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
           "control": "select"
         },
         {
           "name": "tertiaryTheme",
           "default": "\"neutral\"",
+          "allowedValues": [
+            "primary",
+            "neutral",
+            "warning",
+            "error",
+            "success"
+          ],
           "control": "select"
+        },
+        {
+          "name": "actionsAlign",
+          "default": "\"right\"",
+          "allowedValues": [
+            "left",
+            "right"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "actionsFullWidth",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "warning"
         },
         {
           "name": "primaryTone"
@@ -1669,12 +1920,8 @@
         },
         {
           "name": "withDescription",
-          "control": "boolean"
-        },
-        {
-          "name": "description",
-          "control": "text",
-          "default": "'Your unsaved edits to this prescription will be lost.'"
+          "control": "boolean",
+          "default": "true"
         },
         {
           "name": "withCallout",
@@ -1689,38 +1936,6 @@
         },
         {
           "name": "withCheckbox",
-          "control": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "checkboxLabel",
-          "control": "text",
-          "default": "\"Don't show this again\""
-        },
-        {
-          "name": "primaryLabel",
-          "control": "text"
-        },
-        {
-          "name": "secondaryLabel",
-          "control": "text",
-          "default": "'Discard'"
-        },
-        {
-          "name": "tertiaryLabel",
-          "control": "text",
-          "default": "''"
-        },
-        {
-          "name": "actionsAlign",
-          "allowedValues": [
-            "left",
-            "right"
-          ],
-          "control": "inline-radio"
-        },
-        {
-          "name": "actionsFullWidth",
           "control": "boolean",
           "default": "false"
         }
@@ -1844,6 +2059,10 @@
           "default": "3"
         },
         {
+          "name": "selectable",
+          "default": "false"
+        },
+        {
           "name": "selectionMode",
           "default": "'none'",
           "allowedValues": [
@@ -1863,6 +2082,12 @@
           "name": "isRowDisabled"
         },
         {
+          "name": "rowState"
+        },
+        {
+          "name": "getSubRows"
+        },
+        {
           "name": "defaultExpandedKeys"
         },
         {
@@ -1875,10 +2100,16 @@
           "name": "expandColumnId"
         },
         {
+          "name": "groupBy"
+        },
+        {
           "name": "groupLabel"
         },
         {
           "name": "defaultCollapsedGroups"
+        },
+        {
+          "name": "analyticsId"
         },
         {
           "name": "onRowClick"
@@ -2420,7 +2651,14 @@
       "props": [
         {
           "name": "size",
-          "default": "\"md\""
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "select",
+          "description": "height 80 / 120 / 160"
         },
         {
           "name": "bottomRadius",
@@ -2429,7 +2667,8 @@
         },
         {
           "name": "title",
-          "default": "'Your Appointments'"
+          "default": "'Your Appointments'",
+          "control": "text"
         },
         {
           "name": "subtitle",
@@ -2465,7 +2704,8 @@
           "name": "onBack"
         },
         {
-          "name": "actions"
+          "name": "actions",
+          "storyHidden": true
         },
         {
           "name": "pattern",
@@ -2482,16 +2722,50 @@
           "default": "true"
         },
         {
+          "name": "ctaSize",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio",
+          "default": "'sm'"
+        },
+        {
           "name": "iconSize",
           "control": "range",
           "default": "16"
         },
         {
           "name": "ctaOrder",
-          "control": "select"
+          "allowedValues": [
+            "1, 2, 3",
+            "3, 2, 1",
+            "2, 1, 3",
+            "3, 1, 2"
+          ],
+          "control": "select",
+          "default": "'1, 2'"
+        },
+        {
+          "name": "cta1Variant",
+          "allowedValues": [
+            "none",
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "select",
+          "default": "'outline'"
         },
         {
           "name": "cta1Shape",
+          "allowedValues": [
+            "text",
+            "icon",
+            "split"
+          ],
           "control": "inline-radio",
           "default": "'text'"
         },
@@ -2512,7 +2786,25 @@
           "default": "'Add Appointment'"
         },
         {
+          "name": "cta2Variant",
+          "allowedValues": [
+            "none",
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "select",
+          "default": "'solid'"
+        },
+        {
           "name": "cta2Shape",
+          "allowedValues": [
+            "text",
+            "icon",
+            "split"
+          ],
           "control": "inline-radio",
           "default": "'text'"
         },
@@ -2533,7 +2825,25 @@
           "default": "'Start Walk-in'"
         },
         {
+          "name": "cta3Variant",
+          "allowedValues": [
+            "none",
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "select",
+          "default": "'ghost'"
+        },
+        {
           "name": "cta3Shape",
+          "allowedValues": [
+            "text",
+            "icon",
+            "split"
+          ],
           "control": "inline-radio",
           "default": "'icon'"
         },
@@ -3061,7 +3371,8 @@
           "control": "text"
         },
         {
-          "name": "children"
+          "name": "children",
+          "storyHidden": true
         },
         {
           "name": "action",
@@ -3117,6 +3428,11 @@
           "control": "text",
           "description": "Pick a Tesseract icon to override the status icon",
           "default": "''"
+        },
+        {
+          "name": "withCTA",
+          "control": "boolean",
+          "default": "true"
         },
         {
           "name": "actionLabel",

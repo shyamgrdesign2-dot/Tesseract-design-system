@@ -25,6 +25,7 @@ import { dirname, join, resolve } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const MANIFEST_PATH = resolve(here, "..", "manifest", "component-manifest.json");
+const ICONS_PATH = resolve(here, "..", "manifest", "icon-names.json");
 
 function loadManifest() {
   if (!existsSync(MANIFEST_PATH)) {
@@ -34,8 +35,10 @@ function loadManifest() {
   }
   return JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
 }
+const loadIcons = () => (existsSync(ICONS_PATH) ? JSON.parse(readFileSync(ICONS_PATH, "utf8")) : { variants: [], curatedVariants: [], count: 0, names: [] });
 
 let manifest = loadManifest();
+let icons = loadIcons();
 
 const findComponent = (name) =>
   manifest.components.find((c) => c.name.toLowerCase() === String(name).toLowerCase()) ||
@@ -172,6 +175,38 @@ server.tool(
   }
 );
 
+/* ── get_icons  (icon-name guardrail) ──────────────────────────────── */
+server.tool(
+  "get_icons",
+  "Validate and search Tesseract icon names so you never invent one. With `query`, returns matching real icon names (TPLibraryIcon accepts any of them) and whether the query is an exact valid name. Without `query`, returns the valid icon `variant`s and counts. Use TPIcon/TPLibraryIcon/TPMedicalIcon with a name from here.",
+  {
+    query: z.string().optional().describe("Substring to search icon names, or an exact name to validate (e.g. 'calendar', 'heart')"),
+    limit: z.number().optional().describe("Max names to return (default 40)"),
+  },
+  async ({ query, limit = 40 }) => {
+    if (!query) {
+      return text({
+        variants: icons.variants,
+        curatedDefaultVariants: icons.curatedVariants,
+        libraryIconCount: icons.count,
+        usage: 'TPLibraryIcon name="<name>" variant="linear" size={20}  ·  active/selected → variant="bulk"',
+        note: "Call get_icons with a query to search/validate names. Names are the authoritative set from the icon library.",
+      });
+    }
+    const q = query.toLowerCase();
+    const exact = icons.names.includes(query);
+    const matches = icons.names.filter((n) => n.toLowerCase().includes(q));
+    return text({
+      query,
+      isExactValidIconName: exact,
+      totalMatches: matches.length,
+      names: matches.slice(0, limit),
+      variants: icons.variants,
+      truncated: matches.length > limit,
+    });
+  }
+);
+
 /* ── get_rules ─────────────────────────────────────────────────────── */
 server.tool(
   "get_rules",
@@ -182,4 +217,4 @@ server.tool(
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-console.error("tesseract-mcp ready (stdio) —", manifest.counts.components, "components,", manifest.counts.tokens, "tokens");
+console.error("tesseract-mcp ready (stdio) —", manifest.counts.components, "components,", manifest.counts.tokens, "tokens,", icons.count, "icons");
