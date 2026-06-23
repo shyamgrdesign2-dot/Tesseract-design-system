@@ -51,7 +51,7 @@ export const Playground = {
       <div style={{ maxWidth: 820 }}>
         <ClinicalTable {...args} name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows}
           dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon} />
-        <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>{JSON.stringify(rows, null, 2)}</pre>
+        <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(rows, null, 2)}</pre>
       </div>
     );
   }
@@ -260,9 +260,9 @@ export const StickyActions = {
   render: () => {
     const [rows, setRows] = React.useState(SEED);
     return (
-      <div style={{ maxWidth: 460, border: '1px dashed var(--tp-slate-200,#e2e2ea)', padding: 8, borderRadius: 12 }}>
+      <div style={{ maxWidth: 460, border: '1px dashed var(--tesseract-slate-200,#e2e2ea)', padding: 8, borderRadius: 12 }}>
         <ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} rowMenu={[{ label: 'Duplicate', icon: <TPLibraryIcon name="copy" size={15} /> }, { label: 'Clear row', icon: <TPLibraryIcon name="eraser" size={15} />, danger: true, onClick: () => {} }]} />
-        <p style={{ fontSize: 12, color: 'var(--tp-slate-500,#717179)', marginTop: 8 }}>Scroll the table sideways — the actions column stays pinned and the left fade appears only while content sits behind it.</p>
+        <p style={{ fontSize: 12, color: 'var(--tesseract-slate-500,#717179)', marginTop: 8 }}>Scroll the table sideways — the actions column stays pinned and the left fade appears only while content sits behind it.</p>
       </div>
     );
   },
@@ -313,12 +313,12 @@ export const ConfiguringColumns = {
       <div style={{ maxWidth: 1000, display: 'grid', gap: 16 }}>
         <ClinicalTable name={{ header: 'Medicine', options: ['Amoxicillin', 'Paracetamol', 'Azithromycin', 'Ibuprofen'], frequentlyUsedLabel: 'Frequently used' }} columns={EXAMPLE_COLUMNS} rows={rows} onChange={setRows} />
         <div>
-          <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--tp-slate-500,#717179)', marginBottom: 6 }}>Available column types</div>
-          <ul style={{ ...mono, margin: 0, paddingLeft: 18, color: 'var(--tp-slate-700,#454551)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--tesseract-slate-500,#717179)', marginBottom: 6 }}>Available column types</div>
+          <ul style={{ ...mono, margin: 0, paddingLeft: 18, color: 'var(--tesseract-slate-700,#454551)', lineHeight: 1.7 }}>
             {COLUMN_TYPES.map(([t, desc]) => (<li key={t}><strong>{t}</strong> — {desc}</li>))}
           </ul>
         </div>
-        <pre style={{ ...mono, margin: 0, padding: 14, borderRadius: 10, background: 'var(--tp-slate-50,#f8fafc)', border: '1px solid var(--tp-slate-100,#f1f1f5)', color: 'var(--tp-slate-800,#27272a)', overflowX: 'auto' }}>{code}</pre>
+        <pre style={{ ...mono, margin: 0, padding: 14, borderRadius: 10, background: 'var(--tesseract-slate-50,#f8fafc)', border: '1px solid var(--tesseract-slate-100,#f1f1f5)', color: 'var(--tesseract-slate-800,#27272a)', overflowX: 'auto' }}>{code}</pre>
       </div>
     );
   },

@@ -52,10 +52,10 @@ const lib = (name, size = 16) => (name && String(name).trim() ? <TPLibraryIcon n
 
 // Status pill (semantic Tesseract tokens).
 const STATUS_TONE = {
-  Confirmed: ['--tp-success-50', '--tp-success-700'],
-  Waiting: ['--tp-warning-50', '--tp-warning-700'],
-  'No-show': ['--tp-error-50', '--tp-error-700'],
-  Completed: ['--tp-slate-100', '--tp-slate-600'],
+  Confirmed: ['--tesseract-success-50', '--tesseract-success-700'],
+  Waiting: ['--tesseract-warning-50', '--tesseract-warning-700'],
+  'No-show': ['--tesseract-error-50', '--tesseract-error-700'],
+  Completed: ['--tesseract-slate-100', '--tesseract-slate-600'],
 };
 const StatusPill = ({ status }) => {
   const [bg, fg] = STATUS_TONE[status] || STATUS_TONE.Completed;
@@ -263,7 +263,7 @@ export const StickyScrollShadow = {
       ...colArgs(3, { header: 'Contact', field: 'phone', sortable: false, left: 'call', subtext: false }),
     });
     return (
-      <div style={{ maxWidth: 540, border: '1px dashed var(--tp-slate-200, #e2e2ea)', borderRadius: 10, padding: 8 }}>
+      <div style={{ maxWidth: 540, border: '1px dashed var(--tesseract-slate-200, #e2e2ea)', borderRadius: 10, padding: 8 }}>
         <DataTable columns={columns} data={ROWS.slice(0, 6)} hoverable />
       </div>
     );
@@ -333,13 +333,13 @@ const TONES = ['neutral', 'primary', 'success', 'warning', 'error'];
 // One text line with an optional left/right icon (composes nothing extra — plain
 // inline layout matching the DataCell line metrics).
 function TextLine({ text, icon, side, kind }) {
-  const ic = icon ? <span style={{ display: 'inline-flex', flexShrink: 0, color: 'var(--tp-slate-400)' }}>{icon}</span> : null;
+  const ic = icon ? <span style={{ display: 'inline-flex', flexShrink: 0, color: 'var(--tesseract-slate-400)' }}>{icon}</span> : null;
   const secondary = kind === 'secondary';
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0, maxWidth: '100%',
       fontSize: secondary ? 12 : 14, fontWeight: secondary ? 400 : 500,
-      color: secondary ? 'var(--tp-slate-500)' : 'var(--tp-slate-900)',
+      color: secondary ? 'var(--tesseract-slate-500)' : 'var(--tesseract-slate-900)',
     }}>
       {side === 'left' && ic}
       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{text}</span>
@@ -772,21 +772,21 @@ export const ActionTracking = {
             hoverable
             onRowClick={() => {}}
           />
-          <div style={{ fontFamily: 'Inter, sans-serif', border: '1px solid var(--tp-slate-200, #e2e2ea)', borderRadius: 10, overflow: 'hidden' }}>
-            <div style={{ padding: '10px 12px', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--tp-slate-600,#56566a)', background: 'var(--tp-slate-50,#fafafb)', borderBottom: '1px solid var(--tp-slate-200,#e2e2ea)', display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ fontFamily: 'Inter, sans-serif', border: '1px solid var(--tesseract-slate-200, #e2e2ea)', borderRadius: 10, overflow: 'hidden' }}>
+            <div style={{ padding: '10px 12px', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--tesseract-slate-600,#56566a)', background: 'var(--tesseract-slate-50,#fafafb)', borderBottom: '1px solid var(--tesseract-slate-200,#e2e2ea)', display: 'flex', justifyContent: 'space-between' }}>
               <span>Event stream</span>
-              {log.length > 0 && <button type="button" onClick={() => setLog([])} style={{ border: 'none', background: 'none', color: 'var(--tp-blue-500,#2f6fed)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Clear</button>}
+              {log.length > 0 && <button type="button" onClick={() => setLog([])} style={{ border: 'none', background: 'none', color: 'var(--tesseract-blue-500,#2f6fed)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Clear</button>}
             </div>
             <div style={{ maxHeight: 360, overflowY: 'auto' }}>
               {log.length === 0 ? (
-                <div style={{ padding: 16, fontSize: 13, color: 'var(--tp-slate-400,#9c9caa)' }}>Sort, select, click a row, or use the action buttons…</div>
+                <div style={{ padding: 16, fontSize: 13, color: 'var(--tesseract-slate-400,#9c9caa)' }}>Sort, select, click a row, or use the action buttons…</div>
               ) : log.map((e, i) => (
-                <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--tp-slate-100,#f1f1f4)', fontSize: 12 }}>
+                <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--tesseract-slate-100,#f1f1f4)', fontSize: 12 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                    <span style={{ fontWeight: 700, color: 'var(--tp-slate-800,#2c2c38)' }}>{e.component}·{e.action}</span>
-                    <span style={{ color: 'var(--tp-slate-400,#9c9caa)', fontVariantNumeric: 'tabular-nums' }}>{e.at}</span>
+                    <span style={{ fontWeight: 700, color: 'var(--tesseract-slate-800,#2c2c38)' }}>{e.component}·{e.action}</span>
+                    <span style={{ color: 'var(--tesseract-slate-400,#9c9caa)', fontVariantNumeric: 'tabular-nums' }}>{e.at}</span>
                   </div>
-                  <div style={{ color: 'var(--tp-slate-500,#717185)', marginTop: 2, fontFamily: 'ui-monospace, monospace', fontSize: 11, wordBreak: 'break-all' }}>
+                  <div style={{ color: 'var(--tesseract-slate-500,#717185)', marginTop: 2, fontFamily: 'ui-monospace, monospace', fontSize: 11, wordBreak: 'break-all' }}>
                     {[e.id, e.label, e.value != null ? `=${e.value}` : null].filter(Boolean).join(' · ') || '—'}
                   </div>
                 </div>

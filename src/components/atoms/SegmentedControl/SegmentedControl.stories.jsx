@@ -39,7 +39,7 @@ const Row = ({ children, label }) => (
         style={{
           fontSize: 12,
           fontWeight: 600,
-          color: "var(--tp-slate-400)",
+          color: "var(--tesseract-slate-400)",
           fontFamily: "Inter, system-ui, sans-serif",
           textTransform: "uppercase",
           letterSpacing: "0.05em",
@@ -307,13 +307,13 @@ export const AppointmentView = {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "12px 18px",
-          background: "var(--tp-slate-0, #fff)",
-          borderRadius: "var(--tp-radius-12, 12px)",
-          border: "1px solid var(--tp-slate-100, #ececf0)",
+          background: "var(--tesseract-slate-0, #fff)",
+          borderRadius: "var(--tesseract-radius-12, 12px)",
+          border: "1px solid var(--tesseract-slate-100, #ececf0)",
           fontFamily: "Inter, system-ui, sans-serif",
         }}
       >
-        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--tp-slate-700)" }}>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--tesseract-slate-700)" }}>
           Appointments
         </span>
         <SegmentedControl
@@ -360,10 +360,10 @@ export const BillingPeriod = {
           onValueChange={setPeriod}
         />
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 32, fontWeight: 700, color: "var(--tp-slate-900)" }}>
+          <div style={{ fontSize: 32, fontWeight: 700, color: "var(--tesseract-slate-900)" }}>
             ₹{prices[period]}
           </div>
-          <div style={{ fontSize: 13, color: "var(--tp-slate-500)", marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: "var(--tesseract-slate-500)", marginTop: 4 }}>
             per {period === "monthly" ? "month" : period === "quarterly" ? "quarter" : "year"}
           </div>
         </div>

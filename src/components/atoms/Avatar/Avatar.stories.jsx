@@ -31,8 +31,8 @@ export const Playground = {
   render: (args) => <Avatar {...fromArgs(args)} />,
 };
 
-const Row = ({ children }) => <div style={{ display: 'flex', gap: 'var(--tp-space-4)', alignItems: 'center', flexWrap: 'wrap' }}>{children}</div>;
-const Label = ({ children }) => <div style={{ fontSize: 'var(--tp-text-caption-sm)', fontWeight: 'var(--tp-weight-semibold)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-500,#717179)', marginBottom: 'var(--tp-space-2-5)', fontFamily: 'var(--tp-font-body)' }}>{children}</div>;
+const Row = ({ children }) => <div style={{ display: 'flex', gap: 'var(--tesseract-space-4)', alignItems: 'center', flexWrap: 'wrap' }}>{children}</div>;
+const Label = ({ children }) => <div style={{ fontSize: 'var(--tesseract-text-caption-sm)', fontWeight: 'var(--tesseract-weight-semibold)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-500,#717179)', marginBottom: 'var(--tesseract-space-2-5)', fontFamily: 'var(--tesseract-font-body)' }}>{children}</div>;
 
 /** The three content forms — image, initials, icon. */
 export const Content = {
@@ -48,7 +48,7 @@ export const Content = {
 /** The only variant — with vs without the brand ring (shown for each content form). */
 export const Ring = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tp-space-5)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-5)' }}>
       <div>
         <Label>With ring</Label>
         <Row>

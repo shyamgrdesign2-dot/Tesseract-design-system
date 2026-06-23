@@ -44,7 +44,7 @@ Blue = primary action. **Violet = AI/intelligence only** (never a primary CTA fi
 44px touch targets (36px min desktop dense), labelled icon-only buttons, keyboard reachability, ≥4.5:1 contrast, `prefers-reduced-motion` respected. Built in, not bolted on — the components already do most of this; don't undo it.
 
 ## 14. Composition, not custom
-If a region seems to need a component we don't have, **compose it from existing atoms/molecules** before considering anything custom — and never reach outside `tp-ui`. Most "missing" components are an arrangement of `DataCell`, `Badge`, `Button`, `Chip`, and a layout.
+If a region seems to need a component we don't have, **compose it from existing atoms/molecules** before considering anything custom — and never reach outside `tesseract-ui`. Most "missing" components are an arrangement of `DataCell`, `Badge`, `Button`, `Chip`, and a layout.
 
 ## 15. Heavy modules can live outside — link out cleanly
 Not everything belongs in-app. In the live product, big modules (IPD, Pharmacy) SSO-redirect to dedicated portals rather than being rebuilt. When a feature is really a separate system, default to a clean **hand-off** — a nav item or button that links out with the needed context — instead of reconstructing it. Only bring it in-app when the user explicitly asks, and then design it from the standard shapes.

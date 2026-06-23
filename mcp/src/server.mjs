@@ -67,7 +67,7 @@ const server = new McpServer({ name: "tesseract", version: "0.1.0" });
 /* ── list_components ───────────────────────────────────────────────── */
 server.tool(
   "list_components",
-  "List the exact Tesseract (tp-ui) components that exist, with a one-line purpose. Optionally filter by layer.",
+  "List the exact Tesseract (tesseract-ui) components that exist, with a one-line purpose. Optionally filter by layer.",
   { layer: z.enum(["atoms", "molecules", "all"]).optional().describe("Filter by layer (default all)") },
   async ({ layer = "all" }) => {
     const items = manifest.components

@@ -8,13 +8,13 @@
 Smallest UI primitives. Each atom is **domain-agnostic** — it can be
 shipped in a generic UI library without any change.
 
-> **Import rule:** atoms may only consume design tokens (`var(--tp-*)`), the shared primitives in [`@/src/hooks/ui/`](../../hooks/ui/), and `@/src/hooks/utils`. Never `molecules/`.
+> **Import rule:** atoms may only consume design tokens (`var(--tesseract-*)`), the shared primitives in [`@/src/hooks/ui/`](../../hooks/ui/), and `@/src/hooks/utils`. Never `molecules/`.
 
 ## Quick rules for designers + devs
 
 - **Even-pixel sizes only.** 14, 16, 20, 24, 32, 36, 40… No 11/13/15/17.
 - **Touch target ≥ 36 px** desktop, ≥ 44 px iPad.
-- **Color via tokens.** `var(--tp-blue-500)`, `var(--tp-slate-700)`, never raw hex.
+- **Color via tokens.** `var(--tesseract-blue-500)`, `var(--tesseract-slate-700)`, never raw hex.
 - **CTAs use Linear iconsax variant** (Button + similar). Decorative icons may use Bulk/Bold.
 
 ## Dependency status

@@ -22,29 +22,29 @@ export default {
 };
 
 /* ─── shared styles ───────────────────────────────────────────── */
-const PAGE = { fontFamily: "Inter, sans-serif", color: "var(--tp-slate-900)", padding: 28, maxWidth: 1080 };
+const PAGE = { fontFamily: "Inter, sans-serif", color: "var(--tesseract-slate-900)", padding: 28, maxWidth: 1080 };
 const H2 = { font: "700 22px/28px Mulish, sans-serif", margin: "0 0 6px" };
-const SUB = { font: "400 14px/22px Inter", color: "var(--tp-slate-500)", maxWidth: 720, margin: "0 0 20px" };
+const SUB = { font: "400 14px/22px Inter", color: "var(--tesseract-slate-500)", maxWidth: 720, margin: "0 0 20px" };
 const CODE_BLOCK = {
   font: "500 12px/18px ui-monospace, SFMono-Regular, Menlo, monospace",
-  background: "var(--tp-slate-900)", color: "#e6e6f0",
+  background: "var(--tesseract-slate-900)", color: "#e6e6f0",
   padding: 18, borderRadius: 12, overflowX: "auto", margin: "16px 0",
 };
 const CARD = {
-  background: "var(--tp-slate-0)", border: "1px solid var(--tp-slate-200)",
-  borderRadius: "var(--tp-radius-12, 12px)", padding: 20,
-  display: "grid", gap: 14, boxShadow: "var(--tp-shadow-sm)",
+  background: "var(--tesseract-slate-0)", border: "1px solid var(--tesseract-slate-200)",
+  borderRadius: "var(--tesseract-radius-12, 12px)", padding: 20,
+  display: "grid", gap: 14, boxShadow: "var(--tesseract-shadow-sm)",
 };
-const LABEL = { font: "500 11px/14px Inter", color: "var(--tp-slate-400)", textTransform: "uppercase", letterSpacing: "0.04em" };
+const LABEL = { font: "500 11px/14px Inter", color: "var(--tesseract-slate-400)", textTransform: "uppercase", letterSpacing: "0.04em" };
 
 /* ─── reusable sample UI ──────────────────────────────────────── */
 function SampleUI({ title = "Patient summary", subtitle }) {
   return (
-    <div style={{ background: "var(--tp-slate-100)", padding: 24, borderRadius: "var(--tp-radius-16, 16px)", display: "grid", gap: 16, minWidth: 340 }}>
+    <div style={{ background: "var(--tesseract-slate-100)", padding: 24, borderRadius: "var(--tesseract-radius-16, 16px)", display: "grid", gap: 16, minWidth: 340 }}>
       <div style={CARD}>
         <div>
-          <div style={{ font: "700 18px/24px Mulish, sans-serif", color: "var(--tp-slate-900)" }}>{title}</div>
-          {subtitle && <div style={{ font: "400 13px/18px Inter, sans-serif", color: "var(--tp-slate-600)" }}>{subtitle}</div>}
+          <div style={{ font: "700 18px/24px Mulish, sans-serif", color: "var(--tesseract-slate-900)" }}>{title}</div>
+          {subtitle && <div style={{ font: "400 13px/18px Inter, sans-serif", color: "var(--tesseract-slate-600)" }}>{subtitle}</div>}
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <Badge color="primary">Primary</Badge>
@@ -85,7 +85,7 @@ export const BasicSetup = {
         It scopes CSS variables onto the wrapper and provides the theme via React context
         so every component re-themes automatically.
       </p>
-      <pre style={CODE_BLOCK}>{`import { TPThemeProvider } from "tp-ui";
+      <pre style={CODE_BLOCK}>{`import { TPThemeProvider } from "tesseract-ui";
 
 function App() {
   return (
@@ -97,13 +97,13 @@ function App() {
       <div style={{ display: "grid", gap: 20, gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))" }}>
         <div>
           <div style={{ ...LABEL, marginBottom: 8 }}>Light (default)</div>
-          <TPThemeProvider colorScheme="light" style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+          <TPThemeProvider colorScheme="light" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
             <SampleUI subtitle="Default light theme, no overrides." />
           </TPThemeProvider>
         </div>
         <div>
           <div style={{ ...LABEL, marginBottom: 8 }}>Dark</div>
-          <TPThemeProvider colorScheme="dark" style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+          <TPThemeProvider colorScheme="dark" style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
             <SampleUI subtitle="colorScheme='dark' reverses the neutral ramp." />
           </TPThemeProvider>
         </div>
@@ -163,7 +163,7 @@ export const CustomFoundationTokens = {
         },
       },
     };
-    const vars = { "--font-sans": `'${fontBody}', sans-serif`, "--tp-font-body": `'${fontBody}', sans-serif` };
+    const vars = { "--font-sans": `'${fontBody}', sans-serif`, "--tesseract-font-body": `'${fontBody}', sans-serif` };
     return (
       <div style={PAGE}>
         <h2 style={H2}>Custom Foundation Tokens</h2>
@@ -187,7 +187,7 @@ export const CustomFoundationTokens = {
     },
   }}
 >`}</pre>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle="Foundation tokens overridden via controls." />
         </TPThemeProvider>
       </div>
@@ -241,13 +241,13 @@ export const CustomComponentTokens = {
             ["Badge", badgeRadius >= 9999 ? "full" : `${badgeRadius}px`],
             ["Dropdown", `${dropdownRadius}px`],
           ].map(([name, val]) => (
-            <div key={name} style={{ border: "1px solid var(--tp-slate-200)", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-              <div style={{ font: "600 13px/18px Inter", color: "var(--tp-slate-800)" }}>{name}</div>
-              <div style={{ font: "500 20px/28px ui-monospace, monospace", color: "var(--tp-blue-500)" }}>{val}</div>
+            <div key={name} style={{ border: "1px solid var(--tesseract-slate-200)", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+              <div style={{ font: "600 13px/18px Inter", color: "var(--tesseract-slate-800)" }}>{name}</div>
+              <div style={{ font: "500 20px/28px ui-monospace, monospace", color: "var(--tesseract-blue-500)" }}>{val}</div>
             </div>
           ))}
         </div>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+        <TPThemeProvider colorScheme={colorScheme} theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle="Component tokens overridden via controls." />
         </TPThemeProvider>
       </div>
@@ -264,14 +264,14 @@ function HookDemo() {
   const btnTokens = useComponentTokens("button");
   const inputTokens = useComponentTokens("input");
 
-  const pill = { font: "600 11px/14px Inter", padding: "4px 10px", borderRadius: 9999, background: "var(--tp-blue-50)", color: "var(--tp-blue-700)" };
+  const pill = { font: "600 11px/14px Inter", padding: "4px 10px", borderRadius: 9999, background: "var(--tesseract-blue-50)", color: "var(--tesseract-blue-700)" };
   const row = { display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" };
-  const mono = { font: "500 12px/16px ui-monospace, monospace", color: "var(--tp-slate-700)", background: "var(--tp-slate-100)", padding: "2px 6px", borderRadius: 4 };
+  const mono = { font: "500 12px/16px ui-monospace, monospace", color: "var(--tesseract-slate-700)", background: "var(--tesseract-slate-100)", padding: "2px 6px", borderRadius: 4 };
 
   return (
     <div style={{ display: "grid", gap: 20 }}>
       <div style={CARD}>
-        <div style={{ font: "600 15px/20px Inter", color: "var(--tp-slate-900)" }}>useTheme()</div>
+        <div style={{ font: "600 15px/20px Inter", color: "var(--tesseract-slate-900)" }}>useTheme()</div>
         <div style={row}>
           <span style={pill}>colorScheme: {colorScheme}</span>
           <span style={pill}>primary: {theme.foundation.colors.blue[500]}</span>
@@ -285,9 +285,9 @@ function HookDemo() {
               onClick={() => setColorScheme(s)}
               style={{
                 font: "500 12px/16px Inter", padding: "4px 12px", borderRadius: 8, cursor: "pointer",
-                border: colorScheme === s ? "2px solid var(--tp-blue-500)" : "1px solid var(--tp-slate-300)",
-                background: colorScheme === s ? "var(--tp-blue-50)" : "var(--tp-slate-0)",
-                color: colorScheme === s ? "var(--tp-blue-700)" : "var(--tp-slate-600)",
+                border: colorScheme === s ? "2px solid var(--tesseract-blue-500)" : "1px solid var(--tesseract-slate-300)",
+                background: colorScheme === s ? "var(--tesseract-blue-50)" : "var(--tesseract-slate-0)",
+                color: colorScheme === s ? "var(--tesseract-blue-700)" : "var(--tesseract-slate-600)",
               }}
             >
               {s}
@@ -297,20 +297,20 @@ function HookDemo() {
       </div>
 
       <div style={CARD}>
-        <div style={{ font: "600 15px/20px Inter", color: "var(--tp-slate-900)" }}>useBreakpoint()</div>
+        <div style={{ font: "600 15px/20px Inter", color: "var(--tesseract-slate-900)" }}>useBreakpoint()</div>
         <div style={row}>
           <span style={pill}>active: {breakpoint}</span>
           <span style={mono}>mobile: 0px</span>
           <span style={mono}>tablet: {theme.breakpoints.tablet}px</span>
           <span style={mono}>desktop: {theme.breakpoints.desktop}px</span>
         </div>
-        <div style={{ font: "400 12px/18px Inter", color: "var(--tp-slate-500)" }}>
+        <div style={{ font: "400 12px/18px Inter", color: "var(--tesseract-slate-500)" }}>
           Resize the browser window to see the breakpoint change.
         </div>
       </div>
 
       <div style={CARD}>
-        <div style={{ font: "600 15px/20px Inter", color: "var(--tp-slate-900)" }}>useComponentTokens("button")</div>
+        <div style={{ font: "600 15px/20px Inter", color: "var(--tesseract-slate-900)" }}>useComponentTokens("button")</div>
         <div style={row}>
           {Object.entries(btnTokens).map(([k, v]) => (
             <span key={k} style={pill}>{k}: {typeof v === "object" ? JSON.stringify(v) : String(v)}</span>
@@ -319,7 +319,7 @@ function HookDemo() {
       </div>
 
       <div style={CARD}>
-        <div style={{ font: "600 15px/20px Inter", color: "var(--tp-slate-900)" }}>useComponentTokens("input")</div>
+        <div style={{ font: "600 15px/20px Inter", color: "var(--tesseract-slate-900)" }}>useComponentTokens("input")</div>
         <div style={row}>
           {Object.entries(inputTokens).map(([k, v]) => (
             <span key={k} style={pill}>{k}: {typeof v === "object" ? JSON.stringify(v) : String(v)}</span>
@@ -340,7 +340,7 @@ export const UsingThemeHook = {
         active breakpoint name. <code>useComponentTokens(name)</code> returns the token set
         for one component.
       </p>
-      <pre style={CODE_BLOCK}>{`import { useTheme, useBreakpoint, useComponentTokens } from "tp-ui";
+      <pre style={CODE_BLOCK}>{`import { useTheme, useBreakpoint, useComponentTokens } from "tesseract-ui";
 
 function MyComponent() {
   const { theme, colorScheme, setColorScheme } = useTheme();
@@ -349,7 +349,7 @@ function MyComponent() {
 
   return <div style={{ borderRadius: btn.radius }}>...</div>;
 }`}</pre>
-      <TPThemeProvider style={{ background: "var(--tp-slate-50)", borderRadius: 12, padding: 24 }}>
+      <TPThemeProvider style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
         <HookDemo />
       </TPThemeProvider>
     </div>
@@ -374,19 +374,19 @@ function ResponsiveDemo() {
             key={bp}
             style={{
               flex: "1 1 120px", padding: "14px 16px", borderRadius: 10, textAlign: "center",
-              border: i === activeIdx ? "2px solid var(--tp-blue-500)" : "1px solid var(--tp-slate-200)",
-              background: i === activeIdx ? "var(--tp-blue-50)" : "var(--tp-slate-0)",
+              border: i === activeIdx ? "2px solid var(--tesseract-blue-500)" : "1px solid var(--tesseract-slate-200)",
+              background: i === activeIdx ? "var(--tesseract-blue-50)" : "var(--tesseract-slate-0)",
             }}
           >
-            <div style={{ font: "600 14px/18px Inter", color: i === activeIdx ? "var(--tp-blue-700)" : "var(--tp-slate-600)", textTransform: "capitalize" }}>{bp}</div>
-            <div style={{ font: "500 12px/16px ui-monospace, monospace", color: "var(--tp-slate-400)", marginTop: 2 }}>&ge; {theme.breakpoints[bp]}px</div>
-            {i === activeIdx && <div style={{ font: "600 10px/12px Inter", color: "var(--tp-blue-500)", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>active</div>}
+            <div style={{ font: "600 14px/18px Inter", color: i === activeIdx ? "var(--tesseract-blue-700)" : "var(--tesseract-slate-600)", textTransform: "capitalize" }}>{bp}</div>
+            <div style={{ font: "500 12px/16px ui-monospace, monospace", color: "var(--tesseract-slate-400)", marginTop: 2 }}>&ge; {theme.breakpoints[bp]}px</div>
+            {i === activeIdx && <div style={{ font: "600 10px/12px Inter", color: "var(--tesseract-blue-500)", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.06em" }}>active</div>}
           </div>
         ))}
       </div>
       <div style={CARD}>
-        <div style={{ font: "600 15px/20px Inter", color: "var(--tp-slate-900)" }}>Responsive layout</div>
-        <div style={{ font: "400 13px/18px Inter", color: "var(--tp-slate-600)" }}>
+        <div style={{ font: "600 15px/20px Inter", color: "var(--tesseract-slate-900)" }}>Responsive layout</div>
+        <div style={{ font: "400 13px/18px Inter", color: "var(--tesseract-slate-600)" }}>
           The buttons below stack on mobile, wrap on tablet, and sit in a row on desktop.
         </div>
         <div style={{
@@ -438,7 +438,7 @@ function Layout() {
     ? <MobileNav />
     : <DesktopNav />;
 }`}</pre>
-        <TPThemeProvider theme={theme} style={{ background: "var(--tp-slate-50)", borderRadius: 12, padding: 24 }}>
+        <TPThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12, padding: 24 }}>
           <ResponsiveDemo />
         </TPThemeProvider>
       </div>
@@ -452,7 +452,7 @@ function Layout() {
 function LiveReadout() {
   const { colorScheme, theme } = useTheme();
   const breakpoint = useBreakpoint();
-  const pill = { font: "600 11px/14px Inter", padding: "3px 8px", borderRadius: 9999, background: "var(--tp-slate-100)", color: "var(--tp-slate-700)" };
+  const pill = { font: "600 11px/14px Inter", padding: "3px 8px", borderRadius: 9999, background: "var(--tesseract-slate-100)", color: "var(--tesseract-slate-700)" };
   return (
     <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
       <span style={pill}>scheme: {colorScheme}</span>
@@ -508,7 +508,7 @@ export const LiveExample = {
         dropdown: { radius: `${dropdownRadius}px` },
       },
     };
-    const vars = { "--font-sans": `'${fontBody}', sans-serif`, "--tp-font-body": `'${fontBody}', sans-serif` };
+    const vars = { "--font-sans": `'${fontBody}', sans-serif`, "--tesseract-font-body": `'${fontBody}', sans-serif` };
     return (
       <div style={PAGE}>
         <h2 style={H2}>Live Example</h2>
@@ -516,7 +516,7 @@ export const LiveExample = {
           Full playground: all foundation + component tokens combined. Use the Controls panel
           to tweak every token and see the components update live.
         </p>
-        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+        <TPThemeProvider colorScheme={colorScheme} theme={theme} vars={vars} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <LiveReadout />
           <SampleUI subtitle="Every token is driven by the Controls panel." />
         </TPThemeProvider>
@@ -531,7 +531,7 @@ function RampStrip({ label, ramp: r }) {
   return (
     <div style={{ display: "grid", gap: 6 }}>
       <div style={LABEL}>{label}</div>
-      <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1px solid var(--tp-slate-200)" }}>
+      <div style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1px solid var(--tesseract-slate-200)" }}>
         {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((step) => (
           <div key={step} title={`${step}: ${r[step]}`} style={{ background: r[step], height: 40, flex: 1 }} />
         ))}
@@ -573,7 +573,7 @@ const theme = createTheme({
           <RampStrip label="brand → primary" ramp={ramp(brand)} />
           <RampStrip label="accent → violet" ramp={ramp(accent)} />
         </div>
-        <TPThemeProvider theme={theme} style={{ background: "var(--tp-slate-50)", borderRadius: 12 }}>
+        <TPThemeProvider theme={theme} style={{ background: "var(--tesseract-slate-50)", borderRadius: 12 }}>
           <SampleUI subtitle={`Generated from brand ${brand}, radius ${radius}px.`} />
         </TPThemeProvider>
       </div>

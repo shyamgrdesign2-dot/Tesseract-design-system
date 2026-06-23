@@ -261,16 +261,16 @@ function parseBarrel(indexPath) {
 /* ─────────────────────────── tokens ─────────────────────────── */
 
 function parseTokens() {
-  const tokensPath = join(root, "src", "tp-tokens.css");
+  const tokensPath = join(root, "src", "tesseract-tokens.css");
   if (!existsSync(tokensPath)) return { families: {}, count: 0 };
   const css = readFileSync(tokensPath, "utf8");
   const families = {};
   let count = 0;
-  for (const m of css.matchAll(/(--tp-[a-z0-9-]+)\s*:\s*([^;]+);/gi)) {
+  for (const m of css.matchAll(/(--tesseract-[a-z0-9-]+)\s*:\s*([^;]+);/gi)) {
     const name = m[1].trim();
     const value = m[2].trim();
     count++;
-    const fam = name.replace(/^--tp-/, "").split("-")[0];
+    const fam = name.replace(/^--tesseract-/, "").split("-")[0];
     (families[fam] ||= []).push({ name, value });
   }
   return { families, count };
@@ -400,9 +400,9 @@ const icons = parseIcons();
 
 const manifest = {
   $schema: "tesseract-component-manifest/v1",
-  generatedFrom: "src/components/** + src/tp-tokens.css",
+  generatedFrom: "src/components/** + src/tesseract-tokens.css",
   generatedAtNote: "regenerate with: node mcp/scripts/build-manifest.mjs",
-  designSystem: { package: "tp-ui", importAliases: LAYERS.map((l) => `@/src/components/${l}`) },
+  designSystem: { package: "tesseract-ui", importAliases: LAYERS.map((l) => `@/src/components/${l}`) },
   counts: {
     components: components.length,
     atoms: components.filter((c) => c.layer === "atoms").length,
@@ -412,8 +412,8 @@ const manifest = {
   rules: [
     "Use only components and props listed here — they are extracted from real source.",
     "Use only allowedValues for a prop when present; they come from storybook argTypes.",
-    "Colours/spacing/radii must be --tp-* tokens; never raw values.",
-    "No odd numbers in dimensions. Never edit tp-tokens.css.",
+    "Colours/spacing/radii must be --tesseract-* tokens; never raw values.",
+    "No odd numbers in dimensions. Never edit tesseract-tokens.css.",
     "Never substitute Ant Design / MUI / Tailwind / raw Radix.",
   ],
   icons: {

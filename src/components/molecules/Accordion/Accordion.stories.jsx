@@ -96,7 +96,7 @@ export const Controlled = {
             </AccordionItem>
           ))}
         </Accordion>
-        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>
+        <p style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>
           Open item: {value || '(none)'}
         </p>
       </Frame>

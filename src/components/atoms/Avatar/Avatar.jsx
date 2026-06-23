@@ -43,7 +43,7 @@ export function Avatar({ src, name, alt, icon, size = 40, ring = false, onClick,
   let content;
   if (icon != null) {
     content = typeof icon === "string"
-      ? <TPLibraryIcon name={icon} size={Math.round(size * 0.5)} color="var(--tp-slate-600, #545460)" />
+      ? <TPLibraryIcon name={icon} size={Math.round(size * 0.5)} color="var(--tesseract-slate-600, #545460)" />
       : icon;
   } else if (src && !broken) {
     content = <img src={src} alt={alt || name || "User"} onError={() => setBroken(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
@@ -66,7 +66,7 @@ export function Avatar({ src, name, alt, icon, size = 40, ring = false, onClick,
         width: size,
         height: size,
         flexShrink: 0,
-        padding: ring ? "var(--tp-space-0-5)" : 0,
+        padding: ring ? "var(--tesseract-space-0-5)" : 0,
         border: "none",
         background: ringBg || "transparent",
         cursor: onClick ? "pointer" : "default",
@@ -83,11 +83,11 @@ export function Avatar({ src, name, alt, icon, size = 40, ring = false, onClick,
           width: "100%",
           height: "100%",
           overflow: "hidden",
-          border: ring ? "1px solid var(--tp-slate-0, #fff)" : "none",
-          background: "var(--tp-slate-100, #f1f1f5)",
-          color: "var(--tp-slate-600, #545460)",
-          fontFamily: "var(--tp-font-body)",
-          fontWeight: "var(--tp-weight-extrabold)",
+          border: ring ? "1px solid var(--tesseract-slate-0, #fff)" : "none",
+          background: "var(--tesseract-slate-100, #f1f1f5)",
+          color: "var(--tesseract-slate-600, #545460)",
+          fontFamily: "var(--tesseract-font-body)",
+          fontWeight: "var(--tesseract-weight-extrabold)",
           fontSize: Math.round(size * 0.36),
           lineHeight: 1,
           textAlign: "center",

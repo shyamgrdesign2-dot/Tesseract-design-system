@@ -49,7 +49,7 @@ export const Playground = {
           value={value}
           onChange={setValue}
         />
-        <pre style={{ marginTop: "var(--tp-space-4)", fontSize: "var(--tp-text-body-xs)", color: 'var(--tp-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
+        <pre style={{ marginTop: "var(--tesseract-space-4)", fontSize: "var(--tesseract-text-body-xs)", color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
       </div>
     );
   },
@@ -66,10 +66,10 @@ const DATA = NAMES.map((name, i) => ({
   appt: `Today, ${String(((9 + i) % 12) || 12).padStart(2, '0')}:${i % 2 ? '30' : '00'} ${9 + i < 12 ? 'AM' : 'PM'}`,
 }));
 
-const STATUS_TONE = { Confirmed: ['--tp-success-50', '--tp-success-700'], Waiting: ['--tp-warning-50', '--tp-warning-700'], 'No-show': ['--tp-error-50', '--tp-error-700'], Completed: ['--tp-slate-100', '--tp-slate-600'] };
+const STATUS_TONE = { Confirmed: ['--tesseract-success-50', '--tesseract-success-700'], Waiting: ['--tesseract-warning-50', '--tesseract-warning-700'], 'No-show': ['--tesseract-error-50', '--tesseract-error-700'], Completed: ['--tesseract-slate-100', '--tesseract-slate-600'] };
 const Pill = ({ status }) => {
   const [bg, fg] = STATUS_TONE[status];
-  return <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: "var(--tp-text-body-xs)", fontWeight: "var(--tp-weight-semibold)", background: `var(${bg})`, color: `var(${fg})` }}>{status}</span>;
+  return <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: "var(--tesseract-text-body-xs)", fontWeight: "var(--tesseract-weight-semibold)", background: `var(${bg})`, color: `var(${fg})` }}>{status}</span>;
 };
 
 export const WithDataTable = {
@@ -89,7 +89,7 @@ export const WithDataTable = {
       { id: 'status', header: 'Status', minWidth: 120, cell: (r) => <Pill status={r.status} /> },
     ];
     return (
-      <div style={{ maxWidth: 760, display: 'flex', flexDirection: 'column', gap: "var(--tp-space-3-5)" }}>
+      <div style={{ maxWidth: 760, display: 'flex', flexDirection: 'column', gap: "var(--tesseract-space-3-5)" }}>
         <Filter groups={GROUPS} value={sel} onChange={setSel} />
         <DataTable columns={columns} data={rows} pageSize={6} zebra emptyState="No rows match the selected filters." />
       </div>

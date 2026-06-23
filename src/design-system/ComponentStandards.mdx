@@ -26,8 +26,8 @@ identical in API, theming, and behaviour to everything else.
 
 ## 2. Theming
 
-- Colors/radius/spacing only via `var(--tp-*)`. No raw hex except as a token
- fallback (`var(--tp-slate-900, #171725)`).
+- Colors/radius/spacing only via `var(--tesseract-*)`. No raw hex except as a token
+ fallback (`var(--tesseract-slate-900, #171725)`).
 - Radius uses `corner-shape: round` where the squircle base would distort it.
 - Dark surfaces use `surface="dark"` variants, not ad-hoc overrides.
 
@@ -45,7 +45,7 @@ identical in API, theming, and behaviour to everything else.
 
 ## 3a. Theming & tracking
 
-- **Theme** strictly through `var(--tp-*)`; a product re-themes via
+- **Theme** strictly through `var(--tesseract-*)`; a product re-themes via
  `TPThemeProvider`, seed a full theme with `createTheme({ brand })`. Don't read
  raw colours in JS.
 - **Tracking** is opt-in: atoms take a `track` prop, containers take an
@@ -99,7 +99,7 @@ own pill/button is a smell, reach for the atom.
 Build on the shared primitives in `@/src/hooks/ui/` (`Portal`, `Slot`,
 `usePosition`, `useEscape`, `useClickOutside`) and `@/src/hooks/utils` (`cn`).
 **Zero styling/UI dependencies**, no Tailwind, no icon packages, no component
-libraries. All styling is CSS Modules + `var(--tp-*)` tokens; all icons are
+libraries. All styling is CSS Modules + `var(--tesseract-*)` tokens; all icons are
 inline SVG or the vendored Tesseract set. Runtime deps stay limited to `react` /
 `react-dom`. Headings: **Mulish** for the H1 page title, **Inter** everywhere else.
 
@@ -112,7 +112,7 @@ Before a component is "done":
 - Config-driven API (data in, not bespoke markup) with controlled +
  uncontrolled support.
 - `variant` / `size` / `tone` use the shared vocabulary.
-- Colors, radius, spacing from `var(--tp-*)` only.
+- Colors, radius, spacing from `var(--tesseract-*)` only.
 - Icons via `TPIcon` / `TPLibraryIcon`; configurable slots flagged
  `tpIcon: true`.
 - Every option is a Storybook control; a Playground + focused stories exist.

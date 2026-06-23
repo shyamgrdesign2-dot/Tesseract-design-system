@@ -29,17 +29,17 @@ const X = ({ size = 12 }) => <TPLibraryIcon name="close-square" variant="bold" s
 
 // One color token per tone; bg/border are translucent washes derived from it.
 const TONES = {
-  default: "var(--tp-slate-700, #454551)",
-  primary: "var(--tp-blue-600, #3c3bb5)",
-  success: "var(--tp-success-600, #059669)",
-  warning: "var(--tp-warning-600, #d97706)",
-  error:   "var(--tp-error-600, #c8102e)",
+  default: "var(--tesseract-slate-700, #454551)",
+  primary: "var(--tesseract-blue-600, #3c3bb5)",
+  success: "var(--tesseract-success-600, #059669)",
+  warning: "var(--tesseract-warning-600, #d97706)",
+  error:   "var(--tesseract-error-600, #c8102e)",
 };
 
 const SIZES = {
-  sm: { height: 20, padX: 8,  font: "var(--tp-text-micro)",   gap: 4, icon: 12 },
-  md: { height: 24, padX: 10, font: "var(--tp-text-body-xs)", gap: 4, icon: 14 },
-  lg: { height: 28, padX: 12, font: "var(--tp-text-body-sm)", gap: 6, icon: 16 },
+  sm: { height: 20, padX: 8,  font: "var(--tesseract-text-micro)",   gap: 4, icon: 12 },
+  md: { height: 24, padX: 10, font: "var(--tesseract-text-body-xs)", gap: 4, icon: 14 },
+  lg: { height: 28, padX: 12, font: "var(--tesseract-text-body-sm)", gap: 6, icon: 16 },
 };
 
 export function TPChip({
@@ -75,7 +75,7 @@ export function TPChip({
   const v = variant === "filled" ? "soft" : variant === "outlined" ? "outline" : variant;
   const variantStyle =
     v === "solid"
-      ? { color: "var(--tp-slate-0, #fff)", backgroundColor: c, border: `1px solid ${c}` }
+      ? { color: "var(--tesseract-slate-0, #fff)", backgroundColor: c, border: `1px solid ${c}` }
       : v === "outline"
         ? { color: c, backgroundColor: "transparent", border: `1px solid color-mix(in srgb, ${c} 40%, transparent)` }
         : { color: c, backgroundColor: `color-mix(in srgb, ${c} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${c} 22%, transparent)` };
@@ -134,11 +134,11 @@ export function TPChip({
         gap: s.gap,
         height: s.height,
         padding: `0 ${s.padX}px`,
-        borderRadius: "var(--tp-radius-10)",
+        borderRadius: "var(--tesseract-radius-10)",
         cornerShape: "round",
         fontSize: s.font,
-        fontWeight: "var(--tp-weight-medium)",
-        fontFamily: "var(--tp-font-body)",
+        fontWeight: "var(--tesseract-weight-medium)",
+        fontFamily: "var(--tesseract-font-body)",
         lineHeight: 1,
         ...variantStyle,
         cursor: interactive ? "pointer" : "default",

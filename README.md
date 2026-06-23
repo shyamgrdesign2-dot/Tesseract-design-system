@@ -1,13 +1,16 @@
-# tp-ui
+# Tesseract Design System (`tesseract-ui`)
 
-Tesseract UI, a first-party React component library (atoms + molecules) built
-with **zero runtime dependencies**. The only externals are `react` and
-`react-dom`, declared as **peer dependencies** (never bundled).
+The **Tesseract** design system — a first-party React component library (atoms +
+molecules) built with **zero runtime dependencies**. The only externals are
+`react` and `react-dom`, declared as **peer dependencies** (never bundled).
+
+Tokens are namespaced `--tesseract-*` so Tesseract can be adopted gradually and
+run **side by side** with any existing UI library without collisions.
 
 ## Install
 
 ```bash
-npm install tp-ui
+npm install tesseract-ui
 # peers (if not already in your app)
 npm install react react-dom
 ```
@@ -15,17 +18,17 @@ npm install react react-dom
 ## Usage
 
 ```jsx
-import { Button, Badge, Dropdown, DataTable, ClinicalTable, Logo } from "tp-ui";
-import "tp-ui/styles.css"; // one stylesheet for the whole library
+import { Button, Badge, Dropdown, DataTable, ClinicalTable, Logo } from "tesseract-ui";
+import "tesseract-ui/styles.css"; // one stylesheet for the whole library
 
 export function Example() {
  return <Button variant="solid" theme="primary">Save</Button>;
 }
 ```
 
-- **ESM + CJS**: `import` resolves to `dist/tp-ui.js`, `require` to `dist/tp-ui.cjs`.
+- **ESM + CJS**: `import` resolves to `dist/tesseract-ui.js`, `require` to `dist/tesseract-ui.cjs`.
 - **Types**: `dist/index.d.ts` ships with the package.
-- **Styles**: import `tp-ui/styles.css` once at your app root.
+- **Styles**: import `tesseract-ui/styles.css` once at your app root.
 
 ## What's inside
 
@@ -45,7 +48,7 @@ A few components load SVGs at runtime rather than bundling them:
  base elsewhere once at app start:
 
  ```js
- import { setIconBaseUrl } from "tp-ui";
+ import { setIconBaseUrl } from "tesseract-ui";
  setIconBaseUrl("/design-system-assets/icons"); // or any base; or via TPThemeProvider iconBaseUrl
  ```
 
@@ -56,8 +59,8 @@ All other components, Button, Badge, Dropdown, DataTable, ClinicalTable, etc., u
 
 ## Design tokens & fonts
 
-`tp-ui/styles.css` includes the full foundational token layer as CSS variables, colours (`--tp-blue-500`…), typography scale, radius (`--tp-radius-10`), shadows
-(`--tp-shadow-md`), spacing (`--tp-space-4`), sizing, and gradients, plus
+`tesseract-ui/styles.css` includes the full foundational token layer as CSS variables, colours (`--tesseract-blue-500`…), typography scale, radius (`--tesseract-radius-10`), shadows
+(`--tesseract-shadow-md`), spacing (`--tesseract-space-4`), sizing, and gradients, plus
 ready-to-use type classes (`.tp-h1`, `.tp-body-base`, …). Components consume
 these tokens, and you can use them in your own styles. Browse them under
 **Design System → Foundations** in Storybook.
@@ -74,10 +77,10 @@ Load them in your app (Google Fonts or self-host), e.g.:
 `TPThemeProvider` is the single theming surface, it carries the whole theme
 (foundation tokens, component tokens, breakpoints, colour scheme), provides it via
 context, and scopes the matching CSS variables so components re-theme with no prop
-changes (they read `var(--tp-*)`):
+changes (they read `var(--tesseract-*)`):
 
 ```jsx
-import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tp-ui";
+import { TPThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tesseract-ui";
 
 <TPThemeProvider
  colorScheme="dark" // light | dark | system

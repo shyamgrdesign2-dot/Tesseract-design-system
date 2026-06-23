@@ -116,4 +116,4 @@ A widget = a **query** (dataset · measures · dimensions · filters) + a **viz 
 ## Stack note — old vs new
 
 - **Reference-only (do not copy stack):** TP_Master, Pm-Doctor-Portal — Ant Design + Redux + CRA. Mine them for *what pages exist and what they contain*, never for styling or components.
-- **Modern reference:** VoiceRx-L, TP_Dental_L — Next.js App Router, SCSS Modules, atomic design, local state + Context (no Redux), recharts, react-hook-form + zod. Generated pages should match this stack shape and import Tesseract `tp-ui` components.
+- **Modern reference:** VoiceRx-L, TP_Dental_L — Next.js App Router, SCSS Modules, atomic design, local state + Context (no Redux), recharts, react-hook-form + zod. Generated pages should match this stack shape and import Tesseract `tesseract-ui` components.

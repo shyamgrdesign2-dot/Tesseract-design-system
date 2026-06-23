@@ -4,14 +4,14 @@
   display: flex;
   align-items: center;
   /* Tight icon↔text gap; action/dismiss restore their own breathing room below. */
-  gap: var(--tp-space-2);
-  padding: var(--tp-space-3) var(--tp-space-3-5);
-  border-radius: var(--tp-radius-10, 10px);
+  gap: var(--tesseract-space-2);
+  padding: var(--tesseract-space-3) var(--tesseract-space-3-5);
+  border-radius: var(--tesseract-radius-10, 10px);
   corner-shape: round;
-  background-color: var(--tp-slate-900);
-  color: var(--tp-slate-0);
-  font-size: var(--tp-text-body-sm);
-  font-family: var(--tp-font-body);
+  background-color: var(--tesseract-slate-900);
+  color: var(--tesseract-slate-0);
+  font-size: var(--tesseract-text-body-sm);
+  font-family: var(--tesseract-font-body);
   line-height: 1.5;
   /* Grow to content, but never wider than 60% of the container; overflowing
      text fills to the cap then truncates (see title/message rules below). */
@@ -25,10 +25,10 @@
   flex-shrink: 0;
   display: inline-flex;
 
-  &[data-status="info"]    { color: var(--tp-slate-0); } /* neutral white (no blue) */
-  &[data-status="success"] { color: var(--tp-success-400); } /* green  */
-  &[data-status="warning"] { color: var(--tp-warning-400); } /* gold   */
-  &[data-status="error"]   { color: var(--tp-error-400, var(--tp-error-500)); } /* red    */
+  &[data-status="info"]    { color: var(--tesseract-slate-0); } /* neutral white (no blue) */
+  &[data-status="success"] { color: var(--tesseract-success-400); } /* green  */
+  &[data-status="warning"] { color: var(--tesseract-warning-400); } /* gold   */
+  &[data-status="error"]   { color: var(--tesseract-error-400, var(--tesseract-error-500)); } /* red    */
 }
 
 /* ── Body ── */
@@ -41,13 +41,13 @@
 
 .title {
   margin: 0;
-  font-weight: var(--tp-weight-semibold);
-  color: var(--tp-slate-0);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-0);
 }
 
 .message {
-  margin-top: var(--tp-space-0-5);
-  color: color-mix(in srgb, var(--tp-slate-0) 70%, transparent); /* lighter white */
+  margin-top: var(--tesseract-space-0-5);
+  color: color-mix(in srgb, var(--tesseract-slate-0) 70%, transparent); /* lighter white */
 }
 
 /* ── Line behaviour ──
@@ -72,33 +72,33 @@
 /* ── Action slot ── (keep clear of the text, unlike the tight icon gap) */
 .action {
   flex-shrink: 0;
-  margin-left: var(--tp-space-1);
+  margin-left: var(--tesseract-space-1);
 }
 
 /* ── Square solid dismiss (lighter tint of the confirm-dialog close) ── */
 .dismiss {
   flex-shrink: 0;
-  margin-left: var(--tp-space-1);
+  margin-left: var(--tesseract-space-1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--tp-size-28);
-  height: var(--tp-size-28);
+  width: var(--tesseract-size-28);
+  height: var(--tesseract-size-28);
   padding: 0;
   border: none;
-  border-radius: var(--tp-radius-6, 6px);
+  border-radius: var(--tesseract-radius-6, 6px);
   corner-shape: round;
   background-color: transparent;
-  color: var(--tp-slate-0);
+  color: var(--tesseract-slate-0);
   cursor: pointer;
   transition: background-color 150ms ease, color 150ms ease;
 
   &:hover {
-    background-color: color-mix(in srgb, var(--tp-slate-0) 20%, transparent);
-    color: var(--tp-slate-0);
+    background-color: color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent);
+    color: var(--tesseract-slate-0);
   }
   &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--tp-slate-0) 40%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--tesseract-slate-0) 40%, transparent);
     outline-offset: 2px;
   }
 }

@@ -72,7 +72,7 @@ export const WithLabel = {
     const [on, setOn] = React.useState(true);
     const id = React.useId();
     return (
-      <label htmlFor={id} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--tp-slate-700)' }}>
+      <label htmlFor={id} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--tesseract-slate-700)' }}>
         <Toggle {...args} id={id} checked={on} onCheckedChange={setOn} />
         Enable notifications
       </label>

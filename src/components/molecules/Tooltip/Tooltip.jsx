@@ -232,7 +232,7 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
 }
 
 function TooltipArrow({ side, variant }) {
-  const color = variant === "light" ? "var(--tp-slate-0, #ffffff)" : "var(--tp-slate-900, #171725)";
+  const color = variant === "light" ? "var(--tesseract-slate-0, #ffffff)" : "var(--tesseract-slate-900, #171725)";
   const base = { position: "absolute", width: 0, height: 0, borderStyle: "solid", borderColor: "transparent" };
   let style = base;
   if (side === "top") style = { ...base, bottom: -5, left: "50%", transform: "translateX(-50%)", borderWidth: "5px 5px 0 5px", borderTopColor: color };

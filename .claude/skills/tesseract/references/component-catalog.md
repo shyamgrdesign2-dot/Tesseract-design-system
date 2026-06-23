@@ -1,6 +1,6 @@
 # Tesseract Component Catalog
 
-Every atom and molecule in `tp-ui`, with its purpose, the props a page author actually sets, and **when to reach for it**. Import everything from the barrels:
+Every atom and molecule in `tesseract-ui`, with its purpose, the props a page author actually sets, and **when to reach for it**. Import everything from the barrels:
 
 ```jsx
 import { Button, Badge, Chip, InputBox, Avatar, Divider, Toggle, Checkbox, Radio, RadioGroup, SegmentedControl, Slider, Skeleton, LoadingIndicator, Logo, TPIcon, TPLibraryIcon, TPMedicalIcon } from "@/src/components/atoms";

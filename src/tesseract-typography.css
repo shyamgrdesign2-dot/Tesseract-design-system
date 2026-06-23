@@ -1,0 +1,49 @@
+/* ─── Tesseract type styles ───────────────────────────────────────────────
+   Ready-to-use text roles built from the type-scale tokens. Headings use Mulish;
+   body / label / caption / code use Inter / mono. Apply as a class:
+     <h1 class="tp-h1">…</h1>  ·  <p class="tp-body-base">…</p>
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.tp-display-xl,
+.tp-display,
+.tp-h1, .tp-h2, .tp-h3, .tp-h4, .tp-h5, .tp-h6 {
+  font-family: var(--tesseract-font-heading);
+  margin: 0;
+}
+.tp-display-xl { font-weight: var(--tesseract-weight-extrabold); font-size: var(--tesseract-text-display-xl); line-height: var(--tesseract-text-display-xl-lh); letter-spacing: -0.03em; }
+.tp-display    { font-weight: var(--tesseract-weight-bold);      font-size: var(--tesseract-text-display);    line-height: var(--tesseract-text-display-lh);    letter-spacing: -0.02em; }
+.tp-h1 { font-weight: var(--tesseract-weight-bold);     font-size: var(--tesseract-text-h1); line-height: var(--tesseract-text-h1-lh); letter-spacing: -0.02em; }
+.tp-h2 { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-h2); line-height: var(--tesseract-text-h2-lh); letter-spacing: -0.01em; }
+.tp-h3 { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-h3); line-height: var(--tesseract-text-h3-lh); letter-spacing: -0.01em; }
+.tp-h4 { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-h4); line-height: var(--tesseract-text-h4-lh); }
+.tp-h5 { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-h5); line-height: var(--tesseract-text-h5-lh); }
+.tp-h6 { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-h6); line-height: var(--tesseract-text-h6-lh); letter-spacing: 0.01em; }
+
+.tp-body-xl, .tp-body-lg, .tp-body-base, .tp-body-sm, .tp-body-xs,
+.tp-label-lg, .tp-label-md, .tp-label-sm,
+.tp-caption-lg, .tp-caption, .tp-caption-sm, .tp-micro,
+.tp-overline, .tp-overline-lg, .tp-link, .tp-link-sm { font-family: var(--tesseract-font-body); margin: 0; }
+
+.tp-body-xl   { font-weight: var(--tesseract-weight-regular); font-size: var(--tesseract-text-body-xl);   line-height: var(--tesseract-text-body-xl-lh);   letter-spacing: -0.01em; }
+.tp-body-lg   { font-weight: var(--tesseract-weight-regular); font-size: var(--tesseract-text-body-lg);   line-height: var(--tesseract-text-body-lg-lh); }
+.tp-body-base { font-weight: var(--tesseract-weight-regular); font-size: var(--tesseract-text-body-base); line-height: var(--tesseract-text-body-base-lh); }
+.tp-body-sm   { font-weight: var(--tesseract-weight-regular); font-size: var(--tesseract-text-body-sm);   line-height: var(--tesseract-text-body-sm-lh); }
+.tp-body-xs   { font-weight: var(--tesseract-weight-regular); font-size: var(--tesseract-text-body-xs);   line-height: var(--tesseract-text-body-xs-lh); }
+
+.tp-label-lg { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-body-base); line-height: var(--tesseract-text-body-base-lh); }
+.tp-label-md { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-body-sm);   line-height: var(--tesseract-text-body-sm-lh); }
+.tp-label-sm { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-body-xs);   line-height: var(--tesseract-text-caption-lh); letter-spacing: 0.01em; }
+
+.tp-caption-lg { font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-caption-lg); line-height: var(--tesseract-text-caption-lg-lh); letter-spacing: 0.005em; }
+.tp-caption    { font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-caption);    line-height: var(--tesseract-text-caption-lh);    letter-spacing: 0.01em; }
+.tp-caption-sm { font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-caption-sm); line-height: var(--tesseract-text-caption-sm-lh); letter-spacing: 0.01em; }
+.tp-micro      { font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-micro);      line-height: var(--tesseract-text-micro-lh);      letter-spacing: 0.02em; }
+
+.tp-overline    { font-weight: var(--tesseract-weight-bold); font-size: var(--tesseract-text-caption-sm); line-height: var(--tesseract-text-caption-sm-lh); letter-spacing: 0.08em; text-transform: uppercase; }
+.tp-overline-lg { font-weight: var(--tesseract-weight-bold); font-size: var(--tesseract-text-caption-lg); line-height: var(--tesseract-text-caption-lg-lh); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.tp-link    { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-body-sm); line-height: var(--tesseract-text-body-sm-lh); text-decoration: underline; }
+.tp-link-sm { font-weight: var(--tesseract-weight-semibold); font-size: var(--tesseract-text-body-xs); line-height: var(--tesseract-text-caption-lh); letter-spacing: 0.01em; text-decoration: underline; }
+
+.tp-code    { font-family: var(--tesseract-font-mono); font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-caption-lg); line-height: var(--tesseract-text-body-sm-lh); }
+.tp-code-sm { font-family: var(--tesseract-font-mono); font-weight: var(--tesseract-weight-medium); font-size: var(--tesseract-text-caption);    line-height: var(--tesseract-text-caption-lh); }

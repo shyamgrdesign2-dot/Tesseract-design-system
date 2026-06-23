@@ -87,7 +87,7 @@ export const Variants = {
       <Badge variant="soft" color="primary">soft</Badge>
       <Badge variant="outline" color="primary">outline</Badge>
       <Badge variant="gradient" color="primary">gradient</Badge>
-      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--tp-slate-500,#717179)' }}>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--tesseract-slate-500,#717179)' }}>
         <Badge variant="dot" color="primary" /> dot
       </span>
     </Row>
@@ -112,7 +112,7 @@ export const Gradients = {
 export const Sticky = {
   render: () => {
     const Box = ({ children }) => (
-      <div style={{ position: 'relative', width: 120, height: 64, borderRadius: 12, border: '1px solid var(--tp-slate-200, #e2e2ea)', background: 'var(--tp-slate-50, #FAFAFB)' }}>
+      <div style={{ position: 'relative', width: 120, height: 64, borderRadius: 12, border: '1px solid var(--tesseract-slate-200, #e2e2ea)', background: 'var(--tesseract-slate-50, #FAFAFB)' }}>
         {children}
       </div>
     );
@@ -176,7 +176,7 @@ export const Matrix = {
     <div style={{ display: 'grid', gap: 16 }}>
       {['solid', 'soft', 'outline'].map((variant) => (
         <div key={variant} style={{ display: 'grid', gap: 8 }}>
-          <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #717179)' }}>
+          <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #717179)' }}>
             {variant}
           </strong>
           <Row>

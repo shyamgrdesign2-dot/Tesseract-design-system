@@ -231,7 +231,7 @@ export function PatientListPage({ data = [], loading = false, hasMore = false, o
             onLoadMore={onLoadMore}
             emptyState={
               <div className={styles.empty}>
-                <TPIcon name="profile-2user" size={40} color="var(--tp-fg-tertiary)" />
+                <TPIcon name="profile-2user" size={40} color="var(--tesseract-fg-tertiary)" />
                 <p>No patients found</p>
                 <Button variant="solid" theme="primary" size="sm" leftIcon={<TPIcon name="add" size={16} />}>Add Patient</Button>
               </div>
@@ -268,8 +268,8 @@ export default PatientListPage;
 .shell {
   display: flex;
   height: 100vh;
-  background: var(--tp-bg-page);
-  font-family: var(--tp-font-body);
+  background: var(--tesseract-bg-page);
+  font-family: var(--tesseract-font-body);
 }
 
 .main {
@@ -284,15 +284,15 @@ export default PatientListPage;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--tp-space-4);
-  padding: var(--tp-space-4) var(--tp-space-6);
+  gap: var(--tesseract-space-4);
+  padding: var(--tesseract-space-4) var(--tesseract-space-6);
   overflow: hidden;
 }
 
 .toolbar {
   display: flex;
   align-items: center;
-  gap: var(--tp-space-3);
+  gap: var(--tesseract-space-3);
 
   > :first-child { flex: 1; min-width: 0; max-width: 360px; }
   margin-left: auto;
@@ -301,18 +301,18 @@ export default PatientListPage;
 .bulkBar {
   display: flex;
   align-items: center;
-  gap: var(--tp-space-3);
-  padding: var(--tp-space-2) var(--tp-space-3);
-  border-radius: var(--tp-radius-10);
-  background: var(--tp-bg-brand-soft);
-  font-size: var(--tp-text-body-sm);
-  color: var(--tp-fg-secondary);
+  gap: var(--tesseract-space-3);
+  padding: var(--tesseract-space-2) var(--tesseract-space-3);
+  border-radius: var(--tesseract-radius-10);
+  background: var(--tesseract-bg-brand-soft);
+  font-size: var(--tesseract-text-body-sm);
+  color: var(--tesseract-fg-secondary);
 }
 
 .rowActions {
   display: inline-flex;
   align-items: center;
-  gap: var(--tp-space-1);
+  gap: var(--tesseract-space-1);
   justify-content: flex-end;
 }
 
@@ -320,9 +320,9 @@ export default PatientListPage;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--tp-space-3);
-  padding: var(--tp-space-10) var(--tp-space-4);
-  color: var(--tp-fg-secondary);
+  gap: var(--tesseract-space-3);
+  padding: var(--tesseract-space-10) var(--tesseract-space-4);
+  color: var(--tesseract-fg-secondary);
 }
 ```
 

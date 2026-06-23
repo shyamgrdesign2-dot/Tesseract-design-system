@@ -33,7 +33,7 @@ export default meta;
 
 // A square stage so the entire (square) grid is visible.
 const Square = ({ bg, children }) => (
-  <div style={{ position: 'relative', width: 360, height: 360, overflow: 'hidden', borderRadius: 'var(--tp-radius-16)', background: bg }}>
+  <div style={{ position: 'relative', width: 360, height: 360, overflow: 'hidden', borderRadius: 'var(--tesseract-radius-16)', background: bg }}>
     {children}
   </div>
 );
@@ -69,7 +69,7 @@ export const OnLight = {
 /** Dark and light side by side. */
 export const Backgrounds = {
   render: () => (
-    <div style={{ display: 'flex', gap: 'var(--tp-space-5)', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--tesseract-space-5)', flexWrap: 'wrap' }}>
       <Square bg="#171725"><AnimatedGrid style={fill} /></Square>
       <Square bg="#F7F7FB"><AnimatedGrid lineColor="rgba(75,74,213,0.16)" cometColor="#4b4ad5" style={fill} /></Square>
     </div>

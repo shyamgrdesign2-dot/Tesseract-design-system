@@ -1,7 +1,7 @@
 /* Accordion.module.scss */
 
 .item {
-  border-bottom: 1px solid var(--tp-slate-100);
+  border-bottom: 1px solid var(--tesseract-slate-100);
 }
 
 .trigger {
@@ -9,24 +9,24 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--tp-space-3) 0;
+  padding: var(--tesseract-space-3) 0;
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: var(--tp-text-body-sm);
-  font-weight: var(--tp-weight-semibold);
-  font-family: var(--tp-font-body), var(--font-sans, sans-serif);
-  color: var(--tp-slate-700);
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-semibold);
+  font-family: var(--tesseract-font-body), var(--font-sans, sans-serif);
+  color: var(--tesseract-slate-700);
   line-height: 1.43;
   outline: none;
   text-align: left;
   transition: color 150ms ease;
 
-  &:hover { color: var(--tp-slate-900); }
+  &:hover { color: var(--tesseract-slate-900); }
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--tp-blue-300);
-    border-radius: var(--tp-radius-4, 4px);
+    box-shadow: inset 0 0 0 2px var(--tesseract-blue-300);
+    border-radius: var(--tesseract-radius-4, 4px);
   }
 
   /* Rotate chevron when open — Radix sets data-state="open" on the trigger */
@@ -37,20 +37,20 @@
 
 .chevron {
   flex-shrink: 0;
-  width: var(--tp-size-16);
-  height: var(--tp-size-16);
-  color: var(--tp-slate-400);
+  width: var(--tesseract-size-16);
+  height: var(--tesseract-size-16);
+  color: var(--tesseract-slate-400);
   transition: transform 200ms ease;
 }
 
 .content {
   overflow: hidden;
-  font-size: var(--tp-text-body-sm);
-  font-family: var(--tp-font-body), var(--font-sans, sans-serif);
-  color: var(--tp-slate-600);
+  font-size: var(--tesseract-text-body-sm);
+  font-family: var(--tesseract-font-body), var(--font-sans, sans-serif);
+  color: var(--tesseract-slate-600);
   line-height: 1.57;
 }
 
 .contentInner {
-  padding-bottom: var(--tp-space-3);
+  padding-bottom: var(--tesseract-space-3);
 }

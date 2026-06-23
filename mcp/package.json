@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MCP server that serves the EXACT Tesseract (tp-ui) components, props, allowed values, and tokens from source — so AI clients configure real components instead of hallucinating them.",
+  "description": "MCP server that serves the EXACT Tesseract (tesseract-ui) components, props, allowed values, and tokens from source — so AI clients configure real components instead of hallucinating them.",
   "bin": {
     "tesseract-mcp": "src/server.mjs"
   },

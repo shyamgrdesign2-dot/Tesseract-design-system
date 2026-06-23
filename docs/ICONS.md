@@ -36,14 +36,14 @@ is resolved automatically from `icon-manifest.json` (name → family), so you ne
 hand-write the family.
 
 ```jsx
-import { TPLibraryIcon, TPIcon, MedicalIcon } from "tp-ui";
+import { TPLibraryIcon, TPIcon, MedicalIcon } from "tesseract-ui";
 
 <TPLibraryIcon name="search" />                          // rounded / linear / (family auto)
 <TPLibraryIcon name="search" variant="bold" />           // rounded / bold
 <TPLibraryIcon name="search" variant="bulk" corner="straight" />
 <TPLibraryIcon name="calendar" family="health" />        // override family if needed
 
-<TPIcon name="warning" variant="bulk" color="var(--tp-warning-500)" />
+<TPIcon name="warning" variant="bulk" color="var(--tesseract-warning-500)" />
 <MedicalIcon name="ambulance" variant="bold" />          // always family = medical
 ```
 

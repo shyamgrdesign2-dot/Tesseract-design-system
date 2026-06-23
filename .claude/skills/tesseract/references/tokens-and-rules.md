@@ -6,31 +6,31 @@ Final compliance pass. A page is only "in our world" if it obeys all of this.
 
 ## Non-negotiable rules
 
-1. **Tokens only — never raw values.** Every colour, spacing, radius, and type value comes from a `--tp-*` CSS variable. No hex, no `rgb()`, no magic px for colour. `color: var(--tp-fg-primary)`, not `color: #1e1e2d`.
+1. **Tokens only — never raw values.** Every colour, spacing, radius, and type value comes from a `--tesseract-*` CSS variable. No hex, no `rgb()`, no magic px for colour. `color: var(--tesseract-fg-primary)`, not `color: #1e1e2d`.
 2. **No odd numbers in any dimension.** Width, height, padding, margin, gap, radius, font-size, line-height — all even. Use 4 / 8 / 10 / 12 / 14 / 16 / 18 / 20 / 24 / 28 / 32… Only exception: 1px hairline borders.
-3. **Never edit `src/tp-tokens.css`.** It is the source of truth. To re-theme, use `TPThemeProvider` overrides — never mutate the token file.
-4. **Keep the `--tp-` / `tp` / `TP` prefix.** Do not rename tokens or components to any other prefix.
+3. **Never edit `src/tesseract-tokens.css`.** It is the source of truth. To re-theme, use `TPThemeProvider` overrides — never mutate the token file.
+4. **Keep the `--tesseract-` token prefix and the `TP*` component-name style** (e.g. `TPIcon`, `TPThemeProvider`). Tokens are `--tesseract-*`; component identifiers keep the `TP` style. The package is `tesseract-ui`. Do not introduce a third prefix.
 5. **Barrel imports only.** `import { X } from "@/src/components/atoms"` / `"@/src/components/molecules"`. No deep relative paths into component internals from product code.
 6. **CSS Modules + `data-*` styling.** Component styling is `Name.module.scss`; variant/state is expressed via `data-*` attributes and targeted in SCSS (`[data-variant="solid"]`), not ad-hoc class soup.
 7. **Tesseract components only.** No Ant Design, MUI, Tailwind, or raw Radix in generated product pages. Compose missing primitives from existing atoms.
 
 ---
 
-## Token families (reference — read names from `src/tp-tokens.css`, don't redefine)
+## Token families (reference — read names from `src/tesseract-tokens.css`, don't redefine)
 
-**Colour ramps** (steps 50–900): `--tp-blue-*` (primary brand), `--tp-violet-*` (AI accent), `--tp-amber-*`, `--tp-success-*`, `--tp-warning-*`, `--tp-error-*`, and neutral `--tp-slate-0 … --tp-slate-900`.
+**Colour ramps** (steps 50–900): `--tesseract-blue-*` (primary brand), `--tesseract-violet-*` (AI accent), `--tesseract-amber-*`, `--tesseract-success-*`, `--tesseract-warning-*`, `--tesseract-error-*`, and neutral `--tesseract-slate-0 … --tesseract-slate-900`.
 
 **Semantic aliases** (prefer these in layout code over raw ramps):
-- Foreground: `--tp-fg-heading`, `--tp-fg-primary`, `--tp-fg-secondary`, `--tp-fg-tertiary`, `--tp-fg-placeholder`, `--tp-fg-disabled`, `--tp-fg-inverse`, `--tp-fg-link`.
-- Background: `--tp-bg-page`, `--tp-bg-page-subtle`, `--tp-bg-surface`, `--tp-bg-surface-hover`, `--tp-bg-surface-active`, `--tp-bg-selected`, `--tp-bg-inverse`.
-- Soft fills: `--tp-bg-brand-soft`, `--tp-bg-success-soft`, `--tp-bg-warning-soft`, `--tp-bg-error-soft`.
-- Borders: `--tp-border-soft`, `--tp-border-neutral`, `--tp-border-strong`, `--tp-border-focus`.
+- Foreground: `--tesseract-fg-heading`, `--tesseract-fg-primary`, `--tesseract-fg-secondary`, `--tesseract-fg-tertiary`, `--tesseract-fg-placeholder`, `--tesseract-fg-disabled`, `--tesseract-fg-inverse`, `--tesseract-fg-link`.
+- Background: `--tesseract-bg-page`, `--tesseract-bg-page-subtle`, `--tesseract-bg-surface`, `--tesseract-bg-surface-hover`, `--tesseract-bg-surface-active`, `--tesseract-bg-selected`, `--tesseract-bg-inverse`.
+- Soft fills: `--tesseract-bg-brand-soft`, `--tesseract-bg-success-soft`, `--tesseract-bg-warning-soft`, `--tesseract-bg-error-soft`.
+- Borders: `--tesseract-border-soft`, `--tesseract-border-neutral`, `--tesseract-border-strong`, `--tesseract-border-focus`.
 
-**Spacing** (4pt base): `--tp-space-0-5` (2px), `--tp-space-1` (4px), `--tp-space-2` (8px), `--tp-space-2-5` (10px), `--tp-space-3` (12px), `--tp-space-4` (16px) … Compose layout gaps/padding from these.
+**Spacing** (4pt base): `--tesseract-space-0-5` (2px), `--tesseract-space-1` (4px), `--tesseract-space-2` (8px), `--tesseract-space-2-5` (10px), `--tesseract-space-3` (12px), `--tesseract-space-4` (16px) … Compose layout gaps/padding from these.
 
-**Radius:** `--tp-radius-8`, `--tp-radius-10` (chips/badges default), `--tp-radius-12` (cards/pills default), `--tp-radius-full`. (For Sidebar/SecondarySidebar selected pill + icon chip, default is 12px.)
+**Radius:** `--tesseract-radius-8`, `--tesseract-radius-10` (chips/badges default), `--tesseract-radius-12` (cards/pills default), `--tesseract-radius-full`. (For Sidebar/SecondarySidebar selected pill + icon chip, default is 12px.)
 
-**Typography:** `--tp-font-heading` (Mulish), `--tp-font-body` (Inter). Weights 400/500/600/700/800. Type scale tokens `--tp-text-display-*`, `--tp-text-h1…h6`, `--tp-text-body-xl/lg/base/sm/xs`, caption sizes. Weight tokens `--tp-weight-medium/semibold/bold`.
+**Typography:** `--tesseract-font-heading` (Mulish), `--tesseract-font-body` (Inter). Weights 400/500/600/700/800. Type scale tokens `--tesseract-text-display-*`, `--tesseract-text-h1…h6`, `--tesseract-text-body-xl/lg/base/sm/xs`, caption sizes. Weight tokens `--tesseract-weight-medium/semibold/bold`.
 
 **Type usage baseline:** 14px/400 body & table cells & CTA labels; 14px/600 card titles; 12px meta/badges; 10px/600 uppercase trackers only.
 
@@ -44,7 +44,7 @@ Wrap the app once in `TPThemeProvider` to override ramps, component tokens (butt
 
 ## Icons
 
-CDN-served (Iconsax). `TPIcon` (curated) / `TPLibraryIcon` (any name) / `TPMedicalIcon` (medical). Variants: `linear` (default), `bulk` (active/selected), `bold`. Recolour via `color={var(--tp-…)}`. Active nav/tab icons use `bulk`; everything else `linear`. Example names: `search`, `filter-2`, `calendar-1`, `profile`, `clipboard`, `printer`, `add`, `trash`, `eye`, `chevron-down`.
+CDN-served (Iconsax). `TPIcon` (curated) / `TPLibraryIcon` (any name) / `TPMedicalIcon` (medical). Variants: `linear` (default), `bulk` (active/selected), `bold`. Recolour via `color={var(--tesseract-…)}`. Active nav/tab icons use `bulk`; everything else `linear`. Example names: `search`, `filter-2`, `calendar-1`, `profile`, `clipboard`, `printer`, `add`, `trash`, `eye`, `chevron-down`.
 
 ---
 

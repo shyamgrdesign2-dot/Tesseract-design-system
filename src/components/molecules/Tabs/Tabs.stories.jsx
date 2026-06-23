@@ -21,7 +21,7 @@ const meta = {
 export default meta;
 
 const Panel = ({ children }) => (
-  <div style={{ paddingTop: 12, color: 'var(--tp-slate-700, #3f3f46)', fontSize: 14 }}>{children}</div>
+  <div style={{ paddingTop: 12, color: 'var(--tesseract-slate-700, #3f3f46)', fontSize: 14 }}>{children}</div>
 );
 
 // ── Playground — every knob lives in the Controls panel ───────────────────────
@@ -141,7 +141,7 @@ export const HorizontalScroll = {
   render: () => {
     const labels = ['Overview', 'Vitals', 'Prescriptions', 'Lab Results', 'Documents', 'Billing', 'Insurance', 'History', 'Allergies', 'Immunizations'];
     return (
-      <div style={{ width: 360, border: '1px dashed var(--tp-slate-200, #e2e2ea)', borderRadius: 10, padding: 8, fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ width: 360, border: '1px dashed var(--tesseract-slate-200, #e2e2ea)', borderRadius: 10, padding: 8, fontFamily: 'Inter, sans-serif' }}>
         <Tabs defaultValue="overview">
           <TabsList>
             {labels.map((l, i) => (
@@ -302,7 +302,7 @@ export const Controlled = {
           <TabsContent value="vitals"><Panel>Vitals panel.</Panel></TabsContent>
           <TabsContent value="history"><Panel>History panel.</Panel></TabsContent>
         </Tabs>
-        <p style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>Active tab: {value}</p>
+        <p style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>Active tab: {value}</p>
       </div>
     );
   },
@@ -349,8 +349,8 @@ export const PatientProfile = {
                 ['Gender', 'Male'], ['Phone', '+91 98765 43210'], ['Allergies', 'Penicillin, Sulfa drugs'],
               ].map(([label, value]) => (
                 <React.Fragment key={label}>
-                  <span style={{ color: 'var(--tp-slate-400, #A1A1AA)', fontWeight: 500 }}>{label}</span>
-                  <span style={{ fontWeight: 600, color: 'var(--tp-slate-800, #27272A)' }}>{value}</span>
+                  <span style={{ color: 'var(--tesseract-slate-400, #A1A1AA)', fontWeight: 500 }}>{label}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--tesseract-slate-800, #27272A)' }}>{value}</span>
                 </React.Fragment>
               ))}
             </div>

@@ -188,10 +188,10 @@ const Shell = ({ children, height = 600, style }) => (
     style={{
       display: "flex",
       height,
-      background: "var(--tp-slate-50, #FAFAFB)",
+      background: "var(--tesseract-slate-50, #FAFAFB)",
       borderRadius: 12,
       overflow: "hidden",
-      border: "1px solid var(--tp-slate-100, #ececf0)",
+      border: "1px solid var(--tesseract-slate-100, #ececf0)",
       ...style,
     }}
   >
@@ -206,14 +206,14 @@ const Content = ({ activeId }) => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontFamily: "var(--tp-font-body)",
-      color: "var(--tp-slate-500)",
+      fontFamily: "var(--tesseract-font-body)",
+      color: "var(--tesseract-slate-500)",
       fontSize: 14,
       padding: 24,
     }}
   >
     Active:{" "}
-    <strong style={{ color: "var(--tp-slate-900)", marginLeft: 6 }}>
+    <strong style={{ color: "var(--tesseract-slate-900)", marginLeft: 6 }}>
       {activeId}
     </strong>
   </div>
@@ -227,7 +227,7 @@ export const Playground = {
     const [collapsed, setCollapsed] = React.useState(args.defaultCollapsed);
     React.useEffect(() => setCollapsed(args.defaultCollapsed), [args.defaultCollapsed]);
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
         <Sidebar
           {...rest}
           collapsed={collapsed}
@@ -250,7 +250,7 @@ export const CollapsedRail = {
     const [active, setActive] = React.useState("appointments");
     const [collapsed, setCollapsed] = React.useState(true);
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
         <Sidebar
           {...rest}
           items={items}
@@ -273,7 +273,7 @@ export const ExpandedFlat = {
     const items = transformBadges(FLAT_ITEMS, badgeStyle);
     const [active, setActive] = React.useState("appointments");
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
         <Sidebar
           {...rest}
           items={items}
@@ -294,7 +294,7 @@ export const NestedWithSearch = {
     const items = transformBadges(NESTED_ITEMS, badgeStyle);
     const [active, setActive] = React.useState("symptoms");
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }} height={700}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }} height={700}>
         <Sidebar
           {...rest}
           items={items}
@@ -317,7 +317,7 @@ export const CollapsedWithFlyouts = {
     const [active, setActive] = React.useState("medications");
     const [collapsed, setCollapsed] = React.useState(true);
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }} height={700}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }} height={700}>
         <Sidebar
           {...rest}
           items={items}
@@ -341,7 +341,7 @@ export const WithBadges = {
     const [collapsed, setCollapsed] = React.useState(args.defaultCollapsed);
     React.useEffect(() => setCollapsed(args.defaultCollapsed), [args.defaultCollapsed]);
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }} height={640}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }} height={640}>
         <Sidebar
           {...rest}
           items={items}
@@ -373,21 +373,21 @@ export const Controlled = {
             alignItems: "center",
             gap: 12,
             padding: "0 12px",
-            fontFamily: "var(--tp-font-body)",
+            fontFamily: "var(--tesseract-font-body)",
             fontSize: 13,
-            color: "var(--tp-slate-600)",
+            color: "var(--tesseract-slate-600)",
           }}
         >
           <button
             onClick={() => setCollapsed((c) => !c)}
             style={{
               padding: "6px 14px",
-              border: "1px solid var(--tp-slate-200)",
+              border: "1px solid var(--tesseract-slate-200)",
               borderRadius: 8,
-              background: "var(--tp-slate-0)",
+              background: "var(--tesseract-slate-0)",
               cursor: "pointer",
               fontSize: 13,
-              fontFamily: "var(--tp-font-body)",
+              fontFamily: "var(--tesseract-font-body)",
             }}
           >
             {collapsed ? "Expand" : "Collapse"}
@@ -396,7 +396,7 @@ export const Controlled = {
             State: <strong>{collapsed ? "collapsed" : "expanded"}</strong>
           </span>
         </div>
-        <Shell style={{ "--tp-radius-12": `${chipRadius}px` }}>
+        <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
           <Sidebar
             {...rest}
             items={items}
@@ -420,7 +420,7 @@ export const NoCollapseToggle = {
     const items = transformBadges(FLAT_ITEMS, badgeStyle);
     const [active, setActive] = React.useState("appointments");
     return (
-      <div style={{ display: "flex", gap: 16, "--tp-radius-12": `${chipRadius}px` }}>
+      <div style={{ display: "flex", gap: 16, "--tesseract-radius-12": `${chipRadius}px` }}>
         <Shell>
           <Sidebar
             {...rest}
@@ -458,7 +458,7 @@ export const CollapsedWithBadges = {
     const [active, setActive] = React.useState("billing");
     const [collapsed, setCollapsed] = React.useState(true);
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }} height={640}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }} height={640}>
         <Sidebar
           {...rest}
           items={items}
@@ -480,7 +480,7 @@ export const WithFooter = {
     const items = transformBadges(NESTED_ITEMS, badgeStyle);
     const [active, setActive] = React.useState("overview");
     return (
-      <Shell style={{ "--tp-radius-12": `${chipRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
         <Sidebar
           {...rest}
           items={items}
@@ -500,14 +500,14 @@ export const WithFooter = {
                   width: 8,
                   height: 8,
                   borderRadius: "50%",
-                  background: "var(--tp-success-500, #22c55e)",
-                  boxShadow: "0 0 0 3px var(--tp-success-50, #f0fdf4)",
+                  background: "var(--tesseract-success-500, #22c55e)",
+                  boxShadow: "0 0 0 3px var(--tesseract-success-50, #f0fdf4)",
                 }}
               />
               <span
                 style={{
                   fontSize: 11,
-                  color: "var(--tp-slate-400)",
+                  color: "var(--tesseract-slate-400)",
                   fontWeight: 500,
                 }}
               >

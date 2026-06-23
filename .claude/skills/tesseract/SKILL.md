@@ -1,18 +1,18 @@
 ---
 name: tesseract
-description: The prerequisite context layer for the Tesseract design system (`tp-ui`) and the TatvaPractice EMR world. Invoke this whenever a project says "use the Tesseract design system", whenever you start building/scaffolding/designing any clinic/EMR page or screen, or before generating any UI that should live "in our world". It loads who we are (brand + design system), the principles for how an EMR page is composed, a collaborative intake to decide the page architecture WITH the user, and the real Tesseract components to build from. Triggers: "/tesseract", "use tesseract", "build a patient list / appointments / billing / IPD / settings page", "make an EMR screen", "scaffold a page with our design system".
+description: The prerequisite context layer for the Tesseract design system (`tesseract-ui`) and the TatvaPractice EMR world. Invoke this whenever a project says "use the Tesseract design system", whenever you start building/scaffolding/designing any clinic/EMR page or screen, or before generating any UI that should live "in our world". It loads who we are (brand + design system), the principles for how an EMR page is composed, a collaborative intake to decide the page architecture WITH the user, and the real Tesseract components to build from. Triggers: "/tesseract", "use tesseract", "build a patient list / appointments / billing / IPD / settings page", "make an EMR screen", "scaffold a page with our design system".
 ---
 
 # Tesseract — Design System & EMR Page Context
 
-This skill is the **front door to our world**. Drop it into any project and it tells the AI three things before a single line is written: **who we are** (brand + the `tp-ui` design system), **how we think about pages** (EMR composition principles), and **how to decide a specific page** (a collaborative intake with the user). Then it builds from real Tesseract components.
+This skill is the **front door to our world**. Drop it into any project and it tells the AI three things before a single line is written: **who we are** (brand + the `tesseract-ui` design system), **how we think about pages** (EMR composition principles), and **how to decide a specific page** (a collaborative intake with the user). Then it builds from real Tesseract components.
 
 It is a *prerequisite*, not a generator-on-rails. The goal is that a future project can say "use the Tesseract design system" → `/tesseract` → and the AI is fully grounded in our components, brand, rules, and page philosophy, ready to design *with* you.
 
 ## Order of operations
 
 ### 0 · Ground yourself (always, silently)
-Read `references/design-system-and-brand.md` once at the start of a Tesseract task. It defines what `tp-ui` is, our brand identity, the iron rules, and **how to consume the library in this project** (inside the storybook repo vs. the published package — the import path differs). Everything else builds on this.
+Read `references/design-system-and-brand.md` once at the start of a Tesseract task. It defines what `tesseract-ui` is, our brand identity, the iron rules, and **how to consume the library in this project** (inside the storybook repo vs. the published package — the import path differs). Everything else builds on this.
 
 ### 1 · Intake — decide the architecture *with* the user
 Do **not** jump straight to code. Read `references/intake-questions.md` and run a short collaborative intake. The pattern:
@@ -38,7 +38,7 @@ If the MCP isn't connected, fall back to the catalog and the component's source/
 Read `references/product-and-domain.md`. Use real module names, entities, statuses, and vocabulary (Patient, Encounter, MRN, Visit Type, IPD admission, Form 3C, ABHA…) so the page reads like TatvaPractice, not generic CRUD.
 
 ### 5 · Compliance pass
-Check against `references/tokens-and-rules.md`: tokens-only, no odd numbers, `--tp-` prefix, never edit `tp-tokens.css`, barrel imports, CSS Modules + `data-*`, **Tesseract components only** (never Ant Design / MUI / Tailwind / raw Radix — our old live apps use those for *structure reference only*).
+Check against `references/tokens-and-rules.md`: tokens-only, no odd numbers, `--tesseract-` prefix, never edit `tesseract-tokens.css`, barrel imports, CSS Modules + `data-*`, **Tesseract components only** (never Ant Design / MUI / Tailwind / raw Radix — our old live apps use those for *structure reference only*).
 
 ## Reference examples (optional, not mandates)
 - `references/page-archetypes.md` — common EMR page *shapes* (List, Detail, Form, Dashboard, RxPad, Print, Drawer, Settings) as worked illustrations of the principles. Use them as a starting sketch, then adapt to the intake.
@@ -55,7 +55,7 @@ It regenerates `references/_generated-inventory.md` from `src/components/**`. Re
 
 | File | Read it when |
 |------|--------------|
-| `references/design-system-and-brand.md` | First, every time — who we are + how to consume `tp-ui` |
+| `references/design-system-and-brand.md` | First, every time — who we are + how to consume `tesseract-ui` |
 | `references/intake-questions.md` | Before building — to agree the page architecture with the user |
 | `references/page-principles.md` | The ideology for composing any EMR page |
 | `references/component-catalog.md` | Choosing components per region; checking props |

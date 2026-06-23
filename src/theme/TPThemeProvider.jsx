@@ -6,7 +6,7 @@
  * component tokens, breakpoints, and the colour scheme. It provides them via
  * context (read with useTheme / useBreakpoint / useComponentTokens) AND scopes
  * the relevant CSS variables onto a wrapper, so existing components — which read
- * `var(--tp-*)` — re-theme with no prop changes.
+ * `var(--tesseract-*)` — re-theme with no prop changes.
  *
  *   <TPThemeProvider theme={{ foundation: { colors: { blue: { 500: "#0EA5E9" } } },
  *                             components: { button: { radius: "14px" } } }}
@@ -18,7 +18,7 @@
  *   theme        deep-partial of the default theme (foundation / components /
  *                breakpoints) — merged over the defaults.
  *   colorScheme  "light" | "dark" | "system"                    default "light"
- *   tokens       { tokenName: value } shorthand (keys without `--tp-`)
+ *   tokens       { tokenName: value } shorthand (keys without `--tesseract-`)
  *   vars         { "--css-var": value } raw escape hatch
  *   as, className, style, ...rest
  *
@@ -43,10 +43,10 @@ const SLATE = ["#FFFFFF", "#FAFAFB", "#F1F1F5", "#E2E2EA", "#D0D5DD", "#A2A2A8",
 const SLATE_STEPS = ["0", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900"];
 const DARK_VARS = (() => {
   const v = {};
-  SLATE_STEPS.forEach((s, i) => { v[`--tp-slate-${s}`] = SLATE[SLATE.length - 1 - i]; });
+  SLATE_STEPS.forEach((s, i) => { v[`--tesseract-slate-${s}`] = SLATE[SLATE.length - 1 - i]; });
   Object.assign(v, {
-    "--tp-blue-50": "rgba(75, 74, 213, 0.22)", "--tp-violet-50": "rgba(164, 97, 216, 0.20)",
-    "--tp-success-50": "rgba(16, 185, 129, 0.16)", "--tp-warning-50": "rgba(245, 158, 11, 0.16)", "--tp-error-50": "rgba(225, 29, 72, 0.16)",
+    "--tesseract-blue-50": "rgba(75, 74, 213, 0.22)", "--tesseract-violet-50": "rgba(164, 97, 216, 0.20)",
+    "--tesseract-success-50": "rgba(16, 185, 129, 0.16)", "--tesseract-warning-50": "rgba(245, 158, 11, 0.16)", "--tesseract-error-50": "rgba(225, 29, 72, 0.16)",
   });
   return v;
 })();
@@ -54,10 +54,10 @@ const DARK_VARS = (() => {
 // Map component tokens onto the CSS variables components actually read.
 function componentVars(components) {
   const v = {};
-  if (components?.button?.radius) v["--tp-btn-radius"] = components.button.radius;
-  if (components?.input?.radius) v["--tp-input-radius"] = components.input.radius;
-  if (components?.dropdown?.radius) v["--tp-dropdown-radius"] = components.dropdown.radius;
-  if (components?.badge?.radius) v["--tp-badge-radius"] = components.badge.radius;
+  if (components?.button?.radius) v["--tesseract-btn-radius"] = components.button.radius;
+  if (components?.input?.radius) v["--tesseract-input-radius"] = components.input.radius;
+  if (components?.dropdown?.radius) v["--tesseract-dropdown-radius"] = components.dropdown.radius;
+  if (components?.badge?.radius) v["--tesseract-badge-radius"] = components.badge.radius;
   return v;
 }
 
@@ -68,10 +68,10 @@ function buildVars(scheme, theme, tokens, vars) {
   if (scheme === "dark") Object.assign(out, DARK_VARS);
   const colors = theme?.foundation?.colors;
   if (colors) for (const [rampName, steps] of Object.entries(colors)) {
-    if (isObj(steps)) for (const [step, val] of Object.entries(steps)) out[`--tp-${rampName}-${step}`] = val;
+    if (isObj(steps)) for (const [step, val] of Object.entries(steps)) out[`--tesseract-${rampName}-${step}`] = val;
   }
   Object.assign(out, componentVars(theme?.components));
-  if (tokens) for (const [k, val] of Object.entries(tokens)) out[k.startsWith("--") ? k : `--tp-${k}`] = val;
+  if (tokens) for (const [k, val] of Object.entries(tokens)) out[k.startsWith("--") ? k : `--tesseract-${k}`] = val;
   if (vars) Object.assign(out, vars);
   return out;
 }

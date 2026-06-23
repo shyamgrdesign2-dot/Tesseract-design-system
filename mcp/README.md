@@ -1,6 +1,6 @@
 # Tesseract MCP
 
-An MCP server that serves the **exact** Tesseract (`tp-ui`) components, props, allowed values, and design tokens — extracted from source — so any AI client configures **real** components instead of inventing them.
+An MCP server that serves the **exact** Tesseract (`tesseract-ui`) components, props, allowed values, and design tokens — extracted from source — so any AI client configures **real** components instead of inventing them.
 
 It is the machine-readable counterpart to the `/tesseract` skill: the skill teaches *how to compose a page*; this MCP supplies *ground-truth component data and validation*.
 
@@ -9,7 +9,7 @@ It is the machine-readable counterpart to the `/tesseract` skill: the skill teac
 ```
 source of truth                     served by
 src/components/**  ──┐
-src/tp-tokens.css ──┤  build-manifest.mjs  ──▶  manifest/component-manifest.json  ──▶  src/server.mjs (MCP, stdio)
+src/tesseract-tokens.css ──┤  build-manifest.mjs  ──▶  manifest/component-manifest.json  ──▶  src/server.mjs (MCP, stdio)
                      ┘
 ```
 

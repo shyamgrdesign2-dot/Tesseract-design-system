@@ -2,7 +2,7 @@
 // at app start (or via TPThemeProvider `iconBaseUrl`) to point elsewhere — e.g.
 // a self-hosted /tp-icons copy.
 //
-//   import { setIconBaseUrl } from "tp-ui";
+//   import { setIconBaseUrl } from "tesseract-ui";
 //   setIconBaseUrl("/tp-icons");
 //
 // Final URL = `${base}/${corner}/${style}/${family}/${name}.svg`, e.g.

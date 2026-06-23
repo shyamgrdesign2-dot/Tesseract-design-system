@@ -39,20 +39,20 @@ const SelectAddon = ({ ariaLabel, options }) => (
       style={{
         appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none',
         height: '100%', padding: '0 32px 0 12px', margin: 0, border: 'none', outline: 'none',
-        background: 'var(--tp-slate-50, #FAFAFB)', color: 'var(--tp-slate-700, #454551)',
+        background: 'var(--tesseract-slate-50, #FAFAFB)', color: 'var(--tesseract-slate-700, #454551)',
         fontSize: 14, fontWeight: 500, fontFamily: 'Inter, sans-serif', cursor: 'pointer',
       }}
     >
       {options.map((o) => <option key={o}>{o}</option>)}
     </select>
-    <span style={{ position: 'absolute', right: 11, pointerEvents: 'none', display: 'inline-flex', color: 'var(--tp-slate-500, #717179)' }}>
+    <span style={{ position: 'absolute', right: 11, pointerEvents: 'none', display: 'inline-flex', color: 'var(--tesseract-slate-500, #717179)' }}>
       <Chevron />
     </span>
   </span>
 );
 
 const TextAddon = ({ children }) => (
-  <span style={{ padding: '0 12px', background: 'var(--tp-slate-50, #FAFAFB)', color: 'var(--tp-slate-600, #545460)', fontSize: 14, whiteSpace: 'nowrap' }}>
+  <span style={{ padding: '0 12px', background: 'var(--tesseract-slate-50, #FAFAFB)', color: 'var(--tesseract-slate-600, #545460)', fontSize: 14, whiteSpace: 'nowrap' }}>
     {children}
   </span>
 );
@@ -66,8 +66,8 @@ const CtaAddon = ({ label, iconName }) => (
       height: '100%', padding: '0 16px', border: 'none', cursor: 'pointer',
       display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
       fontSize: 13, fontWeight: 600, fontFamily: 'Inter, sans-serif',
-      background: 'var(--tp-slate-50, #FAFAFB)',
-      color: 'var(--tp-slate-700, #454551)',
+      background: 'var(--tesseract-slate-50, #FAFAFB)',
+      color: 'var(--tesseract-slate-700, #454551)',
     }}
   >
     {iconName && <TPLibraryIcon name={iconName} size={16} />}

@@ -40,7 +40,7 @@ function PillIcon({ icon, active, collapsed }) {
         name={icon}
         variant={active ? "bulk" : "linear"}
         size={collapsed ? 20 : 18}
-        color={active ? "var(--tp-blue-500, #4b4ad5)" : "var(--tp-slate-0, #ffffff)"}
+        color={active ? "var(--tesseract-blue-500, #4b4ad5)" : "var(--tesseract-slate-0, #ffffff)"}
       />
     );
   }

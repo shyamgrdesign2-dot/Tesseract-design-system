@@ -2,17 +2,17 @@
 // Tesseract UI — public entry point.
 //
 // Single import surface for consumers:
-//   import { Button, Badge, DataTable, Dropdown } from "tp-ui";
+//   import { Button, Badge, DataTable, Dropdown } from "tesseract-ui";
 //
 // Everything is built from scratch with zero runtime dependencies beyond
 // react / react-dom. Atoms are primitives; molecules compose atoms.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Foundational styles ship with the package (bundled into tp-ui.css): the design
+// Foundational styles ship with the package (bundled into tesseract-ui.css): the design
 // tokens (CSS variables), the minimal base reset, and the type-role classes.
-import "./tp-tokens.css";
-import "./tp-base.css";
-import "./tp-typography.css";
+import "./tesseract-tokens.css";
+import "./tesseract-base.css";
+import "./tesseract-typography.css";
 
 export * from "./components/atoms";
 export * from "./components/molecules";

@@ -1,33 +1,33 @@
 /* Tooltip.module.scss — TP tooltip surface (dark default, light variant). */
 
 .content {
-  padding: var(--tp-space-1-5) var(--tp-space-2-5);
-  border-radius: var(--tp-radius-8, 8px);
+  padding: var(--tesseract-space-1-5) var(--tesseract-space-2-5);
+  border-radius: var(--tesseract-radius-8, 8px);
   corner-shape: round;
-  font-size: var(--tp-text-body-xs);
-  font-weight: var(--tp-weight-medium);
-  font-family: var(--tp-font-body);
+  font-size: var(--tesseract-text-body-xs);
+  font-weight: var(--tesseract-weight-medium);
+  font-family: var(--tesseract-font-body);
   line-height: 1.4;
   white-space: normal;
   word-wrap: break-word;
   text-align: center;
   z-index: 700;
-  box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--tp-slate-900) 24%, transparent);
+  box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--tesseract-slate-900) 24%, transparent);
   animation: tp-tooltip-in 140ms ease;
 }
 
 .content[data-variant="dark"] {
-  color: var(--tp-slate-0, var(--tp-slate-0));
-  background-color: var(--tp-slate-900, var(--tp-slate-900));
+  color: var(--tesseract-slate-0, var(--tesseract-slate-0));
+  background-color: var(--tesseract-slate-900, var(--tesseract-slate-900));
 }
 
 .content[data-variant="light"] {
-  color: var(--tp-slate-900, var(--tp-slate-900));
-  background-color: var(--tp-slate-0, var(--tp-slate-0));
-  border: 1px solid var(--tp-slate-200, var(--tp-slate-200));
+  color: var(--tesseract-slate-900, var(--tesseract-slate-900));
+  background-color: var(--tesseract-slate-0, var(--tesseract-slate-0));
+  border: 1px solid var(--tesseract-slate-200, var(--tesseract-slate-200));
   /* No heavy glow on the white surface — the 1px border defines the edge.
      A crisp, shallow shadow just lifts it off the page. */
-  box-shadow: 0 2px 6px -3px color-mix(in srgb, var(--tp-slate-900) 18%, transparent);
+  box-shadow: 0 2px 6px -3px color-mix(in srgb, var(--tesseract-slate-900) 18%, transparent);
 }
 
 /* Inner layout — leading icon · body · dismiss.
@@ -36,7 +36,7 @@
   display: inline-flex;
   align-items: center;
   /* Tight icon↔text gap; the dismiss restores its own spacing below. */
-  gap: var(--tp-space-1-5);
+  gap: var(--tesseract-space-1-5);
   text-align: left;
 
   &[data-multiline] { align-items: flex-start; }
@@ -50,12 +50,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-left: var(--tp-space-1); /* keep the × clear of the text (icon gap stays tight) */
-  width: var(--tp-size-18);
-  height: var(--tp-size-18);
+  margin-left: var(--tesseract-space-1); /* keep the × clear of the text (icon gap stays tight) */
+  width: var(--tesseract-size-18);
+  height: var(--tesseract-size-18);
   padding: 0;
   border: none;
-  border-radius: var(--tp-radius-6);
+  border-radius: var(--tesseract-radius-6);
   corner-shape: round;
   cursor: pointer;
   color: currentColor;

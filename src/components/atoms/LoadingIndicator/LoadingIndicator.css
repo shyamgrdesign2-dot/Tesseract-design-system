@@ -7,7 +7,7 @@
 .tp-loader {
   display: inline-flex;
   align-items: center;
-  gap: var(--tp-space-2);
+  gap: var(--tesseract-space-2);
   color: inherit;
 }
 
@@ -33,11 +33,11 @@
 }
 
 .tp-loader__label {
-  font-weight: var(--tp-weight-medium);
-  font-size: var(--tp-text-body-sm);
+  font-weight: var(--tesseract-weight-medium);
+  font-size: var(--tesseract-text-body-sm);
   line-height: 1.4;
-  font-family: var(--tp-font-body);
-  color: var(--tp-slate-600, #545460);
+  font-family: var(--tesseract-font-body);
+  color: var(--tesseract-slate-600, #545460);
 }
 
 .tp-loader__sr {

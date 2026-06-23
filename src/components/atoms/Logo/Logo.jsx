@@ -35,10 +35,10 @@ const WORDMARKS = {
 
 const TONES = {
   gradient: "linear-gradient(90deg, #5347d8 0%, #9d2af7 100%)",
-  dark: "var(--tp-slate-900, #171725)",
-  light: "var(--tp-slate-0, #ffffff)",
-  violet: "var(--tp-violet-500, #a461d8)",
-  blue: "var(--tp-blue-500, #4b4ad5)",
+  dark: "var(--tesseract-slate-900, #171725)",
+  light: "var(--tesseract-slate-0, #ffffff)",
+  violet: "var(--tesseract-violet-500, #a461d8)",
+  blue: "var(--tesseract-blue-500, #4b4ad5)",
 };
 
 function mark(src, w, h, tone) {

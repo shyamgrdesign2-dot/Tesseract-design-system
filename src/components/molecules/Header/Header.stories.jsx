@@ -150,7 +150,7 @@ export const InfoTags = {
       <Header
         title="Custom Radius"
         actions={[
-          { type: 'info', icon: 'heart', label: 'BP:', value: '120/80 mmHg', radius: 'var(--tp-radius-full)' },
+          { type: 'info', icon: 'heart', label: 'BP:', value: '120/80 mmHg', radius: 'var(--tesseract-radius-full)' },
           { type: 'info', icon: 'calendar', value: 'Jun 23, 2026', radius: '4px' },
         ]}
       />
@@ -240,7 +240,7 @@ function HeaderPlaygroundDemo(a) {
   else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
 
   return (
-    <div style={{ background: 'var(--tp-slate-50, #FAFAFB)', minHeight: 320 }}>
+    <div style={{ background: 'var(--tesseract-slate-50, #FAFAFB)', minHeight: 320 }}>
       <Header back={a.showBack} {...left} actions={actions} />
     </div>
   );

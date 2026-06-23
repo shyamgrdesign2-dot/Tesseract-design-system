@@ -35,15 +35,15 @@ export const Variants = {
   render: () => (
     <div style={{ width: 240, display: 'grid', gap: 16 }}>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>text</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>text</strong>
         <Skeleton variant="text" />
       </div>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>circular</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>circular</strong>
         <Skeleton variant="circular" />
       </div>
       <div style={{ display: 'grid', gap: 8 }}>
-        <strong style={{ fontSize: 12, color: 'var(--tp-slate-500, #54545C)' }}>rectangular</strong>
+        <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>rectangular</strong>
         <Skeleton variant="rectangular" height={80} />
       </div>
     </div>
@@ -76,7 +76,7 @@ export const CardPlaceholder = {
       style={{
         width: 280,
         padding: 16,
-        border: '1px solid var(--tp-slate-200, #e2e2ea)',
+        border: '1px solid var(--tesseract-slate-200, #e2e2ea)',
         borderRadius: 12,
         display: 'grid',
         gap: 12,

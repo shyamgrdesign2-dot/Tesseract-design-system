@@ -6,7 +6,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ color: 'var(--tp-slate-700, #454551)', background: '#fff', padding: 24, borderRadius: 8 }}>
+      <div style={{ color: 'var(--tesseract-slate-700, #454551)', background: '#fff', padding: 24, borderRadius: 8 }}>
         <Story />
       </div>
     ),
@@ -40,7 +40,7 @@ export const Sizes = {
       {['xs', 'sm', 'md', 'lg'].map((size) => (
         <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
           <LoadingIndicator type="line-spinner" size={size} />
-          <span style={{ fontSize: 12, color: 'var(--tp-slate-500, #71717a)' }}>{size}</span>
+          <span style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #71717a)' }}>{size}</span>
         </div>
       ))}
     </div>
@@ -51,9 +51,9 @@ export const Sizes = {
 export const Colors = {
   render: () => (
     <div style={{ display: 'flex', gap: 32 }}>
-      <span style={{ color: 'var(--tp-blue-500, #4b4ad5)' }}><LoadingIndicator type="line-simple" /></span>
-      <span style={{ color: 'var(--tp-error-500, #e11d48)' }}><LoadingIndicator type="line-spinner" /></span>
-      <span style={{ color: 'var(--tp-slate-700, #454551)' }}><LoadingIndicator type="dot-circle" /></span>
+      <span style={{ color: 'var(--tesseract-blue-500, #4b4ad5)' }}><LoadingIndicator type="line-simple" /></span>
+      <span style={{ color: 'var(--tesseract-error-500, #e11d48)' }}><LoadingIndicator type="line-spinner" /></span>
+      <span style={{ color: 'var(--tesseract-slate-700, #454551)' }}><LoadingIndicator type="dot-circle" /></span>
     </div>
   ),
 };

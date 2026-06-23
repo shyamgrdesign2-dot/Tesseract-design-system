@@ -99,14 +99,14 @@ export function HeroBanner({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "var(--tp-space-3)",
-          padding: "var(--tp-space-3-5) var(--tp-space-4-5)",
+          gap: "var(--tesseract-space-3)",
+          padding: "var(--tesseract-space-3-5) var(--tesseract-space-4-5)",
         }}
       >
         {/* Title + subtitle column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--tp-space-1-5)", minWidth: 0, flex: 1 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--tesseract-space-1-5)", minWidth: 0, flex: 1 }}>
           {/* Heading line: back button + title, centered together */}
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--tp-space-2)", minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", minWidth: 0 }}>
             {showBackButton && (
               // Reuse the Button atom (dark-surface, ghost, icon-only) instead of
               // a hand-rolled <button> with inline styles.
@@ -127,9 +127,9 @@ export function HeroBanner({
               <h1
                 style={{
                   margin: 0,
-                  color: "var(--tp-fg-inverse, #fff)",
+                  color: "var(--tesseract-fg-inverse, #fff)",
                   fontSize: TITLE_FONT_SIZE[ts],
-                  fontWeight: "var(--tp-weight-bold)",
+                  fontWeight: "var(--tesseract-weight-bold)",
                   lineHeight: 1.15,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
@@ -150,7 +150,7 @@ export function HeroBanner({
                 style={{
                   margin: 0,
                   marginLeft: showBackButton ? backSize + 8 : 0,
-                  color: "color-mix(in srgb, var(--tp-slate-0) 75%, transparent)",
+                  color: "color-mix(in srgb, var(--tesseract-slate-0) 75%, transparent)",
                   fontSize: SUBTITLE_FONT_SIZE[subtitleSize] ?? 13,
                   lineHeight: 1.4,
                   whiteSpace: "nowrap",
@@ -166,7 +166,7 @@ export function HeroBanner({
 
         {/* CTAs — vertically centered to the title + subtitle column. */}
         {actions && (
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--tp-space-2)", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", flexShrink: 0 }}>
             {actions}
           </div>
         )}

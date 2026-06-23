@@ -4,7 +4,7 @@
  * TPIcon — single entry point for component icons. Now CDN-backed.
  *
  *   <TPIcon name="search" variant="linear" size={20} />
- *   <TPIcon name="warning" variant="bulk" color="var(--tp-warning-500)" />
+ *   <TPIcon name="warning" variant="bulk" color="var(--tesseract-warning-500)" />
  *
  * Icons resolve from the Tesseract icon CDN via <TPLibraryIcon/> (one icon,
  * six styles, served from `<base>/<corner>/<style>/<family>/<name>.svg`). A small

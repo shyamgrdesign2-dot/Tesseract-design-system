@@ -1,9 +1,9 @@
 {
   "$schema": "tesseract-component-manifest/v1",
-  "generatedFrom": "src/components/** + src/tp-tokens.css",
+  "generatedFrom": "src/components/** + src/tesseract-tokens.css",
   "generatedAtNote": "regenerate with: node mcp/scripts/build-manifest.mjs",
   "designSystem": {
-    "package": "tp-ui",
+    "package": "tesseract-ui",
     "importAliases": [
       "@/src/components/atoms",
       "@/src/components/molecules"
@@ -18,8 +18,8 @@
   "rules": [
     "Use only components and props listed here — they are extracted from real source.",
     "Use only allowedValues for a prop when present; they come from storybook argTypes.",
-    "Colours/spacing/radii must be --tp-* tokens; never raw values.",
-    "No odd numbers in dimensions. Never edit tp-tokens.css.",
+    "Colours/spacing/radii must be --tesseract-* tokens; never raw values.",
+    "No odd numbers in dimensions. Never edit tesseract-tokens.css.",
     "Never substitute Ant Design / MUI / Tailwind / raw Radix."
   ],
   "icons": {
@@ -60,13 +60,13 @@
         },
         {
           "name": "lineColor",
-          "default": "\"color-mix(in srgb, var(--tp-slate-0) 14%, transparent)\"",
+          "default": "\"color-mix(in srgb, var(--tesseract-slate-0) 14%, transparent)\"",
           "control": "color",
           "description": "Lattice stroke color"
         },
         {
           "name": "cometColor",
-          "default": "\"var(--tp-slate-0)\"",
+          "default": "\"var(--tesseract-slate-0)\"",
           "control": "color",
           "description": "Travelling pulse color"
         },
@@ -692,7 +692,7 @@
         },
         {
           "name": "color",
-          "default": "\"var(--tp-slate-200, #E2E2EA)\"",
+          "default": "\"var(--tesseract-slate-200, #E2E2EA)\"",
           "control": "text"
         },
         {
@@ -2904,7 +2904,7 @@
         },
         {
           "name": "iconColor",
-          "default": "\"var(--tp-violet-500)\""
+          "default": "\"var(--tesseract-violet-500)\""
         },
         {
           "name": "mode",
@@ -3599,1164 +3599,1164 @@
   ],
   "tokenFamilies": {
     "blue": [
-      "--tp-blue-50",
-      "--tp-blue-100",
-      "--tp-blue-200",
-      "--tp-blue-300",
-      "--tp-blue-400",
-      "--tp-blue-500",
-      "--tp-blue-600",
-      "--tp-blue-700",
-      "--tp-blue-800",
-      "--tp-blue-900"
+      "--tesseract-blue-50",
+      "--tesseract-blue-100",
+      "--tesseract-blue-200",
+      "--tesseract-blue-300",
+      "--tesseract-blue-400",
+      "--tesseract-blue-500",
+      "--tesseract-blue-600",
+      "--tesseract-blue-700",
+      "--tesseract-blue-800",
+      "--tesseract-blue-900"
     ],
     "violet": [
-      "--tp-violet-50",
-      "--tp-violet-100",
-      "--tp-violet-200",
-      "--tp-violet-300",
-      "--tp-violet-400",
-      "--tp-violet-500",
-      "--tp-violet-600",
-      "--tp-violet-700",
-      "--tp-violet-800",
-      "--tp-violet-900"
+      "--tesseract-violet-50",
+      "--tesseract-violet-100",
+      "--tesseract-violet-200",
+      "--tesseract-violet-300",
+      "--tesseract-violet-400",
+      "--tesseract-violet-500",
+      "--tesseract-violet-600",
+      "--tesseract-violet-700",
+      "--tesseract-violet-800",
+      "--tesseract-violet-900"
     ],
     "amber": [
-      "--tp-amber-50",
-      "--tp-amber-100",
-      "--tp-amber-200",
-      "--tp-amber-300",
-      "--tp-amber-400",
-      "--tp-amber-500",
-      "--tp-amber-600",
-      "--tp-amber-700",
-      "--tp-amber-800",
-      "--tp-amber-900"
+      "--tesseract-amber-50",
+      "--tesseract-amber-100",
+      "--tesseract-amber-200",
+      "--tesseract-amber-300",
+      "--tesseract-amber-400",
+      "--tesseract-amber-500",
+      "--tesseract-amber-600",
+      "--tesseract-amber-700",
+      "--tesseract-amber-800",
+      "--tesseract-amber-900"
     ],
     "slate": [
-      "--tp-slate-0",
-      "--tp-slate-50",
-      "--tp-slate-100",
-      "--tp-slate-200",
-      "--tp-slate-300",
-      "--tp-slate-400",
-      "--tp-slate-500",
-      "--tp-slate-600",
-      "--tp-slate-700",
-      "--tp-slate-800",
-      "--tp-slate-900"
+      "--tesseract-slate-0",
+      "--tesseract-slate-50",
+      "--tesseract-slate-100",
+      "--tesseract-slate-200",
+      "--tesseract-slate-300",
+      "--tesseract-slate-400",
+      "--tesseract-slate-500",
+      "--tesseract-slate-600",
+      "--tesseract-slate-700",
+      "--tesseract-slate-800",
+      "--tesseract-slate-900"
     ],
     "icon": [
-      "--tp-icon-clickable-light-bg",
-      "--tp-icon-clickable-light-bg-hover",
-      "--tp-icon-clickable-dark-bg",
-      "--tp-icon-clickable-dark-bg-hover"
+      "--tesseract-icon-clickable-light-bg",
+      "--tesseract-icon-clickable-light-bg-hover",
+      "--tesseract-icon-clickable-dark-bg",
+      "--tesseract-icon-clickable-dark-bg-hover"
     ],
     "success": [
-      "--tp-success-50",
-      "--tp-success-100",
-      "--tp-success-200",
-      "--tp-success-300",
-      "--tp-success-400",
-      "--tp-success-500",
-      "--tp-success-600",
-      "--tp-success-700",
-      "--tp-success-800",
-      "--tp-success-900"
+      "--tesseract-success-50",
+      "--tesseract-success-100",
+      "--tesseract-success-200",
+      "--tesseract-success-300",
+      "--tesseract-success-400",
+      "--tesseract-success-500",
+      "--tesseract-success-600",
+      "--tesseract-success-700",
+      "--tesseract-success-800",
+      "--tesseract-success-900"
     ],
     "warning": [
-      "--tp-warning-50",
-      "--tp-warning-100",
-      "--tp-warning-200",
-      "--tp-warning-300",
-      "--tp-warning-400",
-      "--tp-warning-500",
-      "--tp-warning-600",
-      "--tp-warning-700",
-      "--tp-warning-800",
-      "--tp-warning-900"
+      "--tesseract-warning-50",
+      "--tesseract-warning-100",
+      "--tesseract-warning-200",
+      "--tesseract-warning-300",
+      "--tesseract-warning-400",
+      "--tesseract-warning-500",
+      "--tesseract-warning-600",
+      "--tesseract-warning-700",
+      "--tesseract-warning-800",
+      "--tesseract-warning-900"
     ],
     "error": [
-      "--tp-error-50",
-      "--tp-error-100",
-      "--tp-error-200",
-      "--tp-error-300",
-      "--tp-error-400",
-      "--tp-error-500",
-      "--tp-error-600",
-      "--tp-error-700",
-      "--tp-error-800",
-      "--tp-error-900"
+      "--tesseract-error-50",
+      "--tesseract-error-100",
+      "--tesseract-error-200",
+      "--tesseract-error-300",
+      "--tesseract-error-400",
+      "--tesseract-error-500",
+      "--tesseract-error-600",
+      "--tesseract-error-700",
+      "--tesseract-error-800",
+      "--tesseract-error-900"
     ],
     "fg": [
-      "--tp-fg-heading",
-      "--tp-fg-primary",
-      "--tp-fg-secondary",
-      "--tp-fg-tertiary",
-      "--tp-fg-placeholder",
-      "--tp-fg-disabled",
-      "--tp-fg-inverse",
-      "--tp-fg-link",
-      "--tp-fg-success",
-      "--tp-fg-warning",
-      "--tp-fg-error"
+      "--tesseract-fg-heading",
+      "--tesseract-fg-primary",
+      "--tesseract-fg-secondary",
+      "--tesseract-fg-tertiary",
+      "--tesseract-fg-placeholder",
+      "--tesseract-fg-disabled",
+      "--tesseract-fg-inverse",
+      "--tesseract-fg-link",
+      "--tesseract-fg-success",
+      "--tesseract-fg-warning",
+      "--tesseract-fg-error"
     ],
     "bg": [
-      "--tp-bg-page",
-      "--tp-bg-page-subtle",
-      "--tp-bg-surface",
-      "--tp-bg-surface-hover",
-      "--tp-bg-surface-active",
-      "--tp-bg-selected",
-      "--tp-bg-inverse",
-      "--tp-bg-brand-soft",
-      "--tp-bg-success-soft",
-      "--tp-bg-warning-soft",
-      "--tp-bg-error-soft"
+      "--tesseract-bg-page",
+      "--tesseract-bg-page-subtle",
+      "--tesseract-bg-surface",
+      "--tesseract-bg-surface-hover",
+      "--tesseract-bg-surface-active",
+      "--tesseract-bg-selected",
+      "--tesseract-bg-inverse",
+      "--tesseract-bg-brand-soft",
+      "--tesseract-bg-success-soft",
+      "--tesseract-bg-warning-soft",
+      "--tesseract-bg-error-soft"
     ],
     "border": [
-      "--tp-border-soft",
-      "--tp-border-neutral",
-      "--tp-border-strong",
-      "--tp-border-focus",
-      "--tp-border-primary",
-      "--tp-border-success",
-      "--tp-border-warning",
-      "--tp-border-error"
+      "--tesseract-border-soft",
+      "--tesseract-border-neutral",
+      "--tesseract-border-strong",
+      "--tesseract-border-focus",
+      "--tesseract-border-primary",
+      "--tesseract-border-success",
+      "--tesseract-border-warning",
+      "--tesseract-border-error"
     ],
     "font": [
-      "--tp-font-heading",
-      "--tp-font-body",
-      "--tp-font-mono"
+      "--tesseract-font-heading",
+      "--tesseract-font-body",
+      "--tesseract-font-mono"
     ],
     "weight": [
-      "--tp-weight-regular",
-      "--tp-weight-medium",
-      "--tp-weight-semibold",
-      "--tp-weight-bold",
-      "--tp-weight-extrabold"
+      "--tesseract-weight-regular",
+      "--tesseract-weight-medium",
+      "--tesseract-weight-semibold",
+      "--tesseract-weight-bold",
+      "--tesseract-weight-extrabold"
     ],
     "text": [
-      "--tp-text-display-xl",
-      "--tp-text-display-xl-lh",
-      "--tp-text-display",
-      "--tp-text-display-lh",
-      "--tp-text-h1",
-      "--tp-text-h1-lh",
-      "--tp-text-h2",
-      "--tp-text-h2-lh",
-      "--tp-text-h3",
-      "--tp-text-h3-lh",
-      "--tp-text-h4",
-      "--tp-text-h4-lh",
-      "--tp-text-h5",
-      "--tp-text-h5-lh",
-      "--tp-text-h6",
-      "--tp-text-h6-lh",
-      "--tp-text-body-xl",
-      "--tp-text-body-xl-lh",
-      "--tp-text-body-lg",
-      "--tp-text-body-lg-lh",
-      "--tp-text-body-base",
-      "--tp-text-body-base-lh",
-      "--tp-text-body-sm",
-      "--tp-text-body-sm-lh",
-      "--tp-text-body-xs",
-      "--tp-text-body-xs-lh",
-      "--tp-text-caption-lg",
-      "--tp-text-caption-lg-lh",
-      "--tp-text-caption",
-      "--tp-text-caption-lh",
-      "--tp-text-caption-sm",
-      "--tp-text-caption-sm-lh",
-      "--tp-text-micro",
-      "--tp-text-micro-lh"
+      "--tesseract-text-display-xl",
+      "--tesseract-text-display-xl-lh",
+      "--tesseract-text-display",
+      "--tesseract-text-display-lh",
+      "--tesseract-text-h1",
+      "--tesseract-text-h1-lh",
+      "--tesseract-text-h2",
+      "--tesseract-text-h2-lh",
+      "--tesseract-text-h3",
+      "--tesseract-text-h3-lh",
+      "--tesseract-text-h4",
+      "--tesseract-text-h4-lh",
+      "--tesseract-text-h5",
+      "--tesseract-text-h5-lh",
+      "--tesseract-text-h6",
+      "--tesseract-text-h6-lh",
+      "--tesseract-text-body-xl",
+      "--tesseract-text-body-xl-lh",
+      "--tesseract-text-body-lg",
+      "--tesseract-text-body-lg-lh",
+      "--tesseract-text-body-base",
+      "--tesseract-text-body-base-lh",
+      "--tesseract-text-body-sm",
+      "--tesseract-text-body-sm-lh",
+      "--tesseract-text-body-xs",
+      "--tesseract-text-body-xs-lh",
+      "--tesseract-text-caption-lg",
+      "--tesseract-text-caption-lg-lh",
+      "--tesseract-text-caption",
+      "--tesseract-text-caption-lh",
+      "--tesseract-text-caption-sm",
+      "--tesseract-text-caption-sm-lh",
+      "--tesseract-text-micro",
+      "--tesseract-text-micro-lh"
     ],
     "space": [
-      "--tp-space-0-25",
-      "--tp-space-0-5",
-      "--tp-space-1",
-      "--tp-space-1-5",
-      "--tp-space-2",
-      "--tp-space-2-5",
-      "--tp-space-3",
-      "--tp-space-3-5",
-      "--tp-space-4",
-      "--tp-space-4-5",
-      "--tp-space-5",
-      "--tp-space-5-5",
-      "--tp-space-6",
-      "--tp-space-7",
-      "--tp-space-8",
-      "--tp-space-9",
-      "--tp-space-10",
-      "--tp-space-10-5",
-      "--tp-space-12",
-      "--tp-space-16"
+      "--tesseract-space-0-25",
+      "--tesseract-space-0-5",
+      "--tesseract-space-1",
+      "--tesseract-space-1-5",
+      "--tesseract-space-2",
+      "--tesseract-space-2-5",
+      "--tesseract-space-3",
+      "--tesseract-space-3-5",
+      "--tesseract-space-4",
+      "--tesseract-space-4-5",
+      "--tesseract-space-5",
+      "--tesseract-space-5-5",
+      "--tesseract-space-6",
+      "--tesseract-space-7",
+      "--tesseract-space-8",
+      "--tesseract-space-9",
+      "--tesseract-space-10",
+      "--tesseract-space-10-5",
+      "--tesseract-space-12",
+      "--tesseract-space-16"
     ],
     "size": [
-      "--tp-size-2",
-      "--tp-size-4",
-      "--tp-size-6",
-      "--tp-size-8",
-      "--tp-size-10",
-      "--tp-size-12",
-      "--tp-size-14",
-      "--tp-size-16",
-      "--tp-size-18",
-      "--tp-size-20",
-      "--tp-size-22",
-      "--tp-size-24",
-      "--tp-size-28",
-      "--tp-size-32",
-      "--tp-size-36",
-      "--tp-size-40",
-      "--tp-size-42"
+      "--tesseract-size-2",
+      "--tesseract-size-4",
+      "--tesseract-size-6",
+      "--tesseract-size-8",
+      "--tesseract-size-10",
+      "--tesseract-size-12",
+      "--tesseract-size-14",
+      "--tesseract-size-16",
+      "--tesseract-size-18",
+      "--tesseract-size-20",
+      "--tesseract-size-22",
+      "--tesseract-size-24",
+      "--tesseract-size-28",
+      "--tesseract-size-32",
+      "--tesseract-size-36",
+      "--tesseract-size-40",
+      "--tesseract-size-42"
     ],
     "radius": [
-      "--tp-radius-0",
-      "--tp-radius-2",
-      "--tp-radius-4",
-      "--tp-radius-6",
-      "--tp-radius-8",
-      "--tp-radius-10",
-      "--tp-radius-12",
-      "--tp-radius-14",
-      "--tp-radius-16",
-      "--tp-radius-18",
-      "--tp-radius-20",
-      "--tp-radius-22",
-      "--tp-radius-24",
-      "--tp-radius-42",
-      "--tp-radius-84",
-      "--tp-radius-full"
+      "--tesseract-radius-0",
+      "--tesseract-radius-2",
+      "--tesseract-radius-4",
+      "--tesseract-radius-6",
+      "--tesseract-radius-8",
+      "--tesseract-radius-10",
+      "--tesseract-radius-12",
+      "--tesseract-radius-14",
+      "--tesseract-radius-16",
+      "--tesseract-radius-18",
+      "--tesseract-radius-20",
+      "--tesseract-radius-22",
+      "--tesseract-radius-24",
+      "--tesseract-radius-42",
+      "--tesseract-radius-84",
+      "--tesseract-radius-full"
     ],
     "shadow": [
-      "--tp-shadow-xs",
-      "--tp-shadow-sm",
-      "--tp-shadow-md",
-      "--tp-shadow-lg",
-      "--tp-shadow-xl",
-      "--tp-shadow-2xl"
+      "--tesseract-shadow-xs",
+      "--tesseract-shadow-sm",
+      "--tesseract-shadow-md",
+      "--tesseract-shadow-lg",
+      "--tesseract-shadow-xl",
+      "--tesseract-shadow-2xl"
     ],
     "focus": [
-      "--tp-focus-primary",
-      "--tp-focus-error",
-      "--tp-focus-neutral"
+      "--tesseract-focus-primary",
+      "--tesseract-focus-error",
+      "--tesseract-focus-neutral"
     ],
     "gradient": [
-      "--tp-gradient-primary-hero",
-      "--tp-gradient-primary-card",
-      "--tp-gradient-primary-subtle",
-      "--tp-gradient-secondary-hero",
-      "--tp-gradient-secondary-card",
-      "--tp-gradient-ai-hero",
-      "--tp-gradient-ai-card"
+      "--tesseract-gradient-primary-hero",
+      "--tesseract-gradient-primary-card",
+      "--tesseract-gradient-primary-subtle",
+      "--tesseract-gradient-secondary-hero",
+      "--tesseract-gradient-secondary-card",
+      "--tesseract-gradient-ai-hero",
+      "--tesseract-gradient-ai-card"
     ]
   },
   "tokens": {
     "blue": [
       {
-        "name": "--tp-blue-50",
+        "name": "--tesseract-blue-50",
         "value": "#EEEEFF"
       },
       {
-        "name": "--tp-blue-100",
+        "name": "--tesseract-blue-100",
         "value": "#D8D8FA"
       },
       {
-        "name": "--tp-blue-200",
+        "name": "--tesseract-blue-200",
         "value": "#B5B4F2"
       },
       {
-        "name": "--tp-blue-300",
+        "name": "--tesseract-blue-300",
         "value": "#8E8DE8"
       },
       {
-        "name": "--tp-blue-400",
+        "name": "--tesseract-blue-400",
         "value": "#6C6BDE"
       },
       {
-        "name": "--tp-blue-500",
+        "name": "--tesseract-blue-500",
         "value": "#4B4AD5"
       },
       {
-        "name": "--tp-blue-600",
+        "name": "--tesseract-blue-600",
         "value": "#3C3BB5"
       },
       {
-        "name": "--tp-blue-700",
+        "name": "--tesseract-blue-700",
         "value": "#2E2D96"
       },
       {
-        "name": "--tp-blue-800",
+        "name": "--tesseract-blue-800",
         "value": "#212077"
       },
       {
-        "name": "--tp-blue-900",
+        "name": "--tesseract-blue-900",
         "value": "#161558"
       }
     ],
     "violet": [
       {
-        "name": "--tp-violet-50",
+        "name": "--tesseract-violet-50",
         "value": "#FAF5FE"
       },
       {
-        "name": "--tp-violet-100",
+        "name": "--tesseract-violet-100",
         "value": "#EDDFF7"
       },
       {
-        "name": "--tp-violet-200",
+        "name": "--tesseract-violet-200",
         "value": "#DBBFEF"
       },
       {
-        "name": "--tp-violet-300",
+        "name": "--tesseract-violet-300",
         "value": "#C89FE7"
       },
       {
-        "name": "--tp-violet-400",
+        "name": "--tesseract-violet-400",
         "value": "#BA7DE9"
       },
       {
-        "name": "--tp-violet-500",
+        "name": "--tesseract-violet-500",
         "value": "#A461D8"
       },
       {
-        "name": "--tp-violet-600",
+        "name": "--tesseract-violet-600",
         "value": "#8A4DBB"
       },
       {
-        "name": "--tp-violet-700",
+        "name": "--tesseract-violet-700",
         "value": "#703A9E"
       },
       {
-        "name": "--tp-violet-800",
+        "name": "--tesseract-violet-800",
         "value": "#572A81"
       },
       {
-        "name": "--tp-violet-900",
+        "name": "--tesseract-violet-900",
         "value": "#3E1C64"
       }
     ],
     "amber": [
       {
-        "name": "--tp-amber-50",
+        "name": "--tesseract-amber-50",
         "value": "#FFFBEB"
       },
       {
-        "name": "--tp-amber-100",
+        "name": "--tesseract-amber-100",
         "value": "#FFF4CC"
       },
       {
-        "name": "--tp-amber-200",
+        "name": "--tesseract-amber-200",
         "value": "#FFE8AE"
       },
       {
-        "name": "--tp-amber-300",
+        "name": "--tesseract-amber-300",
         "value": "#FEDC85"
       },
       {
-        "name": "--tp-amber-400",
+        "name": "--tesseract-amber-400",
         "value": "#FED15E"
       },
       {
-        "name": "--tp-amber-500",
+        "name": "--tesseract-amber-500",
         "value": "#F5B832"
       },
       {
-        "name": "--tp-amber-600",
+        "name": "--tesseract-amber-600",
         "value": "#D99B1A"
       },
       {
-        "name": "--tp-amber-700",
+        "name": "--tesseract-amber-700",
         "value": "#B47D10"
       },
       {
-        "name": "--tp-amber-800",
+        "name": "--tesseract-amber-800",
         "value": "#8F6008"
       },
       {
-        "name": "--tp-amber-900",
+        "name": "--tesseract-amber-900",
         "value": "#6A4504"
       }
     ],
     "slate": [
       {
-        "name": "--tp-slate-0",
+        "name": "--tesseract-slate-0",
         "value": "#FFFFFF"
       },
       {
-        "name": "--tp-slate-50",
+        "name": "--tesseract-slate-50",
         "value": "#FAFAFB"
       },
       {
-        "name": "--tp-slate-100",
+        "name": "--tesseract-slate-100",
         "value": "#F1F1F5"
       },
       {
-        "name": "--tp-slate-200",
+        "name": "--tesseract-slate-200",
         "value": "#E2E2EA"
       },
       {
-        "name": "--tp-slate-300",
+        "name": "--tesseract-slate-300",
         "value": "#D0D5DD"
       },
       {
-        "name": "--tp-slate-400",
+        "name": "--tesseract-slate-400",
         "value": "#A2A2A8"
       },
       {
-        "name": "--tp-slate-500",
+        "name": "--tesseract-slate-500",
         "value": "#717179"
       },
       {
-        "name": "--tp-slate-600",
+        "name": "--tesseract-slate-600",
         "value": "#545460"
       },
       {
-        "name": "--tp-slate-700",
+        "name": "--tesseract-slate-700",
         "value": "#454551"
       },
       {
-        "name": "--tp-slate-800",
+        "name": "--tesseract-slate-800",
         "value": "#2C2C35"
       },
       {
-        "name": "--tp-slate-900",
+        "name": "--tesseract-slate-900",
         "value": "#171725"
       }
     ],
     "icon": [
       {
-        "name": "--tp-icon-clickable-light-bg",
+        "name": "--tesseract-icon-clickable-light-bg",
         "value": "rgba(75, 74, 213, 0.1)"
       },
       {
-        "name": "--tp-icon-clickable-light-bg-hover",
+        "name": "--tesseract-icon-clickable-light-bg-hover",
         "value": "rgba(75, 74, 213, 0.15)"
       },
       {
-        "name": "--tp-icon-clickable-dark-bg",
+        "name": "--tesseract-icon-clickable-dark-bg",
         "value": "rgba(255, 255, 255, 0.25)"
       },
       {
-        "name": "--tp-icon-clickable-dark-bg-hover",
+        "name": "--tesseract-icon-clickable-dark-bg-hover",
         "value": "rgba(255, 255, 255, 0.28)"
       }
     ],
     "success": [
       {
-        "name": "--tp-success-50",
+        "name": "--tesseract-success-50",
         "value": "#ECFDF5"
       },
       {
-        "name": "--tp-success-100",
+        "name": "--tesseract-success-100",
         "value": "#D1FAE5"
       },
       {
-        "name": "--tp-success-200",
+        "name": "--tesseract-success-200",
         "value": "#A7F3D0"
       },
       {
-        "name": "--tp-success-300",
+        "name": "--tesseract-success-300",
         "value": "#6EE7B7"
       },
       {
-        "name": "--tp-success-400",
+        "name": "--tesseract-success-400",
         "value": "#34D399"
       },
       {
-        "name": "--tp-success-500",
+        "name": "--tesseract-success-500",
         "value": "#10B981"
       },
       {
-        "name": "--tp-success-600",
+        "name": "--tesseract-success-600",
         "value": "#059669"
       },
       {
-        "name": "--tp-success-700",
+        "name": "--tesseract-success-700",
         "value": "#047857"
       },
       {
-        "name": "--tp-success-800",
+        "name": "--tesseract-success-800",
         "value": "#065F46"
       },
       {
-        "name": "--tp-success-900",
+        "name": "--tesseract-success-900",
         "value": "#064E3B"
       }
     ],
     "warning": [
       {
-        "name": "--tp-warning-50",
+        "name": "--tesseract-warning-50",
         "value": "#FFFBEB"
       },
       {
-        "name": "--tp-warning-100",
+        "name": "--tesseract-warning-100",
         "value": "#FEF3C7"
       },
       {
-        "name": "--tp-warning-200",
+        "name": "--tesseract-warning-200",
         "value": "#FDE68A"
       },
       {
-        "name": "--tp-warning-300",
+        "name": "--tesseract-warning-300",
         "value": "#FCD34D"
       },
       {
-        "name": "--tp-warning-400",
+        "name": "--tesseract-warning-400",
         "value": "#FBBF24"
       },
       {
-        "name": "--tp-warning-500",
+        "name": "--tesseract-warning-500",
         "value": "#F59E0B"
       },
       {
-        "name": "--tp-warning-600",
+        "name": "--tesseract-warning-600",
         "value": "#D97706"
       },
       {
-        "name": "--tp-warning-700",
+        "name": "--tesseract-warning-700",
         "value": "#B45309"
       },
       {
-        "name": "--tp-warning-800",
+        "name": "--tesseract-warning-800",
         "value": "#92400E"
       },
       {
-        "name": "--tp-warning-900",
+        "name": "--tesseract-warning-900",
         "value": "#78350F"
       }
     ],
     "error": [
       {
-        "name": "--tp-error-50",
+        "name": "--tesseract-error-50",
         "value": "#FFF1F2"
       },
       {
-        "name": "--tp-error-100",
+        "name": "--tesseract-error-100",
         "value": "#FFE4E6"
       },
       {
-        "name": "--tp-error-200",
+        "name": "--tesseract-error-200",
         "value": "#FECDD3"
       },
       {
-        "name": "--tp-error-300",
+        "name": "--tesseract-error-300",
         "value": "#FDA4AF"
       },
       {
-        "name": "--tp-error-400",
+        "name": "--tesseract-error-400",
         "value": "#FB7185"
       },
       {
-        "name": "--tp-error-500",
+        "name": "--tesseract-error-500",
         "value": "#E11D48"
       },
       {
-        "name": "--tp-error-600",
+        "name": "--tesseract-error-600",
         "value": "#C8102E"
       },
       {
-        "name": "--tp-error-700",
+        "name": "--tesseract-error-700",
         "value": "#9F1239"
       },
       {
-        "name": "--tp-error-800",
+        "name": "--tesseract-error-800",
         "value": "#881337"
       },
       {
-        "name": "--tp-error-900",
+        "name": "--tesseract-error-900",
         "value": "#4C0519"
       }
     ],
     "fg": [
       {
-        "name": "--tp-fg-heading",
-        "value": "var(--tp-slate-900)"
+        "name": "--tesseract-fg-heading",
+        "value": "var(--tesseract-slate-900)"
       },
       {
-        "name": "--tp-fg-primary",
-        "value": "var(--tp-slate-700)"
+        "name": "--tesseract-fg-primary",
+        "value": "var(--tesseract-slate-700)"
       },
       {
-        "name": "--tp-fg-secondary",
-        "value": "var(--tp-slate-600)"
+        "name": "--tesseract-fg-secondary",
+        "value": "var(--tesseract-slate-600)"
       },
       {
-        "name": "--tp-fg-tertiary",
-        "value": "var(--tp-slate-500)"
+        "name": "--tesseract-fg-tertiary",
+        "value": "var(--tesseract-slate-500)"
       },
       {
-        "name": "--tp-fg-placeholder",
-        "value": "var(--tp-slate-300)"
+        "name": "--tesseract-fg-placeholder",
+        "value": "var(--tesseract-slate-300)"
       },
       {
-        "name": "--tp-fg-disabled",
-        "value": "var(--tp-slate-200)"
+        "name": "--tesseract-fg-disabled",
+        "value": "var(--tesseract-slate-200)"
       },
       {
-        "name": "--tp-fg-inverse",
-        "value": "var(--tp-slate-0)"
+        "name": "--tesseract-fg-inverse",
+        "value": "var(--tesseract-slate-0)"
       },
       {
-        "name": "--tp-fg-link",
-        "value": "var(--tp-blue-500)"
+        "name": "--tesseract-fg-link",
+        "value": "var(--tesseract-blue-500)"
       },
       {
-        "name": "--tp-fg-success",
-        "value": "var(--tp-success-700)"
+        "name": "--tesseract-fg-success",
+        "value": "var(--tesseract-success-700)"
       },
       {
-        "name": "--tp-fg-warning",
-        "value": "var(--tp-warning-600)"
+        "name": "--tesseract-fg-warning",
+        "value": "var(--tesseract-warning-600)"
       },
       {
-        "name": "--tp-fg-error",
-        "value": "var(--tp-error-500)"
+        "name": "--tesseract-fg-error",
+        "value": "var(--tesseract-error-500)"
       }
     ],
     "bg": [
       {
-        "name": "--tp-bg-page",
-        "value": "var(--tp-slate-50)"
+        "name": "--tesseract-bg-page",
+        "value": "var(--tesseract-slate-50)"
       },
       {
-        "name": "--tp-bg-page-subtle",
-        "value": "var(--tp-slate-100)"
+        "name": "--tesseract-bg-page-subtle",
+        "value": "var(--tesseract-slate-100)"
       },
       {
-        "name": "--tp-bg-surface",
-        "value": "var(--tp-slate-0)"
+        "name": "--tesseract-bg-surface",
+        "value": "var(--tesseract-slate-0)"
       },
       {
-        "name": "--tp-bg-surface-hover",
-        "value": "var(--tp-slate-50)"
+        "name": "--tesseract-bg-surface-hover",
+        "value": "var(--tesseract-slate-50)"
       },
       {
-        "name": "--tp-bg-surface-active",
-        "value": "var(--tp-slate-100)"
+        "name": "--tesseract-bg-surface-active",
+        "value": "var(--tesseract-slate-100)"
       },
       {
-        "name": "--tp-bg-selected",
-        "value": "var(--tp-blue-50)"
+        "name": "--tesseract-bg-selected",
+        "value": "var(--tesseract-blue-50)"
       },
       {
-        "name": "--tp-bg-inverse",
-        "value": "var(--tp-slate-900)"
+        "name": "--tesseract-bg-inverse",
+        "value": "var(--tesseract-slate-900)"
       },
       {
-        "name": "--tp-bg-brand-soft",
-        "value": "var(--tp-blue-50)"
+        "name": "--tesseract-bg-brand-soft",
+        "value": "var(--tesseract-blue-50)"
       },
       {
-        "name": "--tp-bg-success-soft",
-        "value": "var(--tp-success-50)"
+        "name": "--tesseract-bg-success-soft",
+        "value": "var(--tesseract-success-50)"
       },
       {
-        "name": "--tp-bg-warning-soft",
-        "value": "var(--tp-warning-50)"
+        "name": "--tesseract-bg-warning-soft",
+        "value": "var(--tesseract-warning-50)"
       },
       {
-        "name": "--tp-bg-error-soft",
-        "value": "var(--tp-error-50)"
+        "name": "--tesseract-bg-error-soft",
+        "value": "var(--tesseract-error-50)"
       }
     ],
     "border": [
       {
-        "name": "--tp-border-soft",
-        "value": "var(--tp-slate-100)"
+        "name": "--tesseract-border-soft",
+        "value": "var(--tesseract-slate-100)"
       },
       {
-        "name": "--tp-border-neutral",
-        "value": "var(--tp-slate-200)"
+        "name": "--tesseract-border-neutral",
+        "value": "var(--tesseract-slate-200)"
       },
       {
-        "name": "--tp-border-strong",
-        "value": "var(--tp-slate-300)"
+        "name": "--tesseract-border-strong",
+        "value": "var(--tesseract-slate-300)"
       },
       {
-        "name": "--tp-border-focus",
-        "value": "var(--tp-blue-500)"
+        "name": "--tesseract-border-focus",
+        "value": "var(--tesseract-blue-500)"
       },
       {
-        "name": "--tp-border-primary",
-        "value": "var(--tp-blue-500)"
+        "name": "--tesseract-border-primary",
+        "value": "var(--tesseract-blue-500)"
       },
       {
-        "name": "--tp-border-success",
-        "value": "var(--tp-success-500)"
+        "name": "--tesseract-border-success",
+        "value": "var(--tesseract-success-500)"
       },
       {
-        "name": "--tp-border-warning",
-        "value": "var(--tp-warning-500)"
+        "name": "--tesseract-border-warning",
+        "value": "var(--tesseract-warning-500)"
       },
       {
-        "name": "--tp-border-error",
-        "value": "var(--tp-error-500)"
+        "name": "--tesseract-border-error",
+        "value": "var(--tesseract-error-500)"
       }
     ],
     "font": [
       {
-        "name": "--tp-font-heading",
+        "name": "--tesseract-font-heading",
         "value": "var(--font-heading)"
       },
       {
-        "name": "--tp-font-body",
+        "name": "--tesseract-font-body",
         "value": "var(--font-sans)"
       },
       {
-        "name": "--tp-font-mono",
+        "name": "--tesseract-font-mono",
         "value": "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Liberation Mono\", monospace"
       }
     ],
     "weight": [
       {
-        "name": "--tp-weight-regular",
+        "name": "--tesseract-weight-regular",
         "value": "400"
       },
       {
-        "name": "--tp-weight-medium",
+        "name": "--tesseract-weight-medium",
         "value": "500"
       },
       {
-        "name": "--tp-weight-semibold",
+        "name": "--tesseract-weight-semibold",
         "value": "600"
       },
       {
-        "name": "--tp-weight-bold",
+        "name": "--tesseract-weight-bold",
         "value": "700"
       },
       {
-        "name": "--tp-weight-extrabold",
+        "name": "--tesseract-weight-extrabold",
         "value": "800"
       }
     ],
     "text": [
       {
-        "name": "--tp-text-display-xl",
+        "name": "--tesseract-text-display-xl",
         "value": "56px"
       },
       {
-        "name": "--tp-text-display-xl-lh",
+        "name": "--tesseract-text-display-xl-lh",
         "value": "64px"
       },
       {
-        "name": "--tp-text-display",
+        "name": "--tesseract-text-display",
         "value": "48px"
       },
       {
-        "name": "--tp-text-display-lh",
+        "name": "--tesseract-text-display-lh",
         "value": "56px"
       },
       {
-        "name": "--tp-text-h1",
+        "name": "--tesseract-text-h1",
         "value": "36px"
       },
       {
-        "name": "--tp-text-h1-lh",
+        "name": "--tesseract-text-h1-lh",
         "value": "44px"
       },
       {
-        "name": "--tp-text-h2",
+        "name": "--tesseract-text-h2",
         "value": "30px"
       },
       {
-        "name": "--tp-text-h2-lh",
+        "name": "--tesseract-text-h2-lh",
         "value": "38px"
       },
       {
-        "name": "--tp-text-h3",
+        "name": "--tesseract-text-h3",
         "value": "24px"
       },
       {
-        "name": "--tp-text-h3-lh",
+        "name": "--tesseract-text-h3-lh",
         "value": "32px"
       },
       {
-        "name": "--tp-text-h4",
+        "name": "--tesseract-text-h4",
         "value": "20px"
       },
       {
-        "name": "--tp-text-h4-lh",
+        "name": "--tesseract-text-h4-lh",
         "value": "28px"
       },
       {
-        "name": "--tp-text-h5",
+        "name": "--tesseract-text-h5",
         "value": "16px"
       },
       {
-        "name": "--tp-text-h5-lh",
+        "name": "--tesseract-text-h5-lh",
         "value": "24px"
       },
       {
-        "name": "--tp-text-h6",
+        "name": "--tesseract-text-h6",
         "value": "14px"
       },
       {
-        "name": "--tp-text-h6-lh",
+        "name": "--tesseract-text-h6-lh",
         "value": "20px"
       },
       {
-        "name": "--tp-text-body-xl",
+        "name": "--tesseract-text-body-xl",
         "value": "20px"
       },
       {
-        "name": "--tp-text-body-xl-lh",
+        "name": "--tesseract-text-body-xl-lh",
         "value": "32px"
       },
       {
-        "name": "--tp-text-body-lg",
+        "name": "--tesseract-text-body-lg",
         "value": "18px"
       },
       {
-        "name": "--tp-text-body-lg-lh",
+        "name": "--tesseract-text-body-lg-lh",
         "value": "28px"
       },
       {
-        "name": "--tp-text-body-base",
+        "name": "--tesseract-text-body-base",
         "value": "16px"
       },
       {
-        "name": "--tp-text-body-base-lh",
+        "name": "--tesseract-text-body-base-lh",
         "value": "24px"
       },
       {
-        "name": "--tp-text-body-sm",
+        "name": "--tesseract-text-body-sm",
         "value": "14px"
       },
       {
-        "name": "--tp-text-body-sm-lh",
+        "name": "--tesseract-text-body-sm-lh",
         "value": "20px"
       },
       {
-        "name": "--tp-text-body-xs",
+        "name": "--tesseract-text-body-xs",
         "value": "12px"
       },
       {
-        "name": "--tp-text-body-xs-lh",
+        "name": "--tesseract-text-body-xs-lh",
         "value": "18px"
       },
       {
-        "name": "--tp-text-caption-lg",
+        "name": "--tesseract-text-caption-lg",
         "value": "13px"
       },
       {
-        "name": "--tp-text-caption-lg-lh",
+        "name": "--tesseract-text-caption-lg-lh",
         "value": "18px"
       },
       {
-        "name": "--tp-text-caption",
+        "name": "--tesseract-text-caption",
         "value": "12px"
       },
       {
-        "name": "--tp-text-caption-lh",
+        "name": "--tesseract-text-caption-lh",
         "value": "16px"
       },
       {
-        "name": "--tp-text-caption-sm",
+        "name": "--tesseract-text-caption-sm",
         "value": "11px"
       },
       {
-        "name": "--tp-text-caption-sm-lh",
+        "name": "--tesseract-text-caption-sm-lh",
         "value": "14px"
       },
       {
-        "name": "--tp-text-micro",
+        "name": "--tesseract-text-micro",
         "value": "10px"
       },
       {
-        "name": "--tp-text-micro-lh",
+        "name": "--tesseract-text-micro-lh",
         "value": "12px"
       }
     ],
     "space": [
       {
-        "name": "--tp-space-0-25",
+        "name": "--tesseract-space-0-25",
         "value": "1px"
       },
       {
-        "name": "--tp-space-0-5",
+        "name": "--tesseract-space-0-5",
         "value": "2px"
       },
       {
-        "name": "--tp-space-1",
+        "name": "--tesseract-space-1",
         "value": "4px"
       },
       {
-        "name": "--tp-space-1-5",
+        "name": "--tesseract-space-1-5",
         "value": "6px"
       },
       {
-        "name": "--tp-space-2",
+        "name": "--tesseract-space-2",
         "value": "8px"
       },
       {
-        "name": "--tp-space-2-5",
+        "name": "--tesseract-space-2-5",
         "value": "10px"
       },
       {
-        "name": "--tp-space-3",
+        "name": "--tesseract-space-3",
         "value": "12px"
       },
       {
-        "name": "--tp-space-3-5",
+        "name": "--tesseract-space-3-5",
         "value": "14px"
       },
       {
-        "name": "--tp-space-4",
+        "name": "--tesseract-space-4",
         "value": "16px"
       },
       {
-        "name": "--tp-space-4-5",
+        "name": "--tesseract-space-4-5",
         "value": "18px"
       },
       {
-        "name": "--tp-space-5",
+        "name": "--tesseract-space-5",
         "value": "20px"
       },
       {
-        "name": "--tp-space-5-5",
+        "name": "--tesseract-space-5-5",
         "value": "22px"
       },
       {
-        "name": "--tp-space-6",
+        "name": "--tesseract-space-6",
         "value": "24px"
       },
       {
-        "name": "--tp-space-7",
+        "name": "--tesseract-space-7",
         "value": "28px"
       },
       {
-        "name": "--tp-space-8",
+        "name": "--tesseract-space-8",
         "value": "32px"
       },
       {
-        "name": "--tp-space-9",
+        "name": "--tesseract-space-9",
         "value": "36px"
       },
       {
-        "name": "--tp-space-10",
+        "name": "--tesseract-space-10",
         "value": "40px"
       },
       {
-        "name": "--tp-space-10-5",
+        "name": "--tesseract-space-10-5",
         "value": "42px"
       },
       {
-        "name": "--tp-space-12",
+        "name": "--tesseract-space-12",
         "value": "48px"
       },
       {
-        "name": "--tp-space-16",
+        "name": "--tesseract-space-16",
         "value": "64px"
       }
     ],
     "size": [
       {
-        "name": "--tp-size-2",
+        "name": "--tesseract-size-2",
         "value": "2px"
       },
       {
-        "name": "--tp-size-4",
+        "name": "--tesseract-size-4",
         "value": "4px"
       },
       {
-        "name": "--tp-size-6",
+        "name": "--tesseract-size-6",
         "value": "6px"
       },
       {
-        "name": "--tp-size-8",
+        "name": "--tesseract-size-8",
         "value": "8px"
       },
       {
-        "name": "--tp-size-10",
+        "name": "--tesseract-size-10",
         "value": "10px"
       },
       {
-        "name": "--tp-size-12",
+        "name": "--tesseract-size-12",
         "value": "12px"
       },
       {
-        "name": "--tp-size-14",
+        "name": "--tesseract-size-14",
         "value": "14px"
       },
       {
-        "name": "--tp-size-16",
+        "name": "--tesseract-size-16",
         "value": "16px"
       },
       {
-        "name": "--tp-size-18",
+        "name": "--tesseract-size-18",
         "value": "18px"
       },
       {
-        "name": "--tp-size-20",
+        "name": "--tesseract-size-20",
         "value": "20px"
       },
       {
-        "name": "--tp-size-22",
+        "name": "--tesseract-size-22",
         "value": "22px"
       },
       {
-        "name": "--tp-size-24",
+        "name": "--tesseract-size-24",
         "value": "24px"
       },
       {
-        "name": "--tp-size-28",
+        "name": "--tesseract-size-28",
         "value": "28px"
       },
       {
-        "name": "--tp-size-32",
+        "name": "--tesseract-size-32",
         "value": "32px"
       },
       {
-        "name": "--tp-size-36",
+        "name": "--tesseract-size-36",
         "value": "36px"
       },
       {
-        "name": "--tp-size-40",
+        "name": "--tesseract-size-40",
         "value": "40px"
       },
       {
-        "name": "--tp-size-42",
+        "name": "--tesseract-size-42",
         "value": "42px"
       }
     ],
     "radius": [
       {
-        "name": "--tp-radius-0",
+        "name": "--tesseract-radius-0",
         "value": "0"
       },
       {
-        "name": "--tp-radius-2",
+        "name": "--tesseract-radius-2",
         "value": "2px"
       },
       {
-        "name": "--tp-radius-4",
+        "name": "--tesseract-radius-4",
         "value": "4px"
       },
       {
-        "name": "--tp-radius-6",
+        "name": "--tesseract-radius-6",
         "value": "6px"
       },
       {
-        "name": "--tp-radius-8",
+        "name": "--tesseract-radius-8",
         "value": "8px"
       },
       {
-        "name": "--tp-radius-10",
+        "name": "--tesseract-radius-10",
         "value": "10px"
       },
       {
-        "name": "--tp-radius-12",
+        "name": "--tesseract-radius-12",
         "value": "12px"
       },
       {
-        "name": "--tp-radius-14",
+        "name": "--tesseract-radius-14",
         "value": "14px"
       },
       {
-        "name": "--tp-radius-16",
+        "name": "--tesseract-radius-16",
         "value": "16px"
       },
       {
-        "name": "--tp-radius-18",
+        "name": "--tesseract-radius-18",
         "value": "18px"
       },
       {
-        "name": "--tp-radius-20",
+        "name": "--tesseract-radius-20",
         "value": "20px"
       },
       {
-        "name": "--tp-radius-22",
+        "name": "--tesseract-radius-22",
         "value": "22px"
       },
       {
-        "name": "--tp-radius-24",
+        "name": "--tesseract-radius-24",
         "value": "24px"
       },
       {
-        "name": "--tp-radius-42",
+        "name": "--tesseract-radius-42",
         "value": "42px"
       },
       {
-        "name": "--tp-radius-84",
+        "name": "--tesseract-radius-84",
         "value": "84px"
       },
       {
-        "name": "--tp-radius-full",
+        "name": "--tesseract-radius-full",
         "value": "9999px"
       }
     ],
     "shadow": [
       {
-        "name": "--tp-shadow-xs",
+        "name": "--tesseract-shadow-xs",
         "value": "0 1px 2px 0 rgba(23, 23, 37, 0.04)"
       },
       {
-        "name": "--tp-shadow-sm",
+        "name": "--tesseract-shadow-sm",
         "value": "0 1px 3px 0 rgba(23, 23, 37, 0.08)"
       },
       {
-        "name": "--tp-shadow-md",
+        "name": "--tesseract-shadow-md",
         "value": "0 4px 8px -2px rgba(23, 23, 37, 0.08)"
       },
       {
-        "name": "--tp-shadow-lg",
+        "name": "--tesseract-shadow-lg",
         "value": "0 12px 24px -4px rgba(23, 23, 37, 0.08)"
       },
       {
-        "name": "--tp-shadow-xl",
+        "name": "--tesseract-shadow-xl",
         "value": "0 20px 40px -8px rgba(23, 23, 37, 0.12)"
       },
       {
-        "name": "--tp-shadow-2xl",
+        "name": "--tesseract-shadow-2xl",
         "value": "0 32px 64px -12px rgba(23, 23, 37, 0.20)"
       }
     ],
     "focus": [
       {
-        "name": "--tp-focus-primary",
+        "name": "--tesseract-focus-primary",
         "value": "0 0 0 3px #b5b4f2"
       },
       {
-        "name": "--tp-focus-error",
+        "name": "--tesseract-focus-error",
         "value": "0 0 0 3px #fda4af"
       },
       {
-        "name": "--tp-focus-neutral",
+        "name": "--tesseract-focus-neutral",
         "value": "0 0 0 3px #d0d5dd"
       }
     ],
     "gradient": [
       {
-        "name": "--tp-gradient-primary-hero",
+        "name": "--tesseract-gradient-primary-hero",
         "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #4b4ad5 0%, #161558 39.08%, #2e2d96 78.16%, #4b4ad5 100%)"
       },
       {
-        "name": "--tp-gradient-primary-card",
+        "name": "--tesseract-gradient-primary-card",
         "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #6c6bde 0%, #212077 39.08%, #3c3bb5 78.16%, #6c6bde 100%)"
       },
       {
-        "name": "--tp-gradient-primary-subtle",
+        "name": "--tesseract-gradient-primary-subtle",
         "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #b5b4f2 0%, #6c6bde 39.08%, #8e8de8 78.16%, #b5b4f2 100%)"
       },
       {
-        "name": "--tp-gradient-secondary-hero",
+        "name": "--tesseract-gradient-secondary-hero",
         "value": "radial-gradient(99.09% 59.99% at 50% 55.44%, #8a4dbb 0%, #3e1c64 39.08%, #572a81 78.16%, #a461d8 100%)"
       },
       {
-        "name": "--tp-gradient-secondary-card",
+        "name": "--tesseract-gradient-secondary-card",
         "value": "radial-gradient(99.09% 59.99% at 50% 55.44%, #ba7de9 0%, #572a81 39.08%, #703a9e 78.16%, #ba7de9 100%)"
       },
       {
-        "name": "--tp-gradient-ai-hero",
+        "name": "--tesseract-gradient-ai-hero",
         "value": "linear-gradient(91deg, #d565ea 3.04%, #673aac 66.74%, #1a1994 130.45%)"
       },
       {
-        "name": "--tp-gradient-ai-card",
+        "name": "--tesseract-gradient-ai-card",
         "value": "linear-gradient(91deg, #e08bf0 3.04%, #8a5dc2 66.74%, #3c3bb5 130.45%)"
       }
     ]

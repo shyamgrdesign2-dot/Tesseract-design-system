@@ -29,7 +29,7 @@ const Row = ({ children, gap = 12 }) => (
 
 const Section = ({ label, children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #54545C)' }}>
+    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-400, #54545C)' }}>
       {label}
     </span>
     {children}
@@ -113,7 +113,7 @@ export const Playground = {
   // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
   render: ({ shape, icons, leftIconName, rightIconName, iconName, radius, children, ...args }) => {
     const px = ICON_FOR(args.size);
-    const style = { '--tp-btn-radius': `${radius}px` };
+    const style = { '--tesseract-btn-radius': `${radius}px` };
     const lib = (name) => (name ? <TPLibraryIcon name={name} size={px} /> : undefined);
     const showLeft  = icons === 'left'  || icons === 'both';
     const showRight = icons === 'right' || icons === 'both';
@@ -305,14 +305,14 @@ export const FullMatrix = {
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, marginBottom: 8 }}>
         <div />
         {VARIANTS.map((v) => (
-          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tp-slate-400, #54545C)', textAlign: 'center' }}>
+          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-400, #54545C)', textAlign: 'center' }}>
             {v}
           </span>
         ))}
       </div>
       {THEMES.map((theme) => (
         <div key={theme} style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-600, #54545C)' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-600, #54545C)' }}>
             {theme.charAt(0).toUpperCase() + theme.slice(1)}
           </span>
           {VARIANTS.map((variant) => (
@@ -323,7 +323,7 @@ export const FullMatrix = {
         </div>
       ))}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginTop: 12, marginBottom: 8 }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Disabled</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-400, #54545C)' }}>Disabled</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} disabled>Label</Button>
@@ -331,7 +331,7 @@ export const FullMatrix = {
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center' }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tp-slate-400, #54545C)' }}>Loading</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-400, #54545C)' }}>Loading</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} loading>Label</Button>

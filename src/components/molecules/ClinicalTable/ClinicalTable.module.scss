@@ -6,11 +6,11 @@
 .wrap {
   position: relative;
   overflow-x: auto;
-  border: 1px solid var(--tp-slate-100, var(--tp-slate-100));
-  border-radius: var(--tp-radius-10, 10px);
+  border: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
+  border-radius: var(--tesseract-radius-10, 10px);
   corner-shape: round;
-  background: var(--tp-slate-0, var(--tp-slate-0));
-  font-family: var(--tp-font-body);
+  background: var(--tesseract-slate-0, var(--tesseract-slate-0));
+  font-family: var(--tesseract-font-body);
 }
 
 /* Fluid + responsive: the table fills its container and auto-layout flexes each
@@ -22,42 +22,42 @@
   width: 100%;
   table-layout: auto;
   border-collapse: collapse;
-  font-size: var(--tp-text-body-sm);
+  font-size: var(--tesseract-text-body-sm);
 }
 
 /* ── Header ── */
-.headRow { height: 38px; background: var(--tp-slate-50, var(--tp-slate-50)); }
+.headRow { height: 38px; background: var(--tesseract-slate-50, var(--tesseract-slate-50)); }
 .th {
-  padding: var(--tp-space-2) var(--tp-space-3);
+  padding: var(--tesseract-space-2) var(--tesseract-space-3);
   text-align: left;
-  font-size: var(--tp-text-body-xs);
-  font-weight: var(--tp-weight-semibold);
+  font-size: var(--tesseract-text-body-xs);
+  font-weight: var(--tesseract-weight-semibold);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--tp-slate-500, var(--tp-slate-500));
-  border-right: 1px solid var(--tp-slate-100, var(--tp-slate-100));
-  background: var(--tp-slate-50, var(--tp-slate-50));
+  color: var(--tesseract-slate-500, var(--tesseract-slate-500));
+  border-right: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
+  background: var(--tesseract-slate-50, var(--tesseract-slate-50));
   &[data-align="center"] { text-align: center; }
   &[data-align="right"]  { text-align: right; }
   &:last-child { border-right: none; }
 }
 
-.sideCol { width: var(--tp-size-40); min-width: var(--tp-size-40); max-width: var(--tp-size-40); padding: 0; text-align: center; }
+.sideCol { width: var(--tesseract-size-40); min-width: var(--tesseract-size-40); max-width: var(--tesseract-size-40); padding: 0; text-align: center; }
 
 /* ── Rows ── */
 .row {
   height: 52px;
-  border-top: 1px solid var(--tp-slate-100, var(--tp-slate-100));
+  border-top: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
   transition: background-color 150ms ease;
-  &:hover { background: color-mix(in srgb, var(--tp-slate-50, var(--tp-slate-50)) 60%, transparent); }
+  &:hover { background: color-mix(in srgb, var(--tesseract-slate-50, var(--tesseract-slate-50)) 60%, transparent); }
 }
 .td {
   height: 52px;
   padding: 0;
   position: relative;
   vertical-align: middle;
-  border-right: 1px solid var(--tp-slate-100, var(--tp-slate-100));
-  background: var(--tp-slate-0, var(--tp-slate-0));
+  border-right: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
+  background: var(--tesseract-slate-0, var(--tesseract-slate-0));
   &:last-child { border-right: none; }
 }
 /* The seamless atom fills the cell box. */
@@ -67,19 +67,19 @@
    The grabbed row reads as "selected/lifted"; the row it lands on pulses once. */
 .row[data-dragging] {
   cursor: grabbing;
-  .td { background: color-mix(in srgb, var(--tp-blue-50, var(--tp-blue-50)) 70%, var(--tp-slate-0, var(--tp-slate-0))); }
+  .td { background: color-mix(in srgb, var(--tesseract-blue-50, var(--tesseract-blue-50)) 70%, var(--tesseract-slate-0, var(--tesseract-slate-0))); }
   /* left accent bar marks the moving row */
   td:first-child::before {
     content: "";
     position: absolute;
     left: 0; top: 0; bottom: 0;
-    width: var(--tp-size-2);
-    background: var(--tp-blue-500, var(--tp-blue-500));
+    width: var(--tesseract-size-2);
+    background: var(--tesseract-blue-500, var(--tesseract-blue-500));
   }
 }
 @keyframes ctRowSettle {
-  0%   { background: color-mix(in srgb, var(--tp-blue-100, var(--tp-blue-100)) 80%, var(--tp-slate-0, var(--tp-slate-0))); }
-  100% { background: var(--tp-slate-0, var(--tp-slate-0)); }
+  0%   { background: color-mix(in srgb, var(--tesseract-blue-100, var(--tesseract-blue-100)) 80%, var(--tesseract-slate-0, var(--tesseract-slate-0))); }
+  100% { background: var(--tesseract-slate-0, var(--tesseract-slate-0)); }
 }
 .row[data-moved] .td { animation: ctRowSettle 650ms ease; }
 
@@ -89,9 +89,9 @@
   position: sticky;
   right: 0;
   z-index: 5; /* above scrolling body cells so content slides UNDER it */
-  background: var(--tp-slate-0, var(--tp-slate-0));
+  background: var(--tesseract-slate-0, var(--tesseract-slate-0));
 }
-.headRow .sticky { background: var(--tp-slate-50, var(--tp-slate-50)); z-index: 6; }
+.headRow .sticky { background: var(--tesseract-slate-50, var(--tesseract-slate-50)); z-index: 6; }
 
 /* Left fade — ONLY while content is scrolled behind the sticky column. */
 .wrap[data-behind] .sticky[data-shadow]::before {
@@ -100,19 +100,19 @@
   top: 0;
   bottom: 0;
   left: 0;
-  width: var(--tp-size-18);
+  width: var(--tesseract-size-18);
   transform: translateX(-100%);
   pointer-events: none;
-  background: linear-gradient(to left, color-mix(in srgb, var(--tp-slate-900) 12%, transparent), transparent);
+  background: linear-gradient(to left, color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent), transparent);
 }
 
 .actionCell {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--tp-space-0-5);
+  gap: var(--tesseract-space-0-5);
   height: 52px;
-  padding: 0 var(--tp-space-1-5);
+  padding: 0 var(--tesseract-space-1-5);
 }
 .moreAnchor { display: inline-flex; }
 
@@ -125,43 +125,43 @@
   height: 52px;
   border: none;
   background: transparent;
-  color: var(--tp-slate-400, var(--tp-slate-400));
+  color: var(--tesseract-slate-400, var(--tesseract-slate-400));
   cursor: grab;
   transition: background-color 120ms ease, color 120ms ease;
-  &:hover { background: var(--tp-slate-100, var(--tp-slate-100)); color: var(--tp-slate-600, var(--tp-slate-500)); }
+  &:hover { background: var(--tesseract-slate-100, var(--tesseract-slate-100)); color: var(--tesseract-slate-600, var(--tesseract-slate-500)); }
   &:active { cursor: grabbing; }
 }
 
 /* ── Row "⋯" action menu (portal) ── */
 .menu {
   min-width: 168px;
-  padding: var(--tp-space-1);
-  border: 1px solid var(--tp-slate-200, var(--tp-slate-200));
-  border-radius: var(--tp-radius-10, 10px);
+  padding: var(--tesseract-space-1);
+  border: 1px solid var(--tesseract-slate-200, var(--tesseract-slate-200));
+  border-radius: var(--tesseract-radius-10, 10px);
   corner-shape: round;
-  background: var(--tp-slate-0, var(--tp-slate-0));
-  box-shadow: 0 12px 28px -8px color-mix(in srgb, var(--tp-slate-900) 24%, transparent);
+  background: var(--tesseract-slate-0, var(--tesseract-slate-0));
+  box-shadow: 0 12px 28px -8px color-mix(in srgb, var(--tesseract-slate-900) 24%, transparent);
 }
 .menuItem {
   display: flex;
   align-items: center;
-  gap: var(--tp-space-2);
+  gap: var(--tesseract-space-2);
   width: 100%;
   text-align: left;
-  padding: var(--tp-space-2) var(--tp-space-2-5);
+  padding: var(--tesseract-space-2) var(--tesseract-space-2-5);
   border: none;
-  border-radius: var(--tp-radius-8, 8px);
+  border-radius: var(--tesseract-radius-8, 8px);
   corner-shape: round;
   background: transparent;
   font: inherit;
-  font-size: var(--tp-text-body-sm);
-  color: var(--tp-slate-700, var(--tp-slate-700));
+  font-size: var(--tesseract-text-body-sm);
+  color: var(--tesseract-slate-700, var(--tesseract-slate-700));
   cursor: pointer;
-  &:hover { background: var(--tp-slate-50, var(--tp-slate-50)); }
+  &:hover { background: var(--tesseract-slate-50, var(--tesseract-slate-50)); }
 }
-.menuItemIcon { display: inline-flex; align-items: center; color: var(--tp-slate-500, var(--tp-slate-500)); }
+.menuItemIcon { display: inline-flex; align-items: center; color: var(--tesseract-slate-500, var(--tesseract-slate-500)); }
 .menuItemDanger {
-  color: var(--tp-error-600, var(--tp-error-600));
-  .menuItemIcon { color: var(--tp-error-600, var(--tp-error-600)); }
-  &:hover { background: var(--tp-error-50, var(--tp-error-50)); }
+  color: var(--tesseract-error-600, var(--tesseract-error-600));
+  .menuItemIcon { color: var(--tesseract-error-600, var(--tesseract-error-600)); }
+  &:hover { background: var(--tesseract-error-50, var(--tesseract-error-50)); }
 }

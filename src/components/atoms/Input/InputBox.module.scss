@@ -1,69 +1,69 @@
 // InputBox.module.scss
 // World-class, fully token-driven input. All interaction states owned by CSS.
-// Colors come from TP tokens (var(--tp-*)) with safe hex fallbacks.
+// Colors come from TP tokens (var(--tesseract-*)) with safe hex fallbacks.
 
 // ─── Outer wrapper ────────────────────────────────────────────────────────────
 .wrap {
   display:        inline-flex;
   flex-direction: column;
-  gap:            var(--tp-space-1-5);
+  gap:            var(--tesseract-space-1-5);
   min-width:      0;
 
   // Per-status accent + focus ring. Default accent is the brand blue (only
   // applied on focus); status variants apply their accent even when idle.
-  --accent: var(--tp-blue-500);
-  --ring:   color-mix(in srgb, var(--tp-blue-500) 22%, transparent);
+  --accent: var(--tesseract-blue-500);
+  --ring:   color-mix(in srgb, var(--tesseract-blue-500) 22%, transparent);
 
   &[data-status="success"] {
-    --accent: var(--tp-success-500);
-    --ring:   color-mix(in srgb, var(--tp-success-500) 20%, transparent);
+    --accent: var(--tesseract-success-500);
+    --ring:   color-mix(in srgb, var(--tesseract-success-500) 20%, transparent);
   }
   &[data-status="error"] {
-    --accent: var(--tp-error-500);
-    --ring:   color-mix(in srgb, var(--tp-error-500) 20%, transparent);
+    --accent: var(--tesseract-error-500);
+    --ring:   color-mix(in srgb, var(--tesseract-error-500) 20%, transparent);
   }
   &[data-status="warning"] {
-    --accent: var(--tp-warning-500);
-    --ring:   color-mix(in srgb, var(--tp-warning-500) 22%, transparent);
+    --accent: var(--tesseract-warning-500);
+    --ring:   color-mix(in srgb, var(--tesseract-warning-500) 22%, transparent);
   }
 
   &.fullWidth { width: 100%; }
 
   // Size propagation — uniform 10px radius across sizes.
-  &[data-size="sm"] { --h: var(--tp-size-36); --r: var(--tp-radius-10); --px: var(--tp-space-2-5); --fs: var(--tp-text-body-xs); --icon: var(--tp-size-16); }
-  &[data-size="md"] { --h: var(--tp-size-42); --r: var(--tp-radius-10); --px: var(--tp-space-3); --fs: var(--tp-text-body-sm); --icon: var(--tp-size-18); }
-  &[data-size="lg"] { --h: 48px; --r: var(--tp-radius-10); --px: var(--tp-space-3-5); --fs: var(--tp-text-body-base); --icon: var(--tp-size-20); }
+  &[data-size="sm"] { --h: var(--tesseract-size-36); --r: var(--tesseract-radius-10); --px: var(--tesseract-space-2-5); --fs: var(--tesseract-text-body-xs); --icon: var(--tesseract-size-16); }
+  &[data-size="md"] { --h: var(--tesseract-size-42); --r: var(--tesseract-radius-10); --px: var(--tesseract-space-3); --fs: var(--tesseract-text-body-sm); --icon: var(--tesseract-size-18); }
+  &[data-size="lg"] { --h: 48px; --r: var(--tesseract-radius-10); --px: var(--tesseract-space-3-5); --fs: var(--tesseract-text-body-base); --icon: var(--tesseract-size-20); }
 }
 
 // ─── Label ────────────────────────────────────────────────────────────────────
 .label {
   display:     flex;
   align-items: center;
-  gap:         var(--tp-space-1);
-  font-size:   var(--tp-text-body-sm);
-  font-weight: var(--tp-weight-medium);
-  color:       var(--tp-slate-700);
+  gap:         var(--tesseract-space-1);
+  font-size:   var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-medium);
+  color:       var(--tesseract-slate-700);
   line-height: 1.4;
 }
 
-.required { color: var(--tp-error-500); }
+.required { color: var(--tesseract-error-500); }
 
 // ─── Field row (addon + input + addon) ────────────────────────────────────────
 .fieldRow {
   display:       flex;
   align-items:   stretch;
-  height:        var(--h, var(--tp-size-42));
+  height:        var(--h, var(--tesseract-size-42));
   width:         100%;
-  border-radius: var(--tp-input-radius, var(--r, var(--tp-radius-10))); // theme: components.input.radius
+  border-radius: var(--tesseract-input-radius, var(--r, var(--tesseract-radius-10))); // theme: components.input.radius
   corner-shape:  round; // accurate arc (override global squircle)
   overflow:      hidden;
-  border:        1.5px solid var(--tp-slate-200);
-  background:    var(--tp-slate-0);
+  border:        1.5px solid var(--tesseract-slate-200);
+  background:    var(--tesseract-slate-0);
   transition:    border-color 140ms ease, box-shadow 140ms ease;
 
   // Hover — only when NOT focused, so the focused stroke always wins.
   &:hover:not(:focus-within):not(:has(input:disabled)) {
-    border-color: var(--tp-slate-300);
+    border-color: var(--tesseract-slate-300);
   }
 
   // Focus ("selected") — ring lives on the row.
@@ -83,28 +83,28 @@
 
   // Disabled
   [data-disabled] & {
-    background:   var(--tp-slate-50);
-    border-color: var(--tp-slate-200);
+    background:   var(--tesseract-slate-50);
+    border-color: var(--tesseract-slate-200);
     cursor:       not-allowed;
-    &:hover { border-color: var(--tp-slate-200); }
-    &:focus-within { box-shadow: none; border-color: var(--tp-slate-200); }
+    &:hover { border-color: var(--tesseract-slate-200); }
+    &:focus-within { box-shadow: none; border-color: var(--tesseract-slate-200); }
   }
 
   // Read-only — neutral surface, no hover/focus affordance (looks disabled,
   // but the value stays selectable for copy).
   [data-readonly] & {
-    background:   var(--tp-slate-50);
-    border-color: var(--tp-slate-200);
+    background:   var(--tesseract-slate-50);
+    border-color: var(--tesseract-slate-200);
     cursor:       default;
-    &:hover { border-color: var(--tp-slate-200); }
-    &:focus-within { box-shadow: none; border-color: var(--tp-slate-200); }
+    &:hover { border-color: var(--tesseract-slate-200); }
+    &:focus-within { box-shadow: none; border-color: var(--tesseract-slate-200); }
   }
 }
 
 // Read-only input text is non-interactive (default cursor, muted).
 [data-readonly] .input {
   cursor: default;
-  color: var(--tp-slate-600);
+  color: var(--tesseract-slate-600);
 }
 
 // ─── Seamless variant (borderless — fills a table cell, inset focus/status ring) ─
@@ -139,7 +139,7 @@
     content:        "";
     position:       absolute;
     inset:          3px;
-    border-radius:  var(--tp-radius-8); // 7px → snapped
+    border-radius:  var(--tesseract-radius-8); // 7px → snapped
     corner-shape:   round;
     pointer-events: none;
   }
@@ -147,13 +147,13 @@
   &::after  { z-index: 2; box-shadow: 0 0 0 1.5px transparent; transition: box-shadow 120ms ease; }
 
   // Idle status ring.
-  &[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tp-success-500); }
-  &[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tp-warning-500); }
-  &[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tp-error-500); }
+  &[data-status="success"]::after { box-shadow: 0 0 0 1.5px var(--tesseract-success-500); }
+  &[data-status="warning"]::after { box-shadow: 0 0 0 1.5px var(--tesseract-warning-500); }
+  &[data-status="error"]::after   { box-shadow: 0 0 0 1.5px var(--tesseract-error-500); }
 
   // Active (focus) — blue ring + faint blue fill, wins over status.
-  &:focus-within::after  { box-shadow: 0 0 0 1.5px var(--tp-blue-500); }
-  &:focus-within::before { background: color-mix(in srgb, var(--tp-blue-50) 35%, transparent); }
+  &:focus-within::after  { box-shadow: 0 0 0 1.5px var(--tesseract-blue-500); }
+  &:focus-within::before { background: color-mix(in srgb, var(--tesseract-blue-50) 35%, transparent); }
 
   // Disabled (locked) cell — dimmed, no ring.
   &[data-disabled]::after { box-shadow: none; }
@@ -164,18 +164,18 @@
   flex:        1 1 0;
   min-width:   0;
   height:      100%;
-  padding:     0 var(--px, var(--tp-space-3));
-  font-size:   var(--fs, var(--tp-text-body-sm));
-  font-family: var(--tp-font-body);
-  font-weight: var(--tp-weight-regular);
-  color:       var(--tp-slate-900);
+  padding:     0 var(--px, var(--tesseract-space-3));
+  font-size:   var(--fs, var(--tesseract-text-body-sm));
+  font-family: var(--tesseract-font-body);
+  font-weight: var(--tesseract-weight-regular);
+  color:       var(--tesseract-slate-900);
   background:  transparent;
   border:      none;
   outline:     none;
   line-height: 1.5;
 
-  &::placeholder { color: var(--tp-slate-400); }
-  &:disabled { color: var(--tp-slate-400); cursor: not-allowed; }
+  &::placeholder { color: var(--tesseract-slate-400); }
+  &:disabled { color: var(--tesseract-slate-400); cursor: not-allowed; }
 
   // Hide native number spinners (we provide our own stepper).
   &[type="number"] { -moz-appearance: textfield; }
@@ -189,11 +189,11 @@
   height: auto;
   resize: none;
   overflow-y: hidden;
-  padding-top: var(--tp-space-2-5);
-  padding-bottom: var(--tp-space-2-5);
+  padding-top: var(--tesseract-space-2-5);
+  padding-bottom: var(--tesseract-space-2-5);
   line-height: 1.45;
 }
-.wrap[data-autogrow] .fieldRow { height: auto; min-height: var(--h, var(--tp-size-42)); align-items: stretch; }
+.wrap[data-autogrow] .fieldRow { height: auto; min-height: var(--h, var(--tesseract-size-42)); align-items: stretch; }
 .wrap[data-autogrow] .inputWrap { align-items: stretch; }
 
 // ─── Input wrap (icons + input + trailing cluster) ────────────────────────────
@@ -205,8 +205,8 @@
   overflow:    hidden;
 
   // Trim input padding on whichever side carries an adornment.
-  &:has(.iconLeft) .input  { padding-left:  var(--tp-space-1-5); }
-  &:has(.trailing) .input  { padding-right: var(--tp-space-1); }
+  &:has(.iconLeft) .input  { padding-left:  var(--tesseract-space-1-5); }
+  &:has(.trailing) .input  { padding-right: var(--tesseract-space-1); }
 }
 
 // ─── Tag-input variant (chips inside the field) ───────────────────────────────
@@ -216,11 +216,11 @@
 
 .fieldRow[data-tags] {
   height: auto;
-  min-height: var(--h, var(--tp-size-42));
+  min-height: var(--h, var(--tesseract-size-42));
 
   .inputWrap {
-    gap: var(--tp-space-1);
-    padding: var(--tp-space-1-5) var(--px, var(--tp-space-3));
+    gap: var(--tesseract-space-1);
+    padding: var(--tesseract-space-1-5) var(--px, var(--tesseract-space-3));
   }
   .iconLeft { margin-left: 0; }
   .input { padding: 0; min-width: 90px; }
@@ -234,7 +234,7 @@
 }
 
 .fieldRow[data-tags="scroll"] {
-  height: var(--h, var(--tp-size-42));
+  height: var(--h, var(--tesseract-size-42));
   min-height: 0;
 
   .inputWrap {
@@ -255,23 +255,23 @@
   flex-shrink:     0;
   align-items:     center;
   justify-content: center;
-  width:           var(--icon, var(--tp-size-18));
-  height:          var(--icon, var(--tp-size-18));
-  color:           var(--tp-slate-400);
+  width:           var(--icon, var(--tesseract-size-18));
+  height:          var(--icon, var(--tesseract-size-18));
+  color:           var(--tesseract-slate-400);
 
   svg { width: 100%; height: 100%; }
 }
 
-.iconLeft { margin-left: var(--px, var(--tp-space-3)); }
+.iconLeft { margin-left: var(--px, var(--tesseract-space-3)); }
 
 // ─── Trailing cluster (unit · clear · status/spinner · right icon) ────────────
 .trailing {
   display:        inline-flex;
   align-items:    center;
-  gap:            var(--tp-space-1-5);
+  gap:            var(--tesseract-space-1-5);
   flex-shrink:    0;
   height:         100%;
-  padding-right:  var(--px, var(--tp-space-3));
+  padding-right:  var(--px, var(--tesseract-space-3));
 }
 
 // In-field CTA (composed Button atom) sits snug at the right edge.
@@ -280,14 +280,14 @@
   align-items: center;
   flex-shrink: 0;
 }
-.trailing:has(.action) { padding-right: var(--tp-space-1-5); }
+.trailing:has(.action) { padding-right: var(--tesseract-space-1-5); }
 
 // ─── Unit (fixed text, e.g. "kg", "USD") ──────────────────────────────────────
 .unit {
   flex-shrink:    0;
-  font-size:      var(--fs, var(--tp-text-body-sm));
-  font-weight:    var(--tp-weight-medium);
-  color:          var(--tp-slate-500);
+  font-size:      var(--fs, var(--tesseract-text-body-sm));
+  font-weight:    var(--tesseract-weight-medium);
+  color:          var(--tesseract-slate-500);
   white-space:    nowrap;
   pointer-events: none;
 }
@@ -298,8 +298,8 @@
   flex-shrink:     0;
   align-items:     center;
   justify-content: center;
-  width:           var(--icon, var(--tp-size-18));
-  height:          var(--icon, var(--tp-size-18));
+  width:           var(--icon, var(--tesseract-size-18));
+  height:          var(--icon, var(--tesseract-size-18));
   color:           var(--accent);
   svg { width: 100%; height: 100%; }
 }
@@ -310,22 +310,22 @@
   flex-shrink:     0;
   align-items:     center;
   justify-content: center;
-  width:           var(--tp-size-18);
-  height:          var(--tp-size-18);
+  width:           var(--tesseract-size-18);
+  height:          var(--tesseract-size-18);
   padding:         0;
   border:          none;
-  border-radius: var(--tp-radius-full);
+  border-radius: var(--tesseract-radius-full);
   corner-shape:    round;
-  background:      var(--tp-slate-100);
-  color:           var(--tp-slate-500);
+  background:      var(--tesseract-slate-100);
+  color:           var(--tesseract-slate-500);
   cursor:          pointer;
   transition:      background 120ms ease, color 120ms ease;
 
   &:hover {
-    background: var(--tp-slate-200);
-    color:      var(--tp-slate-700);
+    background: var(--tesseract-slate-200);
+    color:      var(--tesseract-slate-700);
   }
-  svg { width: var(--tp-size-12); height: var(--tp-size-12); }
+  svg { width: var(--tesseract-size-12); height: var(--tesseract-size-12); }
 }
 
 // ─── Loading (reuses the LoadingIndicator atom; tinted to the field accent) ────
@@ -343,8 +343,8 @@
   align-items:  stretch;
   flex-shrink:  0;
   white-space:  nowrap;
-  font-size:    var(--fs, var(--tp-text-body-sm));
-  color:        var(--tp-slate-600);
+  font-size:    var(--fs, var(--tesseract-text-body-sm));
+  color:        var(--tesseract-slate-600);
 
   // Any direct child fills the row height and centers its content.
   > * {
@@ -355,8 +355,8 @@
   }
 }
 
-.addonLeft  { border-right: 1.5px solid var(--tp-slate-200); }
-.addonRight { border-left:  1.5px solid var(--tp-slate-200); }
+.addonLeft  { border-right: 1.5px solid var(--tesseract-slate-200); }
+.addonRight { border-left:  1.5px solid var(--tesseract-slate-200); }
 
 // ─── Counter stepper buttons (+/-) ────────────────────────────────────────────
 .stepBtn {
@@ -364,19 +364,19 @@
   flex-shrink:     0;
   align-items:     center;
   justify-content: center;
-  width:           var(--h, var(--tp-size-42));
+  width:           var(--h, var(--tesseract-size-42));
   height:          100%;
-  background:      var(--tp-slate-50);
+  background:      var(--tesseract-slate-50);
   border:          none;
-  color:           var(--tp-slate-700);
+  color:           var(--tesseract-slate-700);
   cursor:          pointer;
   transition:      background 120ms ease;
 
-  &:hover:not(:disabled) { background: var(--tp-slate-100); }
-  &:disabled { cursor: not-allowed; color: var(--tp-slate-400); }
+  &:hover:not(:disabled) { background: var(--tesseract-slate-100); }
+  &:disabled { cursor: not-allowed; color: var(--tesseract-slate-400); }
 
-  &:first-child { border-right: 1.5px solid var(--tp-slate-200); }
-  &:last-child  { border-left:  1.5px solid var(--tp-slate-200); }
+  &:first-child { border-right: 1.5px solid var(--tesseract-slate-200); }
+  &:last-child  { border-left:  1.5px solid var(--tesseract-slate-200); }
 
   svg { pointer-events: none; }
 }
@@ -386,21 +386,21 @@
   display:         flex;
   align-items:     center;
   justify-content: space-between;
-  gap:             var(--tp-space-2-5);
+  gap:             var(--tesseract-space-2-5);
   min-height:      0;
 }
 
 .helper {
   display:     flex;
   align-items: center;
-  gap:         var(--tp-space-1);
-  font-size:   var(--tp-text-body-xs);
-  color:       var(--tp-slate-500);
+  gap:         var(--tesseract-space-1);
+  font-size:   var(--tesseract-text-body-xs);
+  color:       var(--tesseract-slate-500);
   line-height: 1.4;
 
-  [data-status="success"] & { color: var(--tp-success-600); }
-  [data-status="error"]   & { color: var(--tp-error-600); }
-  [data-status="warning"] & { color: var(--tp-warning-700); }
+  [data-status="success"] & { color: var(--tesseract-success-600); }
+  [data-status="error"]   & { color: var(--tesseract-error-600); }
+  [data-status="warning"] & { color: var(--tesseract-warning-700); }
 
   svg { flex-shrink: 0; }
 }
@@ -408,9 +408,9 @@
 .count {
   flex-shrink: 0;
   margin-left: auto;
-  font-size:   var(--tp-text-body-xs);
+  font-size:   var(--tesseract-text-body-xs);
   font-variant-numeric: tabular-nums;
-  color:       var(--tp-slate-400);
+  color:       var(--tesseract-slate-400);
 
-  &[data-over="true"] { color: var(--tp-error-500); font-weight: var(--tp-weight-semibold); }
+  &[data-over="true"] { color: var(--tesseract-error-500); font-weight: var(--tesseract-weight-semibold); }
 }

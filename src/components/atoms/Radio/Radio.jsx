@@ -16,7 +16,7 @@ export function RadioGroup({ value, onChange, name, size, orientation = "vertica
       <div
         role="radiogroup"
         className={className}
-        style={{ display: "flex", flexDirection: isRow ? "row" : "column", gap: isRow ? "var(--tp-space-5)" : "var(--tp-space-2)", flexWrap: isRow ? "wrap" : undefined, ...style }}
+        style={{ display: "flex", flexDirection: isRow ? "row" : "column", gap: isRow ? "var(--tesseract-space-5)" : "var(--tesseract-space-2)", flexWrap: isRow ? "wrap" : undefined, ...style }}
       >
         {children}
       </div>
@@ -25,9 +25,9 @@ export function RadioGroup({ value, onChange, name, size, orientation = "vertica
 }
 
 const RADIO_SIZES = {
-  sm: { box: "var(--tp-size-14)", font: "var(--tp-text-body-xs)" },
-  md: { box: "var(--tp-size-16)", font: "var(--tp-text-body-sm)" },
-  lg: { box: "var(--tp-size-18)", font: "var(--tp-text-body-base)" }, // 16px
+  sm: { box: "var(--tesseract-size-14)", font: "var(--tesseract-text-body-xs)" },
+  md: { box: "var(--tesseract-size-16)", font: "var(--tesseract-text-body-sm)" },
+  lg: { box: "var(--tesseract-size-18)", font: "var(--tesseract-text-body-base)" }, // 16px
 };
 
 export function Radio({
@@ -62,11 +62,11 @@ export function Radio({
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: label != null ? "var(--tp-space-2)" : 0,
+        gap: label != null ? "var(--tesseract-space-2)" : 0,
         cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.5 : 1,
         fontSize: s.font,
-        color: "var(--tp-slate-700, #454551)",
+        color: "var(--tesseract-slate-700, #454551)",
         userSelect: "none",
         ...styleProp,
       }}
@@ -83,7 +83,7 @@ export function Radio({
           width: s.box,
           height: s.box,
           margin: 0,
-          accentColor: "var(--tp-blue-500, #4b4ad5)",
+          accentColor: "var(--tesseract-blue-500, #4b4ad5)",
           cursor: disabled ? "not-allowed" : "pointer",
         }}
       />
@@ -94,7 +94,7 @@ export function Radio({
 
 export function FormControlLabel({ control, label }) {
   return (
-    <label style={{ display: "inline-flex", alignItems: "center", gap: "var(--tp-space-2)", fontSize: "var(--tp-text-body-sm)", color: "var(--tp-slate-700, #454551)", cursor: "pointer" }}>
+    <label style={{ display: "inline-flex", alignItems: "center", gap: "var(--tesseract-space-2)", fontSize: "var(--tesseract-text-body-sm)", color: "var(--tesseract-slate-700, #454551)", cursor: "pointer" }}>
       {control}
       {label}
     </label>

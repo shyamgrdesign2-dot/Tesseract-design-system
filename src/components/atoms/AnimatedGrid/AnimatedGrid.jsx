@@ -301,8 +301,8 @@ function LanePulse({ lane, gradId }) {
 export function AnimatedGrid({
   className,
   style,
-  lineColor = "color-mix(in srgb, var(--tp-slate-0) 14%, transparent)",
-  cometColor = "var(--tp-slate-0)",
+  lineColor = "color-mix(in srgb, var(--tesseract-slate-0) 14%, transparent)",
+  cometColor = "var(--tesseract-slate-0)",
   edgeFade = true,
 }) {
   // Scope the clip/gradient ids per instance so two differently-themed grids on

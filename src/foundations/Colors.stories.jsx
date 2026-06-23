@@ -50,9 +50,9 @@ function Swatch({ varName, step, dark }) {
         title={`${varName} · ${hex}`}
         style={{ height: 56, borderRadius: 8, background: `var(${varName})`, border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "flex-end", padding: 6 }}
       >
-        <span style={{ font: "600 11px/12px Inter", color: dark ? "rgba(255,255,255,0.92)" : "var(--tp-slate-700)" }}>{step}</span>
+        <span style={{ font: "600 11px/12px Inter", color: dark ? "rgba(255,255,255,0.92)" : "var(--tesseract-slate-700)" }}>{step}</span>
       </div>
-      <div style={{ font: "600 10px/13px ui-monospace, monospace", color: "var(--tp-slate-600)", marginTop: 4, letterSpacing: "0.02em" }}>{hex || "—"}</div>
+      <div style={{ font: "600 10px/13px ui-monospace, monospace", color: "var(--tesseract-slate-600)", marginTop: 4, letterSpacing: "0.02em" }}>{hex || "—"}</div>
     </div>
   );
 }
@@ -62,11 +62,11 @@ function Ramp({ name, prefix, steps, note }) {
     <div style={{ marginBottom: 18 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
         <strong style={{ font: "600 13px/16px Inter" }}>{name}</strong>
-        <span style={{ font: "400 12px/16px Inter", color: "var(--tp-slate-500)" }}>{note}</span>
+        <span style={{ font: "400 12px/16px Inter", color: "var(--tesseract-slate-500)" }}>{note}</span>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: `repeat(${steps.length}, 1fr)`, gap: 4 }}>
         {steps.map((s) => {
-          const v = `--tp-${prefix}-${s}`;
+          const v = `--tesseract-${prefix}-${s}`;
           const dark = Number(s) >= 400 || s === "900";
           return <Swatch key={s} varName={v} step={s} dark={dark} />;
         })}
@@ -78,45 +78,45 @@ function Ramp({ name, prefix, steps, note }) {
 export const Palette = {
   render: () => (
     <Page>
-      <Title sub={<>10-step ramps, the raw colour primitives. Use via <Code>var(--tp-&lt;ramp&gt;-&lt;step&gt;)</Code> — e.g. <Code>var(--tp-blue-500)</Code>. The 500 step is each ramp's base; each swatch shows its resolved hex.</>}>Colours</Title>
+      <Title sub={<>10-step ramps, the raw colour primitives. Use via <Code>var(--tesseract-&lt;ramp&gt;-&lt;step&gt;)</Code> — e.g. <Code>var(--tesseract-blue-500)</Code>. The 500 step is each ramp's base; each swatch shows its resolved hex.</>}>Colours</Title>
       {RAMPS.map(([name, prefix, steps, note]) => <Ramp key={prefix} name={name} prefix={prefix} steps={steps} note={note} />)}
     </Page>
   ),
 };
 
-// Real semantic tokens (defined in tp-tokens.css → var(--tp-fg/bg/border-*)).
+// Real semantic tokens (defined in tesseract-tokens.css → var(--tesseract-fg/bg/border-*)).
 // [label, semantic token, underlying ramp] — the ramp is shown for reference.
 const SEMANTIC = {
   Text: [
-    ["heading", "--tp-fg-heading", "slate-900"], ["primary", "--tp-fg-primary", "slate-700"],
-    ["secondary", "--tp-fg-secondary", "slate-600"], ["tertiary", "--tp-fg-tertiary", "slate-500"],
-    ["placeholder", "--tp-fg-placeholder", "slate-300"], ["disabled", "--tp-fg-disabled", "slate-200"],
-    ["inverse / on-dark", "--tp-fg-inverse", "slate-0"], ["brand / link", "--tp-fg-link", "blue-500"],
-    ["success", "--tp-fg-success", "success-700"], ["warning", "--tp-fg-warning", "warning-600"],
-    ["error", "--tp-fg-error", "error-500"],
+    ["heading", "--tesseract-fg-heading", "slate-900"], ["primary", "--tesseract-fg-primary", "slate-700"],
+    ["secondary", "--tesseract-fg-secondary", "slate-600"], ["tertiary", "--tesseract-fg-tertiary", "slate-500"],
+    ["placeholder", "--tesseract-fg-placeholder", "slate-300"], ["disabled", "--tesseract-fg-disabled", "slate-200"],
+    ["inverse / on-dark", "--tesseract-fg-inverse", "slate-0"], ["brand / link", "--tesseract-fg-link", "blue-500"],
+    ["success", "--tesseract-fg-success", "success-700"], ["warning", "--tesseract-fg-warning", "warning-600"],
+    ["error", "--tesseract-fg-error", "error-500"],
   ],
   Background: [
-    ["page", "--tp-bg-page", "slate-50"], ["page subtle", "--tp-bg-page-subtle", "slate-100"],
-    ["surface / card", "--tp-bg-surface", "slate-0"], ["surface hover", "--tp-bg-surface-hover", "slate-50"],
-    ["surface active", "--tp-bg-surface-active", "slate-100"], ["selected", "--tp-bg-selected", "blue-50"],
-    ["inverse", "--tp-bg-inverse", "slate-900"],
-    ["brand soft", "--tp-bg-brand-soft", "blue-50"],
-    ["success soft", "--tp-bg-success-soft", "success-50"], ["warning soft", "--tp-bg-warning-soft", "warning-50"],
-    ["error soft", "--tp-bg-error-soft", "error-50"],
+    ["page", "--tesseract-bg-page", "slate-50"], ["page subtle", "--tesseract-bg-page-subtle", "slate-100"],
+    ["surface / card", "--tesseract-bg-surface", "slate-0"], ["surface hover", "--tesseract-bg-surface-hover", "slate-50"],
+    ["surface active", "--tesseract-bg-surface-active", "slate-100"], ["selected", "--tesseract-bg-selected", "blue-50"],
+    ["inverse", "--tesseract-bg-inverse", "slate-900"],
+    ["brand soft", "--tesseract-bg-brand-soft", "blue-50"],
+    ["success soft", "--tesseract-bg-success-soft", "success-50"], ["warning soft", "--tesseract-bg-warning-soft", "warning-50"],
+    ["error soft", "--tesseract-bg-error-soft", "error-50"],
   ],
   Border: [
-    ["soft", "--tp-border-soft", "slate-100"], ["neutral", "--tp-border-neutral", "slate-200"],
-    ["strong", "--tp-border-strong", "slate-300"], ["focus", "--tp-border-focus", "blue-500"],
-    ["brand / primary", "--tp-border-primary", "blue-500"], ["success", "--tp-border-success", "success-500"],
-    ["warning", "--tp-border-warning", "warning-500"], ["error", "--tp-border-error", "error-500"],
+    ["soft", "--tesseract-border-soft", "slate-100"], ["neutral", "--tesseract-border-neutral", "slate-200"],
+    ["strong", "--tesseract-border-strong", "slate-300"], ["focus", "--tesseract-border-focus", "blue-500"],
+    ["brand / primary", "--tesseract-border-primary", "blue-500"], ["success", "--tesseract-border-success", "success-500"],
+    ["warning", "--tesseract-border-warning", "warning-500"], ["error", "--tesseract-border-error", "error-500"],
   ],
 };
 function Chip({ label, v, ramp }) {
   const [ref, hex] = useResolvedHex(v);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", border: "1px solid var(--tp-slate-100)", borderRadius: 8 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", border: "1px solid var(--tesseract-slate-100)", borderRadius: 8 }}>
       <span ref={ref} title={`${v} · ${hex}`} style={{ width: 22, height: 22, borderRadius: 6, background: `var(${v})`, border: "1px solid rgba(0,0,0,0.08)", flexShrink: 0 }} />
-      <span style={{ font: "500 12px/15px Inter" }}>{label}<br /><span style={{ font: "400 11px/14px ui-monospace, monospace", color: "var(--tp-slate-500)" }}>{v}{ramp ? ` · ${ramp}` : ""}{hex ? ` · ${hex}` : ""}</span></span>
+      <span style={{ font: "500 12px/15px Inter" }}>{label}<br /><span style={{ font: "400 11px/14px ui-monospace, monospace", color: "var(--tesseract-slate-500)" }}>{v}{ramp ? ` · ${ramp}` : ""}{hex ? ` · ${hex}` : ""}</span></span>
     </div>
   );
 }
@@ -157,17 +157,17 @@ function useGradientStops(varName) {
 }
 
 function GradientCard({ g, label }) {
-  const v = `--tp-gradient-${g}`;
+  const v = `--tesseract-gradient-${g}`;
   const [ref, stops] = useGradientStops(v);
   return (
     <div>
       <div ref={ref} style={{ height: 110, borderRadius: 12, background: `var(${v})` }} />
       <div style={{ font: "500 12px/16px Inter", marginTop: 8 }}>{label}</div>
-      <div style={{ font: "400 11px/14px ui-monospace, monospace", color: "var(--tp-slate-500)" }}>{v}</div>
+      <div style={{ font: "400 11px/14px ui-monospace, monospace", color: "var(--tesseract-slate-500)" }}>{v}</div>
       {stops.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
           {stops.map((hex) => (
-            <span key={hex} style={{ display: "inline-flex", alignItems: "center", gap: 4, font: "500 10px/12px ui-monospace, monospace", color: "var(--tp-slate-600)", border: "1px solid var(--tp-slate-100)", borderRadius: 4, padding: "2px 5px" }}>
+            <span key={hex} style={{ display: "inline-flex", alignItems: "center", gap: 4, font: "500 10px/12px ui-monospace, monospace", color: "var(--tesseract-slate-600)", border: "1px solid var(--tesseract-slate-100)", borderRadius: 4, padding: "2px 5px" }}>
               <span style={{ width: 9, height: 9, borderRadius: 2, background: hex, border: "1px solid rgba(0,0,0,0.1)" }} />
               {hex}
             </span>
@@ -181,7 +181,7 @@ function GradientCard({ g, label }) {
 export const Gradients = {
   render: () => (
     <Page>
-      <Title sub={<>Brand depth + AI surface + component marks. Use via <Code>var(--tp-gradient-&lt;name&gt;)</Code>. Each card lists the hex stops it blends.</>}>Gradients</Title>
+      <Title sub={<>Brand depth + AI surface + component marks. Use via <Code>var(--tesseract-gradient-&lt;name&gt;)</Code>. Each card lists the hex stops it blends.</>}>Gradients</Title>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
         {GRADS.map(([g, label]) => <GradientCard key={g} g={g} label={label} />)}
       </div>

@@ -134,7 +134,7 @@ export const RichContent = {
 export const OnlyWhenTruncated = {
   name: 'When Truncated',
   render: () => {
-    const cell = { maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 14, padding: '8px 10px', border: '1px solid var(--tp-slate-200, #e5e7eb)', borderRadius: 8 };
+    const cell = { maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 14, padding: '8px 10px', border: '1px solid var(--tesseract-slate-200, #e5e7eb)', borderRadius: 8 };
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Tooltip content="Short label" whenTruncated side="top">

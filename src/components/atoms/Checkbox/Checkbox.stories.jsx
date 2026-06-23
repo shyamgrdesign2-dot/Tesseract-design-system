@@ -38,7 +38,7 @@ export const Sizes = {
 };
 
 const Label = ({ children, ...props }) => (
-  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, color: 'var(--tp-slate-700)' }} {...props}>
+  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, color: 'var(--tesseract-slate-700)' }} {...props}>
     {children}
   </label>
 );

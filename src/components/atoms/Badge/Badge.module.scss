@@ -8,17 +8,17 @@
   corner-shape: round; /* true circle, not the global squircle */
   flex-shrink: 0;
 
-  &[data-size="xs"] { width: var(--tp-size-6);  height: var(--tp-size-6);  }
-  &[data-size="sm"] { width: var(--tp-size-6);  height: var(--tp-size-6);  }
-  &[data-size="md"] { width: var(--tp-size-8);  height: var(--tp-size-8);  }
-  &[data-size="lg"] { width: var(--tp-size-10); height: var(--tp-size-10); }
+  &[data-size="xs"] { width: var(--tesseract-size-6);  height: var(--tesseract-size-6);  }
+  &[data-size="sm"] { width: var(--tesseract-size-6);  height: var(--tesseract-size-6);  }
+  &[data-size="md"] { width: var(--tesseract-size-8);  height: var(--tesseract-size-8);  }
+  &[data-size="lg"] { width: var(--tesseract-size-10); height: var(--tesseract-size-10); }
 
-  &[data-color="primary"]  { background-color: var(--tp-blue-500); }
-  &[data-color="success"]  { background-color: var(--tp-success-500); }
-  &[data-color="warning"]  { background-color: var(--tp-warning-500); }
-  &[data-color="error"]    { background-color: var(--tp-error-500); }
-  &[data-color="neutral"]  { background-color: var(--tp-slate-400); }
-  &[data-color="violet"]   { background-color: var(--tp-violet-500); }
+  &[data-color="primary"]  { background-color: var(--tesseract-blue-500); }
+  &[data-color="success"]  { background-color: var(--tesseract-success-500); }
+  &[data-color="warning"]  { background-color: var(--tesseract-warning-500); }
+  &[data-color="error"]    { background-color: var(--tesseract-error-500); }
+  &[data-color="neutral"]  { background-color: var(--tesseract-slate-400); }
+  &[data-color="violet"]   { background-color: var(--tesseract-violet-500); }
 }
 
 /* ── Pill variants (solid / soft / outline) ── */
@@ -27,11 +27,11 @@
   align-items: center;
   justify-content: center;
   vertical-align: middle;
-  gap: var(--tp-space-1);
-  border-radius: var(--tp-badge-radius, var(--tp-radius-full, 9999px)); /* theme: components.badge.radius (default full pill) */
+  gap: var(--tesseract-space-1);
+  border-radius: var(--tesseract-badge-radius, var(--tesseract-radius-full, 9999px)); /* theme: components.badge.radius (default full pill) */
   corner-shape: round;
-  font-weight: var(--tp-weight-semibold);
-  font-family: var(--tp-font-body);
+  font-weight: var(--tesseract-weight-semibold);
+  font-family: var(--tesseract-font-body);
   line-height: 1;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -39,43 +39,43 @@
   border: 1px solid transparent;
 
   /* ── Sizes ── */
-  &[data-size="xs"] { height: var(--tp-size-16); min-width: var(--tp-size-16); padding: 0 var(--tp-space-1-5);  font-size: var(--tp-text-micro); }
-  &[data-size="sm"] { height: var(--tp-size-20); min-width: var(--tp-size-20); padding: 0 var(--tp-space-2);  font-size: var(--tp-text-micro); }
-  &[data-size="md"] { height: var(--tp-size-24); min-width: var(--tp-size-24); padding: 0 var(--tp-space-2-5); font-size: var(--tp-text-body-xs); }
-  &[data-size="lg"] { height: var(--tp-size-28); min-width: var(--tp-size-28); padding: 0 var(--tp-space-3); font-size: var(--tp-text-body-sm); }
+  &[data-size="xs"] { height: var(--tesseract-size-16); min-width: var(--tesseract-size-16); padding: 0 var(--tesseract-space-1-5);  font-size: var(--tesseract-text-micro); }
+  &[data-size="sm"] { height: var(--tesseract-size-20); min-width: var(--tesseract-size-20); padding: 0 var(--tesseract-space-2);  font-size: var(--tesseract-text-micro); }
+  &[data-size="md"] { height: var(--tesseract-size-24); min-width: var(--tesseract-size-24); padding: 0 var(--tesseract-space-2-5); font-size: var(--tesseract-text-body-xs); }
+  &[data-size="lg"] { height: var(--tesseract-size-28); min-width: var(--tesseract-size-28); padding: 0 var(--tesseract-space-3); font-size: var(--tesseract-text-body-sm); }
 
   /* ── SOLID ── */
   &[data-variant="solid"] {
-    &[data-color="primary"] { background-color: var(--tp-blue-500);    color: var(--tp-slate-0); }
-    &[data-color="success"] { background-color: var(--tp-success-500); color: var(--tp-slate-0); }
-    &[data-color="warning"] { background-color: var(--tp-warning-500); color: var(--tp-slate-0); }
-    &[data-color="error"]   { background-color: var(--tp-error-500);   color: var(--tp-slate-0); }
-    &[data-color="neutral"] { background-color: var(--tp-slate-500);   color: var(--tp-slate-0); }
-    &[data-color="violet"]  { background-color: var(--tp-violet-500);  color: var(--tp-slate-0); }
+    &[data-color="primary"] { background-color: var(--tesseract-blue-500);    color: var(--tesseract-slate-0); }
+    &[data-color="success"] { background-color: var(--tesseract-success-500); color: var(--tesseract-slate-0); }
+    &[data-color="warning"] { background-color: var(--tesseract-warning-500); color: var(--tesseract-slate-0); }
+    &[data-color="error"]   { background-color: var(--tesseract-error-500);   color: var(--tesseract-slate-0); }
+    &[data-color="neutral"] { background-color: var(--tesseract-slate-500);   color: var(--tesseract-slate-0); }
+    &[data-color="violet"]  { background-color: var(--tesseract-violet-500);  color: var(--tesseract-slate-0); }
   }
 
   /* ── SOFT ── */
   &[data-variant="soft"] {
-    &[data-color="primary"] { background-color: var(--tp-blue-50);    color: var(--tp-blue-500); }
-    &[data-color="success"] { background-color: var(--tp-success-50); color: var(--tp-success-500); }
-    &[data-color="warning"] { background-color: var(--tp-warning-50); color: var(--tp-warning-500); }
-    &[data-color="error"]   { background-color: var(--tp-error-50);   color: var(--tp-error-500); }
-    &[data-color="neutral"] { background-color: var(--tp-slate-100);  color: var(--tp-slate-500); }
-    &[data-color="violet"]  { background-color: var(--tp-violet-50);  color: var(--tp-violet-500); }
+    &[data-color="primary"] { background-color: var(--tesseract-blue-50);    color: var(--tesseract-blue-500); }
+    &[data-color="success"] { background-color: var(--tesseract-success-50); color: var(--tesseract-success-500); }
+    &[data-color="warning"] { background-color: var(--tesseract-warning-50); color: var(--tesseract-warning-500); }
+    &[data-color="error"]   { background-color: var(--tesseract-error-50);   color: var(--tesseract-error-500); }
+    &[data-color="neutral"] { background-color: var(--tesseract-slate-100);  color: var(--tesseract-slate-500); }
+    &[data-color="violet"]  { background-color: var(--tesseract-violet-50);  color: var(--tesseract-violet-500); }
   }
 
   /* ── GRADIENT ── (white text; color picks the gradient ramp) */
   &[data-variant="gradient"] {
     border: none;
-    color: var(--tp-slate-0);
+    color: var(--tesseract-slate-0);
 
     /* base → light (shiny highlight) → base */
-    &[data-color="primary"] { background-image: linear-gradient(257.32deg, var(--tp-blue-500) 0%, var(--tp-blue-200) 47.22%, var(--tp-blue-500) 94.44%); }
-    &[data-color="success"] { background-image: linear-gradient(257.32deg, var(--tp-success-600) 0%, var(--tp-success-400) 47.22%, var(--tp-success-600) 94.44%); }
-    &[data-color="warning"] { background-image: linear-gradient(257.32deg, var(--tp-warning-600) 0%, var(--tp-warning-300) 47.22%, var(--tp-warning-600) 94.44%); }
-    &[data-color="error"]   { background-image: linear-gradient(257.32deg, var(--tp-error-600) 0%, var(--tp-error-400) 47.22%, var(--tp-error-600) 94.44%); }
-    &[data-color="neutral"] { background-image: linear-gradient(257.32deg, var(--tp-slate-700) 0%, var(--tp-slate-400) 47.22%, var(--tp-slate-700) 94.44%); }
-    &[data-color="violet"]  { background-image: linear-gradient(257.32deg, var(--tp-violet-600) 0%, var(--tp-violet-300) 47.22%, var(--tp-violet-600) 94.44%); }
+    &[data-color="primary"] { background-image: linear-gradient(257.32deg, var(--tesseract-blue-500) 0%, var(--tesseract-blue-200) 47.22%, var(--tesseract-blue-500) 94.44%); }
+    &[data-color="success"] { background-image: linear-gradient(257.32deg, var(--tesseract-success-600) 0%, var(--tesseract-success-400) 47.22%, var(--tesseract-success-600) 94.44%); }
+    &[data-color="warning"] { background-image: linear-gradient(257.32deg, var(--tesseract-warning-600) 0%, var(--tesseract-warning-300) 47.22%, var(--tesseract-warning-600) 94.44%); }
+    &[data-color="error"]   { background-image: linear-gradient(257.32deg, var(--tesseract-error-600) 0%, var(--tesseract-error-400) 47.22%, var(--tesseract-error-600) 94.44%); }
+    &[data-color="neutral"] { background-image: linear-gradient(257.32deg, var(--tesseract-slate-700) 0%, var(--tesseract-slate-400) 47.22%, var(--tesseract-slate-700) 94.44%); }
+    &[data-color="violet"]  { background-image: linear-gradient(257.32deg, var(--tesseract-violet-600) 0%, var(--tesseract-violet-300) 47.22%, var(--tesseract-violet-600) 94.44%); }
   }
 
   /* ── Sticky — flatten the corners on the edge the badge sticks to ── */
@@ -94,11 +94,11 @@
   &[data-variant="outline"] {
     background-color: transparent;
 
-    &[data-color="primary"] { color: var(--tp-blue-500);    border-color: var(--tp-blue-500); }
-    &[data-color="success"] { color: var(--tp-success-500); border-color: var(--tp-success-500); }
-    &[data-color="warning"] { color: var(--tp-warning-500); border-color: var(--tp-warning-500); }
-    &[data-color="error"]   { color: var(--tp-error-500);   border-color: var(--tp-error-500); }
-    &[data-color="neutral"] { color: var(--tp-slate-500);   border-color: var(--tp-slate-300); }
-    &[data-color="violet"]  { color: var(--tp-violet-500);  border-color: var(--tp-violet-500); }
+    &[data-color="primary"] { color: var(--tesseract-blue-500);    border-color: var(--tesseract-blue-500); }
+    &[data-color="success"] { color: var(--tesseract-success-500); border-color: var(--tesseract-success-500); }
+    &[data-color="warning"] { color: var(--tesseract-warning-500); border-color: var(--tesseract-warning-500); }
+    &[data-color="error"]   { color: var(--tesseract-error-500);   border-color: var(--tesseract-error-500); }
+    &[data-color="neutral"] { color: var(--tesseract-slate-500);   border-color: var(--tesseract-slate-300); }
+    &[data-color="violet"]  { color: var(--tesseract-violet-500);  border-color: var(--tesseract-violet-500); }
   }
 }

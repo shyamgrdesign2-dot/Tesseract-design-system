@@ -1,22 +1,22 @@
 {
-  "name": "tp-ui",
+  "name": "tesseract-ui",
   "version": "0.1.0",
-  "description": "TatvaPractice UI — a zero-runtime-dependency React component library (atoms + molecules). Only react / react-dom as peers.",
+  "description": "Tesseract Design System — a zero-runtime-dependency React component library (atoms + molecules), published as tesseract-ui. Only react / react-dom as peers.",
   "license": "UNLICENSED",
   "type": "module",
   "sideEffects": [
     "**/*.css"
   ],
-  "main": "./dist/tp-ui.cjs",
-  "module": "./dist/tp-ui.js",
+  "main": "./dist/tesseract-ui.cjs",
+  "module": "./dist/tesseract-ui.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/tp-ui.js",
-      "require": "./dist/tp-ui.cjs"
+      "import": "./dist/tesseract-ui.js",
+      "require": "./dist/tesseract-ui.cjs"
     },
-    "./styles.css": "./dist/tp-ui.css"
+    "./styles.css": "./dist/tesseract-ui.css"
   },
   "files": [
     "dist",

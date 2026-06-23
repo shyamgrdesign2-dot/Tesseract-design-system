@@ -105,7 +105,7 @@ const Shell = ({ children, height = 640, style }) => (
     style={{
       display: "flex",
       height,
-      background: "var(--tp-slate-50, #FAFAFB)",
+      background: "var(--tesseract-slate-50, #FAFAFB)",
       ...style,
     }}
   >
@@ -120,14 +120,14 @@ const Content = ({ activeId }) => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontFamily: "var(--tp-font-body)",
-      color: "var(--tp-slate-500)",
+      fontFamily: "var(--tesseract-font-body)",
+      color: "var(--tesseract-slate-500)",
       fontSize: 14,
       padding: 24,
     }}
   >
     Active:{" "}
-    <strong style={{ color: "var(--tp-slate-900)", marginLeft: 6 }}>
+    <strong style={{ color: "var(--tesseract-slate-900)", marginLeft: 6 }}>
       {activeId}
     </strong>
   </div>
@@ -139,7 +139,7 @@ export const Playground = {
     const items = transformBadges(ITEMS, badgeStyle);
     const [active, setActive] = React.useState("vitals");
     return (
-      <Shell style={{ "--tp-radius-12": `${pillRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${pillRadius}px` }}>
         <SecondarySidebar
           {...rest}
           items={items}
@@ -162,7 +162,7 @@ export const WithBadges = {
     const items = transformBadges(ITEMS, badgeStyle);
     const [active, setActive] = React.useState("vaccine");
     return (
-      <Shell style={{ "--tp-radius-12": `${pillRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${pillRadius}px` }}>
         <SecondarySidebar
           {...rest}
           items={items}
@@ -185,7 +185,7 @@ export const SignalDot = {
     const items = transformBadges(ITEMS, badgeStyle);
     const [active, setActive] = React.useState("history");
     return (
-      <Shell style={{ "--tp-radius-12": `${pillRadius}px` }}>
+      <Shell style={{ "--tesseract-radius-12": `${pillRadius}px` }}>
         <SecondarySidebar
           {...rest}
           items={items}

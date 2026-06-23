@@ -21,10 +21,10 @@ export function Slider({
   // Tesseract tokens with hex fallbacks; every tone the stories use must be mapped here
   // (warning was previously missing and silently fell back to blue).
   const ACCENT = {
-    primary: "var(--tp-blue-500, #4b4ad5)",
-    success: "var(--tp-success-500, #10b981)",
-    warning: "var(--tp-warning-500, #f59e0b)",
-    error:   "var(--tp-error-500, #E11D48)",
+    primary: "var(--tesseract-blue-500, #4b4ad5)",
+    success: "var(--tesseract-success-500, #10b981)",
+    warning: "var(--tesseract-warning-500, #f59e0b)",
+    error:   "var(--tesseract-error-500, #E11D48)",
   };
   const accentColor = ACCENT[color] ?? ACCENT.primary;
   const trackHeight = size === "sm" ? 4 : size === "lg" ? 6 : 4;

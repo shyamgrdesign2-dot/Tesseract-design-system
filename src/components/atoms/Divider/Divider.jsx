@@ -11,7 +11,7 @@
 export function Divider({
   orientation = "horizontal",
   variant      = "solid",
-  color        = "var(--tp-slate-200, #E2E2EA)",
+  color        = "var(--tesseract-slate-200, #E2E2EA)",
   spacing      = 0,
   thickness    = 1,
   className,

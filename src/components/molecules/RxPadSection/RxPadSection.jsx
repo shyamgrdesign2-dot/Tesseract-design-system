@@ -41,7 +41,7 @@ function ActionButton({ iconProp, defaultIcon, defaultVariant = "linear", tip, o
 export function RxPadSection({
   title = "Symptoms",
   icon = "virus",
-  iconColor = "var(--tp-violet-500)",
+  iconColor = "var(--tesseract-violet-500)",
   mode = "table-first",
   bodyType = "table",
   columns = [],
