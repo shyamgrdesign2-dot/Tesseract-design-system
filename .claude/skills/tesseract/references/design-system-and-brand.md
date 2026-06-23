@@ -46,7 +46,7 @@ Component source and stories live at `src/components/{atoms,molecules}/<Name>/` 
 A new app that installed the library. Import from the package name it was installed as (currently **`tesseract-ui`**; publish/scoping is still pending, so confirm the name in that project's `package.json`):
 ```jsx
 import { Button, DataTable, Header } from "tesseract-ui";        // or the scoped name in package.json
-import "tesseract-ui/dist/tokens.css";                            // load tokens once at app root
+import "tesseract-ui/styles.css";                                 // load the stylesheet once at app root
 ```
 Then wrap the app root once in the theme provider so tokens + component overrides apply:
 ```jsx

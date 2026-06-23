@@ -60,12 +60,13 @@ the SVGs would need to be authored in a real colour instead of white.
 - `iconPath({ name, style, corner, family })` → `"<corner>/<style>/<family>/<name>.svg"` (or `null`)
 - `iconFamily(name)`, `hasIcon(name)`
 - Style aliases: `line`→`linear`, `solid`→`bold`, `dual-tone`→`bulk`
-- Name aliases (curated → catalog): `arrow-down-02`→`arrow-down`, `arrow-right-02`→`arrow-right`,
-  `calendar-1`→`calendar`, `chevron-down`→`arrow-down`, `more-horizontal`→`more`,
+- Name aliases (friendly → catalog): `arrow-down-02`→`arrow-down`, `arrow-right-02`→`arrow-right`,
+  `calendar-1`→`calendar`, `chevron-down`→`arrow-down4`, `chevron-up`→`arrow-up4`,
+  `chevron-left`→`arrow-left3`, `chevron-right`→`arrow-right4`, `more-horizontal`→`more`,
   `message`→`messages`, `success`→`tick-circle`
-- App-specific icons not in the catalog (`appt-type`, `consultation-urgency`,
-  `patient-gender`, `reminder-channel`, `sizes`) fall back to vendored inline SVGs
-  via `<TPIcon/>`.
+- **100% CDN — no local assets.** There is no local/vendored fallback: every icon
+  is fetched from the CDN. An unknown name renders nothing (no broken box). Use the
+  exact CDN name (or one of the friendly aliases above).
 
 ## Catalog size
 
