@@ -236,6 +236,7 @@ export function SecondarySidebar({
   React.useEffect(() => {
     const owner = items.find((it) => hasActive(it, activeId));
     if (owner && !isLeaf(owner)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- auto-open the section containing the active item on navigation; guarded so it can't loop
       setOpenIds((prev) =>
         prev.has(owner.id) ? prev : new Set(prev).add(owner.id),
       );
@@ -251,7 +252,8 @@ export function SecondarySidebar({
   const handleToggleSection = (item) => {
     setOpenIds((prev) => {
       const next = new Set(prev);
-      next.has(item.id) ? next.delete(item.id) : next.add(item.id);
+      if (next.has(item.id)) next.delete(item.id);
+      else next.add(item.id);
       return next;
     });
   };

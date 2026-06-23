@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Button } from "@/src/components/atoms/Button";
 import { Badge } from "@/src/components/atoms/Badge";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { cn } from "@/src/hooks/utils";
@@ -63,6 +62,7 @@ function Flyout({ anchor, children, offset = 10 }) {
   const [coords, setCoords] = React.useState(null);
   const closeTimer = React.useRef(null);
   const [mounted, setMounted] = React.useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount flag so the portal only renders client-side
   React.useEffect(() => setMounted(true), []);
 
   const cancel = () => {
@@ -107,6 +107,7 @@ function Flyout({ anchor, children, offset = 10 }) {
 
   return (
     <>
+      {/* eslint-disable-next-line react-hooks/refs -- triggerRef is only attached to the trigger here, never read during render */}
       {anchor(bind, triggerRef)}
       {mounted && open && coords
         ? createPortal(
@@ -361,6 +362,7 @@ export function Sidebar({
   React.useEffect(() => {
     const owner = items.find((it) => hasActive(it, activeId));
     if (owner && !isLeaf(owner)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- auto-open the section containing the active item on navigation; guarded so it can't loop
       setOpenIds((prev) =>
         prev.has(owner.id) ? prev : new Set(prev).add(owner.id),
       );
@@ -390,7 +392,8 @@ export function Sidebar({
     }
     setOpenIds((prev) => {
       const next = new Set(prev);
-      next.has(item.id) ? next.delete(item.id) : next.add(item.id);
+      if (next.has(item.id)) next.delete(item.id);
+      else next.add(item.id);
       return next;
     });
   };
