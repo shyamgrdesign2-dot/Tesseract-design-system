@@ -1,0 +1,12 @@
+{
+  "name": "tesseract",
+  "description": "Private internal marketplace for the Tesseract design system — the /tesseract page-building skill and the tesseract MCP. Install from this repo only.",
+  "owner": { "name": "TatvaCare", "email": "shyam.gr@tatvacare.in" },
+  "plugins": [
+    {
+      "name": "tesseract",
+      "source": "./",
+      "description": "Tesseract design system: the /tesseract page-building skill + the tesseract MCP (exact components, props, tokens, icons + validate_usage). Private — install from this repo."
+    }
+  ]
+}

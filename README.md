@@ -163,15 +163,35 @@ a component:
   props, allowed values, tokens, and icon names from source, with a
   `validate_usage` guardrail.
 
-**Using it in THIS repo** — open it in Claude Code and type `/tesseract`. To turn
-on the MCP guardrails:
+### Install once, use everywhere (plugin — recommended, incl. cloud)
 
+This repo is also a **private Claude Code plugin marketplace** — install it once and
+the `/tesseract` skill **and** the MCP are available in **every** Claude Code session
+(local or cloud), no per-project copying. The MCP is bundled dependency-free
+(`mcp/dist/server.mjs`), so it runs anywhere Node runs.
+
+```bash
+# add this private repo as a marketplace, then install the plugin:
+claude plugin marketplace add DHSPL-Tatvacare/tesseract-design-system
+claude plugin install tesseract@tesseract
+```
+
+(Or inside a session: `/plugin marketplace add DHSPL-Tatvacare/tesseract-design-system`
+then `/plugin install tesseract@tesseract`.)
+
+- **Private auth:** a manual `add`/`install` uses your existing Git credentials
+  (SSH / `gh auth login`). For automatic updates at startup — and in **cloud/web
+  sessions** — set `GITHUB_TOKEN` (a PAT with repo read) in the environment.
+- Updates: `claude plugin update tesseract@tesseract` (or auto on startup with the token).
+
+### Manual alternatives (no plugin)
+
+**In THIS repo** — open it in Claude Code, type `/tesseract`, and enable the MCP:
 ```bash
 claude mcp add tesseract -- node "$(pwd)/mcp/src/server.mjs"
 ```
 
-**Using it in ANOTHER project** — copy the skill in and point the MCP at this repo:
-
+**In ANOTHER project** — copy the skill in and point the MCP at this repo:
 ```bash
 cp -R <this-repo>/.claude/skills/tesseract  <your-project>/.claude/skills/tesseract
 claude mcp add tesseract -- node <this-repo>/mcp/src/server.mjs
@@ -180,6 +200,9 @@ claude mcp add tesseract -- node <this-repo>/mcp/src/server.mjs
 Then, in Claude Code: *“/tesseract — build me an All Patients list page.”* The
 skill runs the intake, the MCP validates every component/prop/icon, and the output
 is real `tesseract-ui` code. Full runbook: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+
+> Maintainers: after changing components, run `npm run build:mcp` to refresh the
+> MCP manifest + bundled server, and commit — that keeps the plugin current.
 
 ---
 
