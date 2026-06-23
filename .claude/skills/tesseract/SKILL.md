@@ -27,7 +27,12 @@ The output of intake is an agreed **page architecture** (which shell regions exi
 Read `references/page-principles.md`. These are the *ideology* — shell-first, one primary action, progressive disclosure, entity context bars, status as colour+text, designed empty/loading states, clinical density, consistency over novelty. Any shared design is just an example of these principles; when a design and a principle conflict, follow the principle.
 
 ### 3 · Compose from the catalog
-Read `references/component-catalog.md`. For each region in the agreed architecture, pick the Tesseract component that fills it (molecules for regions, atoms for leaves). When a prop is uncertain, open the component's source/story at `src/components/{atoms,molecules}/<Name>/`.
+Read `references/component-catalog.md`. For each region in the agreed architecture, pick the Tesseract component that fills it (molecules for regions, atoms for leaves).
+
+**Ground-truth props — prefer the MCP if connected.** This repo ships a `tesseract` MCP server (`mcp/`) that serves the *exact* components and props from source. If its tools are available, use them so you never hallucinate a prop or value:
+- `get_component(name)` → the real prop list + allowed values before you write JSX.
+- `validate_usage(component, props)` → confirm zero unknown props / out-of-range values before committing the usage.
+If the MCP isn't connected, fall back to the catalog and the component's source/story at `src/components/{atoms,molecules}/<Name>/`.
 
 ### 4 · Populate with our domain
 Read `references/product-and-domain.md`. Use real module names, entities, statuses, and vocabulary (Patient, Encounter, MRN, Visit Type, IPD admission, Form 3C, ABHA…) so the page reads like TatvaPractice, not generic CRUD.

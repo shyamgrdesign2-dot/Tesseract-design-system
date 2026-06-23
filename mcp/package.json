@@ -1,0 +1,19 @@
+{
+  "name": "tesseract-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server that serves the EXACT Tesseract (tp-ui) components, props, allowed values, and tokens from source — so AI clients configure real components instead of hallucinating them.",
+  "bin": {
+    "tesseract-mcp": "src/server.mjs"
+  },
+  "scripts": {
+    "build:manifest": "node scripts/build-manifest.mjs",
+    "start": "node src/server.mjs",
+    "prestart": "node scripts/build-manifest.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  }
+}

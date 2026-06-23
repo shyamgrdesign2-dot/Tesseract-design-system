@@ -1,0 +1,4448 @@
+{
+  "$schema": "tesseract-component-manifest/v1",
+  "generatedFrom": "src/components/** + src/tp-tokens.css",
+  "generatedAtNote": "regenerate with: node mcp/scripts/build-manifest.mjs",
+  "designSystem": {
+    "package": "tp-ui",
+    "importAliases": [
+      "@/src/components/atoms",
+      "@/src/components/molecules"
+    ]
+  },
+  "counts": {
+    "components": 31,
+    "atoms": 16,
+    "molecules": 15,
+    "tokens": 216
+  },
+  "rules": [
+    "Use only components and props listed here — they are extracted from real source.",
+    "Use only allowedValues for a prop when present; they come from storybook argTypes.",
+    "Colours/spacing/radii must be --tp-* tokens; never raw values.",
+    "No odd numbers in dimensions. Never edit tp-tokens.css.",
+    "Never substitute Ant Design / MUI / Tailwind / raw Radix."
+  ],
+  "components": [
+    {
+      "name": "AnimatedGrid",
+      "dir": "AnimatedGrid",
+      "layer": "atoms",
+      "exports": [
+        "AnimatedGrid"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { AnimatedGrid } from \"@/src/components/atoms\";",
+      "description": "lineColor?: string,   // lattice stroke (default faint white for dark surfaces) cometColor?: string,  // travelling pulse color (default white) edgeFade?: number|boolean  // edge-fade strength 0..1 (true → 0.6, false → 0) }} props",
+      "props": [
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "lineColor",
+          "default": "\"color-mix(in srgb, var(--tp-slate-0) 14%, transparent)\"",
+          "control": "color",
+          "description": "Lattice stroke color"
+        },
+        {
+          "name": "cometColor",
+          "default": "\"var(--tp-slate-0)\"",
+          "control": "color",
+          "description": "Travelling pulse color"
+        },
+        {
+          "name": "edgeFade",
+          "default": "true",
+          "control": "range",
+          "description": "Edge-fade strength — drag up to dissolve the edges more (0 = none, 1 = strong)"
+        },
+        {
+          "name": "surface",
+          "allowedValues": [
+            "dark",
+            "light"
+          ],
+          "control": "inline-radio",
+          "description": "Preview backdrop (demo only — not a component prop)",
+          "default": "'dark'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "OnDark",
+        "OnLight",
+        "Backgrounds"
+      ],
+      "sourcePath": "src/components/atoms/AnimatedGrid/AnimatedGrid.jsx",
+      "storiesPath": "src/components/atoms/AnimatedGrid/AnimatedGrid.stories.jsx"
+    },
+    {
+      "name": "Avatar",
+      "dir": "Avatar",
+      "layer": "atoms",
+      "exports": [
+        "Avatar"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Avatar } from \"@/src/components/atoms\";",
+      "description": "Avatar — always-circular user/profile mark. Three content types: • image   — pass `src` • initials — pass `name` (first+last initials; single name → first two letters) • icon    — pass `icon` (a Tesseract library icon NAME or a ReactNode) Resolution order: icon → image → initials.",
+      "props": [
+        {
+          "name": "src",
+          "default": "'https://i.pravatar.cc/100?img=12'",
+          "control": "text",
+          "description": "Image URL (content = image)"
+        },
+        {
+          "name": "name",
+          "default": "'Ramesh Kumar'",
+          "control": "text",
+          "description": "Initials source + alt text"
+        },
+        {
+          "name": "alt"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "size",
+          "default": "40",
+          "control": "range"
+        },
+        {
+          "name": "ring",
+          "default": "false",
+          "control": "boolean",
+          "description": "Brand gradient ring"
+        },
+        {
+          "name": "onClick"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "content",
+          "allowedValues": [
+            "image",
+            "initials",
+            "icon"
+          ],
+          "control": "inline-radio",
+          "description": "What the avatar shows",
+          "default": "'image'"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "description": "Tesseract icon (content = icon)",
+          "default": "'profile'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Content",
+        "Ring",
+        "Sizes"
+      ],
+      "sourcePath": "src/components/atoms/Avatar/Avatar.jsx",
+      "storiesPath": "src/components/atoms/Avatar/Avatar.stories.jsx"
+    },
+    {
+      "name": "Badge",
+      "dir": "Badge",
+      "layer": "atoms",
+      "exports": [
+        "Badge"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Badge } from \"@/src/components/atoms\";",
+      "description": "Badge — Status / count indicator atom. Styling: Badge.module.scss (data-variant / data-color selectors).",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"soft\"",
+          "control": "select"
+        },
+        {
+          "name": "color",
+          "default": "\"primary\"",
+          "control": "select"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "control": "inline-radio"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "rightIcon"
+        },
+        {
+          "name": "sticky",
+          "default": "'none'",
+          "allowedValues": [
+            "none",
+            "left",
+            "right"
+          ],
+          "control": "inline-radio",
+          "description": "Square the corners on an edge so it sits flush"
+        },
+        {
+          "name": "children",
+          "default": "'Badge'",
+          "control": "text"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "description": "Tesseract icon glyph",
+          "default": "'verify'"
+        },
+        {
+          "name": "iconPosition",
+          "allowedValues": [
+            "none",
+            "left",
+            "right",
+            "both"
+          ],
+          "control": "inline-radio",
+          "default": "'left'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "WithIcons",
+        "Sizes",
+        "Variants",
+        "Gradients",
+        "Sticky",
+        "Colors",
+        "Dot",
+        "Counts",
+        "Matrix",
+        "PatientStatusBadges",
+        "NotificationCounts"
+      ],
+      "sourcePath": "src/components/atoms/Badge/Badge.jsx",
+      "storiesPath": "src/components/atoms/Badge/Badge.stories.jsx"
+    },
+    {
+      "name": "Button",
+      "dir": "Button",
+      "layer": "atoms",
+      "exports": [
+        "Button"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Button } from \"@/src/components/atoms\";",
+      "description": "Button — the single Tesseract button atom. One component covers every shape: • Text button            <Button>Save</Button> • With icons             <Button leftIcon={…} rightIcon={…}>Save</Button> • Icon-only (square)      <Button icon={…} aria-label=\"Search\" /> • Split (primary + menu)  <Button icon={…} menu={[…]}>New</Button> Styling (variant × theme × size × surface × state) is driven entirely by data-* attributes + Button.module.scss — zero JS for the visual states. The only stateful path is the split-button dropdown (open state + portal).",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"solid\""
+        },
+        {
+          "name": "theme",
+          "default": "\"primary\""
+        },
+        {
+          "name": "size",
+          "default": "\"md\""
+        },
+        {
+          "name": "surface",
+          "default": "\"light\""
+        },
+        {
+          "name": "loading",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "default": "false"
+        },
+        {
+          "name": "leftIcon"
+        },
+        {
+          "name": "rightIcon"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "menu"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children",
+          "default": "'Button'"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "onClick"
+        },
+        {
+          "name": "track"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Variants",
+        "Sizes",
+        "IconPositions",
+        "IconOnly",
+        "States",
+        "DarkSurface",
+        "FullMatrix",
+        "WithIcons",
+        "Destructive",
+        "SplitVariants",
+        "SplitSizes",
+        "SplitStates",
+        "SplitDark",
+        "UseCases"
+      ],
+      "sourcePath": "src/components/atoms/Button/Button.jsx",
+      "storiesPath": "src/components/atoms/Button/Button.stories.jsx"
+    },
+    {
+      "name": "Checkbox",
+      "dir": "Checkbox",
+      "layer": "atoms",
+      "exports": [
+        "Checkbox"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Checkbox } from \"@/src/components/atoms\";",
+      "description": "Checkbox — Tri-state checkbox atom (checked / unchecked / indeterminate). Hand-rolled (no Radix). Renders a <button role=\"checkbox\"> + a hidden native checkbox for form participation. Preserves the data-state attribute the SCSS module selects on, so styling is unchanged.",
+      "props": [
+        {
+          "name": "checked"
+        },
+        {
+          "name": "defaultChecked"
+        },
+        {
+          "name": "onCheckedChange"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "value",
+          "default": "\"on\""
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "onClick"
+        },
+        {
+          "name": "onKeyDown"
+        },
+        {
+          "name": "state",
+          "allowedValues": [
+            "unchecked",
+            "checked",
+            "indeterminate"
+          ],
+          "control": "inline-radio",
+          "description": "Tri-state value (indeterminate is reachable here, not just via boolean)",
+          "default": "'unchecked'"
+        }
+      ],
+      "stories": [
+        "Sizes",
+        "Playground",
+        "Uncontrolled",
+        "States",
+        "Disabled",
+        "WithLabel",
+        "CheckboxList",
+        "ConsentForm",
+        "IndeterminateGroup"
+      ],
+      "sourcePath": "src/components/atoms/Checkbox/Checkbox.jsx",
+      "storiesPath": "src/components/atoms/Checkbox/Checkbox.stories.jsx"
+    },
+    {
+      "name": "Chip",
+      "dir": "Chip",
+      "layer": "atoms",
+      "exports": [
+        "Chip"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Chip } from \"@/src/components/atoms\";",
+      "description": "Chip — removable / selectable label pill (filters, multi-select). Auto-layout (inline-flex + gap), Tesseract color tokens, sm/md/lg sizes, 10px radius.",
+      "props": [
+        {
+          "name": "label",
+          "default": "'Chip'",
+          "control": "text"
+        },
+        {
+          "name": "color",
+          "default": "\"default\"",
+          "control": "select"
+        },
+        {
+          "name": "variant",
+          "default": "\"filled\"",
+          "control": "inline-radio"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "control": "inline-radio"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "rightIcon"
+        },
+        {
+          "name": "onDelete"
+        },
+        {
+          "name": "removePosition",
+          "default": "\"right\"",
+          "allowedValues": [
+            "right",
+            "left"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "onClick"
+        },
+        {
+          "name": "track"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "removable",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "iconSide",
+          "control": "inline-radio",
+          "default": "'left'"
+        },
+        {
+          "name": "leftIconName",
+          "control": "text",
+          "default": "'star-1'"
+        },
+        {
+          "name": "rightIconName",
+          "control": "text",
+          "default": "'arrow-down-1'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Sizes",
+        "Colors",
+        "Variants",
+        "Outlined",
+        "WithIcon",
+        "Deletable",
+        "Clickable",
+        "Disabled",
+        "SymptomSelector",
+        "ActiveFilters",
+        "DepartmentTags"
+      ],
+      "sourcePath": "src/components/atoms/Chip/Chip.jsx",
+      "storiesPath": "src/components/atoms/Chip/Chip.stories.jsx"
+    },
+    {
+      "name": "Divider",
+      "dir": "Divider",
+      "layer": "atoms",
+      "exports": [
+        "Divider"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Divider } from \"@/src/components/atoms\";",
+      "description": "Divider — visual separator atom. variant \"solid\"    — flat single-color line (default) variant \"gradient\" — fades to transparent at both ends; colour in the middle. Works horizontally and vertically.",
+      "props": [
+        {
+          "name": "orientation",
+          "default": "\"horizontal\"",
+          "allowedValues": [
+            "horizontal",
+            "vertical"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "variant",
+          "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "gradient"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "color",
+          "default": "\"var(--tp-slate-200, #E2E2EA)\"",
+          "control": "text"
+        },
+        {
+          "name": "spacing",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "thickness",
+          "default": "1",
+          "control": "number"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Solid",
+        "Gradient",
+        "Vertical",
+        "InContext"
+      ],
+      "sourcePath": "src/components/atoms/Divider/Divider.jsx",
+      "storiesPath": "src/components/atoms/Divider/Divider.stories.jsx"
+    },
+    {
+      "name": "InputBox",
+      "dir": "Input",
+      "layer": "atoms",
+      "exports": [
+        "InputBox"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { InputBox } from \"@/src/components/atoms\";",
+      "description": "InputBox — comprehensive, scalable input atom. Interaction states (hover/focus/disabled) are owned by CSS. JS handles controlled value, character filtering, clear, and derived aria attributes.",
+      "props": [
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "control": "inline-radio"
+        },
+        {
+          "name": "status",
+          "default": "\"default\"",
+          "control": "inline-radio"
+        },
+        {
+          "name": "variant",
+          "default": "\"default\""
+        },
+        {
+          "name": "allow",
+          "default": "\"any\"",
+          "control": "inline-radio",
+          "description": "Restrict typed characters"
+        },
+        {
+          "name": "label",
+          "default": "'Email address'",
+          "control": "text"
+        },
+        {
+          "name": "helperText",
+          "default": "'We’ll never share it.'",
+          "control": "text"
+        },
+        {
+          "name": "leftIcon",
+          "storyHidden": true
+        },
+        {
+          "name": "rightIcon",
+          "storyHidden": true
+        },
+        {
+          "name": "leftAddon",
+          "default": "'none'",
+          "allowedValues": [
+            "none",
+            "country",
+            "prefix",
+            "cta"
+          ],
+          "control": "select"
+        },
+        {
+          "name": "rightAddon",
+          "default": "'none'",
+          "allowedValues": [
+            "none",
+            "dropdown",
+            "cta",
+            "text"
+          ],
+          "control": "select"
+        },
+        {
+          "name": "unit",
+          "default": "''",
+          "control": "text",
+          "description": "Fixed suffix inside the field, e.g. "
+        },
+        {
+          "name": "counter",
+          "default": "false",
+          "control": "boolean",
+          "description": "+/- stepper (number field)"
+        },
+        {
+          "name": "clearable",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "loading",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "showCount",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "fullWidth",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "tags"
+        },
+        {
+          "name": "onRemoveTag"
+        },
+        {
+          "name": "tagsScroll",
+          "default": "false"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "minWidth"
+        },
+        {
+          "name": "maxWidth"
+        },
+        {
+          "name": "autoGrow",
+          "default": "false"
+        },
+        {
+          "name": "maxHeight"
+        },
+        {
+          "name": "type"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue"
+        },
+        {
+          "name": "maxLength",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "showLabel",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "showHelper",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "'you@example.com'"
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "iconSide",
+          "control": "inline-radio",
+          "default": "'left'"
+        },
+        {
+          "name": "leftIconName",
+          "control": "text",
+          "default": "'sms'"
+        },
+        {
+          "name": "rightIconName",
+          "control": "text",
+          "default": "'eye-slash'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Sizes",
+        "Statuses",
+        "AllowedTypes",
+        "Icons",
+        "CharacterCount",
+        "AffixesAndAddons",
+        "AddonsAsCTAs",
+        "ReadOnly",
+        "TagInput",
+        "InFieldCTA",
+        "AutoGrowAndWidth"
+      ],
+      "sourcePath": "src/components/atoms/Input/InputBox.jsx",
+      "storiesPath": "src/components/atoms/Input/InputBox.stories.jsx"
+    },
+    {
+      "name": "LoadingIndicator",
+      "dir": "LoadingIndicator",
+      "layer": "atoms",
+      "exports": [
+        "LoadingIndicator"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { LoadingIndicator } from \"@/src/components/atoms\";",
+      "description": "LoadingIndicator — Tesseract loading spinner. Three glyphs, all drawn in `currentColor` so they adapt to context (e.g. inside a Button they take the button's text color): • line-simple   — a clean ring with a rotating arc • line-spinner  — 12 spokes with a stepped \"chase\" • dot-circle    — 8 dots circling",
+      "props": [
+        {
+          "name": "type",
+          "default": "\"line-simple\"",
+          "allowedValues": [
+            "line-simple",
+            "line-spinner",
+            "dot-circle"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "xs",
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "label",
+          "default": "'Loading...'",
+          "control": "text"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Default",
+        "Sizes",
+        "Colors"
+      ],
+      "sourcePath": "src/components/atoms/LoadingIndicator/LoadingIndicator.jsx",
+      "storiesPath": "src/components/atoms/LoadingIndicator/LoadingIndicator.stories.jsx"
+    },
+    {
+      "name": "Logo",
+      "dir": "Logo",
+      "layer": "atoms",
+      "exports": [
+        "Logo"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Logo } from \"@/src/components/atoms\";",
+      "description": "Logo — the Tatva brand marks. Renders the shared SVGs (served from /public/brand) as CSS masks so the same artwork can be recoloured per surface. Two SEPARATE marks (never combined into one lockup): variant \"wordmark\" — the full brand logo (symbol + word)          default variant \"symbol\"   — the monochrome symbol on its own Two brand wordmarks (the symbol is shared): brand \"practice\" — TatvaPractice                                  default brand \"care\"     — TatvaCare",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"wordmark\"",
+          "allowedValues": [
+            "wordmark",
+            "symbol"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "brand",
+          "default": "\"practice\"",
+          "allowedValues": [
+            "practice",
+            "care"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "tone",
+          "default": "\"gradient\"",
+          "allowedValues": [
+            "gradient",
+            "dark",
+            "light",
+            "violet",
+            "blue"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "height",
+          "default": "32",
+          "control": "range"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Tones",
+        "Variants",
+        "Brands"
+      ],
+      "sourcePath": "src/components/atoms/Logo/Logo.jsx",
+      "storiesPath": "src/components/atoms/Logo/Logo.stories.jsx"
+    },
+    {
+      "name": "MedicalIcon",
+      "dir": "MedicalIcon",
+      "layer": "atoms",
+      "exports": [
+        "MedicalIcon",
+        "TPMedicalIcon",
+        "tpMedicalIconNames",
+        "resolveTPMedicalIconName"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { MedicalIcon, TPMedicalIcon, tpMedicalIconNames, resolveTPMedicalIconName } from \"@/src/components/atoms\";",
+      "description": "MedicalIcon (a.k.a. TPMedicalIcon) — health icons are no longer a separate set; they live in the single icon library (/tp-icons/{linear,bulk,bold}). This is a thin convenience wrapper over TPLibraryIcon that keeps the old API working and maps the legacy style names (line → linear, solid → bold).",
+      "props": [
+        {
+          "name": "name"
+        },
+        {
+          "name": "variant",
+          "default": "\"linear\""
+        },
+        {
+          "name": "size",
+          "default": "24"
+        },
+        {
+          "name": "color"
+        },
+        {
+          "name": "alt"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [],
+      "sourcePath": "src/components/atoms/MedicalIcon/MedicalIcon.jsx",
+      "storiesPath": null
+    },
+    {
+      "name": "Radio",
+      "dir": "Radio",
+      "layer": "atoms",
+      "exports": [
+        "Radio",
+        "RadioGroup",
+        "FormControlLabel"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Radio, RadioGroup, FormControlLabel } from \"@/src/components/atoms\";",
+      "description": "Radio / RadioGroup — Native radio input atoms with Tesseract token styling. RadioGroup manages a controlled group. Radio is a single labeled option.",
+      "props": [
+        {
+          "name": "value"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "checked"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "size",
+          "default": "'md'",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "name",
+          "default": "'demo-group'",
+          "control": "text"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "orientation",
+          "allowedValues": [
+            "vertical",
+            "horizontal"
+          ],
+          "control": "inline-radio",
+          "default": "'vertical'"
+        },
+        {
+          "name": "disabledOption",
+          "allowedValues": [
+            "none",
+            "email",
+            "sms",
+            "push"
+          ],
+          "control": "inline-radio",
+          "default": "'none'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Sizes",
+        "WithDisabledOption",
+        "HorizontalLayout",
+        "AppointmentType",
+        "PatientGender",
+        "ConsultationMode",
+        "FormIntegration"
+      ],
+      "sourcePath": "src/components/atoms/Radio/Radio.jsx",
+      "storiesPath": "src/components/atoms/Radio/Radio.stories.jsx"
+    },
+    {
+      "name": "SegmentedControl",
+      "dir": "SegmentedControl",
+      "layer": "atoms",
+      "exports": [
+        "SegmentedControl"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { SegmentedControl } from \"@/src/components/atoms\";",
+      "description": null,
+      "props": [
+        {
+          "name": "options",
+          "default": "[]"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue"
+        },
+        {
+          "name": "onValueChange"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "variant",
+          "default": "\"pill\"",
+          "allowedValues": [
+            "pill",
+            "block"
+          ],
+          "control": "inline-radio",
+          "description": "Pill (rounded) vs block (squared) track"
+        },
+        {
+          "name": "theme",
+          "default": "\"neutral\"",
+          "allowedValues": [
+            "neutral",
+            "primary"
+          ],
+          "control": "inline-radio",
+          "description": "Neutral uses a white indicator, primary uses blue"
+        },
+        {
+          "name": "fullWidth",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "track"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "TwoOptions",
+        "ThreeOptions",
+        "FourOptions",
+        "Sizes",
+        "Variants",
+        "Themes",
+        "FullWidth",
+        "WithIcons",
+        "DisabledOption",
+        "AppointmentView",
+        "BillingPeriod"
+      ],
+      "sourcePath": "src/components/atoms/SegmentedControl/SegmentedControl.jsx",
+      "storiesPath": "src/components/atoms/SegmentedControl/SegmentedControl.stories.jsx"
+    },
+    {
+      "name": "Skeleton",
+      "dir": "Skeleton",
+      "layer": "atoms",
+      "exports": [
+        "Skeleton"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Skeleton } from \"@/src/components/atoms\";",
+      "description": "Skeleton — Loading placeholder atom. Styling: Skeleton.module.scss (pulse animation + base bg). Width / height / border-radius remain inline (fully dynamic per usage).",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"text\"",
+          "allowedValues": [
+            "text",
+            "circular",
+            "rectangular"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "width",
+          "control": "text"
+        },
+        {
+          "name": "height",
+          "control": "text"
+        },
+        {
+          "name": "radius",
+          "control": "text"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Variants",
+        "TextLines",
+        "Circular",
+        "CardPlaceholder",
+        "PatientTableRows",
+        "PatientProfileHero",
+        "AppointmentCardList"
+      ],
+      "sourcePath": "src/components/atoms/Skeleton/Skeleton.jsx",
+      "storiesPath": "src/components/atoms/Skeleton/Skeleton.stories.jsx"
+    },
+    {
+      "name": "Slider",
+      "dir": "Slider",
+      "layer": "atoms",
+      "exports": [
+        "Slider"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Slider } from \"@/src/components/atoms\";",
+      "description": "Slider — Range input atom with Tesseract token styling. Uses native <input type=\"range\"> with CSS accent-color.",
+      "props": [
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue"
+        },
+        {
+          "name": "min",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "max",
+          "default": "100",
+          "control": "number"
+        },
+        {
+          "name": "step",
+          "default": "1",
+          "control": "number"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "color",
+          "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "success",
+            "warning",
+            "error"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Sizes",
+        "Playground",
+        "Colors",
+        "Disabled",
+        "Steps",
+        "PainScale",
+        "DosageAdjust",
+        "BMIFilter"
+      ],
+      "sourcePath": "src/components/atoms/Slider/Slider.jsx",
+      "storiesPath": "src/components/atoms/Slider/Slider.stories.jsx"
+    },
+    {
+      "name": "Toggle",
+      "dir": "Toggle",
+      "layer": "atoms",
+      "exports": [
+        "Toggle"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Toggle } from \"@/src/components/atoms\";",
+      "description": "Toggle — on/off toggle switch atom. Hand-rolled (no Radix). Renders a <button role=\"switch\"> + a hidden checkbox for native form participation. Preserves the same data-state and data-size attributes the SCSS module selects on, so styling is unchanged.",
+      "props": [
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "shape",
+          "default": "\"rounded\"",
+          "allowedValues": [
+            "rounded",
+            "square"
+          ],
+          "control": "inline-radio",
+          "description": "Pill toggle vs squared toggle"
+        },
+        {
+          "name": "checked",
+          "control": "boolean"
+        },
+        {
+          "name": "defaultChecked",
+          "control": "boolean"
+        },
+        {
+          "name": "onCheckedChange"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "value",
+          "default": "\"on\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "onClick"
+        },
+        {
+          "name": "onKeyDown"
+        },
+        {
+          "name": "track"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Sizes",
+        "Shapes",
+        "States",
+        "WithLabel",
+        "NotificationSettings",
+        "FeatureToggles",
+        "InlineToggle"
+      ],
+      "sourcePath": "src/components/atoms/Toggle/Toggle.jsx",
+      "storiesPath": "src/components/atoms/Toggle/Toggle.stories.jsx"
+    },
+    {
+      "name": "Accordion",
+      "dir": "Accordion",
+      "layer": "molecules",
+      "exports": [
+        "Accordion",
+        "AccordionItem",
+        "AccordionTrigger",
+        "AccordionContent"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@/src/components/molecules\";",
+      "description": "Accordion — hand-rolled disclosure molecule (no Radix). API mirrors Radix UI Accordion so callers don't change: <Accordion type=\"single\" | \"multiple\" collapsible value | defaultValue onValueChange> <AccordionItem value=\"...\"> <AccordionTrigger>label</AccordionTrigger> <AccordionContent>body</AccordionContent> </AccordionItem> </Accordion> Each trigger sets `data-state=\"open|closed\"` so existing styling (the chevron rotate selector) keeps working.",
+      "props": [
+        {
+          "name": "type",
+          "default": "\"single\"",
+          "allowedValues": [
+            "single",
+            "multiple"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "collapsible",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue"
+        },
+        {
+          "name": "onValueChange"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "itemIcon",
+          "control": "text",
+          "description": "Tesseract icon shown before each item title",
+          "default": "'info-circle-pro'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "SingleCollapsible",
+        "Multiple",
+        "NonCollapsibleSingle",
+        "Controlled",
+        "PatientMedicalHistory",
+        "FAQAccordion",
+        "SOAPClinicalNote",
+        "MedicationHistory"
+      ],
+      "sourcePath": "src/components/molecules/Accordion/Accordion.jsx",
+      "storiesPath": "src/components/molecules/Accordion/Accordion.stories.jsx"
+    },
+    {
+      "name": "ClinicalTable",
+      "dir": "ClinicalTable",
+      "layer": "molecules",
+      "exports": [
+        "ClinicalTable"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { ClinicalTable } from \"@/src/components/molecules\";",
+      "description": "ClinicalTable — an EDITABLE table for RxPad modules (symptoms, vitals, …). Every cell is its OWN input box, composed from the design-system atoms (see cells.jsx): • free text / numeric  → the InputBox atom (variant=\"seamless\") • dropdown (pick)      → the Dropdown molecule (variant=\"seamless\", chevron) • search combobox      → the Dropdown molecule (editable, no chevron, a \"Frequently used\" header + \"Add ‹custom›\", key hints) Cells show a blue focus ring and per-cell status rings (success / error / warning) via `column.validate`, or — for a search column — an opt-in `flagCustom` ring on values that aren't in the option list (custom entries). Fixed skeleton (always present, in order): [drag-reorder] · NAME (primary search) · …configurable columns… · NOTES (free text) · ACTION (⋯ menu + delete) NAME and NOTES are mandatory; everything between them is configurable from `columns`. NAME is the PRIMARY KEY — a row's other cells stay locked until it is filled, and the next (draft) row only opens after it.",
+      "props": [
+        {
+          "name": "columns",
+          "default": "[]"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "notes"
+        },
+        {
+          "name": "rows"
+        },
+        {
+          "name": "defaultRows",
+          "default": "[]"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "reorderable",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "deletable",
+          "default": "true",
+          "control": "boolean",
+          "description": "Delete button in the action column"
+        },
+        {
+          "name": "showRowMenu",
+          "default": "true",
+          "control": "boolean",
+          "description": "Show the three-dots row-actions menu"
+        },
+        {
+          "name": "rowMenu"
+        },
+        {
+          "name": "autoRow",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "dragIcon",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "moreIcon",
+          "default": "'3-dots-more'",
+          "control": "text"
+        },
+        {
+          "name": "deleteIcon",
+          "default": "'trash'",
+          "control": "text"
+        },
+        {
+          "name": "duplicateIcon",
+          "default": "'copy'",
+          "control": "text"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "flagCustom",
+          "control": "boolean",
+          "description": "Ring the Name cell when the entry is not in the frequently-used list",
+          "default": "false"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "ColumnConfigurator",
+        "AllCellTypes",
+        "StickyActions",
+        "Empty",
+        "FlaggedCustomEntry",
+        "ConfiguringColumns"
+      ],
+      "sourcePath": "src/components/molecules/ClinicalTable/ClinicalTable.jsx",
+      "storiesPath": "src/components/molecules/ClinicalTable/ClinicalTable.stories.jsx"
+    },
+    {
+      "name": "ConfirmDialog",
+      "dir": "ConfirmDialog",
+      "layer": "molecules",
+      "exports": [
+        "ConfirmDialog"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { ConfirmDialog } from \"@/src/components/molecules\";",
+      "description": "ConfirmDialog — Tesseract confirmation modal. Three sections: Header · Body · Footer. First-party (built on DialogPrimitive); footer actions use the Button atom. HEADER title        h2 text (24px close icon, always present) BODY description  text callout      a tinted box (text / node) calloutTone  \"neutral\" | \"warning\" | \"error\"   default \"warning\" neutral → info icon (or none); warning & error → warning icon calloutIcon  boolean   show the callout icon              default true calloutPlacement \"above\" | \"below\"  box vs description    default \"above\" children     custom body content (overrides description/callout) FOOTER — up to three CTA slots: primary · secondary · tertiary. Each slot: <slot>Label, on<Slot>, <slot>Variant, <slot>Theme, <slot>Disabled. <slot>Variant: solid | outline | ghost | tonal | link <slot>Theme:   primary (Tesseract blue) | neutral | warning | error | success CONVENTION (not enforced — developer decides): the PRIMARY CTA is the safe, non-destructive action (e.g. \"Keep editing\" / \"Close\"); the destructive action lives on the SECONDARY CTA (e.g. \"Discard\", themed error). Tertiary sits on the left for an auxiliary action. Legacy aliases (kept working): warning, primaryLabel/onPrimary/primaryTone, confirmLabel/onConfirm/confirmTheme, secondaryLabel/onSecondary, cancelLabel/onCancel, secondaryTone=\"destructive\".",
+      "props": [
+        {
+          "name": "open"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "title",
+          "default": "'Discard changes?'",
+          "control": "text"
+        },
+        {
+          "name": "callout",
+          "default": "'This action cannot be undone.'",
+          "control": "text"
+        },
+        {
+          "name": "calloutTone",
+          "default": "\"warning\"",
+          "allowedValues": [
+            "neutral",
+            "warning",
+            "error"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "calloutIcon",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "calloutCustomIcon"
+        },
+        {
+          "name": "calloutPlacement",
+          "default": "\"above\"",
+          "allowedValues": [
+            "above",
+            "below"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "checkboxChecked"
+        },
+        {
+          "name": "defaultCheckboxChecked",
+          "default": "false"
+        },
+        {
+          "name": "onCheckboxChange"
+        },
+        {
+          "name": "onPrimary"
+        },
+        {
+          "name": "primaryVariant",
+          "default": "\"solid\"",
+          "control": "select"
+        },
+        {
+          "name": "primaryTheme",
+          "default": "\"primary\"",
+          "control": "select"
+        },
+        {
+          "name": "primaryDisabled",
+          "default": "false"
+        },
+        {
+          "name": "primaryAutoClose",
+          "default": "true"
+        },
+        {
+          "name": "onSecondary"
+        },
+        {
+          "name": "secondaryVariant",
+          "default": "\"outline\"",
+          "control": "select"
+        },
+        {
+          "name": "secondaryTheme",
+          "default": "\"neutral\"",
+          "control": "select"
+        },
+        {
+          "name": "secondaryDisabled",
+          "default": "false"
+        },
+        {
+          "name": "onTertiary"
+        },
+        {
+          "name": "tertiaryVariant",
+          "default": "\"link\"",
+          "control": "select"
+        },
+        {
+          "name": "tertiaryTheme",
+          "default": "\"neutral\"",
+          "control": "select"
+        },
+        {
+          "name": "primaryTone"
+        },
+        {
+          "name": "confirmLabel"
+        },
+        {
+          "name": "onConfirm"
+        },
+        {
+          "name": "confirmTheme"
+        },
+        {
+          "name": "confirmDisabled"
+        },
+        {
+          "name": "cancelLabel"
+        },
+        {
+          "name": "onCancel"
+        },
+        {
+          "name": "secondaryTone"
+        },
+        {
+          "name": "withDescription",
+          "control": "boolean"
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "'Your unsaved edits to this prescription will be lost.'"
+        },
+        {
+          "name": "withCallout",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "calloutIconName",
+          "control": "text",
+          "description": "Pick a Tesseract icon to override the callout icon",
+          "default": "''"
+        },
+        {
+          "name": "withCheckbox",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "checkboxLabel",
+          "control": "text",
+          "default": "\"Don't show this again\""
+        },
+        {
+          "name": "primaryLabel",
+          "control": "text"
+        },
+        {
+          "name": "secondaryLabel",
+          "control": "text",
+          "default": "'Discard'"
+        },
+        {
+          "name": "tertiaryLabel",
+          "control": "text",
+          "default": "''"
+        },
+        {
+          "name": "actionsAlign",
+          "allowedValues": [
+            "left",
+            "right"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "actionsFullWidth",
+          "control": "boolean",
+          "default": "false"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "DestructiveFlow",
+        "CalloutTones",
+        "ThreeCtas",
+        "CalloutLineScaling",
+        "ActionLayout",
+        "BodyVariants"
+      ],
+      "sourcePath": "src/components/molecules/ConfirmDialog/ConfirmDialog.jsx",
+      "storiesPath": "src/components/molecules/ConfirmDialog/ConfirmDialog.stories.jsx"
+    },
+    {
+      "name": "DataTable",
+      "dir": "DataTable",
+      "layer": "molecules",
+      "exports": [
+        "DataTable",
+        "DataCell",
+        "CellTag",
+        "TableActions"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { DataTable, DataCell, CellTag, TableActions } from \"@/src/components/molecules\";",
+      "description": "DataCell — primary line (+ optional subtext), each with optional left/right icons. With subtext the primary truncates at 1 line; without subtext at 2.",
+      "props": [
+        {
+          "name": "columns"
+        },
+        {
+          "name": "data"
+        },
+        {
+          "name": "rowKey",
+          "default": "(row, i) => row?.id ?? i"
+        },
+        {
+          "name": "emptyState",
+          "default": "null"
+        },
+        {
+          "name": "rowClassName"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "rowHeight",
+          "default": "\"lg\"",
+          "allowedValues": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "stickyHeader",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "maxHeight",
+          "default": "360",
+          "control": "range"
+        },
+        {
+          "name": "zebra",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "hoverable",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "bordered",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "sortable",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "defaultSort",
+          "default": "null"
+        },
+        {
+          "name": "onSortChange"
+        },
+        {
+          "name": "pageSize",
+          "default": "6",
+          "control": "range"
+        },
+        {
+          "name": "pageSizeOptions"
+        },
+        {
+          "name": "loading",
+          "default": "false"
+        },
+        {
+          "name": "hasMore",
+          "default": "false"
+        },
+        {
+          "name": "onLoadMore"
+        },
+        {
+          "name": "lazyRows",
+          "default": "3"
+        },
+        {
+          "name": "selectionMode",
+          "default": "'none'",
+          "allowedValues": [
+            "none",
+            "single",
+            "multiple"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "selectedKeys"
+        },
+        {
+          "name": "onSelectionChange"
+        },
+        {
+          "name": "isRowDisabled"
+        },
+        {
+          "name": "defaultExpandedKeys"
+        },
+        {
+          "name": "expandedKeys"
+        },
+        {
+          "name": "onExpandedChange"
+        },
+        {
+          "name": "expandColumnId"
+        },
+        {
+          "name": "groupLabel"
+        },
+        {
+          "name": "defaultCollapsedGroups"
+        },
+        {
+          "name": "onRowClick"
+        },
+        {
+          "name": "dataMode",
+          "allowedValues": [
+            "none",
+            "pagination",
+            "infinite"
+          ],
+          "control": "inline-radio",
+          "default": "'pagination'"
+        },
+        {
+          "name": "showStatus",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "showActions",
+          "control": "boolean",
+          "default": "true"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "TruncationRule",
+        "StickyHeaderLazyLoad",
+        "StickyScrollShadow",
+        "DeclarativeColumns",
+        "RowSelection",
+        "SingleColumnConfigurator",
+        "ColumnConfigurator",
+        "SelectionModes",
+        "StickyColumns",
+        "RowStates",
+        "NestedRows",
+        "GroupedRows",
+        "SpanningRows",
+        "ActionTracking"
+      ],
+      "sourcePath": "src/components/molecules/DataTable/DataTable.jsx",
+      "storiesPath": "src/components/molecules/DataTable/DataTable.stories.jsx"
+    },
+    {
+      "name": "DatePicker",
+      "dir": "DateRangePicker",
+      "layer": "molecules",
+      "exports": [
+        "DatePicker",
+        "DateRangePicker"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { DatePicker, DateRangePicker } from \"@/src/components/molecules\";",
+      "description": "DatePicker — the single Tesseract date/time picker. One component, one popover, every mode (functionality reference: Razorpay Blade DatePicker): mode \"single\"    pick one date mode \"range\"     start–end range (1–2 months, quick-select presets) mode \"month\"     pick a month (month grid + year stepping) mode \"year\"      pick a year (decade grid) mode \"time\"      pick a time (hours · minutes · AM/PM) mode \"datetime\"  pick a date AND a time Shared chrome: month/year drill-down navigation, min/max + per-day disable, keyboard navigation (arrows · Home/End · PageUp/Dn · Enter · Esc), a real form field (label · helperText · status · size · required), staged editing with TP Button CTAs (Clear · Cancel · Apply), and adaptive viewport-aware positioning.",
+      "props": [
+        {
+          "name": "value"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "mode",
+          "default": "\"single\"",
+          "allowedValues": [
+            "single",
+            "range",
+            "month",
+            "year",
+            "time",
+            "datetime"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "months",
+          "default": "2",
+          "control": "inline-radio",
+          "description": "Calendars shown (range)"
+        },
+        {
+          "name": "showPresets",
+          "default": "true",
+          "control": "boolean",
+          "description": "Quick-select rail (range)"
+        },
+        {
+          "name": "presets",
+          "default": "PRESETS"
+        },
+        {
+          "name": "minDate"
+        },
+        {
+          "name": "maxDate"
+        },
+        {
+          "name": "isDateDisabled"
+        },
+        {
+          "name": "use12Hour",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "minuteStep",
+          "default": "5",
+          "control": "inline-radio"
+        },
+        {
+          "name": "label",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "helperText",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "status",
+          "default": "undefined",
+          "allowedValues": [
+            "error",
+            "success",
+            "warning"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "required",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "placeholder",
+          "control": "text"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "fullWidth",
+          "default": "true"
+        },
+        {
+          "name": "analyticsId"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "default": "''"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "SingleDate",
+        "SingleMonthRange",
+        "MultiMonthRange",
+        "MonthPicker",
+        "YearPicker",
+        "TimePicker",
+        "DateTimePicker",
+        "FieldStates",
+        "Sizes",
+        "Constraints",
+        "Controlled"
+      ],
+      "sourcePath": "src/components/molecules/DateRangePicker/DateRangePicker.jsx",
+      "storiesPath": "src/components/molecules/DateRangePicker/DateRangePicker.stories.jsx"
+    },
+    {
+      "name": "Dropdown",
+      "dir": "Dropdown",
+      "layer": "molecules",
+      "exports": [
+        "Dropdown"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Dropdown } from \"@/src/components/molecules\";",
+      "description": "Dropdown — the single, extensive select/menu molecule. One component covers every selection surface: • single-select        mode=\"single\" • multi-select         mode=\"multi\"   (selected shown as a count or chips) • option control       optionControl=\"none\" | \"checkbox\" | \"radio\" • chips in the trigger  chips           (multi — removable Chip atoms) • search box           searchable      (filters options live) • editable combobox     editable        (the trigger IS a typeahead input — type to filter; with allowCustom, add free values) • keyboard-shortcut hint showShortcuts (option.shortcut shown as a kbd) • per-item left/right icon, and a two-line title + subtitle • adjustable width      width=\"trigger\" | \"auto\" | number(px) • always-visible scroll indicator, adaptive viewport-aware positioning, and full keyboard nav (↑ ↓ Home End Enter Esc). Embedding (table cell, etc.): • variant=\"seamless\"   borderless trigger that fills its container and shows an inset focus/status ring (reuse inside ClinicalTable) • chevron={false}      hide the trigger chevron (a plain search, no dropdown affordance — e.g. the primary \"name\" column) • status               \"success\" | \"error\" | \"warning\" — per-cell ring colour • groupLabel           a sticky header above the list (e.g. \"Frequently used\") • allowCustom + addLabel  editable: offer \"Add ‹query›\" when nothing matches",
+      "props": [
+        {
+          "name": "options",
+          "default": "[]"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "onCommit"
+        },
+        {
+          "name": "mode",
+          "default": "\"single\"",
+          "allowedValues": [
+            "single",
+            "multi"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "optionControl",
+          "default": "\"none\"",
+          "allowedValues": [
+            "none",
+            "checkbox",
+            "radio"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "chips",
+          "default": "false",
+          "control": "boolean",
+          "description": "Multi: show selected as removable chips in the trigger"
+        },
+        {
+          "name": "searchable",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "editable",
+          "default": "false"
+        },
+        {
+          "name": "allowCustom",
+          "default": "false"
+        },
+        {
+          "name": "addLabel"
+        },
+        {
+          "name": "chevron",
+          "default": "true"
+        },
+        {
+          "name": "variant",
+          "default": "\"default\""
+        },
+        {
+          "name": "status"
+        },
+        {
+          "name": "groupLabel"
+        },
+        {
+          "name": "showShortcuts",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "footerHint",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "leadingIcon"
+        },
+        {
+          "name": "primaryAction"
+        },
+        {
+          "name": "secondaryAction"
+        },
+        {
+          "name": "tertiaryAction"
+        },
+        {
+          "name": "actionsAlign",
+          "default": "\"right\"",
+          "allowedValues": [
+            "left",
+            "center",
+            "right",
+            "full"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "width",
+          "default": "\"trigger\"",
+          "allowedValues": [
+            "trigger",
+            "auto"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "placeholder",
+          "default": "\"Select…\"",
+          "control": "text"
+        },
+        {
+          "name": "label",
+          "default": "'Department'",
+          "control": "text"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "analyticsId"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "withActions",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "twoLine",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "withIcons",
+          "control": "boolean",
+          "default": "true"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "SingleSelect",
+        "MultiSelect",
+        "CheckboxOptions",
+        "RadioOptions",
+        "ChipsInTrigger",
+        "Searchable",
+        "WithShortcuts",
+        "TwoLineItems",
+        "ItemIcons",
+        "FooterShortcutsAndActions",
+        "ThreeFooterCtas",
+        "FooterCtaAlignment",
+        "GroupedSections",
+        "EditableCombobox",
+        "Widths"
+      ],
+      "sourcePath": "src/components/molecules/Dropdown/Dropdown.jsx",
+      "storiesPath": "src/components/molecules/Dropdown/Dropdown.stories.jsx"
+    },
+    {
+      "name": "Filter",
+      "dir": "Filter",
+      "layer": "molecules",
+      "exports": [
+        "Filter"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Filter } from \"@/src/components/molecules\";",
+      "description": "Filter — a single \"Filter\" entry point that opens one panel with grouped, multi-select sections (e.g. Status · Doctors · Types). First-party, no deps. Chosen options appear as removable chips below the bar. Pairs with DataTable (filter the data by the selection); the section set changes per table — just pass a different `groups` config.",
+      "props": [
+        {
+          "name": "groups",
+          "default": "[]",
+          "control": "object",
+          "description": "Filter sections: [{ id, label, options: [{ value, label }] }]"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue"
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "label",
+          "default": "\"Filter\"",
+          "control": "text",
+          "description": "Trigger label"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "triggerIcon",
+          "control": "text",
+          "description": "Tesseract icon on the Filter trigger (defaults to a funnel)",
+          "default": "''"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "WithDataTable"
+      ],
+      "sourcePath": "src/components/molecules/Filter/Filter.jsx",
+      "storiesPath": "src/components/molecules/Filter/Filter.stories.jsx"
+    },
+    {
+      "name": "Header",
+      "dir": "Header",
+      "layer": "molecules",
+      "exports": [
+        "Header"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Header } from \"@/src/components/molecules\";",
+      "description": "Header — the single configurable top bar (home shell, RxPad, print, …). Composed from atoms: Button (every CTA), Avatar, Divider, Badge (dot), Logo. LEFT cluster (in order, all optional): back    boolean   — full-height 40px back button (onBack) logo    ReactNode — brand mark (use the Logo atom) user    { name, meta, avatar?, dropdown? } — patient / user details block title   ReactNode — leading title (+ optional `subtitle` for title + subtext) subtitle ReactNode leading ReactNode — fully custom left content (escape hatch) RIGHT cluster — `actions`: an ordered list (max 8) of typed items. Only `tutorial` and `avatar` are special; everything else is a CTA (the Button atom), and dividers are placed explicitly wherever you want them: { type: \"cta\", label?, icon?, variant?, theme?, onClick, menu?, badge?, ariaLabel? } label + icon → text CTA; icon only (no label) → icon button; menu → split button (the only Button shape with a dropdown side); badge:{color} → a notification dot on an icon CTA. { type: \"avatar\", src?, name?, ring?, onClick } { type: \"select\", options, value, onClick→onChange, icon?, searchable?, width? } — single-select dropdown that reads like a CTA (e.g. clinic switcher); auto-searchable past 5 options. Composes the Dropdown molecule. { type: \"tutorial\", onClick } { type: \"info\", label?, value, icon?, iconPosition?, radius? } — non-clickable violet data tag (ward number, doctor name, status); icon left (default) or right; radius defaults to CTA radius. { type: \"divider\" }       — vertical gradient Divider atom { type: \"node\", node }    — custom icon — Tesseract library icon NAME (string) or a ReactNode.",
+      "props": [
+        {
+          "name": "back"
+        },
+        {
+          "name": "onBack"
+        },
+        {
+          "name": "logo"
+        },
+        {
+          "name": "user"
+        },
+        {
+          "name": "title",
+          "default": "'Welcome Dr. Sheela BR!'",
+          "control": "text"
+        },
+        {
+          "name": "subtitle",
+          "default": "'Your Appointments'",
+          "control": "text"
+        },
+        {
+          "name": "leading",
+          "default": "'logo'",
+          "allowedValues": [
+            "logo",
+            "title",
+            "user",
+            "none"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "actions",
+          "default": "[]"
+        },
+        {
+          "name": "height",
+          "default": "62"
+        },
+        {
+          "name": "bordered",
+          "default": "true"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "showBack",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "userName",
+          "control": "text",
+          "default": "'Ramesh Kumar'"
+        },
+        {
+          "name": "userMeta",
+          "control": "text",
+          "default": "'Male | 76y'"
+        },
+        {
+          "name": "userDropdown",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "tutorial",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "clinic",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "avatar",
+          "control": "boolean",
+          "default": "true"
+        }
+      ],
+      "stories": [
+        "Shell",
+        "RxPad",
+        "Print",
+        "TitleWithSubtext",
+        "InfoTags",
+        "Playground"
+      ],
+      "sourcePath": "src/components/molecules/Header/Header.jsx",
+      "storiesPath": "src/components/molecules/Header/Header.stories.jsx"
+    },
+    {
+      "name": "HeroBanner",
+      "dir": "HeroBanner",
+      "layer": "molecules",
+      "exports": [
+        "HeroBanner"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { HeroBanner } from \"@/src/components/molecules\";",
+      "description": "HeroBanner — The page hero banner. Dark radial-gradient surface with an animated geometric lattice accent (right side, partly off-canvas), an optional back button, and a top-aligned title + subtitle. This is the only banner.",
+      "props": [
+        {
+          "name": "size",
+          "default": "\"md\""
+        },
+        {
+          "name": "bottomRadius",
+          "default": "24",
+          "control": "range"
+        },
+        {
+          "name": "title",
+          "default": "'Your Appointments'"
+        },
+        {
+          "name": "subtitle",
+          "default": "'32 scheduled today · 4 awaiting confirmation'",
+          "control": "text"
+        },
+        {
+          "name": "titleSize",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio",
+          "description": "18px / 24px"
+        },
+        {
+          "name": "subtitleSize",
+          "default": "\"sm\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio",
+          "description": "13px / 16px"
+        },
+        {
+          "name": "showBackButton",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "onBack"
+        },
+        {
+          "name": "actions"
+        },
+        {
+          "name": "pattern",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "showSubtitle",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "iconSize",
+          "control": "range",
+          "default": "16"
+        },
+        {
+          "name": "ctaOrder",
+          "control": "select"
+        },
+        {
+          "name": "cta1Shape",
+          "control": "inline-radio",
+          "default": "'text'"
+        },
+        {
+          "name": "cta1Icon",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "cta1IconName",
+          "control": "text",
+          "description": "Pick from the Tesseract Icons panel (or type a name)",
+          "default": "'add'"
+        },
+        {
+          "name": "cta1Label",
+          "control": "text",
+          "default": "'Add Appointment'"
+        },
+        {
+          "name": "cta2Shape",
+          "control": "inline-radio",
+          "default": "'text'"
+        },
+        {
+          "name": "cta2Icon",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "cta2IconName",
+          "control": "text",
+          "description": "Pick from the Tesseract Icons panel (or type a name)",
+          "default": "'flash'"
+        },
+        {
+          "name": "cta2Label",
+          "control": "text",
+          "default": "'Start Walk-in'"
+        },
+        {
+          "name": "cta3Shape",
+          "control": "inline-radio",
+          "default": "'icon'"
+        },
+        {
+          "name": "cta3Icon",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "cta3IconName",
+          "control": "text",
+          "description": "Pick from the Tesseract Icons panel (or type a name)",
+          "default": "'more'"
+        },
+        {
+          "name": "cta3Label",
+          "control": "text",
+          "default": "'More options'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Sizes",
+        "WithSubtitle",
+        "WithBackButton",
+        "ActionsWithButtons",
+        "ActionsWithIconButtons",
+        "ActionsWithSplitButton",
+        "ThreeCtas",
+        "AllCtaTypes",
+        "TitleSizes",
+        "BottomRadius",
+        "FullFeatured"
+      ],
+      "sourcePath": "src/components/molecules/HeroBanner/HeroBanner.jsx",
+      "storiesPath": "src/components/molecules/HeroBanner/HeroBanner.stories.jsx"
+    },
+    {
+      "name": "RxPadSection",
+      "dir": "RxPadSection",
+      "layer": "molecules",
+      "exports": [
+        "RxPadSection"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { RxPadSection } from \"@/src/components/molecules\";",
+      "description": "A configurable RxPad module: header (icon + title + CTAs) over a configurable body (ClinicalTable, free-text, or fields), with search and  ghost buttons. Every icon in the component is individually configurable via the Tesseract Icons panel.texttextHeader icontext",
+      "props": [
+        {
+          "name": "title",
+          "default": "\"Symptoms\"",
+          "control": "text"
+        },
+        {
+          "name": "icon",
+          "default": "\"virus\"",
+          "control": "text"
+        },
+        {
+          "name": "iconColor",
+          "default": "\"var(--tp-violet-500)\""
+        },
+        {
+          "name": "mode",
+          "default": "\"table-first\"",
+          "allowedValues": [
+            "table-first",
+            "search-first"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "bodyType",
+          "default": "\"table\"",
+          "allowedValues": [
+            "table",
+            "text",
+            "fields"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "columns",
+          "default": "[]"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "notes"
+        },
+        {
+          "name": "fields",
+          "default": "[]"
+        },
+        {
+          "name": "search",
+          "default": "true"
+        },
+        {
+          "name": "searchPlaceholder"
+        },
+        {
+          "name": "frequentlyUsed",
+          "default": "[]"
+        },
+        {
+          "name": "showRepeat",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showTemplate",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showSave",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showClear",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "onRepeat"
+        },
+        {
+          "name": "onTemplate"
+        },
+        {
+          "name": "onSave"
+        },
+        {
+          "name": "onClear"
+        },
+        {
+          "name": "repeatIcon",
+          "default": "\"refresh-arrow\"",
+          "control": "text"
+        },
+        {
+          "name": "templateIcon",
+          "default": "\"grid-5\"",
+          "control": "text"
+        },
+        {
+          "name": "saveIcon",
+          "default": "\"ram\"",
+          "control": "text"
+        },
+        {
+          "name": "clearIcon",
+          "default": "\"eraser\"",
+          "control": "text"
+        },
+        {
+          "name": "searchIcon",
+          "default": "\"search-normal-1\"",
+          "control": "text"
+        },
+        {
+          "name": "dragIcon",
+          "default": "\"menu\"",
+          "control": "text"
+        },
+        {
+          "name": "moreIcon",
+          "default": "\"3-dots-more\"",
+          "control": "text"
+        },
+        {
+          "name": "deleteIcon",
+          "default": "\"trash\"",
+          "control": "text"
+        },
+        {
+          "name": "duplicateIcon",
+          "default": "\"copy\"",
+          "control": "text"
+        },
+        {
+          "name": "rows"
+        },
+        {
+          "name": "defaultRows",
+          "default": "[]"
+        },
+        {
+          "name": "onRowsChange"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "EmptyState",
+        "SearchFirst",
+        "FreeText",
+        "CustomFields"
+      ],
+      "sourcePath": "src/components/molecules/RxPadSection/RxPadSection.jsx",
+      "storiesPath": "src/components/molecules/RxPadSection/RxPadSection.stories.jsx"
+    },
+    {
+      "name": "SecondarySidebar",
+      "dir": "SecondarySidebar",
+      "layer": "molecules",
+      "exports": [
+        "SecondarySidebar"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { SecondarySidebar } from \"@/src/components/molecules\";",
+      "description": "SecondarySidebar — the blue-gradient secondary navigation rail (RxPad pattern). Supports collapsed rail (80px) and expanded (200px) modes with nested items, search filtering, badges, and a configurable collapse toggle.",
+      "props": [
+        {
+          "name": "items",
+          "default": "[]",
+          "storyHidden": true
+        },
+        {
+          "name": "activeId",
+          "storyHidden": true
+        },
+        {
+          "name": "onSelect",
+          "storyHidden": true
+        },
+        {
+          "name": "collapsed",
+          "storyHidden": true
+        },
+        {
+          "name": "defaultCollapsed",
+          "default": "true",
+          "storyHidden": true
+        },
+        {
+          "name": "onCollapsedChange",
+          "storyHidden": true
+        },
+        {
+          "name": "search",
+          "default": "false",
+          "storyHidden": true
+        },
+        {
+          "name": "searchPlaceholder",
+          "default": "\"Search…\"",
+          "storyHidden": true
+        },
+        {
+          "name": "showCollapseToggle",
+          "default": "true",
+          "storyHidden": true
+        },
+        {
+          "name": "expandedWidth",
+          "default": "200",
+          "storyHidden": true
+        },
+        {
+          "name": "collapsedWidth",
+          "default": "80",
+          "control": "number",
+          "description": "Rail width in px"
+        },
+        {
+          "name": "width",
+          "storyHidden": true
+        },
+        {
+          "name": "bottomFade",
+          "default": "true",
+          "control": "boolean",
+          "description": "Bottom fade overlay"
+        },
+        {
+          "name": "className",
+          "storyHidden": true
+        },
+        {
+          "name": "pillRadius",
+          "control": "range",
+          "description": "Pill corner radius (px)",
+          "default": "12"
+        },
+        {
+          "name": "badgeStyle",
+          "allowedValues": [
+            "default",
+            "none",
+            "dot",
+            "sticky-right",
+            "sticky-left"
+          ],
+          "control": "select",
+          "description": "Badge display variant",
+          "default": "\"default\""
+        }
+      ],
+      "stories": [
+        "Playground",
+        "WithBadges",
+        "SignalDot"
+      ],
+      "sourcePath": "src/components/molecules/SecondarySidebar/SecondarySidebar.jsx",
+      "storiesPath": "src/components/molecules/SecondarySidebar/SecondarySidebar.stories.jsx"
+    },
+    {
+      "name": "Sidebar",
+      "dir": "Sidebar",
+      "layer": "molecules",
+      "exports": [
+        "Sidebar"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Sidebar } from \"@/src/components/molecules\";",
+      "description": "Scalable sidebar with collapsed rail (80px) and expanded (236px) modes. Supports flat items, nested children with expand/collapse, flyout popovers on collapsed hover, search filtering, badges, and a configurable collapse toggle.booleanCollapsed (rail) or expanded modeState",
+      "props": [
+        {
+          "name": "items",
+          "default": "[]",
+          "storyHidden": true
+        },
+        {
+          "name": "activeId",
+          "storyHidden": true
+        },
+        {
+          "name": "onSelect",
+          "storyHidden": true
+        },
+        {
+          "name": "collapsed",
+          "storyHidden": true
+        },
+        {
+          "name": "defaultCollapsed",
+          "default": "false",
+          "control": "boolean",
+          "description": "Collapsed (rail) or expanded mode"
+        },
+        {
+          "name": "onCollapsedChange",
+          "storyHidden": true
+        },
+        {
+          "name": "search",
+          "default": "false",
+          "control": "boolean",
+          "description": "Enable search input in expanded mode"
+        },
+        {
+          "name": "searchPlaceholder",
+          "default": "\"Search…\"",
+          "control": "text",
+          "description": "Search input placeholder"
+        },
+        {
+          "name": "showCollapseToggle",
+          "default": "true",
+          "control": "boolean",
+          "description": "Show the collapse/expand toggle button"
+        },
+        {
+          "name": "expandedWidth",
+          "default": "236",
+          "control": "number",
+          "description": "Expanded width in px"
+        },
+        {
+          "name": "collapsedWidth",
+          "default": "80",
+          "control": "number",
+          "description": "Collapsed rail width in px"
+        },
+        {
+          "name": "bottomFade",
+          "default": "true",
+          "control": "boolean",
+          "description": "Bottom fade overlay"
+        },
+        {
+          "name": "logo",
+          "storyHidden": true
+        },
+        {
+          "name": "footer",
+          "storyHidden": true
+        },
+        {
+          "name": "className",
+          "storyHidden": true
+        },
+        {
+          "name": "chipRadius",
+          "control": "range",
+          "description": "Icon chip corner radius (px)",
+          "default": "12"
+        },
+        {
+          "name": "badgeStyle",
+          "allowedValues": [
+            "default",
+            "none",
+            "dot",
+            "sticky-right",
+            "sticky-left"
+          ],
+          "control": "select",
+          "description": "Badge display variant",
+          "default": "\"default\""
+        }
+      ],
+      "stories": [
+        "Playground",
+        "CollapsedRail",
+        "ExpandedFlat",
+        "NestedWithSearch",
+        "CollapsedWithFlyouts",
+        "WithBadges",
+        "Controlled",
+        "NoCollapseToggle",
+        "CollapsedWithBadges",
+        "WithFooter"
+      ],
+      "sourcePath": "src/components/molecules/Sidebar/Sidebar.jsx",
+      "storiesPath": "src/components/molecules/Sidebar/Sidebar.stories.jsx"
+    },
+    {
+      "name": "Tabs",
+      "dir": "Tabs",
+      "layer": "molecules",
+      "exports": [
+        "Tabs",
+        "TabsList",
+        "TabsTrigger",
+        "TabsContent"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Tabs, TabsList, TabsTrigger, TabsContent } from \"@/src/components/molecules\";",
+      "description": "Tabs — Tesseract tab navigation. First-party, no external deps. Compound API (Radix-shaped, so callers don't change): <Tabs value | defaultValue onValueChange size=\"md\"> <TabsList> <TabsTrigger value=\"...\" leftIcon={<TPIcon .../>} rightIcon={...} tag=\"3\" tagTone=\"error\"> Label </TabsTrigger> </TabsList> <TabsContent value=\"...\">body</TabsContent> </Tabs> TabsTrigger structure (all optional except value + label): leftIcon   ReactNode — icon before the label (use <TPIcon/>); the active tab renders it in the \"bulk\" family, inactive stays \"linear\" rightIcon  ReactNode — icon after the tag, on the far right (same variant rule) tag        ReactNode — a pill on the right (count / status) tagTone    \"neutral\" | \"primary\" | \"success\" | \"warning\" | \"error\" Active state uses a rounded indicator bar (curved, not a hard underline). Keyboard: Left/Right move between triggers, Home/End jump to first/last. Activation follows focus (Radix \"automatic\" mode).",
+      "props": [
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue",
+          "control": "text",
+          "description": "Initially selected tab (uncontrolled)"
+        },
+        {
+          "name": "onValueChange"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio",
+          "description": "Trigger density"
+        },
+        {
+          "name": "analyticsId"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "CustomTabs",
+        "HorizontalScroll",
+        "Sizes",
+        "WithLeftIcons",
+        "WithLeftAndRightIcons",
+        "WithTags",
+        "WithDisabledTab",
+        "Controlled",
+        "FullWidthTabs",
+        "PatientProfile"
+      ],
+      "sourcePath": "src/components/molecules/Tabs/Tabs.jsx",
+      "storiesPath": "src/components/molecules/Tabs/Tabs.stories.jsx"
+    },
+    {
+      "name": "Toast",
+      "dir": "Toast",
+      "layer": "molecules",
+      "exports": [
+        "Toast"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Toast } from \"@/src/components/molecules\";",
+      "description": "Toast — solid dark status message. Only the status icon is colored (semantic: green / gold / red, white for info); text is white / lighter-white on a dark surface (no outer stroke).",
+      "props": [
+        {
+          "name": "status",
+          "default": "\"info\"",
+          "allowedValues": [
+            "info",
+            "success",
+            "warning",
+            "error"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "title",
+          "default": "'License expiring soon'",
+          "control": "text"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "action",
+          "default": "'solid'",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "select"
+        },
+        {
+          "name": "showIcon",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "dismissible",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "duration",
+          "default": "0"
+        },
+        {
+          "name": "onDismiss"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "withSubtext",
+          "control": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "subtext",
+          "control": "text",
+          "default": "'Your TatvaPractice Enterprise license expires on 15 June 2026.'"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "description": "Pick a Tesseract icon to override the status icon",
+          "default": "''"
+        },
+        {
+          "name": "actionLabel",
+          "control": "text",
+          "default": "'Renew'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "SizingAndTruncation",
+        "Statuses",
+        "SingleLine",
+        "WithoutAction",
+        "WithAction",
+        "SystemAlerts",
+        "AutoDismiss"
+      ],
+      "sourcePath": "src/components/molecules/Toast/Toast.jsx",
+      "storiesPath": "src/components/molecules/Toast/Toast.stories.jsx"
+    },
+    {
+      "name": "Tooltip",
+      "dir": "Tooltip",
+      "layer": "molecules",
+      "exports": [
+        "Tooltip",
+        "TooltipProvider",
+        "TooltipTrigger",
+        "TooltipContent"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from \"@/src/components/molecules\";",
+      "description": "Tooltip — Tesseract tooltip molecule. First-party, no external deps (built on the shared Portal / Slot / usePosition / useEscape / useClickOutside). Two consumption styles: 1. Wrapper:   <Tooltip content=\"Save\" side=\"bottom\"><Button/></Tooltip> 2. Compound:  <TooltipProvider><Tooltip><TooltipTrigger asChild>…</TooltipTrigger> <TooltipContent>…</TooltipContent></Tooltip></TooltipProvider> Variants: trigger      \"hover\" | \"click\"     default \"hover\" hover → opens on enter/focus, closes on leave/blur click → toggles on click, stays open; closes on outside-click, Escape, or the dismiss button dismissible  boolean — show a square × dismiss button inside the tooltip icon         ReactNode — leading icon inside the tooltip (with / without) Other props: side, align, sideOffset, variant (\"dark\"|\"light\"), arrow, maxWidth, disabled, whenTruncated (hover only), open/defaultOpen/onOpenChange.",
+      "props": [
+        {
+          "name": "content",
+          "default": "'Save changes'",
+          "control": "text"
+        },
+        {
+          "name": "children",
+          "storyHidden": true
+        },
+        {
+          "name": "side",
+          "default": "\"top\"",
+          "allowedValues": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "align",
+          "default": "\"center\"",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "sideOffset",
+          "default": "6",
+          "control": "range"
+        },
+        {
+          "name": "collisionPadding",
+          "default": "8"
+        },
+        {
+          "name": "delayDuration",
+          "default": "200",
+          "control": "range"
+        },
+        {
+          "name": "variant",
+          "default": "\"dark\"",
+          "allowedValues": [
+            "dark",
+            "light"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "arrow",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "maxWidth",
+          "default": "280",
+          "control": "range"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "whenTruncated",
+          "default": "false",
+          "control": "boolean",
+          "description": "Hover only — show when trigger text overflows"
+        },
+        {
+          "name": "trigger",
+          "default": "\"hover\"",
+          "allowedValues": [
+            "hover",
+            "click"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "dismissible",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "defaultOpen"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "withIcon",
+          "control": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "iconName",
+          "control": "text",
+          "description": "Leading Tesseract icon (needs ",
+          "default": "'information'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Triggers",
+        "WithIcon",
+        "Dismissible",
+        "Sides",
+        "Variants",
+        "RichContent",
+        "OnlyWhenTruncated",
+        "CompoundParts"
+      ],
+      "sourcePath": "src/components/molecules/Tooltip/Tooltip.jsx",
+      "storiesPath": "src/components/molecules/Tooltip/Tooltip.stories.jsx"
+    }
+  ],
+  "tokenFamilies": {
+    "blue": [
+      "--tp-blue-50",
+      "--tp-blue-100",
+      "--tp-blue-200",
+      "--tp-blue-300",
+      "--tp-blue-400",
+      "--tp-blue-500",
+      "--tp-blue-600",
+      "--tp-blue-700",
+      "--tp-blue-800",
+      "--tp-blue-900"
+    ],
+    "violet": [
+      "--tp-violet-50",
+      "--tp-violet-100",
+      "--tp-violet-200",
+      "--tp-violet-300",
+      "--tp-violet-400",
+      "--tp-violet-500",
+      "--tp-violet-600",
+      "--tp-violet-700",
+      "--tp-violet-800",
+      "--tp-violet-900"
+    ],
+    "amber": [
+      "--tp-amber-50",
+      "--tp-amber-100",
+      "--tp-amber-200",
+      "--tp-amber-300",
+      "--tp-amber-400",
+      "--tp-amber-500",
+      "--tp-amber-600",
+      "--tp-amber-700",
+      "--tp-amber-800",
+      "--tp-amber-900"
+    ],
+    "slate": [
+      "--tp-slate-0",
+      "--tp-slate-50",
+      "--tp-slate-100",
+      "--tp-slate-200",
+      "--tp-slate-300",
+      "--tp-slate-400",
+      "--tp-slate-500",
+      "--tp-slate-600",
+      "--tp-slate-700",
+      "--tp-slate-800",
+      "--tp-slate-900"
+    ],
+    "icon": [
+      "--tp-icon-clickable-light-bg",
+      "--tp-icon-clickable-light-bg-hover",
+      "--tp-icon-clickable-dark-bg",
+      "--tp-icon-clickable-dark-bg-hover"
+    ],
+    "success": [
+      "--tp-success-50",
+      "--tp-success-100",
+      "--tp-success-200",
+      "--tp-success-300",
+      "--tp-success-400",
+      "--tp-success-500",
+      "--tp-success-600",
+      "--tp-success-700",
+      "--tp-success-800",
+      "--tp-success-900"
+    ],
+    "warning": [
+      "--tp-warning-50",
+      "--tp-warning-100",
+      "--tp-warning-200",
+      "--tp-warning-300",
+      "--tp-warning-400",
+      "--tp-warning-500",
+      "--tp-warning-600",
+      "--tp-warning-700",
+      "--tp-warning-800",
+      "--tp-warning-900"
+    ],
+    "error": [
+      "--tp-error-50",
+      "--tp-error-100",
+      "--tp-error-200",
+      "--tp-error-300",
+      "--tp-error-400",
+      "--tp-error-500",
+      "--tp-error-600",
+      "--tp-error-700",
+      "--tp-error-800",
+      "--tp-error-900"
+    ],
+    "fg": [
+      "--tp-fg-heading",
+      "--tp-fg-primary",
+      "--tp-fg-secondary",
+      "--tp-fg-tertiary",
+      "--tp-fg-placeholder",
+      "--tp-fg-disabled",
+      "--tp-fg-inverse",
+      "--tp-fg-link",
+      "--tp-fg-success",
+      "--tp-fg-warning",
+      "--tp-fg-error"
+    ],
+    "bg": [
+      "--tp-bg-page",
+      "--tp-bg-page-subtle",
+      "--tp-bg-surface",
+      "--tp-bg-surface-hover",
+      "--tp-bg-surface-active",
+      "--tp-bg-selected",
+      "--tp-bg-inverse",
+      "--tp-bg-brand-soft",
+      "--tp-bg-success-soft",
+      "--tp-bg-warning-soft",
+      "--tp-bg-error-soft"
+    ],
+    "border": [
+      "--tp-border-soft",
+      "--tp-border-neutral",
+      "--tp-border-strong",
+      "--tp-border-focus",
+      "--tp-border-primary",
+      "--tp-border-success",
+      "--tp-border-warning",
+      "--tp-border-error"
+    ],
+    "font": [
+      "--tp-font-heading",
+      "--tp-font-body",
+      "--tp-font-mono"
+    ],
+    "weight": [
+      "--tp-weight-regular",
+      "--tp-weight-medium",
+      "--tp-weight-semibold",
+      "--tp-weight-bold",
+      "--tp-weight-extrabold"
+    ],
+    "text": [
+      "--tp-text-display-xl",
+      "--tp-text-display-xl-lh",
+      "--tp-text-display",
+      "--tp-text-display-lh",
+      "--tp-text-h1",
+      "--tp-text-h1-lh",
+      "--tp-text-h2",
+      "--tp-text-h2-lh",
+      "--tp-text-h3",
+      "--tp-text-h3-lh",
+      "--tp-text-h4",
+      "--tp-text-h4-lh",
+      "--tp-text-h5",
+      "--tp-text-h5-lh",
+      "--tp-text-h6",
+      "--tp-text-h6-lh",
+      "--tp-text-body-xl",
+      "--tp-text-body-xl-lh",
+      "--tp-text-body-lg",
+      "--tp-text-body-lg-lh",
+      "--tp-text-body-base",
+      "--tp-text-body-base-lh",
+      "--tp-text-body-sm",
+      "--tp-text-body-sm-lh",
+      "--tp-text-body-xs",
+      "--tp-text-body-xs-lh",
+      "--tp-text-caption-lg",
+      "--tp-text-caption-lg-lh",
+      "--tp-text-caption",
+      "--tp-text-caption-lh",
+      "--tp-text-caption-sm",
+      "--tp-text-caption-sm-lh",
+      "--tp-text-micro",
+      "--tp-text-micro-lh"
+    ],
+    "space": [
+      "--tp-space-0-25",
+      "--tp-space-0-5",
+      "--tp-space-1",
+      "--tp-space-1-5",
+      "--tp-space-2",
+      "--tp-space-2-5",
+      "--tp-space-3",
+      "--tp-space-3-5",
+      "--tp-space-4",
+      "--tp-space-4-5",
+      "--tp-space-5",
+      "--tp-space-5-5",
+      "--tp-space-6",
+      "--tp-space-7",
+      "--tp-space-8",
+      "--tp-space-9",
+      "--tp-space-10",
+      "--tp-space-10-5",
+      "--tp-space-12",
+      "--tp-space-16"
+    ],
+    "size": [
+      "--tp-size-2",
+      "--tp-size-4",
+      "--tp-size-6",
+      "--tp-size-8",
+      "--tp-size-10",
+      "--tp-size-12",
+      "--tp-size-14",
+      "--tp-size-16",
+      "--tp-size-18",
+      "--tp-size-20",
+      "--tp-size-22",
+      "--tp-size-24",
+      "--tp-size-28",
+      "--tp-size-32",
+      "--tp-size-36",
+      "--tp-size-40",
+      "--tp-size-42"
+    ],
+    "radius": [
+      "--tp-radius-0",
+      "--tp-radius-2",
+      "--tp-radius-4",
+      "--tp-radius-6",
+      "--tp-radius-8",
+      "--tp-radius-10",
+      "--tp-radius-12",
+      "--tp-radius-14",
+      "--tp-radius-16",
+      "--tp-radius-18",
+      "--tp-radius-20",
+      "--tp-radius-22",
+      "--tp-radius-24",
+      "--tp-radius-42",
+      "--tp-radius-84",
+      "--tp-radius-full"
+    ],
+    "shadow": [
+      "--tp-shadow-xs",
+      "--tp-shadow-sm",
+      "--tp-shadow-md",
+      "--tp-shadow-lg",
+      "--tp-shadow-xl",
+      "--tp-shadow-2xl"
+    ],
+    "focus": [
+      "--tp-focus-primary",
+      "--tp-focus-error",
+      "--tp-focus-neutral"
+    ],
+    "gradient": [
+      "--tp-gradient-primary-hero",
+      "--tp-gradient-primary-card",
+      "--tp-gradient-primary-subtle",
+      "--tp-gradient-secondary-hero",
+      "--tp-gradient-secondary-card",
+      "--tp-gradient-ai-hero",
+      "--tp-gradient-ai-card"
+    ]
+  },
+  "tokens": {
+    "blue": [
+      {
+        "name": "--tp-blue-50",
+        "value": "#EEEEFF"
+      },
+      {
+        "name": "--tp-blue-100",
+        "value": "#D8D8FA"
+      },
+      {
+        "name": "--tp-blue-200",
+        "value": "#B5B4F2"
+      },
+      {
+        "name": "--tp-blue-300",
+        "value": "#8E8DE8"
+      },
+      {
+        "name": "--tp-blue-400",
+        "value": "#6C6BDE"
+      },
+      {
+        "name": "--tp-blue-500",
+        "value": "#4B4AD5"
+      },
+      {
+        "name": "--tp-blue-600",
+        "value": "#3C3BB5"
+      },
+      {
+        "name": "--tp-blue-700",
+        "value": "#2E2D96"
+      },
+      {
+        "name": "--tp-blue-800",
+        "value": "#212077"
+      },
+      {
+        "name": "--tp-blue-900",
+        "value": "#161558"
+      }
+    ],
+    "violet": [
+      {
+        "name": "--tp-violet-50",
+        "value": "#FAF5FE"
+      },
+      {
+        "name": "--tp-violet-100",
+        "value": "#EDDFF7"
+      },
+      {
+        "name": "--tp-violet-200",
+        "value": "#DBBFEF"
+      },
+      {
+        "name": "--tp-violet-300",
+        "value": "#C89FE7"
+      },
+      {
+        "name": "--tp-violet-400",
+        "value": "#BA7DE9"
+      },
+      {
+        "name": "--tp-violet-500",
+        "value": "#A461D8"
+      },
+      {
+        "name": "--tp-violet-600",
+        "value": "#8A4DBB"
+      },
+      {
+        "name": "--tp-violet-700",
+        "value": "#703A9E"
+      },
+      {
+        "name": "--tp-violet-800",
+        "value": "#572A81"
+      },
+      {
+        "name": "--tp-violet-900",
+        "value": "#3E1C64"
+      }
+    ],
+    "amber": [
+      {
+        "name": "--tp-amber-50",
+        "value": "#FFFBEB"
+      },
+      {
+        "name": "--tp-amber-100",
+        "value": "#FFF4CC"
+      },
+      {
+        "name": "--tp-amber-200",
+        "value": "#FFE8AE"
+      },
+      {
+        "name": "--tp-amber-300",
+        "value": "#FEDC85"
+      },
+      {
+        "name": "--tp-amber-400",
+        "value": "#FED15E"
+      },
+      {
+        "name": "--tp-amber-500",
+        "value": "#F5B832"
+      },
+      {
+        "name": "--tp-amber-600",
+        "value": "#D99B1A"
+      },
+      {
+        "name": "--tp-amber-700",
+        "value": "#B47D10"
+      },
+      {
+        "name": "--tp-amber-800",
+        "value": "#8F6008"
+      },
+      {
+        "name": "--tp-amber-900",
+        "value": "#6A4504"
+      }
+    ],
+    "slate": [
+      {
+        "name": "--tp-slate-0",
+        "value": "#FFFFFF"
+      },
+      {
+        "name": "--tp-slate-50",
+        "value": "#FAFAFB"
+      },
+      {
+        "name": "--tp-slate-100",
+        "value": "#F1F1F5"
+      },
+      {
+        "name": "--tp-slate-200",
+        "value": "#E2E2EA"
+      },
+      {
+        "name": "--tp-slate-300",
+        "value": "#D0D5DD"
+      },
+      {
+        "name": "--tp-slate-400",
+        "value": "#A2A2A8"
+      },
+      {
+        "name": "--tp-slate-500",
+        "value": "#717179"
+      },
+      {
+        "name": "--tp-slate-600",
+        "value": "#545460"
+      },
+      {
+        "name": "--tp-slate-700",
+        "value": "#454551"
+      },
+      {
+        "name": "--tp-slate-800",
+        "value": "#2C2C35"
+      },
+      {
+        "name": "--tp-slate-900",
+        "value": "#171725"
+      }
+    ],
+    "icon": [
+      {
+        "name": "--tp-icon-clickable-light-bg",
+        "value": "rgba(75, 74, 213, 0.1)"
+      },
+      {
+        "name": "--tp-icon-clickable-light-bg-hover",
+        "value": "rgba(75, 74, 213, 0.15)"
+      },
+      {
+        "name": "--tp-icon-clickable-dark-bg",
+        "value": "rgba(255, 255, 255, 0.25)"
+      },
+      {
+        "name": "--tp-icon-clickable-dark-bg-hover",
+        "value": "rgba(255, 255, 255, 0.28)"
+      }
+    ],
+    "success": [
+      {
+        "name": "--tp-success-50",
+        "value": "#ECFDF5"
+      },
+      {
+        "name": "--tp-success-100",
+        "value": "#D1FAE5"
+      },
+      {
+        "name": "--tp-success-200",
+        "value": "#A7F3D0"
+      },
+      {
+        "name": "--tp-success-300",
+        "value": "#6EE7B7"
+      },
+      {
+        "name": "--tp-success-400",
+        "value": "#34D399"
+      },
+      {
+        "name": "--tp-success-500",
+        "value": "#10B981"
+      },
+      {
+        "name": "--tp-success-600",
+        "value": "#059669"
+      },
+      {
+        "name": "--tp-success-700",
+        "value": "#047857"
+      },
+      {
+        "name": "--tp-success-800",
+        "value": "#065F46"
+      },
+      {
+        "name": "--tp-success-900",
+        "value": "#064E3B"
+      }
+    ],
+    "warning": [
+      {
+        "name": "--tp-warning-50",
+        "value": "#FFFBEB"
+      },
+      {
+        "name": "--tp-warning-100",
+        "value": "#FEF3C7"
+      },
+      {
+        "name": "--tp-warning-200",
+        "value": "#FDE68A"
+      },
+      {
+        "name": "--tp-warning-300",
+        "value": "#FCD34D"
+      },
+      {
+        "name": "--tp-warning-400",
+        "value": "#FBBF24"
+      },
+      {
+        "name": "--tp-warning-500",
+        "value": "#F59E0B"
+      },
+      {
+        "name": "--tp-warning-600",
+        "value": "#D97706"
+      },
+      {
+        "name": "--tp-warning-700",
+        "value": "#B45309"
+      },
+      {
+        "name": "--tp-warning-800",
+        "value": "#92400E"
+      },
+      {
+        "name": "--tp-warning-900",
+        "value": "#78350F"
+      }
+    ],
+    "error": [
+      {
+        "name": "--tp-error-50",
+        "value": "#FFF1F2"
+      },
+      {
+        "name": "--tp-error-100",
+        "value": "#FFE4E6"
+      },
+      {
+        "name": "--tp-error-200",
+        "value": "#FECDD3"
+      },
+      {
+        "name": "--tp-error-300",
+        "value": "#FDA4AF"
+      },
+      {
+        "name": "--tp-error-400",
+        "value": "#FB7185"
+      },
+      {
+        "name": "--tp-error-500",
+        "value": "#E11D48"
+      },
+      {
+        "name": "--tp-error-600",
+        "value": "#C8102E"
+      },
+      {
+        "name": "--tp-error-700",
+        "value": "#9F1239"
+      },
+      {
+        "name": "--tp-error-800",
+        "value": "#881337"
+      },
+      {
+        "name": "--tp-error-900",
+        "value": "#4C0519"
+      }
+    ],
+    "fg": [
+      {
+        "name": "--tp-fg-heading",
+        "value": "var(--tp-slate-900)"
+      },
+      {
+        "name": "--tp-fg-primary",
+        "value": "var(--tp-slate-700)"
+      },
+      {
+        "name": "--tp-fg-secondary",
+        "value": "var(--tp-slate-600)"
+      },
+      {
+        "name": "--tp-fg-tertiary",
+        "value": "var(--tp-slate-500)"
+      },
+      {
+        "name": "--tp-fg-placeholder",
+        "value": "var(--tp-slate-300)"
+      },
+      {
+        "name": "--tp-fg-disabled",
+        "value": "var(--tp-slate-200)"
+      },
+      {
+        "name": "--tp-fg-inverse",
+        "value": "var(--tp-slate-0)"
+      },
+      {
+        "name": "--tp-fg-link",
+        "value": "var(--tp-blue-500)"
+      },
+      {
+        "name": "--tp-fg-success",
+        "value": "var(--tp-success-700)"
+      },
+      {
+        "name": "--tp-fg-warning",
+        "value": "var(--tp-warning-600)"
+      },
+      {
+        "name": "--tp-fg-error",
+        "value": "var(--tp-error-500)"
+      }
+    ],
+    "bg": [
+      {
+        "name": "--tp-bg-page",
+        "value": "var(--tp-slate-50)"
+      },
+      {
+        "name": "--tp-bg-page-subtle",
+        "value": "var(--tp-slate-100)"
+      },
+      {
+        "name": "--tp-bg-surface",
+        "value": "var(--tp-slate-0)"
+      },
+      {
+        "name": "--tp-bg-surface-hover",
+        "value": "var(--tp-slate-50)"
+      },
+      {
+        "name": "--tp-bg-surface-active",
+        "value": "var(--tp-slate-100)"
+      },
+      {
+        "name": "--tp-bg-selected",
+        "value": "var(--tp-blue-50)"
+      },
+      {
+        "name": "--tp-bg-inverse",
+        "value": "var(--tp-slate-900)"
+      },
+      {
+        "name": "--tp-bg-brand-soft",
+        "value": "var(--tp-blue-50)"
+      },
+      {
+        "name": "--tp-bg-success-soft",
+        "value": "var(--tp-success-50)"
+      },
+      {
+        "name": "--tp-bg-warning-soft",
+        "value": "var(--tp-warning-50)"
+      },
+      {
+        "name": "--tp-bg-error-soft",
+        "value": "var(--tp-error-50)"
+      }
+    ],
+    "border": [
+      {
+        "name": "--tp-border-soft",
+        "value": "var(--tp-slate-100)"
+      },
+      {
+        "name": "--tp-border-neutral",
+        "value": "var(--tp-slate-200)"
+      },
+      {
+        "name": "--tp-border-strong",
+        "value": "var(--tp-slate-300)"
+      },
+      {
+        "name": "--tp-border-focus",
+        "value": "var(--tp-blue-500)"
+      },
+      {
+        "name": "--tp-border-primary",
+        "value": "var(--tp-blue-500)"
+      },
+      {
+        "name": "--tp-border-success",
+        "value": "var(--tp-success-500)"
+      },
+      {
+        "name": "--tp-border-warning",
+        "value": "var(--tp-warning-500)"
+      },
+      {
+        "name": "--tp-border-error",
+        "value": "var(--tp-error-500)"
+      }
+    ],
+    "font": [
+      {
+        "name": "--tp-font-heading",
+        "value": "var(--font-heading)"
+      },
+      {
+        "name": "--tp-font-body",
+        "value": "var(--font-sans)"
+      },
+      {
+        "name": "--tp-font-mono",
+        "value": "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Liberation Mono\", monospace"
+      }
+    ],
+    "weight": [
+      {
+        "name": "--tp-weight-regular",
+        "value": "400"
+      },
+      {
+        "name": "--tp-weight-medium",
+        "value": "500"
+      },
+      {
+        "name": "--tp-weight-semibold",
+        "value": "600"
+      },
+      {
+        "name": "--tp-weight-bold",
+        "value": "700"
+      },
+      {
+        "name": "--tp-weight-extrabold",
+        "value": "800"
+      }
+    ],
+    "text": [
+      {
+        "name": "--tp-text-display-xl",
+        "value": "56px"
+      },
+      {
+        "name": "--tp-text-display-xl-lh",
+        "value": "64px"
+      },
+      {
+        "name": "--tp-text-display",
+        "value": "48px"
+      },
+      {
+        "name": "--tp-text-display-lh",
+        "value": "56px"
+      },
+      {
+        "name": "--tp-text-h1",
+        "value": "36px"
+      },
+      {
+        "name": "--tp-text-h1-lh",
+        "value": "44px"
+      },
+      {
+        "name": "--tp-text-h2",
+        "value": "30px"
+      },
+      {
+        "name": "--tp-text-h2-lh",
+        "value": "38px"
+      },
+      {
+        "name": "--tp-text-h3",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-text-h3-lh",
+        "value": "32px"
+      },
+      {
+        "name": "--tp-text-h4",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-text-h4-lh",
+        "value": "28px"
+      },
+      {
+        "name": "--tp-text-h5",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-text-h5-lh",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-text-h6",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-text-h6-lh",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-text-body-xl",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-text-body-xl-lh",
+        "value": "32px"
+      },
+      {
+        "name": "--tp-text-body-lg",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-text-body-lg-lh",
+        "value": "28px"
+      },
+      {
+        "name": "--tp-text-body-base",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-text-body-base-lh",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-text-body-sm",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-text-body-sm-lh",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-text-body-xs",
+        "value": "12px"
+      },
+      {
+        "name": "--tp-text-body-xs-lh",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-text-caption-lg",
+        "value": "13px"
+      },
+      {
+        "name": "--tp-text-caption-lg-lh",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-text-caption",
+        "value": "12px"
+      },
+      {
+        "name": "--tp-text-caption-lh",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-text-caption-sm",
+        "value": "11px"
+      },
+      {
+        "name": "--tp-text-caption-sm-lh",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-text-micro",
+        "value": "10px"
+      },
+      {
+        "name": "--tp-text-micro-lh",
+        "value": "12px"
+      }
+    ],
+    "space": [
+      {
+        "name": "--tp-space-0-25",
+        "value": "1px"
+      },
+      {
+        "name": "--tp-space-0-5",
+        "value": "2px"
+      },
+      {
+        "name": "--tp-space-1",
+        "value": "4px"
+      },
+      {
+        "name": "--tp-space-1-5",
+        "value": "6px"
+      },
+      {
+        "name": "--tp-space-2",
+        "value": "8px"
+      },
+      {
+        "name": "--tp-space-2-5",
+        "value": "10px"
+      },
+      {
+        "name": "--tp-space-3",
+        "value": "12px"
+      },
+      {
+        "name": "--tp-space-3-5",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-space-4",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-space-4-5",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-space-5",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-space-5-5",
+        "value": "22px"
+      },
+      {
+        "name": "--tp-space-6",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-space-7",
+        "value": "28px"
+      },
+      {
+        "name": "--tp-space-8",
+        "value": "32px"
+      },
+      {
+        "name": "--tp-space-9",
+        "value": "36px"
+      },
+      {
+        "name": "--tp-space-10",
+        "value": "40px"
+      },
+      {
+        "name": "--tp-space-10-5",
+        "value": "42px"
+      },
+      {
+        "name": "--tp-space-12",
+        "value": "48px"
+      },
+      {
+        "name": "--tp-space-16",
+        "value": "64px"
+      }
+    ],
+    "size": [
+      {
+        "name": "--tp-size-2",
+        "value": "2px"
+      },
+      {
+        "name": "--tp-size-4",
+        "value": "4px"
+      },
+      {
+        "name": "--tp-size-6",
+        "value": "6px"
+      },
+      {
+        "name": "--tp-size-8",
+        "value": "8px"
+      },
+      {
+        "name": "--tp-size-10",
+        "value": "10px"
+      },
+      {
+        "name": "--tp-size-12",
+        "value": "12px"
+      },
+      {
+        "name": "--tp-size-14",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-size-16",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-size-18",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-size-20",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-size-22",
+        "value": "22px"
+      },
+      {
+        "name": "--tp-size-24",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-size-28",
+        "value": "28px"
+      },
+      {
+        "name": "--tp-size-32",
+        "value": "32px"
+      },
+      {
+        "name": "--tp-size-36",
+        "value": "36px"
+      },
+      {
+        "name": "--tp-size-40",
+        "value": "40px"
+      },
+      {
+        "name": "--tp-size-42",
+        "value": "42px"
+      }
+    ],
+    "radius": [
+      {
+        "name": "--tp-radius-0",
+        "value": "0"
+      },
+      {
+        "name": "--tp-radius-2",
+        "value": "2px"
+      },
+      {
+        "name": "--tp-radius-4",
+        "value": "4px"
+      },
+      {
+        "name": "--tp-radius-6",
+        "value": "6px"
+      },
+      {
+        "name": "--tp-radius-8",
+        "value": "8px"
+      },
+      {
+        "name": "--tp-radius-10",
+        "value": "10px"
+      },
+      {
+        "name": "--tp-radius-12",
+        "value": "12px"
+      },
+      {
+        "name": "--tp-radius-14",
+        "value": "14px"
+      },
+      {
+        "name": "--tp-radius-16",
+        "value": "16px"
+      },
+      {
+        "name": "--tp-radius-18",
+        "value": "18px"
+      },
+      {
+        "name": "--tp-radius-20",
+        "value": "20px"
+      },
+      {
+        "name": "--tp-radius-22",
+        "value": "22px"
+      },
+      {
+        "name": "--tp-radius-24",
+        "value": "24px"
+      },
+      {
+        "name": "--tp-radius-42",
+        "value": "42px"
+      },
+      {
+        "name": "--tp-radius-84",
+        "value": "84px"
+      },
+      {
+        "name": "--tp-radius-full",
+        "value": "9999px"
+      }
+    ],
+    "shadow": [
+      {
+        "name": "--tp-shadow-xs",
+        "value": "0 1px 2px 0 rgba(23, 23, 37, 0.04)"
+      },
+      {
+        "name": "--tp-shadow-sm",
+        "value": "0 1px 3px 0 rgba(23, 23, 37, 0.08)"
+      },
+      {
+        "name": "--tp-shadow-md",
+        "value": "0 4px 8px -2px rgba(23, 23, 37, 0.08)"
+      },
+      {
+        "name": "--tp-shadow-lg",
+        "value": "0 12px 24px -4px rgba(23, 23, 37, 0.08)"
+      },
+      {
+        "name": "--tp-shadow-xl",
+        "value": "0 20px 40px -8px rgba(23, 23, 37, 0.12)"
+      },
+      {
+        "name": "--tp-shadow-2xl",
+        "value": "0 32px 64px -12px rgba(23, 23, 37, 0.20)"
+      }
+    ],
+    "focus": [
+      {
+        "name": "--tp-focus-primary",
+        "value": "0 0 0 3px #b5b4f2"
+      },
+      {
+        "name": "--tp-focus-error",
+        "value": "0 0 0 3px #fda4af"
+      },
+      {
+        "name": "--tp-focus-neutral",
+        "value": "0 0 0 3px #d0d5dd"
+      }
+    ],
+    "gradient": [
+      {
+        "name": "--tp-gradient-primary-hero",
+        "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #4b4ad5 0%, #161558 39.08%, #2e2d96 78.16%, #4b4ad5 100%)"
+      },
+      {
+        "name": "--tp-gradient-primary-card",
+        "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #6c6bde 0%, #212077 39.08%, #3c3bb5 78.16%, #6c6bde 100%)"
+      },
+      {
+        "name": "--tp-gradient-primary-subtle",
+        "value": "radial-gradient(101.06% 60.94% at 50% 55.44%, #b5b4f2 0%, #6c6bde 39.08%, #8e8de8 78.16%, #b5b4f2 100%)"
+      },
+      {
+        "name": "--tp-gradient-secondary-hero",
+        "value": "radial-gradient(99.09% 59.99% at 50% 55.44%, #8a4dbb 0%, #3e1c64 39.08%, #572a81 78.16%, #a461d8 100%)"
+      },
+      {
+        "name": "--tp-gradient-secondary-card",
+        "value": "radial-gradient(99.09% 59.99% at 50% 55.44%, #ba7de9 0%, #572a81 39.08%, #703a9e 78.16%, #ba7de9 100%)"
+      },
+      {
+        "name": "--tp-gradient-ai-hero",
+        "value": "linear-gradient(91deg, #d565ea 3.04%, #673aac 66.74%, #1a1994 130.45%)"
+      },
+      {
+        "name": "--tp-gradient-ai-card",
+        "value": "linear-gradient(91deg, #e08bf0 3.04%, #8a5dc2 66.74%, #3c3bb5 130.45%)"
+      }
+    ]
+  }
+}
