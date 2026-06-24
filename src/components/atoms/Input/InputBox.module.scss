@@ -4,6 +4,10 @@
 
 // ─── Outer wrapper ────────────────────────────────────────────────────────────
 .wrap {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   display:        inline-flex;
   flex-direction: column;
   gap:            var(--tesseract-space-1-5);
@@ -52,7 +56,7 @@
 .fieldRow {
   display:       flex;
   align-items:   stretch;
-  height:        var(--h, var(--tesseract-size-42));
+  height:        var(--input-height, var(--h, var(--tesseract-size-42))); // `height` prop overrides the size token
   width:         100%;
   border-radius: var(--tesseract-input-radius, var(--r, var(--tesseract-radius-10))); // theme: components.input.radius
   corner-shape:  round; // accurate arc (override global squircle)
@@ -357,6 +361,71 @@
 
 .addonLeft  { border-right: 1.5px solid var(--tesseract-slate-200); }
 .addonRight { border-left:  1.5px solid var(--tesseract-slate-200); }
+
+// ─── Built-in add-on content (text · select · button) ─────────────────────────
+// Rendered by the component from a descriptor, so every add-on looks identical
+// across the app regardless of who composes it. Each owns a neutral fill so it
+// sits flush against the divider.
+
+// Text affix — "https://", "+91", "/month".
+.addonText {
+  padding:     0 var(--tesseract-space-3);
+  background:  var(--tesseract-slate-50);
+  color:       var(--tesseract-slate-600);
+  font-size:   var(--fs, var(--tesseract-text-body-sm));
+  font-family: var(--tesseract-font-body);
+  white-space: nowrap;
+}
+
+// Dropdown add-on — native select with a custom chevron, no native chrome.
+.addonSelect {
+  position:    relative;
+  display:     inline-flex;
+  align-items: center;
+  height:      100%;
+}
+.addonSelectControl {
+  appearance:  none;
+  height:      100%;
+  padding:     0 calc(var(--tesseract-space-3) + 18px) 0 var(--tesseract-space-3);
+  margin:      0;
+  border:      none;
+  outline:     none;
+  background:  var(--tesseract-slate-50);
+  color:       var(--tesseract-slate-700);
+  font-size:   var(--fs, var(--tesseract-text-body-sm));
+  font-family: var(--tesseract-font-body);
+  font-weight: var(--tesseract-weight-medium);
+  cursor:      pointer;
+}
+.addonChevron {
+  position:       absolute;
+  right:          var(--tesseract-space-2-5);
+  pointer-events: none;
+  color:          var(--tesseract-slate-500);
+}
+
+// CTA add-on — neutral button so the field reads as one cohesive control.
+.addonButton {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             var(--tesseract-space-1-5);
+  height:          100%;
+  padding:         0 var(--tesseract-space-4);
+  border:          none;
+  background:      var(--tesseract-slate-50);
+  color:           var(--tesseract-slate-700);
+  font-size:       var(--tesseract-text-body-sm);
+  font-family:     var(--tesseract-font-body);
+  font-weight:     var(--tesseract-weight-semibold);
+  white-space:     nowrap;
+  cursor:          pointer;
+  transition:      background 120ms ease;
+
+  &:hover:not(:disabled) { background: var(--tesseract-slate-100); }
+  &:disabled { cursor: not-allowed; color: var(--tesseract-slate-400); }
+}
+.addonButtonLabel { line-height: 1; }
 
 // ─── Counter stepper buttons (+/-) ────────────────────────────────────────────
 .stepBtn {

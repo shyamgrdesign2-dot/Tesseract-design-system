@@ -24,73 +24,19 @@ const glyphFor = (name, size, variant = 'linear', family) =>
     ? <TPIcon name={String(name).trim()} variant={variant} family={family || undefined} size={size} />
     : undefined;
 
-// ── World-class add-on building blocks ────────────────────────────────────────
-// Each owns its own background + balanced padding so it sits flush against the
-// divider — no native <select> chrome, no lopsided spacing.
-
-const Chevron = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-);
-
-const SelectAddon = ({ ariaLabel, options }) => (
-  <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '100%' }}>
-    <select
-      aria-label={ariaLabel}
-      style={{
-        appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none',
-        height: '100%', padding: '0 32px 0 12px', margin: 0, border: 'none', outline: 'none',
-        background: 'var(--tesseract-slate-50, #FAFAFB)', color: 'var(--tesseract-slate-700, #454551)',
-        fontSize: 14, fontWeight: 500, fontFamily: 'Inter, sans-serif', cursor: 'pointer',
-      }}
-    >
-      {options.map((o) => <option key={o}>{o}</option>)}
-    </select>
-    <span style={{ position: 'absolute', right: 11, pointerEvents: 'none', display: 'inline-flex', color: 'var(--tesseract-slate-500, #717179)' }}>
-      <Chevron />
-    </span>
-  </span>
-);
-
-const TextAddon = ({ children }) => (
-  <span style={{ padding: '0 12px', background: 'var(--tesseract-slate-50, #FAFAFB)', color: 'var(--tesseract-slate-600, #545460)', fontSize: 14, whiteSpace: 'nowrap' }}>
-    {children}
-  </span>
-);
-
-// CTA add-on — neutral on both sides (matches the prefix/dropdown add-ons), so
-// the field reads as one cohesive control rather than a coloured button bolted on.
-const CtaAddon = ({ label, iconName }) => (
-  <button
-    type="button"
-    style={{
-      height: '100%', padding: '0 16px', border: 'none', cursor: 'pointer',
-      display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
-      fontSize: 13, fontWeight: 600, fontFamily: 'Inter, sans-serif',
-      background: 'var(--tesseract-slate-50, #FAFAFB)',
-      color: 'var(--tesseract-slate-700, #454551)',
-    }}
-  >
-    {iconName && <TPLibraryIcon name={iconName} size={16} />}
-    {label}
-  </button>
-);
-
-const CountryAddon = () => <SelectAddon ariaLabel="Country code" options={['🇮🇳 +91', '🇺🇸 +1', '🇬🇧 +44', '🇦🇪 +971']} />;
-const UnitDropdown = () => <SelectAddon ariaLabel="Unit" options={['kg', 'lb', 'g']} />;
-
-const leftAddonNode = (kind) => {
-  if (kind === 'country') return <CountryAddon />;
-  if (kind === 'prefix') return <TextAddon>https://</TextAddon>;
-  if (kind === 'cta') return <CtaAddon label="Browse" variant="ghost" iconName="document-upload" />;
+// Build a built-in add-on DESCRIPTOR for a side — the component renders & styles
+// it. Same types on either side, so any add-on can be a prefix or a suffix.
+const addonDescriptor = (kind, side) => {
+  if (!kind || kind === 'none') return undefined;
+  if (kind === 'text')   return { type: 'text',   content: side === 'left' ? 'https://' : '.com' };
+  if (kind === 'select') return { type: 'select', ariaLabel: side === 'left' ? 'Country code' : 'Unit', options: side === 'left' ? ['+91', '+1', '+44', '+971'] : ['kg', 'lb', 'g'] };
+  if (kind === 'button') return { type: 'button', label: side === 'left' ? 'Browse' : 'Search', icon: side === 'left' ? 'document-upload' : 'search-normal' };
   return undefined;
 };
-const rightAddonNode = (kind) => {
-  if (kind === 'dropdown') return <UnitDropdown />;
-  if (kind === 'cta') return <CtaAddon label="Search" iconName="search-normal" />;
-  if (kind === 'text') return <TextAddon>/month</TextAddon>;
-  return undefined;
+// Emit the descriptor literal for the Show-code snippet.
+const addonCode = (kind, side) => {
+  const d = addonDescriptor(kind, side);
+  return d ? JSON.stringify(d) : null;
 };
 
 export default {
@@ -123,9 +69,11 @@ export default {
     required:    { control: 'boolean', table: { category: 'Content' } },
 
     size:        { control: 'inline-radio', options: SIZES, description: 'sm · md · lg', table: { category: 'Appearance' } },
+    variant:     { control: 'inline-radio', options: ['default', 'seamless'], description: 'default · seamless (borderless, fills a table cell with an inset focus ring)', table: { category: 'Appearance' } },
     status:      { control: 'inline-radio', options: STATUSES, description: 'Validation state — default · success · error · warning (drives border + status glyph)', table: { category: 'Appearance' } },
     fullWidth:   { control: 'boolean', table: { category: 'Appearance' } },
     radius:      { control: 'text', name: 'radius', description: 'Field corner radius — a number (px), "pill", "sharp", or any CSS length / token. Blank = default 10px.', table: { category: 'Appearance' } },
+    height:      { control: 'text', name: 'height', description: 'Override the field height — a number (px) or CSS length. Blank = size default (sm 36 · md 42 · lg 48).', table: { category: 'Appearance' } },
 
     allow:       { control: 'inline-radio', options: ALLOW, name: 'allow (filter)', description: 'Restrict typed characters', table: { category: 'Behaviour' } },
     clearable:   { control: 'boolean', name: 'clearable (×)', table: { category: 'Behaviour' } },
@@ -143,8 +91,25 @@ export default {
 
     unit:        { control: 'text', description: 'Fixed suffix inside the field, e.g. "kg"', table: { category: 'Affixes' } },
     counter:     { control: 'boolean', description: '+/- stepper (number field)', table: { category: 'Affixes' } },
-    leftAddon:   { control: 'select', options: ['none', 'country', 'prefix', 'cta'], name: 'left add-on', table: { category: 'Affixes' } },
-    rightAddon:  { control: 'select', options: ['none', 'dropdown', 'cta', 'text'], name: 'right add-on', table: { category: 'Affixes' } },
+    // Either side accepts the same add-on types — choose a side, choose a type.
+    leftAddon:   { control: 'select', options: ['none', 'text', 'select', 'button'], name: 'left add-on', description: 'Built-in add-on on the LEFT — text affix · dropdown · CTA button', table: { category: 'Affixes' } },
+    rightAddon:  { control: 'select', options: ['none', 'text', 'select', 'button'], name: 'right add-on', description: 'Built-in add-on on the RIGHT — text affix · dropdown · CTA button', table: { category: 'Affixes' } },
+
+    // Composed-node / programmatic props — hidden from Controls (set in code, not the panel).
+    tags:        { table: { disable: true } },
+    action:      { table: { disable: true } },
+    onRemoveTag: { table: { disable: true } },
+    onChange:    { table: { disable: true } },
+    value:       { table: { disable: true } },
+    defaultValue:{ table: { disable: true } },
+    type:        { table: { disable: true } },
+    id:          { table: { disable: true } },
+    className:   { table: { disable: true } },
+    minWidth:    { table: { disable: true } },
+    maxWidth:    { table: { disable: true } },
+    maxHeight:   { table: { disable: true } },
+    autoGrow:    { table: { disable: true } },
+    tagsScroll:  { table: { disable: true } },
   },
   args: {
     showLabel: true,
@@ -154,9 +119,11 @@ export default {
     helperText: 'We’ll never share it.',
     required: false,
     size: 'md',
+    variant: 'default',
     status: 'default',
     fullWidth: true,
     radius: '',
+    height: '',
     allow: 'any',
     clearable: true,
     loading: false,
@@ -208,8 +175,15 @@ const inputCode = (a) => {
   if (a.status !== 'default' && a.statusIcon && a.statusIcon.trim()) lines.push(`  statusIcon="${a.statusIcon.trim()}"`);
   if (a.unit) lines.push(`  unit="${a.unit}"`);
   if (a.counter) lines.push('  counter');
+  const la = addonCode(a.leftAddon, 'left');
+  if (la) lines.push(`  leftAddon={${la}}`);
+  const ra = addonCode(a.rightAddon, 'right');
+  if (ra) lines.push(`  rightAddon={${ra}}`);
+  if (a.variant && a.variant !== 'default') lines.push(`  variant="${a.variant}"`);
   const rv = radiusValue(a.radius);
   if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
+  const hv = radiusValue(a.height);
+  if (hv != null) lines.push(typeof hv === 'number' ? `  height={${hv}}` : `  height="${hv}"`);
   if (a.fullWidth) lines.push('  fullWidth');
   return `<InputBox\n${lines.join('\n')}\n/>`;
 };
@@ -227,6 +201,7 @@ export const Playground = {
       <div style={{ maxWidth: 440 }}>
         <InputBox
           size={a.size}
+          variant={a.variant}
           status={a.status}
           allow={a.allow}
           label={a.showLabel ? a.label : undefined}
@@ -239,6 +214,7 @@ export const Playground = {
           readOnly={a.readOnly}
           disabled={a.disabled}
           radius={radiusValue(a.radius)}
+          height={radiusValue(a.height)}
           maxLength={a.maxLength || undefined}
           showCount={a.showCount}
           leftIcon={glyphFor(a.leftIcon, px, a.iconVariant, a.iconFamily)}
@@ -248,8 +224,8 @@ export const Playground = {
           counter={a.counter}
           type={a.counter ? 'number' : undefined}
           defaultValue={a.counter ? 1 : undefined}
-          leftAddon={leftAddonNode(a.leftAddon)}
-          rightAddon={rightAddonNode(a.rightAddon)}
+          leftAddon={addonDescriptor(a.leftAddon, 'left')}
+          rightAddon={addonDescriptor(a.rightAddon, 'right')}
         />
       </div>
     );
@@ -296,6 +272,19 @@ export const Radius = {
       <InputBox label="Sharp" radius="sharp" placeholder="Square corners" fullWidth />
       <InputBox label="Custom 4px" radius={4} placeholder="Tighter corners" fullWidth />
       <InputBox label="Token" radius="var(--tesseract-radius-16)" placeholder="16px token" fullWidth />
+    </Stack>
+  ),
+};
+
+// ── Height override (per-field height, beyond the size tokens) ─────────────────
+export const Height = {
+  name: 'Height override',
+  render: () => (
+    <Stack>
+      <InputBox label="Default md (42px)" placeholder="Size token height" fullWidth />
+      <InputBox label="40px" height={40} placeholder="Compact" fullWidth />
+      <InputBox label="48px" height={48} placeholder="Roomier" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="56px" height={56} placeholder="Tall field" fullWidth />
     </Stack>
   ),
 };
@@ -349,29 +338,51 @@ export const CharacterCount = {
   ),
 };
 
-// ── Unit · counter · dropdown add-ons ─────────────────────────────────────────
+// ── Built-in add-ons — text · dropdown · CTA, on EITHER side ───────────────────
+// The component renders & styles each from a descriptor; pass the same shape to
+// leftAddon or rightAddon to put it on the left or right.
 export const AffixesAndAddons = {
   name: 'Affixes & Add-ons',
   render: () => (
-    <Stack>
+    <Stack w={440}>
       <InputBox label="Unit suffix" type="number" defaultValue={72} unit="kg" fullWidth />
       <InputBox label="Counter (stepper)" type="number" defaultValue={1} counter fullWidth />
-      <InputBox label="Left dropdown add-on" placeholder="98765 43210" allow="numeric" leftAddon={<CountryAddon />} fullWidth />
-      <InputBox label="Right dropdown add-on" type="number" defaultValue={72} rightAddon={<UnitDropdown />} fullWidth />
-      <InputBox label="Prefix add-on" placeholder="your-site" leftAddon={<TextAddon>https://</TextAddon>} rightAddon={<TextAddon>.com</TextAddon>} fullWidth />
+      <InputBox label="Dropdown add-on (left)" placeholder="98765 43210" allow="numeric" leftAddon={{ type: 'select', ariaLabel: 'Country code', options: ['+91', '+1', '+44', '+971'] }} fullWidth />
+      <InputBox label="Dropdown add-on (right)" type="number" defaultValue={72} rightAddon={{ type: 'select', ariaLabel: 'Unit', options: ['kg', 'lb', 'g'] }} fullWidth />
+      <InputBox label="Text affix on both sides" placeholder="your-site" leftAddon="https://" rightAddon=".com" fullWidth />
     </Stack>
   ),
 };
 
-// ── Add-ons as CTAs ────────────────────────────────────────────────────────────
+// ── Same add-on, either side ──────────────────────────────────────────────────
+// One descriptor, swapped between leftAddon and rightAddon — the placement is
+// just which prop you pass it to.
+export const AddonEitherSide = {
+  name: 'Add-on either side',
+  render: () => {
+    const search = { type: 'button', label: 'Search', icon: 'search-normal' };
+    const unit = { type: 'select', ariaLabel: 'Unit', options: ['kg', 'lb', 'g'] };
+    return (
+      <Stack w={440}>
+        <InputBox label="CTA on the right" placeholder="Search patients…" rightAddon={search} fullWidth />
+        <InputBox label="CTA on the left" placeholder="Search patients…" leftAddon={search} fullWidth />
+        <InputBox label="Dropdown on the right" type="number" defaultValue={72} rightAddon={unit} fullWidth />
+        <InputBox label="Dropdown on the left" type="number" defaultValue={72} leftAddon={unit} fullWidth />
+      </Stack>
+    );
+  },
+};
+
+// ── Add-ons as CTAs (button descriptors) ──────────────────────────────────────
 export const AddonsAsCTAs = {
   name: 'Add-ons as CTAs',
   render: () => (
     <Stack w={440}>
-      <InputBox label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} rightAddon={<CtaAddon label="Search" iconName="search-normal" />} fullWidth />
-      <InputBox label="Newsletter" placeholder="you@example.com" leftIcon={<TPLibraryIcon name="sms" size={18} />} rightAddon={<CtaAddon label="Subscribe" />} fullWidth />
-      <InputBox label="Upload path" placeholder="No file selected" leftAddon={<CtaAddon label="Browse" iconName="document-upload" />} fullWidth />
-      <InputBox label="Both-side CTAs" placeholder="0.00" leftAddon={<CtaAddon label="$" />} rightAddon={<CtaAddon label="Convert" />} fullWidth />
+      <InputBox label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} rightAddon={{ type: 'button', label: 'Search', icon: 'search-normal' }} fullWidth />
+      <InputBox label="Newsletter" placeholder="you@example.com" leftIcon={<TPLibraryIcon name="sms" size={18} />} rightAddon={{ type: 'button', label: 'Subscribe' }} fullWidth />
+      <InputBox label="Upload path" placeholder="No file selected" leftAddon={{ type: 'button', label: 'Browse', icon: 'document-upload' }} fullWidth />
+      <InputBox label="Both-side CTAs" placeholder="0.00" leftAddon={{ type: 'button', label: '$' }} rightAddon={{ type: 'button', label: 'Convert' }} fullWidth />
+      <InputBox label="Custom node (escape hatch)" placeholder="Anything goes" rightAddon={<span style={{ padding: '0 12px', display: 'inline-flex', alignItems: 'center', height: '100%', background: 'var(--tesseract-blue-50)', color: 'var(--tesseract-blue-700)', fontWeight: 600, fontSize: 13 }}>BETA</span>} fullWidth />
     </Stack>
   ),
 };

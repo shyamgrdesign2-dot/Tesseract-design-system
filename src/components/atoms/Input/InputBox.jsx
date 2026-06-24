@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useId, useRef, useState } from "react";
+import { forwardRef, isValidElement, useId, useRef, useState } from "react";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { Chip } from "@/src/components/atoms/Chip";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
@@ -26,8 +26,17 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  *   helperText  string — hint / status message below the field
  *   leftIcon    ReactNode — icon inside the left of the input
  *   rightIcon   ReactNode — icon inside the right of the input
- *   leftAddon   ReactNode — pinned segment left of the input (dropdown, CTA…)
- *   rightAddon  ReactNode — pinned segment right of the input (unit, CTA…)
+ *   leftAddon   pinned segment left of the input. Either side accepts the same
+ *   rightAddon  shapes, so any add-on can be a prefix OR a suffix:
+ *                 • string            → styled text affix ("https://", "+91")
+ *                 • { type:"text",   content }                 styled text
+ *                 • { type:"select", options, value, onChange, ariaLabel }
+ *                                       built-in dropdown (chevron + divider)
+ *                 • { type:"button", label, icon, onClick }    in-line CTA add-on
+ *                 • ReactNode         → escape hatch, rendered as-is
+ *               Built-in add-ons are styled by the component (tokens, height,
+ *               divider) so they look identical everywhere — no hand-rolled spans.
+ *   height      number|string — override the field height (else the size token).
  *   unit        string — fixed suffix inside the right edge (e.g. "kg")
  *   counter     boolean — +/- stepper buttons (use with type="number")
  *   clearable   boolean — shows an × to clear the field when it has a value
@@ -83,6 +92,67 @@ function setNativeValue(el, value) {
   desc?.set?.call(el, value);
 }
 
+// ── Built-in add-ons ─────────────────────────────────────────────────────────
+// The add-on visual treatment (background, divider, dropdown chevron, CTA) lives
+// IN the component so it's consistent and tokenised everywhere — consumers pass a
+// descriptor instead of hand-rolling a styled <span>. Either side accepts the same
+// descriptors, so any add-on can be a prefix or a suffix.
+
+function AddonSelect({ options = [], value, defaultValue, onChange, ariaLabel, placeholder }) {
+  return (
+    <span className={styles.addonSelect}>
+      <select
+        className={styles.addonSelectControl}
+        aria-label={ariaLabel}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      >
+        {placeholder && <option value="" disabled>{placeholder}</option>}
+        {options.map((o) => {
+          const opt = typeof o === "object" ? o : { value: o, label: o };
+          return <option key={opt.value ?? opt.label} value={opt.value ?? opt.label}>{opt.label ?? opt.value}</option>;
+        })}
+      </select>
+      <TPLibraryIcon name="arrow-down" size={14} className={styles.addonChevron} aria-hidden />
+    </span>
+  );
+}
+
+function AddonButton({ label, icon, iconVariant = "linear", onClick, ariaLabel, disabled }) {
+  return (
+    <button
+      type="button"
+      className={styles.addonButton}
+      onClick={onClick}
+      aria-label={ariaLabel || (typeof label === "string" ? label : undefined)}
+      disabled={disabled}
+    >
+      {icon && (typeof icon === "string"
+        ? <TPLibraryIcon name={icon} variant={iconVariant} size={16} aria-hidden />
+        : icon)}
+      {label && <span className={styles.addonButtonLabel}>{label}</span>}
+    </button>
+  );
+}
+
+// Resolve an add-on prop into a node. Accepts: a ReactNode (escape hatch), a
+// string (→ text affix), or a descriptor { type: "text" | "select" | "button", … }.
+function renderAddon(addon) {
+  if (addon == null || addon === false) return null;
+  if (isValidElement(addon)) return addon;
+  if (typeof addon === "string" || typeof addon === "number") {
+    return <span className={styles.addonText}>{addon}</span>;
+  }
+  if (typeof addon === "object") {
+    if (addon.type === "select") return <AddonSelect {...addon} />;
+    if (addon.type === "button") return <AddonButton {...addon} />;
+    // default + "text"
+    return <span className={styles.addonText}>{addon.content ?? addon.label}</span>;
+  }
+  return null;
+}
+
 export const InputBox = forwardRef(function InputBox(
   {
     size       = "md",
@@ -111,6 +181,7 @@ export const InputBox = forwardRef(function InputBox(
     action,
     minWidth,
     maxWidth,
+    height,
     autoGrow   = false,
     maxHeight,
     type,
@@ -199,14 +270,18 @@ export const InputBox = forwardRef(function InputBox(
   // (--tesseract-input-radius); undefined keeps the size's default token.
   const resolvedRadius = resolveRadius(radius);
 
-  // Merge width clamps + radius into a single inline style (omit when empty so
-  // defaults are untouched).
+  // A height override → drives the same CSS var the SCSS reads for the field row.
+  const resolvedHeight = height == null ? null : (typeof height === "number" ? `${height}px` : height);
+
+  // Merge width clamps + radius + height into a single inline style (omit when
+  // empty so defaults are untouched).
   const wrapStyle =
-    minWidth != null || maxWidth != null || resolvedRadius != null
+    minWidth != null || maxWidth != null || resolvedRadius != null || resolvedHeight != null
       ? {
           ...(minWidth != null ? { minWidth } : null),
           ...(maxWidth != null ? { maxWidth } : null),
           ...(resolvedRadius != null ? { "--tesseract-input-radius": resolvedRadius } : null),
+          ...(resolvedHeight != null ? { "--input-height": resolvedHeight } : null),
         }
       : undefined;
 
@@ -235,8 +310,8 @@ export const InputBox = forwardRef(function InputBox(
         data-tags={hasTags ? (tagsScroll ? "scroll" : "wrap") : undefined}
       >
 
-        {/* Left addon (country code, prefix dropdown, CTA, …) */}
-        {leftAddon && <div className={styles.addonLeft}>{leftAddon}</div>}
+        {/* Left addon (country code, prefix dropdown, CTA, …) — descriptor or node */}
+        {leftAddon && <div className={styles.addonLeft}>{renderAddon(leftAddon)}</div>}
 
         {/* Counter decrement */}
         {counter && (
@@ -357,8 +432,8 @@ export const InputBox = forwardRef(function InputBox(
           </button>
         )}
 
-        {/* Right addon (unit dropdown, CTA, submit, …) */}
-        {rightAddon && <div className={styles.addonRight}>{rightAddon}</div>}
+        {/* Right addon (unit dropdown, CTA, submit, …) — descriptor or node */}
+        {rightAddon && <div className={styles.addonRight}>{renderAddon(rightAddon)}</div>}
       </div>
 
       {/* Footer: helper / status text + character counter */}
