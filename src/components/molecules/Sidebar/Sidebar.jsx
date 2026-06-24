@@ -133,7 +133,7 @@ function Flyout({ anchor, children, offset = 10, accentVars }) {
 /* ── Flyout content ── */
 function FlyoutContent({ item, activeId, onSelect }) {
   return (
-    <div className={styles.flyout}>
+    <div className={styles.flyout} role="menu" aria-label={item.label}>
       <p className={styles.flyoutTitle}>{item.label}</p>
       <ul className={styles.flyoutList}>
         {item.children.map((child) => {
@@ -142,6 +142,8 @@ function FlyoutContent({ item, activeId, onSelect }) {
             <li key={child.id}>
               <button
                 type="button"
+                role="menuitem"
+                aria-current={active ? "page" : undefined}
                 className={cn(styles.flyoutItem, active && styles.flyoutItemActive)}
                 onClick={() => onSelect(child.id)}
               >
@@ -186,14 +188,17 @@ function SkeletonRows({ collapsed, count = 6 }) {
 /* ── Collapsed rail item ── */
 function CollapsedItem({ item, activeId, onSelect, accentVars }) {
   const active = hasActive(item, activeId);
+  const leaf = isLeaf(item);
 
   const renderTrigger = (bind, ref) => (
     <button
       type="button"
       ref={ref}
       className={cn(styles.railItem, active && styles.railItemActive)}
-      onClick={() => onSelect(isLeaf(item) ? item.id : null, item)}
+      onClick={() => onSelect(leaf ? item.id : null, item)}
       title={item.label}
+      aria-current={leaf && active ? "page" : undefined}
+      aria-haspopup={leaf ? undefined : "menu"}
       {...bind}
     >
       {active && <span className={styles.railBar} />}
@@ -211,7 +216,7 @@ function CollapsedItem({ item, activeId, onSelect, accentVars }) {
     </button>
   );
 
-  if (isLeaf(item)) return renderTrigger({}, null);
+  if (leaf) return renderTrigger({}, null);
 
   return (
     <Flyout

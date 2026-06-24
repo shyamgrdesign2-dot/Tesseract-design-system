@@ -326,6 +326,14 @@
 @media (prefers-reduced-motion: reduce) {
   .actionableTag { transition: none; }
   .actionableTag:active { transform: none; }
+  .chevron,
+  .expander,
+  .sortUp,
+  .sortDown,
+  .sticky[data-edge]::after,
+  .rppSelect,
+  .pageBtn,
+  .pageNav { transition: none; }
 }
 
 /* ── Pagination ── */

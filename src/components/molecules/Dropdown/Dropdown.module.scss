@@ -382,3 +382,17 @@
     > * { flex: 1; }
   }
 }
+
+// ─── Reduced motion ─────────────────────────────────────────────────────────────
+// Honour the user's OS preference: neutralise transitions/transforms (chevron
+// rotate, ring/border fades) while preserving the final resting appearance.
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .chevronBtn > svg,
+  .clearBtn,
+  .root.seamless::before,
+  .root.seamless::after {
+    transition: none;
+  }
+}

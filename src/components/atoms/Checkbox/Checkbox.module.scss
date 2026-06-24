@@ -22,6 +22,10 @@
   flex-shrink: 0;
   outline: none;
 
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
   /* Sizes */
   &[data-size="sm"] { width: var(--tesseract-size-16, 16px); height: var(--tesseract-size-16, 16px); border-radius: var(--tesseract-radius-4, 4px); }
   &[data-size="md"] { width: var(--tesseract-size-18, 18px); height: var(--tesseract-size-18, 18px); border-radius: var(--tesseract-radius-6, 6px); }

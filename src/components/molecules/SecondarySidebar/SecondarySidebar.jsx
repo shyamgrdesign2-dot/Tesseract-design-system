@@ -52,7 +52,7 @@ function PillIcon({ icon, active, collapsed }) {
         name={icon}
         variant={active ? "bulk" : "linear"}
         size={collapsed ? 20 : 18}
-        color={active ? "var(--ss-active-icon, var(--ss-ramp-500, #4b4ad5))" : "var(--tesseract-slate-0, #ffffff)"}
+        color={active ? "var(--ss-active-icon, var(--ss-ramp-500, #4b4ad5))" : "var(--tesseract-slate-0)"}
       />
     );
   }
@@ -126,6 +126,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
   const active = leaf ? item.id === activeId : false;
   const containsActive = !leaf && hasActive(item, activeId);
   const isActive = active || containsActive;
+  const childrenId = `ss-section-${item.id}`;
 
   if (leaf) {
     return (
@@ -163,6 +164,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
         data-open={expanded || undefined}
         onClick={onToggle}
         aria-expanded={expanded}
+        aria-controls={childrenId}
       >
         <span
           className={styles.expPill}
@@ -186,7 +188,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
         </span>
       </button>
       {expanded && (
-        <div className={styles.expChildren}>
+        <div className={styles.expChildren} id={childrenId}>
           {item.children.map((child) => {
             const childActive = child.id === activeId;
             return (

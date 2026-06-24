@@ -161,6 +161,7 @@ export function TooltipTrigger({ asChild, children, ...props }) {
         onClick: (e) => { props.onClick?.(e); if (!e.defaultPrevented) ctx.toggle(); },
         "aria-expanded": ctx.open,
         "aria-haspopup": "dialog",
+        "aria-controls": ctx.open ? ctx.id : undefined,
         ref: ctx.triggerRef,
       }
     : {
@@ -237,8 +238,8 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
   // (e.g. overridden background) carries through to the arrow too.
   const surfaceVar =
     ctx.variant === "light"
-      ? "var(--tesseract-slate-0, #ffffff)"
-      : "var(--tesseract-slate-900, #171725)";
+      ? "var(--tesseract-slate-0)"
+      : "var(--tesseract-slate-900)";
 
   return (
     <Portal container={ctx.portalContainer}>
@@ -280,7 +281,7 @@ function renderCloseIcon(closeIcon) {
 function TooltipArrow({ side, size = 5 }) {
   // Color tracks the bubble surface via the --tp-tooltip-arrow var set on the
   // panel, so a custom surface flows through to the arrow.
-  const color = "var(--tp-tooltip-arrow, var(--tesseract-slate-900, #171725))";
+  const color = "var(--tp-tooltip-arrow, var(--tesseract-slate-900))";
   const s = size;
   const base = { position: "absolute", width: 0, height: 0, borderStyle: "solid", borderColor: "transparent" };
   let style = base;

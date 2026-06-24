@@ -173,3 +173,11 @@
   from { transform: scaleX(1); }
   to   { transform: scaleX(0); }
 }
+
+/* Respect reduced-motion: drop the depleting-bar animation and the dismiss
+   hover transition. Auto-dismiss still fires via the JS timer; the bar simply
+   stays static instead of sweeping. */
+@media (prefers-reduced-motion: reduce) {
+  .progressBar { animation: none; }
+  .dismiss { transition: none; }
+}

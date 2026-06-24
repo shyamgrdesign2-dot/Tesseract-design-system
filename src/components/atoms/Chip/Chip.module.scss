@@ -14,7 +14,7 @@
 
   &:hover { filter: brightness(0.95); box-shadow: 0 1px 4px color-mix(in srgb, var(--tesseract-slate-900) 14%, transparent); }
   &:active { transform: scale(0.97); }
-  &:focus-visible { outline: 2px solid var(--tesseract-blue-300, #8E8DE8); outline-offset: 2px; }
+  &:focus-visible { outline: 2px solid var(--tesseract-blue-300); outline-offset: 2px; }
 }
 
 /* The remove (×) control fades up to full opacity on hover/focus. */
@@ -23,7 +23,7 @@
   border-radius: var(--tesseract-radius-full);
 
   &:hover { opacity: 1 !important; background-color: color-mix(in srgb, currentColor 16%, transparent); }
-  &:focus-visible { outline: 2px solid var(--tesseract-blue-300, #8E8DE8); outline-offset: 1px; }
+  &:focus-visible { outline: 2px solid var(--tesseract-blue-300); outline-offset: 1px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

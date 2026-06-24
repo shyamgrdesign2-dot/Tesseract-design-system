@@ -110,9 +110,13 @@
   }
 }
 
-/* Respect reduced-motion: drop the chevron rotation transition. */
+/* Respect reduced-motion: drop the chevron rotation + trigger colour transitions. */
 @media (prefers-reduced-motion: reduce) {
   .chevron {
+    transition: none;
+  }
+
+  .trigger {
     transition: none;
   }
 }

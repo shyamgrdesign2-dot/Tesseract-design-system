@@ -487,3 +487,20 @@
   align-items: center;
   gap: var(--tesseract-space-2);
 }
+
+// ─── Reduced motion ─────────────────────────────────────────────────────────────
+// Honour the user's OS preference: drop the trigger/chevron/cell transitions for
+// users who opt out of motion. Purely additive — the default (no preference) look
+// and timing are unchanged.
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .preset,
+  .monthBtn,
+  .navBtn,
+  .mycell,
+  .day,
+  .timeItem {
+    transition: none;
+  }
+}

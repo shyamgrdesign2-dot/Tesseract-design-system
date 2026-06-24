@@ -113,9 +113,21 @@ export const AccordionItem = React.forwardRef(function AccordionItem(
   const cls = [styles.item, disabled ? styles.itemDisabled : "", className]
     .filter(Boolean)
     .join(" ");
+  // Stable ids so the trigger and content can be associated for a11y
+  // (aria-controls / aria-labelledby) without changing the DOM structure.
+  const uid = React.useId();
+  const triggerId = `${uid}-trigger`;
+  const contentId = `${uid}-content`;
   const itemCtx = React.useMemo(
-    () => ({ value, open, disabled, toggle: () => !disabled && root?.toggle(value) }),
-    [value, open, disabled, root],
+    () => ({
+      value,
+      open,
+      disabled,
+      triggerId,
+      contentId,
+      toggle: () => !disabled && root?.toggle(value),
+    }),
+    [value, open, disabled, triggerId, contentId, root],
   );
   return (
     <AccordionItemContext.Provider value={itemCtx}>
@@ -183,7 +195,9 @@ export const AccordionTrigger = React.forwardRef(function AccordionTrigger(
       <button
         ref={ref}
         type="button"
+        id={item?.triggerId}
         aria-expanded={open}
+        aria-controls={item?.contentId}
         disabled={disabled}
         data-state={open ? "open" : "closed"}
         data-icon-position={position}
@@ -208,7 +222,15 @@ export const AccordionContent = React.forwardRef(function AccordionContent(
   if (!open) return null;
   const cls = [styles.content, className].filter(Boolean).join(" ");
   return (
-    <div ref={ref} role="region" data-state="open" className={cls} style={style} {...props}>
+    <div
+      ref={ref}
+      role="region"
+      id={item?.contentId}
+      aria-labelledby={item?.triggerId}
+      data-state="open"
+      className={cls}
+      style={style}
+      {...props}>
       <div className={styles.contentInner}>{children}</div>
     </div>
   );

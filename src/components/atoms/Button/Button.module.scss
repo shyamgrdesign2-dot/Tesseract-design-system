@@ -848,3 +848,12 @@
 }
 
 .menuItemChevron { color: var(--tesseract-slate-400); }
+
+/* ── Reduced motion ── honour the user's OS preference (a11y §5). Disables the
+   colour/box-shadow transitions without altering any resting visual state. */
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .menuItem {
+    transition: none;
+  }
+}

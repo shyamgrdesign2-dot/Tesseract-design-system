@@ -42,11 +42,11 @@ const WORDMARKS = {
 
 const TONES = {
   // Brand blue→violet ramp, tokenized to the nearest --tesseract-* stops.
-  gradient: "linear-gradient(90deg, var(--tesseract-blue-500, #4b4ad5) 0%, var(--tesseract-violet-500, #a461d8) 100%)",
-  dark: "var(--tesseract-slate-900, #171725)",
-  light: "var(--tesseract-slate-0, #ffffff)",
-  violet: "var(--tesseract-violet-500, #a461d8)",
-  blue: "var(--tesseract-blue-500, #4b4ad5)",
+  gradient: "linear-gradient(90deg, var(--tesseract-blue-500) 0%, var(--tesseract-violet-500) 100%)",
+  dark: "var(--tesseract-slate-900)",
+  light: "var(--tesseract-slate-0)",
+  violet: "var(--tesseract-violet-500)",
+  blue: "var(--tesseract-blue-500)",
 };
 
 function mark(src, w, h, paint) {

@@ -75,8 +75,10 @@ export const Slider = forwardRef(function Slider({
       max={max}
       step={step}
       disabled={disabled}
+      aria-label={typeof label === "string" && label ? label : undefined}
       data-size={size}
       data-error={error || undefined}
+      data-disabled={disabled || undefined}
       onChange={onChange ? (e) => onChange(e, Number(e.target.value)) : undefined}
       className={cn(styles.input, bare && className)}
       style={{

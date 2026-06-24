@@ -33,21 +33,21 @@ const X = ({ size = 12 }) => <TPLibraryIcon name="close-square" variant="bold" s
 
 // One color token per tone; bg/border are translucent washes derived from it.
 const TONES = {
-  default: "var(--tesseract-slate-700, #454551)",
-  primary: "var(--tesseract-blue-600, #3c3bb5)",
-  success: "var(--tesseract-success-600, #059669)",
-  warning: "var(--tesseract-warning-600, #d97706)",
-  error:   "var(--tesseract-error-600, #c8102e)",
+  default: "var(--tesseract-slate-700)",
+  primary: "var(--tesseract-blue-600)",
+  success: "var(--tesseract-success-600)",
+  warning: "var(--tesseract-warning-600)",
+  error:   "var(--tesseract-error-600)",
 };
 
 // 500-step tokens — the active/selected border accent (one ramp step lighter
 // than the 600 tone, so the selected outline reads as a deliberate emphasis).
 const TONES_500 = {
-  default: "var(--tesseract-slate-500, #717179)",
-  primary: "var(--tesseract-blue-500, #4f4ec7)",
-  success: "var(--tesseract-success-500, #10b981)",
-  warning: "var(--tesseract-warning-500, #f59e0b)",
-  error:   "var(--tesseract-error-500, #ef4444)",
+  default: "var(--tesseract-slate-500)",
+  primary: "var(--tesseract-blue-500)",
+  success: "var(--tesseract-success-500)",
+  warning: "var(--tesseract-warning-500)",
+  error:   "var(--tesseract-error-500)",
 };
 
 const SIZES = {
@@ -94,7 +94,7 @@ export const TPChip = forwardRef(function TPChip({
   const v = variant === "filled" ? "soft" : variant === "outlined" ? "outline" : variant;
   const variantStyle =
     v === "solid"
-      ? { color: "var(--tesseract-slate-0, #fff)", backgroundColor: c, border: `1px solid ${c}` }
+      ? { color: "var(--tesseract-slate-0)", backgroundColor: c, border: `1px solid ${c}` }
       : v === "outline"
         ? { color: c, backgroundColor: "transparent", border: `1px solid color-mix(in srgb, ${c} 40%, transparent)` }
         : { color: c, backgroundColor: `color-mix(in srgb, ${c} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${c} 22%, transparent)` };
@@ -115,6 +115,8 @@ export const TPChip = forwardRef(function TPChip({
     <span
       role="button"
       aria-label="Remove"
+      aria-disabled={disabled ? true : undefined}
+      data-disabled={disabled ? "" : undefined}
       className={styles.remove}
       tabIndex={disabled ? undefined : 0}
       onClick={(e) => {
@@ -156,7 +158,9 @@ export const TPChip = forwardRef(function TPChip({
       role={onClick ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       aria-pressed={onClick && selected ? true : undefined}
+      aria-disabled={onClick && disabled ? true : undefined}
       data-selected={selected ? "" : undefined}
+      data-disabled={disabled ? "" : undefined}
       onClick={disabled ? undefined : handleClick}
       className={[styles.root, hoverable && styles.interactive, className].filter(Boolean).join(" ") || undefined}
       style={{

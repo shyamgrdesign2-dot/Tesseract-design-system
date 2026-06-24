@@ -260,7 +260,7 @@
   transform: translateY(-50%);
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 8px solid var(--ss-pointer, var(--tesseract-bg-surface, #fff));
+  border-right: 8px solid var(--ss-pointer, var(--tesseract-bg-surface));
   pointer-events: none;
 }
 
@@ -423,6 +423,16 @@
 
   .expChild {
     padding: var(--tesseract-space-1) var(--tesseract-space-2) var(--tesseract-space-1) 44px;
+  }
+}
+
+/* ── Reduced motion: honour the user's OS preference (a11y) ── */
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .rail * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

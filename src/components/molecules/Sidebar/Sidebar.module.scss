@@ -566,6 +566,27 @@
   flex-shrink: 0;
 }
 
+/* ── Reduced motion ── honor the user's OS preference: no width/colour/caret
+   transitions, no skeleton shimmer. Final rendered states are unchanged. */
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .search,
+  .toggleBtn,
+  .chip,
+  .section,
+  .caret,
+  .childItem,
+  .railItem,
+  .flyoutItem {
+    transition: none;
+  }
+
+  .skeletonChip,
+  .skeletonLabel {
+    animation: none;
+  }
+}
+
 /* ── Compact density ── tighter padding, 32px chips, smaller labels. */
 .root[data-density="compact"] {
   .chip,

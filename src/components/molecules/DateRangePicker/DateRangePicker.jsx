@@ -42,7 +42,7 @@
  *                                                                  default "outside-click"
  */
 
-import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
@@ -256,6 +256,11 @@ export const DatePicker = forwardRef(function DatePicker({
   ...rest
 }, ref) {
   const { track } = useAnalytics();
+  // Stable ids for label↔trigger association and trigger↔popover aria-controls.
+  const reactId = useId();
+  const triggerId = `tp-drp-trigger-${reactId}`;
+  const popoverId = `tp-drp-popover-${reactId}`;
+  const labelId = `tp-drp-label-${reactId}`;
   const isRange = mode === "range";
   const isSingle = mode === "single";
   const isMonth = mode === "month";
@@ -551,7 +556,7 @@ export const DatePicker = forwardRef(function DatePicker({
   const showNav = hasCalendar || isMonth || isYear;
 
   const popoverContent = (
-    <div ref={popoverRef} tabIndex={-1} className={styles.popover} style={popoverStyle} data-mode={mode} role="dialog" aria-label={`Choose ${mode}`}>
+    <div ref={popoverRef} id={popoverId} tabIndex={-1} className={styles.popover} style={popoverStyle} data-mode={mode} role="dialog" aria-label={`Choose ${mode}`}>
       <div className={styles.body}>
         {showPresets && (
           <div className={styles.presets}>
@@ -641,12 +646,15 @@ export const DatePicker = forwardRef(function DatePicker({
 
   return (
     <div ref={containerRef} className={[styles.root, fullWidth && styles.fullWidth, className].filter(Boolean).join(" ")} style={style} {...rest}>
-      {label && <label className={styles.fieldLabel}>{label}{required && <span className={styles.req}>*</span>}</label>}
-      <button ref={triggerRef} type="button" disabled={disabled}
+      {label && <label id={labelId} htmlFor={triggerId} className={styles.fieldLabel}>{label}{required && <span className={styles.req}>*</span>}</label>}
+      <button ref={triggerRef} type="button" id={triggerId} disabled={disabled}
         onClick={() => (open ? setOpen(false) : openPicker())}
         className={styles.trigger} data-size={size} data-status={status || undefined}
         data-open={open ? "true" : undefined} data-placeholder={!hasValue ? "true" : undefined}
-        aria-haspopup="dialog" aria-expanded={open}>
+        aria-haspopup="dialog" aria-expanded={open}
+        aria-controls={open ? popoverId : undefined}
+        aria-labelledby={label ? labelId : undefined}
+        aria-required={required || undefined}>
         <span className={styles.triggerLabel}>
           <span className={styles.triggerIcon}>
             {icon ?? <TPLibraryIcon name={hasTime && !hasCalendar ? "clock" : "calendar-1"} size={16} />}

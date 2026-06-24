@@ -92,6 +92,7 @@ export function Filter({
   };
 
   const ref = React.useRef(null);
+  const panelId = React.useId();
   useClickOutside(ref, () => setOpen(false), open);
 
   const toggle = (gid, val) => {
@@ -136,6 +137,7 @@ export function Filter({
             data-active={totalSelected > 0 || undefined}
             aria-expanded={open}
             aria-haspopup="dialog"
+            aria-controls={open ? panelId : undefined}
             onClick={() => setOpenState((o) => !o)}
           >
             <span className={styles.triggerIcon}>{icon ?? <FunnelIcon />}</span>
@@ -146,6 +148,7 @@ export function Filter({
 
           {open && (
             <div
+              id={panelId}
               className={styles.panel}
               role="dialog"
               aria-label={label}

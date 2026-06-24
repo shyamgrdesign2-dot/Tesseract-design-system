@@ -17,10 +17,10 @@ const RadioGroupCtx = createContext({ value: undefined, onChange: undefined, nam
 // Semantic colours map to the *-500 token ramp; "primary" stays blue so the
 // default look is unchanged. Error styling overrides this to the error ramp.
 const RADIO_COLORS = {
-  primary: "var(--tesseract-blue-500, #4b4ad5)",
-  success: "var(--tesseract-success-500, #16a34a)",
-  error: "var(--tesseract-error-500, #dc2626)",
-  warning: "var(--tesseract-warning-500, #d97706)",
+  primary: "var(--tesseract-blue-500)",
+  success: "var(--tesseract-success-500)",
+  error: "var(--tesseract-error-500)",
+  warning: "var(--tesseract-warning-500)",
 };
 
 export const RadioGroup = React.forwardRef(function RadioGroup({ value, onChange, name, size, color = "primary", error = false, orientation = "vertical", gap, children, style, className, ...rest }, ref) {
@@ -84,7 +84,7 @@ export const Radio = React.forwardRef(function Radio({
   const handleChange = (e) => { onChange?.(e); ctx.onChange?.(value); };
   // Default look preserved: no description → the label is rendered inline next
   // to the input exactly as before. With a description we stack label + helper.
-  const labelColor = isError ? "var(--tesseract-error-700, #b91c1c)" : "var(--tesseract-slate-700, #454551)";
+  const labelColor = isError ? "var(--tesseract-error-700)" : "var(--tesseract-slate-700)";
 
   return (
     <label
@@ -126,7 +126,7 @@ export const Radio = React.forwardRef(function Radio({
       {description != null ? (
         <span style={{ display: "inline-flex", flexDirection: "column", gap: "var(--tesseract-space-1)" }}>
           <span>{label}</span>
-          <span style={{ fontSize: "var(--tesseract-text-body-xs)", color: isError ? "var(--tesseract-error-600, #dc2626)" : "var(--tesseract-fg-secondary, #717179)", lineHeight: 1.4 }}>
+          <span style={{ fontSize: "var(--tesseract-text-body-xs)", color: isError ? "var(--tesseract-error-600)" : "var(--tesseract-fg-secondary)", lineHeight: 1.4 }}>
             {description}
           </span>
         </span>
@@ -143,7 +143,7 @@ export const FormControlLabel = React.forwardRef(function FormControlLabel({ con
       ref={ref}
       className={cx(styles.root, className)}
       {...rest}
-      style={{ display: "inline-flex", alignItems: "center", gap: "var(--tesseract-space-2)", fontSize: "var(--tesseract-text-body-sm)", color: "var(--tesseract-slate-700, #454551)", cursor: "pointer", ...style }}
+      style={{ display: "inline-flex", alignItems: "center", gap: "var(--tesseract-space-2)", fontSize: "var(--tesseract-text-body-sm)", color: "var(--tesseract-slate-700)", cursor: "pointer", ...style }}
     >
       {control}
       {label}

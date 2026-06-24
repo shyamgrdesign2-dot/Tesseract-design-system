@@ -203,6 +203,8 @@ export const Dropdown = forwardRef(function Dropdown({
   const mounted = useIsClient();
 
   const id = useId();
+  const menuId = `dd-${id}`;
+  const labelId = `dd-label-${id}`;
   const isSelected = (val) => selectedArr.includes(val);
 
   // Active query: editable combobox filters by the trigger value; otherwise the
@@ -484,7 +486,7 @@ export const Dropdown = forwardRef(function Dropdown({
   const menuVars = { "--tesseract-dropdown-max-height": typeof maxMenuHeight === "number" ? `${maxMenuHeight}px` : maxMenuHeight };
 
   const menu = (
-    <div ref={menuRef} className={styles.menu} style={{ ...menuStyle, ...menuVars }} role="listbox" aria-multiselectable={isMulti} id={`dd-${id}`}>
+    <div ref={menuRef} className={styles.menu} style={{ ...menuStyle, ...menuVars }} role="listbox" aria-multiselectable={isMulti} aria-labelledby={label ? labelId : undefined} id={menuId}>
       {searchable && !editable && (
         <div className={styles.search}>
           <span className={styles.searchIcon}><SearchIcon /></span>
@@ -566,7 +568,7 @@ export const Dropdown = forwardRef(function Dropdown({
       data-status={status || undefined}
       data-open={open ? "true" : undefined}
     >
-      {label && <span className={styles.label}>{label}</span>}
+      {label && <span id={labelId} className={styles.label}>{label}</span>}
       {editable ? (
         <div ref={triggerRef} className={styles.trigger} data-editable="true" data-open={open ? "true" : undefined}>
           {leadingIcon && <span className={styles.triggerLead}>{leadingIcon}</span>}
@@ -589,6 +591,8 @@ export const Dropdown = forwardRef(function Dropdown({
             role="combobox"
             aria-expanded={open}
             aria-haspopup="listbox"
+            aria-controls={open ? menuId : undefined}
+            aria-labelledby={label ? labelId : undefined}
             disabled={disabled}
             value={currentValue ?? ""}
             placeholder={placeholder}
@@ -622,6 +626,8 @@ export const Dropdown = forwardRef(function Dropdown({
           disabled={disabled}
           aria-haspopup="listbox"
           aria-expanded={open}
+          aria-controls={open ? menuId : undefined}
+          aria-labelledby={label ? labelId : undefined}
           onClick={() => (open ? setOpen(false) : openMenu())}
           onKeyDown={onKeyDown}
         >

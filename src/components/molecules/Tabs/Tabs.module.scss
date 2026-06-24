@@ -223,3 +223,11 @@
 .list[data-orientation="vertical"][data-variant="pill"] .trigger {
   border-radius: var(--tesseract-radius-8);
 }
+
+/* Respect reduced-motion: drop the colour/highlight transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .trigger::after {
+    transition: none;
+  }
+}

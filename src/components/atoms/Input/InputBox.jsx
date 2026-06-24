@@ -266,6 +266,11 @@ export const InputBox = forwardRef(function InputBox(
   const showFooter = Boolean(helperText || (showCount));
   const hasTags = Array.isArray(tags) && tags.length > 0;
 
+  // Associate the helper/status message with the control for screen readers.
+  // A consumer-supplied aria-describedby (via ...props) still wins.
+  const helperId = helperText ? `${id}-helper` : undefined;
+  const describedBy = props["aria-describedby"] ?? helperId;
+
   // Field corner radius. Drives the same CSS var the SCSS reads
   // (--tesseract-input-radius); undefined keeps the size's default token.
   const resolvedRadius = resolveRadius(radius);
@@ -359,6 +364,7 @@ export const InputBox = forwardRef(function InputBox(
               maxLength={maxLength}
               inputMode={filter?.inputMode}
               aria-invalid={status === "error" || undefined}
+              aria-describedby={describedBy}
               {...props}
             />
           ) : (
@@ -375,6 +381,7 @@ export const InputBox = forwardRef(function InputBox(
               maxLength={maxLength}
               inputMode={filter?.inputMode}
               aria-invalid={status === "error" || undefined}
+              aria-describedby={describedBy}
               {...props}
             />
           )}
@@ -440,7 +447,7 @@ export const InputBox = forwardRef(function InputBox(
       {showFooter && (
         <div className={styles.footer}>
           {helperText && (
-            <span className={styles.helper} role={status === "error" ? "alert" : undefined}>
+            <span id={helperId} className={styles.helper} role={status === "error" ? "alert" : undefined}>
               {status === "error" && <TPLibraryIcon name={STATUS_ICON.error} size={13} aria-hidden />}
               {status === "warning" && <TPLibraryIcon name={STATUS_ICON.warning} size={13} aria-hidden />}
               {helperText}

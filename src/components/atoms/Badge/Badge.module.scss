@@ -37,7 +37,7 @@
   justify-content: center;
   vertical-align: middle;
   gap: var(--tesseract-space-1);
-  border-radius: var(--tesseract-badge-radius, var(--tesseract-radius-full, 9999px)); /* theme: components.badge.radius (default full pill) */
+  border-radius: var(--tesseract-badge-radius, var(--tesseract-radius-full)); /* theme: components.badge.radius (default full pill) */
   corner-shape: round;
   font-weight: var(--tesseract-weight-semibold);
   font-family: var(--tesseract-font-body);

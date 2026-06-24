@@ -33,7 +33,7 @@
 
   /* Square shape — squared track corners (default is a rounded pill) */
   &[data-shape="square"] { border-radius: var(--tesseract-radius-8); corner-shape: round; }
-  &[data-size="sm"][data-shape="square"] { border-radius: var(--tesseract-radius-6, 6px); }
+  &[data-size="sm"][data-shape="square"] { border-radius: var(--tesseract-radius-6); }
 
   /* Focus */
   &:focus-visible {
@@ -54,7 +54,7 @@
   background-color: var(--tesseract-slate-0);
 
   /* Square shape — rounded-square thumb */
-  .root[data-shape="square"] & { border-radius: var(--tesseract-radius-4, 4px); corner-shape: round; }
+  .root[data-shape="square"] & { border-radius: var(--tesseract-radius-4); corner-shape: round; }
   box-shadow: 0 1px 3px color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent);
   transition: transform 150ms ease;
   will-change: transform;
@@ -94,7 +94,15 @@
 }
 
 .label {
-  font-size: var(--tesseract-text-body-sm, 14px);
+  font-size: var(--tesseract-text-body-sm);
   color: var(--tesseract-slate-700);
   user-select: none;
+}
+
+/* Respect reduced-motion: keep final on/off look, drop the animation. */
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .thumb {
+    transition: none;
+  }
 }

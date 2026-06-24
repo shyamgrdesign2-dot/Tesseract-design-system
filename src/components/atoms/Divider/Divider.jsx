@@ -88,7 +88,7 @@ export const Divider = forwardRef(function Divider({
           fontFamily: "var(--tesseract-font-body)",
           display: "flex",
           alignItems: "center",
-          gap: "var(--tesseract-space-3, 12px)",
+          gap: "var(--tesseract-space-3)",
           width: "100%",
           marginTop: spacing,
           marginBottom: spacing,
@@ -101,9 +101,9 @@ export const Divider = forwardRef(function Divider({
         <span
           style={{
             flexShrink: 0,
-            fontSize: "var(--tesseract-text-caption-sm, 12px)",
-            fontWeight: "var(--tesseract-weight-medium, 500)",
-            color: "var(--tesseract-slate-600, #54545C)",
+            fontSize: "var(--tesseract-text-caption-sm)",
+            fontWeight: "var(--tesseract-weight-medium)",
+            color: "var(--tesseract-slate-600)",
             whiteSpace: "nowrap",
           }}
         >

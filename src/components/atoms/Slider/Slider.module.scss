@@ -136,6 +136,16 @@
     &::-webkit-slider-thumb { border-color: var(--tesseract-slate-400); }
     &::-moz-range-thumb { border-color: var(--tesseract-slate-400); }
   }
+
+  /* Respect reduced-motion: drop the thumb scale/box-shadow transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    &::-webkit-slider-thumb { transition: none; }
+    &::-moz-range-thumb { transition: none; }
+    &:hover:not(:disabled)::-webkit-slider-thumb,
+    &:active:not(:disabled)::-webkit-slider-thumb { transform: none; }
+    &:hover:not(:disabled)::-moz-range-thumb,
+    &:active:not(:disabled)::-moz-range-thumb { transform: none; }
+  }
 }
 
 /* Tick / mark labels under the track */

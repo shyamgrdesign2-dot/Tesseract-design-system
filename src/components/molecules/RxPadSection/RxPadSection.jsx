@@ -97,6 +97,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
   const [fieldVals, setFieldVals] = React.useState({});
   const [query, setQuery] = React.useState("");
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  const bodyId = React.useId();
 
   const hasData =
     bodyType === "table" ? rows.length > 0
@@ -162,6 +163,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
               type="button"
               className={styles.collapseBtn}
               aria-expanded={!collapsed}
+              aria-controls={bodyId}
               aria-label={collapsed ? "Expand section" : "Collapse section"}
               onClick={() => setCollapsed((c) => !c)}
             >
@@ -184,7 +186,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
 
       {/* ── Body ── */}
       {showBody && (
-        <div className={styles.body}>
+        <div id={bodyId} className={styles.body}>
           {/* Escape hatch — a fully custom body beyond table/text/fields. */}
           {(children ?? renderBody?.()) != null ? (
             children ?? renderBody()

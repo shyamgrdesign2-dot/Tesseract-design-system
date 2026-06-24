@@ -103,17 +103,17 @@
   align-items: center;
   gap: var(--tesseract-space-2-5);
   padding: var(--tesseract-space-2) var(--tesseract-space-2) var(--tesseract-space-2) var(--tesseract-space-3);
-  border: 1px solid var(--tesseract-slate-100, #F1F1F5);
+  border: 1px solid var(--tesseract-slate-100);
   border-radius: var(--tesseract-radius-12);
   corner-shape: round;
-  background-color: var(--tesseract-slate-50, #fafafb);
+  background-color: var(--tesseract-slate-50);
 }
 
 .activeLabel {
   flex-shrink: 0;
   font-size: var(--tesseract-text-body-sm);
   font-weight: var(--tesseract-weight-semibold);
-  color: var(--tesseract-slate-400, #a2a2a8);
+  color: var(--tesseract-slate-400);
 }
 
 // Active chips reuse the Chip atom (composed in Filter.jsx). Only the group

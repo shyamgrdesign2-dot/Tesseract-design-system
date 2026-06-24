@@ -45,7 +45,7 @@
  *               `track` on each `menu[]` entry.
  */
 
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Button.module.scss";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
@@ -123,6 +123,7 @@ export const Button = forwardRef(function Button(
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0, minWidth: 0 });
   const containerRef = useRef(null);
   const menuRef = useRef(null);
+  const menuId = useId();
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -196,6 +197,7 @@ export const Button = forwardRef(function Button(
     "data-surface": surface,
     "data-loading": loading || undefined,
     "data-full": fullWidth || undefined,
+    "aria-busy": loading || undefined,
   };
 
   // Merge an inline radius override (--tesseract-btn-radius) with the caller's
@@ -239,6 +241,7 @@ export const Button = forwardRef(function Button(
           onClick={() => setOpen(!open)}
           aria-haspopup="menu"
           aria-expanded={open}
+          aria-controls={open ? menuId : undefined}
           aria-label="More actions"
           className={styles.button}
           data-split-part="trigger"
@@ -256,6 +259,7 @@ export const Button = forwardRef(function Button(
           createPortal(
             <div
               ref={menuRef}
+              id={menuId}
               role="menu"
               className={styles.menu}
               style={{

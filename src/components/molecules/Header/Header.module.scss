@@ -36,7 +36,7 @@
   /* Elevation: static ("always") or scroll-driven (set once scrolled). The shadow
      transitions in so the on-scroll mode feels smooth. */
   & { transition: box-shadow 160ms ease; }
-  &[data-elevated] { box-shadow: var(--tesseract-shadow-md, 0 2px 8px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent)); }
+  &[data-elevated] { box-shadow: var(--tesseract-shadow-md); }
 
   /* Center-aligned title (MD3 center top app bar): left | centered title | actions. */
   &[data-align="center"] {
@@ -61,7 +61,7 @@
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: var(--tesseract-radius-10, 10px);
+  border-radius: var(--tesseract-radius-10);
   corner-shape: round;
   background-color: var(--tesseract-slate-50);
   color: var(--tesseract-slate-700);
@@ -93,7 +93,7 @@
   padding: var(--tesseract-space-1) var(--tesseract-space-1-5);
   border: none;
   background: transparent;
-  border-radius: var(--tesseract-radius-10, 10px);
+  border-radius: var(--tesseract-radius-10);
   corner-shape: round;
   cursor: pointer;
   text-align: left;
@@ -183,4 +183,9 @@
   transition: opacity 120ms ease;
   &:hover { opacity: 0.85; }
   > svg { width: var(--tesseract-header-control); height: var(--tesseract-header-control); }
+}
+
+/* Honour reduced-motion: drop the bar's transitions for users who opt out. */
+@media (prefers-reduced-motion: reduce) {
+  .header, .back, .user, .tutorial { transition: none; }
 }

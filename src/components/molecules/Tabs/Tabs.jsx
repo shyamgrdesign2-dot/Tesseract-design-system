@@ -68,6 +68,10 @@ export const Tabs = React.forwardRef(function Tabs({
   const current = isControlled ? value : internal;
   const { track } = useAnalytics();
 
+  // Stable base id so triggers and panels can be linked
+  // (aria-controls / aria-labelledby) without changing the DOM structure.
+  const baseId = React.useId();
+
   const setValue = React.useCallback(
     (next) => {
       if (!isControlled) setInternal(next);
@@ -85,9 +89,17 @@ export const Tabs = React.forwardRef(function Tabs({
     : undefined;
   const rootStyle = accentVar ? { ...style, "--tesseract-tabs-accent": accentVar } : style;
 
+  // Build matching ids for a trigger and its panel from the tab's value, so the
+  // ARIA tab pattern is wired (trigger aria-controls → panel; panel
+  // aria-labelledby → trigger) without restructuring the DOM.
+  const idFor = React.useCallback(
+    (part, v) => `${baseId}-${part}-${String(v).replace(/[^\w-]/g, "_")}`,
+    [baseId],
+  );
+
   const ctx = React.useMemo(
-    () => ({ value: current, setValue, size, variant, activationMode, orientation }),
-    [current, setValue, size, variant, activationMode, orientation],
+    () => ({ value: current, setValue, size, variant, activationMode, orientation, idFor }),
+    [current, setValue, size, variant, activationMode, orientation, idFor],
   );
 
   const cls = [styles.root, className].filter(Boolean).join(" ");
@@ -192,7 +204,9 @@ export function TabsTrigger({
     <button
       type="button"
       role="tab"
+      id={ctx?.idFor?.("trigger", value)}
       aria-selected={isActive}
+      aria-controls={ctx?.idFor?.("panel", value)}
       tabIndex={isActive ? 0 : -1}
       data-state={isActive ? "active" : "inactive"}
       data-disabled={disabled || undefined}
@@ -218,7 +232,15 @@ export function TabsContent({ value, className = "", style, children, ...props }
   if (!isActive) return null;
   const cls = [styles.content, className].filter(Boolean).join(" ");
   return (
-    <div role="tabpanel" data-state="active" className={cls} style={style} {...props}>
+    <div
+      role="tabpanel"
+      id={ctx?.idFor?.("panel", value)}
+      aria-labelledby={ctx?.idFor?.("trigger", value)}
+      data-state="active"
+      className={cls}
+      style={style}
+      {...props}
+    >
       {children}
     </div>
   );

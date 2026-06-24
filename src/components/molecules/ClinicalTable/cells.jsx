@@ -143,6 +143,7 @@ function MoreMenu({ items, row, moreIcon, iconVariant, iconFamily }) {
   const anchorRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
   const mounted = useIsClient();
+  const menuId = React.useId();
 
   React.useEffect(() => {
     if (!open) return undefined;
@@ -171,11 +172,14 @@ function MoreMenu({ items, row, moreIcon, iconVariant, iconFamily }) {
         theme="neutral"
         size="sm"
         aria-label="More actions"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
         icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant={iconVariant || "bold"} family={iconFamily || undefined} corner="straight" size={16} />}
         onClick={() => setOpen((o) => !o)}
       />
       {open && mounted && pos && createPortal(
-        <div className={styles.menu} style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 3000 }} role="menu">
+        <div id={menuId} className={styles.menu} style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 3000 }} role="menu">
           {items.map((it, i) => (
             <button
               key={i}

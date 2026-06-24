@@ -53,7 +53,7 @@
   font-size: var(--tesseract-text-body-sm);
   line-height: 1.4;
   font-family: var(--tesseract-font-body);
-  color: var(--tesseract-slate-600, #545460);
+  color: var(--tesseract-slate-600);
 }
 
 .tp-loader__sr {

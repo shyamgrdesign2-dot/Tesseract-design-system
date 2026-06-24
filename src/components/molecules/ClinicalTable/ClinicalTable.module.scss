@@ -101,6 +101,13 @@
 }
 .row[data-moved] .td { animation: ctRowSettle 650ms ease; }
 
+/* Respect reduced-motion: drop the settle animation + non-essential transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .row { transition: none; }
+  .row[data-moved] .td { animation: none; }
+  .dragHandle { transition: none; }
+}
+
 /* ── Sticky action column ── */
 .actionCol { width: 92px; min-width: 92px; max-width: 92px; }
 .sticky {

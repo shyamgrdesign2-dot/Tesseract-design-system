@@ -91,6 +91,13 @@
   transition: transform var(--tesseract-duration-150, 150ms) ease;
 }
 
+/* Respect reduced-motion: drop the chevron rotation transition. */
+@media (prefers-reduced-motion: reduce) {
+  .chevronCollapsed {
+    transition: none;
+  }
+}
+
 .actions {
   display: inline-flex;
   align-items: center;

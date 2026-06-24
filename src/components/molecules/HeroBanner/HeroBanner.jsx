@@ -190,7 +190,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
               <h1
                 style={{
                   margin: 0,
-                  color: "var(--tesseract-fg-inverse, #fff)",
+                  color: "var(--tesseract-fg-inverse)",
                   fontSize: TITLE_FONT_SIZE[ts],
                   fontWeight: "var(--tesseract-weight-bold)",
                   lineHeight: 1.15,

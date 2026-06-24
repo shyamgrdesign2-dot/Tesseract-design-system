@@ -90,6 +90,13 @@ export const Checkbox = React.forwardRef(function Checkbox(
   const cls = [styles.root, className].filter(Boolean).join(" ");
   const hasLabel = label != null || description != null;
 
+  // Associate the role="checkbox" button with its built-in label/description.
+  // A wrapping <label> does not create an accessible name for a non-native
+  // control, so link them explicitly via aria-labelledby/aria-describedby.
+  const reactId = React.useId();
+  const labelId = label != null ? `${reactId}-label` : undefined;
+  const descId = description != null ? `${reactId}-desc` : undefined;
+
   const box = (
     <button
       type="button"
@@ -97,6 +104,8 @@ export const Checkbox = React.forwardRef(function Checkbox(
       aria-checked={isIndeterminate(current) ? "mixed" : checkedBool}
       aria-required={required || undefined}
       aria-invalid={error || undefined}
+      aria-labelledby={hasLabel ? labelId : undefined}
+      aria-describedby={hasLabel ? descId : undefined}
       data-slot="checkbox"
       data-state={stateAttr}
       data-size={size}
@@ -170,9 +179,15 @@ export const Checkbox = React.forwardRef(function Checkbox(
       {...rest}>
       {box}
       <span className={styles.labelText}>
-        {label != null && <span className={styles.labelTitle}>{label}</span>}
+        {label != null && (
+          <span id={labelId} className={styles.labelTitle}>
+            {label}
+          </span>
+        )}
         {description != null && (
-          <span className={styles.labelDescription}>{description}</span>
+          <span id={descId} className={styles.labelDescription}>
+            {description}
+          </span>
         )}
       </span>
     </label>

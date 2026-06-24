@@ -110,6 +110,8 @@ export const Avatar = React.forwardRef(function Avatar({
     const dot = Math.max(8, Math.round(size * 0.28));
     statusNode = (
       <span
+        role={isPreset ? "img" : undefined}
+        aria-label={isPreset ? status : undefined}
         style={{
           position: "absolute",
           bottom: 0,

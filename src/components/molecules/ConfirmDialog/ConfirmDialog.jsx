@@ -86,7 +86,7 @@ function Callout({ tone = "warning", icon = true, customIcon, lineClamp = 3, chi
   return (
     <div className={styles.callout} data-tone={tone}>
       {icon && (
-        <span className={styles.calloutIcon}>
+        <span className={styles.calloutIcon} aria-hidden>
           {customIcon ?? <TPIcon name={isNeutral ? "info" : tone === "error" ? "danger" : "warning"} variant="bulk" size={iconSize} />}
         </span>
       )}
@@ -235,7 +235,7 @@ export const ConfirmDialog = React.forwardRef(function ConfirmDialog({
               {children ?? (calloutPlacement === "above" ? <>{box}{desc}</> : <>{desc}{box}</>)}
               {checkboxLabel && (
                 <div className={styles.checkboxRow}>
-                  <Checkbox size="sm" checked={cbChecked} onCheckedChange={setChecked} />
+                  <Checkbox size="sm" checked={cbChecked} onCheckedChange={setChecked} aria-label={typeof checkboxLabel === "string" ? checkboxLabel : undefined} />
                   <span className={styles.checkboxLabel} onClick={() => setChecked(!cbChecked)}>{checkboxLabel}</span>
                 </div>
               )}
