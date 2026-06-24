@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useAnalytics, resolveTrack } from "@/src/analytics/context";
+import { resolveRadius } from "@/src/hooks/utils";
 import styles from "./SegmentedControl.module.scss";
 
 export const SegmentedControl = React.forwardRef(function SegmentedControl(
@@ -13,6 +14,9 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
     size = "md",
     variant = "pill",
     theme = "neutral",
+    orientation = "horizontal",
+    radius,
+    indicatorColor,
     fullWidth = false,
     disabled = false,
     className = "",
@@ -22,6 +26,7 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
   },
   ref,
 ) {
+  const isVertical = orientation === "vertical";
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(
     defaultValue ?? (options.length > 0 ? options[0].value : undefined),
@@ -30,7 +35,12 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
 
   const rootRef = React.useRef(null);
   const itemRefs = React.useRef({});
-  const [indicator, setIndicator] = React.useState({ left: 0, width: 0 });
+  const [indicator, setIndicator] = React.useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+  });
   const [ready, setReady] = React.useState(false);
 
   const { track: emit } = useAnalytics();
@@ -43,14 +53,16 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
     const elRect = el.getBoundingClientRect();
     setIndicator({
       left: elRect.left - rootRect.left,
+      top: elRect.top - rootRect.top,
       width: elRect.width,
+      height: elRect.height,
     });
     setReady(true);
   }, [current]);
 
   React.useEffect(() => {
     measure();
-  }, [measure, options.length]);
+  }, [measure, options.length, orientation]);
 
   React.useEffect(() => {
     const root = rootRef.current;
@@ -85,6 +97,15 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
     .filter(Boolean)
     .join(" ");
 
+  const resolvedRadius = resolveRadius(radius);
+  const rootStyle = {
+    ...(resolvedRadius != null
+      ? { "--tesseract-sc-radius": resolvedRadius }
+      : null),
+    ...(indicatorColor ? { "--tesseract-sc-indicator": indicatorColor } : null),
+    ...style,
+  };
+
   return (
     <div
       ref={(el) => {
@@ -96,19 +117,27 @@ export const SegmentedControl = React.forwardRef(function SegmentedControl(
       data-size={size}
       data-variant={variant}
       data-theme={theme}
+      data-orientation={orientation}
       data-disabled={disabled || undefined}
       className={cls}
-      style={style}
+      style={rootStyle}
       {...rest}
     >
       {ready && (
         <span
           className={styles.indicator}
           aria-hidden="true"
-          style={{
-            transform: `translateX(${indicator.left}px)`,
-            width: indicator.width,
-          }}
+          style={
+            isVertical
+              ? {
+                  transform: `translateY(${indicator.top}px)`,
+                  height: indicator.height,
+                }
+              : {
+                  transform: `translateX(${indicator.left}px)`,
+                  width: indicator.width,
+                }
+          }
         />
       )}
       {options.map((opt) => {

@@ -1,0 +1,144 @@
+/* Slider.module.scss — Tesseract-styled native range input.
+   The track fill is a CSS gradient driven by --slider-pct; the fill colour and
+   thumb ring come from --slider-fill (set inline from the `color` prop). */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tesseract-space-2);
+  width: 100%;
+  font-family: var(--tesseract-font-body);
+}
+
+/* Heading + (optional) value readout on one row */
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--tesseract-space-2);
+}
+
+.label {
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-medium);
+  color: var(--tesseract-slate-700);
+}
+
+.value {
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--slider-fill, var(--tesseract-blue-500));
+  font-variant-numeric: tabular-nums;
+}
+
+/* The native range input, fully restyled. */
+.input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  /* Track height per size; defaults to md. */
+  --slider-track-h: var(--tesseract-size-6);
+  --slider-thumb-d: var(--tesseract-size-18);
+
+  &[data-size="sm"] { --slider-track-h: var(--tesseract-size-4); --slider-thumb-d: var(--tesseract-size-14); }
+  &[data-size="md"] { --slider-track-h: var(--tesseract-size-6); --slider-thumb-d: var(--tesseract-size-18); }
+  &[data-size="lg"] { --slider-track-h: var(--tesseract-size-8); --slider-thumb-d: var(--tesseract-size-22); }
+
+  /* ── Track (WebKit) ── */
+  &::-webkit-slider-runnable-track {
+    height: var(--slider-track-h);
+    border-radius: var(--tesseract-radius-full, 9999px);
+    background: linear-gradient(
+      to right,
+      var(--slider-fill, var(--tesseract-blue-500)) var(--slider-pct, 0%),
+      var(--tesseract-slate-200) var(--slider-pct, 0%)
+    );
+  }
+
+  /* ── Track (Firefox) ── */
+  &::-moz-range-track {
+    height: var(--slider-track-h);
+    border-radius: var(--tesseract-radius-full, 9999px);
+    background: var(--tesseract-slate-200);
+  }
+  &::-moz-range-progress {
+    height: var(--slider-track-h);
+    border-radius: var(--tesseract-radius-full, 9999px);
+    background: var(--slider-fill, var(--tesseract-blue-500));
+  }
+
+  /* ── Thumb (WebKit) ── */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--slider-thumb-d);
+    height: var(--slider-thumb-d);
+    border-radius: var(--tesseract-radius-full, 9999px);
+    corner-shape: round; /* true circle, not the global squircle */
+    background: var(--tesseract-slate-0);
+    border: 2px solid var(--slider-fill, var(--tesseract-blue-500));
+    box-shadow: var(--tesseract-shadow-sm);
+    /* Centre the thumb on the runnable track. */
+    margin-top: calc((var(--slider-track-h) - var(--slider-thumb-d)) / 2);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  /* ── Thumb (Firefox) ── */
+  &::-moz-range-thumb {
+    width: var(--slider-thumb-d);
+    height: var(--slider-thumb-d);
+    border-radius: var(--tesseract-radius-full, 9999px);
+    background: var(--tesseract-slate-0);
+    border: 2px solid var(--slider-fill, var(--tesseract-blue-500));
+    box-shadow: var(--tesseract-shadow-sm);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+
+  /* Hover / active scale */
+  &:hover:not(:disabled)::-webkit-slider-thumb { transform: scale(1.12); }
+  &:hover:not(:disabled)::-moz-range-thumb { transform: scale(1.12); }
+  &:active:not(:disabled)::-webkit-slider-thumb { transform: scale(1.18); }
+  &:active:not(:disabled)::-moz-range-thumb { transform: scale(1.18); }
+
+  /* Focus-visible ring on the thumb */
+  &:focus-visible {
+    outline: none;
+    &::-webkit-slider-thumb {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--slider-fill, var(--tesseract-blue-500)) 28%, transparent);
+    }
+    &::-moz-range-thumb {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--slider-fill, var(--tesseract-blue-500)) 28%, transparent);
+    }
+  }
+
+  /* Invalid */
+  &[data-error="true"] {
+    --slider-fill: var(--tesseract-error-500);
+  }
+
+  /* Disabled */
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    --slider-fill: var(--tesseract-slate-400);
+    &::-webkit-slider-thumb { border-color: var(--tesseract-slate-400); }
+    &::-moz-range-thumb { border-color: var(--tesseract-slate-400); }
+  }
+}
+
+/* Tick / mark labels under the track */
+.marks {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--tesseract-space-2);
+  font-size: var(--tesseract-text-caption-sm);
+  color: var(--tesseract-slate-500);
+}
+
+.mark {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

@@ -2,8 +2,34 @@
 
 /**
  * Slider — Range input atom with Tesseract token styling.
- * Uses native <input type="range"> with CSS accent-color.
+ *
+ * A fully Tesseract-styled but still-native `<input type="range">` (kept native
+ * for accessibility + keyboard support). The filled portion of the track is a
+ * CSS gradient driven by `--slider-pct`; the fill colour + thumb ring come from
+ * `--slider-fill` (set inline from the `color` prop). See Slider.module.scss.
  */
+
+import styles from "./Slider.module.scss";
+
+const FILL = {
+  primary: "var(--tesseract-blue-500)",
+  success: "var(--tesseract-success-500)",
+  warning: "var(--tesseract-warning-500)",
+  error: "var(--tesseract-error-500)",
+};
+
+// Resolve the marks prop into an array of { value, label }.
+// boolean true → show min & max; array → use as-is; falsy → no marks.
+function resolveMarks(marks, min, max) {
+  if (!marks) return null;
+  if (marks === true) {
+    return [
+      { value: min, label: String(min) },
+      { value: max, label: String(max) },
+    ];
+  }
+  return Array.isArray(marks) ? marks : null;
+}
 
 export function Slider({
   value,
@@ -15,21 +41,23 @@ export function Slider({
   disabled = false,
   color = "primary",
   size = "md",
+  error = false,
+  label,
+  showValue = false,
+  formatValue = (v) => v,
+  marks = false,
   className,
   style: styleProp,
 }) {
-  // Tesseract tokens with hex fallbacks; every tone the stories use must be mapped here
-  // (warning was previously missing and silently fell back to blue).
-  const ACCENT = {
-    primary: "var(--tesseract-blue-500, #4b4ad5)",
-    success: "var(--tesseract-success-500, #10b981)",
-    warning: "var(--tesseract-warning-500, #f59e0b)",
-    error:   "var(--tesseract-error-500, #E11D48)",
-  };
-  const accentColor = ACCENT[color] ?? ACCENT.primary;
-  const trackHeight = size === "sm" ? 4 : size === "lg" ? 6 : 4;
+  const fill = error ? FILL.error : FILL[color] ?? FILL.primary;
 
-  return (
+  // Current value for the readout / fill percentage (controlled or uncontrolled).
+  const current = value != null ? Number(value) : Number(defaultValue ?? min);
+  const pct = max > min ? ((current - min) / (max - min)) * 100 : 0;
+
+  const markList = resolveMarks(marks, min, max);
+
+  const input = (
     <input
       type="range"
       value={value}
@@ -38,16 +66,41 @@ export function Slider({
       max={max}
       step={step}
       disabled={disabled}
+      data-size={size}
+      data-error={error || undefined}
       onChange={onChange ? (e) => onChange(e, Number(e.target.value)) : undefined}
-      className={className}
+      className={[styles.input, className].filter(Boolean).join(" ")}
       style={{
-        width: "100%",
-        accentColor,
-        height: trackHeight,
-        cursor: disabled ? "not-allowed" : "pointer",
+        "--slider-fill": fill,
+        "--slider-pct": `${pct}%`,
         ...styleProp,
       }}
     />
+  );
+
+  // Bare input when there's no surrounding chrome (label / value / marks).
+  if (!label && !showValue && !markList) return input;
+
+  return (
+    // --slider-fill on the wrapper so the value readout tracks the slider colour.
+    <div className={styles.field} style={{ "--slider-fill": fill }}>
+      {(label || showValue) && (
+        <div className={styles.header}>
+          {label ? <span className={styles.label}>{label}</span> : <span />}
+          {showValue && <span className={styles.value}>{formatValue(current)}</span>}
+        </div>
+      )}
+      {input}
+      {markList && (
+        <div className={styles.marks}>
+          {markList.map((m, i) => (
+            <span key={`${m.value}-${i}`} className={styles.mark}>
+              {m.label ?? m.value}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

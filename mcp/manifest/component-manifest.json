@@ -1490,10 +1490,32 @@
           "default": "\"neutral\"",
           "allowedValues": [
             "neutral",
-            "primary"
+            "primary",
+            "success",
+            "error",
+            "warning"
+          ],
+          "control": "select",
+          "description": "Neutral uses a white indicator; primary/success/error/warning use the matching brand colour with white text"
+        },
+        {
+          "name": "orientation",
+          "default": "\"horizontal\"",
+          "allowedValues": [
+            "horizontal",
+            "vertical"
           ],
           "control": "inline-radio",
-          "description": "Neutral uses a white indicator, primary uses blue"
+          "description": "Lay the segments in a row (default) or stack them in a column"
+        },
+        {
+          "name": "radius",
+          "default": "\"\"",
+          "control": "text",
+          "description": "px number, or "
+        },
+        {
+          "name": "indicatorColor"
         },
         {
           "name": "fullWidth",
@@ -1524,6 +1546,8 @@
         "Sizes",
         "Variants",
         "Themes",
+        "Orientation",
+        "Radius",
         "FullWidth",
         "WithIcons",
         "DisabledOption",
@@ -1595,7 +1619,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { Slider } from \"@/src/components/atoms\";",
-      "description": "Slider — Range input atom with Tesseract token styling. Uses native <input type=\"range\"> with CSS accent-color.",
+      "description": "Slider — Range input atom with Tesseract token styling. A fully Tesseract-styled but still-native `<input type=\"range\">` (kept native for accessibility + keyboard support). The filled portion of the track is a CSS gradient driven by `--slider-pct`; the fill colour + thumb ring come from `--slider-fill` (set inline from the `color` prop). See Slider.module.scss.",
       "props": [
         {
           "name": "value"
@@ -1648,6 +1672,31 @@
           "control": "inline-radio"
         },
         {
+          "name": "error",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "label",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "showValue",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "formatValue",
+          "default": "(v) => v"
+        },
+        {
+          "name": "marks",
+          "default": "false",
+          "control": "boolean",
+          "description": "true = show min & max ticks; or pass an array of {value,label}"
+        },
+        {
           "name": "className"
         },
         {
@@ -1655,9 +1704,11 @@
         }
       ],
       "stories": [
-        "Sizes",
         "Playground",
+        "Sizes",
         "Colors",
+        "WithLabelAndValue",
+        "WithMarks",
         "Disabled",
         "Steps",
         "PainScale",

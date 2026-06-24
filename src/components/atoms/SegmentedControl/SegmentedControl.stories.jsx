@@ -14,9 +14,20 @@ const meta = {
       description: "Pill (rounded) vs block (squared) track",
     },
     theme: {
+      control: "select",
+      options: ["neutral", "primary", "success", "error", "warning"],
+      description:
+        "Neutral uses a white indicator; primary/success/error/warning use the matching brand colour with white text",
+    },
+    orientation: {
       control: "inline-radio",
-      options: ["neutral", "primary"],
-      description: "Neutral uses a white indicator, primary uses blue",
+      options: ["horizontal", "vertical"],
+      description: "Lay the segments in a row (default) or stack them in a column",
+    },
+    radius: {
+      control: "text",
+      name: "corner radius",
+      description: "px number, or 'pill' / 'sharp' — outer + indicator radius (blank = default)",
     },
     fullWidth: { control: "boolean" },
     disabled: { control: "boolean" },
@@ -25,12 +36,49 @@ const meta = {
     size: "md",
     variant: "pill",
     theme: "neutral",
+    orientation: "horizontal",
+    radius: "",
     fullWidth: false,
     disabled: false,
   },
 };
 
 export default meta;
+
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
+const radiusValue = (r) => {
+  const s = String(r ?? "").trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
+
+// Normalise the args for rendering (coerce radius) and build a copy-paste snippet.
+const withRadius = ({ radius, ...args }) => ({
+  ...args,
+  radius: radiusValue(radius),
+});
+
+const scCode = ({
+  size = "md",
+  variant = "pill",
+  theme = "neutral",
+  orientation = "horizontal",
+  radius,
+  fullWidth = false,
+  disabled = false,
+}) => {
+  const lines = [`  size="${size}"`, `  variant="${variant}"`, `  theme="${theme}"`];
+  if (orientation !== "horizontal") lines.push(`  orientation="${orientation}"`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === "number" ? `  radius={${rv}}` : `  radius="${rv}"`);
+  if (fullWidth) lines.push("  fullWidth");
+  if (disabled) lines.push("  disabled");
+  lines.push("  options={options}");
+  lines.push("  value={value}");
+  lines.push("  onValueChange={setValue}");
+  return `<SegmentedControl\n${lines.join("\n")}\n/>`;
+};
 
 const Row = ({ children, label }) => (
   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -59,7 +107,7 @@ export const Playground = {
     const [val, setVal] = React.useState("monthly");
     return (
       <SegmentedControl
-        {...args}
+        {...withRadius(args)}
         options={[
           { value: "monthly", label: "Monthly" },
           { value: "quarterly", label: "Quarterly" },
@@ -70,6 +118,7 @@ export const Playground = {
       />
     );
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => scCode(ctx.args) } } },
 };
 
 export const TwoOptions = {
@@ -204,28 +253,79 @@ export const Variants = {
 export const Themes = {
   render: (args) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Row label="Neutral">
+      {["neutral", "primary", "success", "error", "warning"].map((theme) => (
+        <Row key={theme} label={theme}>
+          <SegmentedControl
+            {...withRadius(args)}
+            theme={theme}
+            options={[
+              { value: "on", label: "Enabled" },
+              { value: "off", label: "Disabled" },
+            ]}
+            defaultValue="on"
+          />
+        </Row>
+      ))}
+    </div>
+  ),
+};
+
+export const Orientation = {
+  name: "Orientation (Vertical)",
+  render: (args) => (
+    <div style={{ display: "flex", gap: 32, alignItems: "flex-start" }}>
+      <Row label="Horizontal">
         <SegmentedControl
-          {...args}
-          theme="neutral"
+          {...withRadius(args)}
+          orientation="horizontal"
           options={[
-            { value: "on", label: "Enabled" },
-            { value: "off", label: "Disabled" },
+            { value: "list", label: "List" },
+            { value: "grid", label: "Grid" },
+            { value: "calendar", label: "Calendar" },
           ]}
-          defaultValue="on"
+          defaultValue="list"
         />
       </Row>
-      <Row label="Primary">
+      <Row label="Vertical">
         <SegmentedControl
-          {...args}
-          theme="primary"
+          {...withRadius(args)}
+          orientation="vertical"
           options={[
-            { value: "on", label: "Enabled" },
-            { value: "off", label: "Disabled" },
+            { value: "list", label: "List" },
+            { value: "grid", label: "Grid" },
+            { value: "calendar", label: "Calendar" },
           ]}
-          defaultValue="on"
+          defaultValue="list"
         />
       </Row>
+    </div>
+  ),
+};
+
+export const Radius = {
+  name: "Corner Radius",
+  render: (args) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {[
+        { label: "Default", radius: undefined },
+        { label: "Sharp", radius: "sharp" },
+        { label: "8px", radius: 8 },
+        { label: "Pill", radius: "pill" },
+      ].map(({ label, radius }) => (
+        <Row key={label} label={label}>
+          <SegmentedControl
+            {...args}
+            variant="block"
+            radius={radius}
+            options={[
+              { value: "a", label: "Option A" },
+              { value: "b", label: "Option B" },
+              { value: "c", label: "Option C" },
+            ]}
+            defaultValue="a"
+          />
+        </Row>
+      ))}
     </div>
   ),
 };
