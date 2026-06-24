@@ -76,6 +76,7 @@ import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { Radio } from "@/src/components/atoms/Radio";
 import { Button } from "@/src/components/atoms/Button";
+import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import { useAnalytics } from "@/src/analytics/context";
@@ -86,15 +87,6 @@ const Chevron = (props) => <TPLibraryIcon name="chevron-down" size={14} {...prop
 const SearchIcon = () => <TPLibraryIcon name="search" size={15} />;
 const PlusIcon = () => <TPLibraryIcon name="add" size={14} />;
 const ClearIcon = () => <TPLibraryIcon name="close" size={13} />;
-// Inline spinner for the async loading row — a bare ring with no clean library match.
-function Spinner({ size = 16 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden className={styles.spinnerSvg}>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity="0.2" />
-      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
-  );
-}
 // Plain checkmark — the CDN only ships circled/squared ticks, so the selected
 // indicator keeps a bare inline ✓ (the one glyph with no clean library match).
 function CheckIcon({ size = 14 }) {
@@ -482,7 +474,7 @@ export function Dropdown({
         {loading ? (
           loadingState ?? (
             <div className={styles.loading}>
-              <span className={styles.loadingSpinner} aria-hidden><Spinner /></span>
+              <LoadingIndicator type="line-spinner" size={16} color="var(--tesseract-blue-500)" />
               <span>Loading…</span>
             </div>
           )

@@ -54,11 +54,20 @@ with a specific reason + file:line when failing.
 - [ ] Back buttons: small, control-sized, using `arrow-left3` in the `straight` corner variant.
 - [ ] InputBox add-ons: any add-on (text/select/button) can sit on either side; styling lives in the component, not the story.
 
+## 7b. Brand compliance (TatvaPractice) — verified by the brand agent
+- [ ] The DEFAULT / out-of-box view of every component is unmistakably TatvaPractice: brand colours (via `--tesseract-*` tokens, brand blue/violet ramps), brand typography (`--tesseract-font-body` / `-heading`, i.e. Inter/Mulish), brand icons (Iconsax via `TPLibraryIcon`/`TPIcon`, never foreign icon sets or inline SVG), and the brand theme.
+- [ ] No off-brand defaults: no generic system font, no non-token colour, no third-party icon set, no default that ignores the brand theme.
+- [ ] Re-themes through `TesseractThemeProvider` (brand seed / dark / clinic) without per-component edits, and the default still reads as TatvaPractice.
+
 ## 8. Quality gate
 - [ ] `npm run lint` → 0 errors. `npm run build:lib` → clean. `npm run build:mcp` regenerated (31+ components).
 - [ ] Verified in Storybook (render + key interactions); default look unchanged; screenshot proof for visual changes.
 
 ## Benchmark north star
-Match or exceed Material UI / Radix UI / shadcn-ui on composition, customizability, a11y, and
-adoptability — without bloating the brand. Skip patterns irrelevant to a desktop EMR (filled/standard
-input variants, mobile scroll-collapse heros, inset/floating sidebar cosmetics, 3+ level nesting).
+Match or exceed Material UI / Radix UI / shadcn-ui on **composition, customizability, a11y, and
+adoptability** — NOT on stylistic variant types. Do NOT import a foreign component's variant zoo
+(e.g. MUI filled/standard/outlined input styles). Tesseract has ONE on-brand input look, ONE button
+system, etc. The goal is **variance + scalability WITHIN our own design language** — richer/scalable
+configuration of our own model (sizes, status, density, states, add-ons, slots), not someone else's
+look-and-feel. Skip patterns irrelevant to a desktop EMR (mobile scroll-collapse heros,
+inset/floating sidebar cosmetics, 3+ level nesting).

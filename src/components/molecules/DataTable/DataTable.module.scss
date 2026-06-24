@@ -451,12 +451,3 @@
   z-index: 40;
   pointer-events: none;
 }
-.spinner { color: var(--tesseract-blue-500, #2f6fed); animation: tesseract-dt-spin 720ms linear infinite; }
-
-@keyframes tesseract-dt-spin {
-  to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .spinner { animation-duration: 1600ms; }
-}

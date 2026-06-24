@@ -85,6 +85,7 @@ import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { Radio } from "@/src/components/atoms/Radio";
 import { Skeleton } from "@/src/components/atoms/Skeleton";
 import { Button } from "@/src/components/atoms/Button";
+import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useAnalytics } from "@/src/analytics/context";
 import {
@@ -142,15 +143,6 @@ function Chevron({ open }) {
   return <TPLibraryIcon name="chevron-right" size={16} className={styles.chevron} data-open={open || undefined} />;
 }
 
-// Centered spinner used by the "overlay" loading variant.
-function Spinner() {
-  return (
-    <svg className={styles.spinner} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" strokeOpacity="0.18" />
-      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 // Default error body — icon + message + optional Retry. Used when `error` is set
 // and no `errorState` slot is provided. A string/node `error` becomes the message.
@@ -925,7 +917,7 @@ export function DataTable({
           <div className={styles.loadingOverlay} aria-live="polite" aria-busy="true">
             {typeof renderLoading === "function"
               ? renderLoading()
-              : renderLoading ?? <Spinner />}
+              : renderLoading ?? <LoadingIndicator type="line-spinner" size={24} color="var(--tesseract-blue-500)" />}
           </div>
         )}
       </div>

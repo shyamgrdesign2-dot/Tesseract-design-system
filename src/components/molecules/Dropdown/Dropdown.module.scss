@@ -252,9 +252,6 @@
   font-size: var(--tesseract-text-body-sm);
   color: var(--tesseract-slate-400);
 }
-.loadingSpinner { display: inline-flex; color: var(--tesseract-blue-500); }
-.spinnerSvg { animation: tesseract-dd-spin 800ms linear infinite; }
-@keyframes tesseract-dd-spin { to { transform: rotate(360deg); } }
 
 // ─── Option row ───────────────────────────────────────────────────────────────
 .option {
