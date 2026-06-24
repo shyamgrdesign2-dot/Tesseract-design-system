@@ -109,6 +109,7 @@ export default {
     size:        { control: 'inline-radio', options: SIZES, table: { category: 'Appearance' } },
     status:      { control: 'inline-radio', options: STATUSES, table: { category: 'Appearance' } },
     fullWidth:   { control: 'boolean', table: { category: 'Appearance' } },
+    radius:      { control: 'text', name: 'radius', description: 'Field corner radius — a number (px), "pill", "sharp", or any CSS length / token. Blank = default 10px.', table: { category: 'Appearance' } },
 
     allow:       { control: 'inline-radio', options: ALLOW, name: 'allow (filter)', description: 'Restrict typed characters', table: { category: 'Behaviour' } },
     clearable:   { control: 'boolean', name: 'clearable (×)', table: { category: 'Behaviour' } },
@@ -122,6 +123,7 @@ export default {
     rightIcon:    { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
     iconVariant:  { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
     iconFamily:   { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
+    statusIcon:   { control: 'text', tpIcon: true, name: 'status icon', description: 'Override the auto status glyph — a CDN icon name (blank = auto: success→tick-circle · error→danger · warning→warning). Only shows when status ≠ default.', if: { arg: 'status', neq: 'default' }, table: { category: 'Icons' } },
 
     unit:        { control: 'text', description: 'Fixed suffix inside the field, e.g. "kg"', table: { category: 'Affixes' } },
     counter:     { control: 'boolean', description: '+/- stepper (number field)', table: { category: 'Affixes' } },
@@ -138,6 +140,7 @@ export default {
     size: 'md',
     status: 'default',
     fullWidth: true,
+    radius: '',
     allow: 'any',
     clearable: true,
     loading: false,
@@ -149,11 +152,21 @@ export default {
     rightIcon: '',
     iconVariant: 'linear',
     iconFamily: '',
+    statusIcon: '',
     unit: '',
     counter: false,
     leftAddon: 'none',
     rightAddon: 'none',
   },
+};
+
+// A radius control comes in as a string. Coerce a pure-number string to a
+// number (so InputBox emits `${n}px`); pass keywords / lengths / tokens through;
+// blank → undefined (keep the default token radius).
+const radiusValue = (r) => {
+  if (r == null || String(r).trim() === '') return undefined;
+  const s = String(r).trim();
+  return /^\d+$/.test(s) ? Number(s) : s;
 };
 
 // Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
@@ -176,8 +189,11 @@ const inputCode = (a) => {
   if (a.showCount) lines.push('  showCount');
   if (a.leftIcon && a.leftIcon.trim()) lines.push(`  leftIcon={${iconJsx(a.leftIcon.trim(), a.iconVariant, a.iconFamily, px)}}`);
   if (a.rightIcon && a.rightIcon.trim()) lines.push(`  rightIcon={${iconJsx(a.rightIcon.trim(), a.iconVariant, a.iconFamily, px)}}`);
+  if (a.status !== 'default' && a.statusIcon && a.statusIcon.trim()) lines.push(`  statusIcon="${a.statusIcon.trim()}"`);
   if (a.unit) lines.push(`  unit="${a.unit}"`);
   if (a.counter) lines.push('  counter');
+  const rv = radiusValue(a.radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (a.fullWidth) lines.push('  fullWidth');
   return `<InputBox\n${lines.join('\n')}\n/>`;
 };
@@ -206,10 +222,12 @@ export const Playground = {
           loading={a.loading}
           readOnly={a.readOnly}
           disabled={a.disabled}
+          radius={radiusValue(a.radius)}
           maxLength={a.maxLength || undefined}
           showCount={a.showCount}
           leftIcon={glyphFor(a.leftIcon, px, a.iconVariant, a.iconFamily)}
           rightIcon={glyphFor(a.rightIcon, px, a.iconVariant, a.iconFamily)}
+          statusIcon={a.statusIcon && a.statusIcon.trim() ? a.statusIcon.trim() : undefined}
           unit={a.unit || undefined}
           counter={a.counter}
           type={a.counter ? 'number' : undefined}
@@ -248,6 +266,34 @@ export const Statuses = {
       <InputBox label="Error" status="error" defaultValue="invalid@@email" helperText="Enter a valid email address" fullWidth />
       <InputBox label="Loading" loading defaultValue="Checking availability…" leftIcon={<TPLibraryIcon name="user" size={18} />} fullWidth />
       <InputBox label="Disabled" disabled defaultValue="Not editable" fullWidth />
+    </Stack>
+  ),
+};
+
+// ── Corner radius (default · pill · sharp · custom) ───────────────────────────
+export const Radius = {
+  name: 'Corner radius',
+  render: () => (
+    <Stack>
+      <InputBox label="Default (10px token)" placeholder="Unchanged corners" fullWidth />
+      <InputBox label="Pill" radius="pill" placeholder="Search…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="Sharp" radius="sharp" placeholder="Square corners" fullWidth />
+      <InputBox label="Custom 4px" radius={4} placeholder="Tighter corners" fullWidth />
+      <InputBox label="Token" radius="var(--tesseract-radius-16)" placeholder="16px token" fullWidth />
+    </Stack>
+  ),
+};
+
+// ── Status icons (distinct warning glyph · custom override) ────────────────────
+export const StatusIcons = {
+  name: 'Status icons',
+  render: () => (
+    <Stack>
+      <InputBox label="Success" status="success" defaultValue="john@example.com" helperText="Verified" fullWidth />
+      <InputBox label="Warning (distinct glyph)" status="warning" defaultValue="admin@example" helperText="Double-check this" fullWidth />
+      <InputBox label="Error" status="error" defaultValue="invalid@@email" helperText="Enter a valid address" fullWidth />
+      <InputBox label="Custom status icon (info)" status="warning" statusIcon="info-circle" defaultValue="Heads up" helperText="Override via statusIcon" fullWidth />
+      <InputBox label="Custom node" status="success" statusIcon={<TPLibraryIcon name="verify" variant="bold" size={18} />} defaultValue="Approved" fullWidth />
     </Stack>
   ),
 };

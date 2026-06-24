@@ -24,7 +24,7 @@ const meta = {
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
-    radius: { control: { type: 'range', min: 0, max: 24, step: 2 }, name: 'corner radius (px)', description: '0 = sharp · high = pill · default keeps radius-10', table: { category: 'Layout' } },
+    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Layout' } },
     leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
     rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
@@ -39,7 +39,7 @@ const meta = {
     disabled: false,
     removable: false,
     removePosition: 'right',
-    radius: 10,
+    radius: '',
     leftIcon: 'star-1',
     rightIcon: '',
     iconVariant: 'linear',
@@ -48,6 +48,14 @@ const meta = {
 };
 
 export default meta;
+
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
+const radiusValue = (r) => {
+  const s = String(r ?? '').trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -63,7 +71,8 @@ const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md'
   const px = ICON_PX[size] || 14;
   const lines = [`  label="${label}"`, `  color="${color}"`, `  variant="${variant}"`, `  size="${size}"`];
   if (selected) lines.push('  selected');
-  if (radius != null && radius !== 10) lines.push(`  radius={${radius}}`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (disabled) lines.push('  disabled');
   if (removable) lines.push(`  onDelete={() => {}}${removePosition === 'left' ? '\n  removePosition="left"' : ''}`);
   if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily, px)}}`);
@@ -72,12 +81,11 @@ const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md'
 };
 
 export const Playground = {
-  // radius=10 is the default token look, so treat it as a no-op (keeps radius-10);
-  // any other value is passed through to resolveRadius.
+  // blank radius keeps the default token look; "pill"/"sharp"/numbers reshape via resolveRadius.
   render: ({ leftIcon, rightIcon, removable, iconVariant, iconFamily, radius, ...args }) => (
     <Chip
       {...args}
-      radius={radius != null && radius !== 10 ? radius : undefined}
+      radius={radiusValue(radius)}
       icon={glyphFor(leftIcon, args.size, iconVariant, iconFamily)}
       rightIcon={glyphFor(rightIcon, args.size, iconVariant, iconFamily)}
       onDelete={removable ? () => {} : undefined}

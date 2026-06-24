@@ -24,7 +24,7 @@ const meta = {
     size: { control: { type: 'range', min: 20, max: 96, step: 2 }, table: { category: 'Appearance' } },
     // ── Appearance ──
     shape: { control: 'inline-radio', options: SHAPES, description: 'Corner shape — circle · rounded · square', table: { category: 'Appearance' } },
-    radius: { control: { type: 'range', min: 0, max: 48, step: 2 }, name: 'corner radius (px)', description: 'Overrides the shape radius (blank = use shape)', table: { category: 'Appearance' } },
+    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Appearance' } },
     color: { control: 'select', options: COLORS, description: 'Background (—100) + initials/icon (—600) ramp', table: { category: 'Appearance' } },
     status: { control: 'inline-radio', options: STATUSES, description: 'Corner status dot', table: { category: 'Appearance' } },
     ring: { control: 'boolean', description: 'Brand gradient ring', table: { category: 'Appearance' } },
@@ -39,7 +39,7 @@ const meta = {
     src: 'https://i.pravatar.cc/100?img=12',
     size: 48,
     shape: 'circle',
-    radius: undefined,
+    radius: '',
     color: 'slate',
     status: 'none',
     ring: true,
@@ -51,11 +51,19 @@ const meta = {
 
 export default meta;
 
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords ("pill"/"sharp") / tokens through; blank → undefined (use shape).
+const radiusValue = (r) => {
+  const s = String(r ?? '').trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
+
 // Map the `content` control to the matching Avatar prop (icon → image → initials).
 // The icon fallback is half the avatar diameter, in the chosen style + family.
 const fromArgs = ({ content, name, src, size, shape, radius, color, status, ring, iconName, iconVariant, iconFamily }) => ({
   size, shape, color, ring, name,
-  radius: typeof radius === 'number' ? radius : undefined,
+  radius: radiusValue(radius),
   status: status && status !== 'none' ? status : undefined,
   src: content === 'image' ? src : undefined,
   icon: content === 'icon' ? glyphFor(iconName, Math.round(size * 0.5), iconVariant, iconFamily) : undefined,
@@ -68,7 +76,8 @@ const iconJsx = (name, variant, family, size) =>
 const avatarCode = ({ content, name = '', src = '', size = 48, shape = 'circle', radius, color = 'slate', status = 'none', ring, iconName, iconVariant, iconFamily }) => {
   const lines = [`  size={${size}}`];
   if (shape && shape !== 'circle') lines.push(`  shape="${shape}"`);
-  if (typeof radius === 'number') lines.push(`  radius={${radius}}`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (color && color !== 'slate') lines.push(`  color="${color}"`);
   if (status && status !== 'none') lines.push(`  status="${status}"`);
   if (ring) lines.push('  ring');

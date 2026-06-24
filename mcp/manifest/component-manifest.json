@@ -143,9 +143,9 @@
         },
         {
           "name": "radius",
-          "default": "undefined",
-          "control": "range",
-          "description": "Overrides the shape radius (blank = use shape)"
+          "default": "''",
+          "control": "text",
+          "description": "px number, or "
         },
         {
           "name": "color",
@@ -308,9 +308,9 @@
         },
         {
           "name": "radius",
-          "default": "10",
-          "control": "range",
-          "description": "0 = sharp rectangle · high = pill"
+          "default": "''",
+          "control": "text",
+          "description": "px number, or "
         },
         {
           "name": "children",
@@ -436,6 +436,27 @@
           "control": "inline-radio"
         },
         {
+          "name": "radius",
+          "default": "''",
+          "control": "text",
+          "description": "px number, or "
+        },
+        {
+          "name": "as"
+        },
+        {
+          "name": "href",
+          "default": "''",
+          "control": "text",
+          "description": "When set, renders a real <a href> with identical styling (great for the link variant). Blank = native <button>"
+        },
+        {
+          "name": "fullWidth",
+          "default": "false",
+          "control": "boolean",
+          "description": "Stretch to width:100% (default is inline width)"
+        },
+        {
           "name": "loading",
           "default": "false",
           "control": "boolean"
@@ -488,11 +509,6 @@
           "name": "track"
         },
         {
-          "name": "radius",
-          "control": "range",
-          "default": "10"
-        },
-        {
           "name": "shape",
           "allowedValues": [
             "text",
@@ -539,7 +555,10 @@
         "SplitSizes",
         "SplitStates",
         "SplitDark",
-        "UseCases"
+        "UseCases",
+        "Radius",
+        "FullWidth",
+        "Polymorphic"
       ],
       "sourcePath": "src/components/atoms/Button/Button.jsx",
       "storiesPath": "src/components/atoms/Button/Button.stories.jsx"
@@ -756,9 +775,9 @@
         },
         {
           "name": "radius",
-          "default": "10",
-          "control": "range",
-          "description": "0 = sharp · high = pill · default keeps radius-10"
+          "default": "''",
+          "control": "text",
+          "description": "px number, or "
         },
         {
           "name": "track"
@@ -1021,6 +1040,18 @@
           "control": "boolean"
         },
         {
+          "name": "radius",
+          "default": "''",
+          "control": "text",
+          "description": "Field corner radius — a number (px), "
+        },
+        {
+          "name": "statusIcon",
+          "default": "''",
+          "control": "text",
+          "description": "Override the auto status glyph — a CDN icon name (blank = auto: success→tick-circle · error→danger · warning→warning). Only shows when status ≠ default."
+        },
+        {
           "name": "tags"
         },
         {
@@ -1115,6 +1146,8 @@
         "Playground",
         "Sizes",
         "Statuses",
+        "Radius",
+        "StatusIcons",
         "AllowedTypes",
         "Icons",
         "CharacterCount",

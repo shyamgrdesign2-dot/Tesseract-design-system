@@ -74,7 +74,9 @@ const meta = {
     theme:    { control: 'select',       options: THEMES,              table: { category: 'Style' } },
     size:     { control: 'inline-radio', options: SIZES,               table: { category: 'Style' } },
     surface:  { control: 'inline-radio', options: ['light', 'dark'],   table: { category: 'Style' } },
-    radius:   { control: { type: 'range', min: 0, max: 24, step: 1 }, name: 'corner radius (px)', table: { category: 'Style' } },
+    radius:   { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Style' } },
+    fullWidth:{ control: 'boolean', name: 'full width', description: 'Stretch to width:100% (default is inline width)', table: { category: 'Style' } },
+    href:     { control: 'text', description: 'When set, renders a real <a href> with identical styling (great for the link variant). Blank = native <button>', table: { category: 'Polymorphic' } },
     loading:  { control: 'boolean',                                    table: { category: 'State' } },
     disabled: { control: 'boolean',                                    table: { category: 'State' } },
     children: { control: 'text', name: 'label',                        table: { category: 'Content' } },
@@ -99,7 +101,9 @@ const meta = {
     theme:    'primary',
     size:     'md',
     surface:  'light',
-    radius:    10,
+    radius:    '',
+    fullWidth: false,
+    href:     '',
     loading:  false,
     disabled: false,
     shape:       'text',
@@ -114,14 +118,26 @@ export default meta;
 
 // ─── 1. Playground ─────────────────────────────────────────────────────────────
 
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
+const radiusValue = (r) => {
+  const s = String(r ?? '').trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
+
 // Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
 const iconJsx = (name, variant, family) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} />`;
 
-const buildCode = ({ shape = 'text', variant = 'solid', theme = 'primary', size = 'md', surface = 'light', radius, loading, disabled, children = '', leftIcon, rightIcon, iconVariant, iconFamily }) => {
+const buildCode = ({ shape = 'text', variant = 'solid', theme = 'primary', size = 'md', surface = 'light', radius, fullWidth, href, loading, disabled, children = '', leftIcon, rightIcon, iconVariant, iconFamily }) => {
   const lines = [`  variant="${variant}"`, `  theme="${theme}"`, `  size="${size}"`];
   if (surface && surface !== 'light') lines.push(`  surface="${surface}"`);
-  if (radius != null) lines.push(`  style={{ '--tesseract-btn-radius': '${radius}px' }}`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
+  if (fullWidth) lines.push('  fullWidth');
+  // href makes the standard / icon-only shapes render a real <a> (split stays a button).
+  if (href && shape !== 'split') lines.push(`  href="${href}"`);
   if (loading) lines.push('  loading');
   if (disabled) lines.push('  disabled');
 
@@ -148,17 +164,20 @@ export const Playground = {
   name: '🎛 Playground',
   // For surface="dark", switch the canvas background via the Storybook
   // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
-  render: ({ shape, leftIcon, rightIcon, iconVariant, iconFamily, radius, children, ...args }) => {
-    const style = { '--tesseract-btn-radius': `${radius}px` };
+  render: ({ shape, leftIcon, rightIcon, iconVariant, iconFamily, radius, href, children, ...args }) => {
+    // radius is a real Button prop now (sets --tesseract-btn-radius via resolveRadius).
+    const radiusProp = radiusValue(radius);
     const glyph = (name) => glyphFor(name, args.size, iconVariant, iconFamily);
+    // href only applies to the non-split shapes (split stays a native button group).
+    const linkHref = href || undefined;
 
     if (shape === 'icon-only') {
-      return <Button {...args} style={style} aria-label={children || 'Action'} icon={glyph(leftIcon) || glyphFor('add', args.size, iconVariant, iconFamily)} />;
+      return <Button {...args} radius={radiusProp} href={linkHref} aria-label={children || 'Action'} icon={glyph(leftIcon) || glyphFor('add', args.size, iconVariant, iconFamily)} />;
     }
 
     if (shape === 'split') {
       return (
-        <Button {...args} style={style} icon={glyph(leftIcon)} menu={DEMO_MENU}>
+        <Button {...args} radius={radiusProp} icon={glyph(leftIcon)} menu={DEMO_MENU}>
           {children}
         </Button>
       );
@@ -166,7 +185,7 @@ export const Playground = {
 
     // text
     return (
-      <Button {...args} style={style} leftIcon={glyph(leftIcon)} rightIcon={glyph(rightIcon)}>
+      <Button {...args} radius={radiusProp} href={linkHref} leftIcon={glyph(leftIcon)} rightIcon={glyph(rightIcon)}>
         {children}
       </Button>
     );
@@ -532,6 +551,75 @@ export const UseCases = {
           <Button variant="outline" theme="error" leftIcon={<TPLibraryIcon name="trash" size={16} />}>Delete Report</Button>
           <Button variant="ghost" leftIcon={<TPLibraryIcon name="magic-star" size={16} />}>AI Summary</Button>
           <Button variant="ghost" theme="neutral" aria-label="More" icon={<TPLibraryIcon name="3-dots-more" size={20} />} />
+        </Row>
+      </Section>
+    </div>
+  ),
+};
+
+// ─── 16. Corner radius ───────────────────────────────────────────────────────────
+
+export const Radius = {
+  name: '⌗ Corner Radius',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Section label="radius prop — number · pill · sharp">
+        <Row gap={16}>
+          <Button radius="sharp">Sharp</Button>
+          <Button radius={4}>4px</Button>
+          <Button>Default (10px)</Button>
+          <Button radius={16}>16px</Button>
+          <Button radius="pill">Pill</Button>
+        </Row>
+      </Section>
+      <Section label="Per variant (pill)">
+        <Row gap={16}>
+          {['solid', 'outline', 'tonal'].map((variant) => (
+            <Button key={variant} variant={variant} radius="pill" leftIcon={<TPLibraryIcon name="add" size={16} />}>
+              {variant.charAt(0).toUpperCase() + variant.slice(1)}
+            </Button>
+          ))}
+        </Row>
+      </Section>
+    </div>
+  ),
+};
+
+// ─── 17. Full width ──────────────────────────────────────────────────────────────
+
+export const FullWidth = {
+  name: '↔ Full Width',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 360 }}>
+      <Button fullWidth leftIcon={<TPLibraryIcon name="add" size={18} />}>New Appointment</Button>
+      <Button fullWidth variant="outline">Cancel</Button>
+      <Button fullWidth variant="tonal" menu={splitMenu}>Save &amp; Continue</Button>
+    </div>
+  ),
+};
+
+// ─── 18. Polymorphic (as / href) ────────────────────────────────────────────────
+
+export const Polymorphic = {
+  name: '🔗 Polymorphic (anchor)',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <Section label="href → renders a real <a> (identical styling)">
+        <Row gap={16}>
+          <Button href="#patients" variant="link" rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>
+            View all patients
+          </Button>
+          <Button href="#export" variant="solid" leftIcon={<TPLibraryIcon name="import" size={16} />}>
+            Download as link
+          </Button>
+          <Button href="#search" variant="ghost" aria-label="Search" icon={<TPLibraryIcon name="search-normal" size={20} />} />
+        </Row>
+      </Section>
+      <Section label="as → render any element (e.g. an external anchor)">
+        <Row gap={16}>
+          <Button as="a" href="https://tatvacare.in" variant="outline" rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>
+            Open site
+          </Button>
         </Row>
       </Section>
     </div>

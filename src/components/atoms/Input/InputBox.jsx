@@ -4,6 +4,7 @@ import { forwardRef, useId, useRef, useState } from "react";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { Chip } from "@/src/components/atoms/Chip";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { resolveRadius } from "@/src/hooks/utils";
 import styles from "./InputBox.module.scss";
 
 const LOADER_PX = { sm: 16, md: 18, lg: 20 };
@@ -48,8 +49,23 @@ const LOADER_PX = { sm: 16, md: 18, lg: 20 };
  *   disabled    boolean
  *   readOnly    boolean — neutral, non-interactive surface (like disabled, but
  *               the value stays focusable/selectable for copy)
+ *   radius      number | "pill" | "sharp" | string — field corner radius.
+ *               Omit to keep the size's default 10px token (e.g. pill search
+ *               inputs keep their existing look).
+ *   statusIcon  ReactNode | string — override the auto status glyph. A string is
+ *               treated as a CDN icon name; a node is rendered as-is. Only shown
+ *               when `status` is not "default".
  *   All native <input> props are forwarded (type, maxLength, pattern, …).
  */
+
+// Per-status glyph shown on the trailing edge. `warning` gets its own real CDN
+// icon (the essential-family warning triangle) so it no longer shares the
+// `danger` error glyph.
+const STATUS_ICON = {
+  success: "tick-circle",
+  error:   "danger",
+  warning: "warning",
+};
 
 // Live character filters. Each strips disallowed characters as the user types
 // and sets the mobile keyboard hint via inputMode.
@@ -87,6 +103,8 @@ export const InputBox = forwardRef(function InputBox(
     fullWidth  = false,
     disabled   = false,
     readOnly   = false,
+    radius,
+    statusIcon,
     tags,
     onRemoveTag,
     tagsScroll = false,
@@ -177,6 +195,21 @@ export const InputBox = forwardRef(function InputBox(
   const showFooter = Boolean(helperText || (showCount));
   const hasTags = Array.isArray(tags) && tags.length > 0;
 
+  // Field corner radius. Drives the same CSS var the SCSS reads
+  // (--tesseract-input-radius); undefined keeps the size's default token.
+  const resolvedRadius = resolveRadius(radius);
+
+  // Merge width clamps + radius into a single inline style (omit when empty so
+  // defaults are untouched).
+  const wrapStyle =
+    minWidth != null || maxWidth != null || resolvedRadius != null
+      ? {
+          ...(minWidth != null ? { minWidth } : null),
+          ...(maxWidth != null ? { maxWidth } : null),
+          ...(resolvedRadius != null ? { "--tesseract-input-radius": resolvedRadius } : null),
+        }
+      : undefined;
+
   return (
     <div
       className={wrapCls}
@@ -186,7 +219,7 @@ export const InputBox = forwardRef(function InputBox(
       data-disabled={disabled || undefined}
       data-readonly={readOnly || undefined}
       data-autogrow={autoGrow || undefined}
-      style={minWidth != null || maxWidth != null ? { minWidth, maxWidth } : undefined}
+      style={wrapStyle}
     >
       {/* Label */}
       {label && (
@@ -295,9 +328,11 @@ export const InputBox = forwardRef(function InputBox(
 
               {showStatus && (
                 <span className={styles.statusIcon} aria-hidden>
-                  {status === "success" && <TPLibraryIcon name="tick-circle" size={18} aria-hidden />}
-                  {status === "error" && <TPLibraryIcon name="danger" size={18} aria-hidden />}
-                  {status === "warning" && <TPLibraryIcon name="danger" size={18} aria-hidden />}
+                  {statusIcon != null
+                    ? (typeof statusIcon === "string"
+                        ? <TPLibraryIcon name={statusIcon} size={18} aria-hidden />
+                        : statusIcon)
+                    : STATUS_ICON[status] && <TPLibraryIcon name={STATUS_ICON[status]} size={18} aria-hidden />}
                 </span>
               )}
 
@@ -331,8 +366,8 @@ export const InputBox = forwardRef(function InputBox(
         <div className={styles.footer}>
           {helperText && (
             <span className={styles.helper} role={status === "error" ? "alert" : undefined}>
-              {status === "error" && <TPLibraryIcon name="danger" size={13} aria-hidden />}
-              {status === "warning" && <TPLibraryIcon name="danger" size={13} aria-hidden />}
+              {status === "error" && <TPLibraryIcon name={STATUS_ICON.error} size={13} aria-hidden />}
+              {status === "warning" && <TPLibraryIcon name={STATUS_ICON.warning} size={13} aria-hidden />}
               {helperText}
             </span>
           )}

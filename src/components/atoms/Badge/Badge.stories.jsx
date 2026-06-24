@@ -27,7 +27,7 @@ const meta = {
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
     iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
     // ── Layout ──
-    radius: { control: { type: 'range', min: 0, max: 24, step: 2 }, name: 'corner radius (px)', description: '0 = sharp rectangle · high = pill', table: { category: 'Layout' } },
+    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Layout' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -40,12 +40,20 @@ const meta = {
     rightIcon: 'arrow-right',
     iconVariant: 'linear',
     iconFamily: '',
-    radius: 10,
+    radius: '',
     sticky: 'none',
   },
 };
 
 export default meta;
+
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
+const radiusValue = (r) => {
+  const s = String(r ?? '').trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
 
 // Map the icon MODE + name(s) + style onto the real icon/rightIcon props, and
 // drop the label for an icon-only badge. One field ("icon") serves the single-icon
@@ -55,7 +63,7 @@ const withIcons = ({ icons, leftIcon, rightIcon, iconVariant, iconFamily, radius
   const trailing = glyphFor(rightIcon, args.size, iconVariant, iconFamily);
   return {
     ...args,
-    radius,
+    radius: radiusValue(radius),
     sticky: sticky && sticky !== 'none' ? sticky : undefined,
     icon: icons === 'left' || icons === 'both' || icons === 'icon-only' ? single : undefined,
     rightIcon: icons === 'right' ? single : icons === 'both' ? trailing : undefined,
@@ -71,7 +79,8 @@ const badgeCode = ({ variant = 'soft', color = 'primary', size = 'md', children 
   const leftName = icons === 'left' || icons === 'both' || icons === 'icon-only' ? leftIcon : '';
   const rightName = icons === 'right' ? leftIcon : icons === 'both' ? rightIcon : '';
   const lines = [`  variant="${variant}"`, `  color="${color}"`, `  size="${size}"`];
-  if (radius != null && radius !== 10) lines.push(`  radius={${radius}}`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (sticky && sticky !== 'none') lines.push(`  sticky="${sticky}"`);
   if (leftName) lines.push(`  icon={${iconJsx(leftName, iconVariant, iconFamily)}}`);
   if (rightName) lines.push(`  rightIcon={${iconJsx(rightName, iconVariant, iconFamily)}}`);

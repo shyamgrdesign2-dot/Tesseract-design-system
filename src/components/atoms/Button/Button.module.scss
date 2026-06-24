@@ -35,6 +35,9 @@
   &[data-size="md"] { height: var(--tesseract-size-42); padding: 0 var(--tesseract-space-4-5); }
   &[data-size="lg"] { height: 48px; padding: 0 var(--tesseract-space-5-5); }
 
+  /* ── Full width ── stretch to fill the container (default is inline width). */
+  &[data-full] { width: 100%; }
+
   /* ── Disabled / loading ──
      Loading keeps the variant's normal colors (only the label is swapped for
      a centered loader), so disabled styling explicitly excludes loading. */
@@ -746,6 +749,15 @@
   display: inline-flex;
   position: relative;
   flex-shrink: 0;
+
+  /* Full width: the group fills the container and the primary segment grows,
+     keeping the trigger at its fixed square width. */
+  &[data-full] {
+    display: flex;
+    width: 100%;
+
+    .button[data-split-part="primary"] { flex: 1; }
+  }
 
   /* primary segment: square off the right edge */
   .button[data-split-part="primary"] {

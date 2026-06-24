@@ -18,6 +18,14 @@
  *   theme     "primary" | "neutral" | "error" | "success" | "warning"   default "primary"
  *   size      "sm" | "md" | "lg"                                  default "md"
  *   surface   "light" | "dark"                                    default "light"
+ *   radius    number | "pill" | "sharp" | string
+ *             — overrides the corner radius (sets --tesseract-btn-radius inline).
+ *               Undefined keeps the default token radius.
+ *   as        ElementType    — render a different element (e.g. "a"). Polymorphic.
+ *   href      string         — when set, the button renders as a real <a href>
+ *               (carrying identical styling). Ideal for the `link` variant.
+ *               Polymorphism applies to the non-split shapes only.
+ *   fullWidth boolean        — stretch to width:100% (default inline width).
  *   loading   boolean        — spinner, interaction disabled
  *   disabled  boolean
  *   leftIcon  / rightIcon    — ReactNode icons flanking the label
@@ -40,6 +48,7 @@ import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/Loadin
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import { useAnalytics, resolveTrack } from "@/src/analytics/context";
+import { resolveRadius } from "@/src/hooks/utils";
 
 const ICON_SIZE = { sm: 18, md: 20, lg: 22 };
 const LOADER_PX = { sm: 16, md: 18, lg: 20 };
@@ -58,6 +67,10 @@ export const Button = forwardRef(function Button(
     theme = "primary",
     size = "md",
     surface = "light",
+    radius,
+    as,
+    href,
+    fullWidth = false,
     loading = false,
     disabled = false,
     leftIcon,
@@ -176,7 +189,16 @@ export const Button = forwardRef(function Button(
     "data-size": size,
     "data-surface": surface,
     "data-loading": loading || undefined,
+    "data-full": fullWidth || undefined,
   };
+
+  // Merge an inline radius override (--tesseract-btn-radius) with the caller's
+  // style. Undefined `radius` leaves the SCSS default token radius untouched.
+  const resolvedRadius = resolveRadius(radius);
+  const mergedStyle =
+    resolvedRadius != null
+      ? { "--tesseract-btn-radius": resolvedRadius, ...styleProp }
+      : styleProp;
 
   // ── SPLIT BUTTON ──
   if (isSplit) {
@@ -190,7 +212,8 @@ export const Button = forwardRef(function Button(
         }}
         className={[styles.splitGroup, className].filter(Boolean).join(" ")}
         data-variant={splitVariant}
-        style={styleProp}
+        data-full={fullWidth || undefined}
+        style={mergedStyle}
       >
         <button
           type="button"
@@ -268,21 +291,34 @@ export const Button = forwardRef(function Button(
     );
   }
 
-  // ── STANDARD / ICON-ONLY BUTTON ──
+  // ── STANDARD / ICON-ONLY BUTTON (polymorphic) ──
+  // When `href` (or `as`) is provided, render a real element other than
+  // <button> carrying identical styling — e.g. an <a href> for the `link`
+  // variant. Native-button-only attributes (type / disabled) are dropped for
+  // non-button elements; a disabled anchor is reflected with aria-disabled.
+  const Component = as || (href != null ? "a" : "button");
+  const isNativeButton = Component === "button";
+  const elementProps = isNativeButton
+    ? { type: "button", disabled: isDisabled }
+    : {
+        href: Component === "a" ? href : undefined,
+        role: Component === "a" ? undefined : "button",
+        "aria-disabled": isDisabled || undefined,
+      };
+
   return (
-    <button
+    <Component
       ref={ref}
-      type="button"
-      disabled={isDisabled}
       className={[styles.button, className].filter(Boolean).join(" ")}
-      style={styleProp}
+      style={mergedStyle}
       data-icon-only={iconOnly || undefined}
       onClick={handleClick}
+      {...elementProps}
       {...dataAttrs}
       {...props}
     >
       {renderContent()}
-    </button>
+    </Component>
   );
 });
 
