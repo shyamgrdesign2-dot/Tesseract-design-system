@@ -31,9 +31,11 @@
  *             or GROUPED sections, each with its own heading:
  *                   [{ heading, options: [{ value, label, … }] }]
  *             (single-header convenience: pass flat options + `groupLabel`)
- *   value     string (single) | string[] (multi)
+ *   value     string (single) | string[] (multi) — controlled selection
+ *   defaultValue same shape — uncontrolled initial selection (when `value` is omitted)
  *   onChange  (next) => void   — every value change (incl. live typing)
  *   onCommit  (value) => void  — only on a deliberate pick (option / custom-add / Enter)
+ *   open / defaultOpen / onOpenChange — controlled / uncontrolled menu open state
  *   mode      "single" | "multi"                     default "single"
  *   optionControl "none" | "checkbox" | "radio"      row indicator; default "none"
  *   chips     boolean — multi: render selected as removable chips in the trigger
@@ -125,8 +127,12 @@ function FooterCta({ action, role }) {
 export const Dropdown = forwardRef(function Dropdown({
   options = [],
   value,
+  defaultValue,
   onChange,
   onCommit,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
   mode = "single",
   optionControl = "none",
   chips = false,
@@ -166,9 +172,25 @@ export const Dropdown = forwardRef(function Dropdown({
 }, forwardedRef) {
   const { track } = useAnalytics();
   const isMulti = mode === "multi";
-  const selectedArr = isMulti ? (Array.isArray(value) ? value : []) : value != null ? [value] : [];
 
-  const [open, setOpen] = useState(false);
+  // Value: controlled (`value`) or uncontrolled (`defaultValue`). Selection logic
+  // reads `currentValue`; setValue updates internal state only when uncontrolled.
+  const isValueControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const currentValue = isValueControlled ? value : internalValue;
+  const setValue = (next) => { if (!isValueControlled) setInternalValue(next); };
+  const selectedArr = isMulti ? (Array.isArray(currentValue) ? currentValue : []) : currentValue != null ? [currentValue] : [];
+
+  // Open: controlled (`open`) or uncontrolled (`defaultOpen`). setOpen accepts a
+  // value or updater fn (existing call sites use both) and notifies onOpenChange.
+  const isOpenControlled = openProp !== undefined;
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const open = isOpenControlled ? openProp : internalOpen;
+  const setOpen = (v) => {
+    const next = typeof v === "function" ? v(open) : v;
+    if (!isOpenControlled) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
   const [query, setQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(-1);
 
@@ -185,7 +207,7 @@ export const Dropdown = forwardRef(function Dropdown({
 
   // Active query: editable combobox filters by the trigger value; otherwise the
   // popover search box drives filtering (only when searchable).
-  const editQ = editable ? String(value ?? "") : "";
+  const editQ = editable ? String(currentValue ?? "") : "";
   const activeQuery = editable ? editQ : query;
 
   // Options may be a FLAT list ([{value,label,…}]) or GROUPED sections, each with
@@ -228,14 +250,16 @@ export const Dropdown = forwardRef(function Dropdown({
   function commit(item) {
     if (item.disabled) return;
     const emit = (value, extra) => { if (analyticsId) track({ component: "Dropdown", id: analyticsId, action: "select", value, ...extra }); };
-    if (item.__custom) { onChange?.(item.value); onCommit?.(item.value); emit(item.value, { custom: true }); setOpen(false); return; }
+    if (item.__custom) { setValue(item.value); onChange?.(item.value); onCommit?.(item.value); emit(item.value, { custom: true }); setOpen(false); return; }
     if (isMulti) {
       const wasSelected = isSelected(item.value);
       const next = wasSelected ? selectedArr.filter((v) => v !== item.value) : [...selectedArr, item.value];
+      setValue(next);
       onChange?.(next);
       onCommit?.(next);
       emit(item.value, { label: item.label, selected: !wasSelected, count: next.length });
     } else {
+      setValue(item.value);
       onChange?.(item.value);
       onCommit?.(item.value);
       emit(item.value, { label: item.label });
@@ -243,15 +267,18 @@ export const Dropdown = forwardRef(function Dropdown({
     }
   }
   function removeChip(val) {
-    onChange?.(selectedArr.filter((v) => v !== val));
+    const next = selectedArr.filter((v) => v !== val);
+    setValue(next);
+    onChange?.(next);
   }
   // Clearable (single-select): reset to empty without opening the menu.
   function clearValue() {
+    setValue("");
     onChange?.("");
     onCommit?.("");
     if (analyticsId) track({ component: "Dropdown", id: analyticsId, action: "clear" });
   }
-  const showClear = clearable && !isMulti && !disabled && value != null && value !== "";
+  const showClear = clearable && !isMulti && !disabled && currentValue != null && currentValue !== "";
 
   // ── Adaptive positioning + width ──
   useLayoutEffect(() => {
@@ -374,8 +401,8 @@ export const Dropdown = forwardRef(function Dropdown({
     if (isMulti && selectedArr.length) {
       return <span className={styles.triggerText}>{selectedArr.length === 1 ? labelOf(selectedArr[0]) : `${selectedArr.length} selected`}</span>;
     }
-    if (!isMulti && value != null && value !== "") {
-      return <span className={styles.triggerText}>{labelOf(value)}</span>;
+    if (!isMulti && currentValue != null && currentValue !== "") {
+      return <span className={styles.triggerText}>{labelOf(currentValue)}</span>;
     }
     return <span className={styles.placeholder}>{placeholder}</span>;
   })();
@@ -563,7 +590,7 @@ export const Dropdown = forwardRef(function Dropdown({
             aria-expanded={open}
             aria-haspopup="listbox"
             disabled={disabled}
-            value={value ?? ""}
+            value={currentValue ?? ""}
             placeholder={placeholder}
             onChange={(e) => { onChange?.(e.target.value); if (!open) setOpen(true); setActiveIdx(-1); }}
             onFocus={() => { if (!disabled) { setOpen(true); setActiveIdx(-1); } }}

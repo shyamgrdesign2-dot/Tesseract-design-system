@@ -201,6 +201,14 @@ export const SingleSelect = {
   },
 };
 
+/** Uncontrolled — `defaultValue` only, no `value`/`onChange`. The Dropdown
+ *  manages its own selection (Radix-style controlled/uncontrolled parity). */
+export const Uncontrolled = {
+  render: () => (
+    <Frame><Dropdown label="Department (uncontrolled)" options={DEPTS} defaultValue="cardio" /></Frame>
+  ),
+};
+
 export const MultiSelect = {
   name: 'Multi-select (checkmarks)',
   render: () => {

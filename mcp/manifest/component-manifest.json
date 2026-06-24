@@ -3330,10 +3330,23 @@
           "name": "value"
         },
         {
+          "name": "defaultValue"
+        },
+        {
           "name": "onChange"
         },
         {
           "name": "onCommit"
+        },
+        {
+          "name": "open"
+        },
+        {
+          "name": "defaultOpen",
+          "default": "false"
+        },
+        {
+          "name": "onOpenChange"
         },
         {
           "name": "mode",
@@ -3550,6 +3563,7 @@
       "stories": [
         "Playground",
         "SingleSelect",
+        "Uncontrolled",
         "MultiSelect",
         "CheckboxOptions",
         "RadioOptions",
