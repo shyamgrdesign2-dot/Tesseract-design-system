@@ -1,6 +1,10 @@
 /* DataTable.module.scss — scroll, sticky-shadow, density, sort, cell, pagination. */
 
 .root {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   display: flex;
   flex-direction: column;
   gap: var(--tesseract-space-3);

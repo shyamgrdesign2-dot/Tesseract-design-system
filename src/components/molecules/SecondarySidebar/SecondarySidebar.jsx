@@ -218,7 +218,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
   );
 }
 
-export function SecondarySidebar({
+export const SecondarySidebar = React.forwardRef(function SecondarySidebar({
   items = [],
   activeId,
   onSelect,
@@ -244,7 +244,9 @@ export function SecondarySidebar({
   collapseIcon = "sidebar-left",
   caretIcon = "chevron-down",
   className,
-}) {
+  style,
+  ...rest
+}, ref) {
   const isControlled = controlledCollapsed !== undefined;
   const [internalCollapsed, setInternalCollapsed] = React.useState(defaultCollapsed);
   const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
@@ -310,11 +312,13 @@ export function SecondarySidebar({
 
   return (
     <nav
+      ref={ref}
       className={cn(styles.rail, collapsed && styles.collapsed, className)}
-      style={railStyle}
+      style={{ ...railStyle, ...style }}
       data-tone={tone !== "blue" ? tone : undefined}
       data-density={density === "compact" ? "compact" : undefined}
       aria-label="Secondary"
+      {...rest}
     >
       {/* Toggle + search header for expanded */}
       {!collapsed && (
@@ -389,7 +393,7 @@ export function SecondarySidebar({
       {bottomFade && <div className={styles.fade} aria-hidden />}
     </nav>
   );
-}
+});
 
 SecondarySidebar.displayName = "SecondarySidebar";
 export default SecondarySidebar;

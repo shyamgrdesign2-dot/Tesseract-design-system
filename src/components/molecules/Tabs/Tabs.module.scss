@@ -4,6 +4,14 @@
    orientation = horizontal (default) | vertical.
    Accent colour is driven by --tesseract-tabs-accent (default blue-600). */
 
+/* Root container — self-contained box model + brand font so the component
+   doesn't depend on the host/global reset and can't drift. Visually inert
+   (no padding/margin/background): preserves the default look. */
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+}
+
 .list {
   /* Accent fallback — root may override --tesseract-tabs-accent inline. */
   --tesseract-tabs-accent: var(--tesseract-blue-600, var(--tesseract-blue-600));

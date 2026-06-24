@@ -41,7 +41,7 @@ function ActionButton({ iconProp, defaultIcon, defaultVariant = "linear", tip, o
   return tip ? <Tooltip content={tip} side="bottom">{btn}</Tooltip> : btn;
 }
 
-export function RxPadSection({
+export const RxPadSection = React.forwardRef(function RxPadSection({
   title = "Symptoms",
   subtitle,
   headerMeta,
@@ -86,7 +86,8 @@ export function RxPadSection({
   renderBody,
   className,
   style,
-}) {
+  ...rest
+}, ref) {
   const controlled = rowsProp !== undefined;
   const [internal, setInternal] = React.useState(defaultRows);
   const rows = controlled ? rowsProp : internal;
@@ -152,7 +153,7 @@ export function RxPadSection({
   const showBody = !(collapsible && collapsed);
 
   return (
-    <section className={[styles.card, className].filter(Boolean).join(" ")} style={style}>
+    <section ref={ref} className={[styles.card, className].filter(Boolean).join(" ")} style={style} {...rest}>
       {/* ── Header ── */}
       <header className={styles.header}>
         <div className={styles.titleWrap}>
@@ -244,7 +245,7 @@ export function RxPadSection({
       )}
     </section>
   );
-}
+});
 
 RxPadSection.displayName = "RxPadSection";
 export default RxPadSection;

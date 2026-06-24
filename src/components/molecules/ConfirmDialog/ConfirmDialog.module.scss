@@ -8,6 +8,11 @@
 }
 
 .content {
+  /* Portaled to document.body (outside the React tree's root), so it does NOT
+     inherit any box-sizing/font from a host root. Establish both on its own
+     subtree so the dialog is self-contained and host-proof. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: fixed;
   left: 50%;
   top: 50%;

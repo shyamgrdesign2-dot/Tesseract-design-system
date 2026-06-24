@@ -1,9 +1,11 @@
 "use client";
 
+import * as React from "react";
 import { AnimatedGrid } from "@/src/components/atoms/AnimatedGrid/AnimatedGrid";
 import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
+import { cn } from "@/src/hooks/utils";
 
 // Surface gradient by tone — token-only (no raw hex). The "violet" tone is the
 // default look: the original radial gradient with each stop swapped for the
@@ -59,7 +61,7 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   pattern       boolean                      default true — animated lattice accent
  *   className     string
  */
-export function HeroBanner({
+export const HeroBanner = React.forwardRef(function HeroBanner({
   size = "md",
   height,
   bottomRadius,
@@ -78,7 +80,9 @@ export function HeroBanner({
   actions,
   pattern = true,
   className = "",
-}) {
+  style,
+  ...rest
+}, ref) {
   // Numeric `height` is an escape hatch; otherwise it derives from `size`.
   const resolvedHeight = height ?? SIZE_HEIGHT[size] ?? SIZE_HEIGHT.md;
   const ts = TITLE_FONT_SIZE[titleSize] ? titleSize : "md";
@@ -91,8 +95,13 @@ export function HeroBanner({
 
   return (
     <div
-      className={className || undefined}
+      ref={ref}
+      className={cn(className) || undefined}
       style={{
+        // Self-contained box model + brand font so the banner never depends on a
+        // host/global reset for its sizing or typography.
+        boxSizing: "border-box",
+        fontFamily: "var(--tesseract-font-body)",
         position: "relative",
         width: "100%",
         overflow: "hidden",
@@ -100,7 +109,9 @@ export function HeroBanner({
         background: surface,
         borderBottomLeftRadius: radius,
         borderBottomRightRadius: radius,
+        ...style,
       }}
+      {...rest}
     >
       {/* Animated lattice accent — larger lattice, vertically centered and
           pushed further off-canvas on the right so only a sliver shows,
@@ -225,4 +236,6 @@ export function HeroBanner({
       </div>
     </div>
   );
-}
+});
+
+HeroBanner.displayName = "HeroBanner";

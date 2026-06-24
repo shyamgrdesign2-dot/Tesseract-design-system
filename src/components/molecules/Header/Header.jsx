@@ -229,14 +229,15 @@ function Action({ item, controlPx = 42 }) {
   }
 }
 
-export function Header({
+export const Header = React.forwardRef(function Header({
   back, onBack, backIcon = "arrow-left3", backIconVariant = "linear", backIconCorner = "straight",
   logo, user, title, subtitle, leading, actions = [],
   align = "left", search, maxVisibleActions,
   height = 62, bordered = true, density = "comfortable",
   sticky = false, elevation = false, trailing,
-  background, borderColor, onUserClick, tutorialIcon, className,
-}) {
+  background, borderColor, onUserClick, tutorialIcon, className, style: styleProp,
+  ...rest
+}, ref) {
   // Merge the per-Header tutorialIcon onto any `tutorial` action that doesn't set its own.
   const resolved = tutorialIcon != null
     ? actions.map((a) => (a && a.type === "tutorial" && a.icon == null ? { ...a, icon: tutorialIcon } : a))
@@ -264,7 +265,7 @@ export function Header({
   const visibleActions = hasOverflow ? resolved.slice(0, maxVisibleActions) : resolved;
   const overflowActions = hasOverflow ? resolved.slice(maxVisibleActions) : [];
 
-  const style = { height };
+  const style = { height, ...styleProp };
   if (background) style["--tesseract-header-bg"] = background;
   if (borderColor) style["--tesseract-header-border"] = borderColor;
 
@@ -284,6 +285,7 @@ export function Header({
 
   return (
     <header
+      ref={ref}
       className={cn(styles.header, className)}
       data-bordered={bordered || undefined}
       data-density={density === "compact" ? "compact" : undefined}
@@ -292,6 +294,7 @@ export function Header({
       data-elevation={elevationMode !== "none" ? elevationMode : undefined}
       data-elevated={elevated || undefined}
       style={style}
+      {...rest}
     >
       <div className={styles.left}>
         {back && (
@@ -319,7 +322,7 @@ export function Header({
       </div>
     </header>
   );
-}
+});
 
 Header.displayName = "Header";
 export default Header;

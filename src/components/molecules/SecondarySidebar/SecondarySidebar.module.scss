@@ -1,6 +1,10 @@
 /* SecondarySidebar.module.scss — blue gradient secondary rail with expanded/collapsed modes. */
 
 .rail {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: relative;
   height: 100%;
   flex-shrink: 0;

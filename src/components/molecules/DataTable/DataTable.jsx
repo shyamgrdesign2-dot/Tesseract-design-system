@@ -371,13 +371,14 @@ function Pagination({ page, pageCount, total, pageSize, sizeOptions, onPageSize,
 }
 
 // ── Table ──────────────────────────────────────────────────────────────────
-export function DataTable({
+export const DataTable = React.forwardRef(function DataTable({
   columns: columnsProp,
   data,
   rowKey = (row, i) => row?.id ?? i,
   emptyState = null,
   rowClassName,
   className,
+  style,
   rowHeight = "lg",
   stickyHeader = false,
   maxHeight,
@@ -425,7 +426,8 @@ export function DataTable({
   // analytics
   analyticsId,
   onRowClick,
-}) {
+  ...rest
+}, ref) {
   // Action tracking — emits DataTable events to the nearest TPAnalyticsProvider,
   // but only when `analyticsId` is set (so silent tables stay silent).
   const { track } = useAnalytics();
@@ -745,7 +747,7 @@ export function DataTable({
   };
 
   return (
-    <div className={cn(styles.root, className)}>
+    <div ref={ref} className={cn(styles.root, className)} style={style} {...rest}>
       {showToolbar && (
         <div className={styles.selectionToolbar} role="toolbar" aria-label="Bulk actions">
           {selectionToolbar(selectedKeyList, clearSelection)}
@@ -935,7 +937,7 @@ export function DataTable({
       ) : null}
     </div>
   );
-}
+});
 
 DataTable.displayName = "DataTable";
 export default DataTable;

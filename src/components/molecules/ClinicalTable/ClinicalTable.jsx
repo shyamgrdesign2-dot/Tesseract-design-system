@@ -79,7 +79,7 @@ const BLANK_IMG = (() => {
   return img;
 })();
 
-export function ClinicalTable({
+export const ClinicalTable = React.forwardRef(function ClinicalTable({
   columns = [],
   name,
   notes,
@@ -105,7 +105,9 @@ export function ClinicalTable({
   iconVariant,   // optional style override for the action glyphs (else each keeps its own default)
   iconFamily,    // optional CDN family override for the action glyphs
   className,
-}) {
+  style,
+  ...rest
+}, ref) {
   const controlled = rowsProp !== undefined;
   const [internal, setInternal] = React.useState(defaultRows);
   const baseRows = controlled ? rowsProp : internal;
@@ -274,17 +276,26 @@ export function ClinicalTable({
     ? { maxHeight: typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight, overflowY: "auto" }
     : undefined;
 
+  // Merge the forwarded ref with the internal scroller ref so the root DOM node is
+  // exposed to callers without losing the table's own overflow tracking.
+  const setRootRef = React.useCallback((node) => {
+    scrollerRef.current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref) ref.current = node;
+  }, [ref]);
+
   const colCount = dataColumns.length + (reorderable ? 1 : 0) + (hasAction ? 1 : 0);
   const showEmpty = !loading && emptyState != null && baseRows.length === 0 && (!autoRow || rendered.length === 0);
 
   return (
     <div
-      ref={scrollerRef}
+      ref={setRootRef}
       className={cn(styles.wrap, className)}
       data-behind={behind || undefined}
       data-density={density}
       data-sticky-header={stickyHeader || undefined}
-      style={wrapStyle}
+      style={{ ...wrapStyle, ...style }}
+      {...rest}
     >
       <table className={styles.table}>
         <thead>
@@ -379,7 +390,7 @@ export function ClinicalTable({
       </table>
     </div>
   );
-}
+});
 
 ClinicalTable.displayName = "ClinicalTable";
 export default ClinicalTable;

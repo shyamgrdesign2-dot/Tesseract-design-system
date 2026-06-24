@@ -3,6 +3,11 @@
 
 // ─── Field (label · trigger · helper) ──────────────────────────────────────────
 .root {
+  // Self-contained box model + font: don't depend on a host/global reset. Scoped
+  // to this component's subtree so it never leaks out, and host CSS can't drift it.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   position: relative;
   display: inline-flex;
   flex-direction: column;
@@ -97,6 +102,13 @@
 
 // ─── Popover shell ─────────────────────────────────────────────────────────────
 .popover {
+  // Portaled to document.body — OUTSIDE .root — so it inherits nothing from the
+  // component subtree. Re-establish the box model + font on its own subtree so the
+  // popover is host-proof wherever the portal lands.
+  box-sizing: border-box;
+  & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   overflow: auto;
   max-width: calc(100vw - 16px);
   max-height: calc(100vh - 16px);

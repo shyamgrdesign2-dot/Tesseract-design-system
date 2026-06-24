@@ -1,5 +1,13 @@
 /* Accordion.module.scss */
 
+/* Self-contained box model: don't depend on a host/global reset. Scoped to this
+   component's subtree so it never leaks out, and host CSS can't drift our sizing. */
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
+  font-family: var(--tesseract-font-body), var(--font-sans, sans-serif);
+}
+
 .item {
   border-bottom: 1px solid var(--tesseract-slate-100);
 }

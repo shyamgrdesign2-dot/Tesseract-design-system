@@ -1,6 +1,10 @@
 /* Toast.module.scss — solid dark surface, no stroke; only the icon is colored. */
 
 .toast {
+  /* Self-contained box model: don't depend on a host/global reset. Scoped to this
+     component's subtree so it never leaks out, and host CSS can't drift our sizing. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: relative;
   display: flex;
   align-items: center;

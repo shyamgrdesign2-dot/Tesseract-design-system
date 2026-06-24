@@ -4,6 +4,10 @@
    action column, and the row-action menu. */
 
 .wrap {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: relative;
   overflow-x: auto;
   border: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
@@ -157,6 +161,12 @@
 
 /* ── Row "⋯" action menu (portal) ── */
 .menu {
+  // Portaled to document.body — OUTSIDE .wrap — so it inherits neither the root's
+  // box-sizing nor its font. Re-establish both on this surface and its subtree.
+  box-sizing: border-box;
+  & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   min-width: 168px;
   padding: var(--tesseract-space-1);
   border: 1px solid var(--tesseract-slate-200, var(--tesseract-slate-200));

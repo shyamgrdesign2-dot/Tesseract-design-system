@@ -70,7 +70,7 @@
  *   clearable boolean — single-select: a clear affordance to reset the value
  */
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
@@ -122,7 +122,7 @@ function FooterCta({ action, role }) {
   return <Button {...common}>{label}</Button>;
 }
 
-export function Dropdown({
+export const Dropdown = forwardRef(function Dropdown({
   options = [],
   value,
   onChange,
@@ -161,7 +161,9 @@ export function Dropdown({
   maxMenuHeight = 340,                  // menu max-height (number→px, or any CSS length)
   placement = "auto",                   // "auto" | "bottom" | "top"
   clearable = false,                    // single-select — show a clear affordance
-}) {
+  style,                                // merged onto the root element
+  ...rest                               // unknown props spread to the root element
+}, forwardedRef) {
   const { track } = useAnalytics();
   const isMulti = mode === "multi";
   const selectedArr = isMulti ? (Array.isArray(value) ? value : []) : value != null ? [value] : [];
@@ -520,10 +522,19 @@ export function Dropdown({
     className,
   ].filter(Boolean).join(" ");
 
+  // Keep the internal rootRef while also honouring a forwarded ref to the root node.
+  const setRootRef = (node) => {
+    rootRef.current = node;
+    if (typeof forwardedRef === "function") forwardedRef(node);
+    else if (forwardedRef) forwardedRef.current = node;
+  };
+
   return (
     <div
-      ref={rootRef}
+      {...rest}
+      ref={setRootRef}
       className={rootCls}
+      style={style}
       data-variant={variant === "seamless" ? "seamless" : undefined}
       data-status={status || undefined}
       data-open={open ? "true" : undefined}
@@ -608,7 +619,7 @@ export function Dropdown({
       {open && mounted && createPortal(menu, document.body)}
     </div>
   );
-}
+});
 
 // Find the next enabled option index in a direction (wraps within bounds).
 function nextEnabled(list, from, dir) {

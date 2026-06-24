@@ -26,7 +26,7 @@
  *   onDismiss    () => void
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import styles from "./Toast.module.scss";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
@@ -43,7 +43,7 @@ const STATUS_ICON = {
 // Coerce a numeric maxWidth/size to a px string; pass strings (e.g. "60%") through.
 const toLength = (v) => (typeof v === "number" ? `${v}px` : v);
 
-export function Toast({
+export const Toast = forwardRef(function Toast({
   status = "info",
   surface = "dark",
   title,
@@ -61,7 +61,8 @@ export function Toast({
   onDismiss,
   className = "",
   style,
-}) {
+  ...rest
+}, ref) {
   const [visible, setVisible] = useState(true);
   const [paused, setPaused] = useState(false);
   const onDismissRef = useRef(onDismiss);
@@ -95,6 +96,8 @@ export function Toast({
 
   return (
     <div
+      ref={ref}
+      {...rest}
       className={[styles.toast, className].filter(Boolean).join(" ")}
       style={{ ...cssVars, ...style }}
       data-status={status}
@@ -136,7 +139,7 @@ export function Toast({
       )}
     </div>
   );
-}
+});
 
 Toast.displayName = "Toast";
 export default Toast;

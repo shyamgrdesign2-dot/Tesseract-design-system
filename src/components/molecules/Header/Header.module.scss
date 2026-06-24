@@ -2,6 +2,10 @@
    Divider / Badge atoms. */
 
 .header {
+  /* Self-contained box model: don't depend on a host/global reset. Scoped to this
+     component's subtree so it never leaks out, and host CSS can't drift our sizing. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   /* Density knobs — comfortable (default) keeps the original 42px controls and
      spacing; compact scales controls + horizontal padding/gap together. The
      surface/border vars let callers override the fixed slate-0 / slate-100. */

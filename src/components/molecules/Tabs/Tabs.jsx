@@ -46,7 +46,7 @@ const TabsContext = React.createContext(null);
 // Icon size is driven by the tab size (md = 18px).
 const ICON_SIZE = { sm: 16, md: 18, lg: 20 };
 
-export function Tabs({
+export const Tabs = React.forwardRef(function Tabs({
   value,
   defaultValue,
   onValueChange,
@@ -62,7 +62,7 @@ export function Tabs({
   style,
   children,
   ...props
-}) {
+}, ref) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(defaultValue);
   const current = isControlled ? value : internal;
@@ -90,12 +90,14 @@ export function Tabs({
     [current, setValue, size, variant, activationMode, orientation],
   );
 
+  const cls = [styles.root, className].filter(Boolean).join(" ");
+
   return (
     <TabsContext.Provider value={ctx}>
-      <div className={className} style={rootStyle} {...props}>{children}</div>
+      <div ref={ref} className={cls} style={rootStyle} {...props}>{children}</div>
     </TabsContext.Provider>
   );
-}
+});
 
 export function TabsList({ className = "", style, fullWidth = false, children, ...props }) {
   const ctx = React.useContext(TabsContext);

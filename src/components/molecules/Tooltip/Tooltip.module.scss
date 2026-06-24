@@ -1,6 +1,12 @@
 /* Tooltip.module.scss — TP tooltip surface (dark default, light variant). */
 
 .content {
+  /* Portaled OUTSIDE the trigger's root (to document.body), so it inherits
+     neither box-sizing nor font from this component's subtree. Establish both
+     explicitly on the surface and its descendants — the #1 host-isolation fix. */
+  box-sizing: border-box;
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   padding: var(--tesseract-space-1-5) var(--tesseract-space-2-5);
   border-radius: var(--tesseract-radius-8, 8px);
   corner-shape: round;

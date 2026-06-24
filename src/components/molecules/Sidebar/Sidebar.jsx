@@ -356,34 +356,39 @@ function ExpandedSection({
 }
 
 /* ── Main Sidebar ── */
-export function Sidebar({
-  items = [],
-  activeId,
-  onSelect,
-  collapsed: controlledCollapsed,
-  defaultCollapsed = false,
-  onCollapsedChange,
-  search = false,
-  searchPlaceholder = "Search…",
-  showCollapseToggle = true,
-  expandedWidth = 236,
-  collapsedWidth = 80,
-  bottomFade = true,
-  logo,
-  header,
-  footer,
-  className,
-  accent = "var(--tesseract-blue-500)",
-  density = "comfortable",
-  emptyState,
-  emptyText = "No matches.",
-  loading = false,
-  collapseIcon = "sidebar-left",
-  searchIcon = "search-normal-1",
-  caretIcon = "chevron-down",
-  defaultOpenIds,
-  onOpenChange,
-}) {
+export const Sidebar = React.forwardRef(function Sidebar(
+  {
+    items = [],
+    activeId,
+    onSelect,
+    collapsed: controlledCollapsed,
+    defaultCollapsed = false,
+    onCollapsedChange,
+    search = false,
+    searchPlaceholder = "Search…",
+    showCollapseToggle = true,
+    expandedWidth = 236,
+    collapsedWidth = 80,
+    bottomFade = true,
+    logo,
+    header,
+    footer,
+    className,
+    style,
+    accent = "var(--tesseract-blue-500)",
+    density = "comfortable",
+    emptyState,
+    emptyText = "No matches.",
+    loading = false,
+    collapseIcon = "sidebar-left",
+    searchIcon = "search-normal-1",
+    caretIcon = "chevron-down",
+    defaultOpenIds,
+    onOpenChange,
+    ...rest
+  },
+  ref,
+) {
   const isControlled = controlledCollapsed !== undefined;
   const [internalCollapsed, setInternalCollapsed] =
     React.useState(defaultCollapsed);
@@ -490,6 +495,7 @@ export function Sidebar({
 
   return (
     <aside
+      ref={ref}
       className={cn(
         styles.root,
         collapsed && styles.collapsed,
@@ -498,9 +504,11 @@ export function Sidebar({
       style={{
         width: collapsed ? collapsedWidth : expandedWidth,
         ...accentVars,
+        ...style,
       }}
       data-density={density}
       aria-label="Navigation"
+      {...rest}
     >
       {/* Header */}
       {collapsed ? (
@@ -606,7 +614,7 @@ export function Sidebar({
       )}
     </aside>
   );
-}
+});
 
 Sidebar.displayName = "Sidebar";
 export default Sidebar;

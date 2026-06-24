@@ -2437,6 +2437,9 @@
           "name": "className"
         },
         {
+          "name": "style"
+        },
+        {
           "name": "flagCustom",
           "control": "boolean",
           "description": "Ring the Name cell when the entry is not in the frequently-used list",
@@ -2756,6 +2759,12 @@
           "name": "secondaryTone"
         },
         {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
           "name": "headerIconVariant",
           "allowedValues": [
             "linear",
@@ -2858,6 +2867,9 @@
         },
         {
           "name": "className"
+        },
+        {
+          "name": "style"
         },
         {
           "name": "rowHeight",
@@ -3095,6 +3107,9 @@
         },
         {
           "name": "className"
+        },
+        {
+          "name": "style"
         },
         {
           "name": "icon"
@@ -3493,6 +3508,9 @@
           "description": "Single-select: show a clear (×) affordance to reset the value"
         },
         {
+          "name": "style"
+        },
+        {
           "name": "withActions",
           "control": "boolean",
           "description": "Render the footer Button CTAs (primary / secondary / tertiary)",
@@ -3800,6 +3818,9 @@
         {
           "name": "className",
           "storyHidden": true
+        },
+        {
+          "name": "style"
         }
       ],
       "stories": [
@@ -3955,6 +3976,9 @@
         {
           "name": "className",
           "default": "\"\""
+        },
+        {
+          "name": "style"
         },
         {
           "name": "showSubtitle",
@@ -4491,6 +4515,9 @@
           "storyHidden": true
         },
         {
+          "name": "style"
+        },
+        {
           "name": "pillRadius",
           "control": "range",
           "description": "Pill corner radius (px)",
@@ -4607,6 +4634,9 @@
         {
           "name": "className",
           "storyHidden": true
+        },
+        {
+          "name": "style"
         },
         {
           "name": "accent",

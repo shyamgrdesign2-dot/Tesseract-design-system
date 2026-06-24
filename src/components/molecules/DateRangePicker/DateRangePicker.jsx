@@ -42,7 +42,7 @@
  *                                                                  default "outside-click"
  */
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
@@ -240,8 +240,8 @@ function TimePanel({ value, use12, step, onChange }) {
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export function DatePicker({
-  value, onChange, className, icon,
+export const DatePicker = forwardRef(function DatePicker({
+  value, onChange, className, style, icon,
   mode = "single",
   months: monthsProp, showPresets: showPresetsProp, presets = PRESETS,
   minDate, maxDate, isDateDisabled,
@@ -253,7 +253,8 @@ export function DatePicker({
   weekStartsOn = 1,
   applyLabel = "Apply", cancelLabel = "Cancel", clearLabel = "Clear", showFooter = true,
   commitMode = "outside-click",
-}) {
+  ...rest
+}, ref) {
   const { track } = useAnalytics();
   const isRange = mode === "range";
   const isSingle = mode === "single";
@@ -298,6 +299,9 @@ export function DatePicker({
   const [stagedTime, setStagedTime] = useState({ h: 9, m: 0 });
 
   const containerRef = useRef(null);
+  // Forward the external ref to the root element (the container div) while
+  // keeping the internal containerRef intact for positioning/outside-click.
+  useImperativeHandle(ref, () => containerRef.current, []);
   const triggerRef = useRef(null);
   const popoverRef = useRef(null);
   const keyHandlerRef = useRef(null);
@@ -636,7 +640,7 @@ export function DatePicker({
   );
 
   return (
-    <div ref={containerRef} className={[styles.root, fullWidth && styles.fullWidth, className].filter(Boolean).join(" ")}>
+    <div ref={containerRef} className={[styles.root, fullWidth && styles.fullWidth, className].filter(Boolean).join(" ")} style={style} {...rest}>
       {label && <label className={styles.fieldLabel}>{label}{required && <span className={styles.req}>*</span>}</label>}
       <button ref={triggerRef} type="button" disabled={disabled}
         onClick={() => (open ? setOpen(false) : openPicker())}
@@ -655,7 +659,7 @@ export function DatePicker({
       {open && mounted && createPortal(popoverContent, document.body)}
     </div>
   );
-}
+});
 
 const DEFAULT_PLACEHOLDER = {
   single: "Select date", range: "Select range", month: "Select month",

@@ -38,6 +38,7 @@ import { Button } from "@/src/components/atoms/Button";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { cn } from "@/src/hooks/utils";
 import styles from "./ConfirmDialog.module.scss";
 
 const Alert = {
@@ -118,7 +119,7 @@ function FooterButton({ label, onClick, variant, theme, disabled, loading = fals
   return autoClose ? <Alert.Close asChild>{btn}</Alert.Close> : btn;
 }
 
-export function ConfirmDialog({
+export const ConfirmDialog = React.forwardRef(function ConfirmDialog({
   open,
   onOpenChange,
   title,
@@ -176,7 +177,11 @@ export function ConfirmDialog({
   cancelLabel,
   onCancel,
   secondaryTone,
-}) {
+  // Passthrough to the portaled dialog surface (the real DOM root)
+  className,
+  style,
+  ...rest
+}, ref) {
   const pLabel = primaryLabel ?? confirmLabel;
   const pOnClick = onPrimary ?? onConfirm;
   const pTheme = confirmTheme ?? primaryTone ?? primaryTheme;
@@ -206,7 +211,7 @@ export function ConfirmDialog({
     <Alert.Root open={open} onOpenChange={onOpenChange}>
       <Alert.Portal>
         <Alert.Overlay className={styles.overlay} />
-        <Alert.Content data-voice-allow data-size={size} className={styles.content}>
+        <Alert.Content ref={ref} data-voice-allow data-size={size} className={cn(styles.content, className)} style={style} {...rest}>
           {/* Header */}
           <div className={styles.header}>
             <div className={styles.headerMain}>
@@ -251,7 +256,7 @@ export function ConfirmDialog({
       </Alert.Portal>
     </Alert.Root>
   );
-}
+});
 
 ConfirmDialog.displayName = "ConfirmDialog";
 export default ConfirmDialog;

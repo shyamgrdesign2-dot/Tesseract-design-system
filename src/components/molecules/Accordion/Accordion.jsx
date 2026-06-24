@@ -22,22 +22,25 @@ import styles from "./Accordion.module.scss";
 const AccordionContext = React.createContext(null);
 const AccordionItemContext = React.createContext(null);
 
-export function Accordion({
-  type = "single",
-  collapsible = false,
-  value,
-  defaultValue,
-  onValueChange,
-  // Defaults below preserve the current look: chevron-down on the right,
-  // comfortable density. Triggers inherit these unless they override locally.
-  expandIcon = "chevron-down",
-  iconPosition = "right",
-  density = "comfortable",
-  className = "",
-  style,
-  children,
-  ...props
-}) {
+export const Accordion = React.forwardRef(function Accordion(
+  {
+    type = "single",
+    collapsible = false,
+    value,
+    defaultValue,
+    onValueChange,
+    // Defaults below preserve the current look: chevron-down on the right,
+    // comfortable density. Triggers inherit these unless they override locally.
+    expandIcon = "chevron-down",
+    iconPosition = "right",
+    density = "comfortable",
+    className = "",
+    style,
+    children,
+    ...props
+  },
+  ref,
+) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(
     defaultValue ?? (type === "multiple" ? [] : ""),
@@ -84,14 +87,21 @@ export function Accordion({
     [toggle, isOpen, expandIcon, iconPosition],
   );
 
+  const rootCls = [styles.root, className].filter(Boolean).join(" ");
+
   return (
     <AccordionContext.Provider value={ctx}>
-      <div className={className} style={style} data-density={density} {...props}>
+      <div
+        ref={ref}
+        className={rootCls}
+        style={style}
+        data-density={density}
+        {...props}>
         {children}
       </div>
     </AccordionContext.Provider>
   );
-}
+});
 
 export const AccordionItem = React.forwardRef(function AccordionItem(
   { value, disabled = false, className = "", style, children, ...props },

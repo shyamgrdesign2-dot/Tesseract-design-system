@@ -1,6 +1,10 @@
 /* Sidebar.module.scss — expanded/collapsed nav with nested items + flyouts. */
 
 .root {
+  /* Self-contained box model: don't depend on a host/global reset. Scoped to this
+     component's subtree so it never leaks out, and host CSS can't drift our sizing. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: relative;
   flex-shrink: 0;
   height: 100%;
@@ -469,6 +473,11 @@
 
 /* ── Flyout (portal) ── */
 .flyoutHost {
+  /* Portaled to <body>, OUTSIDE .root, so it inherits nothing from the component
+     subtree. Re-establish box model + brand font explicitly on this surface. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   position: fixed;
   z-index: 1200;
 }

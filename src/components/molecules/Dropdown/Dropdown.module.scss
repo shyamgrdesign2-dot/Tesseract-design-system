@@ -1,6 +1,10 @@
 // Dropdown — extensive select/menu molecule. TP tokens only, zero deps.
 
 .root {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   display: flex;
   flex-direction: column;
   gap: var(--tesseract-space-1-5);
@@ -170,6 +174,13 @@
 
 // ─── Menu (portal) ────────────────────────────────────────────────────────────
 .menu {
+  // Portaled to document.body — OUTSIDE the root, so it does NOT inherit the
+  // root's box-sizing/font. Re-establish both explicitly on the portaled surface
+  // so host CSS can't drift our sizing or typography.
+  box-sizing: border-box;
+  & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   display: flex;
   flex-direction: column;
   // maxMenuHeight prop → --tesseract-dropdown-max-height (default 340px); never exceeds the viewport.
