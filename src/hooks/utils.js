@@ -82,6 +82,22 @@ export function cn(...inputs) {
   return [...passthrough, ...seen.values()].join(" ");
 }
 
+/**
+ * resolveRadius — shared corner-radius prop resolver for components.
+ *   number      → `${n}px`        (e.g. 8  → "8px")
+ *   "pill"      → fully rounded
+ *   "sharp"     → square corners
+ *   string      → used as-is       (e.g. "12px", "var(--tesseract-radius-12)")
+ *   null/undef  → undefined        (keep the component's default token radius)
+ */
+export function resolveRadius(radius) {
+  if (radius == null) return undefined;
+  if (radius === "pill") return "9999px";
+  if (radius === "sharp") return "0";
+  if (typeof radius === "number") return `${radius}px`;
+  return String(radius);
+}
+
 export function safeClipboardWrite(text) {
   try {
     const result = navigator.clipboard?.writeText(text);

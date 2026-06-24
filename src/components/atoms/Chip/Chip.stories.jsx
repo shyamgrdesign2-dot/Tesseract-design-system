@@ -20,9 +20,11 @@ const meta = {
     color: { control: 'select', options: COLORS, table: { category: 'Style' } },
     variant: { control: 'inline-radio', options: VARIANTS, table: { category: 'Style' } },
     size: { control: 'inline-radio', options: SIZES, table: { category: 'Style' } },
+    selected: { control: 'boolean', name: 'selected (active)', description: 'First-class active/toggle state — stronger wash + 500 accent border', table: { category: 'State' } },
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
+    radius: { control: { type: 'range', min: 0, max: 24, step: 2 }, name: 'corner radius (px)', description: '0 = sharp · high = pill · default keeps radius-10', table: { category: 'Layout' } },
     leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
     rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
@@ -33,9 +35,11 @@ const meta = {
     color: 'primary',
     variant: 'soft',
     size: 'md',
+    selected: false,
     disabled: false,
     removable: false,
     removePosition: 'right',
+    radius: 10,
     leftIcon: 'star-1',
     rightIcon: '',
     iconVariant: 'linear',
@@ -55,9 +59,11 @@ const Row = ({ children }) => (
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md', disabled, removable, removePosition, leftIcon, rightIcon, iconVariant, iconFamily }) => {
+const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md', selected, radius, disabled, removable, removePosition, leftIcon, rightIcon, iconVariant, iconFamily }) => {
   const px = ICON_PX[size] || 14;
   const lines = [`  label="${label}"`, `  color="${color}"`, `  variant="${variant}"`, `  size="${size}"`];
+  if (selected) lines.push('  selected');
+  if (radius != null && radius !== 10) lines.push(`  radius={${radius}}`);
   if (disabled) lines.push('  disabled');
   if (removable) lines.push(`  onDelete={() => {}}${removePosition === 'left' ? '\n  removePosition="left"' : ''}`);
   if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily, px)}}`);
@@ -66,9 +72,12 @@ const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md'
 };
 
 export const Playground = {
-  render: ({ leftIcon, rightIcon, removable, iconVariant, iconFamily, ...args }) => (
+  // radius=10 is the default token look, so treat it as a no-op (keeps radius-10);
+  // any other value is passed through to resolveRadius.
+  render: ({ leftIcon, rightIcon, removable, iconVariant, iconFamily, radius, ...args }) => (
     <Chip
       {...args}
+      radius={radius != null && radius !== 10 ? radius : undefined}
       icon={glyphFor(leftIcon, args.size, iconVariant, iconFamily)}
       rightIcon={glyphFor(rightIcon, args.size, iconVariant, iconFamily)}
       onDelete={removable ? () => {} : undefined}
@@ -103,6 +112,30 @@ export const Variants = {
       {VARIANTS.map((variant) => (
         <Chip key={variant} {...args} variant={variant} label={variant} />
       ))}
+    </Row>
+  ),
+};
+
+/** Selected (active/toggle) state — stronger wash + a 500-step accent border. */
+export const Selected = {
+  render: (args) => (
+    <Row>
+      {COLORS.map((color) => (
+        <Chip key={color} {...args} color={color} label={color} selected />
+      ))}
+    </Row>
+  ),
+};
+
+/** Radius override — default keeps radius-10; "sharp"/numbers/"pill" reshape the chip. */
+export const Radius = {
+  render: (args) => (
+    <Row>
+      <Chip {...args} label="default" />
+      <Chip {...args} label="sharp" radius="sharp" />
+      <Chip {...args} label="radius 4" radius={4} />
+      <Chip {...args} label="radius 16" radius={16} />
+      <Chip {...args} label="pill" radius="pill" />
     </Row>
   ),
 };
@@ -168,8 +201,9 @@ export const SymptomSelector = {
             <Chip
               key={s}
               label={s}
-              color={selected.has(s) ? 'primary' : 'default'}
-              variant={selected.has(s) ? 'filled' : 'outlined'}
+              color="primary"
+              variant="soft"
+              selected={selected.has(s)}
               onClick={() => toggle(s)}
             />
           ))}

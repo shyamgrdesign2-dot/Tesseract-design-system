@@ -13,6 +13,14 @@
  *                                                  or the literal string
  *                                                  "indeterminate".
  *   disabled, required, name, value
+ *   color        — "primary" (default) | "success" | "error" | "warning":
+ *                  the checked/indeterminate fill + border + focus ring.
+ *   error        — boolean; red invalid state (border + focus ring).
+ *   label        — string | ReactNode; built-in label beside the box.
+ *   description  — string | ReactNode; smaller helper text below the label.
+ *   labelPosition — "right" (default) | "left"; side the label sits on.
+ *
+ * With no `label`/`description` the bare box is rendered exactly as before.
  */
 
 import * as React from "react";
@@ -30,10 +38,16 @@ export const Checkbox = React.forwardRef(function Checkbox(
     name,
     value = "on",
     size = "md",
+    color = "primary",
+    error = false,
+    label,
+    description,
+    labelPosition = "right",
     className = "",
     style,
     onClick,
     onKeyDown,
+    id,
     ...rest
   },
   ref,
@@ -74,24 +88,29 @@ export const Checkbox = React.forwardRef(function Checkbox(
   };
 
   const cls = [styles.root, className].filter(Boolean).join(" ");
+  const hasLabel = label != null || description != null;
 
-  return (
+  const box = (
     <button
       type="button"
       role="checkbox"
       aria-checked={isIndeterminate(current) ? "mixed" : checkedBool}
       aria-required={required || undefined}
+      aria-invalid={error || undefined}
       data-slot="checkbox"
       data-state={stateAttr}
       data-size={size}
+      data-color={color}
+      data-error={error || undefined}
       data-disabled={disabled || undefined}
       disabled={disabled}
       ref={ref}
+      id={hasLabel ? undefined : id}
       className={cls}
-      style={style}
+      style={hasLabel ? undefined : style}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      {...rest}>
+      {...(hasLabel ? {} : rest)}>
       {(checkedBool || isIndeterminate(current)) && (
         <span className={styles.indicator}>
           {isIndeterminate(current) ? (
@@ -135,6 +154,26 @@ export const Checkbox = React.forwardRef(function Checkbox(
         />
       ) : null}
     </button>
+  );
+
+  if (!hasLabel) return box;
+
+  return (
+    <label
+      className={styles.field}
+      data-position={labelPosition}
+      data-disabled={disabled || undefined}
+      id={id}
+      style={style}
+      {...rest}>
+      {box}
+      <span className={styles.labelText}>
+        {label != null && <span className={styles.labelTitle}>{label}</span>}
+        {description != null && (
+          <span className={styles.labelDescription}>{description}</span>
+        )}
+      </span>
+    </label>
   );
 });
 

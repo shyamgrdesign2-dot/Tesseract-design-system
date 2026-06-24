@@ -2,6 +2,9 @@ import { Avatar } from './Avatar';
 import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
 const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+const SHAPES = ['circle', 'rounded', 'square'];
+const COLORS = ['slate', 'primary', 'success', 'warning', 'error', 'violet'];
+const STATUSES = ['none', 'online', 'offline', 'away', 'busy'];
 
 // Resolve an icon node for the avatar's single icon slot, in the chosen style + family.
 const glyphFor = (name, size, variant = 'linear', family) =>
@@ -12,27 +15,48 @@ const meta = {
   component: Avatar,
   tags: ['autodocs'],
   parameters: {
-    docs: { description: { component: 'Always-circular profile mark. Content is one of **image · initials · icon**; an optional brand **ring** is the only variant. Used by the Header and anywhere a user avatar is needed.' } },
+    docs: { description: { component: 'Profile mark. Content is one of **image · initials · icon**; deeply configurable via **shape**, **radius**, **color**, **status dot**, and an optional brand **ring**. Used by the Header and anywhere a user avatar is needed.' } },
   },
   argTypes: {
-    content: { control: 'inline-radio', options: ['image', 'initials', 'icon'], description: 'What the avatar shows' },
-    name: { control: 'text', description: 'Initials source + alt text' },
-    src: { control: 'text', description: 'Image URL (content = image)' },
-    size: { control: { type: 'range', min: 20, max: 96, step: 2 } },
-    ring: { control: 'boolean', description: 'Brand gradient ring' },
+    content: { control: 'inline-radio', options: ['image', 'initials', 'icon'], description: 'What the avatar shows', table: { category: 'Content' } },
+    name: { control: 'text', description: 'Initials source + alt text', table: { category: 'Content' } },
+    src: { control: 'text', description: 'Image URL (content = image)', table: { category: 'Content' } },
+    size: { control: { type: 'range', min: 20, max: 96, step: 2 }, table: { category: 'Appearance' } },
+    // ── Appearance ──
+    shape: { control: 'inline-radio', options: SHAPES, description: 'Corner shape — circle · rounded · square', table: { category: 'Appearance' } },
+    radius: { control: { type: 'range', min: 0, max: 48, step: 2 }, name: 'corner radius (px)', description: 'Overrides the shape radius (blank = use shape)', table: { category: 'Appearance' } },
+    color: { control: 'select', options: COLORS, description: 'Background (—100) + initials/icon (—600) ramp', table: { category: 'Appearance' } },
+    status: { control: 'inline-radio', options: STATUSES, description: 'Corner status dot', table: { category: 'Appearance' } },
+    ring: { control: 'boolean', description: 'Brand gradient ring', table: { category: 'Appearance' } },
+    // ── Icons ──
     iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name (content = icon; blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the icon slot', table: { category: 'Icons' } },
     iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
   },
-  args: { content: 'image', name: 'Ramesh Kumar', src: 'https://i.pravatar.cc/100?img=12', size: 48, ring: true, iconName: 'profile', iconVariant: 'linear', iconFamily: '' },
+  args: {
+    content: 'image',
+    name: 'Ramesh Kumar',
+    src: 'https://i.pravatar.cc/100?img=12',
+    size: 48,
+    shape: 'circle',
+    radius: undefined,
+    color: 'slate',
+    status: 'none',
+    ring: true,
+    iconName: 'profile',
+    iconVariant: 'linear',
+    iconFamily: '',
+  },
 };
 
 export default meta;
 
 // Map the `content` control to the matching Avatar prop (icon → image → initials).
 // The icon fallback is half the avatar diameter, in the chosen style + family.
-const fromArgs = ({ content, name, src, size, ring, iconName, iconVariant, iconFamily }) => ({
-  size, ring, name,
+const fromArgs = ({ content, name, src, size, shape, radius, color, status, ring, iconName, iconVariant, iconFamily }) => ({
+  size, shape, color, ring, name,
+  radius: typeof radius === 'number' ? radius : undefined,
+  status: status && status !== 'none' ? status : undefined,
   src: content === 'image' ? src : undefined,
   icon: content === 'icon' ? glyphFor(iconName, Math.round(size * 0.5), iconVariant, iconFamily) : undefined,
 });
@@ -41,8 +65,12 @@ const fromArgs = ({ content, name, src, size, ring, iconName, iconVariant, iconF
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const avatarCode = ({ content, name = '', src = '', size = 48, ring, iconName, iconVariant, iconFamily }) => {
+const avatarCode = ({ content, name = '', src = '', size = 48, shape = 'circle', radius, color = 'slate', status = 'none', ring, iconName, iconVariant, iconFamily }) => {
   const lines = [`  size={${size}}`];
+  if (shape && shape !== 'circle') lines.push(`  shape="${shape}"`);
+  if (typeof radius === 'number') lines.push(`  radius={${radius}}`);
+  if (color && color !== 'slate') lines.push(`  color="${color}"`);
+  if (status && status !== 'none') lines.push(`  status="${status}"`);
   if (ring) lines.push('  ring');
   if (content === 'image') {
     lines.push(`  src="${src}"`, `  name="${name}"`);
@@ -73,7 +101,40 @@ export const Content = {
   ),
 };
 
-/** The only variant — with vs without the brand ring (shown for each content form). */
+/** Corner shapes — circle (default) · rounded · square. */
+export const Shapes = {
+  render: () => (
+    <Row>
+      {SHAPES.map((shape) => (
+        <Avatar key={shape} shape={shape} name="Ramesh Kumar" size={48} />
+      ))}
+    </Row>
+  ),
+};
+
+/** Background + foreground colour ramps (—100 background, —600 initials/icon). */
+export const Colors = {
+  render: () => (
+    <Row>
+      {COLORS.map((color) => (
+        <Avatar key={color} color={color} name="Ramesh Kumar" size={48} />
+      ))}
+    </Row>
+  ),
+};
+
+/** Status dot — online · offline · away · busy, with a white ring. */
+export const Status = {
+  render: () => (
+    <Row>
+      {['online', 'offline', 'away', 'busy'].map((status) => (
+        <Avatar key={status} status={status} src="https://i.pravatar.cc/100?img=12" name="Ramesh Kumar" size={56} />
+      ))}
+    </Row>
+  ),
+};
+
+/** The brand ring — with vs without (shown for each content form). */
 export const Ring = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-5)' }}>

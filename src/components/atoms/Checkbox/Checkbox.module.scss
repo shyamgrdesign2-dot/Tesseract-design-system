@@ -22,26 +22,60 @@
   &[data-size="md"] { width: var(--tesseract-size-18, 18px); height: var(--tesseract-size-18, 18px); border-radius: var(--tesseract-radius-6, 6px); }
   &[data-size="lg"] { width: var(--tesseract-size-22, 22px); height: var(--tesseract-size-22, 22px); border-radius: var(--tesseract-radius-8, 8px); }
 
+  /* Per-color fill/border + focus ring. `primary` maps to the brand blue
+     so the default look is unchanged; the others swap the 500/200 ramp. */
+  --tesseract-checkbox-fill: var(--tesseract-blue-500);
+  --tesseract-checkbox-ring: var(--tesseract-blue-200);
+  --tesseract-checkbox-hover: var(--tesseract-blue-400);
+
+  &[data-color="success"] {
+    --tesseract-checkbox-fill: var(--tesseract-success-500);
+    --tesseract-checkbox-ring: var(--tesseract-success-200);
+    --tesseract-checkbox-hover: var(--tesseract-success-400);
+  }
+  &[data-color="error"] {
+    --tesseract-checkbox-fill: var(--tesseract-error-500);
+    --tesseract-checkbox-ring: var(--tesseract-error-200);
+    --tesseract-checkbox-hover: var(--tesseract-error-400);
+  }
+  &[data-color="warning"] {
+    --tesseract-checkbox-fill: var(--tesseract-warning-500);
+    --tesseract-checkbox-ring: var(--tesseract-warning-200);
+    --tesseract-checkbox-hover: var(--tesseract-warning-400);
+  }
+
   /* Checked */
   &[data-state="checked"] {
-    background-color: var(--tesseract-blue-500);
-    border-color: var(--tesseract-blue-500);
+    background-color: var(--tesseract-checkbox-fill);
+    border-color: var(--tesseract-checkbox-fill);
   }
 
   /* Indeterminate */
   &[data-state="indeterminate"] {
-    background-color: var(--tesseract-blue-500);
-    border-color: var(--tesseract-blue-500);
+    background-color: var(--tesseract-checkbox-fill);
+    border-color: var(--tesseract-checkbox-fill);
   }
 
   /* Hover */
   &:hover:not(:disabled) {
-    border-color: var(--tesseract-blue-400);
+    border-color: var(--tesseract-checkbox-hover);
   }
 
   /* Focus */
   &:focus-visible {
-    box-shadow: 0 0 0 3px var(--tesseract-blue-200);
+    box-shadow: 0 0 0 3px var(--tesseract-checkbox-ring);
+  }
+
+  /* Error — red invalid border + focus ring, regardless of color */
+  &[data-error] {
+    border-color: var(--tesseract-error-500);
+
+    &:hover:not(:disabled) {
+      border-color: var(--tesseract-error-500);
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--tesseract-error-200);
+    }
   }
 
   /* Disabled */
@@ -49,6 +83,38 @@
     cursor: not-allowed;
     opacity: 0.5;
   }
+}
+
+/* Built-in label slot — box beside label, optional description below. */
+.field {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--tesseract-size-8, 8px);
+  cursor: pointer;
+
+  &[data-position="left"] { flex-direction: row-reverse; }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+  }
+}
+
+.labelText {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--tesseract-size-2, 2px);
+}
+
+.labelTitle {
+  font-size: var(--tesseract-text-body-sm);
+  line-height: var(--tesseract-text-body-sm-lh);
+  color: var(--tesseract-fg-primary);
+}
+
+.labelDescription {
+  font-size: var(--tesseract-text-body-xs);
+  line-height: var(--tesseract-text-body-xs-lh);
+  color: var(--tesseract-fg-secondary);
 }
 
 .indicator {

@@ -15,12 +15,15 @@
  *   onDelete      fn           shows a remove (×) button
  *   removePosition "left" | "right"   side for the × button   default "right"
  *   onClick       fn           makes the chip act as a button
+ *   selected  boolean      first-class active/toggle state (stronger wash + 500 border)
+ *   radius    number | "pill" | "sharp" | string   corner radius override (default = radius-10)
  *   track     string | { id, … }  opt-in action tracking (emits on click to the
  *                                  nearest TPAnalyticsProvider; no-op without one)
  *   disabled  boolean
  */
 
 import { useAnalytics, resolveTrack } from "@/src/analytics/context";
+import { resolveRadius } from "@/src/hooks/utils";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Chip.module.scss";
 
@@ -34,6 +37,16 @@ const TONES = {
   success: "var(--tesseract-success-600, #059669)",
   warning: "var(--tesseract-warning-600, #d97706)",
   error:   "var(--tesseract-error-600, #c8102e)",
+};
+
+// 500-step tokens — the active/selected border accent (one ramp step lighter
+// than the 600 tone, so the selected outline reads as a deliberate emphasis).
+const TONES_500 = {
+  default: "var(--tesseract-slate-500, #717179)",
+  primary: "var(--tesseract-blue-500, #4f4ec7)",
+  success: "var(--tesseract-success-500, #10b981)",
+  warning: "var(--tesseract-warning-500, #f59e0b)",
+  error:   "var(--tesseract-error-500, #ef4444)",
 };
 
 const SIZES = {
@@ -52,13 +65,17 @@ export function TPChip({
   onDelete,
   removePosition = "right",
   onClick,
+  selected = false,
+  radius,
   track,
   disabled = false,
   className,
   style: styleProp,
 }) {
   const c = TONES[color] ?? TONES.default;
+  const c500 = TONES_500[color] ?? TONES_500.default;
   const s = SIZES[size] ?? SIZES.md;
+  const resolvedRadius = resolveRadius(radius);
   const interactive = !!onClick && !disabled;
   // Hover affordance applies to any interactive chip — clickable OR dismissible.
   const hoverable = (!!onClick || !!onDelete) && !disabled;
@@ -79,6 +96,15 @@ export function TPChip({
       : v === "outline"
         ? { color: c, backgroundColor: "transparent", border: `1px solid color-mix(in srgb, ${c} 40%, transparent)` }
         : { color: c, backgroundColor: `color-mix(in srgb, ${c} 12%, transparent)`, border: `1px solid color-mix(in srgb, ${c} 22%, transparent)` };
+
+  // Selected = first-class active/toggle state. A solid chip is already "filled",
+  // so we just firm up its border to the 500 accent; soft/outline chips get a
+  // stronger wash plus the 500 border so the active state reads clearly.
+  const selectedStyle = selected
+    ? v === "solid"
+      ? { border: `1px solid ${c500}` }
+      : { color: c, backgroundColor: `color-mix(in srgb, ${c} 22%, transparent)`, border: `1px solid ${c500}` }
+    : undefined;
 
   // The remove control is a span (role="button"), NOT a <button> — chips are
   // often rendered inside a button trigger (Dropdown/ClinicalTable), and a
@@ -125,6 +151,8 @@ export function TPChip({
     <span
       role={onClick ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
+      aria-pressed={onClick && selected ? true : undefined}
+      data-selected={selected ? "" : undefined}
       onClick={disabled ? undefined : handleClick}
       className={[hoverable && styles.interactive, className].filter(Boolean).join(" ") || undefined}
       style={{
@@ -134,13 +162,14 @@ export function TPChip({
         gap: s.gap,
         height: s.height,
         padding: `0 ${s.padX}px`,
-        borderRadius: "var(--tesseract-radius-10)",
+        borderRadius: resolvedRadius ?? "var(--tesseract-radius-10)",
         cornerShape: "round",
         fontSize: s.font,
         fontWeight: "var(--tesseract-weight-medium)",
         fontFamily: "var(--tesseract-font-body)",
         lineHeight: 1,
         ...variantStyle,
+        ...selectedStyle,
         cursor: interactive ? "pointer" : "default",
         opacity: disabled ? 0.5 : 1,
         whiteSpace: "nowrap",

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Toggle } from './Toggle';
 
+const COLORS = ['primary', 'success', 'error', 'warning'];
+
 const meta = {
   title: 'Atoms/Toggle',
   component: Toggle,
@@ -8,6 +10,9 @@ const meta = {
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     shape: { control: 'inline-radio', options: ['rounded', 'square'], description: 'Pill toggle vs squared toggle' },
+    color: { control: 'inline-radio', options: COLORS, description: 'Checked track colour (primary = blue)' },
+    label: { control: 'text', description: 'Adjacent label — clicking it toggles. Blank = bare switch.' },
+    labelPosition: { control: 'inline-radio', options: ['right', 'left'], description: 'Side the label sits on', if: { arg: 'label', truthy: true } },
     checked: { control: 'boolean' },
     defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -16,12 +21,28 @@ const meta = {
   args: {
     size: 'md',
     shape: 'rounded',
+    color: 'primary',
+    label: '',
+    labelPosition: 'right',
     disabled: false,
     required: false,
   },
 };
 
 export default meta;
+
+// Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
+const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label = '', labelPosition = 'right', disabled, defaultChecked }) => {
+  const lines = [];
+  if (size !== 'md') lines.push(`  size="${size}"`);
+  if (shape !== 'rounded') lines.push(`  shape="${shape}"`);
+  if (color !== 'primary') lines.push(`  color="${color}"`);
+  if (label) lines.push(`  label="${label}"`);
+  if (label && labelPosition !== 'right') lines.push(`  labelPosition="${labelPosition}"`);
+  if (defaultChecked) lines.push('  defaultChecked');
+  if (disabled) lines.push('  disabled');
+  return lines.length ? `<Toggle\n${lines.join('\n')}\n/>` : '<Toggle />';
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -34,6 +55,7 @@ export const Playground = {
     const [on, setOn] = React.useState(false);
     return <Toggle {...args} checked={on} onCheckedChange={setOn} />;
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => toggleCode(ctx.args) } } },
 };
 
 export const Sizes = {
@@ -67,17 +89,35 @@ export const States = {
   ),
 };
 
+/** Checked track colour — primary (blue) · success · error · warning. */
+export const Colors = {
+  render: (args) => (
+    <Row>
+      {COLORS.map((color) => (
+        <Toggle key={color} {...args} color={color} defaultChecked aria-label={color} />
+      ))}
+    </Row>
+  ),
+};
+
+/** Built-in `label` prop — clicking the text toggles. Position via `labelPosition`. */
 export const WithLabel = {
+  args: { label: 'Enable notifications' },
   render: (args) => {
     const [on, setOn] = React.useState(true);
-    const id = React.useId();
-    return (
-      <label htmlFor={id} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'var(--tesseract-slate-700)' }}>
-        <Toggle {...args} id={id} checked={on} onCheckedChange={setOn} />
-        Enable notifications
-      </label>
-    );
+    return <Toggle {...args} checked={on} onCheckedChange={setOn} />;
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => toggleCode(ctx.args) } } },
+};
+
+/** Label on either side of the switch. */
+export const LabelPositions = {
+  render: (args) => (
+    <Row>
+      <Toggle {...args} label="Right label" labelPosition="right" defaultChecked />
+      <Toggle {...args} label="Left label" labelPosition="left" defaultChecked />
+    </Row>
+  ),
 };
 
 // ── Healthcare in-context scenarios ──────────────────────────────────────────
@@ -170,7 +210,7 @@ export const InlineToggle = {
           <span style={{ fontSize: 13, color: active ? '#15803D' : '#54545C', fontWeight: 500 }}>
             {active ? 'Active' : 'Inactive'}
           </span>
-          <Toggle {...args} checked={active} onCheckedChange={setActive} aria-label="Doctor active status" />
+          <Toggle {...args} color="success" checked={active} onCheckedChange={setActive} aria-label="Doctor active status" />
         </div>
       </div>
     );

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Checkbox } from './Checkbox';
 
+const COLORS = ['primary', 'success', 'error', 'warning'];
+
 const meta = {
   title: 'Atoms/Checkbox',
   component: Checkbox,
@@ -8,18 +10,45 @@ const meta = {
   argTypes: {
     state: { control: 'inline-radio', options: ['unchecked', 'checked', 'indeterminate'], description: 'Tri-state value (indeterminate is reachable here, not just via boolean)' },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    color: { control: 'inline-radio', options: COLORS, description: 'Checked / indeterminate fill + border + focus ring. primary = brand blue (default).' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
+    error: { control: 'boolean', description: 'Red invalid state — border + focus ring use error tokens.' },
+    // ── Built-in label slot (omit both for a bare box) ──
+    label: { control: 'text', description: 'Label beside the box. Clicking it toggles. Blank = bare box.', table: { category: 'Label' } },
+    description: { control: 'text', description: 'Smaller helper text below the label.', table: { category: 'Label' } },
+    labelPosition: { control: 'inline-radio', options: ['right', 'left'], description: 'Side the label sits on.', if: { arg: 'label', truthy: true }, table: { category: 'Label' } },
   },
   args: {
     state: 'unchecked',
     size: 'md',
+    color: 'primary',
     disabled: false,
     required: false,
+    error: false,
+    label: '',
+    description: '',
+    labelPosition: 'right',
   },
 };
 
 export default meta;
+
+// Build a copy-paste snippet from the controls (what "Show code" shows).
+const checkboxCode = ({ state = 'unchecked', size = 'md', color = 'primary', disabled, required, error, label, description, labelPosition = 'right' }) => {
+  const lines = [];
+  if (state === 'checked') lines.push('  defaultChecked');
+  else if (state === 'indeterminate') lines.push('  checked="indeterminate"');
+  if (size !== 'md') lines.push(`  size="${size}"`);
+  if (color !== 'primary') lines.push(`  color="${color}"`);
+  if (error) lines.push('  error');
+  if (disabled) lines.push('  disabled');
+  if (required) lines.push('  required');
+  if (label) lines.push(`  label="${label}"`);
+  if (description) lines.push(`  description="${description}"`);
+  if (label && labelPosition !== 'right') lines.push(`  labelPosition="${labelPosition}"`);
+  return `<Checkbox\n${lines.join('\n')}\n/>`;
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -44,15 +73,25 @@ const Label = ({ children, ...props }) => (
 );
 
 // Keyed by `state` so changing the control re-initialises the local value
-// (no set-state-in-effect needed).
-function CheckboxDemo({ state, ...args }) {
+// (no set-state-in-effect needed). Empty-string label/description collapse to
+// undefined so the bare box (no label slot) renders by default.
+function CheckboxDemo({ state, label, description, ...args }) {
   const initial = state === 'checked' ? true : state === 'indeterminate' ? 'indeterminate' : false;
   const [checked, setChecked] = React.useState(initial);
-  return <Checkbox {...args} checked={checked} onCheckedChange={setChecked} />;
+  return (
+    <Checkbox
+      {...args}
+      label={label || undefined}
+      description={description || undefined}
+      checked={checked}
+      onCheckedChange={setChecked}
+    />
+  );
 }
 
 export const Playground = {
   render: (args) => <CheckboxDemo key={args.state} {...args} />,
+  parameters: { docs: { source: { transform: (_code, ctx) => checkboxCode(ctx.args) } } },
 };
 
 export const Uncontrolled = {
@@ -75,6 +114,48 @@ export const Disabled = {
       <Checkbox disabled aria-label="disabled unchecked" />
       <Checkbox disabled defaultChecked aria-label="disabled checked" />
     </Row>
+  ),
+};
+
+/** Colours — the checked fill + border + focus ring. primary is the brand blue. */
+export const Colors = {
+  render: () => (
+    <Row>
+      {COLORS.map((color) => (
+        <Checkbox key={color} color={color} defaultChecked aria-label={color} />
+      ))}
+    </Row>
+  ),
+};
+
+/** Built-in label slot — label beside the box, optional description below.
+ *  Clicking the label toggles. Position can flip to the left. */
+export const WithBuiltInLabel = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Checkbox defaultChecked label="Accept terms and conditions" />
+      <Checkbox
+        defaultChecked
+        label="Email notifications"
+        description="Get notified when a lab result is ready."
+      />
+      <Checkbox label="Label on the left" labelPosition="left" />
+    </div>
+  ),
+};
+
+/** Error — red invalid border + focus ring (independent of colour). */
+export const ErrorState = {
+  name: 'Error',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Checkbox error aria-label="error unchecked" />
+      <Checkbox
+        error
+        label="You must accept the consent form"
+        description="This field is required to continue."
+      />
+    </div>
   ),
 };
 

@@ -14,6 +14,10 @@
  *   size: "sm" | "md" | "lg"
  *   shape: "rounded" (pill track + circular thumb) | "square" (squared track +
  *          rounded-square thumb)   default "rounded"
+ *   color: "primary" (default, blue) | "success" | "error" | "warning"
+ *          — the CHECKED track colour
+ *   label: string | ReactNode — adjacent label; clicking it toggles
+ *   labelPosition: "right" (default) | "left"
  */
 
 import * as React from "react";
@@ -24,6 +28,9 @@ export const Toggle = React.forwardRef(function Toggle(
   {
     size = "md",
     shape = "rounded",
+    color = "primary",
+    label,
+    labelPosition = "right",
     checked,
     defaultChecked,
     onCheckedChange,
@@ -74,7 +81,7 @@ export const Toggle = React.forwardRef(function Toggle(
 
   const cls = [styles.root, className].filter(Boolean).join(" ");
 
-  return (
+  const switchEl = (
     <button
       type="button"
       role="switch"
@@ -84,11 +91,12 @@ export const Toggle = React.forwardRef(function Toggle(
       data-state={isOn ? "checked" : "unchecked"}
       data-size={size}
       data-shape={shape}
+      data-color={color}
       data-disabled={disabled || undefined}
       disabled={disabled}
       ref={ref}
       className={cls}
-      style={style}
+      style={label == null ? style : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       {...rest}>
@@ -114,6 +122,24 @@ export const Toggle = React.forwardRef(function Toggle(
         />
       ) : null}
     </button>
+  );
+
+  if (label == null) return switchEl;
+
+  return (
+    <label
+      className={styles.field}
+      data-disabled={disabled || undefined}
+      data-label-position={labelPosition}
+      style={style}>
+      {labelPosition === "left" ? (
+        <span className={styles.label}>{label}</span>
+      ) : null}
+      {switchEl}
+      {labelPosition === "right" ? (
+        <span className={styles.label}>{label}</span>
+      ) : null}
+    </label>
   );
 });
 

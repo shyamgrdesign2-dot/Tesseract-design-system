@@ -16,10 +16,15 @@
   &[data-size="md"] { width: var(--tesseract-size-42); height: var(--tesseract-size-24); }
   &[data-size="lg"] { width: 50px; height: var(--tesseract-size-28); }
 
-  /* Checked */
+  /* Checked — default (primary) keeps the original blue */
   &[data-state="checked"] {
     background-color: var(--tesseract-blue-500);
   }
+
+  /* Checked track colour by data-color (primary = blue, set above) */
+  &[data-color="success"][data-state="checked"] { background-color: var(--tesseract-success-500); }
+  &[data-color="error"][data-state="checked"]   { background-color: var(--tesseract-error-500); }
+  &[data-color="warning"][data-state="checked"] { background-color: var(--tesseract-warning-500); }
 
   /* Square shape — squared track corners (default is a rounded pill) */
   &[data-shape="square"] { border-radius: var(--tesseract-radius-8); corner-shape: round; }
@@ -59,4 +64,27 @@
   .root[data-size="sm"][data-state="checked"] & { transform: translateX(14px); }
   .root[data-size="md"][data-state="checked"] & { transform: translateX(18px); }
   .root[data-size="lg"][data-state="checked"] & { transform: translateX(22px); }
+}
+
+/* Field — switch + adjacent label in a flex row. Clicking the label toggles
+   (native <label> association via the wrapping element). */
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tesseract-space-2);
+  cursor: pointer;
+
+  &[data-label-position="left"] { flex-direction: row; }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+
+    .label { opacity: 0.5; }
+  }
+}
+
+.label {
+  font-size: var(--tesseract-text-body-sm, 14px);
+  color: var(--tesseract-slate-700);
+  user-select: none;
 }

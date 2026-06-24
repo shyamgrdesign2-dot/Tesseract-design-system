@@ -8,6 +8,9 @@ const meta = {
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], table: { category: 'Style' } },
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'], table: { category: 'Style' } },
+    color: { control: 'inline-radio', options: ['primary', 'success', 'error', 'warning'], description: 'Accent colour for the group (primary = blue). Per-Radio color overrides.', table: { category: 'Style' } },
+    gap: { control: { type: 'range', min: 0, max: 40, step: 2 }, name: 'gap (px)', description: 'Override the group gap. Blank = token default (horizontal vs vertical).', table: { category: 'Style' } },
+    error: { control: 'boolean', description: 'Invalid styling — accent + labels shift to the error ramp.', table: { category: 'State' } },
     disabled: { control: 'boolean', name: 'disable all', table: { category: 'State' } },
     disabledOption: { control: 'inline-radio', options: ['none', 'email', 'sms', 'push'], name: 'disable one', table: { category: 'State' } },
     name: { control: 'text', table: { category: 'Content' } },
@@ -17,6 +20,9 @@ const meta = {
   args: {
     size: 'md',
     orientation: 'vertical',
+    color: 'primary',
+    gap: undefined,
+    error: false,
     disabled: false,
     disabledOption: 'none',
     name: 'demo-group',
@@ -25,7 +31,7 @@ const meta = {
 
 export default meta;
 
-const Group = ({ size, orientation, disabled, disabledOption, ...args }) => {
+const Group = ({ size, orientation, color, gap, error, disabled, disabledOption, ...args }) => {
   const [value, setValue] = React.useState('email');
   const opts = [
     { value: 'email', label: 'Email' },
@@ -33,7 +39,7 @@ const Group = ({ size, orientation, disabled, disabledOption, ...args }) => {
     { value: 'push', label: 'Push notification' },
   ];
   return (
-    <RadioGroup {...args} value={value} onChange={setValue} orientation={orientation} size={size}>
+    <RadioGroup {...args} value={value} onChange={setValue} orientation={orientation} size={size} color={color} gap={gap} error={error}>
       {opts.map((o) => (
         <Radio key={o.value} value={o.value} label={o.label} disabled={disabled || disabledOption === o.value} />
       ))}
@@ -41,8 +47,20 @@ const Group = ({ size, orientation, disabled, disabledOption, ...args }) => {
   );
 };
 
+// Build a copy-paste snippet from the controls (what "Show code" shows).
+const radioGroupCode = ({ size = 'md', orientation = 'vertical', color = 'primary', gap, error }) => {
+  const lines = [`  value={value}`, `  onChange={setValue}`];
+  if (size !== 'md') lines.push(`  size="${size}"`);
+  if (orientation !== 'vertical') lines.push(`  orientation="${orientation}"`);
+  if (color !== 'primary') lines.push(`  color="${color}"`);
+  if (gap != null) lines.push(`  gap={${gap}}`);
+  if (error) lines.push(`  error`);
+  return `<RadioGroup\n${lines.join('\n')}\n>\n  <Radio value="email" label="Email" />\n  <Radio value="sms" label="SMS" />\n  <Radio value="push" label="Push notification" />\n</RadioGroup>`;
+};
+
 export const Playground = {
   render: (args) => <Group {...args} />,
+  parameters: { docs: { source: { transform: (_code, ctx) => radioGroupCode(ctx.args) } } },
 };
 
 export const Sizes = {
@@ -80,6 +98,54 @@ export const HorizontalLayout = {
         <Radio value="no" label="No" />
         <Radio value="maybe" label="Maybe" />
       </RadioGroup>
+    );
+  },
+};
+
+/** Semantic accent colours on the group — primary (blue) is the default. */
+export const Colors = {
+  render: () => {
+    const colors = ['primary', 'success', 'error', 'warning'];
+    const [value, setValue] = React.useState({});
+    return (
+      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+        {colors.map((color) => (
+          <RadioGroup key={color} name={`color-${color}`} color={color} value={value[color] ?? 'a'} onChange={(v) => setValue((s) => ({ ...s, [color]: v }))}>
+            <Radio value="a" label={color} />
+            <Radio value="b" label="Option two" />
+          </RadioGroup>
+        ))}
+      </div>
+    );
+  },
+};
+
+/** A Radio with a `description` — smaller helper text under the option label. */
+export const WithDescription = {
+  render: () => {
+    const [value, setValue] = React.useState('standard');
+    return (
+      <RadioGroup name="plan" value={value} onChange={setValue} gap={12}>
+        <Radio value="standard" label="Standard" description="Up to 3 working days for delivery." />
+        <Radio value="express" label="Express" description="Next working day, signature on arrival." />
+        <Radio value="same-day" label="Same day" description="Dispatched within the hour where available." />
+      </RadioGroup>
+    );
+  },
+};
+
+/** Error state — the group `error` flag shifts the accent + labels to the error ramp. */
+export const ErrorState = {
+  render: () => {
+    const [value, setValue] = React.useState('no');
+    return (
+      <div style={{ fontFamily: 'Inter, sans-serif', maxWidth: 360 }}>
+        <RadioGroup name="consent" value={value} onChange={setValue} error>
+          <Radio value="yes" label="I agree to the terms" />
+          <Radio value="no" label="I do not agree" />
+        </RadioGroup>
+        <p style={{ marginTop: 8, fontSize: 'var(--tesseract-text-body-xs)', color: 'var(--tesseract-error-600, #dc2626)' }}>You must accept the terms to continue.</p>
+      </div>
     );
   },
 };

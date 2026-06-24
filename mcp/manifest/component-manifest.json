@@ -105,7 +105,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { Avatar } from \"@/src/components/atoms\";",
-      "description": "Avatar — always-circular user/profile mark. Three content types: • image   — pass `src` • initials — pass `name` (first+last initials; single name → first two letters) • icon    — pass `icon` (a Tesseract library icon NAME or a ReactNode) Resolution order: icon → image → initials.",
+      "description": "Avatar — user/profile mark. Three content types: • image   — pass `src` • initials — pass `name` (first+last initials; single name → first two letters) • icon    — pass `icon` (a Tesseract library icon NAME or a ReactNode) Resolution order: icon → image → initials.",
       "props": [
         {
           "name": "src",
@@ -129,6 +129,50 @@
           "name": "size",
           "default": "40",
           "control": "range"
+        },
+        {
+          "name": "shape",
+          "default": "\"circle\"",
+          "allowedValues": [
+            "circle",
+            "rounded",
+            "square"
+          ],
+          "control": "inline-radio",
+          "description": "Corner shape — circle · rounded · square"
+        },
+        {
+          "name": "radius",
+          "default": "undefined",
+          "control": "range",
+          "description": "Overrides the shape radius (blank = use shape)"
+        },
+        {
+          "name": "color",
+          "default": "\"slate\"",
+          "allowedValues": [
+            "slate",
+            "primary",
+            "success",
+            "warning",
+            "error",
+            "violet"
+          ],
+          "control": "select",
+          "description": "Background (—100) + initials/icon (—600) ramp"
+        },
+        {
+          "name": "status",
+          "default": "'none'",
+          "allowedValues": [
+            "none",
+            "online",
+            "offline",
+            "away",
+            "busy"
+          ],
+          "control": "inline-radio",
+          "description": "Corner status dot"
         },
         {
           "name": "ring",
@@ -186,6 +230,9 @@
       "stories": [
         "Playground",
         "Content",
+        "Shapes",
+        "Colors",
+        "Status",
         "Ring",
         "Sizes"
       ],
@@ -244,9 +291,9 @@
         },
         {
           "name": "rightIcon",
-          "default": "''",
+          "default": "'arrow-right'",
           "control": "text",
-          "description": "CDN icon name for the trailing slot (blank = none)"
+          "description": "The trailing icon name (both mode only)"
         },
         {
           "name": "sticky",
@@ -260,9 +307,16 @@
           "description": "Square the corners on an edge so it sits flush"
         },
         {
+          "name": "radius",
+          "default": "10",
+          "control": "range",
+          "description": "0 = sharp rectangle · high = pill"
+        },
+        {
           "name": "children",
           "default": "'Badge'",
-          "control": "text"
+          "control": "text",
+          "description": "Label — usually data-bound (e.g. a status string from the backend). Omit, or use icons="
         },
         {
           "name": "className"
@@ -271,9 +325,22 @@
           "name": "style"
         },
         {
+          "name": "icons",
+          "allowedValues": [
+            "none",
+            "left",
+            "right",
+            "both",
+            "icon-only"
+          ],
+          "control": "inline-radio",
+          "description": "Which icon slots to show",
+          "default": "'left'"
+        },
+        {
           "name": "leftIcon",
           "control": "text",
-          "description": "CDN icon name for the leading slot (blank = none)",
+          "description": "CDN icon name — the single icon (left / right / icon-only) or the LEFT icon when both",
           "default": "'verify'"
         },
         {
@@ -287,7 +354,7 @@
             "outline"
           ],
           "control": "select",
-          "description": "Icon style applied to both slots",
+          "description": "Icon style",
           "default": "'linear'"
         },
         {
@@ -525,6 +592,46 @@
           "control": "inline-radio"
         },
         {
+          "name": "color",
+          "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "success",
+            "error",
+            "warning"
+          ],
+          "control": "inline-radio",
+          "description": "Checked / indeterminate fill + border + focus ring. primary = brand blue (default)."
+        },
+        {
+          "name": "error",
+          "default": "false",
+          "control": "boolean",
+          "description": "Red invalid state — border + focus ring use error tokens."
+        },
+        {
+          "name": "label",
+          "default": "''",
+          "control": "text",
+          "description": "Label beside the box. Clicking it toggles. Blank = bare box."
+        },
+        {
+          "name": "description",
+          "default": "''",
+          "control": "text",
+          "description": "Smaller helper text below the label."
+        },
+        {
+          "name": "labelPosition",
+          "default": "\"right\"",
+          "allowedValues": [
+            "right",
+            "left"
+          ],
+          "control": "inline-radio",
+          "description": "Side the label sits on."
+        },
+        {
           "name": "className",
           "default": "\"\""
         },
@@ -536,6 +643,9 @@
         },
         {
           "name": "onKeyDown"
+        },
+        {
+          "name": "id"
         },
         {
           "name": "state",
@@ -555,6 +665,9 @@
         "Uncontrolled",
         "States",
         "Disabled",
+        "Colors",
+        "WithBuiltInLabel",
+        "ErrorState",
         "WithLabel",
         "CheckboxList",
         "ConsentForm",
@@ -636,6 +749,18 @@
           "name": "onClick"
         },
         {
+          "name": "selected",
+          "default": "false",
+          "control": "boolean",
+          "description": "First-class active/toggle state — stronger wash + 500 accent border"
+        },
+        {
+          "name": "radius",
+          "default": "10",
+          "control": "range",
+          "description": "0 = sharp · high = pill · default keeps radius-10"
+        },
+        {
           "name": "track"
         },
         {
@@ -686,6 +811,8 @@
         "Sizes",
         "Colors",
         "Variants",
+        "Selected",
+        "Radius",
         "Outlined",
         "WithIcon",
         "Deletable",
@@ -1186,6 +1313,9 @@
           "name": "label"
         },
         {
+          "name": "description"
+        },
+        {
           "name": "checked"
         },
         {
@@ -1202,6 +1332,18 @@
             "lg"
           ],
           "control": "inline-radio"
+        },
+        {
+          "name": "color",
+          "default": "'primary'",
+          "allowedValues": [
+            "primary",
+            "success",
+            "error",
+            "warning"
+          ],
+          "control": "inline-radio",
+          "description": "Accent colour for the group (primary = blue). Per-Radio color overrides."
         },
         {
           "name": "name",
@@ -1227,6 +1369,18 @@
           "default": "'vertical'"
         },
         {
+          "name": "gap",
+          "control": "range",
+          "description": "Override the group gap. Blank = token default (horizontal vs vertical).",
+          "default": "undefined"
+        },
+        {
+          "name": "error",
+          "control": "boolean",
+          "description": "Invalid styling — accent + labels shift to the error ramp.",
+          "default": "false"
+        },
+        {
           "name": "disabledOption",
           "allowedValues": [
             "none",
@@ -1243,6 +1397,9 @@
         "Sizes",
         "WithDisabledOption",
         "HorizontalLayout",
+        "Colors",
+        "WithDescription",
+        "ErrorState",
         "AppointmentType",
         "PatientGender",
         "ConsultationMode",
@@ -1509,6 +1666,34 @@
           "description": "Pill toggle vs squared toggle"
         },
         {
+          "name": "color",
+          "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "success",
+            "error",
+            "warning"
+          ],
+          "control": "inline-radio",
+          "description": "Checked track colour (primary = blue)"
+        },
+        {
+          "name": "label",
+          "default": "''",
+          "control": "text",
+          "description": "Adjacent label — clicking it toggles. Blank = bare switch."
+        },
+        {
+          "name": "labelPosition",
+          "default": "\"right\"",
+          "allowedValues": [
+            "right",
+            "left"
+          ],
+          "control": "inline-radio",
+          "description": "Side the label sits on"
+        },
+        {
           "name": "checked",
           "control": "boolean"
         },
@@ -1558,7 +1743,9 @@
         "Sizes",
         "Shapes",
         "States",
+        "Colors",
         "WithLabel",
+        "LabelPositions",
         "NotificationSettings",
         "FeatureToggles",
         "InlineToggle"
