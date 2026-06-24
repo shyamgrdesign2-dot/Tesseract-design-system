@@ -111,6 +111,14 @@
   color: var(--tesseract-slate-600);
 }
 
+// ─── Muted (filled) surface — slate-50 fill, used for inline search fields ─────
+// (e.g. the sidebar search). Border softens to slate-100; focus still shows the
+// accent ring so the affordance is clear.
+.wrap[data-surface="muted"] .fieldRow {
+  background:    var(--tesseract-slate-50);
+  border-color: var(--tesseract-slate-200);
+}
+
 // ─── Seamless variant (borderless — fills a table cell, inset focus/status ring) ─
 // The cell border lives as an inset pseudo-ring (3px in, rounded) so a row of
 // these reads as one input box per cell. Active (focus) wins over status colour.

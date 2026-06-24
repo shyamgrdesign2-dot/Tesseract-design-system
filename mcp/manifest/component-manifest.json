@@ -1096,6 +1096,10 @@
           "description": "default · seamless (borderless, fills a table cell with an inset focus ring)"
         },
         {
+          "name": "surface",
+          "default": "\"default\""
+        },
+        {
           "name": "allow",
           "default": "\"any\"",
           "allowedValues": [

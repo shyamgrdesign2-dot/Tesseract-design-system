@@ -4,6 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { Badge } from "@/src/components/atoms/Badge";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
+import { InputBox } from "@/src/components/atoms/Input/InputBox";
 import { cn } from "@/src/hooks/utils";
 import styles from "./Sidebar.module.scss";
 
@@ -541,19 +542,18 @@ export const Sidebar = React.forwardRef(function Sidebar(
         <div className={styles.head}>
           {logo != null && <div className={styles.logo}>{logo}</div>}
           {search && (
-            <div className={styles.search}>
-              <TPIcon
-                name={searchIcon}
-                variant="linear"
-                size={16}
-              />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={searchPlaceholder}
-                aria-label={searchPlaceholder}
-              />
-            </div>
+            <InputBox
+              surface="muted"
+              height={40}
+              radius={10}
+              fullWidth
+              style={{ flex: 1, minWidth: 0 }}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder}
+              leftIcon={<TPIcon name={searchIcon} variant="linear" size={16} />}
+            />
           )}
           {showCollapseToggle && (
             <button
