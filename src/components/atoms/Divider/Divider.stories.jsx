@@ -5,13 +5,44 @@ export default {
   component: Divider,
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
-    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
-    variant:     { control: 'inline-radio', options: ['solid', 'gradient'] },
-    color:       { control: 'text' },
-    spacing:     { control: 'number' },
-    thickness:   { control: 'number' },
+    orientation:   { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    variant:       { control: 'inline-radio', options: ['solid', 'gradient'] },
+    lineStyle:     { control: 'inline-radio', options: ['solid', 'dashed', 'dotted'], description: 'Rule rendering — solid bar, or dashed / dotted border' },
+    color:         { control: 'text' },
+    spacing:       { control: 'number' },
+    thickness:     { control: 'number' },
+    inset:         { control: 'number', description: 'Indents the line from both ends (px). Default 0 = full-bleed.' },
+    label:         { control: 'text', description: 'Optional label rendered between two line segments (horizontal only)' },
+    labelPosition: { control: 'inline-radio', options: ['center', 'start', 'end'], if: { arg: 'label', truthy: true }, description: 'Where the label sits along the line' },
   },
-  args: { orientation: 'horizontal', variant: 'solid', spacing: 0, thickness: 1 },
+  args: {
+    orientation: 'horizontal',
+    variant: 'solid',
+    lineStyle: 'solid',
+    spacing: 0,
+    thickness: 1,
+    inset: 0,
+    label: '',
+    labelPosition: 'center',
+  },
+};
+
+// Build a copy-paste snippet from the controls (what "Show code" shows).
+// Omits props left at their defaults so the snippet stays minimal.
+const dividerCode = ({ orientation, variant, lineStyle, color, spacing, thickness, inset, label, labelPosition }) => {
+  const lines = [];
+  if (orientation && orientation !== 'horizontal') lines.push(`  orientation="${orientation}"`);
+  if (variant && variant !== 'solid') lines.push(`  variant="${variant}"`);
+  if (lineStyle && lineStyle !== 'solid') lines.push(`  lineStyle="${lineStyle}"`);
+  if (color) lines.push(`  color="${color}"`);
+  if (spacing) lines.push(`  spacing={${spacing}}`);
+  if (thickness && thickness !== 1) lines.push(`  thickness={${thickness}}`);
+  if (inset) lines.push(`  inset={${inset}}`);
+  if (label) {
+    lines.push(`  label="${label}"`);
+    if (labelPosition && labelPosition !== 'center') lines.push(`  labelPosition="${labelPosition}"`);
+  }
+  return lines.length ? `<Divider\n${lines.join('\n')}\n/>` : `<Divider />`;
 };
 
 const Text = ({ children }) => (
@@ -43,6 +74,74 @@ export const Playground = {
         <Text>Below</Text>
       </div>
     ),
+  parameters: { docs: { source: { transform: (_code, ctx) => dividerCode(ctx.args) } } },
+};
+
+// ─── Line styles ──────────────────────────────────────────────────────────────
+export const LineStyles = {
+  name: '┄ Line styles',
+  render: () => (
+    <div style={{ width: 360, display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-5)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Solid (default)</Label>
+        <Divider lineStyle="solid" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Dashed</Label>
+        <Divider lineStyle="dashed" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Dotted</Label>
+        <Divider lineStyle="dotted" />
+      </div>
+    </div>
+  ),
+};
+
+// ─── Labelled ─────────────────────────────────────────────────────────────────
+export const Labelled = {
+  name: '⊟ Labelled',
+  render: () => (
+    <div style={{ width: 400, display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-6)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Center (default)</Label>
+        <Divider label="OR" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Start</Label>
+        <Divider label="Recent" labelPosition="start" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>End</Label>
+        <Divider label="Older" labelPosition="end" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Dashed line + label</Label>
+        <Divider label="Section" lineStyle="dashed" />
+      </div>
+    </div>
+  ),
+};
+
+// ─── Inset ────────────────────────────────────────────────────────────────────
+export const Inset = {
+  name: '↹ Inset',
+  render: () => (
+    <div style={{ width: 360, display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-5)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Full-bleed (inset 0)</Label>
+        <Divider />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Inset 24px both ends</Label>
+        <Divider inset={24} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
+        <Label>Inset start only (e.g. aligned to list text)</Label>
+        <Divider inset={{ start: 48, end: 0 }} />
+      </div>
+    </div>
+  ),
 };
 
 // ─── Solid ────────────────────────────────────────────────────────────────────

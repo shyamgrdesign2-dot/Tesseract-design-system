@@ -50,7 +50,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { AnimatedGrid } from \"@/src/components/atoms\";",
-      "description": "lineColor?: string,   // lattice stroke (default faint white for dark surfaces) cometColor?: string,  // travelling pulse color (default white) edgeFade?: number|boolean  // edge-fade strength 0..1 (true → 0.6, false → 0) }} props",
+      "description": "lineColor?: string,   // lattice stroke (default faint white for dark surfaces) cometColor?: string,  // travelling pulse color (default white) edgeFade?: number|boolean, // edge-fade strength 0..1 (true → 0.6, false → 0) speed?: number|\"slow\"|\"normal\"|\"fast\", // comet speed multiplier (default 1 / \"normal\") density?: number,     // 0..1 fraction of lanes that emit comets (default 1 = all) animated?: boolean,   // false → static lattice, no comets (default true). //   prefers-reduced-motion is auto-honored regardless. }} props",
       "props": [
         {
           "name": "className"
@@ -77,6 +77,29 @@
           "description": "Edge-fade strength — drag up to dissolve the edges more (0 = none, 1 = strong)"
         },
         {
+          "name": "speed",
+          "default": "\"normal\"",
+          "allowedValues": [
+            "slow",
+            "normal",
+            "fast"
+          ],
+          "control": "inline-radio",
+          "description": "Comet speed multiplier (also accepts a raw number in code)"
+        },
+        {
+          "name": "density",
+          "default": "1",
+          "control": "range",
+          "description": "Fraction of lanes that emit comets (1 = all, lower = sparser/calmer)"
+        },
+        {
+          "name": "animated",
+          "default": "true",
+          "control": "boolean",
+          "description": "Animate comets. When off — or when the OS prefers-reduced-motion — only the static lattice draws"
+        },
+        {
           "name": "surface",
           "allowedValues": [
             "dark",
@@ -89,6 +112,8 @@
       ],
       "stories": [
         "Playground",
+        "CalmAndSparse",
+        "Static",
         "OnDark",
         "OnLight",
         "Backgrounds"
@@ -853,7 +878,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { Divider } from \"@/src/components/atoms\";",
-      "description": "Divider — visual separator atom. variant \"solid\"    — flat single-color line (default) variant \"gradient\" — fades to transparent at both ends; colour in the middle. Works horizontally and vertically.",
+      "description": "Divider — visual separator atom. variant \"solid\"    — flat single-color line (default) variant \"gradient\" — fades to transparent at both ends; colour in the middle. Works horizontally and vertically. lineStyle \"solid\" (default) | \"dashed\" | \"dotted\" — switches the rule rendering. For solid + variant=\"solid\" the line is a filled bar (backgroundColor); for dashed/dotted it becomes a CSS border so the gaps show through. label + labelPosition \"center\" (default) | \"start\" | \"end\" — horizontal only: renders the label between two line segments. No label = a plain line (default). inset (number | {start,end}) — indents the line from its ends (px). Default 0.",
       "props": [
         {
           "name": "orientation",
@@ -889,6 +914,40 @@
           "control": "number"
         },
         {
+          "name": "lineStyle",
+          "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "control": "inline-radio",
+          "description": "Rule rendering — solid bar, or dashed / dotted border"
+        },
+        {
+          "name": "label",
+          "default": "''",
+          "control": "text",
+          "description": "Optional label rendered between two line segments (horizontal only)"
+        },
+        {
+          "name": "labelPosition",
+          "default": "\"center\"",
+          "allowedValues": [
+            "center",
+            "start",
+            "end"
+          ],
+          "control": "inline-radio",
+          "description": "Where the label sits along the line"
+        },
+        {
+          "name": "inset",
+          "default": "0",
+          "control": "number",
+          "description": "Indents the line from both ends (px). Default 0 = full-bleed."
+        },
+        {
           "name": "className"
         },
         {
@@ -897,6 +956,9 @@
       ],
       "stories": [
         "Playground",
+        "LineStyles",
+        "Labelled",
+        "Inset",
         "Solid",
         "Gradient",
         "Vertical",
@@ -1199,8 +1261,38 @@
           "control": "text"
         },
         {
+          "name": "speed",
+          "default": "\"normal\"",
+          "allowedValues": [
+            "slow",
+            "normal",
+            "fast"
+          ],
+          "control": "inline-radio",
+          "description": "Spin speed — scales each glyph’s base duration. "
+        },
+        {
+          "name": "color",
+          "default": "\"inherit\"",
+          "control": "text",
+          "description": "Token or CSS color applied to the root; the currentColor glyphs adopt it. "
+        },
+        {
+          "name": "labelPosition",
+          "default": "\"end\"",
+          "allowedValues": [
+            "end",
+            "bottom"
+          ],
+          "control": "inline-radio",
+          "description": "Where the label sits relative to the glyph."
+        },
+        {
           "name": "className",
           "default": "\"\""
+        },
+        {
+          "name": "style"
         }
       ],
       "stories": [
@@ -1251,12 +1343,38 @@
             "violet",
             "blue"
           ],
-          "control": "inline-radio"
+          "control": "inline-radio",
+          "description": "Preset paint. Ignored when `color` is set."
         },
         {
           "name": "height",
           "default": "32",
-          "control": "range"
+          "control": "range",
+          "description": "Height in px; width derives from the aspect ratio. Ignored when `width` is set."
+        },
+        {
+          "name": "width",
+          "default": "undefined",
+          "control": "number",
+          "description": "Width in px; height then derives from the aspect ratio. Wins over `height`."
+        },
+        {
+          "name": "maxWidth",
+          "default": "undefined",
+          "control": "number",
+          "description": "Optional cap on rendered width (px)."
+        },
+        {
+          "name": "color",
+          "default": "''",
+          "control": "text",
+          "description": "Arbitrary brand colour / gradient — overrides `tone`. Blank = use `tone`."
+        },
+        {
+          "name": "basePath",
+          "default": "\"/brand\"",
+          "control": "text",
+          "description": "Prefix for the brand SVG asset paths (CDN / alt root)."
         },
         {
           "name": "title"
@@ -1292,39 +1410,61 @@
       "description": "MedicalIcon (a.k.a. TPMedicalIcon) — health icons are no longer a separate set; they live in the single icon library (/tp-icons/{linear,bulk,bold}). This is a thin convenience wrapper over TPLibraryIcon that keeps the old API working and maps the legacy style names (line → linear, solid → bold).",
       "props": [
         {
-          "name": "name"
+          "name": "name",
+          "default": "'ambulance'",
+          "control": "text",
+          "description": "Icon name (resolved against the medical subset, then the full library)"
         },
         {
           "name": "variant",
           "default": "\"linear\"",
           "allowedValues": [
-            "line",
             "linear",
             "bulk",
-            "solid",
             "bold"
-          ]
+          ],
+          "control": "inline-radio",
+          "description": "Icon style (legacy "
         },
         {
           "name": "size",
-          "default": "24"
+          "default": "24",
+          "control": "range"
         },
         {
-          "name": "color"
+          "name": "color",
+          "default": "''",
+          "control": "color",
+          "description": "Override fill (blank = inherit currentColor)"
         },
         {
-          "name": "alt"
+          "name": "alt",
+          "default": "''",
+          "control": "text",
+          "description": "Accessible label (sets role="
         },
         {
           "name": "className"
         },
         {
           "name": "style"
+        },
+        {
+          "name": "family",
+          "default": "\"medical\"",
+          "control": "text",
+          "description": "Icon family — defaults to "
         }
       ],
-      "stories": [],
+      "stories": [
+        "Playground",
+        "Variants",
+        "Gallery",
+        "Interactive",
+        "FamilyOverride"
+      ],
       "sourcePath": "src/components/atoms/MedicalIcon/MedicalIcon.jsx",
-      "storiesPath": null
+      "storiesPath": "src/components/atoms/MedicalIcon/MedicalIcon.stories.jsx"
     },
     {
       "name": "Radio",
@@ -1566,7 +1706,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { Skeleton } from \"@/src/components/atoms\";",
-      "description": "Skeleton — Loading placeholder atom. Styling: Skeleton.module.scss (pulse animation + base bg). Width / height / border-radius remain inline (fully dynamic per usage).",
+      "description": "Skeleton — Loading placeholder atom. Styling: Skeleton.module.scss (pulse / wave / none animation + base bg). Width / height / border-radius remain inline (fully dynamic per usage). count     — render N stacked skeletons. For variant=\"text\" the LAST line is shortened (~60%) for realism. Default 1 = a single placeholder. animation — \"pulse\" (default) | \"wave\" | \"none\". Driven by a data-animation attribute the SCSS switches on. Always disabled under prefers-reduced-motion. speed     — animation-duration (seconds number, or any CSS time string). Default ~1.5s. Passed through as the --skeleton-speed CSS var.",
       "props": [
         {
           "name": "variant",
@@ -1591,6 +1731,28 @@
           "control": "text"
         },
         {
+          "name": "count",
+          "default": "1",
+          "control": "number",
+          "description": "Number of stacked skeletons. For variant="
+        },
+        {
+          "name": "animation",
+          "default": "\"pulse\"",
+          "allowedValues": [
+            "pulse",
+            "wave",
+            "none"
+          ],
+          "control": "inline-radio",
+          "description": "pulse (default) · wave shimmer · none. Disabled under prefers-reduced-motion."
+        },
+        {
+          "name": "speed",
+          "control": "text",
+          "description": "Animation duration — seconds number or any CSS time (e.g. "
+        },
+        {
           "name": "className"
         },
         {
@@ -1601,6 +1763,8 @@
         "Playground",
         "Variants",
         "TextLines",
+        "MultiLineCount",
+        "Animations",
         "Circular",
         "CardPlaceholder",
         "PatientTableRows",

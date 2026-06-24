@@ -10,9 +10,16 @@
  *   • dot-circle    — 8 dots circling
  *
  * Props:
- *   type   "line-simple" | "line-spinner" | "dot-circle"   default "line-simple"
- *   size   "xs" | "sm" | "md" | "lg" | number(px)          default "md"
- *   label  string — shown next to the glyph; also the a11y status text
+ *   type          "line-simple" | "line-spinner" | "dot-circle"   default "line-simple"
+ *   size          "xs" | "sm" | "md" | "lg" | number(px)          default "md"
+ *   label         string — shown next to the glyph; also the a11y status text
+ *   speed         "slow" | "normal" | "fast" | number(seconds)    default "normal"
+ *                 — scales the per-glyph spin duration. "normal" keeps the
+ *                   built-in per-type timings (0.7s / 1s / 1.1s). A number sets
+ *                   the duration directly (seconds).
+ *   color         token string | CSS color — applied to the root so the
+ *                 currentColor glyphs adopt it.                    default "inherit"
+ *   labelPosition "end" (label beside the glyph) | "bottom"       default "end"
  */
 
 import "./LoadingIndicator.css";
@@ -21,6 +28,18 @@ const SIZE_PX = { xs: 16, sm: 20, md: 24, lg: 32 };
 
 function toPx(size) {
   return typeof size === "number" ? size : SIZE_PX[size] ?? SIZE_PX.md;
+}
+
+// Map a speed keyword/number to a duration multiplier the CSS applies on top of
+// each glyph's base timing. "normal" → 1 (unchanged). A raw number is treated as
+// an absolute duration in seconds and wins over the per-glyph base.
+const SPEED_FACTOR = { slow: 1.6, normal: 1, fast: 0.5 };
+
+function speedVars(speed) {
+  if (speed == null || speed === "normal") return null;
+  if (typeof speed === "number") return { "--tp-loader-duration": `${speed}s` };
+  const factor = SPEED_FACTOR[speed];
+  return factor != null ? { "--tp-loader-speed": factor } : null;
 }
 
 const polar = (cx, cy, r, deg) => {
@@ -115,11 +134,26 @@ const GLYPHS = {
   "dot-circle": DotCircle,
 };
 
-export function LoadingIndicator({ type = "line-simple", size = "md", label, className = "" }) {
+export function LoadingIndicator({
+  type = "line-simple",
+  size = "md",
+  label,
+  speed = "normal",
+  color = "inherit",
+  labelPosition = "end",
+  className = "",
+  style,
+}) {
   const dim = toPx(size);
   const Glyph = GLYPHS[type] ?? LineSimple;
+  const rootStyle = { color, ...speedVars(speed), ...style };
   return (
-    <div className={["tp-loader", className].filter(Boolean).join(" ")} role="status">
+    <div
+      className={["tp-loader", className].filter(Boolean).join(" ")}
+      role="status"
+      data-label-position={labelPosition}
+      style={rootStyle}
+    >
       <Glyph dim={dim} />
       {label ? (
         <span className="tp-loader__label">{label}</span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useEffect, useState } from "react";
 
 /**
  * AnimatedGrid — Decorative SVG grid with light "comet" pulses that travel
@@ -250,6 +250,9 @@ const LANES = (() => {
     if (a.kind === "V") return a.sx - b.sx;
     return a.intercept - b.intercept;
   });
+  // Tag each lane with its final, stable index so density-subset rendering can
+  // keep clip-path ids consistent regardless of which lanes are dropped.
+  out.forEach((lane, i) => { lane.idx = i; });
   return out;
 })();
 
@@ -257,7 +260,7 @@ const ALL_EDGES_D = EDGES
   .map(([x1, y1, x2, y2]) => `M${x1},${y1}L${x2},${y2}`)
   .join("");
 
-function LanePulse({ lane, gradId }) {
+function LanePulse({ lane, gradId, speed = 1 }) {
   const { sx, sy, ex, ey } = lane;
   const dx = ex - sx, dy = ey - sy;
   const len = Math.hypot(dx, dy);
@@ -267,8 +270,12 @@ function LanePulse({ lane, gradId }) {
   const exPad = ex + ux * COMET_LEN;
   const eyPad = ey + uy * COMET_LEN;
   const path = `M${sxPad.toFixed(1)},${syPad.toFixed(1)} L${exPad.toFixed(1)},${eyPad.toFixed(1)}`;
-  const travel = (len + 2 * COMET_LEN) / SPEED;
-  const activeFrac = Math.min(travel / CYCLE, 0.999);
+  // `speed` scales both the comet velocity and the cycle period inversely, so a
+  // higher multiplier means faster comets on a shorter cycle. The active fraction
+  // (how long a comet is mid-flight per cycle) is invariant to speed.
+  const cycle = CYCLE / speed;
+  const travel = (len + 2 * COMET_LEN) / (SPEED * speed);
+  const activeFrac = Math.min(travel / cycle, 0.999);
 
   return (
     <rect
@@ -279,7 +286,7 @@ function LanePulse({ lane, gradId }) {
       fill={`url(#${gradId})`}
     >
       <animateMotion
-        dur={`${CYCLE}s`}
+        dur={`${(CYCLE / speed).toFixed(3)}s`}
         repeatCount="indefinite"
         rotate="auto"
         keyPoints="0;1;1"
@@ -291,11 +298,38 @@ function LanePulse({ lane, gradId }) {
   );
 }
 
+// Named speed presets → cycle/velocity multipliers (higher = faster).
+const SPEED_PRESETS = { slow: 0.6, normal: 1, fast: 1.6 };
+const resolveSpeed = (s) => {
+  if (typeof s === "number" && Number.isFinite(s) && s > 0) return s;
+  if (typeof s === "string" && s in SPEED_PRESETS) return SPEED_PRESETS[s];
+  return 1;
+};
+
+// React hook: true when the user has asked for reduced motion. SSR-safe (starts
+// false, syncs on mount) and updates live if the OS preference changes.
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return undefined;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReduced(mq.matches);
+    onChange();
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+  return reduced;
+}
+
 /**
  * @param {{ className?: string, style?: object,
  *   lineColor?: string,   // lattice stroke (default faint white for dark surfaces)
  *   cometColor?: string,  // travelling pulse color (default white)
- *   edgeFade?: number|boolean  // edge-fade strength 0..1 (true → 0.6, false → 0)
+ *   edgeFade?: number|boolean, // edge-fade strength 0..1 (true → 0.6, false → 0)
+ *   speed?: number|"slow"|"normal"|"fast", // comet speed multiplier (default 1 / "normal")
+ *   density?: number,     // 0..1 fraction of lanes that emit comets (default 1 = all)
+ *   animated?: boolean,   // false → static lattice, no comets (default true).
+ *                         //   prefers-reduced-motion is auto-honored regardless.
  * }} props
  */
 export function AnimatedGrid({
@@ -304,7 +338,25 @@ export function AnimatedGrid({
   lineColor = "color-mix(in srgb, var(--tesseract-slate-0) 14%, transparent)",
   cometColor = "var(--tesseract-slate-0)",
   edgeFade = true,
+  speed = "normal",
+  density = 1,
+  animated = true,
 }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  // Render comets only when explicitly animated AND the user hasn't requested
+  // reduced motion. When off, just the static lattice draws.
+  const showComets = animated && !prefersReducedMotion;
+  const speedMul = resolveSpeed(speed);
+  // `density` is the FRACTION of lanes that emit comets. 1 → every lane (today's
+  // look); lower → an evenly-spread subset (sparser/calmer + cheaper). We pick a
+  // deterministic stride across the lane list so the kept lanes stay distributed.
+  const dens = Math.max(0, Math.min(1, Number(density)));
+  const activeLanes =
+    !showComets || dens <= 0
+      ? []
+      : dens >= 1
+        ? LANES
+        : LANES.filter((_, i) => Math.floor(i * dens) !== Math.floor((i - 1) * dens));
   // Scope the clip/gradient ids per instance so two differently-themed grids on
   // one page never share (and clobber) each other's definitions.
   const uid = useId().replace(/:/g, "");
@@ -334,8 +386,8 @@ export function AnimatedGrid({
       aria-hidden
     >
       <defs>
-        {LANES.map((lane, i) => (
-          <clipPath key={i} id={`${uid}-lc${i}`} clipPathUnits="userSpaceOnUse">
+        {activeLanes.map((lane) => (
+          <clipPath key={lane.idx} id={`${uid}-lc${lane.idx}`} clipPathUnits="userSpaceOnUse">
             <path d={lane.clipD} />
           </clipPath>
         ))}
@@ -357,9 +409,9 @@ export function AnimatedGrid({
           fill="none"
         />
 
-        {LANES.map((lane, i) => (
-          <g key={i} clipPath={`url(#${uid}-lc${i})`}>
-            <LanePulse lane={lane} gradId={gradId} />
+        {activeLanes.map((lane) => (
+          <g key={lane.idx} clipPath={`url(#${uid}-lc${lane.idx})`}>
+            <LanePulse lane={lane} gradId={gradId} speed={speedMul} />
           </g>
         ))}
       </g>

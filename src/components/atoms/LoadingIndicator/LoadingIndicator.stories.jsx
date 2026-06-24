@@ -15,13 +15,28 @@ const meta = {
     type: { control: 'inline-radio', options: ['line-simple', 'line-spinner', 'dot-circle'] },
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
     label: { control: 'text' },
+    speed: { control: 'inline-radio', options: ['slow', 'normal', 'fast'], description: 'Spin speed — scales each glyph’s base duration. "normal" keeps the built-in per-type timings. (A number of seconds also works in code.)', table: { category: 'Motion' } },
+    color: { control: 'text', description: 'Token or CSS color applied to the root; the currentColor glyphs adopt it. "inherit" = follow context.', table: { category: 'Appearance' } },
+    labelPosition: { control: 'inline-radio', options: ['end', 'bottom'], description: 'Where the label sits relative to the glyph.', table: { category: 'Layout' } },
   },
-  args: { type: 'line-simple', size: 'md', label: 'Loading...' },
+  args: { type: 'line-simple', size: 'md', label: 'Loading...', speed: 'normal', color: 'inherit', labelPosition: 'end' },
 };
 
 export default meta;
 
-export const Playground = {};
+// Build a copy-paste snippet from the controls — only emit non-default props.
+const loaderCode = ({ type = 'line-simple', size = 'md', label, speed = 'normal', color = 'inherit', labelPosition = 'end' }) => {
+  const lines = [`  type="${type}"`, `  size="${size}"`];
+  if (label) lines.push(`  label="${label}"`);
+  if (speed && speed !== 'normal') lines.push(typeof speed === 'number' ? `  speed={${speed}}` : `  speed="${speed}"`);
+  if (color && color !== 'inherit') lines.push(`  color="${color}"`);
+  if (labelPosition && labelPosition !== 'end') lines.push(`  labelPosition="${labelPosition}"`);
+  return `<LoadingIndicator\n${lines.join('\n')}\n/>`;
+};
+
+export const Playground = {
+  parameters: { docs: { source: { transform: (_code, ctx) => loaderCode(ctx.args) } } },
+};
 
 /** The three glyphs side by side (the requested default demo). */
 export const Default = {

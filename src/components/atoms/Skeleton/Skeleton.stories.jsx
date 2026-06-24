@@ -9,13 +9,39 @@ const meta = {
     width: { control: 'text' },
     height: { control: 'text' },
     radius: { control: 'text' },
+    count: { control: { type: 'number', min: 1 }, description: 'Number of stacked skeletons. For variant="text" the last line is shortened.' },
+    animation: { control: 'inline-radio', options: ['pulse', 'wave', 'none'], description: 'pulse (default) · wave shimmer · none. Disabled under prefers-reduced-motion.' },
+    speed: { control: 'text', description: 'Animation duration — seconds number or any CSS time (e.g. "2s"). Default ~1.5s.' },
   },
   args: {
     variant: 'text',
+    count: 1,
+    animation: 'pulse',
   },
 };
 
 export default meta;
+
+// Coerce a pure-number speed string to a number; pass CSS time strings through;
+// blank → undefined (component default).
+const speedValue = (s) => {
+  const v = String(s ?? '').trim();
+  if (!v) return undefined;
+  return /^-?\d*\.?\d+$/.test(v) ? Number(v) : v;
+};
+
+// Build a copy-paste snippet from the controls (what "Show code" shows).
+const skeletonCode = ({ variant = 'text', width, height, radius, count = 1, animation = 'pulse', speed }) => {
+  const lines = [`  variant="${variant}"`];
+  if (width) lines.push(typeof width === 'number' ? `  width={${width}}` : `  width="${width}"`);
+  if (height) lines.push(typeof height === 'number' ? `  height={${height}}` : `  height="${height}"`);
+  if (radius) lines.push(typeof radius === 'number' ? `  radius={${radius}}` : `  radius="${radius}"`);
+  if (count && count !== 1) lines.push(`  count={${count}}`);
+  if (animation && animation !== 'pulse') lines.push(`  animation="${animation}"`);
+  const sv = speedValue(speed);
+  if (sv != null) lines.push(typeof sv === 'number' ? `  speed={${sv}}` : `  speed="${sv}"`);
+  return `<Skeleton\n${lines.join('\n')}\n/>`;
+};
 
 const Row = ({ children }) => (
   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -24,11 +50,12 @@ const Row = ({ children }) => (
 );
 
 export const Playground = {
-  render: (args) => (
+  render: ({ speed, ...args }) => (
     <div style={{ width: 240 }}>
-      <Skeleton {...args} />
+      <Skeleton {...args} speed={speedValue(speed)} />
     </div>
   ),
+  parameters: { docs: { source: { transform: (_code, ctx) => skeletonCode(ctx.args) } } },
 };
 
 export const Variants = {
@@ -56,6 +83,37 @@ export const TextLines = {
       <Skeleton variant="text" />
       <Skeleton variant="text" width="90%" />
       <Skeleton variant="text" width="75%" />
+    </div>
+  ),
+};
+
+/** Multi-line text block via `count` — the last line is auto-shortened (~60%). */
+export const MultiLineCount = {
+  name: 'Count (multi-line text)',
+  render: () => (
+    <div style={{ width: 320, display: 'grid', gap: 16 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>count={3}</strong>
+        <Skeleton variant="text" count={3} />
+      </div>
+      <div style={{ display: 'grid', gap: 8 }}>
+        <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>count={5}</strong>
+        <Skeleton variant="text" count={5} />
+      </div>
+    </div>
+  ),
+};
+
+/** Animation modes — pulse (default) · wave shimmer · none (static). */
+export const Animations = {
+  render: () => (
+    <div style={{ width: 280, display: 'grid', gap: 16 }}>
+      {['pulse', 'wave', 'none'].map((a) => (
+        <div key={a} style={{ display: 'grid', gap: 8 }}>
+          <strong style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #54545C)' }}>{a}</strong>
+          <Skeleton variant="text" animation={a} count={2} />
+        </div>
+      ))}
     </div>
   ),
 };

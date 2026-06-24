@@ -10,13 +10,31 @@ const meta = {
   argTypes: {
     variant: { control: 'inline-radio', options: ['wordmark', 'symbol'] },
     brand: { control: 'inline-radio', options: ['practice', 'care'] },
-    tone: { control: 'inline-radio', options: ['gradient', 'dark', 'light', 'violet', 'blue'] },
-    height: { control: { type: 'range', min: 16, max: 80, step: 2 } },
+    tone: { control: 'inline-radio', options: ['gradient', 'dark', 'light', 'violet', 'blue'], description: 'Preset paint. Ignored when `color` is set.', table: { category: 'Appearance' } },
+    color: { control: 'text', description: 'Arbitrary brand colour / gradient — overrides `tone`. Blank = use `tone`.', table: { category: 'Appearance' } },
+    height: { control: { type: 'range', min: 16, max: 80, step: 2 }, description: 'Height in px; width derives from the aspect ratio. Ignored when `width` is set.', table: { category: 'Sizing' } },
+    width: { control: 'number', description: 'Width in px; height then derives from the aspect ratio. Wins over `height`.', table: { category: 'Sizing' } },
+    maxWidth: { control: 'number', description: 'Optional cap on rendered width (px).', table: { category: 'Sizing' } },
+    basePath: { control: 'text', description: 'Prefix for the brand SVG asset paths (CDN / alt root).', table: { category: 'Assets' } },
   },
-  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', height: 32 },
+  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', color: '', height: 32, width: undefined, maxWidth: undefined, basePath: '/brand' },
 };
 
 export default meta;
+
+// Build a copy-paste snippet from the controls — only emit non-default props.
+const logoCode = ({ variant = 'wordmark', brand = 'practice', tone = 'gradient', color, height = 32, width, maxWidth, basePath = '/brand' }) => {
+  const lines = [];
+  if (variant !== 'wordmark') lines.push(`  variant="${variant}"`);
+  if (brand !== 'practice') lines.push(`  brand="${brand}"`);
+  if (color) lines.push(`  color="${color}"`);
+  else if (tone !== 'gradient') lines.push(`  tone="${tone}"`);
+  if (width != null && width !== '') lines.push(`  width={${width}}`);
+  else if (height !== 32) lines.push(`  height={${height}}`);
+  if (maxWidth != null && maxWidth !== '') lines.push(`  maxWidth={${maxWidth}}`);
+  if (basePath && basePath !== '/brand') lines.push(`  basePath="${basePath}"`);
+  return lines.length ? `<Logo\n${lines.join('\n')}\n/>` : '<Logo />';
+};
 
 export const Playground = {
   render: (args) => (
@@ -24,6 +42,7 @@ export const Playground = {
       <Logo {...args} />
     </div>
   ),
+  parameters: { docs: { source: { transform: (_code, ctx) => logoCode(ctx.args) } } },
 };
 
 const Tile = ({ dark, children, label }) => (

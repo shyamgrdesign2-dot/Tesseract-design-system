@@ -5,10 +5,18 @@
 }
 
 .tp-loader {
+  /* --tp-loader-speed: multiplier on each glyph's base duration (1 = unchanged).
+     --tp-loader-duration: absolute override (wins over the base when set). */
+  --tp-loader-speed: 1;
   display: inline-flex;
   align-items: center;
   gap: var(--tesseract-space-2);
   color: inherit;
+}
+
+/* labelPosition="bottom": stack the glyph over the label */
+.tp-loader[data-label-position="bottom"] {
+  flex-direction: column;
 }
 
 .tp-loader__glyph {
@@ -19,17 +27,17 @@
 
 /* line-simple: smooth continuous rotation */
 .tp-loader__glyph[data-type="line-simple"] {
-  animation: tp-loader-spin 0.7s linear infinite;
+  animation: tp-loader-spin var(--tp-loader-duration, calc(0.7s * var(--tp-loader-speed))) linear infinite;
 }
 
 /* line-spinner: 12 spokes, stepped rotation for the classic "chase" */
 .tp-loader__glyph[data-type="line-spinner"] {
-  animation: tp-loader-spin 1s steps(12) infinite;
+  animation: tp-loader-spin var(--tp-loader-duration, calc(1s * var(--tp-loader-speed))) steps(12) infinite;
 }
 
 /* dot-circle: 8 dots, stepped rotation */
 .tp-loader__glyph[data-type="dot-circle"] {
-  animation: tp-loader-spin 1.1s steps(8) infinite;
+  animation: tp-loader-spin var(--tp-loader-duration, calc(1.1s * var(--tp-loader-speed))) steps(8) infinite;
 }
 
 .tp-loader__label {

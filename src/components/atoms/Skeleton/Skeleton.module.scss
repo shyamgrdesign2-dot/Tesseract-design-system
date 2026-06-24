@@ -5,12 +5,48 @@
   50% { opacity: 0.4; }
 }
 
+@keyframes wave {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .skeleton {
   display: block;
   background-color: var(--tesseract-slate-200);
-  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  /* Speed is supplied per-instance via --skeleton-speed (default ~1.5s). */
+  --skeleton-speed: 1.5s;
   /* Accurate arcs so the `circular` variant (border-radius: 50%) renders a true
      circle instead of the global squircle. */
   corner-shape: round;
   /* width / height / border-radius set via inline style (fully dynamic) */
+}
+
+/* pulse — the default animation (current look). */
+.skeleton[data-animation="pulse"] {
+  animation: pulse var(--skeleton-speed) cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* wave — a moving shimmer gradient sweeping across the base colour. */
+.skeleton[data-animation="wave"] {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--tesseract-slate-100, #F0F0F6) 70%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: wave var(--skeleton-speed) ease-in-out infinite;
+}
+
+/* none — static placeholder, no animation. */
+.skeleton[data-animation="none"] {
+  animation: none;
+}
+
+/* Respect the user's reduced-motion preference: never animate. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton[data-animation] {
+    animation: none;
+  }
 }
