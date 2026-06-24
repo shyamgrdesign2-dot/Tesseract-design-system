@@ -40,7 +40,7 @@ const meta = {
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
-    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Layout' } },
+    radius: { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'corner radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Layout' } },
     leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
     rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
@@ -55,7 +55,7 @@ const meta = {
     disabled: false,
     removable: false,
     removePosition: 'right',
-    radius: '',
+    radius: 'default',
     leftIcon: 'star-1',
     rightIcon: '',
     iconVariant: 'linear',
@@ -69,7 +69,7 @@ export default meta;
 // pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
 const radiusValue = (r) => {
   const s = String(r ?? '').trim();
-  if (!s) return undefined;
+  if (!s || s === 'default') return undefined;
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 

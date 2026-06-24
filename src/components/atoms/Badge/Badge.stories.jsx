@@ -43,7 +43,7 @@ const meta = {
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
     iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
     // ── Layout ──
-    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Layout' } },
+    radius: { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'corner radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Layout' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -56,7 +56,7 @@ const meta = {
     rightIcon: 'arrow-right',
     iconVariant: 'linear',
     iconFamily: '',
-    radius: '',
+    radius: 'default',
     sticky: 'none',
   },
 };
@@ -67,7 +67,7 @@ export default meta;
 // pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
 const radiusValue = (r) => {
   const s = String(r ?? '').trim();
-  if (!s) return undefined;
+  if (!s || s === 'default') return undefined;
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 

@@ -72,7 +72,7 @@ export default {
     variant:     { control: 'inline-radio', options: ['default', 'seamless'], description: 'default · seamless (borderless, fills a table cell with an inset focus ring)', table: { category: 'Appearance' } },
     status:      { control: 'inline-radio', options: STATUSES, description: 'Validation state — default · success · error · warning (drives border + status glyph)', table: { category: 'Appearance' } },
     fullWidth:   { control: 'boolean', table: { category: 'Appearance' } },
-    radius:      { control: 'text', name: 'radius', description: 'Field corner radius — a number (px), "pill", "sharp", or any CSS length / token. Blank = default 10px.', table: { category: 'Appearance' } },
+    radius:      { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Appearance' } },
     height:      { control: 'text', name: 'height', description: 'Override the field height — a number (px) or CSS length. Blank = size default (sm 36 · md 42 · lg 48).', table: { category: 'Appearance' } },
 
     allow:       { control: 'inline-radio', options: ALLOW, name: 'allow (filter)', description: 'Restrict typed characters', table: { category: 'Behaviour' } },
@@ -122,7 +122,7 @@ export default {
     variant: 'default',
     status: 'default',
     fullWidth: true,
-    radius: '',
+    radius: 'default',
     height: '',
     allow: 'any',
     clearable: true,
@@ -149,6 +149,7 @@ export default {
 const radiusValue = (r) => {
   if (r == null || String(r).trim() === '') return undefined;
   const s = String(r).trim();
+  if (s === 'default') return undefined;
   return /^\d+$/.test(s) ? Number(s) : s;
 };
 

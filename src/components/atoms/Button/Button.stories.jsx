@@ -90,7 +90,7 @@ const meta = {
     theme:    { control: 'select',       options: THEMES,              description: 'Colour theme — primary · neutral · error · success · warning', table: { category: 'Style' } },
     size:     { control: 'inline-radio', options: SIZES,               description: 'sm · md · lg', table: { category: 'Style' } },
     surface:  { control: 'inline-radio', options: ['light', 'dark'],   description: 'Tune contrast for a light or dark background', table: { category: 'Style' } },
-    radius:   { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Style' } },
+    radius:   { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'corner radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Style' } },
     fullWidth:{ control: 'boolean', name: 'full width', description: 'Stretch to width:100% (default is inline width)', table: { category: 'Style' } },
     href:     { control: 'text', description: 'When set, renders a real <a href> with identical styling (great for the link variant). Blank = native <button>', table: { category: 'Polymorphic' } },
     loading:  { control: 'boolean', description: 'Show a spinner and block clicks',     table: { category: 'State' } },
@@ -117,7 +117,7 @@ const meta = {
     theme:    'primary',
     size:     'md',
     surface:  'light',
-    radius:    '',
+    radius:    'default',
     fullWidth: false,
     href:     '',
     loading:  false,
@@ -138,7 +138,7 @@ export default meta;
 // pass keywords ("pill"/"sharp") / tokens through; blank → undefined (default look).
 const radiusValue = (r) => {
   const s = String(r ?? '').trim();
-  if (!s) return undefined;
+  if (!s || s === 'default') return undefined;
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 

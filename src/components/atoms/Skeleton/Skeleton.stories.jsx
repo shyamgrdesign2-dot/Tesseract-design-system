@@ -24,7 +24,7 @@ const meta = {
     variant: { control: 'inline-radio', options: ['text', 'circular', 'rectangular'], description: 'Shape to mimic — line of text, avatar, or block' },
     width: { control: 'text', description: 'px or any CSS length (e.g. "60%")' },
     height: { control: 'text', description: 'px or any CSS length; text infers from font' },
-    radius: { control: 'text' },
+    radius: { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default." },
     count: { control: { type: 'number', min: 1 }, description: 'Number of stacked skeletons. For variant="text" the last line is shortened.' },
     animation: { control: 'inline-radio', options: ['pulse', 'wave', 'none'], description: 'pulse (default) · wave shimmer · none. Disabled under prefers-reduced-motion.' },
     speed: { control: 'text', description: 'Animation duration — seconds number or any CSS time (e.g. "2s"). Default ~1.5s.' },
@@ -50,7 +50,7 @@ const speedValue = (s) => {
 // pass keywords / tokens through; blank → undefined (component default).
 const radiusValue = (r) => {
   const s = String(r ?? '').trim();
-  if (!s) return undefined;
+  if (!s || s === 'default') return undefined;
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 

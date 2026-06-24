@@ -37,7 +37,7 @@ const meta = {
     size: { control: { type: 'range', min: 20, max: 96, step: 2 }, table: { category: 'Appearance' } },
     // ── Appearance ──
     shape: { control: 'inline-radio', options: SHAPES, description: 'Corner shape — circle · rounded · square', table: { category: 'Appearance' } },
-    radius: { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Appearance' } },
+    radius: { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'corner radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Appearance' } },
     color: { control: 'select', options: COLORS, description: 'Background (—100) + initials/icon (—600) ramp', table: { category: 'Appearance' } },
     status: { control: 'inline-radio', options: STATUSES, description: 'Corner status dot', table: { category: 'Appearance' } },
     ring: { control: 'boolean', description: 'Brand gradient ring', table: { category: 'Appearance' } },
@@ -52,7 +52,7 @@ const meta = {
     src: 'https://i.pravatar.cc/100?img=12',
     size: 48,
     shape: 'circle',
-    radius: '',
+    radius: 'default',
     color: 'slate',
     status: 'none',
     ring: true,
@@ -68,7 +68,7 @@ export default meta;
 // pass keywords ("pill"/"sharp") / tokens through; blank → undefined (use shape).
 const radiusValue = (r) => {
   const s = String(r ?? '').trim();
-  if (!s) return undefined;
+  if (!s || s === 'default') return undefined;
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 
