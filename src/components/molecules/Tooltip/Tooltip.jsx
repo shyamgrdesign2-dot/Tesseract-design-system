@@ -18,7 +18,9 @@
  *   icon         ReactNode — leading icon inside the tooltip (with / without)
  *
  * Other props: side, align, sideOffset, variant ("dark"|"light"), arrow,
- *   maxWidth, disabled, whenTruncated (hover only), open/defaultOpen/onOpenChange.
+ *   arrowSize, maxWidth, disabled, whenTruncated (hover only), interactive,
+ *   closeIcon, closeDelay, skipDelayDuration, portalContainer,
+ *   open/defaultOpen/onOpenChange.
  */
 
 import * as React from "react";
@@ -52,14 +54,20 @@ export function Tooltip({
   sideOffset = 6,
   collisionPadding = 8,
   delayDuration,
+  closeDelay = 60,
+  skipDelayDuration,
   variant = "dark",
   arrow = true,
+  arrowSize = 5,
   maxWidth = 280,
   disabled = false,
   whenTruncated = false,
+  interactive = false,
   trigger = "hover",
   dismissible = false,
   icon,
+  closeIcon,
+  portalContainer,
   className,
   open: openProp,
   defaultOpen,
@@ -68,6 +76,9 @@ export function Tooltip({
   const provider = React.useContext(ProviderContext);
   const delay = delayDuration ?? provider.delayDuration ?? 200;
   const isClick = trigger === "click";
+  // Most-recent close timestamp — used by skipDelayDuration to open instantly
+  // when re-entering shortly after the tooltip closed.
+  const lastClosedAt = React.useRef(0);
 
   const isControlled = openProp !== undefined;
   const [internalOpen, setInternalOpen] = React.useState(Boolean(defaultOpen));
@@ -94,11 +105,19 @@ export function Tooltip({
     if (disabled) return;
     if (whenTruncated && !isOverflowing(triggerRef.current)) return;
     cancelTimers();
-    openTimer.current = window.setTimeout(() => setOpen(true), delay);
+    // skipDelayDuration: if we re-enter within that window of the last close,
+    // skip the open delay so the tooltip feels "still up" while scanning.
+    const skip =
+      skipDelayDuration != null && Date.now() - lastClosedAt.current <= skipDelayDuration;
+    const d = skip ? 0 : delay;
+    openTimer.current = window.setTimeout(() => setOpen(true), d);
   };
   const requestClose = () => {
     cancelTimers();
-    closeTimer.current = window.setTimeout(() => setOpen(false), 60);
+    closeTimer.current = window.setTimeout(() => {
+      lastClosedAt.current = Date.now();
+      setOpen(false);
+    }, closeDelay);
   };
   const toggle = () => { if (!disabled) setOpen(!open); };
 
@@ -112,11 +131,12 @@ export function Tooltip({
       open, setOpen, requestOpen, requestClose, toggle,
       triggerRef, floatingRef, id,
       side, align, sideOffset, collisionPadding,
-      variant, arrow, maxWidth, className,
-      isClick, dismissible, icon, disabled,
+      variant, arrow, arrowSize, maxWidth, className,
+      isClick, dismissible, icon, closeIcon, disabled,
+      interactive, portalContainer,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [open, id, side, align, sideOffset, collisionPadding, variant, arrow, maxWidth, className, disabled, whenTruncated, isClick, dismissible, icon],
+    [open, id, side, align, sideOffset, collisionPadding, variant, arrow, arrowSize, maxWidth, className, disabled, whenTruncated, isClick, dismissible, icon, closeIcon, interactive, portalContainer],
   );
 
   const hasContent = content !== undefined && content !== null && content !== "";
@@ -200,20 +220,38 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
     collisionPadding: collisionPadding ?? ctx.collisionPadding,
   });
 
-  const interactive = ctx.isClick || ctx.dismissible;
+  // Pointer-events are needed for click / dismissible panels, and for hover
+  // tooltips opted into `interactive` (so the pointer can move into the bubble).
+  const hoverInteractive = !ctx.isClick && ctx.interactive;
+  const wantsPointer = ctx.isClick || ctx.dismissible || hoverInteractive;
+  const isDialog = ctx.isClick || ctx.dismissible;
   const cls = [styles.content, ctx.className, className].filter(Boolean).join(" ");
 
+  // Keep an interactive hover tooltip open while the pointer is inside it; let the
+  // close timer run once it leaves. (Click/dismissible manage close themselves.)
+  const interactiveHandlers = hoverInteractive
+    ? { onPointerEnter: ctx.requestOpen, onPointerLeave: ctx.requestClose }
+    : {};
+
+  // Arrow color follows the bubble surface via a CSS var, so a custom surface
+  // (e.g. overridden background) carries through to the arrow too.
+  const surfaceVar =
+    ctx.variant === "light"
+      ? "var(--tesseract-slate-0, #ffffff)"
+      : "var(--tesseract-slate-900, #171725)";
+
   return (
-    <Portal>
+    <Portal container={ctx.portalContainer}>
       <div
         ref={ref}
         id={ctx.id}
-        role={interactive ? "dialog" : "tooltip"}
+        role={isDialog ? "dialog" : "tooltip"}
         data-state="open"
         data-side={pos.side}
         data-variant={ctx.variant}
         className={cls}
-        style={{ position: "fixed", left: pos.x, top: pos.y, maxWidth: ctx.maxWidth, pointerEvents: interactive ? "auto" : "none", ...style }}
+        style={{ position: "fixed", left: pos.x, top: pos.y, maxWidth: ctx.maxWidth, pointerEvents: wantsPointer ? "auto" : "none", "--tp-tooltip-arrow": surfaceVar, ...style }}
+        {...interactiveHandlers}
         {...props}
       >
         <span className={styles.inner} data-multiline={multiline || undefined}>
@@ -221,24 +259,35 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
           <span ref={bodyRef} className={styles.ttBody}>{children}</span>
           {ctx.dismissible && (
             <button type="button" className={styles.ttDismiss} aria-label="Dismiss" onClick={() => ctx.setOpen(false)}>
-              <TPLibraryIcon name="close-square" variant="bold" size={14} aria-hidden />
+              {renderCloseIcon(ctx.closeIcon)}
             </button>
           )}
         </span>
-        {ctx.arrow ? <TooltipArrow side={pos.side} variant={ctx.variant} /> : null}
+        {ctx.arrow ? <TooltipArrow side={pos.side} size={ctx.arrowSize} /> : null}
       </div>
     </Portal>
   );
 }
 
-function TooltipArrow({ side, variant }) {
-  const color = variant === "light" ? "var(--tesseract-slate-0, #ffffff)" : "var(--tesseract-slate-900, #171725)";
+// Dismiss glyph: a node passed through as-is, a string used as an icon name, or
+// the default bold `close-square` (preserves the current look).
+function renderCloseIcon(closeIcon) {
+  if (closeIcon == null) return <TPLibraryIcon name="close-square" variant="bold" size={14} aria-hidden />;
+  if (typeof closeIcon === "string") return <TPLibraryIcon name={closeIcon} variant="bold" size={14} aria-hidden />;
+  return closeIcon;
+}
+
+function TooltipArrow({ side, size = 5 }) {
+  // Color tracks the bubble surface via the --tp-tooltip-arrow var set on the
+  // panel, so a custom surface flows through to the arrow.
+  const color = "var(--tp-tooltip-arrow, var(--tesseract-slate-900, #171725))";
+  const s = size;
   const base = { position: "absolute", width: 0, height: 0, borderStyle: "solid", borderColor: "transparent" };
   let style = base;
-  if (side === "top") style = { ...base, bottom: -5, left: "50%", transform: "translateX(-50%)", borderWidth: "5px 5px 0 5px", borderTopColor: color };
-  else if (side === "bottom") style = { ...base, top: -5, left: "50%", transform: "translateX(-50%)", borderWidth: "0 5px 5px 5px", borderBottomColor: color };
-  else if (side === "left") style = { ...base, right: -5, top: "50%", transform: "translateY(-50%)", borderWidth: "5px 0 5px 5px", borderLeftColor: color };
-  else if (side === "right") style = { ...base, left: -5, top: "50%", transform: "translateY(-50%)", borderWidth: "5px 5px 5px 0", borderRightColor: color };
+  if (side === "top") style = { ...base, bottom: -s, left: "50%", transform: "translateX(-50%)", borderWidth: `${s}px ${s}px 0 ${s}px`, borderTopColor: color };
+  else if (side === "bottom") style = { ...base, top: -s, left: "50%", transform: "translateX(-50%)", borderWidth: `0 ${s}px ${s}px ${s}px`, borderBottomColor: color };
+  else if (side === "left") style = { ...base, right: -s, top: "50%", transform: "translateY(-50%)", borderWidth: `${s}px 0 ${s}px ${s}px`, borderLeftColor: color };
+  else if (side === "right") style = { ...base, left: -s, top: "50%", transform: "translateY(-50%)", borderWidth: `${s}px ${s}px ${s}px 0`, borderRightColor: color };
   return <span aria-hidden style={style} />;
 }
 

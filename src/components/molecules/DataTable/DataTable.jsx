@@ -19,16 +19,29 @@
  *   defaultSort  { id, dir: "asc"|"desc" }
  *   onSortChange (sort) => void
  *   pageSize     number    enables pagination when set
- *   loading      boolean   shows a loading row (lazy fetch)
+ *   loading      boolean   shows a loading state (lazy fetch)
+ *   loadingVariant "skeleton"|"overlay"  skeleton rows (default) vs a centered
+ *                spinner over the dimmed existing rows
+ *   renderLoading ReactNode|()=>ReactNode  override the overlay's content
  *   hasMore      boolean   more rows exist to lazy-load
  *   onLoadMore   ()=>void  called when scrolled near the bottom
  *   emptyState   ReactNode
+ *   stickyMaxHeight number  scroll cap applied to sticky-header tables  default 420
+ *
+ *   ── Error ──
+ *   error        boolean|ReactNode  show a distinct error row (instead of data/empty)
+ *   errorState   ReactNode          custom error body (else: icon + message + Retry)
+ *   onRetry      ()=>void           adds a Retry button to the default error row
  *
  *   ── Selection ──
  *   selectionMode "none"|"single"|"multiple"  leading radio/checkbox column
  *   selectable    boolean   alias for selectionMode="multiple"
  *   selectedKeys / onSelectionChange          controlled selection (array of keys)
  *   isRowDisabled (row, i) => boolean         disabled rows can't be selected
+ *   selectionToolbar (selectedKeys, clear) => node  bulk-action bar shown above the
+ *                table when selection is on and ≥1 row is selected
+ *   selectColumnWidth number  width of the leading select column  default 48
+ *   minColumnWidth    number  floor a column shrinks to           default 88
  *
  *   ── Row state (semantic tint) ──
  *   rowState     (row, i) => "info"|"success"|"warning"|"error"|"reference"
@@ -88,15 +101,22 @@ import styles from "./DataTable.module.scss";
 
 // Responsive per-column sizing. `expand` drops the max so the column soaks up the
 // leftover width (its ceiling becomes the screen); otherwise `maxWidth` caps it.
-const colStyle = (col) => ({
+const colStyle = (col, minWidth = DEFAULT_MIN_WIDTH) => ({
   width: col.width,
-  minWidth: col.minWidth ?? DEFAULT_MIN_WIDTH,
+  minWidth: col.minWidth ?? minWidth,
   maxWidth: col.expand ? undefined : col.maxWidth,
 });
 
+// Inline style for the leading select column: its configurable fixed width, plus
+// the pinned `left:0` when it sticks alongside a left band.
+const selectCellStyle = (sticky, width = LEADING_COL_WIDTH) => {
+  const w = { width, minWidth: width, maxWidth: width };
+  return sticky ? { ...w, left: 0 } : w;
+};
+
 // Merge the responsive sizing with the resolved sticky offset (left/right px).
-const stickyStyle = (col, offsets) => {
-  const base = colStyle(col);
+const stickyStyle = (col, offsets, minWidth = DEFAULT_MIN_WIDTH) => {
+  const base = colStyle(col, minWidth);
   const s = offsets[col.id];
   if (!s) return base;
   return { ...base, [s.side]: s.offset };
@@ -120,6 +140,30 @@ function SortIcon() {
 // via the .chevron[data-open] selector.
 function Chevron({ open }) {
   return <TPLibraryIcon name="chevron-right" size={16} className={styles.chevron} data-open={open || undefined} />;
+}
+
+// Centered spinner used by the "overlay" loading variant.
+function Spinner() {
+  return (
+    <svg className={styles.spinner} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" strokeOpacity="0.18" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// Default error body — icon + message + optional Retry. Used when `error` is set
+// and no `errorState` slot is provided. A string/node `error` becomes the message.
+function DefaultErrorState({ message, onRetry }) {
+  return (
+    <div className={styles.errorBody}>
+      <TPLibraryIcon name="information" size={20} className={styles.errorIcon} />
+      <span className={styles.errorMsg}>{message ?? "Something went wrong."}</span>
+      {onRetry && (
+        <Button variant="outline" theme="neutral" size="sm" onClick={onRetry}>Retry</Button>
+      )}
+    </div>
+  );
 }
 
 // ── Rich cell ────────────────────────────────────────────────────────────────
@@ -354,15 +398,26 @@ export function DataTable({
   pageSize,
   pageSizeOptions,
   loading = false,
+  loadingVariant = "skeleton",
+  renderLoading,
   hasMore = false,
   onLoadMore,
   lazyRows = 3,
+  // error
+  error = false,
+  errorState,
+  onRetry,
   // selection
   selectable = false,
   selectionMode,
   selectedKeys,
   onSelectionChange,
   isRowDisabled,
+  selectionToolbar,
+  // sizing knobs
+  selectColumnWidth = LEADING_COL_WIDTH,
+  minColumnWidth = DEFAULT_MIN_WIDTH,
+  stickyMaxHeight = 420,
   // row state
   rowState,
   // nesting
@@ -400,8 +455,8 @@ export function DataTable({
   // first-paint / SSR estimate from declared widths; it's then corrected with
   // measured widths below so there's never a gap between pinned columns.
   const modelOffsets = React.useMemo(
-    () => stickyOffsets(columns, { leadingWidth: hasSelect ? LEADING_COL_WIDTH : 0 }),
-    [columns, hasSelect],
+    () => stickyOffsets(columns, { leadingWidth: hasSelect ? selectColumnWidth : 0 }),
+    [columns, hasSelect, selectColumnWidth],
   );
   const hasLeftSticky = columns.some((c) => c.sticky === "left");
   // The control column pins left whenever something else is pinned left (so it
@@ -593,8 +648,26 @@ export function DataTable({
     emit("select_group", { meta: { selected: !allOn, count: next.size } });
   };
 
+  // Bulk-action toolbar (shown above the table when selection is on + ≥1 row
+  // selected). `clear` resets the selection through the same controlled path.
+  const selectedKeyList = React.useMemo(() => [...selectedSet], [selectedSet]);
+  const clearSelection = React.useCallback(() => {
+    setSelection(new Set());
+    emit("clear_selection", { meta: { count: 0 } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selControlled, onSelectionChange, emit]);
+  const showToolbar = hasSelect && typeof selectionToolbar === "function" && selectedKeyList.length > 0;
+
   const dataColCount = columns.length;
   const colCount = dataColCount + (hasSelect ? 1 : 0);
+
+  // Error wins over data/empty (but not over an active overlay-load). `error` may
+  // carry a custom node; `errorState` is the explicit slot.
+  const hasError = error !== false && error != null && error !== "";
+  // Loading display: "skeleton" replaces rows with shimmer rows (default,
+  // unchanged); "overlay" dims the existing rows behind a centered spinner.
+  const overlayLoading = loading && loadingVariant === "overlay";
+  const skeletonLoading = loading && loadingVariant === "skeleton";
 
   // The column that hosts the nesting expander (first data column by default).
   const expanderColId = hasNesting ? (expandColumnId || columns[0]?.id) : null;
@@ -615,7 +688,7 @@ export function DataTable({
   // Scroll: horizontal-overflow shadows (left + right) + vertical lazy-load.
   const scrollerRef = React.useRef(null);
   const [edges, setEdges] = React.useState({ left: false, right: false });
-  const effMaxHeight = maxHeight ?? (stickyHeader ? 420 : undefined);
+  const effMaxHeight = maxHeight ?? (stickyHeader ? stickyMaxHeight : undefined);
 
   React.useEffect(() => {
     const el = scrollerRef.current;
@@ -658,7 +731,7 @@ export function DataTable({
           className={cn(styles.td, s && styles.sticky, col.cellClassName)}
           data-align={col.align || "left"}
           data-edge={s?.edge ? s.side : undefined}
-          style={stickyStyle(col, offsets)}
+          style={stickyStyle(col, offsets, minColumnWidth)}
         >
           {isExpander ? (
             <div className={styles.expandWrap} style={{ paddingLeft: depth * 20 }}>
@@ -681,9 +754,15 @@ export function DataTable({
 
   return (
     <div className={cn(styles.root, className)}>
+      {showToolbar && (
+        <div className={styles.selectionToolbar} role="toolbar" aria-label="Bulk actions">
+          {selectionToolbar(selectedKeyList, clearSelection)}
+        </div>
+      )}
+      <div className={styles.scrollerWrap}>
       <div
         ref={scrollerRef}
-        className={styles.scroller}
+        className={cn(styles.scroller, overlayLoading && styles.dimmed)}
         data-overflow-left={edges.left || undefined}
         data-overflow-right={edges.right || undefined}
         style={effMaxHeight ? { maxHeight: effMaxHeight, overflowY: "auto" } : undefined}
@@ -692,7 +771,7 @@ export function DataTable({
           <thead>
             <tr className={styles.headRow} data-sticky-header={stickyHeader || undefined}>
               {hasSelect && (
-                <th ref={leadThRef} className={cn(styles.th, styles.selectCell, leadingSticky && styles.sticky)} data-align="center" data-edge={leadingSticky ? "left" : undefined} style={leadingSticky ? { left: 0 } : undefined}>
+                <th ref={leadThRef} className={cn(styles.th, styles.selectCell, leadingSticky && styles.sticky)} data-align="center" data-edge={leadingSticky ? "left" : undefined} style={selectCellStyle(leadingSticky, selectColumnWidth)}>
                   {selMode === "multiple" && (
                     <Checkbox
                       size="sm"
@@ -714,7 +793,7 @@ export function DataTable({
                     className={cn(styles.th, s && styles.sticky, col.headerClassName)}
                     data-align={col.headerAlign || "left"}
                     data-edge={s?.edge ? s.side : undefined}
-                    style={stickyStyle(col, offsets)}
+                    style={stickyStyle(col, offsets, minColumnWidth)}
                     aria-sort={active ? (sort.dir === "asc" ? "ascending" : "descending") : undefined}
                   >
                     {canSort ? (
@@ -731,7 +810,18 @@ export function DataTable({
             </tr>
           </thead>
           <tbody>
-            {visualRows.length === 0 && !loading ? (
+            {hasError ? (
+              <tr>
+                <td colSpan={colCount} className={styles.errorCell}>
+                  {errorState ?? (
+                    <DefaultErrorState
+                      message={typeof error === "boolean" ? undefined : error}
+                      onRetry={onRetry}
+                    />
+                  )}
+                </td>
+              </tr>
+            ) : visualRows.length === 0 && !loading ? (
               <tr>
                 <td colSpan={colCount} className={styles.empty}>{emptyState || "No data"}</td>
               </tr>
@@ -745,7 +835,7 @@ export function DataTable({
                   return (
                     <tr key={`g-${vr.gi}`} className={styles.groupRow}>
                       {hasSelect && (
-                        <td className={cn(styles.td, styles.selectCell, styles.groupCell, leadingSticky && styles.sticky)} data-align="center" style={leadingSticky ? { left: 0 } : undefined}>
+                        <td className={cn(styles.td, styles.selectCell, styles.groupCell, leadingSticky && styles.sticky)} data-align="center" style={selectCellStyle(leadingSticky, selectColumnWidth)}>
                           {selMode === "multiple" && (
                             <Checkbox size="sm" checked={groupChecked} onCheckedChange={() => toggleGroupSelect(groupKeys, groupAll)} aria-label="Select group" />
                           )}
@@ -784,7 +874,7 @@ export function DataTable({
                     } : undefined}
                   >
                     {hasSelect && (
-                      <td className={cn(styles.td, styles.selectCell, leadingSticky && styles.sticky)} data-align="center" data-edge={leadingSticky ? "left" : undefined} style={leadingSticky ? { left: 0 } : undefined}>
+                      <td className={cn(styles.td, styles.selectCell, leadingSticky && styles.sticky)} data-align="center" data-edge={leadingSticky ? "left" : undefined} style={selectCellStyle(leadingSticky, selectColumnWidth)}>
                         {selMode === "single" ? (
                           <Radio
                             size="sm"
@@ -810,18 +900,18 @@ export function DataTable({
                 );
               })
             )}
-            {/* Shimmer skeleton rows while lazy-loading */}
-            {loading &&
+            {/* Shimmer skeleton rows while lazy-loading (skeleton variant) */}
+            {skeletonLoading && !hasError &&
               Array.from({ length: lazyRows }).map((_, r) => (
                 <tr key={`sk-${r}`} className={styles.row} aria-hidden>
-                  {hasSelect && <td className={cn(styles.td, styles.selectCell, leadingSticky && styles.sticky)} style={leadingSticky ? { left: 0 } : undefined}><Skeleton variant="rect" width={16} height={16} radius={5} style={{ display: "block" }} /></td>}
+                  {hasSelect && <td className={cn(styles.td, styles.selectCell, leadingSticky && styles.sticky)} style={selectCellStyle(leadingSticky, selectColumnWidth)}><Skeleton variant="rect" width={16} height={16} radius={5} style={{ display: "block" }} /></td>}
                   {columns.map((col, c) => (
                     <td
                       key={col.id}
                       className={cn(styles.td, offsets[col.id] && styles.sticky)}
                       data-align={col.align || "left"}
                       data-edge={offsets[col.id]?.edge ? offsets[col.id].side : undefined}
-                      style={stickyStyle(col, offsets)}
+                      style={stickyStyle(col, offsets, minColumnWidth)}
                     >
                       <Skeleton variant="text" width={`${55 + ((r * 7 + c * 13) % 35)}%`} />
                     </td>
@@ -830,6 +920,14 @@ export function DataTable({
               ))}
           </tbody>
         </table>
+      </div>
+        {overlayLoading && (
+          <div className={styles.loadingOverlay} aria-live="polite" aria-busy="true">
+            {typeof renderLoading === "function"
+              ? renderLoading()
+              : renderLoading ?? <Spinner />}
+          </div>
+        )}
       </div>
 
       {pageSize ? (

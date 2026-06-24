@@ -27,8 +27,11 @@ const meta = {
     sideOffset:    { control: { type: 'range', min: 0, max: 24, step: 1 }, table: { category: 'Placement' } },
     variant:       { control: 'inline-radio', options: ['dark', 'light'], table: { category: 'Appearance' } },
     arrow:         { control: 'boolean', table: { category: 'Appearance' } },
+    arrowSize:     { control: { type: 'range', min: 3, max: 12, step: 1 }, name: 'arrow size', table: { category: 'Appearance' } },
     maxWidth:      { control: { type: 'range', min: 120, max: 400, step: 10 }, table: { category: 'Appearance' } },
     delayDuration: { control: { type: 'range', min: 0, max: 800, step: 50 }, table: { category: 'Behaviour' } },
+    closeDelay:    { control: { type: 'range', min: 0, max: 500, step: 10 }, name: 'close delay (ms)', description: 'Delay before the hover tooltip closes', table: { category: 'Behaviour' } },
+    interactive:   { control: 'boolean', description: 'Hover only — keep open while the pointer is inside the tooltip', table: { category: 'Behaviour' } },
     disabled:      { control: 'boolean', table: { category: 'Behaviour' } },
     whenTruncated: { control: 'boolean', description: 'Hover only — show when trigger text overflows', table: { category: 'Behaviour' } },
     withIcon:      { control: 'boolean', name: 'with icon', table: { category: 'Icons' } },
@@ -46,8 +49,11 @@ const meta = {
     sideOffset: 6,
     variant: 'dark',
     arrow: true,
+    arrowSize: 5,
     maxWidth: 280,
     delayDuration: 200,
+    closeDelay: 60,
+    interactive: false,
     disabled: false,
     whenTruncated: false,
     withIcon: false,
@@ -63,14 +69,17 @@ export default meta;
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const tooltipCode = ({ content = '', trigger, dismissible, side, align, variant, arrow, withIcon, iconName, iconVariant, iconFamily }) => {
+const tooltipCode = ({ content = '', trigger, dismissible, side, align, variant, arrow, arrowSize, interactive, closeDelay, withIcon, iconName, iconVariant, iconFamily }) => {
   const lines = [`  content="${content}"`];
   if (trigger && trigger !== 'hover') lines.push(`  trigger="${trigger}"`);
   if (dismissible) lines.push('  dismissible');
+  if (interactive) lines.push('  interactive');
   if (side && side !== 'top') lines.push(`  side="${side}"`);
   if (align && align !== 'center') lines.push(`  align="${align}"`);
   if (variant && variant !== 'dark') lines.push(`  variant="${variant}"`);
   if (!arrow) lines.push('  arrow={false}');
+  if (arrow && arrowSize != null && arrowSize !== 5) lines.push(`  arrowSize={${arrowSize}}`);
+  if (closeDelay != null && closeDelay !== 60) lines.push(`  closeDelay={${closeDelay}}`);
   if (withIcon && iconName) lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, ICON_SIZE)}}`);
   return `<Tooltip\n${lines.join('\n')}\n>\n  <Button variant="outline">${trigger === 'click' ? 'Click me' : 'Hover me'}</Button>\n</Tooltip>`;
 };
@@ -175,6 +184,49 @@ export const OnlyWhenTruncated = {
       </div>
     );
   },
+};
+
+/** Interactive — a hover tooltip you can move into (e.g. to click a link inside).
+ *  The pointer can travel from the trigger into the bubble without it closing. */
+export const Interactive = {
+  render: () => (
+    <Tooltip
+      interactive
+      side="bottom"
+      maxWidth={260}
+      content={
+        <span>
+          Dr. Mehta is on leave today.{' '}
+          <a href="#" style={{ color: 'inherit', textDecoration: 'underline' }} onClick={(e) => e.preventDefault()}>
+            View cover roster
+          </a>
+        </span>
+      }
+    >
+      <Button variant="outline">Hover, then reach in</Button>
+    </Tooltip>
+  ),
+};
+
+/** Custom arrow — bigger arrow + a custom dismiss glyph. The arrow color tracks
+ *  the surface (light here) via a CSS var, so it matches the bubble. */
+export const CustomArrow = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 24 }}>
+      <Tooltip content="Big arrow on a light surface" variant="light" arrowSize={9} side="bottom">
+        <Button variant="outline">Big arrow</Button>
+      </Tooltip>
+      <Tooltip
+        trigger="click"
+        dismissible
+        side="bottom"
+        closeIcon={<TPLibraryIcon name="minus-square" variant="bold" size={14} aria-hidden />}
+        content="Custom × glyph (minus-square)"
+      >
+        <Button variant="tonal">Custom dismiss</Button>
+      </Tooltip>
+    </div>
+  ),
 };
 
 /** Compound parts — full control over trigger and content. */

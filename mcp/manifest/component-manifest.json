@@ -2639,6 +2639,13 @@
           "default": "false"
         },
         {
+          "name": "loadingVariant",
+          "default": "\"skeleton\""
+        },
+        {
+          "name": "renderLoading"
+        },
+        {
           "name": "hasMore",
           "default": "false"
         },
@@ -2648,6 +2655,16 @@
         {
           "name": "lazyRows",
           "default": "3"
+        },
+        {
+          "name": "error",
+          "default": "false"
+        },
+        {
+          "name": "errorState"
+        },
+        {
+          "name": "onRetry"
         },
         {
           "name": "selectable",
@@ -2671,6 +2688,21 @@
         },
         {
           "name": "isRowDisabled"
+        },
+        {
+          "name": "selectionToolbar"
+        },
+        {
+          "name": "selectColumnWidth",
+          "default": "LEADING_COL_WIDTH"
+        },
+        {
+          "name": "minColumnWidth",
+          "default": "DEFAULT_MIN_WIDTH"
+        },
+        {
+          "name": "stickyMaxHeight",
+          "default": "420"
         },
         {
           "name": "rowState"
@@ -2741,6 +2773,9 @@
         "NestedRows",
         "GroupedRows",
         "SpanningRows",
+        "ErrorState",
+        "SelectionToolbar",
+        "LoadingOverlay",
         "ActionTracking"
       ],
       "sourcePath": "src/components/molecules/DataTable/DataTable.jsx",
@@ -3104,6 +3139,54 @@
           "name": "className"
         },
         {
+          "name": "renderOption"
+        },
+        {
+          "name": "loading",
+          "default": "false",
+          "control": "boolean",
+          "description": "Show a loading row in the menu (async option fetch)"
+        },
+        {
+          "name": "loadingState"
+        },
+        {
+          "name": "emptyState"
+        },
+        {
+          "name": "emptyLabel",
+          "default": "\"No matches\"",
+          "control": "text",
+          "description": "Text shown when no options match"
+        },
+        {
+          "name": "searchPlaceholder",
+          "default": "\"Search…\"",
+          "control": "text",
+          "description": "Placeholder for the in-popover search field"
+        },
+        {
+          "name": "maxMenuHeight",
+          "default": "340"
+        },
+        {
+          "name": "placement",
+          "default": "\"auto\"",
+          "allowedValues": [
+            "auto",
+            "bottom",
+            "top"
+          ],
+          "control": "inline-radio",
+          "description": "Menu placement relative to the trigger"
+        },
+        {
+          "name": "clearable",
+          "default": "false",
+          "control": "boolean",
+          "description": "Single-select: show a clear (×) affordance to reset the value"
+        },
+        {
           "name": "withActions",
           "control": "boolean",
           "default": "false"
@@ -3149,6 +3232,10 @@
         "FooterCtaAlignment",
         "GroupedSections",
         "EditableCombobox",
+        "Clearable",
+        "Placement",
+        "CustomOptionRows",
+        "AsyncLoading",
         "Widths"
       ],
       "sourcePath": "src/components/molecules/Dropdown/Dropdown.jsx",
@@ -4527,7 +4614,7 @@
       ],
       "importFrom": "@/src/components/molecules",
       "importExample": "import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from \"@/src/components/molecules\";",
-      "description": "Tooltip — Tesseract tooltip molecule. First-party, no external deps (built on the shared Portal / Slot / usePosition / useEscape / useClickOutside). Two consumption styles: 1. Wrapper:   <Tooltip content=\"Save\" side=\"bottom\"><Button/></Tooltip> 2. Compound:  <TooltipProvider><Tooltip><TooltipTrigger asChild>…</TooltipTrigger> <TooltipContent>…</TooltipContent></Tooltip></TooltipProvider> Variants: trigger      \"hover\" | \"click\"     default \"hover\" hover → opens on enter/focus, closes on leave/blur click → toggles on click, stays open; closes on outside-click, Escape, or the dismiss button dismissible  boolean — show a square × dismiss button inside the tooltip icon         ReactNode — leading icon inside the tooltip (with / without) Other props: side, align, sideOffset, variant (\"dark\"|\"light\"), arrow, maxWidth, disabled, whenTruncated (hover only), open/defaultOpen/onOpenChange.",
+      "description": "Tooltip — Tesseract tooltip molecule. First-party, no external deps (built on the shared Portal / Slot / usePosition / useEscape / useClickOutside). Two consumption styles: 1. Wrapper:   <Tooltip content=\"Save\" side=\"bottom\"><Button/></Tooltip> 2. Compound:  <TooltipProvider><Tooltip><TooltipTrigger asChild>…</TooltipTrigger> <TooltipContent>…</TooltipContent></Tooltip></TooltipProvider> Variants: trigger      \"hover\" | \"click\"     default \"hover\" hover → opens on enter/focus, closes on leave/blur click → toggles on click, stays open; closes on outside-click, Escape, or the dismiss button dismissible  boolean — show a square × dismiss button inside the tooltip icon         ReactNode — leading icon inside the tooltip (with / without) Other props: side, align, sideOffset, variant (\"dark\"|\"light\"), arrow, arrowSize, maxWidth, disabled, whenTruncated (hover only), interactive, closeIcon, closeDelay, skipDelayDuration, portalContainer, open/defaultOpen/onOpenChange.",
       "props": [
         {
           "name": "content",
@@ -4574,6 +4661,15 @@
           "control": "range"
         },
         {
+          "name": "closeDelay",
+          "default": "60",
+          "control": "range",
+          "description": "Delay before the hover tooltip closes"
+        },
+        {
+          "name": "skipDelayDuration"
+        },
+        {
           "name": "variant",
           "default": "\"dark\"",
           "allowedValues": [
@@ -4586,6 +4682,11 @@
           "name": "arrow",
           "default": "true",
           "control": "boolean"
+        },
+        {
+          "name": "arrowSize",
+          "default": "5",
+          "control": "range"
         },
         {
           "name": "maxWidth",
@@ -4604,6 +4705,12 @@
           "description": "Hover only — show when trigger text overflows"
         },
         {
+          "name": "interactive",
+          "default": "false",
+          "control": "boolean",
+          "description": "Hover only — keep open while the pointer is inside the tooltip"
+        },
+        {
           "name": "trigger",
           "default": "\"hover\"",
           "allowedValues": [
@@ -4619,6 +4726,12 @@
         },
         {
           "name": "icon"
+        },
+        {
+          "name": "closeIcon"
+        },
+        {
+          "name": "portalContainer"
         },
         {
           "name": "className"
@@ -4673,6 +4786,8 @@
         "Variants",
         "RichContent",
         "OnlyWhenTruncated",
+        "Interactive",
+        "CustomArrow",
         "CompoundParts"
       ],
       "sourcePath": "src/components/molecules/Tooltip/Tooltip.jsx",

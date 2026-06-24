@@ -78,6 +78,25 @@
   &:disabled { cursor: not-allowed; }
 }
 
+/* Clear affordance (single-select, clearable) — reset the value without opening. */
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--tesseract-size-18);
+  height: var(--tesseract-size-18);
+  padding: 0;
+  border: none;
+  border-radius: var(--tesseract-radius-full);
+  corner-shape: round;
+  background: transparent;
+  color: var(--tesseract-slate-400);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  &:hover { background: var(--tesseract-slate-100); color: var(--tesseract-slate-600); }
+}
+
 /* Optional leading icon inside the trigger (e.g. the clinic glyph). */
 .triggerLead { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--tesseract-slate-600); }
 
@@ -153,7 +172,8 @@
 .menu {
   display: flex;
   flex-direction: column;
-  max-height: min(340px, calc(100vh - 24px));
+  // maxMenuHeight prop → --tesseract-dropdown-max-height (default 340px); never exceeds the viewport.
+  max-height: min(var(--tesseract-dropdown-max-height, 340px), calc(100vh - 24px));
   border: 1px solid var(--tesseract-slate-200);
   border-radius: var(--tesseract-dropdown-radius, var(--tesseract-radius-12)); // theme: components.dropdown.radius
   corner-shape: round;
@@ -221,6 +241,20 @@
   font-size: var(--tesseract-text-body-sm);
   color: var(--tesseract-slate-400);
 }
+
+/* Async loading row — spinner + label, centred in the list. */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tesseract-space-2);
+  padding: var(--tesseract-space-4) var(--tesseract-space-3);
+  font-size: var(--tesseract-text-body-sm);
+  color: var(--tesseract-slate-400);
+}
+.loadingSpinner { display: inline-flex; color: var(--tesseract-blue-500); }
+.spinnerSvg { animation: tesseract-dd-spin 800ms linear infinite; }
+@keyframes tesseract-dd-spin { to { transform: rotate(360deg); } }
 
 // ─── Option row ───────────────────────────────────────────────────────────────
 .option {

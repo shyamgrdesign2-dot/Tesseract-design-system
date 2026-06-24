@@ -73,6 +73,11 @@ const meta = {
     optionControl: { control: 'inline-radio', options: ['none', 'checkbox', 'radio'], name: 'row control', table: { category: 'Selection' } },
     chips: { control: 'boolean', description: 'Multi: show selected as removable chips in the trigger', table: { category: 'Selection' } },
     searchable: { control: 'boolean', table: { category: 'Behaviour' } },
+    searchPlaceholder: { control: 'text', name: 'search placeholder', description: 'Placeholder for the in-popover search field', if: { arg: 'searchable' }, table: { category: 'Behaviour' } },
+    clearable: { control: 'boolean', name: 'clearable', description: 'Single-select: show a clear (×) affordance to reset the value', table: { category: 'Behaviour' } },
+    loading: { control: 'boolean', name: 'loading', description: 'Show a loading row in the menu (async option fetch)', table: { category: 'Behaviour' } },
+    emptyLabel: { control: 'text', name: 'empty label', description: 'Text shown when no options match', table: { category: 'Behaviour' } },
+    placement: { control: 'inline-radio', options: ['auto', 'bottom', 'top'], name: 'placement', description: 'Menu placement relative to the trigger', table: { category: 'Layout' } },
     showShortcuts: { control: 'boolean', name: 'item shortcuts', table: { category: 'Behaviour' } },
     footerHint: { control: 'boolean', name: 'footer shortcut bar', table: { category: 'Behaviour' } },
     withActions: { control: 'boolean', name: 'footer CTAs', table: { category: 'Footer' } },
@@ -95,6 +100,11 @@ const meta = {
     optionControl: 'none',
     chips: false,
     searchable: false,
+    searchPlaceholder: 'Search…',
+    clearable: false,
+    loading: false,
+    emptyLabel: 'No matches',
+    placement: 'auto',
     showShortcuts: false,
     footerHint: false,
     withActions: false,
@@ -115,6 +125,29 @@ const meta = {
 export default meta;
 
 const Frame = ({ w = 300, children }) => <div style={{ width: w }}>{children}</div>;
+
+// Build an accurate, copy-paste Dropdown snippet from the Playground controls
+// (what "Show code" displays). Only non-default props are emitted.
+function dropdownCode(a) {
+  const lines = [];
+  if (a.mode && a.mode !== 'single') lines.push(`  mode="${a.mode}"`);
+  if (a.optionControl && a.optionControl !== 'none') lines.push(`  optionControl="${a.optionControl}"`);
+  if (a.chips) lines.push('  chips');
+  if (a.searchable) lines.push('  searchable');
+  if (a.searchPlaceholder && a.searchPlaceholder !== 'Search…') lines.push(`  searchPlaceholder="${a.searchPlaceholder}"`);
+  if (a.clearable) lines.push('  clearable');
+  if (a.loading) lines.push('  loading');
+  if (a.emptyLabel && a.emptyLabel !== 'No matches') lines.push(`  emptyLabel="${a.emptyLabel}"`);
+  if (a.placement && a.placement !== 'auto') lines.push(`  placement="${a.placement}"`);
+  if (a.showShortcuts) lines.push('  showShortcuts');
+  if (a.footerHint) lines.push('  footerHint');
+  if (a.actionsAlign && a.actionsAlign !== 'right' && a.withActions) lines.push(`  actionsAlign="${a.actionsAlign}"`);
+  if (a.width && a.width !== 'trigger') lines.push(typeof a.width === 'number' ? `  width={${a.width}}` : `  width="${a.width}"`);
+  if (a.label) lines.push(`  label="${a.label}"`);
+  if (a.placeholder && a.placeholder !== 'Select…') lines.push(`  placeholder="${a.placeholder}"`);
+  if (a.disabled) lines.push('  disabled');
+  return `<Dropdown\n  options={options}\n  value={value}\n  onChange={setValue}\n${lines.join('\n')}${lines.length ? '\n' : ''}/>`;
+}
 
 // ── Playground — every capability wired to Controls ───────────────────────────
 export const Playground = {
@@ -142,6 +175,7 @@ export const Playground = {
       </Frame>
     );
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => dropdownCode(ctx.args) } } },
 };
 
 export const SingleSelect = {
@@ -325,6 +359,95 @@ export const EditableCombobox = {
     const [v, setV] = React.useState('');
     const opts = ['Fever', 'Cough', 'Chest pain', 'Headache', 'Fatigue', 'Nausea'];
     return <Frame><Dropdown label="Symptom" editable allowCustom chevron={false} groupLabel="Frequently used" footerHint="keys" options={opts.map((o) => ({ value: o, label: o }))} value={v} onChange={setV} placeholder="Search & add…" /></Frame>;
+  },
+};
+
+/** Clearable single-select — a small × in the trigger resets the value without
+ *  opening the menu. Only shown when a value is selected (single mode). */
+export const Clearable = {
+  name: 'Clearable (single-select)',
+  render: () => {
+    const [v, setV] = React.useState('cardio');
+    return <Frame><Dropdown label="Department" clearable options={DEPTS} value={v} onChange={setV} /></Frame>;
+  },
+};
+
+/** Placement — force the menu above ("top") or below ("bottom") the trigger, or
+ *  let it flip automatically ("auto", the default). */
+export const Placement = {
+  name: 'Placement (auto · bottom · top)',
+  render: () => {
+    const [a, setA] = React.useState('cardio');
+    const [b, setB] = React.useState('cardio');
+    const [c, setC] = React.useState('cardio');
+    return (
+      <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <Frame w={200}><Dropdown label='placement="auto"' options={DEPTS} value={a} onChange={setA} /></Frame>
+        <Frame w={200}><Dropdown label='placement="bottom"' placement="bottom" options={DEPTS} value={b} onChange={setB} /></Frame>
+        <Frame w={200}><Dropdown label='placement="top"' placement="top" options={DEPTS} value={c} onChange={setC} /></Frame>
+      </div>
+    );
+  },
+};
+
+/** Custom option rows via `renderOption(option, { selected, active })` — here an
+ *  avatar + two-line name/role layout that replaces the default row entirely. */
+export const CustomOptionRows = {
+  name: 'renderOption — avatar rows',
+  render: () => {
+    const [v, setV] = React.useState('cardio');
+    const Avatar = ({ label, on }) => (
+      <span style={{
+        width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 12, fontWeight: 700,
+        background: on ? 'var(--tesseract-blue-100)' : 'var(--tesseract-slate-100)',
+        color: on ? 'var(--tesseract-blue-700)' : 'var(--tesseract-slate-500)',
+      }}>{label.replace('Dr. ', '').split(' ').map((s) => s[0]).join('').slice(0, 2)}</span>
+    );
+    return (
+      <Frame w={320}>
+        <Dropdown
+          label="Assign to"
+          options={DEPTS}
+          value={v}
+          onChange={setV}
+          renderOption={(opt, { selected }) => (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+              <Avatar label={opt.subtitle || opt.label} on={selected} />
+              <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <span style={{ fontSize: 13, fontWeight: selected ? 700 : 500, color: 'var(--tesseract-slate-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{opt.subtitle || opt.label}</span>
+                <span style={{ fontSize: 11, color: 'var(--tesseract-slate-400)' }}>{opt.label}</span>
+              </span>
+            </div>
+          )}
+        />
+      </Frame>
+    );
+  },
+};
+
+/** Async loading — `loading` shows a spinner row while options fetch, then the
+ *  list renders. (Toggle the button to simulate a refetch.) */
+export const AsyncLoading = {
+  name: 'loading — async option fetch',
+  render: () => {
+    const [v, setV] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
+    const [opts, setOpts] = React.useState([]);
+    React.useEffect(() => {
+      if (!loading) return undefined;
+      const t = setTimeout(() => { setOpts(DEPTS); setLoading(false); }, 1200);
+      return () => clearTimeout(t);
+    }, [loading]);
+    return (
+      <Frame>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <Dropdown label="Department" searchable loading={loading} options={opts} value={v} onChange={setV} placeholder="Search & select…" />
+          <button type="button" onClick={() => { setOpts([]); setLoading(true); }} style={{ alignSelf: 'flex-start', fontSize: 12, padding: '4px 10px', borderRadius: 6, border: '1px solid var(--tesseract-slate-200)', background: 'var(--tesseract-slate-0)', cursor: 'pointer' }}>Refetch</button>
+        </div>
+      </Frame>
+    );
   },
 };
 

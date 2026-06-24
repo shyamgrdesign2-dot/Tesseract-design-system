@@ -7,6 +7,9 @@
   font-family: var(--tesseract-font-body);
 }
 
+/* Positioning context for the loading overlay (it covers the scroller). */
+.scrollerWrap { position: relative; }
+
 /* Horizontal scroll container. On overflow the row scrolls; columns keep their
    min-widths instead of squishing. */
 .scroller {
@@ -406,3 +409,54 @@
 .pageBtn[data-active="true"]:hover { background-color: var(--tesseract-slate-200, var(--tesseract-slate-200)); color: var(--tesseract-slate-900, var(--tesseract-slate-900)); }
 
 .ellipsis { padding: 0 var(--tesseract-space-0-5); color: var(--tesseract-slate-400, var(--tesseract-slate-400)); font-size: var(--tesseract-text-body-xs); align-self: center; }
+
+/* ── Selection toolbar (bulk actions) ──
+   A neutral bar above the table, shown only when selection is on and ≥1 row is
+   selected. The render slot owns its own content/buttons. */
+.selectionToolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-3);
+  flex-wrap: wrap;
+  padding: var(--tesseract-space-2-5) var(--tesseract-space-3-5);
+  border: 1px solid var(--tesseract-blue-200, #c3d7ff);
+  border-radius: var(--tesseract-radius-10);
+  corner-shape: round;
+  background-color: var(--tesseract-blue-50, #eef4ff);
+  color: var(--tesseract-slate-800, #2c2c38);
+  font-size: var(--tesseract-text-body-sm);
+}
+
+/* ── Error state ── */
+.errorCell { padding: var(--tesseract-space-10) var(--tesseract-space-4); text-align: center; }
+.errorBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tesseract-space-3);
+  color: var(--tesseract-slate-600, #56566a);
+}
+.errorIcon { color: var(--tesseract-error-500, #f04438); }
+.errorMsg { font-size: var(--tesseract-text-body-sm); color: var(--tesseract-slate-600, #56566a); max-width: 420px; }
+
+/* ── Loading overlay variant ── */
+/* The scroller is dimmed under a centered spinner; existing rows stay visible. */
+.dimmed { opacity: 0.5; pointer-events: none; }
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  pointer-events: none;
+}
+.spinner { color: var(--tesseract-blue-500, #2f6fed); animation: tesseract-dt-spin 720ms linear infinite; }
+
+@keyframes tesseract-dt-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 1600ms; }
+}

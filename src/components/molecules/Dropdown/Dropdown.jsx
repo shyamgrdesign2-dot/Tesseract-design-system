@@ -59,6 +59,15 @@
  *                  (full → CTAs share the footer width equally)
  *   width     "trigger" | "auto" | number            default "trigger"
  *   placeholder, label, disabled, className
+ *   renderOption (option, { selected, active }) => node — custom option-row layout
+ *     (avatars, two-line, etc.); replaces the icon/title/subtitle/shortcut/check default
+ *   loading   boolean — show a loading row in the menu while options load (async)
+ *   loadingState node — custom loading row (default: spinner + "Loading…")
+ *   emptyState node — custom empty row;  emptyLabel string (default "No matches")
+ *   searchPlaceholder string — search field placeholder           default "Search…"
+ *   maxMenuHeight number|string — menu max-height (number→px)      default 340
+ *   placement "auto" | "bottom" | "top"                            default "auto"
+ *   clearable boolean — single-select: a clear affordance to reset the value
  */
 
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -76,6 +85,16 @@ import styles from "./Dropdown.module.scss";
 const Chevron = (props) => <TPLibraryIcon name="chevron-down" size={14} {...props} />;
 const SearchIcon = () => <TPLibraryIcon name="search" size={15} />;
 const PlusIcon = () => <TPLibraryIcon name="add" size={14} />;
+const ClearIcon = () => <TPLibraryIcon name="close" size={13} />;
+// Inline spinner for the async loading row — a bare ring with no clean library match.
+function Spinner({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden className={styles.spinnerSvg}>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity="0.2" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
 // Plain checkmark — the CDN only ships circled/squared ticks, so the selected
 // indicator keeps a bare inline ✓ (the one glyph with no clean library match).
 function CheckIcon({ size = 14 }) {
@@ -140,6 +159,16 @@ export function Dropdown({
   disabled = false,
   analyticsId,
   className,
+  // ── Deep-configurability slots (defaults preserve the current look) ──
+  renderOption,                         // (option, { selected, active }) => node — custom option row
+  loading = false,                      // async fetch — show a loading row in the menu
+  loadingState,                         // node — custom loading row (default: spinner + "Loading…")
+  emptyState,                           // node — custom empty row (default: emptyLabel text)
+  emptyLabel = "No matches",            // empty-list text (was hardcoded)
+  searchPlaceholder = "Search…",        // search field placeholder (was hardcoded)
+  maxMenuHeight = 340,                  // menu max-height (number→px, or any CSS length)
+  placement = "auto",                   // "auto" | "bottom" | "top"
+  clearable = false,                    // single-select — show a clear affordance
 }) {
   const { track } = useAnalytics();
   const isMulti = mode === "multi";
@@ -222,6 +251,13 @@ export function Dropdown({
   function removeChip(val) {
     onChange?.(selectedArr.filter((v) => v !== val));
   }
+  // Clearable (single-select): reset to empty without opening the menu.
+  function clearValue() {
+    onChange?.("");
+    onCommit?.("");
+    if (analyticsId) track({ component: "Dropdown", id: analyticsId, action: "clear" });
+  }
+  const showClear = clearable && !isMulti && !disabled && value != null && value !== "";
 
   // ── Adaptive positioning + width ──
   useLayoutEffect(() => {
@@ -251,8 +287,20 @@ export function Dropdown({
       let left = tr.left;
       if (left + mw > vw - pad) left = vw - pad - mw;
       if (left < pad) left = pad;
-      let top = tr.bottom + gap;
-      if (top + mh > vh - pad && tr.top - gap - mh >= pad) top = tr.top - gap - mh;
+      // Placement: "auto" flips up only when it overflows the bottom; "bottom"/"top"
+      // are forced (still clamped to the viewport so the menu never clips off-screen).
+      const bottomTop = tr.bottom + gap;
+      const topTop = tr.top - gap - mh;
+      let top;
+      if (placement === "top") {
+        top = topTop >= pad ? topTop : bottomTop;
+      } else if (placement === "bottom") {
+        top = bottomTop;
+      } else {
+        top = bottomTop;
+        if (top + mh > vh - pad && topTop >= pad) top = topTop;
+      }
+      if (top + mh > vh - pad) top = Math.max(pad, vh - pad - mh);
       if (top < pad) top = pad;
       setMenuStyle({ position: "fixed", top, left, zIndex: 9999 });
     };
@@ -263,7 +311,7 @@ export function Dropdown({
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
     };
-  }, [open, width, variant, listItems.length, chips]);
+  }, [open, width, variant, listItems.length, chips, placement]);
 
   // ── Close on outside click ──
   useEffect(() => {
@@ -362,6 +410,7 @@ export function Dropdown({
       );
     }
     const sel = isSelected(item.value);
+    const active = i === activeIdx;
     return (
       <div
         key={item.value}
@@ -369,13 +418,18 @@ export function Dropdown({
         aria-selected={sel}
         aria-disabled={item.disabled || undefined}
         className={styles.option}
-        data-active={i === activeIdx ? "true" : undefined}
+        data-active={active ? "true" : undefined}
         data-selected={sel ? "true" : undefined}
         data-disabled={item.disabled ? "true" : undefined}
         onMouseEnter={() => setActiveIdx(i)}
         onMouseDown={editable ? (e) => e.preventDefault() : undefined}
         onClick={() => commit(item)}
       >
+        {/* renderOption slot — full custom row layout (avatars, two-line, etc.). */}
+        {renderOption ? (
+          renderOption(item, { selected: sel, active })
+        ) : (
+        <>
         {optionControl === "checkbox" && (
           // Reuse the Checkbox atom (shows a real tick). It's decorative
           // here — the row owns the click — so pointer-events are off.
@@ -399,12 +453,17 @@ export function Dropdown({
           {item.iconRight && <span className={styles.optIconR}>{item.iconRight}</span>}
           {optionControl === "none" && sel && <span className={styles.check}><CheckIcon /></span>}
         </span>
+        </>
+        )}
       </div>
     );
   }
 
+  // maxMenuHeight → inline CSS var consumed by the SCSS (number coerced to px).
+  const menuVars = { "--tesseract-dropdown-max-height": typeof maxMenuHeight === "number" ? `${maxMenuHeight}px` : maxMenuHeight };
+
   const menu = (
-    <div ref={menuRef} className={styles.menu} style={menuStyle} role="listbox" aria-multiselectable={isMulti} id={`dd-${id}`}>
+    <div ref={menuRef} className={styles.menu} style={{ ...menuStyle, ...menuVars }} role="listbox" aria-multiselectable={isMulti} id={`dd-${id}`}>
       {searchable && !editable && (
         <div className={styles.search}>
           <span className={styles.searchIcon}><SearchIcon /></span>
@@ -413,15 +472,26 @@ export function Dropdown({
             ref={searchRef}
             className={styles.searchInput}
             value={query}
-            placeholder="Search…"
+            placeholder={searchPlaceholder}
             onChange={(e) => { setQuery(e.target.value); setActiveIdx(-1); }}
             onKeyDown={onKeyDown}
           />
         </div>
       )}
       <div className={styles.list}>
-        {optionCount === 0 && !showCustom && <div className={styles.empty}>No matches</div>}
-        {listItems.map((item, i) => renderOptionRow(item, i))}
+        {loading ? (
+          loadingState ?? (
+            <div className={styles.loading}>
+              <span className={styles.loadingSpinner} aria-hidden><Spinner /></span>
+              <span>Loading…</span>
+            </div>
+          )
+        ) : (
+          <>
+            {optionCount === 0 && !showCustom && (emptyState ?? <div className={styles.empty}>{emptyLabel}</div>)}
+            {listItems.map((item, i) => renderOptionRow(item, i))}
+          </>
+        )}
       </div>
 
       {(footerHint || primaryAction || secondaryAction || tertiaryAction) && (
@@ -470,6 +540,17 @@ export function Dropdown({
       {editable ? (
         <div ref={triggerRef} className={styles.trigger} data-editable="true" data-open={open ? "true" : undefined}>
           {leadingIcon && <span className={styles.triggerLead}>{leadingIcon}</span>}
+          {showClear && (
+            <button
+              type="button"
+              className={styles.clearBtn}
+              aria-label="Clear selection"
+              tabIndex={-1}
+              onMouseDown={(e) => { e.preventDefault(); clearValue(); }}
+            >
+              <ClearIcon />
+            </button>
+          )}
           {/* Intentional structural input host (seamless combobox typeahead nested in the styled trigger), not a standalone field — do not convert to InputBox. */}
           <input
             ref={inputRef}
@@ -516,6 +597,19 @@ export function Dropdown({
         >
           {leadingIcon && <span className={styles.triggerLead}>{leadingIcon}</span>}
           {triggerContent}
+          {showClear && (
+            // role="button" span — a nested <button> would be invalid inside the trigger button.
+            <span
+              role="button"
+              tabIndex={-1}
+              className={styles.clearBtn}
+              aria-label="Clear selection"
+              onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); clearValue(); }}
+              onClick={(e) => { e.stopPropagation(); }}
+            >
+              <ClearIcon />
+            </span>
+          )}
           {chevron && <Chevron className={styles.chevron} data-open={open ? "true" : undefined} />}
         </button>
       )}

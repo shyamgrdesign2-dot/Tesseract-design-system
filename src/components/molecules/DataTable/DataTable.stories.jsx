@@ -757,6 +757,117 @@ export const SpanningRows = {
   },
 };
 
+// ── Error state — distinct error row + Retry ──────────────────────────────────
+export const ErrorState = {
+  name: 'Error State (with Retry)',
+  parameters: { docs: { description: { story: 'Set `error` (boolean or a message node) to replace the body with a distinct error row — an icon, a message, and an optional **Retry** button when `onRetry` is passed. Use `errorState` to render a fully custom node instead. Toggle the controls to compare the default and custom presentations.' } } },
+  args: { showError: true, message: "Couldn't load patients. Check your connection and try again.", custom: false },
+  argTypes: {
+    showError: { control: 'boolean', name: 'error', table: { category: 'Error' } },
+    message: { control: 'text', name: 'error message', table: { category: 'Error' }, if: { arg: 'custom', truthy: false } },
+    custom: { control: 'boolean', name: 'custom errorState slot', table: { category: 'Error' } },
+  },
+  render: (args) => {
+    const [reloaded, setReloaded] = React.useState(0);
+    const columns = [
+      patientCol(),
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 190, primary: (r) => r.appt, secondary: (r) => r.doctor, leftIcon: <TPIcon name="calendar-1" size={16} /> },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 130, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+    ];
+    return (
+      <div style={{ maxWidth: 820, display: 'flex', flexDirection: 'column', gap: 10, fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ fontSize: 13, color: '#454551' }}>Retry pressed <strong style={{ color: '#171725' }}>{reloaded}</strong> time(s)</div>
+        <DataTable
+          columns={columns}
+          data={ROWS.slice(0, 6)}
+          rowKey={(r) => r.mrn}
+          hoverable
+          error={args.showError ? (args.custom ? true : args.message) : false}
+          errorState={args.showError && args.custom ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: 8, color: '#56566a' }}>
+              <TPIcon name="cloud-off" variant="bulk" size={28} />
+              <strong style={{ color: '#2c2c38' }}>Service unavailable</strong>
+              <span style={{ fontSize: 13 }}>The patient service is temporarily offline.</span>
+            </div>
+          ) : undefined}
+          onRetry={!args.custom ? () => setReloaded((n) => n + 1) : undefined}
+        />
+      </div>
+    );
+  },
+};
+
+// ── Selection toolbar — bulk-action bar above the table ───────────────────────
+export const SelectionToolbar = {
+  parameters: { docs: { description: { story: 'Pass `selectionToolbar(selectedKeys, clear)` to render a bulk-action bar **above** the table — shown only when selection is on and at least one row is selected. The slot owns its content; `clear` resets the selection.' } } },
+  render: () => {
+    const [sel, setSel] = React.useState([]);
+    const columns = [
+      patientCol(),
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 190, primary: (r) => r.appt, secondary: (r) => r.doctor, leftIcon: <TPIcon name="calendar-1" size={16} /> },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 130, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+    ];
+    return (
+      <div style={{ maxWidth: 820, fontFamily: 'Inter, sans-serif' }}>
+        <DataTable
+          columns={columns}
+          data={ROWS.slice(0, 8)}
+          rowKey={(r) => r.mrn}
+          selectionMode="multiple"
+          selectedKeys={sel}
+          onSelectionChange={setSel}
+          hoverable
+          selectionToolbar={(keys, clear) => (
+            <>
+              <strong>{keys.length}</strong>
+              <span style={{ flex: 1 }}>selected</span>
+              <TableActions
+                align="left"
+                actions={[
+                  { icon: 'sms', label: 'Message', onClick: () => {} },
+                  { icon: 'printer', label: 'Print', onClick: () => {} },
+                  { icon: 'trash', label: 'Delete', theme: 'error', onClick: () => {} },
+                ]}
+              />
+              <button type="button" onClick={clear} style={{ border: 'none', background: 'none', color: 'var(--tesseract-blue-600,#2456c8)', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>Clear</button>
+            </>
+          )}
+        />
+      </div>
+    );
+  },
+};
+
+// ── Loading overlay variant — spinner over dimmed rows ────────────────────────
+export const LoadingOverlay = {
+  name: 'Loading (overlay variant)',
+  parameters: { docs: { description: { story: '`loadingVariant="overlay"` shows a centered spinner over the **dimmed existing rows** instead of replacing them with skeletons (the default `"skeleton"`). Use it for a refresh / in-place reload where the prior data should stay visible. Pass `renderLoading` to override the overlay content.' } } },
+  args: { loadingVariant: 'overlay', loading: true },
+  argTypes: {
+    loadingVariant: { control: 'inline-radio', options: ['skeleton', 'overlay'], name: 'loading variant', table: { category: 'Table' } },
+    loading: { control: 'boolean', table: { category: 'Table' } },
+  },
+  render: (args) => {
+    const columns = [
+      patientCol(),
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 190, primary: (r) => r.appt, secondary: (r) => r.doctor, leftIcon: <TPIcon name="calendar-1" size={16} /> },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 130, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+    ];
+    return (
+      <div style={{ maxWidth: 820 }}>
+        <DataTable
+          columns={columns}
+          data={ROWS.slice(0, 6)}
+          rowKey={(r) => r.mrn}
+          hoverable
+          loading={args.loading}
+          loadingVariant={args.loadingVariant}
+        />
+      </div>
+    );
+  },
+};
+
 // ── Action tracking — opt-in analytics across the whole table ──────────────────
 export const ActionTracking = {
   name: 'Action Tracking (analytics)',
