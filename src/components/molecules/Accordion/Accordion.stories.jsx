@@ -15,11 +15,19 @@ const meta = {
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
     collapsible: { control: 'boolean' },
     itemIcon: { control: 'text', tpIcon: true, name: 'item icon', description: 'Tesseract icon shown before each item title' },
+    // ── Disclosure indicator (root defaults; can be overridden per-trigger) ──
+    expandIcon: { control: 'text', tpIcon: true, name: 'expand icon', description: 'CDN icon name for the disclosure indicator (rotates on open)', table: { category: 'Indicator' } },
+    iconPosition: { control: 'inline-radio', options: ['right', 'left'], name: 'icon position', description: 'Which side the indicator sits on', table: { category: 'Indicator' } },
+    // ── Layout ──
+    density: { control: 'inline-radio', options: ['comfortable', 'compact'], description: 'Row padding + font scale', table: { category: 'Layout' } },
   },
   args: {
     type: 'single',
     collapsible: true,
     itemIcon: 'info-circle-pro',
+    expandIcon: 'chevron-down',
+    iconPosition: 'right',
+    density: 'comfortable',
   },
 };
 
@@ -47,6 +55,26 @@ const items = [
   },
 ];
 
+// Build an accurate "Show code" snippet from the controls. Defaults
+// (chevron-down / right / comfortable) are omitted so the output stays clean.
+const accordionCode = ({ type = 'single', collapsible, expandIcon, iconPosition, density } = {}) => {
+  const root = [`  type="${type}"`];
+  if (collapsible) root.push('  collapsible');
+  if (expandIcon && expandIcon !== 'chevron-down') root.push(`  expandIcon="${expandIcon}"`);
+  if (iconPosition && iconPosition !== 'right') root.push(`  iconPosition="${iconPosition}"`);
+  if (density && density !== 'comfortable') root.push(`  density="${density}"`);
+  return [
+    `<Accordion`,
+    root.join('\n'),
+    `>`,
+    `  <AccordionItem value="item-1">`,
+    `    <AccordionTrigger>What is TatvaPractice?</AccordionTrigger>`,
+    `    <AccordionContent>…</AccordionContent>`,
+    `  </AccordionItem>`,
+    `</Accordion>`,
+  ].join('\n');
+};
+
 export const Playground = {
   args: { defaultValue: 'item-1' },
   render: ({ itemIcon, ...args }) => (
@@ -66,6 +94,7 @@ export const Playground = {
       </Accordion>
     </Frame>
   ),
+  parameters: { docs: { source: { transform: (_code, ctx) => accordionCode(ctx.args) } } },
 };
 
 export const SingleCollapsible = {
@@ -81,6 +110,56 @@ export const Multiple = {
 export const NonCollapsibleSingle = {
   args: { type: 'single', collapsible: false, defaultValue: 'item-1' },
   render: Playground.render,
+};
+
+/** Indicator on the left, with a custom expand icon set on the root. */
+export const IconLeft = {
+  args: { iconPosition: 'left', expandIcon: 'arrow-down-01', defaultValue: 'item-1' },
+  render: Playground.render,
+};
+
+/** Compact density — tighter rows + smaller type for dense panels. */
+export const Compact = {
+  args: { density: 'compact', defaultValue: 'item-1' },
+  render: Playground.render,
+};
+
+/** A disabled item is dimmed and can't be toggled; siblings still work. */
+export const DisabledItem = {
+  render: () => (
+    <Frame>
+      <Accordion type="single" collapsible defaultValue="item-1">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>What is TatvaPractice?</AccordionTrigger>
+          <AccordionContent>{items[0].body}</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2" disabled>
+          <AccordionTrigger>How do appointments sync? (coming soon)</AccordionTrigger>
+          <AccordionContent>{items[1].body}</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Is my data secure?</AccordionTrigger>
+          <AccordionContent>{items[2].body}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </Frame>
+  ),
+};
+
+/** Custom heading level for a11y — each trigger wraps in an h2 instead of h3. */
+export const CustomHeadingLevel = {
+  render: () => (
+    <Frame>
+      <Accordion type="single" collapsible defaultValue="item-1">
+        {items.map((it) => (
+          <AccordionItem key={it.value} value={it.value}>
+            <AccordionTrigger headingLevel={2}>{it.title}</AccordionTrigger>
+            <AccordionContent>{it.body}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </Frame>
+  ),
 };
 
 export const Controlled = {

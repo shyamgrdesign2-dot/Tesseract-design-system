@@ -28,6 +28,11 @@ export function Accordion({
   value,
   defaultValue,
   onValueChange,
+  // Defaults below preserve the current look: chevron-down on the right,
+  // comfortable density. Triggers inherit these unless they override locally.
+  expandIcon = "chevron-down",
+  iconPosition = "right",
+  density = "comfortable",
   className = "",
   style,
   children,
@@ -74,63 +79,113 @@ export function Accordion({
     [type, current],
   );
 
-  const ctx = React.useMemo(() => ({ toggle, isOpen }), [toggle, isOpen]);
+  const ctx = React.useMemo(
+    () => ({ toggle, isOpen, expandIcon, iconPosition }),
+    [toggle, isOpen, expandIcon, iconPosition],
+  );
 
   return (
     <AccordionContext.Provider value={ctx}>
-      <div className={className} style={style} {...props}>{children}</div>
+      <div className={className} style={style} data-density={density} {...props}>
+        {children}
+      </div>
     </AccordionContext.Provider>
   );
 }
 
 export const AccordionItem = React.forwardRef(function AccordionItem(
-  { value, className = "", style, children, ...props },
+  { value, disabled = false, className = "", style, children, ...props },
   ref,
 ) {
   const root = React.useContext(AccordionContext);
-  const open = root?.isOpen(value) ?? false;
-  const cls = [styles.item, className].filter(Boolean).join(" ");
+  // A disabled item is never reported as open and can't be toggled.
+  const open = disabled ? false : root?.isOpen(value) ?? false;
+  const cls = [styles.item, disabled ? styles.itemDisabled : "", className]
+    .filter(Boolean)
+    .join(" ");
   const itemCtx = React.useMemo(
-    () => ({ value, open, toggle: () => root?.toggle(value) }),
-    [value, open, root],
+    () => ({ value, open, disabled, toggle: () => !disabled && root?.toggle(value) }),
+    [value, open, disabled, root],
   );
   return (
     <AccordionItemContext.Provider value={itemCtx}>
-      <div ref={ref} className={cls} style={style} data-state={open ? "open" : "closed"} {...props}>
+      <div
+        ref={ref}
+        className={cls}
+        style={style}
+        data-state={open ? "open" : "closed"}
+        data-disabled={disabled ? "" : undefined}
+        {...props}>
         {children}
       </div>
     </AccordionItemContext.Provider>
   );
 });
 
+// Render the disclosure indicator: an icon-name string resolves via the CDN
+// (sized 16, rotates on open), while a node is rendered as-is. Returning a
+// string name keeps the default chevron-down/16 behavior unchanged.
+function renderExpandIcon(icon) {
+  if (icon == null || icon === false) return null;
+  if (typeof icon === "string") {
+    return <TPLibraryIcon name={icon} size={16} className={styles.chevron} />;
+  }
+  return <span className={styles.chevron}>{icon}</span>;
+}
+
 export const AccordionTrigger = React.forwardRef(function AccordionTrigger(
-  { className = "", style, children, onClick, ...props },
+  {
+    className = "",
+    style,
+    children,
+    onClick,
+    // Local overrides; fall back to the root Accordion's defaults.
+    expandIcon,
+    iconPosition,
+    headingLevel = 3,
+    as,
+    ...props
+  },
   ref,
 ) {
+  const root = React.useContext(AccordionContext);
   const item = React.useContext(AccordionItemContext);
   const open = item?.open ?? false;
+  const disabled = item?.disabled ?? false;
   const cls = [styles.trigger, className].filter(Boolean).join(" ");
+
+  // Resolve icon + side: trigger prop wins, else the root default.
+  const icon = expandIcon !== undefined ? expandIcon : root?.expandIcon ?? "chevron-down";
+  const position = iconPosition || root?.iconPosition || "right";
+  const indicator = renderExpandIcon(icon);
+
+  // Heading wrapper for a11y: `as` (h1–h6 / element) wins, else headingLevel.
+  const Heading = as || `h${Math.min(6, Math.max(1, headingLevel))}`;
+
   const handleClick = (e) => {
     onClick?.(e);
     if (e.defaultPrevented) return;
     item?.toggle();
   };
+
   return (
-    <h3 style={{ margin: 0 }}>
+    <Heading style={{ margin: 0 }}>
       <button
         ref={ref}
         type="button"
         aria-expanded={open}
+        disabled={disabled}
         data-state={open ? "open" : "closed"}
+        data-icon-position={position}
         className={cls}
         style={style}
         onClick={handleClick}
         {...props}>
-        {children}
-        {/* Disclosure chevron from the icon CDN; rotates on open via .chevron. */}
-        <TPLibraryIcon name="chevron-down" size={16} className={styles.chevron} />
+        {position === "left" ? indicator : null}
+        <span className={styles.label}>{children}</span>
+        {position === "right" ? indicator : null}
       </button>
-    </h3>
+    </Heading>
   );
 });
 

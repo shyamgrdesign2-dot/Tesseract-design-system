@@ -5,7 +5,21 @@ import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 
-const BACKGROUND = "radial-gradient(99.09% 59.99% at 50% 55.44%, #46286C 0%, #25113E 39.08%, #372153 78.16%, #6C4F90 100%)";
+// Surface gradient by tone — token-only (no raw hex). The "violet" tone is the
+// default look: the original radial gradient with each stop swapped for the
+// nearest --tesseract-violet token (it reads ~identically). Other tones reskin
+// the hero per page/specialty using the matching dark colour ramp.
+const TONE_GRADIENTS = {
+  violet:
+    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-violet-800) 0%, var(--tesseract-violet-900) 39.08%, var(--tesseract-violet-900) 78.16%, var(--tesseract-violet-700) 100%)",
+  blue:
+    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-blue-800) 0%, var(--tesseract-blue-900) 39.08%, var(--tesseract-blue-900) 78.16%, var(--tesseract-blue-700) 100%)",
+  slate:
+    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-slate-700) 0%, var(--tesseract-slate-900) 39.08%, var(--tesseract-slate-800) 78.16%, var(--tesseract-slate-600) 100%)",
+  dark:
+    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 39.08%, var(--tesseract-slate-900) 78.16%, var(--tesseract-slate-700) 100%)",
+};
+const DEFAULT_TONE = "violet";
 
 const SIZE_HEIGHT = { sm: 80, md: 120, lg: 160 };
 // Default bottom corner radius scales with size (md = 24px). Soft, generous
@@ -28,7 +42,12 @@ const BACK_ICON = { sm: 14, md: 18 };
  *
  * Props:
  *   size          "sm" | "md" | "lg"          banner height; default "md"
+ *   height        number                       numeric height override (escape hatch); default undefined → use size
  *   bottomRadius  number                       overrides the size default (sm 20 / md 24 / lg 32); max 42
+ *   tone          "violet" | "blue" | "slate" | "dark"   gradient tone (token-only); default "violet" = current look
+ *   background    string                       full CSS background override (wins over tone); default undefined
+ *   eyebrow       string | node                small kicker label above the title; default none
+ *   align         "center" | "top"             vertical alignment of the content block; default "center" = current
  *   title         string                       required
  *   subtitle      string                       optional
  *   titleSize     "sm" (18px) | "md" (24px)    default "md"
@@ -42,7 +61,12 @@ const BACK_ICON = { sm: 14, md: 18 };
  */
 export function HeroBanner({
   size = "md",
+  height,
   bottomRadius,
+  tone = DEFAULT_TONE,
+  background,
+  eyebrow,
+  align = "center",
   title,
   subtitle,
   titleSize = "md",
@@ -55,12 +79,15 @@ export function HeroBanner({
   pattern = true,
   className = "",
 }) {
-  const height = SIZE_HEIGHT[size] ?? SIZE_HEIGHT.md;
+  // Numeric `height` is an escape hatch; otherwise it derives from `size`.
+  const resolvedHeight = height ?? SIZE_HEIGHT[size] ?? SIZE_HEIGHT.md;
   const ts = TITLE_FONT_SIZE[titleSize] ? titleSize : "md";
   const backSize = BACK_SIZE[ts];
   // Explicit bottomRadius wins; otherwise it scales with size (md = 24px).
   // Clamped to a 42px ceiling so the banner corners stay sane.
   const radius = Math.min(MAX_RADIUS, bottomRadius ?? SIZE_RADIUS[size] ?? SIZE_RADIUS.md);
+  // Explicit `background` string wins; otherwise pick the tone gradient.
+  const surface = background ?? TONE_GRADIENTS[tone] ?? TONE_GRADIENTS[DEFAULT_TONE];
 
   return (
     <div
@@ -69,8 +96,8 @@ export function HeroBanner({
         position: "relative",
         width: "100%",
         overflow: "hidden",
-        height,
-        background: BACKGROUND,
+        height: resolvedHeight,
+        background: surface,
         borderBottomLeftRadius: radius,
         borderBottomRightRadius: radius,
       }}
@@ -95,13 +122,14 @@ export function HeroBanner({
         />
       )}
 
-      {/* Content — the block hugs the top of the banner, while the CTAs are
-          vertically centered against the whole title + subtitle column. */}
+      {/* Content — `align="center"` (default) vertically centers the block in
+          the banner; `align="top"` lets it hug the top. The CTAs stay centered
+          against the whole title + subtitle column. */}
       <div
         style={{
           position: "relative",
           display: "flex",
-          alignItems: "center",
+          alignItems: align === "top" ? "flex-start" : "center",
           justifyContent: "space-between",
           gap: "var(--tesseract-space-3)",
           padding: "var(--tesseract-space-3-5) var(--tesseract-space-4-5)",
@@ -109,6 +137,26 @@ export function HeroBanner({
       >
         {/* Title + subtitle column */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--tesseract-space-1-5)", minWidth: 0, flex: 1 }}>
+          {/* Eyebrow — a small kicker label above the title. */}
+          {eyebrow && (
+            <span
+              style={{
+                marginLeft: showBackButton ? backSize + 8 : 0,
+                color: "color-mix(in srgb, var(--tesseract-slate-0) 70%, transparent)",
+                fontSize: "var(--tesseract-text-body-xs, 12px)",
+                fontWeight: "var(--tesseract-weight-semibold)",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                lineHeight: 1.2,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {eyebrow}
+            </span>
+          )}
+
           {/* Heading line: back button + title, centered together */}
           <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", minWidth: 0 }}>
             {showBackButton && (

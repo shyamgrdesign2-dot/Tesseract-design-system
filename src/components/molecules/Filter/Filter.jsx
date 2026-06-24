@@ -9,12 +9,18 @@
  * pass a different `groups` config.
  *
  * Props:
- *   groups       [{ id, label, options: [{ value, label }] }]
+ *   groups       [{ id, label, type?, options: [{ value, label }] }]
+ *                  type: "multi" (default, checkboxes) | "single" (radio — one value per section)
  *   value        { [groupId]: string[] }     controlled selection
  *   defaultValue { [groupId]: string[] }     uncontrolled initial selection
  *   onChange     (selection) => void
  *   label        trigger label                default "Filter"
  *   icon         ReactNode — trigger icon     default a funnel glyph
+ *   mode         "live" (default, immediate onChange) | "apply" (stage a draft, fire on Done)
+ *   clearLabel   footer / active-bar reset label   default "Clear all"
+ *   doneLabel    footer confirm label              default "Done"
+ *   width        panel width (CSS length)          default 240px equivalent (min-width)
+ *   maxHeight    panel max height (CSS length)     default 360px
  *   className
  */
 
@@ -23,6 +29,7 @@ import { cn } from "@/src/hooks/utils";
 import { useClickOutside } from "@/src/hooks/ui/use-overlay";
 import { Chip } from "@/src/components/atoms/Chip";
 import { Checkbox } from "@/src/components/atoms/Checkbox";
+import { Radio } from "@/src/components/atoms/Radio";
 import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Filter.module.scss";
@@ -31,31 +38,92 @@ import styles from "./Filter.module.scss";
 const Chevron = () => <TPLibraryIcon name="chevron-down" size={14} className={styles.caret} />;
 const FunnelIcon = () => <TPLibraryIcon name="filter-2" size={15} />;
 
-export function Filter({ groups = [], value, defaultValue, onChange, label = "Filter", icon, className }) {
+const toLen = (v) => (typeof v === "number" ? `${v}px` : v || undefined);
+
+export function Filter({
+  groups = [],
+  value,
+  defaultValue,
+  onChange,
+  label = "Filter",
+  icon,
+  mode = "live",
+  clearLabel = "Clear all",
+  doneLabel = "Done",
+  width,
+  maxHeight,
+  className,
+}) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(defaultValue || {});
-  const sel = isControlled ? value : internal;
+  const committed = isControlled ? value : internal;
+
+  // In "apply" mode, edits accumulate in a draft and only fire onChange on Done.
+  const isApply = mode === "apply";
+  const [draft, setDraft] = React.useState(committed);
+
+  const [open, setOpen] = React.useState(false);
+
+  // Open/close the panel; opening in apply mode re-seeds the draft from committed.
+  const setOpenState = (next) => {
+    setOpen((prev) => {
+      const value = typeof next === "function" ? next(prev) : next;
+      if (isApply && value) setDraft(committed);
+      return value;
+    });
+  };
+
+  // The selection the panel renders from: the live committed value, or the draft.
+  const sel = isApply ? draft : committed;
+
   const commit = (next) => {
+    if (isApply) {
+      setDraft(next);
+      return;
+    }
     if (!isControlled) setInternal(next);
     onChange?.(next);
   };
 
-  const [open, setOpen] = React.useState(false);
+  const apply = () => {
+    if (!isControlled) setInternal(draft);
+    onChange?.(draft);
+    setOpen(false);
+  };
+
   const ref = React.useRef(null);
   useClickOutside(ref, () => setOpen(false), open);
 
   const toggle = (gid, val) => {
+    const group = groups.find((g) => g.id === gid);
+    if (group?.type === "single") {
+      const cur = sel[gid] || [];
+      const next = cur.includes(val) ? [] : [val];
+      commit({ ...sel, [gid]: next });
+      return;
+    }
     const cur = sel[gid] || [];
     const next = cur.includes(val) ? cur.filter((v) => v !== val) : [...cur, val];
     commit({ ...sel, [gid]: next });
   };
-  const removeChip = (gid, val) => commit({ ...sel, [gid]: (sel[gid] || []).filter((v) => v !== val) });
+  // Active-bar actions operate on the committed selection directly: they always
+  // fire onChange (even in apply mode) and keep the draft in sync.
+  const commitNow = (next) => {
+    if (!isControlled) setInternal(next);
+    if (isApply) setDraft(next);
+    onChange?.(next);
+  };
+  const removeChip = (gid, val) => commitNow({ ...committed, [gid]: (committed[gid] || []).filter((v) => v !== val) });
+  const clearActive = () => commitNow({});
+
+  // Panel "Clear all" — in apply mode resets the draft (staged), else commits.
   const clearAll = () => commit({});
 
   const totalSelected = groups.reduce((n, g) => n + (sel[g.id]?.length || 0), 0);
 
+  // Active chips always reflect the committed selection (the draft is panel-only).
   const chips = groups.flatMap((g) =>
-    (sel[g.id] || []).map((v) => ({ gid: g.id, value: v, group: g.label, label: g.options.find((o) => o.value === v)?.label ?? v })),
+    (committed[g.id] || []).map((v) => ({ gid: g.id, value: v, group: g.label, label: g.options.find((o) => o.value === v)?.label ?? v })),
   );
 
   return (
@@ -68,7 +136,7 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
             data-active={totalSelected > 0 || undefined}
             aria-expanded={open}
             aria-haspopup="dialog"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => setOpenState((o) => !o)}
           >
             <span className={styles.triggerIcon}>{icon ?? <FunnelIcon />}</span>
             {label}
@@ -77,41 +145,51 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
           </button>
 
           {open && (
-            <div className={styles.panel} role="dialog" aria-label={label}>
+            <div
+              className={styles.panel}
+              role="dialog"
+              aria-label={label}
+              style={{ "--filter-panel-width": toLen(width), "--filter-panel-max-height": toLen(maxHeight) }}
+            >
               <div className={styles.sections}>
-                {groups.map((g) => (
-                  <div key={g.id} className={styles.section}>
-                    <div className={styles.sectionTitle}>{g.label}</div>
-                    {g.options.map((o) => {
-                      const on = (sel[g.id] || []).includes(o.value);
-                      const pick = () => toggle(g.id, o.value);
-                      return (
-                        <div
-                          key={o.value}
-                          role="option"
-                          aria-selected={on}
-                          tabIndex={0}
-                          className={styles.option}
-                          onClick={pick}
-                          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }}
-                        >
-                          {/* Reuse the Checkbox atom (decorative — the row owns the click). */}
-                          <span className={styles.control} aria-hidden>
-                            <Checkbox size="sm" checked={on} tabIndex={-1} />
-                          </span>
-                          {o.label}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
+                {groups.map((g) => {
+                  const single = g.type === "single";
+                  return (
+                    <div key={g.id} className={styles.section}>
+                      <div className={styles.sectionTitle}>{g.label}</div>
+                      {g.options.map((o) => {
+                        const on = (sel[g.id] || []).includes(o.value);
+                        const pick = () => toggle(g.id, o.value);
+                        return (
+                          <div
+                            key={o.value}
+                            role="option"
+                            aria-selected={on}
+                            tabIndex={0}
+                            className={styles.option}
+                            onClick={pick}
+                            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } }}
+                          >
+                            {/* Reuse the Checkbox / Radio atom (decorative — the row owns the click). */}
+                            <span className={styles.control} aria-hidden>
+                              {single
+                                ? <Radio size="sm" checked={on} />
+                                : <Checkbox size="sm" checked={on} tabIndex={-1} />}
+                            </span>
+                            {o.label}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
               </div>
               <div className={styles.panelFooter}>
                 <Button variant="ghost" theme="warning" size="sm" onClick={clearAll} disabled={totalSelected === 0}>
-                  Clear all
+                  {clearLabel}
                 </Button>
-                <Button variant="solid" theme="primary" size="sm" onClick={() => setOpen(false)}>
-                  Done
+                <Button variant="solid" theme="primary" size="sm" onClick={isApply ? apply : () => setOpen(false)}>
+                  {doneLabel}
                 </Button>
               </div>
             </div>
@@ -132,7 +210,7 @@ export function Filter({ groups = [], value, defaultValue, onChange, label = "Fi
               />
             ))}
           </div>
-          <Button variant="ghost" theme="warning" size="sm" onClick={clearAll}>Clear all</Button>
+          <Button variant="ghost" theme="warning" size="sm" onClick={clearActive}>{clearLabel}</Button>
         </div>
       )}
     </div>

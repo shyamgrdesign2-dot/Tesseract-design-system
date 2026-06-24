@@ -5,11 +5,37 @@
   height: 100%;
   flex-shrink: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   font-family: var(--tesseract-font-body);
-  background: linear-gradient(180deg, var(--tesseract-blue-900) 0%, var(--tesseract-blue-700) 50%, var(--tesseract-blue-500) 100%);
+
+  /* Tone ramp — defaults to blue so the look is unchanged. A `gradient` override
+     (set as the inline custom prop --ss-gradient) wins over the token ramp. */
+  --ss-ramp-900: var(--tesseract-blue-900);
+  --ss-ramp-700: var(--tesseract-blue-700);
+  --ss-ramp-500: var(--tesseract-blue-500);
+  background: var(--ss-gradient, linear-gradient(180deg, var(--ss-ramp-900) 0%, var(--ss-ramp-700) 50%, var(--ss-ramp-500) 100%));
   transition: width 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
     min-width 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
     max-width 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rail[data-tone="violet"] {
+  --ss-ramp-900: var(--tesseract-violet-900);
+  --ss-ramp-700: var(--tesseract-violet-700);
+  --ss-ramp-500: var(--tesseract-violet-500);
+}
+
+.rail[data-tone="slate"] {
+  --ss-ramp-900: var(--tesseract-slate-900);
+  --ss-ramp-700: var(--tesseract-slate-700);
+  --ss-ramp-500: var(--tesseract-slate-500);
+}
+
+.rail[data-tone="green"] {
+  --ss-ramp-900: var(--tesseract-success-900);
+  --ss-ramp-700: var(--tesseract-success-700);
+  --ss-ramp-500: var(--tesseract-success-500);
 }
 
 /* ── Collapsed header ── */
@@ -99,12 +125,28 @@
   align-items: center;
   gap: var(--tesseract-space-1);
   width: 100%;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar { width: 0; display: none; }
+}
+
+/* ── Custom header / footer slots ── */
+.slotHeader {
+  flex-shrink: 0;
+  width: 100%;
+  color: var(--tesseract-slate-0);
+}
+
+.slotFooter {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 100%;
+  color: var(--tesseract-slate-0);
 }
 
 /* ── Collapsed: rail item ── */
@@ -158,7 +200,7 @@
 .item[data-active]:hover .pill { background: var(--tesseract-slate-0); transform: scale(1.02); }
 
 .signal { position: absolute; top: -3px; right: -3px; line-height: 0; pointer-events: none; }
-.signal :global(*) { box-shadow: 0 0 0 2px color-mix(in srgb, var(--tesseract-blue-900) 60%, transparent); border-radius: 50%; }
+.signal :global(*) { box-shadow: 0 0 0 2px color-mix(in srgb, var(--ss-ramp-900) 60%, transparent); border-radius: 50%; }
 
 .railBadge {
   position: absolute;
@@ -214,7 +256,7 @@
   transform: translateY(-50%);
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 8px solid var(--tesseract-bg-surface, #fff);
+  border-right: 8px solid var(--ss-pointer, var(--tesseract-bg-surface, #fff));
   pointer-events: none;
 }
 
@@ -348,6 +390,38 @@
   font-weight: var(--tesseract-weight-semibold);
 }
 
+/* ── Density: compact tightens pills, padding & label width ── */
+.rail[data-density="compact"] {
+  .inner {
+    gap: var(--tesseract-space-1);
+    padding: var(--tesseract-space-2-5) var(--tesseract-space-1);
+  }
+
+  .pill {
+    width: 30px;
+    height: 30px;
+  }
+
+  .label {
+    width: 64px;
+    max-width: 64px;
+    line-height: 16px;
+  }
+
+  .expItem {
+    padding: var(--tesseract-space-1-5) var(--tesseract-space-2) var(--tesseract-space-1-5) var(--tesseract-space-2-5);
+  }
+
+  .expPill {
+    width: 26px;
+    height: 26px;
+  }
+
+  .expChild {
+    padding: var(--tesseract-space-1) var(--tesseract-space-2) var(--tesseract-space-1) 44px;
+  }
+}
+
 /* ── Bottom fade ── */
 .fade {
   position: absolute;
@@ -357,5 +431,5 @@
   width: 100%;
   height: 80px;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, var(--tesseract-blue-500) 85%);
+  background: linear-gradient(180deg, transparent 0%, var(--ss-fade, var(--ss-ramp-500)) 85%);
 }

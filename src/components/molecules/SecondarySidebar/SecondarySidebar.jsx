@@ -18,6 +18,15 @@
  *   expandedWidth  number (default 200)
  *   collapsedWidth number (default 80)
  *   width          alias for collapsedWidth (backwards compat)
+ *   tone           "blue" (default) | "violet" | "slate" | "green" — swaps the rail
+ *                  gradient + fade + active-pill-icon colour using --tesseract-* ramps
+ *   gradient       CSS string — overrides the tone ramp for the rail background
+ *   density        "comfortable" (default) | "compact" — tightens pills/padding/label
+ *   header         ReactNode rendered above the items
+ *   footer         ReactNode pinned at the bottom (above the fade)
+ *   emptyState     ReactNode shown when the filter matches nothing (overrides emptyText)
+ *   emptyText      string for the no-matches message (default "No matches")
+ *   pointerColor   colour of the active caret so it matches the adjacent content surface
  *   className
  */
 
@@ -40,7 +49,7 @@ function PillIcon({ icon, active, collapsed }) {
         name={icon}
         variant={active ? "bulk" : "linear"}
         size={collapsed ? 20 : 18}
-        color={active ? "var(--tesseract-blue-500, #4b4ad5)" : "var(--tesseract-slate-0, #ffffff)"}
+        color={active ? "var(--ss-active-icon, var(--ss-ramp-500, #4b4ad5))" : "var(--tesseract-slate-0, #ffffff)"}
       />
     );
   }
@@ -220,6 +229,14 @@ export function SecondarySidebar({
   collapsedWidth = 80,
   width,
   bottomFade = true,
+  tone = "blue",
+  gradient,
+  density = "comfortable",
+  header,
+  footer,
+  emptyState,
+  emptyText = "No matches",
+  pointerColor,
   className,
 }) {
   const isControlled = controlledCollapsed !== undefined;
@@ -276,10 +293,21 @@ export function SecondarySidebar({
     return out;
   }, [items, query]);
 
+  const railStyle = {
+    width: railWidth,
+    minWidth: railWidth,
+    maxWidth: railWidth,
+    flexBasis: railWidth,
+  };
+  if (gradient) railStyle["--ss-gradient"] = gradient;
+  if (pointerColor) railStyle["--ss-pointer"] = pointerColor;
+
   return (
     <nav
       className={cn(styles.rail, collapsed && styles.collapsed, className)}
-      style={{ width: railWidth, minWidth: railWidth, maxWidth: railWidth, flexBasis: railWidth }}
+      style={railStyle}
+      data-tone={tone !== "blue" ? tone : undefined}
+      data-density={density === "compact" ? "compact" : undefined}
       aria-label="Secondary"
     >
       {/* Toggle + search header for expanded */}
@@ -323,9 +351,11 @@ export function SecondarySidebar({
         </div>
       )}
 
+      {header != null && <div className={styles.slotHeader}>{header}</div>}
+
       <div className={styles.scroll}>
         {filtered.length === 0 ? (
-          <p className={styles.empty}>No matches</p>
+          emptyState ?? <p className={styles.empty}>{emptyText}</p>
         ) : collapsed ? (
           filtered.map((item) => (
             <CollapsedItem
@@ -348,6 +378,7 @@ export function SecondarySidebar({
           ))
         )}
       </div>
+      {footer != null && <div className={styles.slotFooter}>{footer}</div>}
       {bottomFade && <div className={styles.fade} aria-hidden />}
     </nav>
   );

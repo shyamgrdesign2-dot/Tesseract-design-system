@@ -13,6 +13,7 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'ghost', 'tonal', 'link'];
 const CTA_SHAPES = ['text', 'icon', 'split'];
 const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+const TONES = ['violet', 'blue', 'slate', 'dark'];
 
 // Clean line plus (two crossing strokes) — matches the accordion-style line
 // icons, not the chunky TP_Icons "Plus" silhouette.
@@ -71,6 +72,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     // ── Content ──
+    eyebrow:        { control: 'text', name: 'eyebrow (kicker)', description: 'Small label above the title; blank = none', table: { category: 'Content' } },
     title:          { control: 'text', table: { category: 'Content' } },
     titleSize:      { control: 'inline-radio', options: ['sm', 'md'], description: '18px / 24px', table: { category: 'Content' } },
     showSubtitle:   { control: 'boolean', name: 'with subtitle', table: { category: 'Content' } },
@@ -81,7 +83,11 @@ const meta = {
     backIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'back icon style', table: { category: 'Content' } },
 
     // ── Appearance ──  (pattern opacity is fixed at 100%, no control)
+    tone:         { control: 'inline-radio', options: TONES, description: 'Gradient tone (token-only); violet = default look', table: { category: 'Appearance' } },
+    background:   { control: 'text', name: 'background (override)', description: 'Full CSS background string; wins over tone. Blank = use tone', table: { category: 'Appearance' } },
     size:         { control: 'select', options: ['sm', 'md', 'lg'], description: 'height 80 / 120 / 160', table: { category: 'Appearance' } },
+    height:       { control: { type: 'number', min: 0, step: 4 }, name: 'height (override)', description: 'Numeric height; overrides size. Blank = use size', table: { category: 'Appearance' } },
+    align:        { control: 'inline-radio', options: ['center', 'top'], description: 'Vertical alignment of the content block', table: { category: 'Appearance' } },
     bottomRadius: { control: { type: 'range', min: 0, max: 42, step: 1 }, name: 'bottom radius (L + R)', table: { category: 'Appearance' } },
     pattern:      { control: 'boolean', name: 'with pattern', table: { category: 'Appearance' } },
 
@@ -116,6 +122,7 @@ const meta = {
     actions: { table: { disable: true } },
   },
   args: {
+    eyebrow: '',
     title: 'Your Appointments',
     titleSize: 'md',
     showSubtitle: true,
@@ -125,7 +132,11 @@ const meta = {
     backIcon: 'arrow-left',
     backIconVariant: 'linear',
 
+    tone: 'violet',
+    background: '',
     size: 'md',
+    height: undefined,
+    align: 'center',
     bottomRadius: 24,
     pattern: true,
 
@@ -173,9 +184,16 @@ function renderActions(a) {
   return <>{ctas}</>;
 }
 
-// Accurate, copy-paste snippet for the back button (mirrors Badge's "Show code").
+// Accurate, copy-paste snippet (mirrors Badge's "Show code"). Only non-default
+// props are emitted, so the snippet stays minimal at the default look.
 const heroBackCode = (a) => {
-  const lines = [`  title="${a.title}"`];
+  const lines = [];
+  if (a.eyebrow) lines.push(`  eyebrow="${a.eyebrow}"`);
+  lines.push(`  title="${a.title}"`);
+  if (a.tone && a.tone !== 'violet') lines.push(`  tone="${a.tone}"`);
+  if (a.background) lines.push(`  background="${a.background}"`);
+  if (a.align && a.align !== 'center') lines.push(`  align="${a.align}"`);
+  if (a.height) lines.push(`  height={${a.height}}`);
   if (a.showBackButton) {
     lines.push('  showBackButton');
     if (a.backIcon && a.backIcon !== 'arrow-left') lines.push(`  backIcon="${a.backIcon}"`);
@@ -192,7 +210,12 @@ export const Playground = {
   render:(args) => (
     <HeroBanner
       size={args.size}
+      height={args.height || undefined}
+      tone={args.tone}
+      background={args.background || undefined}
+      align={args.align}
       bottomRadius={args.bottomRadius}
+      eyebrow={args.eyebrow || undefined}
       title={args.title}
       titleSize={args.titleSize}
       subtitle={args.showSubtitle ? args.subtitle : undefined}
@@ -369,12 +392,39 @@ export const BottomRadius = {
   ),
 };
 
+/** Tones — token-only gradient reskins. "violet" is the default look. */
+export const Tones = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {TONES.map((tone) => (
+        <HeroBanner key={tone} tone={tone} title={`${tone[0].toUpperCase()}${tone.slice(1)} tone`} subtitle="Same hero, reskinned per page / specialty" />
+      ))}
+    </div>
+  ),
+};
+
+/** Eyebrow kicker + top-aligned content (taller banner). */
+export const EyebrowAndAlign = {
+  name: 'Eyebrow + align="top"',
+  render: () => (
+    <HeroBanner
+      height={180}
+      align="top"
+      eyebrow="Cardiology · OPD Block B"
+      title="Outpatient Appointments"
+      subtitle="32 scheduled today · 4 awaiting confirmation"
+      showBackButton
+    />
+  ),
+};
+
 export const FullFeatured = {
   render: () => (
     <HeroBanner
       size="lg"
+      eyebrow="Today · OPD Block B"
       title="Outpatient Appointments"
-      subtitle="Cardiology · OPD Block B"
+      subtitle="Cardiology · 32 scheduled today"
       titleSize="md"
       subtitleSize="sm"
       showBackButton

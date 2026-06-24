@@ -13,13 +13,32 @@ const meta = {
     docs: { description: { component: 'A single "Filter" entry point that opens one panel with grouped, multi-select sections (Status · Doctors · Types). Chosen options become removable chips below. The section set changes per table — pass a different `groups` config. Pairs with DataTable to filter rows.' } },
   },
   argTypes: {
-    groups: { control: 'object', description: 'Filter sections: [{ id, label, options: [{ value, label }] }]' },
+    groups: { control: 'object', description: 'Filter sections: [{ id, label, type?, options: [{ value, label }] }] — type "multi" (default) | "single"' },
     label: { control: 'text', description: 'Trigger label' },
     triggerIcon: { control: 'text', tpIcon: true, name: 'trigger icon', description: 'Tesseract icon on the Filter trigger (defaults to a funnel)' },
+    mode: { control: 'inline-radio', options: ['live', 'apply'], description: 'live = immediate onChange · apply = stage a draft, fire on Done', table: { category: 'Behavior' } },
+    clearLabel: { control: 'text', name: 'clear label', description: 'Reset button label (footer + active bar)', table: { category: 'Labels' } },
+    doneLabel: { control: 'text', name: 'done label', description: 'Footer confirm button label', table: { category: 'Labels' } },
+    width: { control: 'text', description: 'Panel width (CSS length, e.g. 320px). Blank = default (240px min-width).', table: { category: 'Layout' } },
+    maxHeight: { control: 'text', name: 'max height', description: 'Panel max height (CSS length). Blank = default 360px.', table: { category: 'Layout' } },
   },
+  args: { mode: 'live', clearLabel: 'Clear all', doneLabel: 'Done', width: '', maxHeight: '' },
 };
 
 export default meta;
+
+// Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
+const filterCode = ({ label = 'Filter', mode = 'live', clearLabel = 'Clear all', doneLabel = 'Done', width, maxHeight, triggerIcon } = {}) => {
+  const lines = ['  groups={GROUPS}', '  value={value}', '  onChange={setValue}'];
+  if (label && label !== 'Filter') lines.push(`  label="${label}"`);
+  if (triggerIcon) lines.push(`  icon={<TPLibraryIcon name="${triggerIcon}" size={16} />}`);
+  if (mode && mode !== 'live') lines.push(`  mode="${mode}"`);
+  if (clearLabel && clearLabel !== 'Clear all') lines.push(`  clearLabel="${clearLabel}"`);
+  if (doneLabel && doneLabel !== 'Done') lines.push(`  doneLabel="${doneLabel}"`);
+  if (width) lines.push(`  width="${width}"`);
+  if (maxHeight) lines.push(`  maxHeight="${maxHeight}"`);
+  return `<Filter\n${lines.join('\n')}\n/>`;
+};
 
 const GROUPS = [
   { id: 'status', label: 'Status', options: [
@@ -38,7 +57,8 @@ const GROUPS = [
 
 export const Playground = {
   args: { groups: GROUPS, label: 'Filter', triggerIcon: '' },
-  render: ({ groups, label, triggerIcon }) => {
+  parameters: { docs: { source: { transform: (_code, ctx) => filterCode(ctx.args) } } },
+  render: ({ groups, label, triggerIcon, mode, clearLabel, doneLabel, width, maxHeight }) => {
     const [value, setValue] = React.useState({ status: ['Waiting'] });
     return (
       <div style={{ maxWidth: 720 }}>
@@ -46,9 +66,59 @@ export const Playground = {
           groups={groups}
           label={label}
           icon={triggerIcon ? <TPLibraryIcon name={triggerIcon} size={16} /> : undefined}
+          mode={mode}
+          clearLabel={clearLabel}
+          doneLabel={doneLabel}
+          width={width || undefined}
+          maxHeight={maxHeight || undefined}
           value={value}
           onChange={setValue}
         />
+        <pre style={{ marginTop: "var(--tesseract-space-4)", fontSize: "var(--tesseract-text-body-xs)", color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
+      </div>
+    );
+  },
+};
+
+// ── Single-select section — "type: single" turns a section into radio behavior ──
+const SINGLE_GROUPS = [
+  { id: 'view', label: 'View', type: 'single', options: [
+    { value: 'All', label: 'All appointments' }, { value: 'Mine', label: 'My appointments' },
+    { value: 'Unassigned', label: 'Unassigned' },
+  ] },
+  { id: 'status', label: 'Status', options: [
+    { value: 'Confirmed', label: 'Confirmed' }, { value: 'Waiting', label: 'Waiting' },
+    { value: 'No-show', label: 'No-show' }, { value: 'Completed', label: 'Completed' },
+  ] },
+  { id: 'doctor', label: 'Doctor', options: [
+    { value: 'Dr. Mehra', label: 'Dr. Mehra' }, { value: 'Dr. Sharma', label: 'Dr. Sharma' },
+    { value: 'Dr. Kapoor', label: 'Dr. Kapoor' }, { value: 'Dr. Gupta', label: 'Dr. Gupta' },
+  ] },
+];
+
+/** A single-select section ("View" = radio, one value) above multi-select sections. */
+export const SingleSelectSection = {
+  name: 'Single-select section',
+  args: { groups: SINGLE_GROUPS, label: 'Filter' },
+  render: ({ groups, label }) => {
+    const [value, setValue] = React.useState({ view: ['All'] });
+    return (
+      <div style={{ maxWidth: 720 }}>
+        <Filter groups={groups} label={label} value={value} onChange={setValue} />
+        <pre style={{ marginTop: "var(--tesseract-space-4)", fontSize: "var(--tesseract-text-body-xs)", color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
+      </div>
+    );
+  },
+};
+
+/** Apply mode — toggling stages a draft; onChange only fires on "Apply". */
+export const ApplyMode = {
+  name: 'Apply mode (staged)',
+  render: () => {
+    const [value, setValue] = React.useState({ status: ['Waiting'] });
+    return (
+      <div style={{ maxWidth: 720 }}>
+        <Filter groups={GROUPS} mode="apply" doneLabel="Apply" value={value} onChange={setValue} />
         <pre style={{ marginTop: "var(--tesseract-space-4)", fontSize: "var(--tesseract-text-body-xs)", color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(value, null, 2)}</pre>
       </div>
     );

@@ -2039,6 +2039,32 @@
           "name": "onValueChange"
         },
         {
+          "name": "expandIcon",
+          "default": "\"chevron-down\"",
+          "control": "text",
+          "description": "CDN icon name for the disclosure indicator (rotates on open)"
+        },
+        {
+          "name": "iconPosition",
+          "default": "\"right\"",
+          "allowedValues": [
+            "right",
+            "left"
+          ],
+          "control": "inline-radio",
+          "description": "Which side the indicator sits on"
+        },
+        {
+          "name": "density",
+          "default": "\"comfortable\"",
+          "allowedValues": [
+            "comfortable",
+            "compact"
+          ],
+          "control": "inline-radio",
+          "description": "Row padding + font scale"
+        },
+        {
           "name": "className",
           "default": "\"\""
         },
@@ -2060,6 +2086,10 @@
         "SingleCollapsible",
         "Multiple",
         "NonCollapsibleSingle",
+        "IconLeft",
+        "Compact",
+        "DisabledItem",
+        "CustomHeadingLevel",
         "Controlled",
         "PatientMedicalHistory",
         "FAQAccordion",
@@ -3005,7 +3035,7 @@
           "name": "groups",
           "default": "[]",
           "control": "object",
-          "description": "Filter sections: [{ id, label, options: [{ value, label }] }]"
+          "description": "Filter sections: [{ id, label, type?, options: [{ value, label }] }] — type "
         },
         {
           "name": "value"
@@ -3026,17 +3056,52 @@
           "name": "icon"
         },
         {
+          "name": "mode",
+          "default": "\"live\"",
+          "allowedValues": [
+            "live",
+            "apply"
+          ],
+          "control": "inline-radio",
+          "description": "live = immediate onChange · apply = stage a draft, fire on Done"
+        },
+        {
+          "name": "clearLabel",
+          "default": "\"Clear all\"",
+          "control": "text",
+          "description": "Reset button label (footer + active bar)"
+        },
+        {
+          "name": "doneLabel",
+          "default": "\"Done\"",
+          "control": "text",
+          "description": "Footer confirm button label"
+        },
+        {
+          "name": "width",
+          "default": "''",
+          "control": "text",
+          "description": "Panel width (CSS length, e.g. 320px). Blank = default (240px min-width)."
+        },
+        {
+          "name": "maxHeight",
+          "default": "''",
+          "control": "text",
+          "description": "Panel max height (CSS length). Blank = default 360px."
+        },
+        {
           "name": "className"
         },
         {
           "name": "triggerIcon",
           "control": "text",
-          "description": "Tesseract icon on the Filter trigger (defaults to a funnel)",
-          "default": "''"
+          "description": "Tesseract icon on the Filter trigger (defaults to a funnel)"
         }
       ],
       "stories": [
         "Playground",
+        "SingleSelectSection",
+        "ApplyMode",
         "WithDataTable"
       ],
       "sourcePath": "src/components/molecules/Filter/Filter.jsx",
@@ -3189,9 +3254,49 @@
           "description": "height 80 / 120 / 160"
         },
         {
+          "name": "height",
+          "default": "undefined",
+          "control": "number",
+          "description": "Numeric height; overrides size. Blank = use size"
+        },
+        {
           "name": "bottomRadius",
           "default": "24",
           "control": "range"
+        },
+        {
+          "name": "tone",
+          "default": "DEFAULT_TONE",
+          "allowedValues": [
+            "violet",
+            "blue",
+            "slate",
+            "dark"
+          ],
+          "control": "inline-radio",
+          "description": "Gradient tone (token-only); violet = default look"
+        },
+        {
+          "name": "background",
+          "default": "''",
+          "control": "text",
+          "description": "Full CSS background string; wins over tone. Blank = use tone"
+        },
+        {
+          "name": "eyebrow",
+          "default": "''",
+          "control": "text",
+          "description": "Small label above the title; blank = none"
+        },
+        {
+          "name": "align",
+          "default": "\"center\"",
+          "allowedValues": [
+            "center",
+            "top"
+          ],
+          "control": "inline-radio",
+          "description": "Vertical alignment of the content block"
         },
         {
           "name": "title",
@@ -3422,6 +3527,8 @@
         "AllCtaTypes",
         "TitleSizes",
         "BottomRadius",
+        "Tones",
+        "EyebrowAndAlign",
         "FullFeatured"
       ],
       "sourcePath": "src/components/molecules/HeroBanner/HeroBanner.jsx",
@@ -3674,6 +3781,54 @@
           "description": "Bottom fade overlay"
         },
         {
+          "name": "tone",
+          "default": "\"blue\"",
+          "allowedValues": [
+            "blue",
+            "violet",
+            "slate",
+            "green"
+          ],
+          "control": "inline-radio",
+          "description": "Rail gradient + fade + active-icon ramp"
+        },
+        {
+          "name": "gradient",
+          "storyHidden": true
+        },
+        {
+          "name": "density",
+          "default": "\"comfortable\"",
+          "allowedValues": [
+            "comfortable",
+            "compact"
+          ],
+          "control": "inline-radio",
+          "description": "Pill / padding / label sizing"
+        },
+        {
+          "name": "header",
+          "storyHidden": true
+        },
+        {
+          "name": "footer",
+          "storyHidden": true
+        },
+        {
+          "name": "emptyState",
+          "storyHidden": true
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No matches\"",
+          "control": "text",
+          "description": "No-matches message"
+        },
+        {
+          "name": "pointerColor",
+          "storyHidden": true
+        },
+        {
           "name": "className",
           "storyHidden": true
         },
@@ -3700,7 +3855,8 @@
       "stories": [
         "Playground",
         "WithBadges",
-        "SignalDot"
+        "SignalDot",
+        "ToneDensityFooter"
       ],
       "sourcePath": "src/components/molecules/SecondarySidebar/SecondarySidebar.jsx",
       "storiesPath": "src/components/molecules/SecondarySidebar/SecondarySidebar.stories.jsx"

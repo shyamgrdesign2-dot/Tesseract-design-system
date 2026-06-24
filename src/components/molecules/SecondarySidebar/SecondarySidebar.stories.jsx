@@ -1,5 +1,6 @@
 import React from "react";
 import { SecondarySidebar } from "./SecondarySidebar";
+import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 
 const ITEMS = [
   { id: "pastVisits", label: "Past Visits", icon: "clipboard-text" },
@@ -67,7 +68,29 @@ const meta = {
     showCollapseToggle: { table: { disable: true } },
     expandedWidth: { table: { disable: true } },
     width: { table: { disable: true } },
+    gradient: { table: { disable: true } },
+    header: { table: { disable: true } },
+    footer: { table: { disable: true } },
+    emptyState: { table: { disable: true } },
+    pointerColor: { table: { disable: true } },
     className: { table: { disable: true } },
+    tone: {
+      control: "inline-radio",
+      options: ["blue", "violet", "slate", "green"],
+      description: "Rail gradient + fade + active-icon ramp",
+      table: { category: "Appearance" },
+    },
+    density: {
+      control: "inline-radio",
+      options: ["comfortable", "compact"],
+      description: "Pill / padding / label sizing",
+      table: { category: "Appearance" },
+    },
+    emptyText: {
+      control: "text",
+      description: "No-matches message",
+      table: { category: "Content" },
+    },
     collapsedWidth: {
       control: { type: "number", min: 64, max: 100, step: 4 },
       description: "Rail width in px",
@@ -95,10 +118,26 @@ const meta = {
     pillRadius: 12,
     bottomFade: true,
     badgeStyle: "default",
+    tone: "blue",
+    density: "comfortable",
+    emptyText: "No matches",
   },
 };
 
 export default meta;
+
+// Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
+const sidebarCode = ({ tone = "blue", density = "comfortable", collapsedWidth = 80, bottomFade = true, emptyText }) => {
+  const lines = ["  items={items}", '  activeId={active}', "  onSelect={setActive}", "  collapsed"];
+  if (tone !== "blue") lines.push(`  tone="${tone}"`);
+  if (density !== "comfortable") lines.push(`  density="${density}"`);
+  if (collapsedWidth !== 80) lines.push(`  collapsedWidth={${collapsedWidth}}`);
+  if (!bottomFade) lines.push("  bottomFade={false}");
+  if (emptyText && emptyText !== "No matches") lines.push(`  emptyText="${emptyText}"`);
+  return `<SecondarySidebar\n${lines.join("\n")}\n/>`;
+};
+
+const transform = { docs: { source: { transform: (_code, ctx) => sidebarCode(ctx.args) } } };
 
 const Shell = ({ children, height = 640, style }) => (
   <div
@@ -153,6 +192,7 @@ export const Playground = {
       </Shell>
     );
   },
+  parameters: transform,
 };
 
 export const WithBadges = {
@@ -176,6 +216,7 @@ export const WithBadges = {
       </Shell>
     );
   },
+  parameters: transform,
 };
 
 export const SignalDot = {
@@ -199,4 +240,67 @@ export const SignalDot = {
       </Shell>
     );
   },
+  parameters: transform,
+};
+
+/** Reskin via `tone`, tighten with `density`, and pin a `footer` slot at the
+ *  bottom of the rail (parallel to Sidebar's footer). Defaults stay blue. */
+export const ToneDensityFooter = {
+  name: "Tone + Density + Footer",
+  render: (args) => {
+    const { badgeStyle, pillRadius, ...rest } = args;
+    const items = transformBadges(ITEMS, badgeStyle);
+    const [active, setActive] = React.useState("vitals");
+    const footer = (
+      <button
+        type="button"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+          width: "100%",
+          padding: "12px 0",
+          border: "none",
+          background: "transparent",
+          cursor: "pointer",
+          color: "var(--tesseract-slate-0, #fff)",
+          fontFamily: "var(--tesseract-font-body)",
+          fontSize: 11,
+          fontWeight: 500,
+        }}
+      >
+        <span
+          style={{
+            display: "grid",
+            placeItems: "center",
+            width: 34,
+            height: 34,
+            borderRadius: 12,
+            background: "color-mix(in srgb, var(--tesseract-slate-0) 16%, transparent)",
+          }}
+        >
+          <TPIcon name="setting-2" variant="linear" size={18} color="var(--tesseract-slate-0, #fff)" />
+        </span>
+        Settings
+      </button>
+    );
+    return (
+      <Shell style={{ "--tesseract-radius-12": `${pillRadius}px` }}>
+        <SecondarySidebar
+          {...rest}
+          items={items}
+          activeId={active}
+          onSelect={setActive}
+          collapsed
+          showCollapseToggle={false}
+          search={false}
+          footer={footer}
+        />
+        <Content activeId={active} />
+      </Shell>
+    );
+  },
+  args: { tone: "violet", density: "compact" },
+  parameters: transform,
 };
