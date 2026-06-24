@@ -1,8 +1,14 @@
-/* ─── Base reset ─────────────────────────────────────────────────────────────
-   Minimal preflight-equivalent. Previously these came from Tailwind's preflight;
-   now that the library is dependency-free, they live here so layout, font
-   inheritance, and box-sizing stay consistent for every consumer.
+/* ─── Base reset (isolation-hardened) ─────────────────────────────────────────
+   This ships with the package. To avoid LEAKING into a host application's own
+   elements (the #1 adoption complaint), only the universally-safe rules stay
+   global; everything that would restyle a host's buttons, inputs, headings,
+   scrollbars, or corners is scoped to the Tesseract root ([data-tp-theme], set by
+   TesseractThemeProvider on its wrapper and the document root). Components also
+   self-contain their own box model, so they render correctly even with no reset.
    ──────────────────────────────────────────────────────────────────────────── */
+
+/* Universally safe + expected — kept global so components work even outside the
+   provider. border-box is benign on a host's elements. */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -11,48 +17,46 @@ body {
   margin: 0;
 }
 
-button, input, select, textarea {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  background: none;
-}
-
-/* ─── Smoothed corners (squircle) ────────────────────────────────────────────
-   Applies iOS-style super-ellipse rounding to every element that already has
-   a non-zero border-radius. The `corner-shape` property is a CSS Shapes Level 2
-   feature supported in Chrome 133+. Older browsers silently ignore it and fall
-   back to the standard `border-radius` value — no breakage.
-   ──────────────────────────────────────────────────────────────────────────── */
-*, *::before, *::after {
-  corner-shape: squircle;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-*::-webkit-scrollbar {
-  display: none;
-}
-
-html, body {
-  overflow-x: clip;
-}
-
-body {
+/* ─── Scoped reset — only inside a Tesseract subtree ──────────────────────────
+   Everything below would otherwise restyle the host's own DOM. Scoping to
+   [data-tp-theme] keeps it for our components (which always render under the
+   provider) without touching the host. */
+[data-tp-theme] {
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
-  color: #171725;
+  color: var(--tesseract-fg-default, var(--tesseract-slate-900, #171725));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Only the H1 page title uses Mulish. Every other heading uses Inter. */
-h1 {
+[data-tp-theme] :is(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+[data-tp-theme] button {
+  background: none;
+}
+
+/* Smoothed corners (squircle) — iOS-style super-ellipse on anything already
+   rounded. Chrome 133+; older browsers fall back to border-radius. Scoped so we
+   don't reshape every corner in the host app. */
+[data-tp-theme] :is(*, *::before, *::after) {
+  corner-shape: squircle;
+}
+
+/* Hidden scrollbars — scoped so we don't strip the host's scrollbars page-wide. */
+[data-tp-theme] * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+[data-tp-theme] *::-webkit-scrollbar {
+  display: none;
+}
+
+/* Heading roles — scoped so the host's own h1..h6 are untouched. */
+[data-tp-theme] h1 {
   font-family: var(--font-heading);
   font-size: 36px;
   font-weight: 700;
@@ -60,50 +64,22 @@ h1 {
   letter-spacing: -0.02em;
   margin: 0;
 }
+[data-tp-theme] h2 { font-family: var(--font-sans); font-size: 30px; font-weight: 600; line-height: 1.27; letter-spacing: -0.01em; margin: 0; }
+[data-tp-theme] h3 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; line-height: 1.33; margin: 0; }
+[data-tp-theme] h4 { font-family: var(--font-sans); font-size: 20px; font-weight: 600; line-height: 1.4; margin: 0; }
+[data-tp-theme] h5 { font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 1.5; margin: 0; }
+[data-tp-theme] h6 { font-family: var(--font-sans); font-size: 14px; font-weight: 600; line-height: 1.43; letter-spacing: 0.01em; margin: 0; }
 
-h2 {
-  font-family: var(--font-sans);
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 1.27;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-
-h3 {
-  font-family: var(--font-sans);
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.33;
-  letter-spacing: 0;
-  margin: 0;
-}
-
-h4 {
-  font-family: var(--font-sans);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0;
-  margin: 0;
-}
-
-h5 {
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.5;
-  letter-spacing: 0;
-  margin: 0;
-}
-
-h6 {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.43;
-  letter-spacing: 0.01em;
-  margin: 0;
+/* ─── Reduced motion ─────────────────────────────────────────────────────────
+   Respect the OS "reduce motion" preference across every Tesseract component in
+   one place (individual components no longer each need to guard). */
+@media (prefers-reduced-motion: reduce) {
+  [data-tp-theme] *, [data-tp-theme] *::before, [data-tp-theme] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .rxpad-rich-editor.tiptap.ProseMirror ::selection {
