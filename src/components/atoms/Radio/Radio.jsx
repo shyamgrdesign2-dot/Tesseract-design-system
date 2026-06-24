@@ -5,7 +5,12 @@
  * RadioGroup manages a controlled group. Radio is a single labeled option.
  */
 
+import * as React from "react";
 import { createContext, useContext } from "react";
+import styles from "./Radio.module.scss";
+
+// Append a module class to any caller-supplied className (never replace it).
+const cx = (...parts) => parts.filter(Boolean).join(" ");
 
 const RadioGroupCtx = createContext({ value: undefined, onChange: undefined, name: undefined, size: undefined, color: undefined, error: undefined });
 
@@ -18,23 +23,25 @@ const RADIO_COLORS = {
   warning: "var(--tesseract-warning-500, #d97706)",
 };
 
-export function RadioGroup({ value, onChange, name, size, color = "primary", error = false, orientation = "vertical", gap, children, style, className }) {
+export const RadioGroup = React.forwardRef(function RadioGroup({ value, onChange, name, size, color = "primary", error = false, orientation = "vertical", gap, children, style, className, ...rest }, ref) {
   const isRow = orientation === "horizontal";
   // Default gaps preserve the current look; `gap` (px) overrides when provided.
   const groupGap = gap != null ? gap : (isRow ? "var(--tesseract-space-5)" : "var(--tesseract-space-2)");
   return (
     <RadioGroupCtx.Provider value={{ value, onChange, name, size, color, error }}>
       <div
+        ref={ref}
         role="radiogroup"
         aria-invalid={error || undefined}
-        className={className}
+        className={cx(styles.root, className)}
         style={{ display: "flex", flexDirection: isRow ? "row" : "column", gap: groupGap, flexWrap: isRow ? "wrap" : undefined, ...style }}
+        {...rest}
       >
         {children}
       </div>
     </RadioGroupCtx.Provider>
   );
-}
+});
 
 const RADIO_SIZES = {
   sm: { box: "var(--tesseract-size-14)", font: "var(--tesseract-text-body-xs)" },
@@ -42,7 +49,7 @@ const RADIO_SIZES = {
   lg: { box: "var(--tesseract-size-18)", font: "var(--tesseract-text-body-base)" }, // 16px
 };
 
-export function Radio({
+export const Radio = React.forwardRef(function Radio({
   value,
   label,
   description,
@@ -55,7 +62,8 @@ export function Radio({
   className,
   style: styleProp,
   "aria-label": ariaLabel,
-}) {
+  ...rest
+}, ref) {
   const ctx = useContext(RadioGroupCtx);
   // Controlled standalone mode when `checked` is passed (e.g. as a decorative
   // indicator inside a Dropdown option, or a single-select row control in a
@@ -80,7 +88,9 @@ export function Radio({
 
   return (
     <label
-      className={className}
+      ref={ref}
+      className={cx(styles.root, className)}
+      {...rest}
       style={{
         display: "inline-flex",
         alignItems: description != null ? "flex-start" : "center",
@@ -125,16 +135,22 @@ export function Radio({
       )}
     </label>
   );
-}
+});
 
-export function FormControlLabel({ control, label }) {
+export const FormControlLabel = React.forwardRef(function FormControlLabel({ control, label, className, style, ...rest }, ref) {
   return (
-    <label style={{ display: "inline-flex", alignItems: "center", gap: "var(--tesseract-space-2)", fontSize: "var(--tesseract-text-body-sm)", color: "var(--tesseract-slate-700, #454551)", cursor: "pointer" }}>
+    <label
+      ref={ref}
+      className={cx(styles.root, className)}
+      {...rest}
+      style={{ display: "inline-flex", alignItems: "center", gap: "var(--tesseract-space-2)", fontSize: "var(--tesseract-text-body-sm)", color: "var(--tesseract-slate-700, #454551)", cursor: "pointer", ...style }}
+    >
       {control}
       {label}
     </label>
   );
-}
+});
 
 RadioGroup.displayName = "RadioGroup";
 Radio.displayName = "Radio";
+FormControlLabel.displayName = "FormControlLabel";

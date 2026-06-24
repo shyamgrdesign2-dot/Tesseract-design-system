@@ -158,9 +158,11 @@ export const Checkbox = React.forwardRef(function Checkbox(
 
   if (!hasLabel) return box;
 
+  const fieldCls = [styles.field, className].filter(Boolean).join(" ");
+
   return (
     <label
-      className={styles.field}
+      className={fieldCls}
       data-position={labelPosition}
       data-disabled={disabled || undefined}
       id={id}

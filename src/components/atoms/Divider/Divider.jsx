@@ -1,5 +1,8 @@
 "use client";
 
+import { forwardRef } from "react";
+import { cn } from "../../../hooks/utils";
+
 /**
  * Divider — visual separator atom.
  *
@@ -17,7 +20,7 @@
  * inset (number | {start,end}) — indents the line from its ends (px). Default 0.
  */
 
-export function Divider({
+export const Divider = forwardRef(function Divider({
   orientation = "horizontal",
   variant      = "solid",
   color        = "var(--tesseract-slate-200, #E2E2EA)",
@@ -29,7 +32,8 @@ export function Divider({
   inset        = 0,
   className,
   style: styleProp,
-}) {
+  ...rest
+}, ref) {
   const isH = orientation === "horizontal";
 
   // Normalise inset → { start, end } in px.
@@ -74,10 +78,14 @@ export function Divider({
     const endFlex   = labelPosition === "end" ? 0 : 1;
     return (
       <div
+        ref={ref}
         role="separator"
         aria-orientation="horizontal"
-        className={className}
+        {...rest}
+        className={cn(className)}
         style={{
+          boxSizing: "border-box",
+          fontFamily: "var(--tesseract-font-body)",
           display: "flex",
           alignItems: "center",
           gap: "var(--tesseract-space-3, 12px)",
@@ -123,13 +131,15 @@ export function Divider({
 
   return (
     <div
+      ref={ref}
       role="separator"
       aria-orientation={orientation}
-      className={className}
-      style={{ ...lineEl(), ...wrapStyle, ...styleProp }}
+      {...rest}
+      className={cn(className)}
+      style={{ boxSizing: "border-box", fontFamily: "var(--tesseract-font-body)", ...lineEl(), ...wrapStyle, ...styleProp }}
     />
   );
-}
+});
 
 Divider.displayName = "Divider";
 export default Divider;

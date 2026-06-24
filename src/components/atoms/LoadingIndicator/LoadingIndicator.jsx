@@ -22,6 +22,8 @@
  *   labelPosition "end" (label beside the glyph) | "bottom"       default "end"
  */
 
+import { forwardRef } from "react";
+
 import "./LoadingIndicator.css";
 
 const SIZE_PX = { xs: 16, sm: 20, md: 24, lg: 32 };
@@ -134,7 +136,7 @@ const GLYPHS = {
   "dot-circle": DotCircle,
 };
 
-export function LoadingIndicator({
+export const LoadingIndicator = forwardRef(function LoadingIndicator({
   type = "line-simple",
   size = "md",
   label,
@@ -143,12 +145,15 @@ export function LoadingIndicator({
   labelPosition = "end",
   className = "",
   style,
-}) {
+  ...rest
+}, ref) {
   const dim = toPx(size);
   const Glyph = GLYPHS[type] ?? LineSimple;
   const rootStyle = { color, ...speedVars(speed), ...style };
   return (
     <div
+      ref={ref}
+      {...rest}
       className={["tp-loader", className].filter(Boolean).join(" ")}
       role="status"
       data-label-position={labelPosition}
@@ -162,6 +167,6 @@ export function LoadingIndicator({
       )}
     </div>
   );
-}
+});
 
 export default LoadingIndicator;

@@ -9,6 +9,8 @@
  * `--slider-fill` (set inline from the `color` prop). See Slider.module.scss.
  */
 
+import { forwardRef } from "react";
+import { cn } from "@/src/hooks/utils";
 import styles from "./Slider.module.scss";
 
 const FILL = {
@@ -31,7 +33,7 @@ function resolveMarks(marks, min, max) {
   return Array.isArray(marks) ? marks : null;
 }
 
-export function Slider({
+export const Slider = forwardRef(function Slider({
   value,
   defaultValue,
   min = 0,
@@ -48,7 +50,8 @@ export function Slider({
   marks = false,
   className,
   style: styleProp,
-}) {
+  ...rest
+}, ref) {
   const fill = error ? FILL.error : FILL[color] ?? FILL.primary;
 
   // Current value for the readout / fill percentage (controlled or uncontrolled).
@@ -57,8 +60,14 @@ export function Slider({
 
   const markList = resolveMarks(marks, min, max);
 
+  // Shared <input type="range"> markup. When the slider renders bare (no chrome),
+  // this IS the root, so it receives the forwarded ref, appended className, merged
+  // style and the spread `...rest`. When wrapped, those land on the root <div>.
+  const bare = !label && !showValue && !markList;
+
   const input = (
     <input
+      ref={bare ? ref : undefined}
       type="range"
       value={value}
       defaultValue={defaultValue}
@@ -69,21 +78,27 @@ export function Slider({
       data-size={size}
       data-error={error || undefined}
       onChange={onChange ? (e) => onChange(e, Number(e.target.value)) : undefined}
-      className={[styles.input, className].filter(Boolean).join(" ")}
+      className={cn(styles.input, bare && className)}
       style={{
         "--slider-fill": fill,
         "--slider-pct": `${pct}%`,
-        ...styleProp,
+        ...(bare ? styleProp : null),
       }}
+      {...(bare ? rest : null)}
     />
   );
 
   // Bare input when there's no surrounding chrome (label / value / marks).
-  if (!label && !showValue && !markList) return input;
+  if (bare) return input;
 
   return (
     // --slider-fill on the wrapper so the value readout tracks the slider colour.
-    <div className={styles.field} style={{ "--slider-fill": fill }}>
+    <div
+      ref={ref}
+      className={cn(styles.field, className)}
+      style={{ "--slider-fill": fill, ...styleProp }}
+      {...rest}
+    >
       {(label || showValue) && (
         <div className={styles.header}>
           {label ? <span className={styles.label}>{label}</span> : <span />}
@@ -102,7 +117,7 @@ export function Slider({
       )}
     </div>
   );
-}
+});
 
 Slider.displayName = "Slider";
 export default Slider;

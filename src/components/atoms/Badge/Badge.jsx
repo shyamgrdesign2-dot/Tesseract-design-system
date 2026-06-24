@@ -19,6 +19,7 @@
  */
 
 
+import { forwardRef } from "react";
 import styles from "./Badge.module.scss";
 
 
@@ -32,7 +33,7 @@ import styles from "./Badge.module.scss";
 
 
 
-export function Badge({
+export const Badge = forwardRef(function Badge({
   variant = "soft",
   color = "primary",
   size = "md",
@@ -42,8 +43,9 @@ export function Badge({
   radius,
   children,
   className,
-  style: styleProp
-}) {
+  style: styleProp,
+  ...rest
+}, ref) {
   // Corner radius is configurable; default falls back to the token in the SCSS.
   const radiusStyle =
     radius != null ? { borderRadius: typeof radius === "number" ? `${radius}px` : radius } : null;
@@ -53,11 +55,13 @@ export function Badge({
     const cls = [styles.dot, className].filter(Boolean).join(" ");
     return (
       <span
+        ref={ref}
         className={cls}
         style={mergedStyle}
         data-color={color}
         data-size={size}
-        aria-hidden />);
+        aria-hidden
+        {...rest} />);
 
 
   }
@@ -67,19 +71,21 @@ export function Badge({
   // match the variant/color automatically.
   return (
     <span
+      ref={ref}
       className={cls}
       style={mergedStyle}
       data-variant={variant}
       data-color={color}
       data-size={size}
-      data-sticky={sticky || undefined}>
+      data-sticky={sticky || undefined}
+      {...rest}>
 
       {icon != null && <span className={styles.icon}>{icon}</span>}
       {children != null && <span>{children}</span>}
       {rightIcon != null && <span className={styles.icon}>{rightIcon}</span>}
     </span>);
 
-}
+});
 
 Badge.displayName = "Badge";
 export default Badge;

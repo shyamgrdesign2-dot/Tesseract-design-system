@@ -1,0 +1,10 @@
+/* Radio.module.scss
+   Self-contained box model + brand typography so the component never depends on
+   a host/global reset and host CSS can't drift its sizing. Scoped to each
+   component's own subtree (matches the InputBox isolation template). No visual
+   change: these roots carry no padding/border and already inherit the body font. */
+
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+}

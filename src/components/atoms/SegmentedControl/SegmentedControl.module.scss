@@ -1,7 +1,12 @@
 .root {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   position: relative;
   display: inline-flex;
   align-items: stretch;
+  font-family: var(--tesseract-font-body);
   background-color: var(--tesseract-slate-100);
   border-radius: var(--tesseract-sc-radius, var(--tesseract-btn-radius, var(--tesseract-radius-10)));
   corner-shape: round;

@@ -10,7 +10,18 @@
   100% { background-position: 200% 0; }
 }
 
+/* Multi-line wrapper root. Self-contained box model + brand font so the
+   component never depends on a host/global reset. */
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+}
+
 .skeleton {
+  /* Self-contained box model: don't depend on a host/global reset. */
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   display: block;
   background-color: var(--tesseract-slate-200);
   /* Speed is supplied per-instance via --skeleton-speed (default ~1.5s). */

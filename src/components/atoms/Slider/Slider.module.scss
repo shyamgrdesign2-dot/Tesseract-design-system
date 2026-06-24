@@ -3,6 +3,10 @@
    thumb ring come from --slider-fill (set inline from the `color` prop). */
 
 .field {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
   display: flex;
   flex-direction: column;
   gap: var(--tesseract-space-2);
@@ -33,6 +37,11 @@
 
 /* The native range input, fully restyled. */
 .input {
+  // Self-contained box model + font: the bare input can be the component root,
+  // so it must establish its own box-sizing/font rather than rely on a host reset.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   -webkit-appearance: none;
   appearance: none;
   width: 100%;

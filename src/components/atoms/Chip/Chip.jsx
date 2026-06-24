@@ -22,6 +22,7 @@
  *   disabled  boolean
  */
 
+import { forwardRef } from "react";
 import { useAnalytics, resolveTrack } from "@/src/analytics/context";
 import { resolveRadius } from "@/src/hooks/utils";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
@@ -55,7 +56,7 @@ const SIZES = {
   lg: { height: 28, padX: 12, font: "var(--tesseract-text-body-sm)", gap: 6, icon: 16 },
 };
 
-export function TPChip({
+export const TPChip = forwardRef(function TPChip({
   label,
   color = "default",
   variant = "filled",
@@ -71,7 +72,8 @@ export function TPChip({
   disabled = false,
   className,
   style: styleProp,
-}) {
+  ...rest
+}, ref) {
   const c = TONES[color] ?? TONES.default;
   const c500 = TONES_500[color] ?? TONES_500.default;
   const s = SIZES[size] ?? SIZES.md;
@@ -149,12 +151,14 @@ export function TPChip({
 
   return (
     <span
+      {...rest}
+      ref={ref}
       role={onClick ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       aria-pressed={onClick && selected ? true : undefined}
       data-selected={selected ? "" : undefined}
       onClick={disabled ? undefined : handleClick}
-      className={[hoverable && styles.interactive, className].filter(Boolean).join(" ") || undefined}
+      className={[styles.root, hoverable && styles.interactive, className].filter(Boolean).join(" ") || undefined}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -184,6 +188,8 @@ export function TPChip({
       {removePosition === "right" && removeBtn}
     </span>
   );
-}
+});
+
+TPChip.displayName = "TPChip";
 
 export default TPChip;

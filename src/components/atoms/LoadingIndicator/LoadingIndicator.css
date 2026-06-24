@@ -4,6 +4,13 @@
   to { transform: rotate(360deg); }
 }
 
+/* Self-contained box model: don't depend on a host/global reset. Scoped to this
+   component's subtree so it never leaks out, and host CSS can't drift our sizing. */
+.tp-loader,
+.tp-loader *,
+.tp-loader *::before,
+.tp-loader *::after { box-sizing: border-box; }
+
 .tp-loader {
   /* --tp-loader-speed: multiplier on each glyph's base duration (1 = unchanged).
      --tp-loader-duration: absolute override (wins over the base when set). */
@@ -12,6 +19,7 @@
   align-items: center;
   gap: var(--tesseract-space-2);
   color: inherit;
+  font-family: var(--tesseract-font-body);
 }
 
 /* labelPosition="bottom": stack the glyph over the label */

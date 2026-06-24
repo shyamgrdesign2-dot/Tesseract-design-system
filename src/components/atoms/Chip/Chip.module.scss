@@ -1,3 +1,11 @@
+/* Chip root — self-contained box model so host/global resets can't drift our
+   sizing, and our box-sizing never leaks out. Scoped to this component's subtree.
+   font-family is also asserted on the root (mirrored by the inline style). */
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+}
+
 /* Chip — hover/press affordances for interactive (clickable / dismissible) chips.
    The fill is set inline (dynamic per tone), so hover uses filter + shadow so it
    layers over any color without fighting the inline styles. */

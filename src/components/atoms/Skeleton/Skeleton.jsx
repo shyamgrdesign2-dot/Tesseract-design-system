@@ -14,9 +14,11 @@
  *             Default ~1.5s. Passed through as the --skeleton-speed CSS var.
  */
 
+import { forwardRef } from "react";
+import { cn } from "../../../hooks/utils";
 import styles from "./Skeleton.module.scss";
 
-function SkeletonLine({ variant, width, height, radius, isLast, animation, speed, className, styleProp }) {
+function SkeletonLine({ variant, width, height, radius, isLast, animation, speed, className, styleProp, rootRef, rootRest }) {
   const defaultRadius =
     variant === "circular" ? "50%" :
     variant === "text" ? 4 :
@@ -39,44 +41,73 @@ function SkeletonLine({ variant, width, height, radius, isLast, animation, speed
     ...styleProp,
   };
 
-  const cls = [styles.skeleton, className].filter(Boolean).join(" ");
-
-  return <span className={cls} data-animation={animation} style={dynamicStyle} aria-hidden />;
+  return (
+    <span
+      ref={rootRef}
+      className={cn(styles.skeleton, className)}
+      data-animation={animation}
+      style={dynamicStyle}
+      aria-hidden
+      {...rootRest}
+    />
+  );
 }
 
-export function Skeleton({
-  variant = "text",
-  width,
-  height,
-  radius,
-  count = 1,
-  animation = "pulse",
-  speed,
-  className,
-  style: styleProp,
-}) {
+export const Skeleton = forwardRef(function Skeleton(
+  {
+    variant = "text",
+    width,
+    height,
+    radius,
+    count = 1,
+    animation = "pulse",
+    speed,
+    className,
+    style: styleProp,
+    ...rest
+  },
+  ref,
+) {
   const n = Math.max(1, Math.floor(count) || 1);
 
   const lineProps = (i) => ({
-    variant, width, height, radius, animation, speed, className, styleProp,
+    variant, width, height, radius, animation, speed,
     isLast: n > 1 && i === n - 1,
   });
 
+  // Single line: the SkeletonLine span IS the root — forward ref/rest/className/style to it.
   if (n === 1) {
-    return <SkeletonLine {...lineProps(0)} />;
+    return (
+      <SkeletonLine
+        {...lineProps(0)}
+        className={className}
+        styleProp={styleProp}
+        rootRef={ref}
+        rootRest={rest}
+      />
+    );
   }
 
+  // Multi line: the wrapper span is the root; per-line className/style still apply to each line.
   return (
     <span
+      ref={ref}
       aria-hidden
-      style={{ display: "flex", flexDirection: "column", gap: "var(--tesseract-space-2, 8px)" }}
+      className={cn(styles.root, className)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--tesseract-space-2, 8px)",
+        ...styleProp,
+      }}
+      {...rest}
     >
       {Array.from({ length: n }, (_, i) => (
         <SkeletonLine key={i} {...lineProps(i)} />
       ))}
     </span>
   );
-}
+});
 
 Skeleton.displayName = "Skeleton";
 export default Skeleton;

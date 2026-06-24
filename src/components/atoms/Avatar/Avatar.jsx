@@ -26,7 +26,7 @@
 
 import * as React from "react";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
-import { resolveRadius } from "@/src/hooks/utils";
+import { resolveRadius, cn } from "@/src/hooks/utils";
 
 // Component-local brand gradient — token-only (was raw `linear-gradient(#ffde00, #fd5900)`).
 // amber-400 (#FED15E) → warning-600 (#D97706) is the nearest token ramp.
@@ -67,7 +67,7 @@ function initialsOf(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export function Avatar({
+export const Avatar = React.forwardRef(function Avatar({
   src,
   name,
   alt,
@@ -81,7 +81,8 @@ export function Avatar({
   onClick,
   className,
   style,
-}) {
+  ...rest
+}, ref) {
   const [broken, setBroken] = React.useState(false);
   const ringBg = ring ? (typeof ring === "string" ? ring : DEFAULT_RING) : undefined;
   const Tag = onClick ? "button" : "span";
@@ -131,10 +132,12 @@ export function Avatar({
 
   return (
     <Tag
+      ref={ref}
       type={onClick ? "button" : undefined}
       onClick={onClick}
       aria-label={onClick ? (name || "Profile") : undefined}
-      className={className}
+      className={cn(className)}
+      {...rest}
       style={{
         boxSizing: "border-box",
         position: "relative",
@@ -178,7 +181,7 @@ export function Avatar({
       {statusNode}
     </Tag>
   );
-}
+});
 
 Avatar.displayName = "Avatar";
 export default Avatar;

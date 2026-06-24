@@ -1,6 +1,11 @@
 /* Switch.module.scss */
 
 .root {
+  // Self-contained box model: don't depend on a host/global reset. Scoped to this
+  // component's subtree so it never leaks out, and host CSS can't drift our sizing.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   border-radius: var(--tesseract-radius-full, 9999px);
   corner-shape: round; /* true pill (not the global squircle) */
   border: none;
@@ -69,6 +74,11 @@
 /* Field — switch + adjacent label in a flex row. Clicking the label toggles
    (native <label> association via the wrapping element). */
 .field {
+  // Self-contained box model: when a label wraps the switch, the <label> is the
+  // root element — keep its subtree host-proof too.
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
   display: inline-flex;
   align-items: center;
   gap: var(--tesseract-space-2);
