@@ -1,5 +1,6 @@
 import React from 'react';
 import { RxPadSection } from './RxPadSection';
+import { Badge } from '@/src/components/atoms/Badge/Badge';
 
 const SYMPTOM_COLUMNS = [
   { id: 'since', header: 'Since', type: 'text', placeholder: 'e.g. 2 days', minWidth: 120, maxWidth: 160 },
@@ -17,6 +18,7 @@ const meta = {
   },
   argTypes: {
     title:        { control: 'text' },
+    subtitle:     { control: 'text', name: 'Subtitle', description: 'Secondary line under the title (blank = none).', table: { category: 'Header' } },
     icon:         { control: 'text', tpIcon: true, name: 'Header icon' },
     repeatIcon:   { control: 'text', tpIcon: true, name: 'Repeat icon' },
     templateIcon: { control: 'text', tpIcon: true, name: 'Template icon' },
@@ -31,10 +33,14 @@ const meta = {
     bodyType:     { control: 'inline-radio', options: ['table', 'text', 'fields'] },
     showRepeat:   { control: 'boolean' },
     showTemplate: { control: 'boolean' }, showSave:   { control: 'boolean' }, showClear: { control: 'boolean' },
+    loading:      { control: 'boolean', name: 'Loading', description: 'Show skeleton rows instead of the body.', table: { category: 'State' } },
+    collapsible:  { control: 'boolean', name: 'Collapsible', description: 'Add a chevron that hides the body (header stays).', table: { category: 'State' } },
+    defaultCollapsed: { control: 'boolean', name: 'Start collapsed', if: { arg: 'collapsible' }, table: { category: 'State' } },
   },
   args: {
-    title: 'Symptoms', icon: 'virus', mode: 'table-first', bodyType: 'table',
+    title: 'Symptoms', subtitle: '', icon: 'virus', mode: 'table-first', bodyType: 'table',
     showRepeat: true, showTemplate: true, showSave: true, showClear: true,
+    loading: false, collapsible: false, defaultCollapsed: false,
     repeatIcon: 'refresh-arrow', templateIcon: 'grid-5',
     saveIcon: 'ram', clearIcon: 'eraser', searchIcon: 'search-normal-1',
     dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy',
@@ -53,7 +59,33 @@ const Render = (args) => (
   </div>
 );
 
-export const Playground = { render: Render };
+// Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
+// Only non-default props are emitted, so the snippet stays minimal.
+const DEFAULTS = {
+  title: 'Symptoms', icon: 'virus', mode: 'table-first', bodyType: 'table',
+  showRepeat: true, showTemplate: true, showSave: true, showClear: true,
+  loading: false, collapsible: false, defaultCollapsed: false,
+};
+const rxCode = (args) => {
+  const lines = [];
+  const add = (k, v) => lines.push(typeof v === 'boolean' ? (v ? `  ${k}` : `  ${k}={false}`) : `  ${k}="${v}"`);
+  if (args.title !== DEFAULTS.title) add('title', args.title);
+  if (args.subtitle) add('subtitle', args.subtitle);
+  if (args.icon !== DEFAULTS.icon) add('icon', args.icon);
+  if (args.mode !== DEFAULTS.mode) add('mode', args.mode);
+  if (args.bodyType !== DEFAULTS.bodyType) add('bodyType', args.bodyType);
+  ['showRepeat', 'showTemplate', 'showSave', 'showClear'].forEach((k) => { if (args[k] !== DEFAULTS[k]) add(k, args[k]); });
+  if (args.loading) add('loading', true);
+  if (args.collapsible) add('collapsible', true);
+  if (args.collapsible && args.defaultCollapsed) add('defaultCollapsed', true);
+  lines.push('  columns={SYMPTOM_COLUMNS}', '  frequentlyUsed={FREQUENT}');
+  return `<RxPadSection\n${lines.join('\n')}\n/>`;
+};
+
+export const Playground = {
+  render: Render,
+  parameters: { docs: { source: { transform: (_code, ctx) => rxCode(ctx.args) } } },
+};
 
 export const EmptyState = {
   render: (args) => (
@@ -87,4 +119,62 @@ export const CustomFields = {
       ]} />
     </div>
   ),
+};
+
+/**
+ * `subtitle`, a right-aligned `headerMeta` badge, and a custom `headerActions`
+ * toolbar (an array of `{ icon, tip, variant, onClick }`) replacing the default
+ * Repeat/Template/Save/Clear quartet.
+ */
+export const CustomHeaderActions = {
+  args: { title: 'Medications', subtitle: '3 active prescriptions', icon: 'health' },
+  render: (args) => (
+    <div style={{ maxWidth: 920 }}>
+      <RxPadSection
+        {...args}
+        columns={[{ id: 'dose', header: 'Dose', type: 'text', placeholder: 'e.g. 500mg', minWidth: 120 }]}
+        frequentlyUsed={['Paracetamol', 'Amoxicillin', 'Ibuprofen']}
+        headerMeta={<Badge variant="soft" color="success" size="sm">Synced</Badge>}
+        headerActions={[
+          { icon: 'add', tip: 'Add from formulary', variant: 'filled', onClick: () => {} },
+          { icon: 'printer', tip: 'Print', onClick: () => {} },
+          { icon: 'share', tip: 'Share', onClick: () => {} },
+        ]}
+      />
+    </div>
+  ),
+};
+
+/** Real `loading` (skeleton rows) and `emptyState` rendering. */
+export const LoadingAndEmpty = {
+  render: (args) => (
+    <div style={{ maxWidth: 920, display: 'grid', gap: 24 }}>
+      <RxPadSection
+        {...args}
+        title="Loading lab results"
+        icon="activity"
+        loading
+        columns={SYMPTOM_COLUMNS}
+      />
+      <RxPadSection
+        {...args}
+        title="Allergies"
+        icon="shield-tick"
+        mode="search-first"
+        columns={SYMPTOM_COLUMNS}
+        emptyState={(
+          <>
+            <strong>No allergies recorded</strong>
+            <span>Search above to add a known allergy.</span>
+          </>
+        )}
+      />
+    </div>
+  ),
+};
+
+/** Whole section collapses — header stays, body hides. */
+export const Collapsible = {
+  args: { title: 'Past History', icon: 'document-text', collapsible: true, defaultCollapsed: true, subtitle: 'Click the chevron to expand' },
+  render: Render,
 };

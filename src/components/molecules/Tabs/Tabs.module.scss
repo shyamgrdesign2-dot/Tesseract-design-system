@@ -1,7 +1,13 @@
 /* Tabs.module.scss — scalable tabs: L/R icons, right-side tag, rounded
-   active indicator (curved, not a hard cut), hover states, sizes. */
+   active indicator (curved, not a hard cut), hover states, sizes.
+   variant = line (default underline) | pill | segment.
+   orientation = horizontal (default) | vertical.
+   Accent colour is driven by --tesseract-tabs-accent (default blue-600). */
 
 .list {
+  /* Accent fallback — root may override --tesseract-tabs-accent inline. */
+  --tesseract-tabs-accent: var(--tesseract-blue-600, var(--tesseract-blue-600));
+
   display: flex;
   flex-wrap: nowrap;
   gap: var(--tesseract-space-1);
@@ -19,6 +25,12 @@
     background-color: var(--tesseract-slate-200, var(--tesseract-slate-200));
     border-radius: var(--tesseract-radius-full, 9999px);
   }
+}
+
+/* ── fullWidth — triggers grow to fill the row equally ── */
+.list[data-fullwidth] .trigger {
+  flex: 1 1 0;
+  justify-content: center;
 }
 
 .trigger {
@@ -57,10 +69,10 @@
     transition: background-color 150ms ease;
   }
 
-  /* Active tab + indicator use TP blue; the icon inherits it via currentColor. */
+  /* Active tab + indicator use the accent token; icon inherits via currentColor. */
   &[data-state="active"] {
-    color: var(--tesseract-blue-600, var(--tesseract-blue-600));
-    &::after { background-color: var(--tesseract-blue-600, var(--tesseract-blue-600)); }
+    color: var(--tesseract-tabs-accent);
+    &::after { background-color: var(--tesseract-tabs-accent); }
   }
 
   &:hover:not([data-state="active"]):not(:disabled) {
@@ -100,4 +112,106 @@
 .content {
   padding: var(--tesseract-space-4) 0;
   outline: none;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Variants — the default "line" needs no overrides (the rules above ARE line).
+   "pill" + "segment" trade the underline bar for a full-size moving highlight
+   behind the active trigger.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Shared: pill + segment kill the underline bar and round the whole trigger. */
+.list[data-variant="pill"] .trigger,
+.list[data-variant="segment"] .trigger {
+  border-radius: var(--tesseract-radius-full, 9999px);
+  &::after { display: none; } /* no underline bar in these variants */
+}
+
+/* ── pill — rounded highlight behind the active trigger ── */
+.list[data-variant="pill"] {
+  border-bottom: none;
+  gap: var(--tesseract-space-2);
+
+  .trigger {
+    transition: color 150ms ease, background-color 150ms ease;
+
+    &:hover:not([data-state="active"]):not(:disabled) {
+      background-color: var(--tesseract-slate-100, var(--tesseract-slate-100));
+    }
+
+    /* The "moving highlight": a soft, accent-tinted full-size pill. */
+    &[data-state="active"] {
+      color: var(--tesseract-tabs-accent);
+      background-color: color-mix(in srgb, var(--tesseract-tabs-accent) 12%, transparent);
+    }
+  }
+}
+
+/* ── segment — filled track + raised active (segmented-control look) ── */
+.list[data-variant="segment"] {
+  border-bottom: none;
+  gap: var(--tesseract-space-1);
+  padding: var(--tesseract-space-1);
+  background-color: var(--tesseract-slate-100, var(--tesseract-slate-100));
+  border-radius: var(--tesseract-radius-full, 9999px);
+
+  .trigger {
+    transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+
+    &:hover:not([data-state="active"]):not(:disabled) {
+      background-color: color-mix(in srgb, var(--tesseract-slate-0, #ffffff) 60%, transparent);
+    }
+
+    /* Raised active segment — white surface lifted off the track. */
+    &[data-state="active"] {
+      color: var(--tesseract-tabs-accent);
+      background-color: var(--tesseract-slate-0, #ffffff);
+      box-shadow: var(--tesseract-shadow-xs, 0 1px 2px rgba(16, 24, 40, 0.06));
+    }
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Orientation — vertical: column list with a SIDE indicator (line variant)
+   or full-size highlight (pill / segment), same accent token.
+   ────────────────────────────────────────────────────────────────────────── */
+.list[data-orientation="vertical"] {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  border-bottom: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  align-items: stretch;
+
+  .trigger {
+    flex-shrink: 0;
+    justify-content: flex-start;
+    width: 100%;
+
+    /* Side indicator bar runs down the left edge for the line variant. */
+    &::after {
+      left: 0;
+      right: auto;
+      top: var(--tesseract-space-1-5);
+      bottom: var(--tesseract-space-1-5);
+      width: var(--tesseract-size-2);
+      height: auto;
+      border-radius: 0 var(--tesseract-radius-2) var(--tesseract-radius-2) 0;
+    }
+  }
+}
+
+/* Vertical line variant gets a right divider instead of a bottom border. */
+.list[data-orientation="vertical"][data-variant="line"] {
+  border-right: 1px solid var(--tesseract-slate-200, var(--tesseract-slate-200));
+}
+
+/* Vertical segment becomes a stacked track. */
+.list[data-orientation="vertical"][data-variant="segment"] {
+  border-radius: var(--tesseract-radius-12, var(--tesseract-radius-8));
+  .trigger { border-radius: var(--tesseract-radius-8); }
+}
+
+.list[data-orientation="vertical"][data-variant="pill"] .trigger {
+  border-radius: var(--tesseract-radius-8);
 }

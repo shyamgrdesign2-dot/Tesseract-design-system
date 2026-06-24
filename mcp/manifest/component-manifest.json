@@ -3543,12 +3543,21 @@
       ],
       "importFrom": "@/src/components/molecules",
       "importExample": "import { RxPadSection } from \"@/src/components/molecules\";",
-      "description": "A configurable RxPad module: header (icon + title + CTAs) over a configurable body (ClinicalTable, free-text, or fields), with search and  ghost buttons. Every icon in the component is individually configurable via the Tesseract Icons panel.texttextHeader icontext",
+      "description": "A configurable RxPad module: header (icon + title + CTAs) over a configurable body (ClinicalTable, free-text, or fields), with search and  ghost buttons. Every icon in the component is individually configurable via the Tesseract Icons panel.texttextSubtitleSecondary line under the title (blank = none).",
       "props": [
         {
           "name": "title",
           "default": "\"Symptoms\"",
           "control": "text"
+        },
+        {
+          "name": "subtitle",
+          "default": "''",
+          "control": "text",
+          "description": "Secondary line under the title (blank = none)."
+        },
+        {
+          "name": "headerMeta"
         },
         {
           "name": "icon",
@@ -3636,6 +3645,12 @@
           "name": "onClear"
         },
         {
+          "name": "headerActions"
+        },
+        {
+          "name": "actionButtonProps"
+        },
+        {
           "name": "repeatIcon",
           "default": "\"refresh-arrow\"",
           "control": "text"
@@ -3691,6 +3706,32 @@
           "name": "onRowsChange"
         },
         {
+          "name": "loading",
+          "default": "false",
+          "control": "boolean",
+          "description": "Show skeleton rows instead of the body."
+        },
+        {
+          "name": "emptyState"
+        },
+        {
+          "name": "collapsible",
+          "default": "false",
+          "control": "boolean",
+          "description": "Add a chevron that hides the body (header stays)."
+        },
+        {
+          "name": "defaultCollapsed",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "renderBody"
+        },
+        {
           "name": "className"
         },
         {
@@ -3702,7 +3743,10 @@
         "EmptyState",
         "SearchFirst",
         "FreeText",
-        "CustomFields"
+        "CustomFields",
+        "CustomHeaderActions",
+        "LoadingAndEmpty",
+        "Collapsible"
       ],
       "sourcePath": "src/components/molecules/RxPadSection/RxPadSection.jsx",
       "storiesPath": "src/components/molecules/RxPadSection/RxPadSection.stories.jsx"
@@ -3940,12 +3984,71 @@
           "storyHidden": true
         },
         {
+          "name": "header"
+        },
+        {
           "name": "footer",
           "storyHidden": true
         },
         {
           "name": "className",
           "storyHidden": true
+        },
+        {
+          "name": "accent",
+          "default": "\"var(--tesseract-blue-500)\"",
+          "allowedValues": [
+            "var(--tesseract-blue-500)",
+            "var(--tesseract-success-500)",
+            "var(--tesseract-violet-500)",
+            "var(--tesseract-warning-500)",
+            "var(--tesseract-error-500)"
+          ],
+          "control": "select",
+          "description": "Active accent token — recolors active chip, rail bar, active labels and flyout. Default blue = unchanged."
+        },
+        {
+          "name": "density",
+          "default": "\"comfortable\"",
+          "allowedValues": [
+            "comfortable",
+            "compact"
+          ],
+          "control": "inline-radio",
+          "description": "Row/chip density. Compact = 32px chips + tighter padding."
+        },
+        {
+          "name": "emptyState"
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No matches.\"",
+          "control": "text",
+          "description": "Text shown when search yields no matches"
+        },
+        {
+          "name": "loading",
+          "default": "false",
+          "control": "boolean",
+          "description": "Show skeleton placeholder rows"
+        },
+        {
+          "name": "collapseIcon",
+          "default": "\"sidebar-left\""
+        },
+        {
+          "name": "searchIcon",
+          "default": "\"search-normal-1\""
+        },
+        {
+          "name": "caretIcon",
+          "default": "\"chevron-down\""
+        },
+        {
+          "name": "defaultOpenIds"
+        },
+        {
+          "name": "onOpenChange"
         },
         {
           "name": "chipRadius",
@@ -3977,7 +4080,9 @@
         "Controlled",
         "NoCollapseToggle",
         "CollapsedWithBadges",
-        "WithFooter"
+        "WithFooter",
+        "ClinicSkin",
+        "LoadingAndEmpty"
       ],
       "sourcePath": "src/components/molecules/Sidebar/Sidebar.jsx",
       "storiesPath": "src/components/molecules/Sidebar/Sidebar.stories.jsx"
@@ -3994,7 +4099,7 @@
       ],
       "importFrom": "@/src/components/molecules",
       "importExample": "import { Tabs, TabsList, TabsTrigger, TabsContent } from \"@/src/components/molecules\";",
-      "description": "Tabs — Tesseract tab navigation. First-party, no external deps. Compound API (Radix-shaped, so callers don't change): <Tabs value | defaultValue onValueChange size=\"md\"> <TabsList> <TabsTrigger value=\"...\" leftIcon={<TPIcon .../>} rightIcon={...} tag=\"3\" tagTone=\"error\"> Label </TabsTrigger> </TabsList> <TabsContent value=\"...\">body</TabsContent> </Tabs> TabsTrigger structure (all optional except value + label): leftIcon   ReactNode — icon before the label (use <TPIcon/>); the active tab renders it in the \"bulk\" family, inactive stays \"linear\" rightIcon  ReactNode — icon after the tag, on the far right (same variant rule) tag        ReactNode — a pill on the right (count / status) tagTone    \"neutral\" | \"primary\" | \"success\" | \"warning\" | \"error\" Active state uses a rounded indicator bar (curved, not a hard underline). Keyboard: Left/Right move between triggers, Home/End jump to first/last. Activation follows focus (Radix \"automatic\" mode).",
+      "description": "Tabs — Tesseract tab navigation. First-party, no external deps. Compound API (Radix-shaped, so callers don't change): <Tabs value | defaultValue onValueChange size=\"md\"> <TabsList> <TabsTrigger value=\"...\" leftIcon={<TPIcon .../>} rightIcon={...} tag=\"3\" tagTone=\"error\"> Label </TabsTrigger> </TabsList> <TabsContent value=\"...\">body</TabsContent> </Tabs> TabsTrigger structure (all optional except value + label): leftIcon   ReactNode — icon before the label (use <TPIcon/>); the active tab renders it in the \"bulk\" family, inactive stays \"linear\" rightIcon  ReactNode — icon after the tag, on the far right (same variant rule) tag        ReactNode — a pill on the right (count / status) tagTone    \"neutral\" | \"primary\" | \"success\" | \"warning\" | \"error\" Active state uses a rounded indicator bar (curved, not a hard underline). Root-level configurability (all optional, defaults preserve the current look): variant         \"line\" (default underline) | \"pill\" | \"segment\" accent / color  token name driving active text + indicator (default --tesseract-blue-600) activationMode  \"automatic\" (default, select on focus) | \"manual\" (select on Enter/Space/click) orientation     \"horizontal\" (default) | \"vertical\" TabsList: fullWidth       triggers grow to fill the row equally Keyboard: arrow keys move between triggers (Left/Right when horizontal, Up/Down when vertical), Home/End jump to first/last. In \"automatic\" mode activation follows focus; in \"manual\" mode focus moves but selection waits for Enter/Space/click.",
       "props": [
         {
           "name": "value"
@@ -4019,11 +4124,33 @@
           "description": "Trigger density"
         },
         {
+          "name": "variant",
+          "default": "\"line\""
+        },
+        {
+          "name": "accent",
+          "default": "''"
+        },
+        {
+          "name": "color"
+        },
+        {
+          "name": "activationMode",
+          "default": "\"automatic\""
+        },
+        {
+          "name": "orientation",
+          "default": "\"horizontal\""
+        },
+        {
           "name": "analyticsId"
         },
         {
           "name": "className",
           "default": "\"\""
+        },
+        {
+          "name": "style"
         },
         {
           "name": "children"
@@ -4040,6 +4167,10 @@
         "WithDisabledTab",
         "Controlled",
         "FullWidthTabs",
+        "Variants",
+        "PillWithAccent",
+        "Vertical",
+        "ManualActivation",
         "PatientProfile"
       ],
       "sourcePath": "src/components/molecules/Tabs/Tabs.jsx",
@@ -4066,6 +4197,16 @@
             "error"
           ],
           "control": "inline-radio"
+        },
+        {
+          "name": "surface",
+          "default": "\"dark\"",
+          "allowedValues": [
+            "dark",
+            "light"
+          ],
+          "control": "inline-radio",
+          "description": "Surface variant — dark (default) or a light bg + dark text"
         },
         {
           "name": "title",
@@ -4097,13 +4238,36 @@
           "name": "icon"
         },
         {
+          "name": "statusIcons"
+        },
+        {
           "name": "dismissible",
           "default": "false",
           "control": "boolean"
         },
         {
+          "name": "closeIcon",
+          "default": "''",
+          "control": "text",
+          "description": "Library icon name to override the dismiss glyph (blank = close-square)"
+        },
+        {
+          "name": "maxWidth"
+        },
+        {
+          "name": "lineClamp"
+        },
+        {
+          "name": "progress",
+          "default": "false",
+          "control": "boolean",
+          "description": "Depleting bar over `duration` (needs duration > 0)"
+        },
+        {
           "name": "duration",
-          "default": "0"
+          "default": "0",
+          "control": "number",
+          "description": "0 = persist; > 0 auto-dismisses"
         },
         {
           "name": "onDismiss"
@@ -4166,6 +4330,8 @@
         "Playground",
         "SizingAndTruncation",
         "Statuses",
+        "LightSurface",
+        "WithProgress",
         "SingleLine",
         "WithoutAction",
         "WithAction",

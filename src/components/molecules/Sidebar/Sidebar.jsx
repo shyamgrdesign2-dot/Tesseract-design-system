@@ -56,7 +56,7 @@ function ItemBadge({ badge }) {
 }
 
 /* ── Flyout (portal, hover) ── */
-function Flyout({ anchor, children, offset = 10 }) {
+function Flyout({ anchor, children, offset = 10, accentVars }) {
   const triggerRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
   const [coords, setCoords] = React.useState(null);
@@ -116,6 +116,7 @@ function Flyout({ anchor, children, offset = 10 }) {
               style={{
                 left: coords.left,
                 top: Math.max(8, coords.top - 4),
+                ...accentVars,
               }}
               onMouseEnter={openNow}
               onMouseLeave={scheduleClose}
@@ -162,8 +163,28 @@ function FlyoutContent({ item, activeId, onSelect }) {
   );
 }
 
+/* ── Skeleton placeholder rows ── */
+function SkeletonRows({ collapsed, count = 6 }) {
+  return (
+    <div className={styles.skeletonWrap} aria-hidden>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className={cn(
+            styles.skeletonRow,
+            collapsed && styles.skeletonRowRail,
+          )}
+        >
+          <span className={styles.skeletonChip} />
+          {!collapsed && <span className={styles.skeletonLabel} />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ── Collapsed rail item ── */
-function CollapsedItem({ item, activeId, onSelect }) {
+function CollapsedItem({ item, activeId, onSelect, accentVars }) {
   const active = hasActive(item, activeId);
 
   const renderTrigger = (bind, ref) => (
@@ -193,7 +214,10 @@ function CollapsedItem({ item, activeId, onSelect }) {
   if (isLeaf(item)) return renderTrigger({}, null);
 
   return (
-    <Flyout anchor={(bind, ref) => renderTrigger(bind, ref)}>
+    <Flyout
+      anchor={(bind, ref) => renderTrigger(bind, ref)}
+      accentVars={accentVars}
+    >
       <FlyoutContent item={item} activeId={activeId} onSelect={onSelect} />
     </Flyout>
   );
@@ -206,6 +230,7 @@ function ExpandedSection({
   expanded,
   onToggle,
   onSelect,
+  caretIcon = "chevron-down",
 }) {
   const leaf = isLeaf(item);
   const active = leaf ? item.id === activeId : false;
@@ -286,7 +311,7 @@ function ExpandedSection({
           </span>
         )}
         <span className={cn(styles.caret, expanded && styles.caretOpen)}>
-          <TPIcon name="chevron-down" variant="linear" size={14} />
+          <TPIcon name={caretIcon} variant="linear" size={14} />
         </span>
       </button>
       {expanded && (
@@ -345,8 +370,19 @@ export function Sidebar({
   collapsedWidth = 80,
   bottomFade = true,
   logo,
+  header,
   footer,
   className,
+  accent = "var(--tesseract-blue-500)",
+  density = "comfortable",
+  emptyState,
+  emptyText = "No matches.",
+  loading = false,
+  collapseIcon = "sidebar-left",
+  searchIcon = "search-normal-1",
+  caretIcon = "chevron-down",
+  defaultOpenIds,
+  onOpenChange,
 }) {
   const isControlled = controlledCollapsed !== undefined;
   const [internalCollapsed, setInternalCollapsed] =
@@ -355,9 +391,21 @@ export function Sidebar({
 
   const [query, setQuery] = React.useState("");
   const [openIds, setOpenIds] = React.useState(() => {
+    if (defaultOpenIds) return new Set(defaultOpenIds);
     const owner = items.find((it) => hasActive(it, activeId));
     return new Set(owner && !isLeaf(owner) ? [owner.id] : []);
   });
+
+  const commitOpenIds = React.useCallback(
+    (updater) => {
+      setOpenIds((prev) => {
+        const next = typeof updater === "function" ? updater(prev) : updater;
+        onOpenChange?.([...next]);
+        return next;
+      });
+    },
+    [onOpenChange],
+  );
 
   React.useEffect(() => {
     const owner = items.find((it) => hasActive(it, activeId));
@@ -387,10 +435,10 @@ export function Sidebar({
     if (collapsed) {
       if (!isControlled) setInternalCollapsed(false);
       onCollapsedChange?.(false);
-      setOpenIds((p) => new Set(p).add(item.id));
+      commitOpenIds((p) => new Set(p).add(item.id));
       return;
     }
-    setOpenIds((prev) => {
+    commitOpenIds((prev) => {
       const next = new Set(prev);
       if (next.has(item.id)) next.delete(item.id);
       else next.add(item.id);
@@ -404,6 +452,22 @@ export function Sidebar({
     } else if (item) {
       handleSectionToggle(item);
     }
+  };
+
+  // The "strong" accent step powers active labels (the old hardwired blue-700).
+  // Default blue keeps blue-700 exactly; a custom accent derives a darker step.
+  const isDefaultAccent = accent === "var(--tesseract-blue-500)";
+  const accentMid = isDefaultAccent
+    ? "var(--tesseract-blue-600)"
+    : `color-mix(in srgb, ${accent} 85%, #000)`;
+  const accentStrong = isDefaultAccent
+    ? "var(--tesseract-blue-700)"
+    : `color-mix(in srgb, ${accent} 72%, #000)`;
+  // Flyouts portal to <body>, outside .root — re-declare the accent vars there.
+  const accentVars = {
+    "--sidebar-accent": accent,
+    "--sidebar-accent-mid": accentMid,
+    "--sidebar-accent-strong": accentStrong,
   };
 
   const filtered = React.useMemo(() => {
@@ -431,7 +495,11 @@ export function Sidebar({
         collapsed && styles.collapsed,
         className,
       )}
-      style={{ width: collapsed ? collapsedWidth : expandedWidth }}
+      style={{
+        width: collapsed ? collapsedWidth : expandedWidth,
+        ...accentVars,
+      }}
+      data-density={density}
       aria-label="Navigation"
     >
       {/* Header */}
@@ -446,7 +514,7 @@ export function Sidebar({
                 aria-label="Expand sidebar"
               >
                 <TPIcon
-                  name="sidebar-left"
+                  name={collapseIcon}
                   variant="linear"
                   size={20}
                   className={styles.flipIcon}
@@ -462,7 +530,7 @@ export function Sidebar({
           {search && (
             <div className={styles.search}>
               <TPIcon
-                name="search-normal-1"
+                name={searchIcon}
                 variant="linear"
                 size={16}
               />
@@ -481,16 +549,27 @@ export function Sidebar({
               title="Collapse sidebar"
               aria-label="Collapse sidebar"
             >
-              <TPIcon name="sidebar-left" variant="linear" size={20} />
+              <TPIcon name={collapseIcon} variant="linear" size={20} />
             </button>
           )}
         </div>
       )}
 
+      {/* Header slot (e.g. account card) */}
+      {header != null && !collapsed && (
+        <div className={styles.header}>{header}</div>
+      )}
+
       {/* Items */}
       <nav className={styles.list}>
-        {filtered.length === 0 ? (
-          <p className={styles.empty}>No matches.</p>
+        {loading ? (
+          <SkeletonRows collapsed={collapsed} />
+        ) : filtered.length === 0 ? (
+          emptyState != null ? (
+            emptyState
+          ) : (
+            <p className={styles.empty}>{emptyText}</p>
+          )
         ) : collapsed ? (
           filtered.map((item) => (
             <CollapsedItem
@@ -498,6 +577,7 @@ export function Sidebar({
               item={item}
               activeId={activeId}
               onSelect={handleSelect}
+              accentVars={accentVars}
             />
           ))
         ) : (
@@ -506,6 +586,7 @@ export function Sidebar({
               key={item.id}
               item={item}
               activeId={activeId}
+              caretIcon={caretIcon}
               expanded={
                 !isLeaf(item) && (openIds.has(item.id) || !!query)
               }

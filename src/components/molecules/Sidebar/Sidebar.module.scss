@@ -4,6 +4,12 @@
   position: relative;
   flex-shrink: 0;
   height: 100%;
+  /* Accent drives every active state. Default = brand blue (unchanged look).
+     --sidebar-accent + --sidebar-accent-strong are set inline by the component;
+     the strong step is used for active labels (the old hardwired blue-700). */
+  --sidebar-accent: var(--tesseract-blue-500);
+  --sidebar-accent-mid: var(--tesseract-blue-600);
+  --sidebar-accent-strong: var(--tesseract-blue-700);
   background-color: var(--tesseract-slate-0);
   border-right: 1px solid var(--tesseract-slate-100);
   display: flex;
@@ -50,7 +56,7 @@
 
   &:focus-within {
     background: var(--tesseract-slate-0);
-    border-color: var(--tesseract-blue-500);
+    border-color: var(--sidebar-accent);
   }
 
   input {
@@ -84,7 +90,7 @@
 
   &:hover {
     background: var(--tesseract-slate-100);
-    color: var(--tesseract-blue-600);
+    color: var(--sidebar-accent);
   }
 }
 
@@ -141,6 +147,55 @@
   text-align: center;
 }
 
+/* ── Header slot (account card etc.) ── */
+.header {
+  flex-shrink: 0;
+  padding: 0 var(--tesseract-space-3) var(--tesseract-space-2);
+}
+
+/* ── Loading skeleton ── */
+.skeletonWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tesseract-space-1);
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-2);
+  padding: var(--tesseract-space-1-5) var(--tesseract-space-2);
+}
+
+.skeletonRowRail {
+  flex-direction: column;
+  gap: var(--tesseract-space-1-5);
+  padding: var(--tesseract-space-3) 0;
+}
+
+@keyframes sidebarShimmer {
+  0% { opacity: 0.55; }
+  50% { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+
+.skeletonChip {
+  width: var(--tesseract-size-40);
+  height: var(--tesseract-size-40);
+  border-radius: var(--tesseract-radius-12);
+  background: var(--tesseract-slate-100);
+  flex-shrink: 0;
+  animation: sidebarShimmer 1400ms ease-in-out infinite;
+}
+
+.skeletonLabel {
+  flex: 1;
+  height: var(--tesseract-space-2-5);
+  border-radius: var(--tesseract-radius-full);
+  background: var(--tesseract-slate-100);
+  animation: sidebarShimmer 1400ms ease-in-out infinite;
+}
+
 /* ── L1 chip (shared between expanded + collapsed) ── */
 .chip {
   position: relative;
@@ -156,7 +211,7 @@
 }
 
 .chipActive {
-  background: var(--tesseract-blue-500);
+  background: var(--sidebar-accent);
   color: var(--tesseract-slate-0);
 }
 
@@ -193,16 +248,16 @@
 }
 
 .sectionActiveLeaf {
-  background: color-mix(in srgb, var(--tesseract-blue-500) 8%, transparent);
+  background: color-mix(in srgb, var(--sidebar-accent) 8%, transparent);
 
   &:hover {
-    background: color-mix(in srgb, var(--tesseract-blue-500) 12%, transparent);
+    background: color-mix(in srgb, var(--sidebar-accent) 12%, transparent);
   }
 }
 
 .sectionAncestor {
   .chip {
-    background: var(--tesseract-blue-500);
+    background: var(--sidebar-accent);
     color: var(--tesseract-slate-0);
   }
 }
@@ -228,7 +283,7 @@
 }
 
 .sectionLabelActive {
-  color: var(--tesseract-blue-700);
+  color: var(--sidebar-accent-strong);
   font-weight: var(--tesseract-weight-semibold);
 }
 
@@ -286,7 +341,7 @@
 }
 
 .childItemActive {
-  background: color-mix(in srgb, var(--tesseract-blue-500) 8%, transparent);
+  background: color-mix(in srgb, var(--sidebar-accent) 8%, transparent);
 }
 
 .childItemIcon {
@@ -299,7 +354,7 @@
 }
 
 .childItemActive .childItemIcon {
-  color: var(--tesseract-blue-500);
+  color: var(--sidebar-accent);
 }
 
 .childItemLabel {
@@ -315,7 +370,7 @@
 }
 
 .childItemActive .childItemLabel {
-  color: var(--tesseract-blue-600);
+  color: var(--sidebar-accent-mid);
   font-weight: var(--tesseract-weight-semibold);
 }
 
@@ -343,7 +398,7 @@
 }
 
 .railItemActive {
-  background: color-mix(in srgb, var(--tesseract-blue-500) 10%, transparent);
+  background: color-mix(in srgb, var(--sidebar-accent) 10%, transparent);
 }
 
 .railBar {
@@ -352,7 +407,7 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background: var(--tesseract-blue-500);
+  background: var(--sidebar-accent);
   border-radius: 0 var(--tesseract-radius-full) var(--tesseract-radius-full) 0;
 }
 
@@ -370,7 +425,7 @@
 }
 
 .railLabelActive {
-  color: var(--tesseract-blue-700);
+  color: var(--sidebar-accent-strong);
   font-weight: var(--tesseract-weight-semibold);
 }
 
@@ -478,8 +533,8 @@
 }
 
 .flyoutItemActive {
-  background: color-mix(in srgb, var(--tesseract-blue-500) 8%, transparent);
-  color: var(--tesseract-blue-600);
+  background: color-mix(in srgb, var(--sidebar-accent) 8%, transparent);
+  color: var(--sidebar-accent-mid);
   font-weight: var(--tesseract-weight-semibold);
 }
 
@@ -500,4 +555,48 @@
 
 .flyoutItemBadge {
   flex-shrink: 0;
+}
+
+/* ── Compact density ── tighter padding, 32px chips, smaller labels. */
+.root[data-density="compact"] {
+  .chip,
+  .skeletonChip {
+    width: var(--tesseract-size-32);
+    height: var(--tesseract-size-32);
+  }
+
+  &:not(.collapsed) .list {
+    padding: var(--tesseract-space-1) var(--tesseract-space-1) var(--tesseract-space-3) var(--tesseract-space-2);
+  }
+
+  .collapsed .list,
+  &.collapsed .list {
+    padding: var(--tesseract-space-1) 0 var(--tesseract-space-3);
+  }
+
+  .section {
+    padding: var(--tesseract-space-1) var(--tesseract-space-1) var(--tesseract-space-1) var(--tesseract-space-1-5);
+    gap: var(--tesseract-space-1-5);
+  }
+
+  .sectionLabel {
+    font-size: var(--tesseract-text-body-xs);
+  }
+
+  .childItem {
+    padding: var(--tesseract-space-1) var(--tesseract-space-1) var(--tesseract-space-1) var(--tesseract-space-2);
+  }
+
+  .railItem {
+    padding: var(--tesseract-space-2) 0;
+    gap: var(--tesseract-space-1);
+  }
+
+  .railLabel {
+    font-size: 10px;
+  }
+
+  .skeletonRowRail {
+    padding: var(--tesseract-space-2) 0;
+  }
 }

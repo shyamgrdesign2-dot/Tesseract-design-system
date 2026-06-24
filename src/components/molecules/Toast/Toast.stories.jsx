@@ -15,11 +15,15 @@ const meta = {
   tags: ['autodocs', 'ai-generated'],
   argTypes: {
     status:      { control: 'inline-radio', options: ['info', 'success', 'warning', 'error'], table: { category: 'Content' } },
+    surface:     { control: 'inline-radio', options: ['dark', 'light'], description: 'Surface variant — dark (default) or a light bg + dark text', table: { category: 'Content' } },
     title:       { control: 'text', table: { category: 'Content' } },
     withSubtext: { control: 'boolean', name: 'with subtext', table: { category: 'Content' } },
     subtext:     { control: 'text', table: { category: 'Content' } },
     showIcon:    { control: 'boolean', name: 'with icon', table: { category: 'Parts' } },
     dismissible: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'Parts' } },
+    closeIcon:   { control: 'text', tpIcon: true, name: 'close icon', description: 'Library icon name to override the dismiss glyph (blank = close-square)', if: { arg: 'dismissible' }, table: { category: 'Parts' } },
+    progress:    { control: 'boolean', name: 'with progress bar', description: 'Depleting bar over `duration` (needs duration > 0)', table: { category: 'Parts' } },
+    duration:    { control: { type: 'number', min: 0, step: 500 }, name: 'duration (ms)', description: '0 = persist; > 0 auto-dismisses', table: { category: 'Parts' } },
     iconName:    { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name to override the status icon (blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the override icon', table: { category: 'Icons' } },
     iconFamily:  { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
@@ -32,11 +36,15 @@ const meta = {
   },
   args: {
     status: 'warning',
+    surface: 'dark',
     title: 'License expiring soon',
     withSubtext: true,
     subtext: 'Your TatvaPractice Enterprise license expires on 15 June 2026.',
     showIcon: true,
     dismissible: true,
+    closeIcon: '',
+    progress: false,
+    duration: 0,
     iconName: '',
     iconVariant: 'linear',
     iconFamily: '',
@@ -54,34 +62,45 @@ const Stack = ({ children }) => (
   </div>
 );
 
-// Build the nested CTA from the synthetic controls.
-const renderAction = (on, variant, label) =>
-  on ? <Button surface="dark" variant={variant} size="sm">{label || 'Action'}</Button> : undefined;
+// Build the nested CTA from the synthetic controls. The Button surface follows
+// the toast surface so the CTA reads correctly on a light or dark toast.
+const renderAction = (on, variant, label, surface = 'dark') =>
+  on ? <Button surface={surface} variant={variant} size="sm">{label || 'Action'}</Button> : undefined;
 
 // Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const toastCode = ({ status = 'info', title = '', withSubtext, subtext = '', showIcon, iconName, iconVariant, iconFamily, dismissible, withCTA, action, actionLabel }) => {
-  const lines = [`  status="${status}"`, `  title="${title}"`];
+const toastCode = ({ status = 'info', surface = 'dark', title = '', withSubtext, subtext = '', showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, withCTA, action, actionLabel }) => {
+  const btnSurface = surface === 'light' ? 'light' : 'dark';
+  const lines = [`  status="${status}"`];
+  if (surface !== 'dark') lines.push(`  surface="${surface}"`);
+  lines.push(`  title="${title}"`);
   if (!showIcon) lines.push('  showIcon={false}');
   if (iconName) lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, withSubtext ? 42 : 24)}}`);
   if (dismissible) lines.push('  dismissible');
-  if (withCTA) lines.push(`  action={<Button surface="dark" variant="${action}" size="sm">${actionLabel || 'Action'}</Button>}`);
+  if (dismissible && closeIcon) lines.push(`  closeIcon="${closeIcon}"`);
+  if (duration > 0) lines.push(`  duration={${duration}}`);
+  if (progress && duration > 0) lines.push('  progress');
+  if (withCTA) lines.push(`  action={<Button surface="${btnSurface}" variant="${action}" size="sm">${actionLabel || 'Action'}</Button>}`);
   if (withSubtext && subtext) return `<Toast\n${lines.join('\n')}\n>\n  ${subtext}\n</Toast>`;
   return `<Toast\n${lines.join('\n')}\n/>`;
 };
 
 export const Playground = {
-  render: ({ status, title, withSubtext, subtext, showIcon, iconName, iconVariant, iconFamily, dismissible, withCTA, action, actionLabel }) => (
+  render: ({ status, surface, title, withSubtext, subtext, showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, withCTA, action, actionLabel }) => (
     <div style={{ width: '100%' }}>
       <Toast
         status={status}
+        surface={surface}
         title={title}
         showIcon={showIcon}
         icon={glyphFor(iconName, withSubtext ? 42 : 24, iconVariant, iconFamily)}
         dismissible={dismissible}
-        action={renderAction(withCTA, action, actionLabel)}
+        closeIcon={closeIcon || undefined}
+        progress={progress}
+        duration={duration}
+        action={renderAction(withCTA, action, actionLabel, surface === 'light' ? 'light' : 'dark')}
       >
         {withSubtext ? (subtext || undefined) : undefined}
       </Toast>
@@ -119,6 +138,50 @@ export const Statuses = {
       <Toast status="error" title="Sync failed" dismissible>EHR sync failed — retrying in 5 minutes.</Toast>
     </Stack>
   ),
+};
+
+/** Light surface — token-driven light bg + dark text. Same status colours,
+ *  shifted to the deeper ramp for legibility. CTAs use a light-surface Button. */
+export const LightSurface = {
+  name: 'Light surface',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, width: '100%', padding: 16, background: 'var(--tesseract-slate-100, #F1F1F5)', borderRadius: 12 }}>
+      <Toast surface="light" status="info" title="New ABDM guidelines" dismissible>
+        Effective 1 June 2026 — review the updated consent flow.
+      </Toast>
+      <Toast surface="light" status="success" title="Prescription saved" dismissible>
+        Saved to the patient record.
+      </Toast>
+      <Toast surface="light" status="warning" title="License expiring soon" dismissible
+        action={<Button surface="light" variant="solid" size="sm">Renew</Button>}>
+        Your TatvaPractice Enterprise license expires on 15 June 2026.
+      </Toast>
+      <Toast surface="light" status="error" title="Sync failed" dismissible>
+        EHR sync failed — retrying in 5 minutes.
+      </Toast>
+    </div>
+  ),
+};
+
+/** Progress bar — a thin, status-coloured bar depletes over `duration`.
+ *  Pass `progress` alongside `duration` (ms). Click to fire one. */
+export const WithProgress = {
+  name: 'With progress bar',
+  render: () => {
+    const [seq, setSeq] = React.useState(0);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
+        <Button variant="solid" size="sm" onClick={() => setSeq((s) => s + 1)}>Show toast</Button>
+        <div style={{ minHeight: 64 }}>
+          {seq > 0 && (
+            <Toast key={seq} status="info" title="Uploading records" dismissible progress duration={5000}>
+              5 patient records are syncing — this bar shows the remaining time.
+            </Toast>
+          )}
+        </div>
+      </div>
+    );
+  },
 };
 
 /** Single line — primary text only (no subtext). Icon is the compact 24px. */

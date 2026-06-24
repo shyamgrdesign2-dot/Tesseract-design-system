@@ -161,6 +161,35 @@ const meta = {
       description: "Icon chip corner radius (px)",
       table: { category: "Appearance" },
     },
+    accent: {
+      control: "select",
+      options: [
+        "var(--tesseract-blue-500)",
+        "var(--tesseract-success-500)",
+        "var(--tesseract-violet-500)",
+        "var(--tesseract-warning-500)",
+        "var(--tesseract-error-500)",
+      ],
+      description:
+        "Active accent token — recolors active chip, rail bar, active labels and flyout. Default blue = unchanged.",
+      table: { category: "Appearance" },
+    },
+    density: {
+      control: "inline-radio",
+      options: ["comfortable", "compact"],
+      description: "Row/chip density. Compact = 32px chips + tighter padding.",
+      table: { category: "Appearance" },
+    },
+    emptyText: {
+      control: "text",
+      description: "Text shown when search yields no matches",
+      table: { category: "State" },
+    },
+    loading: {
+      control: "boolean",
+      description: "Show skeleton placeholder rows",
+      table: { category: "State" },
+    },
     badgeStyle: {
       control: "select",
       options: ["default", "none", "dot", "sticky-right", "sticky-left"],
@@ -177,9 +206,50 @@ const meta = {
     expandedWidth: 236,
     collapsedWidth: 80,
     chipRadius: 12,
+    accent: "var(--tesseract-blue-500)",
+    density: "comfortable",
+    emptyText: "No matches.",
+    loading: false,
     badgeStyle: "default",
   },
 };
+
+/* Build an accurate, copy-paste <Sidebar /> snippet from the controls. */
+const sidebarCode = (args = {}) => {
+  const {
+    defaultCollapsed,
+    search,
+    showCollapseToggle,
+    searchPlaceholder,
+    bottomFade,
+    expandedWidth,
+    collapsedWidth,
+    accent,
+    density,
+    emptyText,
+    loading,
+  } = args;
+  const lines = ["  items={items}", '  activeId={activeId}', "  onSelect={setActive}"];
+  if (defaultCollapsed) lines.push("  defaultCollapsed");
+  if (search) lines.push("  search");
+  if (searchPlaceholder && searchPlaceholder !== "Search…")
+    lines.push(`  searchPlaceholder="${searchPlaceholder}"`);
+  if (showCollapseToggle === false) lines.push("  showCollapseToggle={false}");
+  if (bottomFade === false) lines.push("  bottomFade={false}");
+  if (expandedWidth && expandedWidth !== 236)
+    lines.push(`  expandedWidth={${expandedWidth}}`);
+  if (collapsedWidth && collapsedWidth !== 80)
+    lines.push(`  collapsedWidth={${collapsedWidth}}`);
+  if (accent && accent !== "var(--tesseract-blue-500)")
+    lines.push(`  accent="${accent}"`);
+  if (density && density !== "comfortable") lines.push(`  density="${density}"`);
+  if (emptyText && emptyText !== "No matches.")
+    lines.push(`  emptyText="${emptyText}"`);
+  if (loading) lines.push("  loading");
+  return `<Sidebar\n${lines.join("\n")}\n/>`;
+};
+
+const sidebarTransform = { docs: { source: { transform: (_c, ctx) => sidebarCode(ctx.args) } } };
 
 export default meta;
 
@@ -240,6 +310,7 @@ export const Playground = {
       </Shell>
     );
   },
+  parameters: sidebarTransform,
 };
 
 export const CollapsedRail = {
@@ -518,6 +589,131 @@ export const WithFooter = {
         />
         <Content activeId={active} />
       </Shell>
+    );
+  },
+};
+
+/* A reusable account/user card for the header slot. */
+const AccountCard = () => (
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "8px 10px",
+      borderRadius: 12,
+      background: "var(--tesseract-slate-50)",
+      border: "1px solid var(--tesseract-slate-100)",
+    }}
+  >
+    <span
+      style={{
+        width: 32,
+        height: 32,
+        borderRadius: "50%",
+        background: "var(--tesseract-blue-500)",
+        color: "#fff",
+        display: "grid",
+        placeItems: "center",
+        fontSize: 13,
+        fontWeight: 600,
+        fontFamily: "var(--tesseract-font-body)",
+      }}
+    >
+      DR
+    </span>
+    <div style={{ minWidth: 0, lineHeight: 1.2 }}>
+      <div
+        style={{
+          fontSize: 13,
+          fontWeight: 600,
+          color: "var(--tesseract-slate-900)",
+          fontFamily: "var(--tesseract-font-body)",
+        }}
+      >
+        Dr. Riya Sharma
+      </div>
+      <div
+        style={{
+          fontSize: 11,
+          color: "var(--tesseract-slate-500)",
+          fontFamily: "var(--tesseract-font-body)",
+        }}
+      >
+        City Care Clinic
+      </div>
+    </div>
+  </div>
+);
+
+/** Clinic skin: a green accent recolors every active state, compact density,
+ *  and a header account card above the list. Defaults stay untouched. */
+export const ClinicSkin = {
+  name: "Custom Accent + Compact + Header",
+  render: (args) => {
+    const { badgeStyle, chipRadius, ...rest } = args;
+    const items = transformBadges(NESTED_ITEMS, badgeStyle);
+    const [active, setActive] = React.useState("symptoms");
+    return (
+      <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }} height={700}>
+        <Sidebar
+          {...rest}
+          items={items}
+          activeId={active}
+          onSelect={setActive}
+          accent="var(--tesseract-success-500)"
+          density="compact"
+          header={<AccountCard />}
+          logo={undefined}
+          search
+          searchPlaceholder="Search…"
+        />
+        <Content activeId={active} />
+      </Shell>
+    );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code:
+          '<Sidebar\n  items={items}\n  activeId={activeId}\n  onSelect={setActive}\n  accent="var(--tesseract-success-500)"\n  density="compact"\n  header={<AccountCard />}\n  search\n/>',
+      },
+    },
+  },
+};
+
+/** Loading skeleton and the empty (no-match) state. */
+export const LoadingAndEmpty = {
+  name: "Loading + Empty States",
+  render: (args) => {
+    const { badgeStyle, chipRadius, ...rest } = args;
+    const items = transformBadges(NESTED_ITEMS, badgeStyle);
+    const [active, setActive] = React.useState("overview");
+    return (
+      <div style={{ display: "flex", gap: 16 }}>
+        <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
+          <Sidebar
+            {...rest}
+            items={items}
+            activeId={active}
+            onSelect={setActive}
+            loading
+            search={false}
+          />
+          <Content activeId="loading…" />
+        </Shell>
+        <Shell style={{ "--tesseract-radius-12": `${chipRadius}px` }}>
+          <Sidebar
+            {...rest}
+            items={[]}
+            activeId={active}
+            onSelect={setActive}
+            emptyText="No menu items yet."
+            search={false}
+          />
+          <Content activeId="empty" />
+        </Shell>
+      </div>
     );
   },
 };

@@ -4,6 +4,7 @@ import * as React from "react";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { Button } from "@/src/components/atoms/Button/Button";
 import { InputBox } from "@/src/components/atoms/Input/InputBox";
+import { Skeleton } from "@/src/components/atoms/Skeleton/Skeleton";
 import { ClinicalTable } from "@/src/components/molecules/ClinicalTable/ClinicalTable";
 import { Tooltip } from "@/src/components/molecules/Tooltip/Tooltip";
 import styles from "./RxPadSection.module.scss";
@@ -21,25 +22,29 @@ function parseIconProp(val, defaultName, defaultVariant = "linear") {
   return { name: s, variant: defaultVariant };
 }
 
-function ActionButton({ iconProp, defaultIcon, defaultVariant = "linear", tip, onClick, disabled, size = 18, color }) {
+function ActionButton({ iconProp, defaultIcon, defaultVariant = "linear", tip, onClick, disabled, size = 18, color, buttonProps }) {
   const { name, variant } = parseIconProp(iconProp, defaultIcon, defaultVariant);
-  return (
-    <Tooltip content={tip} side="bottom">
-      <Button
-        variant="tonal"
-        theme="neutral"
-        size="sm"
-        aria-label={tip}
-        disabled={disabled}
-        onClick={onClick}
-        icon={<TPLibraryIcon name={name} variant={variant} size={size} color={color} />}
-      />
-    </Tooltip>
+  // Pass-through styling for the button atom. Defaults preserve the current look.
+  const { variant: btnVariant = "tonal", theme = "neutral", size: btnSize = "sm", ...restButton } = buttonProps || {};
+  const btn = (
+    <Button
+      variant={btnVariant}
+      theme={theme}
+      size={btnSize}
+      aria-label={tip}
+      disabled={disabled}
+      onClick={onClick}
+      icon={<TPLibraryIcon name={name} variant={variant} size={size} color={color} />}
+      {...restButton}
+    />
   );
+  return tip ? <Tooltip content={tip} side="bottom">{btn}</Tooltip> : btn;
 }
 
 export function RxPadSection({
   title = "Symptoms",
+  subtitle,
+  headerMeta,
   icon = "virus",
   iconColor = "var(--tesseract-violet-500)",
   mode = "table-first",
@@ -59,6 +64,8 @@ export function RxPadSection({
   onTemplate,
   onSave,
   onClear,
+  headerActions,
+  actionButtonProps,
   repeatIcon = "refresh-arrow",
   templateIcon = "grid-5",
   saveIcon = "ram",
@@ -71,6 +78,12 @@ export function RxPadSection({
   rows: rowsProp,
   defaultRows = [],
   onRowsChange,
+  loading = false,
+  emptyState,
+  collapsible = false,
+  defaultCollapsed = false,
+  children,
+  renderBody,
   className,
   style,
 }) {
@@ -82,6 +95,7 @@ export function RxPadSection({
   const [text, setText] = React.useState("");
   const [fieldVals, setFieldVals] = React.useState({});
   const [query, setQuery] = React.useState("");
+  const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
 
   const hasData =
     bodyType === "table" ? rows.length > 0
@@ -109,68 +123,125 @@ export function RxPadSection({
   const headerIcon = parseIconProp(icon, "virus", "bulk");
   const searchParsed = parseIconProp(searchIcon, "search-normal-1");
 
+  // The default Repeat/Template/Save/Clear quartet — preserved as the default.
+  const defaultActions = (
+    <>
+      {showRepeat && <ActionButton iconProp={repeatIcon} defaultIcon="refresh-arrow" tip="Repeat previous Rx" onClick={onRepeat} buttonProps={actionButtonProps} />}
+      {showTemplate && <ActionButton iconProp={templateIcon} defaultIcon="grid-5" tip="Browse templates" onClick={onTemplate} buttonProps={actionButtonProps} />}
+      {showSave && <ActionButton iconProp={saveIcon} defaultIcon="ram" tip="Save as template" onClick={onSave} disabled={!hasData} buttonProps={actionButtonProps} />}
+      {showClear && <ActionButton iconProp={clearIcon} defaultIcon="eraser" tip="Clear all entries" onClick={clearAll} disabled={!hasData} buttonProps={actionButtonProps} />}
+    </>
+  );
+
+  // headerActions: an array of custom actions, a ReactNode, or absent (→ default quartet).
+  const customActions = Array.isArray(headerActions)
+    ? headerActions.map((a, i) => (
+        <ActionButton
+          key={i}
+          iconProp={a.icon}
+          defaultIcon={a.icon}
+          tip={a.tip}
+          onClick={a.onClick}
+          disabled={a.disabled}
+          buttonProps={{ ...actionButtonProps, ...(a.variant ? { variant: a.variant } : null) }}
+        />
+      ))
+    : headerActions;
+  const headerActionsContent = headerActions != null ? customActions : defaultActions;
+
+  const showBody = !(collapsible && collapsed);
+
   return (
     <section className={[styles.card, className].filter(Boolean).join(" ")} style={style}>
       {/* ── Header ── */}
       <header className={styles.header}>
         <div className={styles.titleWrap}>
+          {collapsible && (
+            <button
+              type="button"
+              className={styles.collapseBtn}
+              aria-expanded={!collapsed}
+              aria-label={collapsed ? "Expand section" : "Collapse section"}
+              onClick={() => setCollapsed((c) => !c)}
+            >
+              <TPLibraryIcon name="chevron-down" variant="linear" size={18} className={collapsed ? styles.chevronCollapsed : undefined} />
+            </button>
+          )}
           <span className={styles.iconChip} style={{ color: iconColor }}>
             <TPLibraryIcon name={headerIcon.name} variant={headerIcon.variant} size={24} color={iconColor} />
           </span>
-          <h3 className={styles.title}>{title}</h3>
+          <div className={styles.titleText}>
+            <h3 className={styles.title}>{title}</h3>
+            {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+          </div>
         </div>
         <div className={styles.actions}>
-          {showRepeat && <ActionButton iconProp={repeatIcon} defaultIcon="refresh-arrow" tip="Repeat previous Rx" onClick={onRepeat} />}
-          {showTemplate && <ActionButton iconProp={templateIcon} defaultIcon="grid-5" tip="Browse templates" onClick={onTemplate} />}
-          {showSave && <ActionButton iconProp={saveIcon} defaultIcon="ram" tip="Save as template" onClick={onSave} disabled={!hasData} />}
-          {showClear && <ActionButton iconProp={clearIcon} defaultIcon="eraser" tip="Clear all entries" onClick={clearAll} disabled={!hasData} />}
+          {headerMeta && <div className={styles.headerMeta}>{headerMeta}</div>}
+          {headerActionsContent}
         </div>
       </header>
 
       {/* ── Body ── */}
-      <div className={styles.body}>
-        {showTable && (
-          <ClinicalTable
-            columns={columns} name={name} notes={notes} rows={rows} onChange={setRows}
-            autoRow={mode === "table-first"}
-            dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon}
-          />
-        )}
+      {showBody && (
+        <div className={styles.body}>
+          {/* Escape hatch — a fully custom body beyond table/text/fields. */}
+          {(children ?? renderBody?.()) != null ? (
+            children ?? renderBody()
+          ) : loading ? (
+            <div className={styles.loading} aria-busy="true" aria-live="polite">
+              {Array.from({ length: 3 }, (_, i) => (
+                <Skeleton key={i} variant="rectangular" height={40} radius={8} />
+              ))}
+            </div>
+          ) : !hasData && emptyState != null ? (
+            <div className={styles.empty}>{emptyState}</div>
+          ) : (
+            <>
+              {showTable && (
+                <ClinicalTable
+                  columns={columns} name={name} notes={notes} rows={rows} onChange={setRows}
+                  autoRow={mode === "table-first"}
+                  dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon}
+                />
+              )}
 
-        {bodyType === "text" && (
-          <InputBox fullWidth autoGrow maxHeight={160} value={text} onChange={(e) => setText(e.target?.value ?? e)}
-            placeholder={searchPlaceholder || "Add clinical notes…"} />
-        )}
+              {bodyType === "text" && (
+                <InputBox fullWidth autoGrow maxHeight={160} value={text} onChange={(e) => setText(e.target?.value ?? e)}
+                  placeholder={searchPlaceholder || "Add clinical notes…"} />
+              )}
 
-        {bodyType === "fields" && (
-          <div className={styles.fields}>
-            {fields.map((f) => (
-              <InputBox key={f.id} fullWidth label={f.label} type={f.type} placeholder={f.placeholder}
-                leftIcon={f.icon} value={fieldVals[f.id] || ""}
-                onChange={(e) => setFieldVals((s) => ({ ...s, [f.id]: e.target?.value ?? e }))} />
-            ))}
-          </div>
-        )}
+              {bodyType === "fields" && (
+                <div className={styles.fields}>
+                  {fields.map((f) => (
+                    <InputBox key={f.id} fullWidth label={f.label} type={f.type} placeholder={f.placeholder}
+                      leftIcon={f.icon} value={fieldVals[f.id] || ""}
+                      onChange={(e) => setFieldVals((s) => ({ ...s, [f.id]: e.target?.value ?? e }))} />
+                  ))}
+                </div>
+              )}
 
-        {search && bodyType === "table" && mode !== "table-first" && (
-          <InputBox
-            fullWidth
-            value={query}
-            onChange={(e) => setQuery(e.target?.value ?? e)}
-            onKeyDown={(e) => { if (e.key === "Enter") addRow(query); }}
-            leftIcon={<TPLibraryIcon name={searchParsed.name} variant={searchParsed.variant} size={18} />}
-            placeholder={searchPlaceholder || `Search & add ${title}`}
-          />
-        )}
+              {search && bodyType === "table" && mode !== "table-first" && (
+                <InputBox
+                  fullWidth
+                  value={query}
+                  onChange={(e) => setQuery(e.target?.value ?? e)}
+                  onKeyDown={(e) => { if (e.key === "Enter") addRow(query); }}
+                  leftIcon={<TPLibraryIcon name={searchParsed.name} variant={searchParsed.variant} size={18} />}
+                  placeholder={searchPlaceholder || `Search & add ${title}`}
+                />
+              )}
 
-        {availableChips.length > 0 && (
-          <div className={styles.chips}>
-            {availableChips.map((s) => (
-              <Button key={s} variant="tonal" theme="neutral" size="sm" onClick={() => addRow(s)}>{s}</Button>
-            ))}
-          </div>
-        )}
-      </div>
+              {availableChips.length > 0 && (
+                <div className={styles.chips}>
+                  {availableChips.map((s) => (
+                    <Button key={s} variant="tonal" theme="neutral" size="sm" onClick={() => addRow(s)}>{s}</Button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </section>
   );
 }
