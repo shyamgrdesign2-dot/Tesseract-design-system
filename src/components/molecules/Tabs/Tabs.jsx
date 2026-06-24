@@ -38,6 +38,7 @@
 
 import * as React from "react";
 import { Badge } from "@/src/components/atoms/Badge";
+import { Slot } from "@/src/hooks/ui/Slot";
 import { useAnalytics } from "@/src/analytics/context";
 import styles from "./Tabs.module.scss";
 
@@ -163,6 +164,7 @@ export function TabsTrigger({
   className = "",
   style,
   disabled,
+  asChild = false,
   onClick,
   leftIcon,
   rightIcon,
@@ -199,6 +201,30 @@ export function TabsTrigger({
     React.isValidElement(node)
       ? React.cloneElement(node, { variant: isActive ? "bulk" : "linear", size: iconSize })
       : node;
+
+  // asChild — render a tab as the consumer's own element (e.g. a router <Link>)
+  // with the tab role/state/handlers merged on. The child owns its content.
+  if (asChild) {
+    return (
+      <Slot
+        role="tab"
+        id={ctx?.idFor?.("trigger", value)}
+        aria-selected={isActive}
+        aria-controls={ctx?.idFor?.("panel", value)}
+        aria-disabled={disabled || undefined}
+        tabIndex={isActive ? 0 : -1}
+        data-state={isActive ? "active" : "inactive"}
+        data-disabled={disabled || undefined}
+        className={cls}
+        style={style}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </Slot>
+    );
+  }
 
   return (
     <button
