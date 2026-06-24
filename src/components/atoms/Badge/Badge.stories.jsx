@@ -19,11 +19,15 @@ const meta = {
     variant: { control: 'select', options: VARIANTS },
     color: { control: 'select', options: COLORS },
     size: { control: 'inline-radio', options: SIZES },
-    children: { control: 'text', table: { category: 'Content' } },
-    leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
-    rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
-    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
-    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
+    children: { control: 'text', name: 'label (text)', description: 'Label — usually data-bound (e.g. a status string from the backend). Omit, or use icons="icon-only", for an icon-only badge.', table: { category: 'Content' } },
+    // ── Icons: choose how many / which side, then pick the glyph(s) ──
+    icons: { control: 'inline-radio', options: ['none', 'left', 'right', 'both', 'icon-only'], name: 'icons', description: 'Which icon slots to show', table: { category: 'Icons' } },
+    leftIcon: { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name — the single icon (left / right / icon-only) or the LEFT icon when both', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
+    rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'The trailing icon name (both mode only)', if: { arg: 'icons', eq: 'both' }, table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
+    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', if: { arg: 'icons', neq: 'none' }, table: { category: 'Icons' } },
+    // ── Layout ──
+    radius: { control: { type: 'range', min: 0, max: 24, step: 2 }, name: 'corner radius (px)', description: '0 = sharp rectangle · high = pill', table: { category: 'Layout' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -31,35 +35,49 @@ const meta = {
     color: 'primary',
     size: 'md',
     children: 'Badge',
+    icons: 'left',
     leftIcon: 'verify',
-    rightIcon: '',
+    rightIcon: 'arrow-right',
     iconVariant: 'linear',
     iconFamily: '',
+    radius: 10,
     sticky: 'none',
   },
 };
 
 export default meta;
 
-// Map the left/right icon-name controls + style onto the real icon/rightIcon props.
-const withIcons = ({ leftIcon, rightIcon, iconVariant, iconFamily, sticky, ...args }) => ({
-  ...args,
-  sticky: sticky && sticky !== 'none' ? sticky : undefined,
-  icon: glyphFor(leftIcon, args.size, iconVariant, iconFamily),
-  rightIcon: glyphFor(rightIcon, args.size, iconVariant, iconFamily),
-});
+// Map the icon MODE + name(s) + style onto the real icon/rightIcon props, and
+// drop the label for an icon-only badge. One field ("icon") serves the single-icon
+// modes (left/right/icon-only); the second ("right icon") only applies to "both".
+const withIcons = ({ icons, leftIcon, rightIcon, iconVariant, iconFamily, radius, sticky, children, ...args }) => {
+  const single = glyphFor(leftIcon, args.size, iconVariant, iconFamily);
+  const trailing = glyphFor(rightIcon, args.size, iconVariant, iconFamily);
+  return {
+    ...args,
+    radius,
+    sticky: sticky && sticky !== 'none' ? sticky : undefined,
+    icon: icons === 'left' || icons === 'both' || icons === 'icon-only' ? single : undefined,
+    rightIcon: icons === 'right' ? single : icons === 'both' ? trailing : undefined,
+    children: icons === 'icon-only' ? undefined : children,
+  };
+};
 
 // Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
 const iconJsx = (name, variant, family) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={14} />`;
 
-const badgeCode = ({ variant = 'soft', color = 'primary', size = 'md', children = '', sticky, leftIcon, rightIcon, iconVariant, iconFamily }) => {
+const badgeCode = ({ variant = 'soft', color = 'primary', size = 'md', children = '', sticky, radius, icons = 'none', leftIcon, rightIcon, iconVariant, iconFamily }) => {
+  const leftName = icons === 'left' || icons === 'both' || icons === 'icon-only' ? leftIcon : '';
+  const rightName = icons === 'right' ? leftIcon : icons === 'both' ? rightIcon : '';
   const lines = [`  variant="${variant}"`, `  color="${color}"`, `  size="${size}"`];
+  if (radius != null && radius !== 10) lines.push(`  radius={${radius}}`);
   if (sticky && sticky !== 'none') lines.push(`  sticky="${sticky}"`);
-  if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily)}}`);
-  if (rightIcon) lines.push(`  rightIcon={${iconJsx(rightIcon, iconVariant, iconFamily)}}`);
-  if (variant === 'dot') return `<Badge\n${lines.join('\n')}\n/>`;
-  return `<Badge\n${lines.join('\n')}\n>\n  ${children}\n</Badge>`;
+  if (leftName) lines.push(`  icon={${iconJsx(leftName, iconVariant, iconFamily)}}`);
+  if (rightName) lines.push(`  rightIcon={${iconJsx(rightName, iconVariant, iconFamily)}}`);
+  const body = icons === 'icon-only' ? '' : children;
+  if (variant === 'dot' || !body) return `<Badge\n${lines.join('\n')}\n/>`;
+  return `<Badge\n${lines.join('\n')}\n>\n  ${body}\n</Badge>`;
 };
 
 const Row = ({ children }) => (

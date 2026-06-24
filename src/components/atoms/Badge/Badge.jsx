@@ -13,7 +13,9 @@
  *   rightIcon  ReactNode — trailing icon
  *   sticky     "left" | "right" — squares the corners on that edge so the badge
  *              can sit flush against a container edge
- *   children   label
+ *   radius     number (px) | string — override the corner radius (default = pill).
+ *              0 = sharp rectangle; high values = pill. Configurable, not fixed.
+ *   children   label (optional — omit for an icon-only badge; usually data-bound)
  */
 
 
@@ -37,16 +39,22 @@ export function Badge({
   icon,
   rightIcon,
   sticky,
+  radius,
   children,
   className,
   style: styleProp
 }) {
+  // Corner radius is configurable; default falls back to the token in the SCSS.
+  const radiusStyle =
+    radius != null ? { borderRadius: typeof radius === "number" ? `${radius}px` : radius } : null;
+  const mergedStyle = radiusStyle || styleProp ? { ...radiusStyle, ...styleProp } : undefined;
+
   if (variant === "dot") {
     const cls = [styles.dot, className].filter(Boolean).join(" ");
     return (
       <span
         className={cls}
-        style={styleProp}
+        style={mergedStyle}
         data-color={color}
         data-size={size}
         aria-hidden />);
@@ -60,7 +68,7 @@ export function Badge({
   return (
     <span
       className={cls}
-      style={styleProp}
+      style={mergedStyle}
       data-variant={variant}
       data-color={color}
       data-size={size}
