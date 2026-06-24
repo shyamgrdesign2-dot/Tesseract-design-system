@@ -161,6 +161,7 @@ export const InfoTags = {
 // ── Configurable Playground ──────────────────────────────────────────────────
 
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'tonal', 'ghost', 'link'];
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
 const SLOTS = [1, 2, 3, 4, 5, 6]; // up to 8 supported by the API; 6 wired here
 
 function slotArgTypes() {
@@ -176,9 +177,21 @@ function slotArgTypes() {
   return t;
 }
 
+// Accurate, copy-paste snippet for the back button (mirrors Badge's "Show code").
+const headerBackCode = (a) => {
+  if (!a.showBack) return '<Header /* … */ />';
+  const lines = ['  back'];
+  if (a.backIcon && a.backIcon !== 'arrow-left-02') lines.push(`  backIcon="${a.backIcon}"`);
+  if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
+  return `<Header\n${lines.join('\n')}\n  /* …actions, leading… */\n/>`;
+};
+
 export const Playground = {
+  parameters: { docs: { source: { transform: (_code, ctx) => headerBackCode(ctx.args) } } },
   argTypes: {
     showBack: { control: 'boolean', name: 'back button', table: { category: 'Left' } },
+    backIcon: { control: 'text', tpIcon: true, name: 'back icon', table: { category: 'Left' } },
+    backIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'back icon style', table: { category: 'Left' } },
     leading: { control: 'inline-radio', options: ['logo', 'title', 'user', 'none'], name: 'leading', table: { category: 'Left' } },
     title: { control: 'text', table: { category: 'Left' } },
     subtitle: { control: 'text', name: 'subtext (blank = title only)', table: { category: 'Left' } },
@@ -192,6 +205,8 @@ export const Playground = {
   },
   args: {
     showBack: false,
+    backIcon: 'arrow-left-02',
+    backIconVariant: 'linear',
     leading: 'logo',
     title: 'Welcome Dr. Sheela BR!',
     subtitle: 'Your Appointments',
@@ -241,7 +256,7 @@ function HeaderPlaygroundDemo(a) {
 
   return (
     <div style={{ background: 'var(--tesseract-slate-50, #FAFAFB)', minHeight: 320 }}>
-      <Header back={a.showBack} {...left} actions={actions} />
+      <Header back={a.showBack} backIcon={a.backIcon} backIconVariant={a.backIconVariant} {...left} actions={actions} />
     </div>
   );
 }

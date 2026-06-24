@@ -15,12 +15,14 @@ import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 const SIZES = ['sm', 'md', 'lg'];
 const STATUSES = ['default', 'success', 'error', 'warning'];
 const ALLOW = ['any', 'numeric', 'alpha', 'alphanumeric'];
-const ICON_SIDES = ['none', 'left', 'right', 'both'];
 const ICON_PX = { sm: 16, md: 18, lg: 20 };
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
 
-// Icon node from a library name ('' = none).
-const icon = (name, size) =>
-  name && String(name).trim() ? <TPLibraryIcon name={String(name).trim()} size={size} /> : undefined;
+// Resolve an icon node for a slot, sized to the field, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name && String(name).trim()
+    ? <TPIcon name={String(name).trim()} variant={variant} family={family || undefined} size={size} />
+    : undefined;
 
 // ── World-class add-on building blocks ────────────────────────────────────────
 // Each owns its own background + balanced padding so it sits flush against the
@@ -116,17 +118,15 @@ export default {
     maxLength:   { control: { type: 'number', min: 0 }, name: 'max length', table: { category: 'Behaviour' } },
     showCount:   { control: 'boolean', name: 'show count', table: { category: 'Behaviour' } },
 
-    iconSide:     { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Icons' } },
-    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', table: { category: 'Icons' } },
-    rightIconName:{ control: 'text', tpIcon: true, name: 'right icon', table: { category: 'Icons' } },
+    leftIcon:     { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
+    rightIcon:    { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
+    iconVariant:  { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
+    iconFamily:   { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
 
     unit:        { control: 'text', description: 'Fixed suffix inside the field, e.g. "kg"', table: { category: 'Affixes' } },
     counter:     { control: 'boolean', description: '+/- stepper (number field)', table: { category: 'Affixes' } },
     leftAddon:   { control: 'select', options: ['none', 'country', 'prefix', 'cta'], name: 'left add-on', table: { category: 'Affixes' } },
     rightAddon:  { control: 'select', options: ['none', 'dropdown', 'cta', 'text'], name: 'right add-on', table: { category: 'Affixes' } },
-
-    leftIcon: { table: { disable: true } },
-    rightIcon: { table: { disable: true } },
   },
   args: {
     showLabel: true,
@@ -145,14 +145,41 @@ export default {
     disabled: false,
     maxLength: 0,
     showCount: false,
-    iconSide: 'left',
-    leftIconName: 'sms',
-    rightIconName: 'eye-slash',
+    leftIcon: 'sms',
+    rightIcon: '',
+    iconVariant: 'linear',
+    iconFamily: '',
     unit: '',
     counter: false,
     leftAddon: 'none',
     rightAddon: 'none',
   },
+};
+
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family, size) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
+const inputCode = (a) => {
+  const px = ICON_PX[a.size] || 18;
+  const lines = [`  size="${a.size}"`, `  status="${a.status}"`];
+  if (a.showLabel && a.label) lines.push(`  label="${a.label}"`);
+  if (a.placeholder) lines.push(`  placeholder="${a.placeholder}"`);
+  if (a.showHelper && a.helperText) lines.push(`  helperText="${a.helperText}"`);
+  if (a.required) lines.push('  required');
+  if (a.allow && a.allow !== 'any') lines.push(`  allow="${a.allow}"`);
+  if (a.clearable) lines.push('  clearable');
+  if (a.loading) lines.push('  loading');
+  if (a.readOnly) lines.push('  readOnly');
+  if (a.disabled) lines.push('  disabled');
+  if (a.maxLength) lines.push(`  maxLength={${a.maxLength}}`);
+  if (a.showCount) lines.push('  showCount');
+  if (a.leftIcon && a.leftIcon.trim()) lines.push(`  leftIcon={${iconJsx(a.leftIcon.trim(), a.iconVariant, a.iconFamily, px)}}`);
+  if (a.rightIcon && a.rightIcon.trim()) lines.push(`  rightIcon={${iconJsx(a.rightIcon.trim(), a.iconVariant, a.iconFamily, px)}}`);
+  if (a.unit) lines.push(`  unit="${a.unit}"`);
+  if (a.counter) lines.push('  counter');
+  if (a.fullWidth) lines.push('  fullWidth');
+  return `<InputBox\n${lines.join('\n')}\n/>`;
 };
 
 // ── Playground — every capability wired to Controls ───────────────────────────
@@ -164,8 +191,6 @@ export const Playground = {
   },
   render:(a) => {
     const px = ICON_PX[a.size] || 18;
-    const showLeft = a.iconSide === 'left' || a.iconSide === 'both';
-    const showRight = a.iconSide === 'right' || a.iconSide === 'both';
     return (
       <div style={{ maxWidth: 440 }}>
         <InputBox
@@ -183,8 +208,8 @@ export const Playground = {
           disabled={a.disabled}
           maxLength={a.maxLength || undefined}
           showCount={a.showCount}
-          leftIcon={showLeft ? icon(a.leftIconName, px) : undefined}
-          rightIcon={showRight ? icon(a.rightIconName, px) : undefined}
+          leftIcon={glyphFor(a.leftIcon, px, a.iconVariant, a.iconFamily)}
+          rightIcon={glyphFor(a.rightIcon, px, a.iconVariant, a.iconFamily)}
           unit={a.unit || undefined}
           counter={a.counter}
           type={a.counter ? 'number' : undefined}
@@ -194,7 +219,8 @@ export const Playground = {
         />
       </div>
     );
-  }
+  },
+  parameters: { docs: { source: { transform: (_code, ctx) => inputCode(ctx.args) } } },
 };
 
 const Stack = ({ children, w = 380 }) => (

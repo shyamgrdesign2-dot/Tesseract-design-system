@@ -12,6 +12,7 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 // surface="dark".
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'ghost', 'tonal', 'link'];
 const CTA_SHAPES = ['text', 'icon', 'split'];
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
 
 // Clean line plus (two crossing strokes) — matches the accordion-style line
 // icons, not the chunky TP_Icons "Plus" silhouette.
@@ -76,6 +77,8 @@ const meta = {
     subtitle:       { control: 'text', table: { category: 'Content' } },
     subtitleSize:   { control: 'inline-radio', options: ['sm', 'md'], description: '13px / 16px', table: { category: 'Content' } },
     showBackButton: { control: 'boolean', name: 'with back button', table: { category: 'Content' } },
+    backIcon:        { control: 'text', tpIcon: true, name: 'back icon', table: { category: 'Content' } },
+    backIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'back icon style', table: { category: 'Content' } },
 
     // ── Appearance ──  (pattern opacity is fixed at 100%, no control)
     size:         { control: 'select', options: ['sm', 'md', 'lg'], description: 'height 80 / 120 / 160', table: { category: 'Appearance' } },
@@ -119,6 +122,8 @@ const meta = {
     subtitle: '32 scheduled today · 4 awaiting confirmation',
     subtitleSize: 'sm',
     showBackButton: false,
+    backIcon: 'arrow-left',
+    backIconVariant: 'linear',
 
     size: 'md',
     bottomRadius: 24,
@@ -168,10 +173,22 @@ function renderActions(a) {
   return <>{ctas}</>;
 }
 
+// Accurate, copy-paste snippet for the back button (mirrors Badge's "Show code").
+const heroBackCode = (a) => {
+  const lines = [`  title="${a.title}"`];
+  if (a.showBackButton) {
+    lines.push('  showBackButton');
+    if (a.backIcon && a.backIcon !== 'arrow-left') lines.push(`  backIcon="${a.backIcon}"`);
+    if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
+  }
+  return `<HeroBanner\n${lines.join('\n')}\n  /* …size, subtitle, actions… */\n/>`;
+};
+
 export const Playground = {
   args: {
     cta1IconName: "calendar-2"
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => heroBackCode(ctx.args) } } },
   render:(args) => (
     <HeroBanner
       size={args.size}
@@ -181,6 +198,8 @@ export const Playground = {
       subtitle={args.showSubtitle ? args.subtitle : undefined}
       subtitleSize={args.subtitleSize}
       showBackButton={args.showBackButton}
+      backIcon={args.backIcon}
+      backIconVariant={args.backIconVariant}
       pattern={args.pattern}
       actions={renderActions(args)}
     />

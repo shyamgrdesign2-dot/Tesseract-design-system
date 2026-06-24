@@ -1,6 +1,12 @@
 import React from 'react';
 import { DatePicker } from './DateRangePicker';
-import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
+
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Resolve the trigger icon in the chosen name + style (variant) + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
 
 const meta = {
   title: 'Molecules/DatePicker',
@@ -23,18 +29,20 @@ const meta = {
     required: { control: 'boolean', table: { category: 'Field' } },
     disabled: { control: 'boolean', table: { category: 'Field' } },
     placeholder: { control: 'text', table: { category: 'Field' } },
-    iconName: { control: 'text', tpIcon: true, name: 'trigger icon', table: { category: 'Content' } },
+    iconName: { control: 'text', tpIcon: true, name: 'trigger icon', description: 'CDN icon name for the trigger (blank = default calendar/clock)', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to the trigger icon', table: { category: 'Icons' } },
+    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
     value: { control: false },
     onChange: { control: false },
   },
-  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '' },
+  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '', iconVariant: 'linear', iconFamily: '' },
 };
 
 export default meta;
 
 /** Playground — switch `mode` and every field option in Controls. */
 export const Playground = {
-  render: ({ iconName, ...args }) => {
+  render: ({ iconName, iconVariant, iconFamily, ...args }) => {
     const [value, setValue] = React.useState(null);
     return (
       <div style={{ width: 320 }}>
@@ -42,7 +50,7 @@ export const Playground = {
           {...args}
           value={value}
           onChange={(r) => setValue(r.date ?? r.range ?? r)}
-          icon={iconName ? <TPLibraryIcon name={iconName} size={16} /> : undefined}
+          icon={glyphFor(iconName, 16, iconVariant, iconFamily)}
         />
       </div>
     );

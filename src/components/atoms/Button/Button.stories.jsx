@@ -14,12 +14,21 @@
 
 import { Button } from './Button';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
 const VARIANTS = ['solid', 'outline', 'ghost', 'tonal', 'link'];
 const THEMES   = ['primary', 'neutral', 'error', 'success', 'warning'];
 const SIZES    = ['sm', 'md', 'lg'];
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Button maps size → icon px the same way (see ICON_FOR below); reuse that sizing.
+const ICON_FOR = (size) => (size === 'sm' ? 16 : size === 'lg' ? 20 : 18);
+
+// Resolve an icon node for a slot, sized to the button, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={ICON_FOR(size)} /> : undefined;
 
 const Row = ({ children, gap = 12 }) => (
   <div style={{ display: 'flex', gap, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -77,12 +86,12 @@ const meta = {
       description: 'Demo only — which Button shape to render',
       table: { category: 'Shape (demo)' },
     },
-    // Which side(s) carry an icon on the text shape; the glyphs come from the
-    // two TP-library pickers below.
-    icons:         { control: 'inline-radio', options: ['none', 'left', 'right', 'both'], name: 'icons (side)', description: 'Leading / trailing / both icon on the text shape', table: { category: 'Icons' } },
-    leftIconName:  { control: 'text', tpIcon: true, name: 'left icon',  description: 'Tesseract icon for the left side', table: { category: 'Icons' } },
-    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', description: 'Tesseract icon for the right side', table: { category: 'Icons' } },
-    iconName:      { control: 'text', tpIcon: true, name: 'icon (icon-only / split)', table: { category: 'Icons' } },
+    // Icon controls — name a CDN icon per slot; the text shape uses left + right,
+    // the icon-only / split shapes use the left slot as their single glyph.
+    leftIcon:    { control: 'text', tpIcon: true, name: 'left icon',  description: 'CDN icon name for the leading slot (also the icon-only / split glyph). Blank = none', table: { category: 'Icons' } },
+    rightIcon:   { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (text shape only). Blank = none', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
+    iconFamily:  { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
   },
   args: {
     children: 'Button',
@@ -93,11 +102,11 @@ const meta = {
     radius:    10,
     loading:  false,
     disabled: false,
-    shape:     'text',
-    icons:         'left',
-    leftIconName:  'plus',
-    rightIconName: 'arrow-right-02',
-    iconName:      'plus',
+    shape:       'text',
+    leftIcon:    'add',
+    rightIcon:   '',
+    iconVariant: 'linear',
+    iconFamily:  '',
   },
 };
 
@@ -105,26 +114,51 @@ export default meta;
 
 // ─── 1. Playground ─────────────────────────────────────────────────────────────
 
-const ICON_FOR = (size) => (size === 'sm' ? 16 : size === 'lg' ? 20 : 18);
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} />`;
+
+const buildCode = ({ shape = 'text', variant = 'solid', theme = 'primary', size = 'md', surface = 'light', radius, loading, disabled, children = '', leftIcon, rightIcon, iconVariant, iconFamily }) => {
+  const lines = [`  variant="${variant}"`, `  theme="${theme}"`, `  size="${size}"`];
+  if (surface && surface !== 'light') lines.push(`  surface="${surface}"`);
+  if (radius != null) lines.push(`  style={{ '--tesseract-btn-radius': '${radius}px' }}`);
+  if (loading) lines.push('  loading');
+  if (disabled) lines.push('  disabled');
+
+  if (shape === 'icon-only') {
+    const glyph = leftIcon || 'add';
+    lines.push(`  aria-label="${children || 'Action'}"`);
+    lines.push(`  icon={${iconJsx(glyph, iconVariant, iconFamily)}}`);
+    return `<Button\n${lines.join('\n')}\n/>`;
+  }
+
+  if (shape === 'split') {
+    if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily)}}`);
+    lines.push('  menu={menu}');
+    return `<Button\n${lines.join('\n')}\n>\n  ${children}\n</Button>`;
+  }
+
+  // text
+  if (leftIcon)  lines.push(`  leftIcon={${iconJsx(leftIcon, iconVariant, iconFamily)}}`);
+  if (rightIcon) lines.push(`  rightIcon={${iconJsx(rightIcon, iconVariant, iconFamily)}}`);
+  return `<Button\n${lines.join('\n')}\n>\n  ${children}\n</Button>`;
+};
 
 export const Playground = {
   name: '🎛 Playground',
   // For surface="dark", switch the canvas background via the Storybook
   // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
-  render: ({ shape, icons, leftIconName, rightIconName, iconName, radius, children, ...args }) => {
-    const px = ICON_FOR(args.size);
+  render: ({ shape, leftIcon, rightIcon, iconVariant, iconFamily, radius, children, ...args }) => {
     const style = { '--tesseract-btn-radius': `${radius}px` };
-    const lib = (name) => (name ? <TPLibraryIcon name={name} size={px} /> : undefined);
-    const showLeft  = icons === 'left'  || icons === 'both';
-    const showRight = icons === 'right' || icons === 'both';
+    const glyph = (name) => glyphFor(name, args.size, iconVariant, iconFamily);
 
     if (shape === 'icon-only') {
-      return <Button {...args} style={style} aria-label={children || 'Action'} icon={lib(iconName) || <TPLibraryIcon name="plus" size={px} />} />;
+      return <Button {...args} style={style} aria-label={children || 'Action'} icon={glyph(leftIcon) || glyphFor('add', args.size, iconVariant, iconFamily)} />;
     }
 
     if (shape === 'split') {
       return (
-        <Button {...args} style={style} icon={lib(iconName)} menu={DEMO_MENU}>
+        <Button {...args} style={style} icon={glyph(leftIcon)} menu={DEMO_MENU}>
           {children}
         </Button>
       );
@@ -132,11 +166,12 @@ export const Playground = {
 
     // text
     return (
-      <Button {...args} style={style} leftIcon={showLeft ? lib(leftIconName) : undefined} rightIcon={showRight ? lib(rightIconName) : undefined}>
+      <Button {...args} style={style} leftIcon={glyph(leftIcon)} rightIcon={glyph(rightIcon)}>
         {children}
       </Button>
     );
-  }
+  },
+  parameters: { docs: { source: { transform: (_code, ctx) => buildCode(ctx.args) } } },
 };
 
 // ─── 2. Variants ────────────────────────────────────────────────────────────────

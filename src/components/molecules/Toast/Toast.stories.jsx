@@ -1,7 +1,13 @@
 import React from 'react';
 import { Toast } from './Toast';
 import { Button } from '@/src/components/atoms';
-import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
+
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Resolve the override-icon node, sized to the toast (42 two-line / 24 one-line).
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
 
 const meta = {
   title: 'Molecules/Toast',
@@ -13,8 +19,10 @@ const meta = {
     withSubtext: { control: 'boolean', name: 'with subtext', table: { category: 'Content' } },
     subtext:     { control: 'text', table: { category: 'Content' } },
     showIcon:    { control: 'boolean', name: 'with icon', table: { category: 'Parts' } },
-    iconName:    { control: 'text', tpIcon: true, name: 'icon (override)', description: 'Pick a Tesseract icon to override the status icon', table: { category: 'Parts' } },
     dismissible: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'Parts' } },
+    iconName:    { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name to override the status icon (blank = none)', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the override icon', table: { category: 'Icons' } },
+    iconFamily:  { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
     // Nested CTA — toggle it on/off, then choose its Button variant + label.
     withCTA:     { control: 'boolean', name: 'with CTA', table: { category: 'Action' } },
     action:      { control: 'select', options: ['solid', 'outline', 'ghost', 'tonal', 'link'], name: 'CTA variant', table: { category: 'Action' } },
@@ -28,8 +36,10 @@ const meta = {
     withSubtext: true,
     subtext: 'Your TatvaPractice Enterprise license expires on 15 June 2026.',
     showIcon: true,
-    iconName: '',
     dismissible: true,
+    iconName: '',
+    iconVariant: 'linear',
+    iconFamily: '',
     withCTA: true,
     action: 'solid',
     actionLabel: 'Renew',
@@ -48,14 +58,28 @@ const Stack = ({ children }) => (
 const renderAction = (on, variant, label) =>
   on ? <Button surface="dark" variant={variant} size="sm">{label || 'Action'}</Button> : undefined;
 
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family, size) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
+const toastCode = ({ status = 'info', title = '', withSubtext, subtext = '', showIcon, iconName, iconVariant, iconFamily, dismissible, withCTA, action, actionLabel }) => {
+  const lines = [`  status="${status}"`, `  title="${title}"`];
+  if (!showIcon) lines.push('  showIcon={false}');
+  if (iconName) lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, withSubtext ? 42 : 24)}}`);
+  if (dismissible) lines.push('  dismissible');
+  if (withCTA) lines.push(`  action={<Button surface="dark" variant="${action}" size="sm">${actionLabel || 'Action'}</Button>}`);
+  if (withSubtext && subtext) return `<Toast\n${lines.join('\n')}\n>\n  ${subtext}\n</Toast>`;
+  return `<Toast\n${lines.join('\n')}\n/>`;
+};
+
 export const Playground = {
-  render: ({ status, title, withSubtext, subtext, showIcon, iconName, dismissible, withCTA, action, actionLabel }) => (
+  render: ({ status, title, withSubtext, subtext, showIcon, iconName, iconVariant, iconFamily, dismissible, withCTA, action, actionLabel }) => (
     <div style={{ width: '100%' }}>
       <Toast
         status={status}
         title={title}
         showIcon={showIcon}
-        icon={iconName ? <TPLibraryIcon name={iconName} size={withSubtext ? 42 : 24} /> : undefined}
+        icon={glyphFor(iconName, withSubtext ? 42 : 24, iconVariant, iconFamily)}
         dismissible={dismissible}
         action={renderAction(withCTA, action, actionLabel)}
       >
@@ -63,6 +87,7 @@ export const Playground = {
       </Toast>
     </div>
   ),
+  parameters: { docs: { source: { transform: (_code, ctx) => toastCode(ctx.args) } } },
 };
 
 /** Width grows to content, caps at 60%. Long text follows the line rules:

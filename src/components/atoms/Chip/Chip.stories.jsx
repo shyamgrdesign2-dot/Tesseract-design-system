@@ -1,11 +1,15 @@
 import { Chip } from './index.js';
-import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
 const COLORS = ['default', 'primary', 'success', 'warning', 'error'];
 const VARIANTS = ['solid', 'soft', 'outline'];
-const ICON_SIDES = ['none', 'left', 'right', 'both'];
 const SIZES = ['sm', 'md', 'lg'];
 const ICON_PX = { sm: 12, md: 14, lg: 16 };
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Resolve an icon node for a slot, sized to the chip, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={ICON_PX[size] || 14} /> : undefined;
 
 const meta = {
   title: 'Atoms/Chip',
@@ -19,9 +23,10 @@ const meta = {
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
-    iconSide: { control: 'inline-radio', options: ICON_SIDES, name: 'icon side', table: { category: 'Icons' } },
-    leftIconName: { control: 'text', tpIcon: true, name: 'left icon', table: { category: 'Icons' } },
-    rightIconName: { control: 'text', tpIcon: true, name: 'right icon', table: { category: 'Icons' } },
+    leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
+    rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
+    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
   },
   args: {
     label: 'Chip',
@@ -31,9 +36,10 @@ const meta = {
     disabled: false,
     removable: false,
     removePosition: 'right',
-    iconSide: 'left',
-    leftIconName: 'star-1',
-    rightIconName: 'arrow-down-1',
+    leftIcon: 'star-1',
+    rightIcon: '',
+    iconVariant: 'linear',
+    iconFamily: '',
   },
 };
 
@@ -45,23 +51,30 @@ const Row = ({ children }) => (
   </div>
 );
 
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family, size) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
+const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md', disabled, removable, removePosition, leftIcon, rightIcon, iconVariant, iconFamily }) => {
+  const px = ICON_PX[size] || 14;
+  const lines = [`  label="${label}"`, `  color="${color}"`, `  variant="${variant}"`, `  size="${size}"`];
+  if (disabled) lines.push('  disabled');
+  if (removable) lines.push(`  onDelete={() => {}}${removePosition === 'left' ? '\n  removePosition="left"' : ''}`);
+  if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily, px)}}`);
+  if (rightIcon) lines.push(`  rightIcon={${iconJsx(rightIcon, iconVariant, iconFamily, px)}}`);
+  return `<Chip\n${lines.join('\n')}\n/>`;
+};
+
 export const Playground = {
-  args: {
-    leftIconName: "add-protection"
-  },
-  render:({ leftIconName, rightIconName, removable, iconSide, ...args }) => {
-    const px = ICON_PX[args.size] || 14;
-    const showLeft = iconSide === 'left' || iconSide === 'both';
-    const showRight = iconSide === 'right' || iconSide === 'both';
-    return (
-      <Chip
-        {...args}
-        icon={showLeft && leftIconName ? <TPLibraryIcon name={leftIconName} size={px} /> : undefined}
-        rightIcon={showRight && rightIconName ? <TPLibraryIcon name={rightIconName} size={px} /> : undefined}
-        onDelete={removable ? () => {} : undefined}
-      />
-    );
-  }
+  render: ({ leftIcon, rightIcon, removable, iconVariant, iconFamily, ...args }) => (
+    <Chip
+      {...args}
+      icon={glyphFor(leftIcon, args.size, iconVariant, iconFamily)}
+      rightIcon={glyphFor(rightIcon, args.size, iconVariant, iconFamily)}
+      onDelete={removable ? () => {} : undefined}
+    />
+  ),
+  parameters: { docs: { source: { transform: (_code, ctx) => chipCode(ctx.args) } } },
 };
 
 export const Sizes = {

@@ -159,8 +159,28 @@
         {
           "name": "iconName",
           "control": "text",
-          "description": "Tesseract icon (content = icon)",
+          "description": "CDN icon name (content = icon; blank = none)",
           "default": "'profile'"
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style for the icon slot",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -223,7 +243,10 @@
           "name": "icon"
         },
         {
-          "name": "rightIcon"
+          "name": "rightIcon",
+          "default": "''",
+          "control": "text",
+          "description": "CDN icon name for the trailing slot (blank = none)"
         },
         {
           "name": "sticky",
@@ -248,21 +271,30 @@
           "name": "style"
         },
         {
-          "name": "iconName",
+          "name": "leftIcon",
           "control": "text",
-          "description": "Tesseract icon glyph",
+          "description": "CDN icon name for the leading slot (blank = none)",
           "default": "'verify'"
         },
         {
-          "name": "iconPosition",
+          "name": "iconVariant",
           "allowedValues": [
-            "none",
-            "left",
-            "right",
-            "both"
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
           ],
-          "control": "inline-radio",
-          "default": "'left'"
+          "control": "select",
+          "description": "Icon style applied to both slots",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -347,10 +379,16 @@
           "control": "boolean"
         },
         {
-          "name": "leftIcon"
+          "name": "leftIcon",
+          "default": "'add'",
+          "control": "text",
+          "description": "CDN icon name for the leading slot (also the icon-only / split glyph). Blank = none"
         },
         {
-          "name": "rightIcon"
+          "name": "rightIcon",
+          "default": "''",
+          "control": "text",
+          "description": "CDN icon name for the trailing slot (text shape only). Blank = none"
         },
         {
           "name": "icon"
@@ -399,33 +437,24 @@
           "default": "'text'"
         },
         {
-          "name": "icons",
+          "name": "iconVariant",
           "allowedValues": [
-            "none",
-            "left",
-            "right",
-            "both"
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
           ],
-          "control": "inline-radio",
-          "description": "Leading / trailing / both icon on the text shape",
-          "default": "'left'"
+          "control": "select",
+          "description": "Icon style applied to both slots",
+          "default": "'linear'"
         },
         {
-          "name": "leftIconName",
+          "name": "iconFamily",
           "control": "text",
-          "description": "Tesseract icon for the left side",
-          "default": "'plus'"
-        },
-        {
-          "name": "rightIconName",
-          "control": "text",
-          "description": "Tesseract icon for the right side",
-          "default": "'arrow-right-02'"
-        },
-        {
-          "name": "iconName",
-          "control": "text",
-          "default": "'plus'"
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -586,7 +615,10 @@
           "name": "icon"
         },
         {
-          "name": "rightIcon"
+          "name": "rightIcon",
+          "default": "''",
+          "control": "text",
+          "description": "CDN icon name for the trailing slot (blank = none)"
         },
         {
           "name": "onDelete"
@@ -623,25 +655,30 @@
           "default": "false"
         },
         {
-          "name": "iconSide",
-          "allowedValues": [
-            "none",
-            "left",
-            "right",
-            "both"
-          ],
-          "control": "inline-radio",
-          "default": "'left'"
-        },
-        {
-          "name": "leftIconName",
+          "name": "leftIcon",
           "control": "text",
+          "description": "CDN icon name for the leading slot (blank = none)",
           "default": "'star-1'"
         },
         {
-          "name": "rightIconName",
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style applied to both slots",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
           "control": "text",
-          "default": "'arrow-down-1'"
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -782,11 +819,15 @@
         },
         {
           "name": "leftIcon",
-          "storyHidden": true
+          "default": "'sms'",
+          "control": "text",
+          "description": "CDN icon name for the leading slot (blank = none)"
         },
         {
           "name": "rightIcon",
-          "storyHidden": true
+          "default": "''",
+          "control": "text",
+          "description": "CDN icon name for the trailing slot (blank = none)"
         },
         {
           "name": "leftAddon",
@@ -923,25 +964,24 @@
           "default": "false"
         },
         {
-          "name": "iconSide",
+          "name": "iconVariant",
           "allowedValues": [
-            "none",
-            "left",
-            "right",
-            "both"
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
           ],
-          "control": "inline-radio",
-          "default": "'left'"
+          "control": "select",
+          "description": "Icon style applied to both slots",
+          "default": "'linear'"
         },
         {
-          "name": "leftIconName",
+          "name": "iconFamily",
           "control": "text",
-          "default": "'sms'"
-        },
-        {
-          "name": "rightIconName",
-          "control": "text",
-          "default": "'eye-slash'"
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -2281,6 +2321,27 @@
         {
           "name": "iconName",
           "control": "text",
+          "description": "CDN icon name for the trigger (blank = default calendar/clock)",
+          "default": "''"
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style applied to the trigger icon",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
           "default": "''"
         }
       ],
@@ -2457,6 +2518,20 @@
           "name": "withIcons",
           "control": "boolean",
           "default": "true"
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style applied to the per-item icons and footer CTA icons",
+          "default": "'linear'"
         }
       ],
       "stories": [
@@ -2548,6 +2623,24 @@
         },
         {
           "name": "onBack"
+        },
+        {
+          "name": "backIcon",
+          "default": "\"arrow-left-02\"",
+          "control": "text"
+        },
+        {
+          "name": "backIconVariant",
+          "default": "\"linear\"",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select"
         },
         {
           "name": "logo"
@@ -2699,6 +2792,24 @@
           "name": "showBackButton",
           "default": "false",
           "control": "boolean"
+        },
+        {
+          "name": "backIcon",
+          "default": "\"arrow-left\"",
+          "control": "text"
+        },
+        {
+          "name": "backIconVariant",
+          "default": "\"linear\"",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select"
         },
         {
           "name": "onBack"
@@ -3426,7 +3537,27 @@
         {
           "name": "iconName",
           "control": "text",
-          "description": "Pick a Tesseract icon to override the status icon",
+          "description": "CDN icon name to override the status icon (blank = none)",
+          "default": "''"
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style for the override icon",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
           "default": "''"
         },
         {
@@ -3578,8 +3709,28 @@
         {
           "name": "iconName",
           "control": "text",
-          "description": "Leading Tesseract icon (needs ",
+          "description": "Leading CDN icon name (needs ",
           "default": "'information'"
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style for the leading icon",
+          "default": "'linear'"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [

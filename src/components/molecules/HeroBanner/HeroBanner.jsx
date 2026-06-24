@@ -34,6 +34,8 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   titleSize     "sm" (18px) | "md" (24px)    default "md"
  *   subtitleSize  "sm" | "md"                  default "sm"
  *   showBackButton boolean                     back button (centered on the heading)
+ *   backIcon      string                       back glyph name; default "arrow-left"
+ *   backIconVariant "linear" | …               back glyph style; default "linear"
  *   actions       ReactNode                    CTA slot (dark-surface Button: text / icon / split)
  *   pattern       boolean                      default true — animated lattice accent
  *   className     string
@@ -46,6 +48,8 @@ export function HeroBanner({
   titleSize = "md",
   subtitleSize = "sm",
   showBackButton = false,
+  backIcon = "arrow-left",
+  backIconVariant = "linear",
   onBack,
   actions,
   pattern = true,
@@ -117,7 +121,7 @@ export function HeroBanner({
                 size={ts === "sm" ? "sm" : "md"}
                 aria-label="Go back"
                 onClick={onBack}
-                icon={<TPLibraryIcon name="arrow-left" size={BACK_ICON[ts]} color="currentColor" />}
+                icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} size={BACK_ICON[ts]} color="currentColor" />}
               />
             )}
 

@@ -1,8 +1,14 @@
 import React from 'react';
 import { Dropdown } from './Dropdown';
-import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
-const ic = (name) => <TPLibraryIcon name={name} size={16} />;
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Resolve an icon node in the chosen name + style (variant) + family.
+const glyphFor = (name, size = 16, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
+
+const ic = (name, variant = 'linear') => glyphFor(name, 16, variant);
 
 // Department options — title + subtitle + left icon + keyboard shortcut.
 const DEPTS = [
@@ -51,7 +57,7 @@ function actionFromArgs(a, role, onClick) {
   if (!variant || variant === 'none') return undefined;
   const shape = a[`${role}Shape`] || 'text';
   const name = (a[`${role}IconName`] || '').trim();
-  const glyph = name ? <TPLibraryIcon name={name} size={16} /> : undefined;
+  const glyph = glyphFor(name, 16, a.iconVariant);
   const label = a[`${role}Label`] || role;
   if (shape === 'icon') return { icon: glyph, ariaLabel: label, variant, onClick };
   return { label, icon: a[`${role}WithIcon`] ? glyph : undefined, variant, onClick };
@@ -77,6 +83,7 @@ const meta = {
     width: { control: 'inline-radio', options: ['trigger', 'auto', 320], table: { category: 'Layout' } },
     twoLine: { control: 'boolean', name: 'title + subtitle', table: { category: 'Content' } },
     withIcons: { control: 'boolean', name: 'item icons', table: { category: 'Content' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to the per-item icons and footer CTA icons', table: { category: 'Icons' } },
     label: { control: 'text', table: { category: 'Content' } },
     placeholder: { control: 'text', table: { category: 'Content' } },
     disabled: { control: 'boolean', table: { category: 'State' } },
@@ -98,6 +105,7 @@ const meta = {
     width: 'trigger',
     twoLine: true,
     withIcons: true,
+    iconVariant: 'linear',
     label: 'Department',
     placeholder: 'Select department…',
     disabled: false,
@@ -110,13 +118,14 @@ const Frame = ({ w = 300, children }) => <div style={{ width: w }}>{children}</d
 
 // ── Playground — every capability wired to Controls ───────────────────────────
 export const Playground = {
-  render: ({ mode, twoLine, withIcons, withActions, ...args }) => {
+  render: ({ mode, twoLine, withIcons, withActions, iconVariant, ...args }) => {
     const [val, setVal] = React.useState(mode === 'multi' ? [] : '');
     const value = mode === 'multi' ? (Array.isArray(val) ? val : []) : (Array.isArray(val) ? '' : val);
     const options = DEPTS.map((o) => ({
       ...o,
       subtitle: twoLine ? o.subtitle : undefined,
-      icon: withIcons ? o.icon : undefined,
+      // Re-resolve each item's icon in the chosen style so the picker previews variants.
+      icon: withIcons ? ic('user', iconVariant) : undefined,
     }));
     return (
       <Frame>
@@ -126,9 +135,9 @@ export const Playground = {
           options={options}
           value={value}
           onChange={setVal}
-          primaryAction={withActions ? actionFromArgs(args, 'primary', () => {}) : undefined}
-          secondaryAction={withActions ? actionFromArgs(args, 'secondary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
-          tertiaryAction={withActions ? actionFromArgs(args, 'tertiary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
+          primaryAction={withActions ? actionFromArgs({ ...args, iconVariant }, 'primary', () => {}) : undefined}
+          secondaryAction={withActions ? actionFromArgs({ ...args, iconVariant }, 'secondary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
+          tertiaryAction={withActions ? actionFromArgs({ ...args, iconVariant }, 'tertiary', () => setVal(mode === 'multi' ? [] : '')) : undefined}
         />
       </Frame>
     );

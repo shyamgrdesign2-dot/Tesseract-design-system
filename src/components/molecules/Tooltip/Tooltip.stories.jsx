@@ -1,6 +1,14 @@
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from './Tooltip';
 import { Button } from '@/src/components/atoms/Button';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
+
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+const ICON_SIZE = 16;
+
+// Resolve the leading-icon node for the tooltip, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
 
 const meta = {
   title: 'Molecules/Tooltip',
@@ -12,8 +20,6 @@ const meta = {
   },
   argTypes: {
     content:       { control: 'text', table: { category: 'Content' } },
-    withIcon:      { control: 'boolean', name: 'with icon', table: { category: 'Content' } },
-    iconName:      { control: 'text', tpIcon: true, name: 'icon', description: 'Leading Tesseract icon (needs "with icon" on)', table: { category: 'Content' } },
     trigger:       { control: 'inline-radio', options: ['hover', 'click'], table: { category: 'Behaviour' } },
     dismissible:   { control: 'boolean', name: 'with dismiss (×)', table: { category: 'Behaviour' } },
     side:          { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'], table: { category: 'Placement' } },
@@ -25,12 +31,14 @@ const meta = {
     delayDuration: { control: { type: 'range', min: 0, max: 800, step: 50 }, table: { category: 'Behaviour' } },
     disabled:      { control: 'boolean', table: { category: 'Behaviour' } },
     whenTruncated: { control: 'boolean', description: 'Hover only — show when trigger text overflows', table: { category: 'Behaviour' } },
+    withIcon:      { control: 'boolean', name: 'with icon', table: { category: 'Icons' } },
+    iconName:      { control: 'text', tpIcon: true, name: 'icon', description: 'Leading CDN icon name (needs "with icon" on; blank = none)', table: { category: 'Icons' } },
+    iconVariant:   { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the leading icon', table: { category: 'Icons' } },
+    iconFamily:    { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
     children:      { table: { disable: true } },
   },
   args: {
     content: 'Save changes',
-    withIcon: false,
-    iconName: 'information',
     trigger: 'hover',
     dismissible: false,
     side: 'top',
@@ -42,17 +50,38 @@ const meta = {
     delayDuration: 200,
     disabled: false,
     whenTruncated: false,
+    withIcon: false,
+    iconName: 'information',
+    iconVariant: 'linear',
+    iconFamily: '',
   },
 };
 
 export default meta;
 
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family, size) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
+const tooltipCode = ({ content = '', trigger, dismissible, side, align, variant, arrow, withIcon, iconName, iconVariant, iconFamily }) => {
+  const lines = [`  content="${content}"`];
+  if (trigger && trigger !== 'hover') lines.push(`  trigger="${trigger}"`);
+  if (dismissible) lines.push('  dismissible');
+  if (side && side !== 'top') lines.push(`  side="${side}"`);
+  if (align && align !== 'center') lines.push(`  align="${align}"`);
+  if (variant && variant !== 'dark') lines.push(`  variant="${variant}"`);
+  if (!arrow) lines.push('  arrow={false}');
+  if (withIcon && iconName) lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, ICON_SIZE)}}`);
+  return `<Tooltip\n${lines.join('\n')}\n>\n  <Button variant="outline">${trigger === 'click' ? 'Click me' : 'Hover me'}</Button>\n</Tooltip>`;
+};
+
 export const Playground = {
-  render: ({ withIcon, iconName, ...args }) => (
-    <Tooltip {...args} icon={withIcon && iconName ? <TPLibraryIcon name={iconName} size={16} /> : undefined}>
+  render: ({ withIcon, iconName, iconVariant, iconFamily, ...args }) => (
+    <Tooltip {...args} icon={withIcon ? glyphFor(iconName, ICON_SIZE, iconVariant, iconFamily) : undefined}>
       <Button variant="outline">{args.trigger === 'click' ? 'Click me' : 'Hover me'}</Button>
     </Tooltip>
   ),
+  parameters: { docs: { source: { transform: (_code, ctx) => tooltipCode(ctx.args) } } },
 };
 
 /** Hover vs click trigger. The click one stays open until you click out / dismiss. */

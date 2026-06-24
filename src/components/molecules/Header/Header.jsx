@@ -31,8 +31,9 @@
  *   { type: "node", node }    — custom
  *     icon — Tesseract library icon NAME (string) or a ReactNode.
  *
- * Props: back, onBack, logo, user, title, subtitle, leading, actions,
- *        height (default 62), bordered (default true), className.
+ * Props: back, onBack, backIcon (default "arrow-left-02"),
+ *        backIconVariant (default "linear"), logo, user, title, subtitle,
+ *        leading, actions, height (default 62), bordered (default true), className.
  */
 
 import * as React from "react";
@@ -48,8 +49,10 @@ import styles from "./Header.module.scss";
 const icon = (g, size = 20) => (typeof g === "string" ? <TPLibraryIcon name={g} size={size} /> : g);
 
 // Chevrons come from the Iconsax library (arrow-*-02), like every other icon.
-function Chevron({ dir = "down", size = 18 }) {
-  return <TPLibraryIcon name={dir === "left" ? "arrow-left-02" : "arrow-down-02"} size={size} />;
+// The back/left glyph can be overridden (name + style) by the Header props.
+function Chevron({ dir = "down", size = 18, name, variant = "linear" }) {
+  const glyph = name ?? (dir === "left" ? "arrow-left-02" : "arrow-down-02");
+  return <TPLibraryIcon name={glyph} variant={variant} size={size} />;
 }
 
 function TutorialButton({ onClick }) {
@@ -161,13 +164,13 @@ function Action({ item }) {
   }
 }
 
-export function Header({ back, onBack, logo, user, title, subtitle, leading, actions = [], height = 62, bordered = true, className }) {
+export function Header({ back, onBack, backIcon = "arrow-left-02", backIconVariant = "linear", logo, user, title, subtitle, leading, actions = [], height = 62, bordered = true, className }) {
   return (
     <header className={cn(styles.header, className)} data-bordered={bordered || undefined} style={{ height }}>
       <div className={styles.left}>
         {back && (
           <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
-            <Chevron dir="left" size={24} />
+            <Chevron dir="left" size={24} name={backIcon} variant={backIconVariant} />
           </button>
         )}
         {logo != null && <div className={styles.logo}>{logo}</div>}

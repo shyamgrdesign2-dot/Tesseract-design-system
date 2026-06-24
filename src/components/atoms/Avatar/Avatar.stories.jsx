@@ -1,4 +1,11 @@
 import { Avatar } from './Avatar';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
+
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Resolve an icon node for the avatar's single icon slot, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
 
 const meta = {
   title: 'Atoms/Avatar',
@@ -11,24 +18,45 @@ const meta = {
     content: { control: 'inline-radio', options: ['image', 'initials', 'icon'], description: 'What the avatar shows' },
     name: { control: 'text', description: 'Initials source + alt text' },
     src: { control: 'text', description: 'Image URL (content = image)' },
-    iconName: { control: 'text', tpIcon: true, description: 'Tesseract icon (content = icon)' },
     size: { control: { type: 'range', min: 20, max: 96, step: 2 } },
     ring: { control: 'boolean', description: 'Brand gradient ring' },
+    iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name (content = icon; blank = none)', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the icon slot', table: { category: 'Icons' } },
+    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
   },
-  args: { content: 'image', name: 'Ramesh Kumar', src: 'https://i.pravatar.cc/100?img=12', iconName: 'profile', size: 48, ring: true },
+  args: { content: 'image', name: 'Ramesh Kumar', src: 'https://i.pravatar.cc/100?img=12', size: 48, ring: true, iconName: 'profile', iconVariant: 'linear', iconFamily: '' },
 };
 
 export default meta;
 
 // Map the `content` control to the matching Avatar prop (icon → image → initials).
-const fromArgs = ({ content, name, src, iconName, size, ring }) => ({
+// The icon fallback is half the avatar diameter, in the chosen style + family.
+const fromArgs = ({ content, name, src, size, ring, iconName, iconVariant, iconFamily }) => ({
   size, ring, name,
   src: content === 'image' ? src : undefined,
-  icon: content === 'icon' ? iconName : undefined,
+  icon: content === 'icon' ? glyphFor(iconName, Math.round(size * 0.5), iconVariant, iconFamily) : undefined,
 });
+
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family, size) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
+const avatarCode = ({ content, name = '', src = '', size = 48, ring, iconName, iconVariant, iconFamily }) => {
+  const lines = [`  size={${size}}`];
+  if (ring) lines.push('  ring');
+  if (content === 'image') {
+    lines.push(`  src="${src}"`, `  name="${name}"`);
+  } else if (content === 'icon' && iconName) {
+    lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, Math.round(size * 0.5))}}`);
+  } else {
+    lines.push(`  name="${name}"`);
+  }
+  return `<Avatar\n${lines.join('\n')}\n/>`;
+};
 
 export const Playground = {
   render: (args) => <Avatar {...fromArgs(args)} />,
+  parameters: { docs: { source: { transform: (_code, ctx) => avatarCode(ctx.args) } } },
 };
 
 const Row = ({ children }) => <div style={{ display: 'flex', gap: 'var(--tesseract-space-4)', alignItems: 'center', flexWrap: 'wrap' }}>{children}</div>;

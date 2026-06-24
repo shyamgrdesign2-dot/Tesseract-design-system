@@ -10,7 +10,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   // Never lint build output or vendored static assets.
-  globalIgnores(['dist', 'storybook-static', 'public/tp-icons']),
+  globalIgnores(['dist', 'mcp/dist', 'storybook-static', 'public/tp-icons']),
   {
     // This project is authored in JS/JSX (plus a few TS config files), so the
     // linter must cover all four extensions and parse JSX.

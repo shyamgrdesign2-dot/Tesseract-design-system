@@ -47,8 +47,15 @@ const FIELDS = ['name', 'mrn', 'appt', 'doctor', 'type', 'phone', 'notes', 'bloo
 const fieldVal = (r, f) => r[f];
 const sortAccessorFor = (f) => (f === 'appt' ? (r) => r.minutes : (r) => r[f]);
 
-// Library icon node (pickable in the Tesseract Icons panel; empty = none).
-const lib = (name, size = 16) => (name && String(name).trim() ? <TPLibraryIcon name={String(name).trim()} size={size} /> : undefined);
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Icon node in the chosen name + style (variant) + family (pickable in the
+// Tesseract Icons panel; empty name = none).
+const glyphFor = (name, size = 16, variant = 'linear', family) =>
+  name && String(name).trim() ? <TPIcon name={String(name).trim()} variant={variant} family={family || undefined} size={size} /> : undefined;
+
+// Library icon node — back-compat helper; defaults to the linear style.
+const lib = (name, size = 16, variant = 'linear') => glyphFor(name, size, variant);
 
 // Status pill (semantic Tesseract tokens).
 const STATUS_TONE = {
@@ -352,15 +359,16 @@ function TextLine({ text, icon, side, kind }) {
 function configCell(row, a) {
   if (a.kind === 'actions') return <Actions />;
 
+  const v = a.iconVariant || 'linear';
   const primary = a.kind === 'tag'
-    ? <CellTag label={fieldVal(row, a.field)} tone={a.tagTone} actionable={a.tagActionable} icon={a.tagIcon === 'left' ? lib(a.iconName, 14) : undefined} />
-    : <TextLine text={fieldVal(row, a.field)} icon={lib(a.iconName, 16)} side={a.primaryIcon} kind="primary" />;
+    ? <CellTag label={fieldVal(row, a.field)} tone={a.tagTone} actionable={a.tagActionable} icon={a.tagIcon === 'left' ? lib(a.iconName, 14, v) : undefined} />
+    : <TextLine text={fieldVal(row, a.field)} icon={lib(a.iconName, 16, v)} side={a.primaryIcon} kind="primary" />;
 
   let sub = null;
   if (a.withSub) {
     sub = a.subKind === 'tag'
       ? <CellTag label={fieldVal(row, a.subField)} tone={a.subTagTone} actionable={a.subTagActionable} />
-      : <TextLine text={fieldVal(row, a.subField)} icon={lib(a.subIconName, 12)} side={a.subIcon} kind="secondary" />;
+      : <TextLine text={fieldVal(row, a.subField)} icon={lib(a.subIconName, 12, v)} side={a.subIcon} kind="secondary" />;
   }
 
   return (
@@ -379,6 +387,7 @@ export const SingleColumnConfigurator = {
     field: 'name',
     primaryIcon: 'left',
     iconName: 'profile',
+    iconVariant: 'linear',
     tagTone: 'primary',
     tagActionable: false,
     tagIcon: 'none',
@@ -397,6 +406,7 @@ export const SingleColumnConfigurator = {
 
     primaryIcon:      { control: 'inline-radio', options: ['none', 'left', 'right'], name: 'text · icon side', table: { category: 'Text' } },
     iconName:         { control: 'text', tpIcon: true, name: 'text · icon', table: { category: 'Text' } },
+    iconVariant:      { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to every icon in this column', table: { category: 'Icons' } },
 
     tagTone:          { control: 'select', options: TONES, name: 'tag · tone', table: { category: 'Tag' } },
     tagActionable:    { control: 'boolean', name: 'tag · actionable (Chip)', table: { category: 'Tag' } },
@@ -488,6 +498,7 @@ const dtColDefaults = (n, o) => ({
 function buildDTColumn(n, a, isSticky) {
   const type = a[`c${n}Type`] || 'text';
   const field = a[`c${n}Field`] || 'name';
+  const v = a.iconVariant || 'linear';
   const base = {
     id: `dc_${n}`, header: a[`c${n}Name`] || `Column ${n}`,
     sortable: a[`c${n}Sortable`], sortAccessor: sortAccessorFor(field),
@@ -513,7 +524,7 @@ function buildDTColumn(n, a, isSticky) {
   if (type === 'tag') {
     const tone = a[`c${n}TagTone`] || 'auto';
     const actionable = a[`c${n}TagActionable`] || false;
-    const tagIcon = lib(a[`c${n}TagIcon`], 14);
+    const tagIcon = lib(a[`c${n}TagIcon`], 14, v);
     return { ...base, type: 'tag', minWidth: 130, tag: (r) => ({
       label: fieldVal(r, field),
       tone: tone === 'auto' ? (AUTO_TONE[fieldVal(r, field)] || 'neutral') : tone,
@@ -521,12 +532,12 @@ function buildDTColumn(n, a, isSticky) {
     })};
   }
   // text
-  const leftIcon = lib(a[`c${n}LeftIcon`], 16);
-  const rightIcon = lib(a[`c${n}RightIcon`], 14);
+  const leftIcon = lib(a[`c${n}LeftIcon`], 16, v);
+  const rightIcon = lib(a[`c${n}RightIcon`], 14, v);
   if (a[`c${n}WithSub`]) {
     const sub = a[`c${n}SubField`] || 'mrn';
     return { ...base, type: 'text', minWidth: 200, primary: (r) => fieldVal(r, field), secondary: (r) => fieldVal(r, sub),
-      leftIcon, rightIcon, subLeftIcon: lib(a[`c${n}SubLeftIcon`], 12), subRightIcon: lib(a[`c${n}SubRightIcon`], 12) };
+      leftIcon, rightIcon, subLeftIcon: lib(a[`c${n}SubLeftIcon`], 12, v), subRightIcon: lib(a[`c${n}SubRightIcon`], 12, v) };
   }
   return { ...base, type: 'text', minWidth: leftIcon ? 180 : 140, primary: (r) => fieldVal(r, field), leftIcon, rightIcon };
 }
@@ -538,6 +549,7 @@ export const ColumnConfigurator = {
   },
   args: {
     columnCount: 5,
+    iconVariant: 'linear',
     ...dtColDefaults(1,  { name: 'Patient',     type: 'text',    field: 'name',   sortable: true,  leftIcon: 'profile', withSub: true, subField: 'mrn', subLeftIcon: 'clipboard' }),
     ...dtColDefaults(2,  { name: 'Appointment', type: 'text',    field: 'appt',   sortable: true,  leftIcon: 'calendar-1' }),
     ...dtColDefaults(3,  { name: 'Type',        type: 'tag',     field: 'type',   sortable: false, tagTone: 'auto' }),
@@ -551,6 +563,7 @@ export const ColumnConfigurator = {
   },
   argTypes: {
     columnCount: { control: { type: 'range', min: 1, max: 10, step: 1 }, name: 'number of columns', table: { category: 'Table' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to every column icon (left/right, secondary, tag)', table: { category: 'Icons' } },
     ...dtColArgTypes(1), ...dtColArgTypes(2), ...dtColArgTypes(3), ...dtColArgTypes(4), ...dtColArgTypes(5),
     ...dtColArgTypes(6), ...dtColArgTypes(7), ...dtColArgTypes(8), ...dtColArgTypes(9), ...dtColArgTypes(10),
   },
