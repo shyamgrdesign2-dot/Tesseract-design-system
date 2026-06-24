@@ -168,9 +168,24 @@
         },
         {
           "name": "radius",
-          "default": "''",
-          "control": "text",
-          "description": "px number, or "
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "color",
@@ -336,9 +351,24 @@
         },
         {
           "name": "radius",
-          "default": "''",
-          "control": "text",
-          "description": "px number, or "
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "children",
@@ -469,9 +499,24 @@
         },
         {
           "name": "radius",
-          "default": "''",
-          "control": "text",
-          "description": "px number, or "
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "as"
@@ -815,9 +860,24 @@
         },
         {
           "name": "radius",
-          "default": "''",
-          "control": "text",
-          "description": "px number, or "
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "track"
@@ -1135,9 +1195,24 @@
         },
         {
           "name": "radius",
-          "default": "''",
-          "control": "text",
-          "description": "Field corner radius — a number (px), "
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "statusIcon",
@@ -1840,7 +1915,23 @@
         },
         {
           "name": "radius",
-          "control": "text"
+          "allowedValues": [
+            "default",
+            "sharp",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "20",
+            "24",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Restricted radius — a px step, or "
         },
         {
           "name": "count",
@@ -3558,15 +3649,18 @@
       "description": "Header — the single configurable top bar (home shell, RxPad, print, …). Composed from atoms: Button (every CTA), Avatar, Divider, Badge (dot), Logo. LEFT cluster (in order, all optional): back    boolean   — full-height 40px back button (onBack) logo    ReactNode — brand mark (use the Logo atom) user    { name, meta, avatar?, dropdown? } — patient / user details block title   ReactNode — leading title (+ optional `subtitle` for title + subtext) subtitle ReactNode leading ReactNode — fully custom left content (escape hatch) RIGHT cluster — `actions`: an ordered list (max 8) of typed items. Only `tutorial` and `avatar` are special; everything else is a CTA (the Button atom), and dividers are placed explicitly wherever you want them: { type: \"cta\", label?, icon?, variant?, theme?, onClick, menu?, badge?, ariaLabel? } label + icon → text CTA; icon only (no label) → icon button; menu → split button (the only Button shape with a dropdown side); badge:{color} → a notification dot on an icon CTA. { type: \"avatar\", src?, name?, ring?, onClick } { type: \"select\", options, value, onClick→onChange, icon?, searchable?, width? } — single-select dropdown that reads like a CTA (e.g. clinic switcher); auto-searchable past 5 options. Composes the Dropdown molecule. { type: \"tutorial\", onClick } { type: \"info\", label?, value, icon?, iconPosition?, radius? } — non-clickable violet data tag (ward number, doctor name, status); icon left (default) or right; radius defaults to CTA radius. { type: \"divider\" }       — vertical gradient Divider atom { type: \"node\", node }    — custom icon — Tesseract library icon NAME (string) or a ReactNode.",
       "props": [
         {
-          "name": "back"
+          "name": "back",
+          "control": "boolean",
+          "description": "Show the back button (a small, control-sized icon button)"
         },
         {
           "name": "onBack"
         },
         {
           "name": "backIcon",
-          "default": "\"arrow-left-02\"",
-          "control": "text"
+          "default": "\"arrow-left3\"",
+          "control": "text",
+          "description": "Back glyph name (default "
         },
         {
           "name": "backIconVariant",
@@ -3579,47 +3673,80 @@
             "twotone",
             "outline"
           ],
-          "control": "select"
+          "control": "select",
+          "description": "Back glyph style"
         },
         {
-          "name": "logo"
+          "name": "backIconCorner",
+          "default": "\"straight\"",
+          "allowedValues": [
+            "straight",
+            "rounded"
+          ],
+          "control": "inline-radio",
+          "description": "Back glyph corner variant (default "
         },
         {
-          "name": "user"
+          "name": "logo",
+          "description": "Brand mark (use the Logo atom)"
+        },
+        {
+          "name": "user",
+          "description": "{ name, meta?, avatar?, dropdown? } — patient/user block"
         },
         {
           "name": "title",
           "default": "'Welcome Dr. Sheela BR!'",
-          "control": "text"
+          "control": "text",
+          "description": "Leading title (string or node)"
         },
         {
           "name": "subtitle",
           "default": "'Your Appointments'",
-          "control": "text"
+          "control": "text",
+          "description": "Subtext under the title"
         },
         {
           "name": "leading",
           "default": "'logo'",
-          "allowedValues": [
-            "logo",
-            "title",
-            "user",
-            "none"
-          ],
-          "control": "inline-radio",
-          "description": "What fills the left slot — logo, title (+subtext), user/patient block, or nothing"
+          "description": "Custom left content (escape hatch)"
         },
         {
           "name": "actions",
-          "default": "[]"
+          "default": "[]",
+          "description": "Ordered list (max 8) of typed action items (cta · info · divider · select · tutorial · avatar · node)"
+        },
+        {
+          "name": "align",
+          "default": "\"left\"",
+          "allowedValues": [
+            "left",
+            "center"
+          ],
+          "control": "inline-radio",
+          "description": "left (default) or center-aligned title (MD3 center top app bar)"
+        },
+        {
+          "name": "search",
+          "description": "{ placeholder?, value?, onChange?, width? } — a first-class search field in the bar"
+        },
+        {
+          "name": "maxVisibleActions",
+          "default": "0",
+          "control": "number",
+          "description": "Actions past this count roll into a "
         },
         {
           "name": "height",
-          "default": "62"
+          "default": "62",
+          "control": "number",
+          "description": "Bar height in px (default 62)"
         },
         {
           "name": "bordered",
-          "default": "true"
+          "default": "true",
+          "control": "boolean",
+          "description": "Bottom hairline border (default true)"
         },
         {
           "name": "density",
@@ -3629,77 +3756,50 @@
             "compact"
           ],
           "control": "inline-radio",
-          "description": "Control height + padding — comfortable or compact (36px)"
+          "description": "Control height + padding (comfortable 42px / compact 36px)"
         },
         {
           "name": "sticky",
           "default": "false",
           "control": "boolean",
-          "description": "Pin the bar to the top as content scrolls"
+          "description": "Pin the bar to the top (position: sticky)"
         },
         {
           "name": "elevation",
           "default": "false",
-          "control": "boolean",
-          "description": "Add a drop shadow under the bar"
+          "allowedValues": [
+            "always",
+            "onScroll"
+          ],
+          "control": "inline-radio",
+          "description": "Drop shadow — false · always · onScroll (appears after scrolling)"
         },
         {
           "name": "trailing",
           "default": "false",
-          "control": "boolean",
-          "description": "Free-form node rendered after the actions list"
+          "description": "Free-form right content after the actions"
         },
         {
           "name": "background",
           "default": "''",
-          "control": "text"
+          "control": "text",
+          "description": "Surface override (token, default --tesseract-slate-0)"
         },
         {
-          "name": "borderColor"
+          "name": "borderColor",
+          "control": "text",
+          "description": "Bottom-border colour (token, default --tesseract-slate-100)"
         },
         {
           "name": "onUserClick"
         },
         {
-          "name": "tutorialIcon"
+          "name": "tutorialIcon",
+          "description": "Override the tutorial play glyph (icon name or node)"
         },
         {
-          "name": "className"
-        },
-        {
-          "name": "showBack",
-          "control": "boolean",
-          "default": "false"
-        },
-        {
-          "name": "userName",
-          "control": "text",
-          "default": "'Ramesh Kumar'"
-        },
-        {
-          "name": "userMeta",
-          "control": "text",
-          "default": "'Male | 76y'"
-        },
-        {
-          "name": "userDropdown",
-          "control": "boolean",
-          "default": "true"
-        },
-        {
-          "name": "tutorial",
-          "control": "boolean",
-          "default": "true"
-        },
-        {
-          "name": "clinic",
-          "control": "boolean",
-          "default": "true"
-        },
-        {
-          "name": "avatar",
-          "control": "boolean",
-          "default": "true"
+          "name": "className",
+          "storyHidden": true
         }
       ],
       "stories": [
@@ -3710,6 +3810,10 @@
         "InfoTags",
         "Compact",
         "TrailingSlot",
+        "CenterAligned",
+        "WithSearch",
+        "ActionOverflow",
+        "ElevateOnScroll",
         "Playground"
       ],
       "sourcePath": "src/components/molecules/Header/Header.jsx",

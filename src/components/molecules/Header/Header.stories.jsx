@@ -47,6 +47,36 @@ const meta = {
       '**Good to know** — every action except `tutorial` and `avatar` is a CTA rendered through the Button atom; dividers are placed explicitly in the `actions` array wherever you want them (not auto-inserted). Reuses the Button / Avatar / Divider / Badge / Logo atoms.',
     ].join('\n') } },
   },
+  // Meta-level argTypes so the autodocs args table documents the REAL component
+  // props (description + control), not just the Playground's synthetic controls.
+  argTypes: {
+    back:            { control: 'boolean', description: 'Show the back button (a small, control-sized icon button)', table: { category: 'Left' } },
+    backIcon:        { control: 'text', description: 'Back glyph name (default "arrow-left3")', table: { category: 'Left' } },
+    backIconVariant: { control: 'select', options: ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'], description: 'Back glyph style', table: { category: 'Left' } },
+    backIconCorner:  { control: 'inline-radio', options: ['straight', 'rounded'], description: 'Back glyph corner variant (default "straight")', table: { category: 'Left' } },
+    title:           { control: 'text', description: 'Leading title (string or node)', table: { category: 'Left' } },
+    subtitle:        { control: 'text', description: 'Subtext under the title', table: { category: 'Left' } },
+    align:           { control: 'inline-radio', options: ['left', 'center'], description: 'left (default) or center-aligned title (MD3 center top app bar)', table: { category: 'Bar' } },
+    maxVisibleActions: { control: { type: 'number', min: 0 }, description: 'Actions past this count roll into a "More" overflow menu (blank = no overflow)', table: { category: 'Bar' } },
+    density:         { control: 'inline-radio', options: ['comfortable', 'compact'], description: 'Control height + padding (comfortable 42px / compact 36px)', table: { category: 'Bar' } },
+    sticky:          { control: 'boolean', description: 'Pin the bar to the top (position: sticky)', table: { category: 'Bar' } },
+    elevation:       { control: 'inline-radio', options: [false, 'always', 'onScroll'], description: 'Drop shadow — false · always · onScroll (appears after scrolling)', table: { category: 'Bar' } },
+    bordered:        { control: 'boolean', description: 'Bottom hairline border (default true)', table: { category: 'Bar' } },
+    height:          { control: { type: 'number', min: 40, max: 96 }, description: 'Bar height in px (default 62)', table: { category: 'Bar' } },
+    background:      { control: 'text', description: 'Surface override (token, default --tesseract-slate-0)', table: { category: 'Bar' } },
+    borderColor:     { control: 'text', description: 'Bottom-border colour (token, default --tesseract-slate-100)', table: { category: 'Bar' } },
+    // Node / object props — documented but not panel-controllable.
+    search:          { control: false, description: '{ placeholder?, value?, onChange?, width? } — a first-class search field in the bar', table: { category: 'Slots' } },
+    logo:            { control: false, description: 'Brand mark (use the Logo atom)', table: { category: 'Slots' } },
+    user:            { control: false, description: '{ name, meta?, avatar?, dropdown? } — patient/user block', table: { category: 'Slots' } },
+    leading:         { control: false, description: 'Custom left content (escape hatch)', table: { category: 'Slots' } },
+    trailing:        { control: false, description: 'Free-form right content after the actions', table: { category: 'Slots' } },
+    actions:         { control: false, description: 'Ordered list (max 8) of typed action items (cta · info · divider · select · tutorial · avatar · node)', table: { category: 'Slots' } },
+    onBack:          { control: false, table: { category: 'Events' } },
+    onUserClick:     { control: false, table: { category: 'Events' } },
+    tutorialIcon:    { control: false, description: 'Override the tutorial play glyph (icon name or node)', table: { category: 'Slots' } },
+    className:       { table: { disable: true } },
+  },
 };
 
 export default meta;
@@ -214,6 +244,81 @@ export const TrailingSlot = {
   ),
 };
 
+/** Center-aligned title (MD3 center top app bar) — back left, title centered, actions right. */
+export const CenterAligned = {
+  name: 'Center-aligned title',
+  render: () => (
+    <Header
+      back
+      align="center"
+      title="Patient Summary"
+      subtitle="MRN-10231 · Aarav Sharma"
+      actions={[
+        { type: 'cta', icon: 'printer', ariaLabel: 'Print', variant: 'tonal', theme: 'neutral' },
+        { type: 'cta', icon: 'more', ariaLabel: 'More', variant: 'ghost', theme: 'neutral' },
+      ]}
+    />
+  ),
+};
+
+/** First-class search slot — a pill search field in the bar. */
+export const WithSearch = {
+  name: 'Search slot',
+  render: () => {
+    const [q, setQ] = React.useState('');
+    return (
+      <Header
+        logo={<HeaderLogo />}
+        search={{ placeholder: 'Search patients, doctors, MRN…', value: q, onChange: (e) => setQ(e.target.value) }}
+        actions={[
+          { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral', badge: { color: 'error' } },
+          { type: 'avatar', name: 'Dr Sheela', ring: true },
+        ]}
+      />
+    );
+  },
+};
+
+/** Responsive action overflow — actions past `maxVisibleActions` roll into a "More" menu. */
+export const ActionOverflow = {
+  name: 'Action overflow (More menu)',
+  render: () => (
+    <Header
+      logo={<HeaderLogo />}
+      maxVisibleActions={2}
+      actions={[
+        { type: 'cta', label: 'New', icon: 'add-square', variant: 'solid', theme: 'primary', onClick: () => {} },
+        { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral' },
+        { type: 'cta', label: 'Export', icon: 'document-download', onClick: () => {} },
+        { type: 'cta', label: 'Import', icon: 'document-upload', onClick: () => {} },
+        { type: 'cta', label: 'Settings', icon: 'setting-4', onClick: () => {} },
+        { type: 'cta', label: 'Help', icon: 'message-question', onClick: () => {} },
+      ]}
+    />
+  ),
+};
+
+/** Elevate on scroll — the shadow appears only after the page scrolls under the bar. */
+export const ElevateOnScroll = {
+  name: 'Elevate on scroll',
+  render: () => (
+    <div style={{ minHeight: 700 }}>
+      <Header
+        sticky
+        elevation="onScroll"
+        logo={<HeaderLogo />}
+        actions={[
+          { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral' },
+          { type: 'avatar', name: 'Dr Sheela', ring: true },
+        ]}
+      />
+      <div style={{ padding: 24, color: 'var(--tesseract-slate-500)' }}>
+        Scroll this story — the header has no shadow at the top, and gains one once you scroll.
+      </div>
+    </div>
+  ),
+};
+
 // ── Configurable Playground ──────────────────────────────────────────────────
 
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'tonal', 'ghost', 'link'];
@@ -239,12 +344,15 @@ const headerBackCode = (a) => {
   const lines = [];
   if (a.showBack) {
     lines.push('  back');
-    if (a.backIcon && a.backIcon !== 'arrow-left-02') lines.push(`  backIcon="${a.backIcon}"`);
+    if (a.backIcon && a.backIcon !== 'arrow-left3') lines.push(`  backIcon="${a.backIcon}"`);
     if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
   }
+  if (a.align && a.align !== 'left') lines.push(`  align="${a.align}"`);
+  if (a.searchSlot) lines.push('  search={{ placeholder: "Search patients, doctors…" }}');
+  if (a.maxVisibleActions > 0) lines.push(`  maxVisibleActions={${a.maxVisibleActions}}`);
   if (a.density && a.density !== 'comfortable') lines.push(`  density="${a.density}"`);
   if (a.sticky) lines.push('  sticky');
-  if (a.elevation) lines.push('  elevation');
+  if (a.elevation) lines.push(typeof a.elevation === 'string' ? `  elevation="${a.elevation}"` : '  elevation');
   if (a.background && a.background.trim()) lines.push(`  background="${a.background.trim()}"`);
   if (!lines.length) return '<Header /* … */ />';
   return `<Header\n${lines.join('\n')}\n  /* …actions, leading, trailing… */\n/>`;
@@ -266,16 +374,22 @@ export const Playground = {
     clinic: { control: 'boolean', name: 'clinic select', table: { category: 'Right' } },
     avatar: { control: 'boolean', name: 'avatar (last)', table: { category: 'Right' } },
     trailing: { control: 'boolean', name: 'trailing slot (status pill)', description: 'Free-form node rendered after the actions list', table: { category: 'Right' } },
+    align: { control: 'inline-radio', options: ['left', 'center'], name: 'align', description: 'left or center-aligned title', table: { category: 'Bar' } },
+    searchSlot: { control: 'boolean', name: 'search slot', description: 'Render a first-class search field in the bar', table: { category: 'Bar' } },
+    maxVisibleActions: { control: { type: 'number', min: 0 }, name: 'max visible actions (0 = off)', description: 'Roll extra actions into a "More" overflow menu', table: { category: 'Bar' } },
     density: { control: 'inline-radio', options: ['comfortable', 'compact'], name: 'density', description: 'Control height + padding — comfortable or compact (36px)', table: { category: 'Bar' } },
     sticky: { control: 'boolean', name: 'sticky', description: 'Pin the bar to the top as content scrolls', table: { category: 'Bar' } },
-    elevation: { control: 'boolean', name: 'elevation (shadow)', description: 'Add a drop shadow under the bar', table: { category: 'Bar' } },
+    elevation: { control: 'inline-radio', options: [false, 'always', 'onScroll'], name: 'elevation (shadow)', description: 'Drop shadow — off · always · on scroll', table: { category: 'Bar' } },
     background: { control: 'text', name: 'background (token)', table: { category: 'Bar' } },
     ...slotArgTypes(),
   },
   args: {
     showBack: false,
-    backIcon: 'arrow-left-02',
+    backIcon: 'arrow-left3',
     backIconVariant: 'linear',
+    align: 'left',
+    searchSlot: false,
+    maxVisibleActions: 0,
     leading: 'logo',
     title: 'Welcome Dr. Sheela BR!',
     subtitle: 'Your Appointments',
@@ -341,6 +455,9 @@ function HeaderPlaygroundDemo(a) {
         back={a.showBack}
         backIcon={a.backIcon}
         backIconVariant={a.backIconVariant}
+        align={a.align}
+        search={a.searchSlot ? { placeholder: 'Search patients, doctors…' } : undefined}
+        maxVisibleActions={a.maxVisibleActions > 0 ? a.maxVisibleActions : undefined}
         density={a.density}
         sticky={a.sticky}
         elevation={a.elevation}

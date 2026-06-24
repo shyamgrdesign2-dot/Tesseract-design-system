@@ -29,34 +29,53 @@
   }
 
   &[data-sticky] { position: sticky; top: 0; z-index: var(--tesseract-z-sticky, 100); }
-  &[data-elevation] { box-shadow: var(--tesseract-shadow-md, 0 2px 8px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent)); }
+  /* Elevation: static ("always") or scroll-driven (set once scrolled). The shadow
+     transitions in so the on-scroll mode feels smooth. */
+  & { transition: box-shadow 160ms ease; }
+  &[data-elevated] { box-shadow: var(--tesseract-shadow-md, 0 2px 8px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent)); }
+
+  /* Center-aligned title (MD3 center top app bar): left | centered title | actions. */
+  &[data-align="center"] {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    .left    { flex: 0 1 auto; justify-self: start; }
+    .actions { justify-self: end; }
+  }
 }
 
 .left { display: flex; align-items: center; align-self: stretch; gap: var(--tesseract-space-4); min-width: 0; flex: 1; }
+.center { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .actions { display: flex; align-items: center; gap: var(--tesseract-header-gap); flex-shrink: 0; }
 
-/* ── Back button — 62px square (full header height), bordered cell ── */
+/* ── Back button — small control-sized icon button (not a full-height cell) ── */
 .back {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 62px;
-  align-self: stretch;
+  width: var(--tesseract-header-control);
+  height: var(--tesseract-header-control);
   flex-shrink: 0;
-  margin: 0 0 0 -16px;            /* bleed to the header's left edge */
+  padding: 0;
   border: none;
-  border-right: 0.5px solid var(--tesseract-slate-100);
-  background-color: transparent;
+  border-radius: var(--tesseract-radius-10, 10px);
+  corner-shape: round;
+  background-color: var(--tesseract-slate-50);
   color: var(--tesseract-slate-700);
   cursor: pointer;
   transition: background-color 120ms ease;
-  &:hover { background-color: var(--tesseract-slate-50); }
+  &:hover { background-color: var(--tesseract-slate-100); }
 }
 
 .logo { display: flex; align-items: center; flex-shrink: 0; }
 
+/* ── Search slot — pill field in the bar ── */
+.search { display: flex; align-items: center; min-width: 0; flex: 1 1 auto; max-width: 420px; }
+.center .search { flex: 1 1 320px; }
+
 /* ── Title (+ optional subtext) ── */
 .titleBlock { display: flex; flex-direction: column; min-width: 0; }
+.center .titleBlock { align-items: center; }
+.center .title, .center .subtitle { text-align: center; }
 .title { font-size: var(--tesseract-text-body-base); font-weight: var(--tesseract-weight-semibold); color: var(--tesseract-slate-900); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .subtitle { font-size: var(--tesseract-text-body-xs); line-height: 18px; color: var(--tesseract-slate-600); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
