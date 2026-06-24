@@ -22,6 +22,10 @@
  *             — overrides the corner radius (sets --tesseract-btn-radius inline).
  *               Undefined keeps the default token radius.
  *   as        ElementType    — render a different element (e.g. "a"). Polymorphic.
+ *   asChild   boolean        — render the consumer's single child element instead,
+ *               merging the full button styling onto it (Radix pattern). Use for
+ *               router links / SSR: <Button asChild><Link href="/x">Go</Link></Button>.
+ *               The child owns its inner content; leftIcon/icon/menu aren't injected.
  *   href      string         — when set, the button renders as a real <a href>
  *               (carrying identical styling). Ideal for the `link` variant.
  *               Polymorphism applies to the non-split shapes only.
@@ -46,6 +50,7 @@ import { createPortal } from "react-dom";
 import styles from "./Button.module.scss";
 import { LoadingIndicator } from "@/src/components/atoms/LoadingIndicator/LoadingIndicator";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { Slot } from "@/src/hooks/ui/Slot";
 import { useIsClient } from "@/src/hooks/use-is-client";
 import { useAnalytics, resolveTrack } from "@/src/analytics/context";
 import { resolveRadius } from "@/src/hooks/utils";
@@ -69,6 +74,7 @@ export const Button = forwardRef(function Button(
     surface = "light",
     radius,
     as,
+    asChild = false,
     href,
     fullWidth = false,
     loading = false,
@@ -288,6 +294,29 @@ export const Button = forwardRef(function Button(
             document.body
           )}
       </div>
+    );
+  }
+
+  // ── asChild — merge the button styling onto the consumer's own element ──
+  // <Button asChild><Link href="/x">Go</Link></Button> → the Link renders with
+  // the full button look (Radix pattern), so routing/SSR work without forking.
+  // In asChild mode the consumer owns the inner content (icons + label go inside
+  // their element); `.button` lays it out via flex. leftIcon/icon/rightIcon and
+  // split `menu` are not injected here by design.
+  if (asChild) {
+    return (
+      <Slot
+        ref={ref}
+        className={[styles.button, className].filter(Boolean).join(" ")}
+        style={mergedStyle}
+        data-icon-only={iconOnly || undefined}
+        onClick={handleClick}
+        aria-disabled={isDisabled || undefined}
+        {...dataAttrs}
+        {...props}
+      >
+        {children}
+      </Slot>
     );
   }
 

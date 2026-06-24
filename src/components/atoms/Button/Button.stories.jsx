@@ -638,6 +638,19 @@ export const Polymorphic = {
           </Button>
         </Row>
       </Section>
+      <Section label="asChild → merge the button look onto your own element (router Link / SSR)">
+        <Row gap={16}>
+          <Button asChild variant="solid">
+            <a href="#go">As a solid link</a>
+          </Button>
+          <Button asChild variant="outline">
+            <a href="#go">As an outline link</a>
+          </Button>
+          <Button asChild variant="tonal" theme="neutral">
+            <a href="#go"><TPLibraryIcon name="add-square" size={20} />New (icon inside child)</a>
+          </Button>
+        </Row>
+      </Section>
     </div>
   ),
 };

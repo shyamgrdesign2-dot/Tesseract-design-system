@@ -522,6 +522,10 @@
           "name": "as"
         },
         {
+          "name": "asChild",
+          "default": "false"
+        },
+        {
           "name": "href",
           "default": "''",
           "control": "text",
