@@ -1,13 +1,15 @@
 import { Badge } from './Badge';
-import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
+import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
 
 const COLORS = ['primary', 'success', 'warning', 'error', 'neutral', 'violet'];
 const VARIANTS = ['solid', 'soft', 'outline', 'gradient', 'dot'];
 const SIZES = ['xs', 'sm', 'md', 'lg'];
 const ICON_PX = { xs: 10, sm: 12, md: 14, lg: 16 };
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
 
-// Resolve the icon node for a side, sized to the badge.
-const glyphFor = (name, size) => (name ? <TPLibraryIcon name={name} size={ICON_PX[size] || 14} /> : null);
+// Resolve an icon node for a slot, sized to the badge, in the chosen style + family.
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={ICON_PX[size] || 14} /> : undefined;
 
 const meta = {
   title: 'Atoms/Badge',
@@ -18,8 +20,10 @@ const meta = {
     color: { control: 'select', options: COLORS },
     size: { control: 'inline-radio', options: SIZES },
     children: { control: 'text', table: { category: 'Content' } },
-    iconName: { control: 'text', tpIcon: true, name: 'icon', description: 'Tesseract icon glyph', table: { category: 'Content' } },
-    iconPosition: { control: 'inline-radio', options: ['none', 'left', 'right', 'both'], name: 'icon position', table: { category: 'Content' } },
+    leftIcon: { control: 'text', tpIcon: true, name: 'left icon', description: 'CDN icon name for the leading slot (blank = none)', table: { category: 'Icons' } },
+    rightIcon: { control: 'text', tpIcon: true, name: 'right icon', description: 'CDN icon name for the trailing slot (blank = none)', table: { category: 'Icons' } },
+    iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to both slots', table: { category: 'Icons' } },
+    iconFamily: { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
     sticky: { control: 'inline-radio', options: ['none', 'left', 'right'], description: 'Square the corners on an edge so it sits flush', table: { category: 'Layout' } },
   },
   args: {
@@ -27,23 +31,35 @@ const meta = {
     color: 'primary',
     size: 'md',
     children: 'Badge',
-    iconName: 'verify',
-    iconPosition: 'left',
+    leftIcon: 'verify',
+    rightIcon: '',
+    iconVariant: 'linear',
+    iconFamily: '',
     sticky: 'none',
   },
 };
 
 export default meta;
 
-// Place the chosen icon on the left, right, or both sides per the control.
-const withIcons = ({ iconName, iconPosition, sticky, ...args }) => {
-  const g = glyphFor(iconName, args.size);
-  return {
-    ...args,
-    sticky: sticky && sticky !== 'none' ? sticky : undefined,
-    icon: iconPosition === 'left' || iconPosition === 'both' ? g : undefined,
-    rightIcon: iconPosition === 'right' || iconPosition === 'both' ? g : undefined,
-  };
+// Map the left/right icon-name controls + style onto the real icon/rightIcon props.
+const withIcons = ({ leftIcon, rightIcon, iconVariant, iconFamily, sticky, ...args }) => ({
+  ...args,
+  sticky: sticky && sticky !== 'none' ? sticky : undefined,
+  icon: glyphFor(leftIcon, args.size, iconVariant, iconFamily),
+  rightIcon: glyphFor(rightIcon, args.size, iconVariant, iconFamily),
+});
+
+// Build an accurate, copy-paste code snippet from the controls (what "Show code" shows).
+const iconJsx = (name, variant, family) =>
+  `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={14} />`;
+
+const badgeCode = ({ variant = 'soft', color = 'primary', size = 'md', children = '', sticky, leftIcon, rightIcon, iconVariant, iconFamily }) => {
+  const lines = [`  variant="${variant}"`, `  color="${color}"`, `  size="${size}"`];
+  if (sticky && sticky !== 'none') lines.push(`  sticky="${sticky}"`);
+  if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily)}}`);
+  if (rightIcon) lines.push(`  rightIcon={${iconJsx(rightIcon, iconVariant, iconFamily)}}`);
+  if (variant === 'dot') return `<Badge\n${lines.join('\n')}\n/>`;
+  return `<Badge\n${lines.join('\n')}\n>\n  ${children}\n</Badge>`;
 };
 
 const Row = ({ children }) => (
@@ -54,6 +70,7 @@ const Row = ({ children }) => (
 
 export const Playground = {
   render: (args) => <Badge {...withIcons(args)} />,
+  parameters: { docs: { source: { transform: (_code, ctx) => badgeCode(ctx.args) } } },
 };
 
 /** Leading / trailing icons — they inherit the badge color via currentColor. */
