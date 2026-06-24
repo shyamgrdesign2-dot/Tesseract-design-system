@@ -11,6 +11,20 @@
   corner-shape: round;
   background: var(--tesseract-slate-0, var(--tesseract-slate-0));
   font-family: var(--tesseract-font-body);
+
+  /* Density drives every row/header height + the cell paddings via local vars.
+     comfortable (default) is the original look (52 / 38); compact is denser. */
+  --ct-row-h: 52px;
+  --ct-head-h: 38px;
+  --ct-cell-pad-y: var(--tesseract-space-2);
+  --ct-cell-pad-x: var(--tesseract-space-3);
+
+  &[data-density="compact"] {
+    --ct-row-h: 40px;
+    --ct-head-h: 30px;
+    --ct-cell-pad-y: var(--tesseract-space-1);
+    --ct-cell-pad-x: var(--tesseract-space-2);
+  }
 }
 
 /* Fluid + responsive: the table fills its container and auto-layout flexes each
@@ -26,9 +40,9 @@
 }
 
 /* ── Header ── */
-.headRow { height: 38px; background: var(--tesseract-slate-50, var(--tesseract-slate-50)); }
+.headRow { height: var(--ct-head-h); background: var(--tesseract-slate-50, var(--tesseract-slate-50)); }
 .th {
-  padding: var(--tesseract-space-2) var(--tesseract-space-3);
+  padding: var(--ct-cell-pad-y) var(--ct-cell-pad-x);
   text-align: left;
   font-size: var(--tesseract-text-body-xs);
   font-weight: var(--tesseract-weight-semibold);
@@ -46,13 +60,13 @@
 
 /* ── Rows ── */
 .row {
-  height: 52px;
+  height: var(--ct-row-h);
   border-top: 1px solid var(--tesseract-slate-100, var(--tesseract-slate-100));
   transition: background-color 150ms ease;
   &:hover { background: color-mix(in srgb, var(--tesseract-slate-50, var(--tesseract-slate-50)) 60%, transparent); }
 }
 .td {
-  height: 52px;
+  height: var(--ct-row-h);
   padding: 0;
   position: relative;
   vertical-align: middle;
@@ -93,6 +107,15 @@
 }
 .headRow .sticky { background: var(--tesseract-slate-50, var(--tesseract-slate-50)); z-index: 6; }
 
+/* ── Sticky header (vertical scroll) ──
+   When the wrapper is height-capped + sticky-header is on, pin <thead> cells to
+   the top so the header stays visible as the body scrolls. The action column's
+   header cell needs the higher z-index so it stays above body sticky cells. */
+.wrap[data-sticky-header] {
+  .th { position: sticky; top: 0; z-index: 7; }
+  .th.sticky { z-index: 8; }
+}
+
 /* Left fade — ONLY while content is scrolled behind the sticky column. */
 .wrap[data-behind] .sticky[data-shadow]::before {
   content: "";
@@ -111,7 +134,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--tesseract-space-0-5);
-  height: 52px;
+  height: var(--ct-row-h);
   padding: 0 var(--tesseract-space-1-5);
 }
 .moreAnchor { display: inline-flex; }
@@ -122,7 +145,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 52px;
+  height: var(--ct-row-h);
   border: none;
   background: transparent;
   color: var(--tesseract-slate-400, var(--tesseract-slate-400));
@@ -164,4 +187,30 @@
   color: var(--tesseract-error-600, var(--tesseract-error-600));
   .menuItemIcon { color: var(--tesseract-error-600, var(--tesseract-error-600)); }
   &:hover { background: var(--tesseract-error-50, var(--tesseract-error-50)); }
+}
+
+/* ── Loading / empty / custom-render cells ── */
+/* Skeleton placeholder sits in the same horizontal padding as a real cell. */
+.skelCell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--ct-cell-pad-x);
+}
+/* Centred empty-state row, spanning the full table. */
+.emptyCell {
+  padding: var(--tesseract-space-8) var(--tesseract-space-4);
+  text-align: center;
+  color: var(--tesseract-slate-500, var(--tesseract-slate-500));
+  border-right: none;
+}
+/* A custom render() cell reads like static content (matched cell padding). */
+.customCell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--ct-cell-pad-x);
+  color: var(--tesseract-slate-700, var(--tesseract-slate-700));
+  &[data-align="center"] { justify-content: center; }
+  &[data-align="right"]  { justify-content: flex-end; }
 }

@@ -34,6 +34,19 @@
  * Props: back, onBack, backIcon (default "arrow-left-02"),
  *        backIconVariant (default "linear"), logo, user, title, subtitle,
  *        leading, actions, height (default 62), bordered (default true), className.
+ *
+ * Configurability:
+ *   density     "comfortable" (default) | "compact" — scales the control sizes
+ *               (CTA / info / avatar 42px → 36px) and the bar padding/gap together.
+ *   sticky      boolean — position: sticky; top: 0 (default false).
+ *   elevation   boolean — drop shadow under the bar (default false).
+ *   trailing    ReactNode — free-form right content after the `actions` array
+ *               (mirrors `leading` on the left).
+ *   background  token-driven surface override (default --tesseract-slate-0).
+ *   borderColor token-driven bottom-border colour (default --tesseract-slate-100).
+ *   onUserClick wires the user block's click (default no-op).
+ *   tutorialIcon icon name | node — replaces the default play glyph in a
+ *               `tutorial` action (default: the violet play-circle).
  */
 
 import * as React from "react";
@@ -55,21 +68,27 @@ function Chevron({ dir = "down", size = 18, name, variant = "linear" }) {
   return <TPLibraryIcon name={glyph} variant={variant} size={size} />;
 }
 
-function TutorialButton({ onClick }) {
+// Default play glyph — the hand-rolled violet play-circle. A custom `tutorialIcon`
+// (name string or node) replaces it.
+const DEFAULT_TUTORIAL_GLYPH = (
+  <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden style={{ color: "var(--tesseract-violet-600)" }}>
+    <circle cx="24" cy="24" r="21" stroke="currentColor" strokeWidth="3.5" fill="none" />
+    <circle cx="24" cy="24" r="15" fill="currentColor" />
+    <path d="M20.5 15L33 24L20.5 33V15Z" style={{ fill: "var(--tesseract-slate-0)" }} />
+  </svg>
+);
+
+function TutorialButton({ onClick, glyph }) {
   return (
     <button type="button" className={styles.tutorial} aria-label="Play tutorial" onClick={onClick}>
-      <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden style={{ color: "var(--tesseract-violet-600)" }}>
-        <circle cx="24" cy="24" r="21" stroke="currentColor" strokeWidth="3.5" fill="none" />
-        <circle cx="24" cy="24" r="15" fill="currentColor" />
-        <path d="M20.5 15L33 24L20.5 33V15Z" style={{ fill: "var(--tesseract-slate-0)" }} />
-      </svg>
+      {glyph != null ? (typeof glyph === "string" ? icon(glyph, 42) : glyph) : DEFAULT_TUTORIAL_GLYPH}
     </button>
   );
 }
 
-function UserBlock({ name, meta, avatar, dropdown }) {
+function UserBlock({ name, meta, avatar, dropdown, onClick }) {
   return (
-    <button type="button" className={styles.user} aria-haspopup={dropdown ? "menu" : undefined}>
+    <button type="button" className={styles.user} aria-haspopup={dropdown ? "menu" : undefined} onClick={onClick}>
       {avatar !== false && (
         typeof avatar === "string"
           ? <Avatar src={avatar} name={name} size={40} />
@@ -102,7 +121,7 @@ function Cta({ item }) {
       aria-label={iconOnly ? (item.ariaLabel || item.label) : undefined}
       icon={iconOnly || item.menu ? glyph : undefined}
       leftIcon={!iconOnly && !item.menu ? glyph : undefined}
-      style={iconOnly ? { width: "var(--tesseract-size-42)", height: "var(--tesseract-size-42)" } : { height: "var(--tesseract-size-42)" }}
+      style={iconOnly ? { width: "var(--tesseract-header-control)", height: "var(--tesseract-header-control)" } : { height: "var(--tesseract-header-control)" }}
     >
       {iconOnly ? undefined : <span className={styles.ctaLabel}>{item.label}</span>}
     </Button>
@@ -133,14 +152,14 @@ function InfoTag({ item }) {
   );
 }
 
-function Action({ item }) {
+function Action({ item, controlPx = 42 }) {
   switch (item.type) {
     case "divider":
-      return <Divider orientation="vertical" variant="gradient" color="var(--tesseract-slate-300)" style={{ height: "var(--tesseract-size-42)", opacity: 0.8 }} />;
+      return <Divider orientation="vertical" variant="gradient" color="var(--tesseract-slate-300)" style={{ height: "var(--tesseract-header-control)", opacity: 0.8 }} />;
     case "tutorial":
-      return <TutorialButton onClick={item.onClick} />;
+      return <TutorialButton onClick={item.onClick} glyph={item.icon} />;
     case "avatar":
-      return <Avatar src={item.src} name={item.name} ring={item.ring} size={42} onClick={item.onClick || (() => {})} />;
+      return <Avatar src={item.src} name={item.name} ring={item.ring} size={controlPx} onClick={item.onClick || (() => {})} />;
     case "select":
       return (
         <Dropdown
@@ -164,9 +183,26 @@ function Action({ item }) {
   }
 }
 
-export function Header({ back, onBack, backIcon = "arrow-left-02", backIconVariant = "linear", logo, user, title, subtitle, leading, actions = [], height = 62, bordered = true, className }) {
+export function Header({ back, onBack, backIcon = "arrow-left-02", backIconVariant = "linear", logo, user, title, subtitle, leading, actions = [], height = 62, bordered = true, density = "comfortable", sticky = false, elevation = false, trailing, background, borderColor, onUserClick, tutorialIcon, className }) {
+  // Merge the per-Header tutorialIcon onto any `tutorial` action that doesn't set its own.
+  const resolved = tutorialIcon != null
+    ? actions.map((a) => (a && a.type === "tutorial" && a.icon == null ? { ...a, icon: tutorialIcon } : a))
+    : actions;
+
+  const controlPx = density === "compact" ? 36 : 42;
+  const style = { height };
+  if (background) style["--tesseract-header-bg"] = background;
+  if (borderColor) style["--tesseract-header-border"] = borderColor;
+
   return (
-    <header className={cn(styles.header, className)} data-bordered={bordered || undefined} style={{ height }}>
+    <header
+      className={cn(styles.header, className)}
+      data-bordered={bordered || undefined}
+      data-density={density === "compact" ? "compact" : undefined}
+      data-sticky={sticky || undefined}
+      data-elevation={elevation || undefined}
+      style={style}
+    >
       <div className={styles.left}>
         {back && (
           <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
@@ -174,7 +210,7 @@ export function Header({ back, onBack, backIcon = "arrow-left-02", backIconVaria
           </button>
         )}
         {logo != null && <div className={styles.logo}>{logo}</div>}
-        {user && <UserBlock {...user} />}
+        {user && <UserBlock {...user} onClick={user.onClick || onUserClick} />}
         {title != null && (
           <div className={styles.titleBlock}>
             <div className={styles.title}>{title}</div>
@@ -185,7 +221,8 @@ export function Header({ back, onBack, backIcon = "arrow-left-02", backIconVaria
       </div>
 
       <div className={styles.actions}>
-        {actions.map((item, i) => <Action key={item.key ?? i} item={item} />)}
+        {resolved.map((item, i) => <Action key={item.key ?? i} item={item} controlPx={controlPx} />)}
+        {trailing}
       </div>
     </header>
   );

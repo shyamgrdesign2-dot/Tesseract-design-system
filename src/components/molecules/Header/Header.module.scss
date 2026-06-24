@@ -2,20 +2,38 @@
    Divider / Badge atoms. */
 
 .header {
+  /* Density knobs — comfortable (default) keeps the original 42px controls and
+     spacing; compact scales controls + horizontal padding/gap together. The
+     surface/border vars let callers override the fixed slate-0 / slate-100. */
+  --tesseract-header-control: var(--tesseract-size-42);
+  --tesseract-header-pad: var(--tesseract-space-4);
+  --tesseract-header-gap: var(--tesseract-space-3-5);
+  --tesseract-header-bg: var(--tesseract-slate-0);
+  --tesseract-header-border: var(--tesseract-slate-100);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--tesseract-space-4);
   width: 100%;
-  padding: 0 var(--tesseract-space-4);
-  background-color: var(--tesseract-slate-0);
+  padding: 0 var(--tesseract-header-pad);
+  background-color: var(--tesseract-header-bg);
   font-family: var(--tesseract-font-body);
 
-  &[data-bordered] { border-bottom: 1px solid var(--tesseract-slate-100); }
+  &[data-bordered] { border-bottom: 1px solid var(--tesseract-header-border); }
+
+  &[data-density="compact"] {
+    --tesseract-header-control: var(--tesseract-size-36);
+    --tesseract-header-pad: var(--tesseract-space-3);
+    --tesseract-header-gap: var(--tesseract-space-2-5);
+  }
+
+  &[data-sticky] { position: sticky; top: 0; z-index: var(--tesseract-z-sticky, 100); }
+  &[data-elevation] { box-shadow: var(--tesseract-shadow-md, 0 2px 8px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent)); }
 }
 
 .left { display: flex; align-items: center; align-self: stretch; gap: var(--tesseract-space-4); min-width: 0; flex: 1; }
-.actions { display: flex; align-items: center; gap: var(--tesseract-space-3-5); flex-shrink: 0; }
+.actions { display: flex; align-items: center; gap: var(--tesseract-header-gap); flex-shrink: 0; }
 
 /* ── Back button — 62px square (full header height), bordered cell ── */
 .back {
@@ -87,7 +105,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--tesseract-space-2);
-  height: var(--tesseract-size-42);
+  height: var(--tesseract-header-control);
   padding: 0 var(--tesseract-space-3-5);
   background: var(--tesseract-violet-50);
   border-radius: var(--tesseract-btn-radius, var(--tesseract-radius-10));
@@ -132,8 +150,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--tesseract-size-42);
-  height: var(--tesseract-size-42);
+  width: var(--tesseract-header-control);
+  height: var(--tesseract-header-control);
   padding: 0;
   border: none;
   background: transparent;
@@ -141,4 +159,5 @@
   flex-shrink: 0;
   transition: opacity 120ms ease;
   &:hover { opacity: 0.85; }
+  > svg { width: var(--tesseract-header-control); height: var(--tesseract-header-control); }
 }

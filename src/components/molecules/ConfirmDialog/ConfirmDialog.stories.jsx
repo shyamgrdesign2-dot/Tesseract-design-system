@@ -30,9 +30,42 @@ function Demo({ trigger = 'Open dialog', ...props }) {
 }
 
 // ── Playground — every section + CTA in Controls ──────────────────────────────
+// Build a copy-paste snippet from the current controls (what "Show code" shows).
+const dialogCode = (a) => {
+  const lines = [`  open={open}`, `  onOpenChange={setOpen}`, `  title="${a.title}"`];
+  if (a.size && a.size !== 'md') lines.push(`  size="${a.size}"`);
+  if (a.headerIcon) lines.push(`  icon="${a.headerIcon}"`);
+  if (a.hideClose) lines.push(`  hideClose`);
+  if (a.withDescription && a.description) lines.push(`  description="${a.description}"`);
+  if (a.withCallout && a.callout) {
+    lines.push(`  callout="${a.callout}"`);
+    if (a.calloutTone && a.calloutTone !== 'warning') lines.push(`  calloutTone="${a.calloutTone}"`);
+  }
+  if (a.withCheckbox) lines.push(`  checkboxLabel="${a.checkboxLabel}"`);
+  if (a.primaryLabel) {
+    lines.push(`  primaryLabel="${a.primaryLabel}"`);
+    if (a.primaryVariant && a.primaryVariant !== 'solid') lines.push(`  primaryVariant="${a.primaryVariant}"`);
+    if (a.primaryTheme && a.primaryTheme !== 'primary') lines.push(`  primaryTheme="${a.primaryTheme}"`);
+    if (a.primaryLoading) lines.push(`  primaryLoading`);
+  }
+  if (a.secondaryLabel) {
+    lines.push(`  secondaryLabel="${a.secondaryLabel}"`);
+    if (a.secondaryVariant && a.secondaryVariant !== 'outline') lines.push(`  secondaryVariant="${a.secondaryVariant}"`);
+    if (a.secondaryTheme && a.secondaryTheme !== 'neutral') lines.push(`  secondaryTheme="${a.secondaryTheme}"`);
+  }
+  if (a.tertiaryLabel) lines.push(`  tertiaryLabel="${a.tertiaryLabel}"`);
+  if (a.actionsAlign && a.actionsAlign !== 'right') lines.push(`  actionsAlign="${a.actionsAlign}"`);
+  if (a.actionsFullWidth) lines.push(`  actionsFullWidth`);
+  return `<ConfirmDialog\n${lines.join('\n')}\n/>`;
+};
+
 export const Playground = {
   args: {
     title: 'Discard changes?',
+    // Frame
+    size: 'md',
+    headerIcon: '',
+    hideClose: false,
     // Body
     withDescription: true,
     description: 'Your unsaved edits to this prescription will be lost.',
@@ -48,6 +81,7 @@ export const Playground = {
     primaryLabel: 'Keep editing',
     primaryVariant: 'solid',
     primaryTheme: 'primary',
+    primaryLoading: false,
     secondaryLabel: 'Discard',
     secondaryVariant: 'outline',
     secondaryTheme: 'error',
@@ -60,6 +94,9 @@ export const Playground = {
   },
   argTypes: {
     title:            { control: 'text', table: { category: 'Header' } },
+    size:             { control: 'inline-radio', options: ['sm', 'md', 'lg'], name: 'size', description: 'Dialog width — sm ~400 · md 480 (default) · lg ~640', table: { category: 'Frame' } },
+    headerIcon:       { control: 'text', tpIcon: true, name: 'header icon', description: 'Leading icon next to the title (CDN icon name; blank = none)', table: { category: 'Header' } },
+    hideClose:        { control: 'boolean', name: 'hide close', description: 'Hide the always-on close button', table: { category: 'Header' } },
     withDescription:  { control: 'boolean', name: 'with description', table: { category: 'Body' } },
     description:      { control: 'text', table: { category: 'Body' } },
     withCallout:      { control: 'boolean', name: 'with callout box', table: { category: 'Body' } },
@@ -74,6 +111,7 @@ export const Playground = {
     primaryLabel:     { control: 'text', name: 'primary · label', table: { category: 'Primary CTA' } },
     primaryVariant:   { control: 'select', options: VARIANTS, name: 'primary · variant', table: { category: 'Primary CTA' } },
     primaryTheme:     { control: 'select', options: THEMES, name: 'primary · color', table: { category: 'Primary CTA' } },
+    primaryLoading:   { control: 'boolean', name: 'primary · loading', description: 'Show the Button spinner + disable while an async confirm runs', table: { category: 'Primary CTA' } },
 
     secondaryLabel:   { control: 'text', name: 'secondary · label', table: { category: 'Secondary CTA' } },
     secondaryVariant: { control: 'select', options: VARIANTS, name: 'secondary · variant', table: { category: 'Secondary CTA' } },
@@ -86,9 +124,14 @@ export const Playground = {
     actionsAlign:     { control: 'inline-radio', options: ['left', 'right'], name: 'align', table: { category: 'Footer layout' } },
     actionsFullWidth: { control: 'boolean', name: 'full width (equal)', table: { category: 'Footer layout' } },
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => dialogCode(ctx.args) } } },
   render: (a) => (
     <Demo
       title={a.title}
+      size={a.size}
+      headerIcon={a.headerIcon || undefined}
+      hideClose={a.hideClose}
+      primaryLoading={a.primaryLoading}
       description={a.withDescription ? a.description : undefined}
       callout={a.withCallout ? a.callout : undefined}
       calloutTone={a.calloutTone}
@@ -181,6 +224,57 @@ export const ActionLayout = {
       <Demo trigger="Full width (equal)" title="Save changes?" description="Two CTAs share the dialog width equally." primaryLabel="Save" secondaryLabel="Cancel" secondaryVariant="outline" actionsFullWidth />
     </div>
   ),
+};
+
+// ── Sizes — sm (~400) · md (480, default) · lg (~640) ─────────────────────────
+export const Sizes = {
+  name: 'Frame · Sizes',
+  render: () => (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <Demo trigger="Small" size="sm" title="Discard changes?" description="A compact dialog for terse confirmations." primaryLabel="Keep" secondaryLabel="Discard" secondaryVariant="outline" secondaryTheme="error" />
+      <Demo trigger="Medium (default)" size="md" title="Discard changes?" description="The default 480px width." primaryLabel="Keep" secondaryLabel="Discard" secondaryVariant="outline" secondaryTheme="error" />
+      <Demo trigger="Large" size="lg" title="Review consultation summary before sending" description="A wider dialog suits richer bodies — longer descriptions, callouts, and a checkbox without feeling cramped." callout="The summary will be shared with the patient via SMS and email." calloutTone="neutral" checkboxLabel="Don't ask me again" primaryLabel="Send summary" secondaryLabel="Cancel" secondaryVariant="outline" />
+    </div>
+  ),
+};
+
+// ── Destructive with a leading header icon + async primary (loading) ──────────
+export const DestructiveWithIcon = {
+  name: 'Destructive · Header Icon + Loading',
+  render: () => {
+    function AsyncDemo() {
+      const [open, setOpen] = React.useState(false);
+      const [loading, setLoading] = React.useState(false);
+      const confirm = () => {
+        setLoading(true);
+        setTimeout(() => { setLoading(false); setOpen(false); }, 1800);
+      };
+      return (
+        <>
+          <Button variant="solid" theme="error" onClick={() => setOpen(true)}>Delete patient</Button>
+          <ConfirmDialog
+            open={open}
+            onOpenChange={(v) => { if (!loading) setOpen(v); }}
+            size="md"
+            icon={<TPLibraryIcon name="trash" variant="bold" size={24} style={{ color: 'var(--tesseract-error-500)' }} />}
+            title="Delete patient record?"
+            description="Aarav Sharma's record and all linked visits will be permanently removed."
+            callout="This action cannot be undone."
+            calloutTone="error"
+            primaryLabel={loading ? 'Deleting…' : 'Delete record'}
+            primaryTheme="error"
+            primaryLoading={loading}
+            primaryAutoClose={false}
+            onPrimary={confirm}
+            secondaryLabel="Keep record"
+            secondaryVariant="outline"
+            secondaryDisabled={loading}
+          />
+        </>
+      );
+    }
+    return <AsyncDemo />;
+  },
 };
 
 // ── Text only / box only ──────────────────────────────────────────────────────

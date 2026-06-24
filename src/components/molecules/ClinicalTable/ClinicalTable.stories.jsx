@@ -15,16 +15,35 @@ const meta = {
     deletable: { control: 'boolean', description: 'Delete button in the action column', table: { category: 'Actions' } },
     showRowMenu: { control: 'boolean', name: 'row ⋯ menu', description: 'Show the three-dots row-actions menu', table: { category: 'Actions' } },
     autoRow: { control: 'boolean', name: 'auto empty row' },
+    density: { control: 'inline-radio', options: ['comfortable', 'compact'], description: 'Row/header height + cell padding', table: { category: 'Layout' } },
+    loading: { control: 'boolean', description: 'Show skeleton rows instead of data', table: { category: 'State' } },
+    stickyHeader: { control: 'boolean', name: 'sticky header', description: 'Pin the header while the body scrolls (pair with maxHeight)', table: { category: 'Layout' } },
     flagCustom: { control: 'boolean', name: 'flag custom names', description: 'Ring the Name cell when the entry is not in the frequently-used list' },
     dragIcon:      { control: 'text', tpIcon: true, name: 'Drag handle icon', table: { category: 'Icons' } },
     moreIcon:      { control: 'text', tpIcon: true, name: 'Kebab/More icon', table: { category: 'Icons' } },
     deleteIcon:    { control: 'text', tpIcon: true, name: 'Delete icon', table: { category: 'Icons' } },
     duplicateIcon: { control: 'text', tpIcon: true, name: 'Duplicate icon', table: { category: 'Icons' } },
   },
-  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy' },
+  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy' },
 };
 
 export default meta;
+
+// ── "Show code" transform: emit the props the controls actually set, dropping
+// the ones left at their defaults so the snippet stays clean. Sample columns/rows
+// are summarised as placeholders (they aren't story controls). ──
+const ctTransform = (_code, ctx) => {
+  const a = ctx.args || {};
+  const lines = ['  name={SYMPTOM_NAME}', '  columns={MIDDLE_COLUMNS}', '  rows={rows}', '  onChange={setRows}'];
+  if (a.reorderable === false) lines.push('  reorderable={false}');
+  if (a.deletable === false) lines.push('  deletable={false}');
+  if (a.showRowMenu === false) lines.push('  showRowMenu={false}');
+  if (a.autoRow === false) lines.push('  autoRow={false}');
+  if (a.density && a.density !== 'comfortable') lines.push(`  density="${a.density}"`);
+  if (a.loading) lines.push('  loading');
+  if (a.stickyHeader) lines.push('  stickyHeader\n  maxHeight={320}');
+  return `<ClinicalTable\n${lines.join('\n')}\n/>`;
+};
 
 // ── Shared sample data ──
 const FREQUENT_SYMPTOMS = ['Fever', 'Cough', 'Chest pain', 'Shortness of breath', 'Headache', 'Fatigue', 'Nausea', 'Abdominal pain', 'Dizziness', 'Joint pain'];
@@ -44,12 +63,14 @@ const SEED = [
 // ── Playground — the simple default story with basic controls ──
 export const Playground = {
   args: { showRowMenu: true, moreIcon: '3-dots-more' },
-  render: ({ flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, ...args }) => {
+  parameters: { docs: { source: { transform: ctTransform } } },
+  render: ({ flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, stickyHeader, ...args }) => {
     const [rows, setRows] = React.useState(SEED);
     const nameCol = { ...SYMPTOM_NAME, flagCustom: flagCustom ? 'warning' : undefined };
     return (
       <div style={{ maxWidth: 820 }}>
-        <ClinicalTable {...args} name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows}
+        <ClinicalTable {...args} stickyHeader={stickyHeader} maxHeight={stickyHeader ? 320 : undefined}
+          name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows}
           dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon} />
         <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(rows, null, 2)}</pre>
       </div>
@@ -268,10 +289,90 @@ export const StickyActions = {
   },
 };
 
+/** Default empty behaviour — `autoRow` keeps a single draft row to type into. */
 export const Empty = {
   render: () => {
     const [rows, setRows] = React.useState([]);
     return <div style={{ maxWidth: 820 }}><ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} /></div>;
+  },
+};
+
+/** Custom empty state — pass `emptyState` + `autoRow={false}` to show a message
+ *  instead of the draft row when there is no data. */
+export const EmptyState = {
+  name: 'Empty state (custom)',
+  parameters: { docs: { description: { story: 'With `autoRow={false}` and an `emptyState` node, the table renders a centred message when there are no rows — instead of the always-on draft row.' } } },
+  render: () => {
+    const [rows, setRows] = React.useState([]);
+    const empty = (
+      <div style={{ display: 'grid', gap: 6, justifyItems: 'center' }}>
+        <TPLibraryIcon name="document-text" size={28} />
+        <strong style={{ fontSize: 14, color: 'var(--tesseract-slate-700,#454551)' }}>No symptoms recorded</strong>
+        <span style={{ fontSize: 12 }}>Add a symptom to start building the note.</span>
+      </div>
+    );
+    return <div style={{ maxWidth: 820 }}><ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} autoRow={false} emptyState={empty} /></div>;
+  },
+};
+
+/** Loading state — `loading` renders skeleton rows (Skeleton atom) keeping the
+ *  real column widths so the layout doesn't jump when data arrives. */
+export const Loading = {
+  parameters: { docs: { description: { story: 'Set `loading` to swap the body for skeleton rows. `loadingRows` controls how many (default 4). The header + column widths stay, so there is no layout shift on load.' } } },
+  render: () => (
+    <div style={{ maxWidth: 820 }}>
+      <ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={[]} loading loadingRows={5} />
+    </div>
+  ),
+};
+
+/** Compact density — denser rows/header + tighter padding for long lists. The
+ *  default `comfortable` density is unchanged. */
+export const Compact = {
+  parameters: { docs: { description: { story: 'Set `density="compact"` to shrink the row/header height and cell padding. Default is `comfortable` (the original look).' } } },
+  render: () => {
+    const [rows, setRows] = React.useState(SEED);
+    return <div style={{ maxWidth: 820 }}><ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} density="compact" /></div>;
+  },
+};
+
+/** Sticky header — `stickyHeader` + `maxHeight` cap the height and pin the header
+ *  so it stays visible while a long body scrolls vertically. */
+export const StickyHeader = {
+  name: 'Sticky header (scrollable)',
+  parameters: { docs: { description: { story: 'Pair `stickyHeader` with `maxHeight` to cap the table height. The body scrolls vertically and the header stays pinned at the top.' } } },
+  render: () => {
+    const many = Array.from({ length: 14 }, (_, i) => ({ id: `r${i}`, name: FREQUENT_SYMPTOMS[i % FREQUENT_SYMPTOMS.length], since: SINCE[i % SINCE.length], status: STATUS[i % STATUS.length], notes: '' }));
+    const [rows, setRows] = React.useState(many);
+    return <div style={{ maxWidth: 820 }}><ClinicalTable name={SYMPTOM_NAME} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows} stickyHeader maxHeight={320} /></div>;
+  },
+};
+
+/** Custom cell renderer + notes={false} + primaryKey — escape hatches: a column
+ *  draws its own read-only cell via `render`, Notes is dropped, and a non-Name
+ *  column gates the row. */
+export const CustomRenderAndConfig = {
+  name: 'Custom render · notes={false} · primaryKey',
+  parameters: { docs: { description: { story: 'A `render(value, row)` column draws a custom (read-only) cell — here a coloured severity tag — bypassing the type set. `notes={false}` removes the trailing Notes column, and `primaryKey` keeps the Name column gating each row.' } } },
+  render: () => {
+    const [rows, setRows] = React.useState([
+      { id: 'p1', name: 'Chest pain', since: '2 days', status: 'Severe' },
+      { id: 'p2', name: 'Headache', since: '1 day', status: 'Mild' },
+    ]);
+    const STATUS_TONE = { Mild: 'success', Moderate: 'warning', Severe: 'error', Improving: 'success', Worsening: 'error' };
+    const cols = [
+      MIDDLE_COLUMNS[0],
+      {
+        id: 'status', header: 'Severity', type: 'select', placeholder: 'Select', options: STATUS, minWidth: 135, maxWidth: 170,
+        render: (value) => {
+          const tone = STATUS_TONE[value] || 'neutral';
+          return value ? (
+            <span style={{ fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 999, color: `var(--tesseract-${tone}-700,#454551)`, background: `var(--tesseract-${tone}-50,#f1f1f5)` }}>{value}</span>
+          ) : <span style={{ color: 'var(--tesseract-slate-400,#9a9aa3)' }}>—</span>;
+        },
+      },
+    ];
+    return <div style={{ maxWidth: 720 }}><ClinicalTable name={SYMPTOM_NAME} columns={cols} notes={false} primaryKey="name" rows={rows} onChange={setRows} /></div>;
   },
 };
 

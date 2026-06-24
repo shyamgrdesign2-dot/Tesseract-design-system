@@ -158,6 +158,53 @@ export const InfoTags = {
   ),
 };
 
+/** Compact density — the same Shell header with 36px controls + tighter padding/gap. */
+export const Compact = {
+  name: 'Compact density',
+  render: () => (
+    <ClinicHeader
+      density="compact"
+      logo={<HeaderLogo />}
+      actions={[
+        { type: 'tutorial' },
+        { type: 'divider' },
+        { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral', badge: { color: 'error' } },
+        { type: 'divider' },
+        { type: 'info', icon: 'hospital', label: 'Ward', value: 'W-204' },
+        '__clinic__',
+        { type: 'avatar', name: 'Dr Sheela', ring: true },
+      ]}
+    />
+  ),
+};
+
+/** Trailing slot — free-form right content rendered AFTER the actions array
+ *  (mirrors the `leading` slot on the left). Here: a sticky + elevated bar with
+ *  a custom status pill in the trailing slot. */
+export const TrailingSlot = {
+  name: 'Trailing slot + sticky',
+  render: () => (
+    <div style={{ minHeight: 320 }}>
+      <Header
+        sticky
+        elevation
+        logo={<HeaderLogo />}
+        actions={[
+          { type: 'cta', icon: 'bell-2', ariaLabel: 'Notifications', variant: 'tonal', theme: 'neutral' },
+          { type: 'divider' },
+        ]}
+        trailing={
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 'var(--tesseract-radius-full)', background: 'var(--tesseract-success-50, #ECFDF3)', color: 'var(--tesseract-success-700, #027A48)', fontSize: 13, fontWeight: 600 }}>
+            <TPLibraryIcon name="status-up" size={16} />
+            Online
+          </span>
+        }
+      />
+      <div style={{ padding: 16, color: 'var(--tesseract-slate-500)' }}>Scroll content — the bar stays pinned (sticky) with a drop shadow (elevation).</div>
+    </div>
+  ),
+};
+
 // ── Configurable Playground ──────────────────────────────────────────────────
 
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'tonal', 'ghost', 'link'];
@@ -177,13 +224,21 @@ function slotArgTypes() {
   return t;
 }
 
-// Accurate, copy-paste snippet for the back button (mirrors Badge's "Show code").
+// Accurate, copy-paste snippet (mirrors Badge's "Show code"). Defaults are
+// omitted so the snippet stays minimal and reflects only what's been changed.
 const headerBackCode = (a) => {
-  if (!a.showBack) return '<Header /* … */ />';
-  const lines = ['  back'];
-  if (a.backIcon && a.backIcon !== 'arrow-left-02') lines.push(`  backIcon="${a.backIcon}"`);
-  if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
-  return `<Header\n${lines.join('\n')}\n  /* …actions, leading… */\n/>`;
+  const lines = [];
+  if (a.showBack) {
+    lines.push('  back');
+    if (a.backIcon && a.backIcon !== 'arrow-left-02') lines.push(`  backIcon="${a.backIcon}"`);
+    if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
+  }
+  if (a.density && a.density !== 'comfortable') lines.push(`  density="${a.density}"`);
+  if (a.sticky) lines.push('  sticky');
+  if (a.elevation) lines.push('  elevation');
+  if (a.background && a.background.trim()) lines.push(`  background="${a.background.trim()}"`);
+  if (!lines.length) return '<Header /* … */ />';
+  return `<Header\n${lines.join('\n')}\n  /* …actions, leading, trailing… */\n/>`;
 };
 
 export const Playground = {
@@ -201,6 +256,11 @@ export const Playground = {
     tutorial: { control: 'boolean', name: 'tutorial (first)', table: { category: 'Right' } },
     clinic: { control: 'boolean', name: 'clinic select', table: { category: 'Right' } },
     avatar: { control: 'boolean', name: 'avatar (last)', table: { category: 'Right' } },
+    trailing: { control: 'boolean', name: 'trailing slot (status pill)', table: { category: 'Right' } },
+    density: { control: 'inline-radio', options: ['comfortable', 'compact'], name: 'density', table: { category: 'Bar' } },
+    sticky: { control: 'boolean', name: 'sticky', table: { category: 'Bar' } },
+    elevation: { control: 'boolean', name: 'elevation (shadow)', table: { category: 'Bar' } },
+    background: { control: 'text', name: 'background (token)', table: { category: 'Bar' } },
     ...slotArgTypes(),
   },
   args: {
@@ -216,6 +276,11 @@ export const Playground = {
     tutorial: true,
     clinic: true,
     avatar: true,
+    trailing: false,
+    density: 'comfortable',
+    sticky: false,
+    elevation: false,
+    background: '',
     c1Variant: 'tonal', c1Label: '', c1Icon: 'bell-2', c1Split: false, c1Divider: true,
     c2Variant: 'solid', c2Label: 'End Visit', c2Icon: 'clipboard-export', c2Split: true, c2Divider: true,
     c3Variant: 'none', c3Label: '', c3Icon: '', c3Split: false, c3Divider: false,
@@ -254,9 +319,27 @@ function HeaderPlaygroundDemo(a) {
   else if (a.leading === 'title') { left.title = a.title; if (a.subtitle && a.subtitle.trim()) left.subtitle = a.subtitle; }
   else if (a.leading === 'user') left.user = { name: a.userName, meta: a.userMeta, dropdown: a.userDropdown };
 
+  const trailing = a.trailing ? (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 'var(--tesseract-radius-full)', background: 'var(--tesseract-success-50, #ECFDF3)', color: 'var(--tesseract-success-700, #027A48)', fontSize: 13, fontWeight: 600 }}>
+      <TPLibraryIcon name="status-up" size={16} />
+      Online
+    </span>
+  ) : undefined;
+
   return (
     <div style={{ background: 'var(--tesseract-slate-50, #FAFAFB)', minHeight: 320 }}>
-      <Header back={a.showBack} backIcon={a.backIcon} backIconVariant={a.backIconVariant} {...left} actions={actions} />
+      <Header
+        back={a.showBack}
+        backIcon={a.backIcon}
+        backIconVariant={a.backIconVariant}
+        density={a.density}
+        sticky={a.sticky}
+        elevation={a.elevation}
+        background={a.background && a.background.trim() ? a.background.trim() : undefined}
+        trailing={trailing}
+        {...left}
+        actions={actions}
+      />
     </div>
   );
 }

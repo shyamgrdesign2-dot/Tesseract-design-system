@@ -35,7 +35,10 @@
  *       chevron?: bool (combo — show chevron, default true),
  *       validate?: (value, row) => "success"|"error"|"warning"|undefined }
  *   name      override config for the primary Name column (defaults provided)
- *   notes     override config for the Notes column (defaults provided)
+ *   notes     override config for the Notes column (defaults provided). Pass
+ *             `false` to drop the Notes column entirely.
+ *   primaryKey  column id used as the PRIMARY KEY (the search column that gates
+ *               a row + opens the next draft). Default: the Name column's id.
  *   reorderable  boolean  drag handle + reorder                  default true
  *   deletable    boolean  delete button in the action column     default true
  *   showRowMenu  boolean  the "⋯" row-actions menu (independent of delete) default true
@@ -43,11 +46,22 @@
  *                  extra "⋯" row actions. `onClick` omitted on "Duplicate" →
  *                  built-in duplicate.                            default [Duplicate]
  *   autoRow      boolean  keep one empty draft row to type into  default true
+ *   density      "comfortable" (default) | "compact"  row/header height + padding
+ *   loading      boolean  show skeleton rows (Skeleton atom) instead of data
+ *   loadingRows  number   how many skeleton rows to render       default 4
+ *   emptyState   ReactNode  shown when there are no rows AND no draft row
+ *                  (autoRow off / loading off). Default: the draft row only.
+ *   stickyHeader boolean  pin the header while the body scrolls vertically
+ *   maxHeight    number|string  cap the table height → vertical scroll
+ *
+ *   Per-column `render(value, row) => ReactNode`  escape hatch: when present, the
+ *   column renders this instead of the type-dispatched editable cell.
  *   className
  */
 
 import * as React from "react";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { Skeleton } from "@/src/components/atoms/Skeleton";
 import { cn } from "@/src/hooks/utils";
 import { EditableCell, RowActions, DragHandle } from "./cells";
 import { columnWidthStyle } from "./columns";
@@ -69,6 +83,7 @@ export function ClinicalTable({
   columns = [],
   name,
   notes,
+  primaryKey,
   rows: rowsProp,
   defaultRows = [],
   onChange,
@@ -77,6 +92,12 @@ export function ClinicalTable({
   showRowMenu = true,
   rowMenu,
   autoRow = true,
+  density = "comfortable",
+  loading = false,
+  loadingRows = 4,
+  emptyState,
+  stickyHeader = false,
+  maxHeight,
   dragIcon,
   moreIcon,
   deleteIcon,
@@ -88,24 +109,30 @@ export function ClinicalTable({
   const baseRows = controlled ? rowsProp : internal;
   const commit = (next) => { if (!controlled) setInternal(next); onChange?.(next); };
 
-  // ── Fixed skeleton: NAME (primary search) · …middle… · NOTES (free text) ──
+  // ── Skeleton: NAME (primary search) · …middle… · NOTES (free text) ──
+  // NAME and NOTES are defaults, not hard constraints: `notes={false}` drops the
+  // trailing notes column, and `primaryKey` lets any column be the gating search
+  // key — keeping the legacy NAME-first / NOTES-last layout when unset.
   const nameCol = {
     id: "name", header: "Name", type: "search", placeholder: "Search & add",
     frequentlyUsedLabel: "Frequently used", allowCustom: true, minWidth: 220, maxWidth: 320,
     ...name,
   };
-  const notesCol = {
+  const notesCol = notes === false ? null : {
     id: "notes", header: "Notes", type: "text", placeholder: "Notes", minWidth: 160, expand: true,
     ...notes,
   };
-  const rawDataColumns = [nameCol, ...columns, notesCol];
+  const rawDataColumns = [nameCol, ...columns, ...(notesCol ? [notesCol] : [])];
   const dataColumns = React.useMemo(() => {
     const normal = rawDataColumns.filter((c) => c.sticky !== "right");
     const sticky = rawDataColumns.filter((c) => c.sticky === "right");
     if (sticky.length <= 1) return [...normal, ...sticky];
     return [...normal, ...sticky.slice(0, -1).map((c) => ({ ...c, sticky: undefined })), sticky[sticky.length - 1]];
   }, [rawDataColumns]);
-  const primaryColId = nameCol.id;
+  // The primary key gates a row + opens the next draft. Default: the Name column;
+  // override via `primaryKey` (falls back to Name's id if it doesn't match a col).
+  const primaryColId =
+    primaryKey && dataColumns.some((c) => c.id === primaryKey) ? primaryKey : nameCol.id;
 
   const [draft, setDraft] = React.useState(makeEmptyRow);
   const rendered = autoRow ? [...baseRows, draft] : baseRows;
@@ -239,8 +266,24 @@ export function ClinicalTable({
     return () => { el.removeEventListener("scroll", update); ro?.disconnect(); window.removeEventListener("resize", update); };
   }, [columns.length]);
 
+  // Vertical scroll cap (long tables). When set, the wrapper scrolls vertically;
+  // `stickyHeader` pins <thead> against that scroll.
+  const wrapStyle = maxHeight != null
+    ? { maxHeight: typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight, overflowY: "auto" }
+    : undefined;
+
+  const colCount = dataColumns.length + (reorderable ? 1 : 0) + (hasAction ? 1 : 0);
+  const showEmpty = !loading && emptyState != null && baseRows.length === 0 && (!autoRow || rendered.length === 0);
+
   return (
-    <div ref={scrollerRef} className={cn(styles.wrap, className)} data-behind={behind || undefined}>
+    <div
+      ref={scrollerRef}
+      className={cn(styles.wrap, className)}
+      data-behind={behind || undefined}
+      data-density={density}
+      data-sticky-header={stickyHeader || undefined}
+      style={wrapStyle}
+    >
       <table className={styles.table}>
         <thead>
           <tr className={styles.headRow}>
@@ -254,7 +297,27 @@ export function ClinicalTable({
           </tr>
         </thead>
         <tbody>
-          {rendered.map((row, i) => {
+          {loading && Array.from({ length: Math.max(1, loadingRows) }).map((_, i) => (
+            <tr key={`sk-${i}`} className={styles.row} aria-hidden>
+              {reorderable && <td className={cn(styles.td, styles.sideCol)} />}
+              {dataColumns.map((c) => (
+                <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={c.sticky === "right" || undefined}>
+                  <div className={styles.skelCell}>
+                    <Skeleton variant="text" height={12} width={c.id === primaryColId ? "70%" : "55%"} />
+                  </div>
+                </td>
+              ))}
+              {hasAction && <td className={cn(styles.td, styles.actionCol, styles.sticky)} data-shadow="true" />}
+            </tr>
+          ))}
+
+          {showEmpty && (
+            <tr className={styles.row}>
+              <td className={cn(styles.td, styles.emptyCell)} colSpan={colCount}>{emptyState}</td>
+            </tr>
+          )}
+
+          {!loading && !showEmpty && rendered.map((row, i) => {
             const isDraft = row.id === draft.id;
             const primaryFilled = Boolean(String(row[primaryColId] ?? "").trim());
             return (
@@ -279,16 +342,25 @@ export function ClinicalTable({
                   // locked until the name is confirmed (and the row becomes real).
                   // Committed rows lock a non-primary cell only if the name is empty.
                   const locked = !isPrimary && (isDraft || !primaryFilled);
+                  // Escape hatch: a column may supply `render(value, row)` to draw
+                  // its own (typically read-only) cell, bypassing the type-dispatch.
+                  // The draft row still falls through to the editable cell so a new
+                  // row can be typed in regardless of custom renderers.
+                  const useCustom = typeof c.render === "function" && !isDraft;
                   return (
                     <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={c.sticky === "right" || undefined}>
-                      <EditableCell
-                        column={c}
-                        value={row[c.id]}
-                        row={row}
-                        locked={locked}
-                        onChange={(v) => updateCell(row.id, c.id, v)}
-                        onCommit={isDraft && isPrimary ? commitDraft : undefined}
-                      />
+                      {useCustom ? (
+                        <div className={styles.customCell} data-align={c.align}>{c.render(row[c.id], row)}</div>
+                      ) : (
+                        <EditableCell
+                          column={c}
+                          value={row[c.id]}
+                          row={row}
+                          locked={locked}
+                          onChange={(v) => updateCell(row.id, c.id, v)}
+                          onCommit={isDraft && isPrimary ? commitDraft : undefined}
+                        />
+                      )}
                     </td>
                   );
                 })}

@@ -2121,6 +2121,9 @@
           "name": "notes"
         },
         {
+          "name": "primaryKey"
+        },
+        {
           "name": "rows"
         },
         {
@@ -2154,6 +2157,38 @@
           "name": "autoRow",
           "default": "true",
           "control": "boolean"
+        },
+        {
+          "name": "density",
+          "default": "\"comfortable\"",
+          "allowedValues": [
+            "comfortable",
+            "compact"
+          ],
+          "control": "inline-radio",
+          "description": "Row/header height + cell padding"
+        },
+        {
+          "name": "loading",
+          "default": "false",
+          "control": "boolean",
+          "description": "Show skeleton rows instead of data"
+        },
+        {
+          "name": "loadingRows",
+          "default": "4"
+        },
+        {
+          "name": "emptyState"
+        },
+        {
+          "name": "stickyHeader",
+          "default": "false",
+          "control": "boolean",
+          "description": "Pin the header while the body scrolls (pair with maxHeight)"
+        },
+        {
+          "name": "maxHeight"
         },
         {
           "name": "dragIcon",
@@ -2191,6 +2226,11 @@
         "AllCellTypes",
         "StickyActions",
         "Empty",
+        "EmptyState",
+        "Loading",
+        "Compact",
+        "StickyHeader",
+        "CustomRenderAndConfig",
         "FlaggedCustomEntry",
         "ConfiguringColumns"
       ],
@@ -2218,6 +2258,36 @@
           "name": "title",
           "default": "'Discard changes?'",
           "control": "text"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio",
+          "description": "Dialog width — sm ~400 · md 480 (default) · lg ~640"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "headerIcon",
+          "default": "''",
+          "control": "text",
+          "description": "Leading icon next to the title (CDN icon name; blank = none)"
+        },
+        {
+          "name": "hideClose",
+          "default": "false",
+          "control": "boolean",
+          "description": "Hide the always-on close button"
+        },
+        {
+          "name": "closeIcon",
+          "default": "\"close-square\""
         },
         {
           "name": "description",
@@ -2255,6 +2325,14 @@
             "below"
           ],
           "control": "inline-radio"
+        },
+        {
+          "name": "calloutLines",
+          "default": "3"
+        },
+        {
+          "name": "descriptionLines",
+          "default": "3"
         },
         {
           "name": "children"
@@ -2309,6 +2387,12 @@
         {
           "name": "primaryDisabled",
           "default": "false"
+        },
+        {
+          "name": "primaryLoading",
+          "default": "false",
+          "control": "boolean",
+          "description": "Show the Button spinner + disable while an async confirm runs"
         },
         {
           "name": "primaryAutoClose",
@@ -2452,6 +2536,8 @@
         "ThreeCtas",
         "CalloutLineScaling",
         "ActionLayout",
+        "Sizes",
+        "DestructiveWithIcon",
         "BodyVariants"
       ],
       "sourcePath": "src/components/molecules/ConfirmDialog/ConfirmDialog.jsx",
@@ -2784,6 +2870,52 @@
           "name": "analyticsId"
         },
         {
+          "name": "locale",
+          "default": "\"en-IN\"",
+          "control": "text",
+          "description": "BCP-47 locale for date formatting (e.g. en-IN, en-US, fr-FR)"
+        },
+        {
+          "name": "formatDate"
+        },
+        {
+          "name": "weekStartsOn",
+          "default": "1",
+          "control": "inline-radio",
+          "description": "0 = Sunday · 1 = Monday"
+        },
+        {
+          "name": "applyLabel",
+          "default": "\"Apply\"",
+          "control": "text"
+        },
+        {
+          "name": "cancelLabel",
+          "default": "\"Cancel\"",
+          "control": "text"
+        },
+        {
+          "name": "clearLabel",
+          "default": "\"Clear\"",
+          "control": "text"
+        },
+        {
+          "name": "showFooter",
+          "default": "true",
+          "control": "boolean",
+          "description": "Show the Clear · Cancel · Apply footer"
+        },
+        {
+          "name": "commitMode",
+          "default": "\"outside-click\"",
+          "allowedValues": [
+            "outside-click",
+            "apply"
+          ],
+          "control": "inline-radio",
+          "description": "When the selection commits"
+        },
+        {
           "name": "iconName",
           "control": "text",
           "description": "CDN icon name for the trigger (blank = default calendar/clock)",
@@ -2822,6 +2954,8 @@
         "FieldStates",
         "Sizes",
         "Constraints",
+        "SundayStart",
+        "RelabeledFooter",
         "Controlled"
       ],
       "sourcePath": "src/components/molecules/DateRangePicker/DateRangePicker.jsx",
@@ -3182,6 +3316,44 @@
           "default": "true"
         },
         {
+          "name": "density",
+          "default": "\"comfortable\"",
+          "allowedValues": [
+            "comfortable",
+            "compact"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "sticky",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "elevation",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "trailing",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "background",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "borderColor"
+        },
+        {
+          "name": "onUserClick"
+        },
+        {
+          "name": "tutorialIcon"
+        },
+        {
           "name": "className"
         },
         {
@@ -3226,6 +3398,8 @@
         "Print",
         "TitleWithSubtext",
         "InfoTags",
+        "Compact",
+        "TrailingSlot",
         "Playground"
       ],
       "sourcePath": "src/components/molecules/Header/Header.jsx",

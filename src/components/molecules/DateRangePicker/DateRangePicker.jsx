@@ -33,6 +33,13 @@
  *   minuteStep   minute granularity                         default 5
  *   label / helperText / status ("error"|"success"|"warning") / required / disabled
  *   placeholder / size ("sm"|"md"|"lg") / fullWidth / icon / analyticsId
+ *   locale       BCP-47 locale for all date formatting            default "en-IN"
+ *   formatDate   (date) => string  override for rendered dates (wins over locale)
+ *   weekStartsOn 0 (Sunday) | 1 (Monday) — week start             default 1
+ *   applyLabel / cancelLabel / clearLabel   footer button labels  default Apply/Cancel/Clear
+ *   showFooter   show the Clear · Cancel · Apply footer            default true
+ *   commitMode   "outside-click" (commit on outside click) | "apply" (commit only on Apply)
+ *                                                                  default "outside-click"
  */
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -55,23 +62,31 @@ function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); retu
 function addMonths(d, n) { const r = new Date(d); r.setMonth(r.getMonth() + n); return r; }
 function isSameDay(a, b) { return a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 function clampDate(d, min, max) { if (min && d < min) return startOfDay(min); if (max && d > max) return startOfDay(max); return d; }
-function startOfWeek(d) { const s = startOfDay(d); const dow = (s.getDay() + 6) % 7; return addDays(s, -dow); }
+// startOfWeek honours weekStartsOn (0=Sun, 1=Mon). Default 1 = the original Monday start.
+function startOfWeek(d, weekStartsOn = 1) { const s = startOfDay(d); const dow = (s.getDay() - weekStartsOn + 7) % 7; return addDays(s, -dow); }
 function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
 function endOfMonth(d) { return new Date(d.getFullYear(), d.getMonth() + 1, 0); }
 function startOfYear(d) { return new Date(d.getFullYear(), 0, 1); }
 function endOfYear(d) { return new Date(d.getFullYear(), 11, 31); }
 const pad2 = (n) => String(n).padStart(2, "0");
 
-function formatDate(d) { return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
-function formatMonthYear(d) { return d.toLocaleDateString("en-IN", { month: "long", year: "numeric" }); }
-function formatInputDate(d) { return d ? d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : ""; }
+// Formatters take a locale (default "en-IN" = unchanged). formatDate additionally
+// accepts a `custom` override ((date) => string) which wins over the locale path.
+function formatDate(d, locale = "en-IN", custom) { return custom ? custom(d) : d.toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" }); }
+function formatMonthYear(d, locale = "en-IN") { return d.toLocaleDateString(locale, { month: "long", year: "numeric" }); }
+function formatInputDate(d, locale = "en-IN") { return d ? d.toLocaleDateString(locale, { day: "2-digit", month: "short", year: "numeric" }) : ""; }
 function formatTime(h, m, use12) {
   if (use12) { const ap = h < 12 ? "AM" : "PM"; const h12 = h % 12 || 12; return `${pad2(h12)}:${pad2(m)} ${ap}`; }
   return `${pad2(h)}:${pad2(m)}`;
 }
 
 const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+// Sunday-indexed base labels; reordered per weekStartsOn (default 1 = Monday-first,
+// i.e. ["Mo","Tu","We","Th","Fr","Sa","Su"] — the original array).
+const WEEKDAYS_BASE = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+function weekdayLabels(weekStartsOn = 1) {
+  return Array.from({ length: 7 }, (_, i) => WEEKDAYS_BASE[(i + weekStartsOn) % 7]);
+}
 
 // ─── Presets (range mode) ─────────────────────────────────────────────────────
 const PRESETS = [
@@ -85,10 +100,10 @@ const PRESETS = [
   { id: "last-year", label: "Last year", getRange: () => { const ly = new Date(new Date().getFullYear() - 1, 0, 1); return { start: startOfYear(ly), end: endOfYear(ly) }; } },
 ];
 
-function buildCalendarDays(viewDate) {
+function buildCalendarDays(viewDate, weekStartsOn = 1) {
   const year = viewDate.getFullYear(), month = viewDate.getMonth();
-  let startOffset = new Date(year, month, 1).getDay() - 1;
-  if (startOffset < 0) startOffset = 6;
+  // Days from the week start to the 1st of the month (default Monday start = original).
+  const startOffset = (new Date(year, month, 1).getDay() - weekStartsOn + 7) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const cells = [];
   for (let i = 0; i < startOffset; i++) cells.push(null);
@@ -98,14 +113,15 @@ function buildCalendarDays(viewDate) {
 }
 
 // ─── Calendar month grid ──────────────────────────────────────────────────────
-function CalendarMonth({ viewDate, stagedStart, stagedEnd, pendingStart, hoverDate, focusDate, isDisabledDay, onDayClick, onDayHover }) {
+function CalendarMonth({ viewDate, stagedStart, stagedEnd, pendingStart, hoverDate, focusDate, isDisabledDay, onDayClick, onDayHover, weekStartsOn = 1, locale = "en-IN", formatDateFn }) {
   const effectiveRange = (() => {
     if (pendingStart && hoverDate) { const [s, e] = pendingStart <= hoverDate ? [pendingStart, hoverDate] : [hoverDate, pendingStart]; return { start: s, end: e }; }
     if (stagedStart && stagedEnd) return { start: stagedStart, end: stagedEnd };
     return null;
   })();
   const isSingle = effectiveRange ? isSameDay(effectiveRange.start, effectiveRange.end) : false;
-  const days = buildCalendarDays(viewDate);
+  const days = buildCalendarDays(viewDate, weekStartsOn);
+  const WEEKDAYS = weekdayLabels(weekStartsOn);
   const inRange = (day) => (effectiveRange && effectiveRange.start && effectiveRange.end ? day >= effectiveRange.start && day <= effectiveRange.end : false);
   const isStart = (day) => (effectiveRange ? isSameDay(day, effectiveRange.start) : false);
   const isEnd = (day) => (effectiveRange ? isSameDay(day, effectiveRange.end) : false);
@@ -132,7 +148,7 @@ function CalendarMonth({ viewDate, stagedStart, stagedEnd, pendingStart, hoverDa
                 data-today={today && !edge && !within ? "true" : undefined}
                 data-focused={focused && !edge ? "true" : undefined}
                 data-disabled={disabled ? "true" : undefined}
-                aria-label={formatDate(day)} aria-current={today ? "date" : undefined}>
+                aria-label={formatDate(day, locale, formatDateFn)} aria-current={today ? "date" : undefined}>
                 {day.getDate()}
                 {today && !edge && <span className={styles.todayDot} />}
               </button>
@@ -232,6 +248,11 @@ export function DatePicker({
   use12Hour = true, minuteStep = 5,
   label, helperText, status, required = false, disabled = false, placeholder,
   size = "md", fullWidth = true, analyticsId,
+  // i18n + configurability (defaults preserve the original behaviour/look)
+  locale = "en-IN", formatDate: formatDateProp,
+  weekStartsOn = 1,
+  applyLabel = "Apply", cancelLabel = "Cancel", clearLabel = "Clear", showFooter = true,
+  commitMode = "outside-click",
 }) {
   const { track } = useAnalytics();
   const isRange = mode === "range";
@@ -252,6 +273,15 @@ export function DatePicker({
     if (max && day > max) return true;
     return isDateDisabled ? isDateDisabled(day) : false;
   };
+
+  // Locale-bound formatters — the rest of the component calls these so `locale`
+  // (default "en-IN" = unchanged) and the optional `formatDate` override apply
+  // everywhere a date is rendered. `fmtDate` honours the override; the others
+  // are locale-only (month/year + short-input variants).
+  const fmtDate = (d) => formatDate(d, locale, formatDateProp);
+  const fmtMonthYear = (d) => formatMonthYear(d, locale);
+  const fmtInputDate = (d) => formatInputDate(d, locale);
+  const fmtMonthShort = (d) => d.toLocaleDateString(locale, { month: "short", year: "numeric" });
 
   // Base panel for the mode (month/year open straight onto their grid).
   const basePanel = isMonth ? "months" : isYear ? "years" : "days";
@@ -314,17 +344,17 @@ export function DatePicker({
   // ── Trigger label ──
   const triggerLabel = (() => {
     if (isRange) {
-      if (value && typeof value === "object" && value.start) return `${formatInputDate(value.start)}${value.end ? ` – ${formatInputDate(value.end)}` : ""}`;
+      if (value && typeof value === "object" && value.start) return `${fmtInputDate(value.start)}${value.end ? ` – ${fmtInputDate(value.end)}` : ""}`;
       const p = presets.find((x) => x.id === value); if (p) return p.label;
-      if (value instanceof Date) return formatInputDate(value);
+      if (value instanceof Date) return fmtInputDate(value);
     } else if (isTime) {
       if (value != null) { const s = deriveStaged(value); if (s.time) return formatTime(s.time.h, s.time.m, use12Hour); }
     } else if (isYear) {
       if (value != null) return String(value instanceof Date ? value.getFullYear() : value);
     } else if (isMonth) {
-      if (value != null) { const s = deriveStaged(value); if (s.start) return s.start.toLocaleDateString("en-IN", { month: "short", year: "numeric" }); }
+      if (value != null) { const s = deriveStaged(value); if (s.start) return fmtMonthShort(s.start); }
     } else if (value instanceof Date) {
-      return isDateTime ? `${formatInputDate(value)}, ${formatTime(value.getHours(), value.getMinutes(), use12Hour)}` : formatInputDate(value);
+      return isDateTime ? `${fmtInputDate(value)}, ${formatTime(value.getHours(), value.getMinutes(), use12Hour)}` : fmtInputDate(value);
     }
     return placeholder || DEFAULT_PLACEHOLDER[mode] || "Select";
   })();
@@ -334,13 +364,13 @@ export function DatePicker({
   const stagedLabel = (() => {
     if (isTime) return formatTime(stagedTime.h, stagedTime.m, use12Hour);
     if (isYear) return stagedStart ? String(stagedStart.getFullYear()) : null;
-    if (isMonth) return stagedStart ? stagedStart.toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : null;
+    if (isMonth) return stagedStart ? fmtMonthShort(stagedStart) : null;
     if (isRange) {
-      if (stagedStart && stagedEnd) { const p = presets.find((x) => x.id === stagedPreset); return p ? p.label : `${formatInputDate(stagedStart)} – ${formatInputDate(stagedEnd)}`; }
-      if (stagedStart) return formatInputDate(stagedStart);
+      if (stagedStart && stagedEnd) { const p = presets.find((x) => x.id === stagedPreset); return p ? p.label : `${fmtInputDate(stagedStart)} – ${fmtInputDate(stagedEnd)}`; }
+      if (stagedStart) return fmtInputDate(stagedStart);
       return null;
     }
-    if (stagedStart) return isDateTime ? `${formatInputDate(stagedStart)}, ${formatTime(stagedTime.h, stagedTime.m, use12Hour)}` : formatInputDate(stagedStart);
+    if (stagedStart) return isDateTime ? `${fmtInputDate(stagedStart)}, ${formatTime(stagedTime.h, stagedTime.m, use12Hour)}` : fmtInputDate(stagedStart);
     return null;
   })();
   const displayLabel = open && stagedLabel ? stagedLabel : triggerLabel;
@@ -435,8 +465,8 @@ export function DatePicker({
       case "ArrowRight": next = addDays(f, 1); break;
       case "ArrowUp": next = addDays(f, -7); break;
       case "ArrowDown": next = addDays(f, 7); break;
-      case "Home": next = startOfWeek(f); break;
-      case "End": next = addDays(startOfWeek(f), 6); break;
+      case "Home": next = startOfWeek(f, weekStartsOn); break;
+      case "End": next = addDays(startOfWeek(f, weekStartsOn), 6); break;
       case "PageUp": next = addMonths(f, -1); break;
       case "PageDown": next = addMonths(f, 1); break;
       case "Enter": e.preventDefault(); selectDay(f); return;
@@ -463,13 +493,13 @@ export function DatePicker({
       onChange?.({ mode: "year", year: y, date: new Date(y, 0, 1), label: String(y) });
       emit("apply", { value: y });
     } else if (isMonth && stagedStart) {
-      const label = stagedStart.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+      const label = fmtMonthShort(stagedStart);
       onChange?.({ mode: "month", year: stagedStart.getFullYear(), month: stagedStart.getMonth(), date: stagedStart, label });
       emit("apply", { value: label });
     } else if (isRange) {
       if (stagedStart && stagedEnd) {
         const preset = presets.find((p) => p.id === stagedPreset);
-        const label = preset ? preset.label : `${formatDate(stagedStart)} – ${formatDate(stagedEnd)}`;
+        const label = preset ? preset.label : `${fmtDate(stagedStart)} – ${fmtDate(stagedEnd)}`;
         onChange?.({ mode: "range", type: stagedPreset ? "preset" : "custom", presetId: stagedPreset, range: { start: stagedStart, end: stagedEnd }, start: stagedStart, end: stagedEnd, label });
         emit("apply", { value: label, presetId: stagedPreset || undefined });
       }
@@ -477,7 +507,7 @@ export function DatePicker({
       // single / datetime
       let date = stagedStart;
       if (isDateTime) { date = new Date(stagedStart); date.setHours(stagedTime.h, stagedTime.m, 0, 0); }
-      const label = isDateTime ? `${formatInputDate(date)}, ${formatTime(stagedTime.h, stagedTime.m, use12Hour)}` : formatDate(date);
+      const label = isDateTime ? `${fmtInputDate(date)}, ${formatTime(stagedTime.h, stagedTime.m, use12Hour)}` : fmtDate(date);
       onChange?.({ mode, date, label });
       emit("apply", { value: label });
     }
@@ -485,8 +515,11 @@ export function DatePicker({
   }
   // Outside-click commit. An INCOMPLETE range (only the start picked — pendingStart
   // still set) is discarded rather than committed as a one-day range.
+  // commitMode "outside-click" (default) commits the staged selection on outside
+  // click; "apply" only closes (commit happens solely via the Apply button).
   useEffect(() => {
     commitRef.current = () => {
+      if (commitMode === "apply") { setOpen(false); return; }
       if (isRange && pendingStart) { setOpen(false); return; }
       handleApply();
     };
@@ -537,7 +570,7 @@ export function DatePicker({
                   {panel === "days" ? (
                     Array.from({ length: months }).map((_, i) => (
                       <button key={i} type="button" className={styles.monthBtn} onClick={() => setPanel("months")}>
-                        {formatMonthYear(addMonths(leftViewDate, i))}<Chevron dir="down" size={13} />
+                        {fmtMonthYear(addMonths(leftViewDate, i))}<Chevron dir="down" size={13} />
                       </button>
                     ))
                   ) : (
@@ -558,7 +591,8 @@ export function DatePicker({
                     {i > 0 && <div className={styles.calDivider} />}
                     <CalendarMonth viewDate={addMonths(leftViewDate, i)} stagedStart={stagedStart} stagedEnd={stagedEnd}
                       pendingStart={pendingStart} hoverDate={hoverDate} focusDate={focusDate}
-                      isDisabledDay={isDisabledDay} onDayClick={selectDay} onDayHover={setHoverDate} />
+                      isDisabledDay={isDisabledDay} onDayClick={selectDay} onDayHover={setHoverDate}
+                      weekStartsOn={weekStartsOn} locale={locale} formatDateFn={formatDateProp} />
                   </div>
                 ))}
               </div>
@@ -587,13 +621,15 @@ export function DatePicker({
             return (<>{nav}{body}{isTime && <div className={styles.timeWrap}>{time}</div>}</>);
           })()}
 
-          <div className={styles.actions}>
-            <Button variant="link" theme="warning" size="sm" onClick={handleClear}>Clear</Button>
-            <div className={styles.actionsRight}>
-              <Button variant="outline" theme="neutral" size="sm" onClick={handleCancel}>Cancel</Button>
-              <Button variant="solid" theme="primary" size="sm" disabled={applyDisabled} onClick={handleApply}>Apply</Button>
+          {showFooter && (
+            <div className={styles.actions}>
+              <Button variant="link" theme="warning" size="sm" onClick={handleClear}>{clearLabel}</Button>
+              <div className={styles.actionsRight}>
+                <Button variant="outline" theme="neutral" size="sm" onClick={handleCancel}>{cancelLabel}</Button>
+                <Button variant="solid" theme="primary" size="sm" disabled={applyDisabled} onClick={handleApply}>{applyLabel}</Button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

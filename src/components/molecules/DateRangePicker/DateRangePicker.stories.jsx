@@ -22,6 +22,14 @@ const meta = {
     showPresets: { control: 'boolean', name: 'show presets', description: 'Quick-select rail (range)', table: { category: 'Type' } },
     use12Hour: { control: 'boolean', name: '12-hour clock', table: { category: 'Type' } },
     minuteStep: { control: 'inline-radio', options: [1, 5, 15, 30], table: { category: 'Type' } },
+    // ── i18n + behaviour ──
+    locale: { control: 'text', description: 'BCP-47 locale for date formatting (e.g. en-IN, en-US, fr-FR)', table: { category: 'Localization' } },
+    weekStartsOn: { control: 'inline-radio', options: [0, 1], name: 'week starts on', description: '0 = Sunday · 1 = Monday', table: { category: 'Localization' } },
+    applyLabel: { control: 'text', name: 'apply label', table: { category: 'Footer' } },
+    cancelLabel: { control: 'text', name: 'cancel label', table: { category: 'Footer' } },
+    clearLabel: { control: 'text', name: 'clear label', table: { category: 'Footer' } },
+    showFooter: { control: 'boolean', name: 'show footer', description: 'Show the Clear · Cancel · Apply footer', table: { category: 'Footer' } },
+    commitMode: { control: 'inline-radio', options: ['outside-click', 'apply'], name: 'commit mode', description: 'When the selection commits', table: { category: 'Footer' } },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], table: { category: 'Field' } },
     label: { control: 'text', table: { category: 'Field' } },
     helperText: { control: 'text', name: 'helper text', table: { category: 'Field' } },
@@ -35,10 +43,44 @@ const meta = {
     value: { control: false },
     onChange: { control: false },
   },
-  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '', iconVariant: 'linear', iconFamily: '' },
+  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '', iconVariant: 'linear', iconFamily: '', locale: 'en-IN', weekStartsOn: 1, applyLabel: 'Apply', cancelLabel: 'Cancel', clearLabel: 'Clear', showFooter: true, commitMode: 'outside-click' },
 };
 
 export default meta;
+
+// Build an accurate copy-paste snippet from the Playground controls (Show code).
+// Only non-default props are emitted so the snippet stays minimal.
+const datePickerCode = ({
+  mode = 'single', months = 2, showPresets = true, use12Hour = true, minuteStep = 5,
+  size = 'md', label, helperText, status, required, disabled, placeholder,
+  locale = 'en-IN', weekStartsOn = 1,
+  applyLabel = 'Apply', cancelLabel = 'Cancel', clearLabel = 'Clear', showFooter = true,
+  commitMode = 'outside-click',
+  iconName, iconVariant, iconFamily,
+}) => {
+  const lines = [`  mode="${mode}"`];
+  if (mode === 'range' && months !== 2) lines.push(`  months={${months}}`);
+  if (mode === 'range' && showPresets === false) lines.push('  showPresets={false}');
+  if ((mode === 'time' || mode === 'datetime') && !use12Hour) lines.push('  use12Hour={false}');
+  if ((mode === 'time' || mode === 'datetime') && minuteStep !== 5) lines.push(`  minuteStep={${minuteStep}}`);
+  if (size !== 'md') lines.push(`  size="${size}"`);
+  if (label) lines.push(`  label="${label}"`);
+  if (helperText) lines.push(`  helperText="${helperText}"`);
+  if (status) lines.push(`  status="${status}"`);
+  if (required) lines.push('  required');
+  if (disabled) lines.push('  disabled');
+  if (placeholder) lines.push(`  placeholder="${placeholder}"`);
+  if (locale && locale !== 'en-IN') lines.push(`  locale="${locale}"`);
+  if (weekStartsOn !== 1) lines.push(`  weekStartsOn={${weekStartsOn}}`);
+  if (applyLabel && applyLabel !== 'Apply') lines.push(`  applyLabel="${applyLabel}"`);
+  if (cancelLabel && cancelLabel !== 'Cancel') lines.push(`  cancelLabel="${cancelLabel}"`);
+  if (clearLabel && clearLabel !== 'Clear') lines.push(`  clearLabel="${clearLabel}"`);
+  if (showFooter === false) lines.push('  showFooter={false}');
+  if (commitMode && commitMode !== 'outside-click') lines.push(`  commitMode="${commitMode}"`);
+  if (iconName) lines.push(`  icon={<TPIcon name="${iconName}"${iconVariant && iconVariant !== 'linear' ? ` variant="${iconVariant}"` : ''}${iconFamily ? ` family="${iconFamily}"` : ''} size={16} />}`);
+  lines.push('  value={value}', '  onChange={handleChange}');
+  return `<DatePicker\n${lines.join('\n')}\n/>`;
+};
 
 /** Playground — switch `mode` and every field option in Controls. */
 export const Playground = {
@@ -55,6 +97,7 @@ export const Playground = {
       </div>
     );
   },
+  parameters: { docs: { source: { transform: (_code, ctx) => datePickerCode(ctx.args) } } },
 };
 
 // ── Core date modes ──────────────────────────────────────────────────────────
@@ -162,6 +205,36 @@ export const Constraints = {
       <div style={{ width: 340 }}>
         <DatePicker mode="single" label="Booking date (this & next month, weekdays only)" helperText="Weekends and out-of-window dates are disabled"
           minDate={minD} maxDate={maxD} isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6} value={v} onChange={(r) => setV(r.date)} />
+      </div>
+    );
+  },
+};
+
+// ── Localization & footer ────────────────────────────────────────────────────
+
+/** Sunday-start week — `weekStartsOn={0}` reorders the weekday header and the
+ *  day-grid offset (US convention). Paired here with the `en-US` locale. */
+export const SundayStart = {
+  name: 'Week starts on Sunday',
+  parameters: { docs: { description: { story: '`weekStartsOn={0}` puts Sunday first (header + grid offset). Default is `1` (Monday). Combined with `locale="en-US"` for US-style month/day formatting.' } } },
+  render: () => {
+    const [v, setV] = React.useState(null);
+    return <div style={{ width: 320 }}><DatePicker mode="single" weekStartsOn={0} locale="en-US" label="Date (US)" value={v} onChange={(r) => setV(r.date)} /></div>;
+  },
+};
+
+/** Relabeled footer — override the footer button labels (and the picker can be
+ *  driven in any language via `locale`). Here: French labels + `fr-FR` locale. */
+export const RelabeledFooter = {
+  name: 'Relabeled footer + locale',
+  parameters: { docs: { description: { story: 'Footer buttons are relabeled via `applyLabel` / `cancelLabel` / `clearLabel`; `locale="fr-FR"` localizes the rendered dates. Set `showFooter={false}` to hide the footer entirely.' } } },
+  render: () => {
+    const [v, setV] = React.useState(null);
+    return (
+      <div style={{ width: 320 }}>
+        <DatePicker mode="range" months={1} showPresets={false} locale="fr-FR"
+          applyLabel="Appliquer" cancelLabel="Annuler" clearLabel="Effacer"
+          label="Période" value={v} onChange={(r) => setV(r.range)} />
       </div>
     );
   },

@@ -52,9 +52,17 @@ const Alert = {
   Close: DialogPrimitive.Close,
 };
 
+// Resolve an icon slot: a string is treated as a CDN icon name, anything else
+// (a React node) is rendered as-is. Returns null for empty/false.
+function resolveIcon(icon, { size = 24, variant = "bold" } = {}) {
+  if (icon == null || icon === false || icon === "") return null;
+  if (typeof icon === "string") return <TPLibraryIcon name={icon} variant={variant} size={size} />;
+  return icon;
+}
+
 // Icon scales with how many lines the callout text wraps to (capped at 3):
 //   3 lines → 42px · 2 lines → 24px · 1 line → 24px.
-function Callout({ tone = "warning", icon = true, customIcon, children }) {
+function Callout({ tone = "warning", icon = true, customIcon, lineClamp = 3, children }) {
   const isNeutral = tone === "neutral";
   const textRef = React.useRef(null);
   const [lines, setLines] = React.useState(1);
@@ -81,23 +89,25 @@ function Callout({ tone = "warning", icon = true, customIcon, children }) {
           {customIcon ?? <TPIcon name={isNeutral ? "info" : tone === "error" ? "danger" : "warning"} variant="bulk" size={iconSize} />}
         </span>
       )}
-      <div ref={textRef} className={styles.calloutText}>{children}</div>
+      <div ref={textRef} className={styles.calloutText} style={{ "--cd-callout-lines": lineClamp }}>{children}</div>
     </div>
   );
 }
 
 // One footer CTA: wraps Button in Close so it dismisses, then runs the handler.
-function FooterButton({ label, onClick, variant, theme, disabled, autoClose = true, fullWidth = false }) {
+function FooterButton({ label, onClick, variant, theme, disabled, loading = false, autoClose = true, fullWidth = false }) {
   if (!label) return null;
+  const isBlocked = disabled || loading;
   const btn = (
     <Button
       variant={variant}
       theme={theme}
       size="sm"
-      disabled={disabled}
+      disabled={isBlocked}
+      loading={loading}
       style={fullWidth ? { flex: 1 } : undefined}
       onClick={(e) => {
-        if (disabled) { e.preventDefault(); return; }
+        if (isBlocked) { e.preventDefault(); return; }
         if (!autoClose) e.preventDefault();
         onClick?.();
       }}
@@ -112,6 +122,13 @@ export function ConfirmDialog({
   open,
   onOpenChange,
   title,
+  // Dialog frame
+  size = "md",                // "sm" (~400) | "md" (480, default) | "lg" (~640)
+  // Header
+  icon,                       // leading header icon: CDN icon name | React node
+  headerIcon,                 // alias for `icon`
+  hideClose = false,          // hide the always-on close button
+  closeIcon = "close-square", // override the close button glyph: name | node
   // Body
   description,
   callout,
@@ -119,6 +136,8 @@ export function ConfirmDialog({
   calloutIcon = true,
   calloutCustomIcon,
   calloutPlacement = "above",
+  calloutLines = 3,           // -webkit-line-clamp on the callout text
+  descriptionLines = 3,       // -webkit-line-clamp on the description text
   children,
   // Optional "Don't show again" style checkbox in the body.
   checkboxLabel,
@@ -131,6 +150,7 @@ export function ConfirmDialog({
   primaryVariant = "solid",
   primaryTheme = "primary",
   primaryDisabled = false,
+  primaryLoading = false,
   primaryAutoClose = true,
   // Secondary CTA (destructive action, by convention)
   secondaryLabel,
@@ -175,23 +195,31 @@ export function ConfirmDialog({
     onCheckboxChange?.(Boolean(v));
   };
 
-  const box = calloutContent ? <Callout tone={cTone} icon={calloutIcon} customIcon={calloutCustomIcon}>{calloutContent}</Callout> : null;
-  const desc = description ? <Alert.Description className={styles.description}>{description}</Alert.Description> : null;
+  const box = calloutContent ? <Callout tone={cTone} icon={calloutIcon} customIcon={calloutCustomIcon} lineClamp={calloutLines}>{calloutContent}</Callout> : null;
+  const desc = description ? <Alert.Description className={styles.description} style={{ "--cd-desc-lines": descriptionLines }}>{description}</Alert.Description> : null;
   const hasBody = box || desc || children || checkboxLabel;
+
+  const headerGlyph = resolveIcon(headerIcon ?? icon, { size: 24 });
+  const closeGlyph = resolveIcon(closeIcon, { size: 24 });
 
   return (
     <Alert.Root open={open} onOpenChange={onOpenChange}>
       <Alert.Portal>
         <Alert.Overlay className={styles.overlay} />
-        <Alert.Content data-voice-allow className={styles.content}>
+        <Alert.Content data-voice-allow data-size={size} className={styles.content}>
           {/* Header */}
           <div className={styles.header}>
-            <Alert.Title className={styles.title}>{title}</Alert.Title>
-            <Alert.Close asChild>
-              <button type="button" aria-label="Close" className={styles.closeBtn}>
-                <TPLibraryIcon name="close-square" variant="bold" size={24} />
-              </button>
-            </Alert.Close>
+            <div className={styles.headerMain}>
+              {headerGlyph && <span className={styles.headerIcon} aria-hidden>{headerGlyph}</span>}
+              <Alert.Title className={styles.title}>{title}</Alert.Title>
+            </div>
+            {!hideClose && (
+              <Alert.Close asChild>
+                <button type="button" aria-label="Close" className={styles.closeBtn}>
+                  {closeGlyph ?? <TPLibraryIcon name="close-square" variant="bold" size={24} />}
+                </button>
+              </Alert.Close>
+            )}
           </div>
 
           <div className={styles.divider} aria-hidden />
@@ -216,7 +244,7 @@ export function ConfirmDialog({
             </div>
             <div className={styles.footerRight}>
               <FooterButton label={sLabel} onClick={sOnClick} variant={secondaryVariant} theme={sTheme} disabled={secondaryDisabled} fullWidth={actionsFullWidth} />
-              <FooterButton label={pLabel} onClick={pOnClick} variant={primaryVariant} theme={pTheme} disabled={pDisabled} autoClose={primaryAutoClose && !pDisabled} fullWidth={actionsFullWidth} />
+              <FooterButton label={pLabel} onClick={pOnClick} variant={primaryVariant} theme={pTheme} disabled={pDisabled} loading={primaryLoading} autoClose={primaryAutoClose && !pDisabled && !primaryLoading} fullWidth={actionsFullWidth} />
             </div>
           </div>
         </Alert.Content>
