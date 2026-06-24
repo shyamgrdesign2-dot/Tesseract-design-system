@@ -9,6 +9,10 @@ export const ThemeContext = createContext({
   colorScheme: "light",
   setColorScheme: () => {},
   breakpoint: "desktop",
+  // false on the default (no provider mounted) → lets a provider detect whether it
+  // is the outermost one, so only the root provider mirrors the scheme onto the
+  // document root (for portaled overlays). Real providers set this true.
+  __provided: false,
 });
 
 /** Full theme + scheme + active breakpoint. */

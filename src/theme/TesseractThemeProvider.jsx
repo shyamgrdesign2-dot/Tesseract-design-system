@@ -123,6 +123,8 @@ export function TesseractThemeProvider({
   children,
   ...rest
 }) {
+  const parent = React.useContext(ThemeContext);
+  const isRoot = !parent.__provided;
   const [override, setOverride] = React.useState(null);
   const resolved = useResolvedScheme(override ?? colorScheme);
 
@@ -134,8 +136,31 @@ export function TesseractThemeProvider({
   const theme = React.useMemo(() => deepMerge(defaultTheme, { ...themeProp, colorScheme: resolved }), [themeProp, resolved]);
   const breakpoint = useActiveBreakpoint(theme.breakpoints);
   const cssVars = React.useMemo(() => buildVars(resolved, themeProp, tokens, vars), [resolved, themeProp, tokens, vars]);
+
+  // The outermost provider mirrors its scheme + CSS variables onto the document
+  // root, so content that portals to document.body (Dropdown / Tooltip menus,
+  // ConfirmDialog, flyouts) inherits the same theme as the scoped wrapper instead
+  // of falling back to the light defaults. Nested providers stay wrapper-scoped
+  // (e.g. side-by-side light/dark demos), so this never clobbers local overrides.
+  React.useEffect(() => {
+    if (!isRoot || typeof document === "undefined") return undefined;
+    const root = document.documentElement;
+    const prevAttr = root.getAttribute("data-tp-theme");
+    const prevColorScheme = root.style.colorScheme;
+    const keys = Object.keys(cssVars).filter((k) => k.startsWith("--"));
+    const prev = {};
+    keys.forEach((k) => { prev[k] = root.style.getPropertyValue(k); root.style.setProperty(k, cssVars[k]); });
+    root.setAttribute("data-tp-theme", resolved);
+    root.style.colorScheme = resolved === "dark" ? "dark" : "light";
+    return () => {
+      keys.forEach((k) => { if (prev[k]) root.style.setProperty(k, prev[k]); else root.style.removeProperty(k); });
+      if (prevAttr) root.setAttribute("data-tp-theme", prevAttr); else root.removeAttribute("data-tp-theme");
+      root.style.colorScheme = prevColorScheme;
+    };
+  }, [isRoot, resolved, cssVars]);
+
   const ctx = React.useMemo(
-    () => ({ theme, colorScheme: resolved, setColorScheme: setOverride, breakpoint }),
+    () => ({ theme, colorScheme: resolved, setColorScheme: setOverride, breakpoint, __provided: true }),
     [theme, resolved, breakpoint],
   );
 

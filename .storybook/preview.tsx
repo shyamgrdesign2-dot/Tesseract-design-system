@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/react-vite'
+import React from 'react'
+import { TesseractThemeProvider } from '../src/theme'
 import '../src/tesseract-tokens.css'
 import '../src/tesseract-base.css'
 import '../src/tesseract-typography.css'
@@ -54,9 +56,52 @@ const preview: Preview = {
     },
   },
 
+  // Toolbar toggle: light / dark / system — drives a real TesseractThemeProvider
+  // around every story, so any component (not just the Theme Provider stories) can
+  // be previewed in dark mode and verified against the runtime ramp remap.
+  globalTypes: {
+    theme: {
+      description: 'Tesseract colour scheme (wraps every story in TesseractThemeProvider)',
+      toolbar: {
+        title: 'Theme',
+        icon: 'contrast',
+        items: [
+          { value: 'light',  title: 'Light',  icon: 'sun' },
+          { value: 'dark',   title: 'Dark',   icon: 'moon' },
+          { value: 'system', title: 'System', icon: 'browser' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+
   initialGlobals: {
     backgrounds: { value: 'light' },
+    theme: 'light',
   },
-};
 
-export default preview;
+  decorators: [
+    (Story, context) => {
+      const scheme = (context.globals.theme as 'light' | 'dark' | 'system') ?? 'light'
+      // Paint the wrapper only in dark/system so the light canvas still shows the
+      // backgrounds-addon selection. slate-0 = bg-default, which the dark remap
+      // flips to the dark surface, so the canvas matches the themed components.
+      const dark = scheme !== 'light'
+      return (
+        <TesseractThemeProvider
+          colorScheme={scheme}
+          style={{
+            minHeight: '100vh',
+            background: dark ? 'var(--tesseract-slate-0)' : 'transparent',
+            // keep layout neutral so centered/padded/fullscreen stories are unaffected
+            display: 'flow-root',
+          }}
+        >
+          <Story />
+        </TesseractThemeProvider>
+      )
+    },
+  ],
+}
+
+export default preview
