@@ -102,6 +102,8 @@ export function ClinicalTable({
   moreIcon,
   deleteIcon,
   duplicateIcon,
+  iconVariant,   // optional style override for the action glyphs (else each keeps its own default)
+  iconFamily,    // optional CDN family override for the action glyphs
   className,
 }) {
   const controlled = rowsProp !== undefined;
@@ -241,7 +243,7 @@ export function ClinicalTable({
   const dupIconName = duplicateIcon || "copy";
   const menuItems = !showRowMenu
     ? []
-    : (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name={dupIconName} size={15} /> }]).map((it) => ({
+    : (rowMenu ?? [{ label: "Duplicate", icon: <TPLibraryIcon name={dupIconName} variant={iconVariant || undefined} family={iconFamily || undefined} size={15} /> }]).map((it) => ({
         ...it,
         onClick: it.onClick ?? (it.label === "Duplicate" ? duplicateRow : undefined),
       }));
@@ -332,7 +334,7 @@ export function ClinicalTable({
               >
                 {reorderable && (
                   <td className={cn(styles.td, styles.sideCol)}>
-                    {!isDraft && <DragHandle icon={dragIcon} onDragStart={(e) => startDrag(e, row.id)} onDragEnd={endDrag} />}
+                    {!isDraft && <DragHandle icon={dragIcon} iconVariant={iconVariant} iconFamily={iconFamily} onDragStart={(e) => startDrag(e, row.id)} onDragEnd={endDrag} />}
                   </td>
                 )}
 
@@ -367,7 +369,7 @@ export function ClinicalTable({
 
                 {hasAction && (
                   <td className={cn(styles.td, styles.actionCol, styles.sticky)} data-shadow="true">
-                    {!isDraft && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} moreIcon={moreIcon} deleteIcon={deleteIcon} />}
+                    {!isDraft && <RowActions row={row} deletable={deletable} menuItems={menuItems} onDelete={deleteRow} moreIcon={moreIcon} deleteIcon={deleteIcon} iconVariant={iconVariant} iconFamily={iconFamily} />}
                   </td>
                 )}
               </tr>

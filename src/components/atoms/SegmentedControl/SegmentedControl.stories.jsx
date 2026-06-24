@@ -1,6 +1,13 @@
 import React from "react";
 import { SegmentedControl } from "./SegmentedControl";
 import { TPLibraryIcon } from "../icons/tp/TPLibraryIcon";
+import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
+
+const ICON_VARIANTS = ["linear", "bulk", "bold", "broken", "twotone", "outline"];
+
+// Resolve an icon node for an option, in the chosen style + family. Blank name → undefined.
+const glyphFor = (name, variant = "linear", family) =>
+  name ? <TPIcon name={name} variant={variant} family={family || undefined} size={16} /> : undefined;
 
 const meta = {
   title: "Atoms/Segmented Control",
@@ -31,6 +38,13 @@ const meta = {
     },
     fullWidth: { control: "boolean" },
     disabled: { control: "boolean" },
+    // ── Icons: one shared set of controls applied to every option ──
+    withIcons: { control: "boolean", name: "with icons", description: "Show a leading icon on every segment", table: { category: "Icons" } },
+    opt1Icon: { control: "text", tpIcon: true, name: "icon · Monthly", description: "CDN icon name for the first option", if: { arg: "withIcons" }, table: { category: "Icons" } },
+    opt2Icon: { control: "text", tpIcon: true, name: "icon · Quarterly", description: "CDN icon name for the second option", if: { arg: "withIcons" }, table: { category: "Icons" } },
+    opt3Icon: { control: "text", tpIcon: true, name: "icon · Yearly", description: "CDN icon name for the third option", if: { arg: "withIcons" }, table: { category: "Icons" } },
+    iconVariant: { control: "select", options: ICON_VARIANTS, name: "icon style", description: "Shared icon style for all option icons", if: { arg: "withIcons" }, table: { category: "Icons" } },
+    iconFamily: { control: "text", name: "icon family", description: "Override the auto-resolved CDN family (blank = auto)", if: { arg: "withIcons" }, table: { category: "Icons" } },
   },
   args: {
     size: "md",
@@ -40,6 +54,12 @@ const meta = {
     radius: "",
     fullWidth: false,
     disabled: false,
+    withIcons: false,
+    opt1Icon: "calendar-1",
+    opt2Icon: "calendar-2",
+    opt3Icon: "calendar",
+    iconVariant: "linear",
+    iconFamily: "",
   },
 };
 
@@ -53,11 +73,16 @@ const radiusValue = (r) => {
   return /^-?\d+$/.test(s) ? Number(s) : s;
 };
 
-// Normalise the args for rendering (coerce radius) and build a copy-paste snippet.
-const withRadius = ({ radius, ...args }) => ({
+// Normalise the args for rendering (coerce radius). Strip the story-only icon
+// controls so they don't leak onto the DOM via `...rest`.
+const withRadius = ({ radius, withIcons, opt1Icon, opt2Icon, opt3Icon, iconVariant, iconFamily, ...args }) => ({
   ...args,
   radius: radiusValue(radius),
 });
+
+// Render an option's `icon` prop for the snippet, in the shared style/family.
+const iconJsx = (name, variant, family) =>
+  `<TPIcon name="${name}"${variant && variant !== "linear" ? ` variant="${variant}"` : ""}${family ? ` family="${family}"` : ""} size={16} />`;
 
 const scCode = ({
   size = "md",
@@ -67,6 +92,12 @@ const scCode = ({
   radius,
   fullWidth = false,
   disabled = false,
+  withIcons = false,
+  opt1Icon,
+  opt2Icon,
+  opt3Icon,
+  iconVariant,
+  iconFamily,
 }) => {
   const lines = [`  size="${size}"`, `  variant="${variant}"`, `  theme="${theme}"`];
   if (orientation !== "horizontal") lines.push(`  orientation="${orientation}"`);
@@ -74,7 +105,20 @@ const scCode = ({
   if (rv != null) lines.push(typeof rv === "number" ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (fullWidth) lines.push("  fullWidth");
   if (disabled) lines.push("  disabled");
-  lines.push("  options={options}");
+  if (withIcons) {
+    const labels = ["Monthly", "Quarterly", "Yearly"];
+    const values = ["monthly", "quarterly", "yearly"];
+    const names = [opt1Icon, opt2Icon, opt3Icon];
+    const opts = values
+      .map((value, i) => {
+        const icon = names[i] ? `, icon: ${iconJsx(names[i], iconVariant, iconFamily)}` : "";
+        return `    { value: "${value}", label: "${labels[i]}"${icon} },`;
+      })
+      .join("\n");
+    lines.push(`  options={[\n${opts}\n  ]}`);
+  } else {
+    lines.push("  options={options}");
+  }
   lines.push("  value={value}");
   lines.push("  onValueChange={setValue}");
   return `<SegmentedControl\n${lines.join("\n")}\n/>`;
@@ -102,17 +146,26 @@ const Row = ({ children, label }) => (
   </div>
 );
 
+// Build the Playground options, attaching a shared-style icon to each when
+// `withIcons` is on. Default (off) renders the original icon-less options.
+const playgroundOptions = ({ withIcons, opt1Icon, opt2Icon, opt3Icon, iconVariant, iconFamily }) => {
+  const names = [opt1Icon, opt2Icon, opt3Icon];
+  return [
+    { value: "monthly", label: "Monthly" },
+    { value: "quarterly", label: "Quarterly" },
+    { value: "yearly", label: "Yearly" },
+  ].map((opt, i) =>
+    withIcons ? { ...opt, icon: glyphFor(names[i], iconVariant, iconFamily) } : opt,
+  );
+};
+
 export const Playground = {
   render: (args) => {
     const [val, setVal] = React.useState("monthly");
     return (
       <SegmentedControl
         {...withRadius(args)}
-        options={[
-          { value: "monthly", label: "Monthly" },
-          { value: "quarterly", label: "Quarterly" },
-          { value: "yearly", label: "Yearly" },
-        ]}
+        options={playgroundOptions(args)}
         value={val}
         onValueChange={setVal}
       />

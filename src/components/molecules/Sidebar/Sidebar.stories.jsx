@@ -196,6 +196,24 @@ const meta = {
       description: "Badge display variant",
       table: { category: "Badge" },
     },
+    collapseIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Icon for the collapse/expand toggle button",
+      table: { category: "Icons" },
+    },
+    searchIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Icon shown inside the search input",
+      table: { category: "Icons" },
+    },
+    caretIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Caret icon on expandable section rows",
+      table: { category: "Icons" },
+    },
   },
   args: {
     defaultCollapsed: false,
@@ -211,6 +229,9 @@ const meta = {
     emptyText: "No matches.",
     loading: false,
     badgeStyle: "default",
+    collapseIcon: "sidebar-left",
+    searchIcon: "search-normal-1",
+    caretIcon: "chevron-down",
   },
 };
 
@@ -228,6 +249,9 @@ const sidebarCode = (args = {}) => {
     density,
     emptyText,
     loading,
+    collapseIcon,
+    searchIcon,
+    caretIcon,
   } = args;
   const lines = ["  items={items}", '  activeId={activeId}', "  onSelect={setActive}"];
   if (defaultCollapsed) lines.push("  defaultCollapsed");
@@ -246,6 +270,12 @@ const sidebarCode = (args = {}) => {
   if (emptyText && emptyText !== "No matches.")
     lines.push(`  emptyText="${emptyText}"`);
   if (loading) lines.push("  loading");
+  if (collapseIcon && collapseIcon !== "sidebar-left")
+    lines.push(`  collapseIcon="${collapseIcon}"`);
+  if (searchIcon && searchIcon !== "search-normal-1")
+    lines.push(`  searchIcon="${searchIcon}"`);
+  if (caretIcon && caretIcon !== "chevron-down")
+    lines.push(`  caretIcon="${caretIcon}"`);
   return `<Sidebar\n${lines.join("\n")}\n/>`;
 };
 

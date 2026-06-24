@@ -112,6 +112,24 @@ const meta = {
       description: "Badge display variant",
       table: { category: "Badge" },
     },
+    searchIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Icon shown inside the search input",
+      table: { category: "Icons" },
+    },
+    collapseIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Icon for the collapse/expand toggle button",
+      table: { category: "Icons" },
+    },
+    caretIcon: {
+      control: "text",
+      tpIcon: true,
+      description: "Caret icon on expandable section rows",
+      table: { category: "Icons" },
+    },
   },
   args: {
     collapsedWidth: 80,
@@ -121,19 +139,25 @@ const meta = {
     tone: "blue",
     density: "comfortable",
     emptyText: "No matches",
+    searchIcon: "search-normal-1",
+    collapseIcon: "sidebar-left",
+    caretIcon: "chevron-down",
   },
 };
 
 export default meta;
 
 // Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
-const sidebarCode = ({ tone = "blue", density = "comfortable", collapsedWidth = 80, bottomFade = true, emptyText }) => {
+const sidebarCode = ({ tone = "blue", density = "comfortable", collapsedWidth = 80, bottomFade = true, emptyText, searchIcon, collapseIcon, caretIcon }) => {
   const lines = ["  items={items}", '  activeId={active}', "  onSelect={setActive}", "  collapsed"];
   if (tone !== "blue") lines.push(`  tone="${tone}"`);
   if (density !== "comfortable") lines.push(`  density="${density}"`);
   if (collapsedWidth !== 80) lines.push(`  collapsedWidth={${collapsedWidth}}`);
   if (!bottomFade) lines.push("  bottomFade={false}");
   if (emptyText && emptyText !== "No matches") lines.push(`  emptyText="${emptyText}"`);
+  if (searchIcon && searchIcon !== "search-normal-1") lines.push(`  searchIcon="${searchIcon}"`);
+  if (collapseIcon && collapseIcon !== "sidebar-left") lines.push(`  collapseIcon="${collapseIcon}"`);
+  if (caretIcon && caretIcon !== "chevron-down") lines.push(`  caretIcon="${caretIcon}"`);
   return `<SecondarySidebar\n${lines.join("\n")}\n/>`;
 };
 

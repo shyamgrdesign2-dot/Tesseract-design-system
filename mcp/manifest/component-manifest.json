@@ -1676,6 +1676,50 @@
         },
         {
           "name": "track"
+        },
+        {
+          "name": "withIcons",
+          "control": "boolean",
+          "description": "Show a leading icon on every segment",
+          "default": "false"
+        },
+        {
+          "name": "opt1Icon",
+          "control": "text",
+          "description": "CDN icon name for the first option",
+          "default": "\"calendar-1\""
+        },
+        {
+          "name": "opt2Icon",
+          "control": "text",
+          "description": "CDN icon name for the second option",
+          "default": "\"calendar-2\""
+        },
+        {
+          "name": "opt3Icon",
+          "control": "text",
+          "description": "CDN icon name for the third option",
+          "default": "\"calendar\""
+        },
+        {
+          "name": "iconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Shared icon style for all option icons",
+          "default": "\"linear\""
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family (blank = auto)",
+          "default": "\"\""
         }
       ],
       "stories": [
@@ -2211,6 +2255,12 @@
           "control": "text"
         },
         {
+          "name": "iconVariant"
+        },
+        {
+          "name": "iconFamily"
+        },
+        {
           "name": "className"
         },
         {
@@ -2218,6 +2268,27 @@
           "control": "boolean",
           "description": "Ring the Name cell when the entry is not in the frequently-used list",
           "default": "false"
+        },
+        {
+          "name": "actionIconVariant",
+          "allowedValues": [
+            "default",
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Shared icon style for the action glyphs. ",
+          "default": "'default'"
+        },
+        {
+          "name": "actionIconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family for the action glyphs (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -2508,6 +2579,20 @@
           "name": "secondaryTone"
         },
         {
+          "name": "headerIconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style for the header glyph (default bold)",
+          "default": "'bold'"
+        },
+        {
           "name": "withDescription",
           "control": "boolean",
           "default": "true"
@@ -2524,9 +2609,29 @@
           "default": "''"
         },
         {
+          "name": "calloutIconVariant",
+          "allowedValues": [
+            "linear",
+            "bulk",
+            "bold",
+            "broken",
+            "twotone",
+            "outline"
+          ],
+          "control": "select",
+          "description": "Icon style for the callout override (default linear)",
+          "default": "'linear'"
+        },
+        {
           "name": "withCheckbox",
           "control": "boolean",
           "default": "false"
+        },
+        {
+          "name": "iconFamily",
+          "control": "text",
+          "description": "Override the auto-resolved CDN family for the header + callout icons (blank = auto)",
+          "default": "''"
         }
       ],
       "stories": [
@@ -4134,6 +4239,24 @@
           "storyHidden": true
         },
         {
+          "name": "searchIcon",
+          "default": "\"search-normal-1\"",
+          "control": "text",
+          "description": "Icon shown inside the search input"
+        },
+        {
+          "name": "collapseIcon",
+          "default": "\"sidebar-left\"",
+          "control": "text",
+          "description": "Icon for the collapse/expand toggle button"
+        },
+        {
+          "name": "caretIcon",
+          "default": "\"chevron-down\"",
+          "control": "text",
+          "description": "Caret icon on expandable section rows"
+        },
+        {
           "name": "className",
           "storyHidden": true
         },
@@ -4295,15 +4418,21 @@
         },
         {
           "name": "collapseIcon",
-          "default": "\"sidebar-left\""
+          "default": "\"sidebar-left\"",
+          "control": "text",
+          "description": "Icon for the collapse/expand toggle button"
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal-1\""
+          "default": "\"search-normal-1\"",
+          "control": "text",
+          "description": "Icon shown inside the search input"
         },
         {
           "name": "caretIcon",
-          "default": "\"chevron-down\""
+          "default": "\"chevron-down\"",
+          "control": "text",
+          "description": "Caret icon on expandable section rows"
         },
         {
           "name": "defaultOpenIds"

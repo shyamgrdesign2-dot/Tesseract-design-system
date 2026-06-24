@@ -30,12 +30,21 @@ const speedValue = (s) => {
   return /^-?\d*\.?\d+$/.test(v) ? Number(v) : v;
 };
 
+// A radius control comes in as a string. Coerce a pure-number string to a number;
+// pass keywords / tokens through; blank → undefined (component default).
+const radiusValue = (r) => {
+  const s = String(r ?? '').trim();
+  if (!s) return undefined;
+  return /^-?\d+$/.test(s) ? Number(s) : s;
+};
+
 // Build a copy-paste snippet from the controls (what "Show code" shows).
 const skeletonCode = ({ variant = 'text', width, height, radius, count = 1, animation = 'pulse', speed }) => {
   const lines = [`  variant="${variant}"`];
   if (width) lines.push(typeof width === 'number' ? `  width={${width}}` : `  width="${width}"`);
   if (height) lines.push(typeof height === 'number' ? `  height={${height}}` : `  height="${height}"`);
-  if (radius) lines.push(typeof radius === 'number' ? `  radius={${radius}}` : `  radius="${radius}"`);
+  const rv = radiusValue(radius);
+  if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (count && count !== 1) lines.push(`  count={${count}}`);
   if (animation && animation !== 'pulse') lines.push(`  animation="${animation}"`);
   const sv = speedValue(speed);
@@ -50,9 +59,9 @@ const Row = ({ children }) => (
 );
 
 export const Playground = {
-  render: ({ speed, ...args }) => (
+  render: ({ speed, radius, ...args }) => (
     <div style={{ width: 240 }}>
-      <Skeleton {...args} speed={speedValue(speed)} />
+      <Skeleton {...args} radius={radiusValue(radius)} speed={speedValue(speed)} />
     </div>
   ),
   parameters: { docs: { source: { transform: (_code, ctx) => skeletonCode(ctx.args) } } },

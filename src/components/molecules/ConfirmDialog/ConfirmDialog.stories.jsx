@@ -5,6 +5,13 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const VARIANTS = ['solid', 'outline', 'ghost', 'tonal', 'link'];
 const THEMES = ['primary', 'neutral', 'warning', 'error', 'success'];
+const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
+// Build an icon node in the chosen style + family. Defaults preserve the current
+// look: the header icon renders bold (matching ConfirmDialog.jsx resolveIcon's
+// default), the callout override renders linear (TPLibraryIcon's default).
+const glyphFor = (name, size, variant = 'linear', family) =>
+  name ? <TPLibraryIcon name={name} variant={variant} family={family || undefined} size={size} /> : undefined;
 
 const meta = {
   title: 'Molecules/ConfirmDialog',
@@ -30,16 +37,29 @@ function Demo({ trigger = 'Open dialog', ...props }) {
 }
 
 // ── Playground — every section + CTA in Controls ──────────────────────────────
+// An icon JSX fragment for the snippet — emit variant/family only when non-default.
+const iconJsx = (name, size, variant, defaultVariant, family) =>
+  `<TPLibraryIcon name="${name}"${variant && variant !== defaultVariant ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
+
 // Build a copy-paste snippet from the current controls (what "Show code" shows).
 const dialogCode = (a) => {
   const lines = [`  open={open}`, `  onOpenChange={setOpen}`, `  title="${a.title}"`];
   if (a.size && a.size !== 'md') lines.push(`  size="${a.size}"`);
-  if (a.headerIcon) lines.push(`  icon="${a.headerIcon}"`);
+  if (a.headerIcon) {
+    // Header default variant is "bold" (ConfirmDialog.jsx resolveIcon). A plain
+    // name string keeps that default; a non-default style/family emits a node.
+    if ((a.headerIconVariant && a.headerIconVariant !== 'bold') || a.iconFamily) {
+      lines.push(`  icon={${iconJsx(a.headerIcon, 24, a.headerIconVariant, 'bold', a.iconFamily)}}`);
+    } else {
+      lines.push(`  icon="${a.headerIcon}"`);
+    }
+  }
   if (a.hideClose) lines.push(`  hideClose`);
   if (a.withDescription && a.description) lines.push(`  description="${a.description}"`);
   if (a.withCallout && a.callout) {
     lines.push(`  callout="${a.callout}"`);
     if (a.calloutTone && a.calloutTone !== 'warning') lines.push(`  calloutTone="${a.calloutTone}"`);
+    if (a.calloutIconName) lines.push(`  calloutCustomIcon={${iconJsx(a.calloutIconName, 24, a.calloutIconVariant, 'linear', a.iconFamily)}}`);
   }
   if (a.withCheckbox) lines.push(`  checkboxLabel="${a.checkboxLabel}"`);
   if (a.primaryLabel) {
@@ -65,6 +85,7 @@ export const Playground = {
     // Frame
     size: 'md',
     headerIcon: '',
+    headerIconVariant: 'bold',
     hideClose: false,
     // Body
     withDescription: true,
@@ -74,7 +95,10 @@ export const Playground = {
     calloutTone: 'warning',
     calloutIcon: true,
     calloutIconName: '',
+    calloutIconVariant: 'linear',
     calloutPlacement: 'above',
+    // Shared icon family override (blank = auto-resolve)
+    iconFamily: '',
     withCheckbox: false,
     checkboxLabel: "Don't show this again",
     // CTAs
@@ -96,6 +120,7 @@ export const Playground = {
     title:            { control: 'text', table: { category: 'Header' } },
     size:             { control: 'inline-radio', options: ['sm', 'md', 'lg'], name: 'size', description: 'Dialog width — sm ~400 · md 480 (default) · lg ~640', table: { category: 'Frame' } },
     headerIcon:       { control: 'text', tpIcon: true, name: 'header icon', description: 'Leading icon next to the title (CDN icon name; blank = none)', table: { category: 'Header' } },
+    headerIconVariant:{ control: 'select', options: ICON_VARIANTS, name: 'header icon style', description: 'Icon style for the header glyph (default bold)', if: { arg: 'headerIcon' }, table: { category: 'Header' } },
     hideClose:        { control: 'boolean', name: 'hide close', description: 'Hide the always-on close button', table: { category: 'Header' } },
     withDescription:  { control: 'boolean', name: 'with description', table: { category: 'Body' } },
     description:      { control: 'text', table: { category: 'Body' } },
@@ -104,9 +129,11 @@ export const Playground = {
     calloutTone:      { control: 'inline-radio', options: ['neutral', 'warning', 'error'], name: 'callout tone', table: { category: 'Body' } },
     calloutIcon:      { control: 'boolean', name: 'callout icon', table: { category: 'Body' } },
     calloutIconName:  { control: 'text', tpIcon: true, name: 'callout icon (override)', description: 'Pick a Tesseract icon to override the callout icon', table: { category: 'Body' } },
+    calloutIconVariant:{ control: 'select', options: ICON_VARIANTS, name: 'callout icon style', description: 'Icon style for the callout override (default linear)', if: { arg: 'calloutIconName' }, table: { category: 'Body' } },
     calloutPlacement: { control: 'inline-radio', options: ['above', 'below'], name: 'callout vs text', table: { category: 'Body' } },
     withCheckbox:     { control: 'boolean', name: 'with checkbox', table: { category: 'Body' } },
     checkboxLabel:    { control: 'text', name: 'checkbox label', table: { category: 'Body' } },
+    iconFamily:       { control: 'text', name: 'icon family (override)', description: 'Override the auto-resolved CDN family for the header + callout icons (blank = auto)', table: { category: 'Icons' } },
 
     primaryLabel:     { control: 'text', name: 'primary · label', table: { category: 'Primary CTA' } },
     primaryVariant:   { control: 'select', options: VARIANTS, name: 'primary · variant', table: { category: 'Primary CTA' } },
@@ -129,14 +156,14 @@ export const Playground = {
     <Demo
       title={a.title}
       size={a.size}
-      headerIcon={a.headerIcon || undefined}
+      icon={glyphFor(a.headerIcon, 24, a.headerIconVariant, a.iconFamily)}
       hideClose={a.hideClose}
       primaryLoading={a.primaryLoading}
       description={a.withDescription ? a.description : undefined}
       callout={a.withCallout ? a.callout : undefined}
       calloutTone={a.calloutTone}
       calloutIcon={a.calloutIcon}
-      calloutCustomIcon={a.calloutIconName ? <TPLibraryIcon name={a.calloutIconName} size={a.withCallout ? 24 : 20} /> : undefined}
+      calloutCustomIcon={glyphFor(a.calloutIconName, a.withCallout ? 24 : 20, a.calloutIconVariant, a.iconFamily)}
       calloutPlacement={a.calloutPlacement}
       checkboxLabel={a.withCheckbox ? a.checkboxLabel : undefined}
       primaryLabel={a.primaryLabel}

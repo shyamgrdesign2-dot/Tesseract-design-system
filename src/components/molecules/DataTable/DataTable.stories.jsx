@@ -165,9 +165,39 @@ const basicColumns = (args) => {
   return cols;
 };
 
+// Build a copy-paste snippet from the Playground's table-level controls (what
+// "Show code" shows). Emits only the NON-DEFAULT scalar props; the column set is
+// left as a placeholder comment (the Playground exposes table knobs, not columns).
+const dataTableCode = ({
+  rowHeight = 'lg', dataMode = 'pagination', pageSize = 6, sortable = true,
+  selectionMode = 'none', stickyHeader = false, maxHeight = 360, zebra = false,
+  hoverable = true, bordered = false,
+} = {}) => {
+  const lines = [];
+  if (rowHeight !== 'lg') lines.push(`  rowHeight="${rowHeight}"`);
+  if (!sortable) lines.push(`  sortable={false}`);
+  if (selectionMode && selectionMode !== 'none') lines.push(`  selectionMode="${selectionMode}"`);
+  if (stickyHeader) {
+    lines.push(`  stickyHeader`);
+    if (maxHeight != null) lines.push(`  maxHeight={${maxHeight}}`);
+  }
+  if (zebra) lines.push(`  zebra`);
+  if (!hoverable) lines.push(`  hoverable={false}`);
+  if (bordered) lines.push(`  bordered`);
+  if (dataMode === 'pagination') lines.push(`  pageSize={${pageSize}}`);
+  else if (dataMode === 'infinite') lines.push(`  hasMore={hasMore} onLoadMore={onLoadMore} loading={loading}`);
+  const props = ['  columns={columns}', '  data={data}', '  rowKey={(r) => r.id}', ...lines].join('\n');
+  return `<DataTable\n${props}\n/>\n// columns omitted — see the Column Configurator story for column authoring`;
+};
+
 // ── Playground — basic, table-level configuration only ────────────────────────
 export const Playground = {
-  parameters: { docs: { description: { story: 'The everyday table with **table-level** controls (density, data mode, selection, sticky header, zebra, borders, …). For deep per-column authoring — cell types, icons, tags, sticky, the action column — see **Column Configurator**. Each capability (selection, sticky columns, row states, nesting, grouping, spanning) has its own dedicated story.' } } },
+  parameters: {
+    docs: {
+      description: { story: 'The everyday table with **table-level** controls (density, data mode, selection, sticky header, zebra, borders, …). For deep per-column authoring — cell types, icons, tags, sticky, the action column — see **Column Configurator**. Each capability (selection, sticky columns, row states, nesting, grouping, spanning) has its own dedicated story.' },
+      source: { transform: (_code, ctx) => dataTableCode(ctx.args) },
+    },
+  },
   args: {
     rowHeight: 'lg',
     dataMode: 'pagination',

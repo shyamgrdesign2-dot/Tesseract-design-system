@@ -129,16 +129,16 @@ function DragDots() {
     </svg>
   );
 }
-export function DragHandle({ icon, onDragStart, onDragEnd }) {
+export function DragHandle({ icon, iconVariant, iconFamily, onDragStart, onDragEnd }) {
   return (
     <button type="button" className={styles.dragHandle} draggable onDragStart={onDragStart} onDragEnd={onDragEnd} aria-label="Drag to reorder row">
-      {icon ? <TPLibraryIcon name={icon} size={18} /> : <DragDots />}
+      {icon ? <TPLibraryIcon name={icon} variant={iconVariant || undefined} family={iconFamily || undefined} size={18} /> : <DragDots />}
     </button>
   );
 }
 
 // ── Row "⋯" menu (portal of row actions) ──────────────────────────────────────
-function MoreMenu({ items, row, moreIcon }) {
+function MoreMenu({ items, row, moreIcon, iconVariant, iconFamily }) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
@@ -171,7 +171,7 @@ function MoreMenu({ items, row, moreIcon }) {
         theme="neutral"
         size="sm"
         aria-label="More actions"
-        icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant="bold" corner="straight" size={16} />}
+        icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant={iconVariant || "bold"} family={iconFamily || undefined} corner="straight" size={16} />}
         onClick={() => setOpen((o) => !o)}
       />
       {open && mounted && pos && createPortal(
@@ -196,17 +196,17 @@ function MoreMenu({ items, row, moreIcon }) {
 }
 
 // ── RowActions ────────────────────────────────────────────────────────────────
-export function RowActions({ row, deletable, menuItems, onDelete, moreIcon, deleteIcon }) {
+export function RowActions({ row, deletable, menuItems, onDelete, moreIcon, deleteIcon, iconVariant, iconFamily }) {
   return (
     <div className={styles.actionCell}>
-      {menuItems.length > 0 && <MoreMenu items={menuItems} row={row} moreIcon={moreIcon} />}
+      {menuItems.length > 0 && <MoreMenu items={menuItems} row={row} moreIcon={moreIcon} iconVariant={iconVariant} iconFamily={iconFamily} />}
       {deletable && (
         <Button
           variant="ghost"
           theme="neutral"
           size="sm"
           aria-label="Delete row"
-          icon={<TPLibraryIcon name={deleteIcon || "trash"} size={16} />}
+          icon={<TPLibraryIcon name={deleteIcon || "trash"} variant={iconVariant || undefined} family={iconFamily || undefined} size={16} />}
           onClick={() => onDelete(row.id)}
         />
       )}

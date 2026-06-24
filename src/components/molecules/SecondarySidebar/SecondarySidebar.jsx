@@ -27,6 +27,9 @@
  *   emptyState     ReactNode shown when the filter matches nothing (overrides emptyText)
  *   emptyText      string for the no-matches message (default "No matches")
  *   pointerColor   colour of the active caret so it matches the adjacent content surface
+ *   searchIcon     CDN icon name for the search input (default "search-normal-1")
+ *   collapseIcon   CDN icon name for the collapse/expand toggle (default "sidebar-left")
+ *   caretIcon      CDN icon name for the expandable-section caret (default "chevron-down")
  *   className
  */
 
@@ -118,7 +121,7 @@ function CollapsedItem({ item, activeId, onSelect }) {
   );
 }
 
-function ExpandedItem({ item, activeId, onSelect, expanded, onToggle }) {
+function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon = "chevron-down" }) {
   const leaf = isLeaf(item);
   const active = leaf ? item.id === activeId : false;
   const containsActive = !leaf && hasActive(item, activeId);
@@ -179,7 +182,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle }) {
           </span>
         )}
         <span className={cn(styles.caret, expanded && styles.caretOpen)}>
-          <TPIcon name="chevron-down" variant="linear" size={12} />
+          <TPIcon name={caretIcon} variant="linear" size={12} />
         </span>
       </button>
       {expanded && (
@@ -237,6 +240,9 @@ export function SecondarySidebar({
   emptyState,
   emptyText = "No matches",
   pointerColor,
+  searchIcon = "search-normal-1",
+  collapseIcon = "sidebar-left",
+  caretIcon = "chevron-down",
   className,
 }) {
   const isControlled = controlledCollapsed !== undefined;
@@ -315,7 +321,7 @@ export function SecondarySidebar({
         <div className={styles.expHead}>
           {search && (
             <div className={styles.expSearch}>
-              <TPIcon name="search-normal-1" variant="linear" size={14} />
+              <TPIcon name={searchIcon} variant="linear" size={14} />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -331,7 +337,7 @@ export function SecondarySidebar({
               title="Collapse sidebar"
               aria-label="Collapse sidebar"
             >
-              <TPIcon name="sidebar-left" variant="linear" size={16} />
+              <TPIcon name={collapseIcon} variant="linear" size={16} />
             </button>
           )}
         </div>
@@ -346,7 +352,7 @@ export function SecondarySidebar({
             title="Expand sidebar"
             aria-label="Expand sidebar"
           >
-            <TPIcon name="sidebar-left" variant="linear" size={16} className={styles.flipIcon} />
+            <TPIcon name={collapseIcon} variant="linear" size={16} className={styles.flipIcon} />
           </button>
         </div>
       )}
@@ -374,6 +380,7 @@ export function SecondarySidebar({
               onSelect={(id) => onSelect?.(id)}
               expanded={!isLeaf(item) && (openIds.has(item.id) || !!query)}
               onToggle={() => handleToggleSection(item)}
+              caretIcon={caretIcon}
             />
           ))
         )}

@@ -2,6 +2,8 @@ import React from 'react';
 import { ClinicalTable } from './ClinicalTable';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
+const ICON_VARIANTS = ['default', 'linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
+
 const meta = {
   title: 'Molecules/ClinicalTable',
   component: ClinicalTable,
@@ -23,8 +25,10 @@ const meta = {
     moreIcon:      { control: 'text', tpIcon: true, name: 'Kebab/More icon', table: { category: 'Icons' } },
     deleteIcon:    { control: 'text', tpIcon: true, name: 'Delete icon', table: { category: 'Icons' } },
     duplicateIcon: { control: 'text', tpIcon: true, name: 'Duplicate icon', table: { category: 'Icons' } },
+    actionIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'Action icon style', description: "Shared icon style for the action glyphs. 'default' keeps each glyph's own style (drag/delete/duplicate linear, more bold).", table: { category: 'Icons' } },
+    actionIconFamily:  { control: 'text', name: 'Action icon family', description: 'Override the auto-resolved CDN family for the action glyphs (blank = auto)', table: { category: 'Icons' } },
   },
-  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy' },
+  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy', actionIconVariant: 'default', actionIconFamily: '' },
 };
 
 export default meta;
@@ -42,6 +46,8 @@ const ctTransform = (_code, ctx) => {
   if (a.density && a.density !== 'comfortable') lines.push(`  density="${a.density}"`);
   if (a.loading) lines.push('  loading');
   if (a.stickyHeader) lines.push('  stickyHeader\n  maxHeight={320}');
+  if (a.actionIconVariant && a.actionIconVariant !== 'default') lines.push(`  iconVariant="${a.actionIconVariant}"`);
+  if (a.actionIconFamily) lines.push(`  iconFamily="${a.actionIconFamily}"`);
   return `<ClinicalTable\n${lines.join('\n')}\n/>`;
 };
 
@@ -64,14 +70,15 @@ const SEED = [
 export const Playground = {
   args: { showRowMenu: true, moreIcon: '3-dots-more' },
   parameters: { docs: { source: { transform: ctTransform } } },
-  render: ({ flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, stickyHeader, ...args }) => {
+  render: ({ flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, actionIconVariant, actionIconFamily, stickyHeader, ...args }) => {
     const [rows, setRows] = React.useState(SEED);
     const nameCol = { ...SYMPTOM_NAME, flagCustom: flagCustom ? 'warning' : undefined };
     return (
       <div style={{ maxWidth: 820 }}>
         <ClinicalTable {...args} stickyHeader={stickyHeader} maxHeight={stickyHeader ? 320 : undefined}
           name={nameCol} columns={MIDDLE_COLUMNS} rows={rows} onChange={setRows}
-          dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon} />
+          dragIcon={dragIcon} moreIcon={moreIcon} deleteIcon={deleteIcon} duplicateIcon={duplicateIcon}
+          iconVariant={actionIconVariant && actionIconVariant !== 'default' ? actionIconVariant : undefined} iconFamily={actionIconFamily || undefined} />
         <pre style={{ marginTop: 16, fontSize: 12, color: 'var(--tesseract-slate-500, #717179)' }}>{JSON.stringify(rows, null, 2)}</pre>
       </div>
     );
@@ -208,7 +215,7 @@ export const ColumnConfigurator = {
     ...ctColArgTypes(1), ...ctColArgTypes(2), ...ctColArgTypes(3), ...ctColArgTypes(4), ...ctColArgTypes(5),
     ...ctColArgTypes(6), ...ctColArgTypes(7), ...ctColArgTypes(8), ...ctColArgTypes(9), ...ctColArgTypes(10),
   },
-  render: ({ columnCount, flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, ...args }) => {
+  render: ({ columnCount, flagCustom, dragIcon, moreIcon, deleteIcon, duplicateIcon, actionIconVariant, actionIconFamily, ...args }) => {
     const [rows, setRows] = React.useState([
       { id: 'cr1', name: 'Chest pain', col_1: '2 days', col_2: 'Moderate', col_3: ['Chest'], notes: 'On exertion' },
       { id: 'cr2', name: 'Dizziness', col_1: '1 week', col_2: 'Mild', col_3: ['Head'], notes: '' },
@@ -235,6 +242,8 @@ export const ColumnConfigurator = {
           moreIcon={moreIcon}
           deleteIcon={deleteIcon}
           duplicateIcon={duplicateIcon}
+          iconVariant={actionIconVariant && actionIconVariant !== 'default' ? actionIconVariant : undefined}
+          iconFamily={actionIconFamily || undefined}
         />
       </div>
     );
