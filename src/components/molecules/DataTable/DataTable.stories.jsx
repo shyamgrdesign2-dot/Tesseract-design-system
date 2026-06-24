@@ -8,7 +8,23 @@ const meta = {
   title: 'Molecules/DataTable',
   component: DataTable,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component: [
+          'Config-driven data table — declare `columns` + `data` and the table renders sortable, truncating, optionally sticky/selectable rows; no per-cell JSX required.',
+          '',
+          '**When to use** — any tabular list of records (patients, appointments, results) that needs sorting, pagination/lazy-load, selection, or sticky header/columns.',
+          '**When not** — a short read-only key/value list is a plain layout; a heavily clinical input grid is `ClinicalTable`.',
+          '',
+          '**Key props** — `columns` (declarative `type: text | tag | action` + accessors, per-column `sortable` / `sticky` / `minWidth` / `maxWidth` / `align`) · `data` + `rowKey` · `selectionMode` single/multiple (+ `selectedKeys` / `onSelectionChange`, `selectionToolbar` bulk bar) · `pageSize` (pagination) or `hasMore` + `onLoadMore` + `loading` (infinite) · `stickyHeader` + `maxHeight` · `loading` + `loadingVariant` skeleton/overlay · `error` + `onRetry` (or `errorState` slot) · `rowState` / `getSubRows` / `groupBy` / `spanRows`.',
+          '',
+          '**Good to know** — overflowing cell text truncates then reveals the full value in a `Tooltip` on hover (subtext → 1-line primary; none → up to 2 lines). Sticky columns cast a divider shadow only while content scrolls under them. Tracking is opt-in via `analyticsId` + a `TPAnalyticsProvider`; no provider means zero overhead.',
+        ].join('\n'),
+      },
+    },
+  },
 };
 
 export default meta;
@@ -213,18 +229,18 @@ export const Playground = {
     showActions: true,
   },
   argTypes: {
-    rowHeight:     { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg', 'xl'], name: 'density', table: { category: 'Table' } },
-    dataMode:      { control: 'inline-radio', options: ['none', 'pagination', 'infinite'], name: 'data mode', table: { category: 'Table' } },
-    pageSize:      { control: { type: 'range', min: 3, max: 12, step: 1 }, name: 'page size', table: { category: 'Table' }, if: { arg: 'dataMode', eq: 'pagination' } },
-    sortable:      { control: 'boolean', name: 'sort enabled', table: { category: 'Table' } },
-    selectionMode: { control: 'inline-radio', options: ['none', 'single', 'multiple'], name: 'selection', table: { category: 'Table' } },
-    stickyHeader:  { control: 'boolean', name: 'sticky header', table: { category: 'Table' } },
-    maxHeight:     { control: { type: 'range', min: 200, max: 600, step: 20 }, name: 'scroll height', table: { category: 'Table' }, if: { arg: 'stickyHeader' } },
-    zebra:         { control: 'boolean', table: { category: 'Table' } },
-    hoverable:     { control: 'boolean', table: { category: 'Table' } },
-    bordered:      { control: 'boolean', table: { category: 'Table' } },
-    showStatus:    { control: 'boolean', name: 'status column', table: { category: 'Columns' } },
-    showActions:   { control: 'boolean', name: 'actions column', table: { category: 'Columns' } },
+    rowHeight:     { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg', 'xl'], name: 'density', description: 'Row height / density', table: { category: 'Table' } },
+    dataMode:      { control: 'inline-radio', options: ['none', 'pagination', 'infinite'], name: 'data mode', description: 'How rows are paged: all at once, paginated, or infinite lazy-load', table: { category: 'Table' } },
+    pageSize:      { control: { type: 'range', min: 3, max: 12, step: 1 }, name: 'page size', description: 'Rows per page (pagination mode)', table: { category: 'Table' }, if: { arg: 'dataMode', eq: 'pagination' } },
+    sortable:      { control: 'boolean', name: 'sort enabled', description: 'Allow sorting on columns that opt in with `sortable`', table: { category: 'Table' } },
+    selectionMode: { control: 'inline-radio', options: ['none', 'single', 'multiple'], name: 'selection', description: 'Leading control column: radios (single) or checkboxes + select-all (multiple)', table: { category: 'Table' } },
+    stickyHeader:  { control: 'boolean', name: 'sticky header', description: 'Pin the header while the body scrolls (needs `maxHeight`)', table: { category: 'Table' } },
+    maxHeight:     { control: { type: 'range', min: 200, max: 600, step: 20 }, name: 'scroll height', description: 'Body scroll height in px when the header is sticky', table: { category: 'Table' }, if: { arg: 'stickyHeader' } },
+    zebra:         { control: 'boolean', description: 'Alternate row background tint', table: { category: 'Table' } },
+    hoverable:     { control: 'boolean', description: 'Highlight rows on hover', table: { category: 'Table' } },
+    bordered:      { control: 'boolean', description: 'Draw cell borders', table: { category: 'Table' } },
+    showStatus:    { control: 'boolean', name: 'status column', description: 'Include the demo Status tag column', table: { category: 'Columns' } },
+    showActions:   { control: 'boolean', name: 'actions column', description: 'Include the demo sticky Actions column', table: { category: 'Columns' } },
   },
   render: (args) => {
     const columns = basicColumns(args);

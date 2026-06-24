@@ -15,10 +15,26 @@ const meta = {
   title: 'Atoms/Badge',
   component: Badge,
   tags: ['autodocs', 'ai-generated'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A small non-interactive status pill — a label, count, or dot that annotates another element.',
+          '',
+          '**When to use** — a read-only state tag (`Confirmed`, `Critical`), a notification count on a nav item, or a dot indicator. Pair colour with meaning: `success`/`warning`/`error`/`neutral`.',
+          '**When not** — if it can be toggled, selected, or dismissed, reach for **Chip**; for a clickable action use **Button**.',
+          '',
+          '**Key props** — `variant` (solid · soft · outline · gradient · dot), `color` (semantic tone), `size` (xs–lg), `children` (the label, usually data-bound), `sticky` (square one edge to sit flush against a container).',
+          '',
+          '**Good to know** — icons inherit the badge colour via `currentColor`; pass them as nodes through `icon` / `rightIcon`. `variant="dot"` and `icons="icon-only"` drop the label, so give the element accessible context from its surroundings.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    variant: { control: 'select', options: VARIANTS },
-    color: { control: 'select', options: COLORS },
-    size: { control: 'inline-radio', options: SIZES },
+    variant: { control: 'select', options: VARIANTS, description: 'Visual treatment — solid · soft · outline · gradient · dot' },
+    color: { control: 'select', options: COLORS, description: 'Semantic tone — map it to meaning (success / warning / error / neutral …)' },
+    size: { control: 'inline-radio', options: SIZES, description: 'xs · sm · md · lg' },
     children: { control: 'text', name: 'label (text)', description: 'Label — usually data-bound (e.g. a status string from the backend). Omit, or use icons="icon-only", for an icon-only badge.', table: { category: 'Content' } },
     // ── Icons: choose how many / which side, then pick the glyph(s) ──
     icons: { control: 'inline-radio', options: ['none', 'left', 'right', 'both', 'icon-only'], name: 'icons', description: 'Which icon slots to show', table: { category: 'Icons' } },

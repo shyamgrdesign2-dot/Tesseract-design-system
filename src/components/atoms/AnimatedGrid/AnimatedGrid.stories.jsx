@@ -6,7 +6,20 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: { description: { component: 'Standalone decorative atom: a geometric lattice with travelling "comet" pulses. It is its own component (the HeroBanner just reuses it) — drop it behind any surface. Themeable via `lineColor` + `cometColor`, so it works on both dark and light backgrounds. The viewBox is square, so in a square area the full grid is visible.' } },
+    docs: {
+      description: {
+        component: [
+          'A decorative geometric lattice with travelling "comet" pulses, sized to fill whatever surface it sits behind.',
+          '',
+          '**When to use** — adding subtle motion behind a hero, splash, empty state, or marketing surface. It is standalone (the HeroBanner just reuses it), so drop it behind any panel.',
+          '**When not** — never as a loading state (that is `LoadingIndicator` / `Skeleton`); not for content-bearing graphics — it is purely ambient.',
+          '',
+          '**Key props** — `lineColor` + `cometColor` theme it for dark or light surfaces; `edgeFade` dissolves the edges (0–1); `speed` slow/normal/fast; `density` is the fraction of lanes that emit comets (lower = calmer); `animated={false}` draws only the static lattice.',
+          '',
+          '**Good to know** — it auto-falls back to the static lattice under `prefers-reduced-motion`, so `animated` is an upper bound, not a guarantee of motion. The viewBox is square; in a square container the whole grid shows. Position it absolutely (`inset: 0`) behind your content.',
+        ].join('\n'),
+      },
+    },
   },
   argTypes: {
     lineColor: { control: 'color', description: 'Lattice stroke color' },

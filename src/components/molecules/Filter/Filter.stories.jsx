@@ -10,7 +10,16 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: { description: { component: 'A single "Filter" entry point that opens one panel with grouped, multi-select sections (Status · Doctors · Types). Chosen options become removable chips below. The section set changes per table — pass a different `groups` config. Pairs with DataTable to filter rows.' } },
+    docs: { description: { component: [
+      'A single trigger that opens one panel of grouped, multi-select sections; chosen options surface as removable `Chip` atoms in a bordered active bar below.',
+      '',
+      '**When to use** — narrowing a `DataTable` by several facets at once (status, doctor, type); when the section set varies per table, pass a different `groups`.',
+      "**When not** — a single binary or one-axis choice — reach for a plain checkbox/segmented control. Date ranges go to `DateRangePicker`.",
+      '',
+      '**Key props** — `groups` (the section config: `[{ id, label, type?, options }]`, `type` `multi` default or `single`); `value`/`onChange` (controlled selection map, keyed by group `id`); `mode` (`live` fires immediately vs `apply` stages a draft until Done); `label`/`triggerIcon` (trigger text + glyph); `width`/`maxHeight` (panel sizing).',
+      '',
+      '**Good to know** — selection is fully controlled: `value` is `{ groupId: [pickedValues] }`. Clearing fires `onChange` with the emptied map; the red Clear all sits in the active bar and the panel footer.',
+    ].join('\n') } },
   },
   argTypes: {
     groups: { control: 'object', description: 'Filter sections: [{ id, label, type?, options: [{ value, label }] }] — type "multi" (default) | "single"' },

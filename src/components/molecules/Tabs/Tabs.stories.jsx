@@ -8,7 +8,16 @@ const meta = {
   component: Tabs,
   tags: ['autodocs'],
   parameters: {
-    docs: { description: { component: 'Scalable tabs with optional left/right Tesseract icons, a right-side tag (count/status), a rounded active indicator, hover states, and three sizes.' } },
+    docs: { description: { component: [
+      'A compound tab set — `Tabs` wraps `TabsList` / `TabsTrigger` / `TabsContent`; each trigger takes optional left/right icons and a right-side tag (count or status).',
+      '',
+      '**When to use** — switching between peer views of one record (a patient\'s Overview / Vitals / Labs) where only one panel shows at a time.',
+      '**When not** — show/hide of stacked, independently-open content (use `Accordion`); primary app navigation (use `Sidebar`).',
+      '',
+      '**Key props** — `value`/`defaultValue` + `onValueChange` (controlled vs uncontrolled); `variant` (`line` underline · `pill` floating highlight · `segment` segmented track); `size` (`sm`/`md`/`lg`); `orientation` (`horizontal`/`vertical`); `activationMode` (`automatic` selects on focus · `manual` arrows-then-Enter); `accent` (token for active text + indicator); `TabsList fullWidth`; per-trigger `leftIcon`/`rightIcon`/`tag`/`tagTone`/`disabled`.',
+      '',
+      '**Good to know** — arrow keys move between triggers (Up/Down when vertical) and `aria-orientation` is set; when triggers overflow the row scrolls horizontally rather than wrapping or squishing. Reach for `manual` activation when panels are expensive to mount.',
+    ].join('\n') } },
   },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'Trigger density' },

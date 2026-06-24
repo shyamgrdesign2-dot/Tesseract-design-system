@@ -68,18 +68,34 @@ const meta = {
   title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs', 'ai-generated'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'The single Tesseract CTA — one component for every button shape: text, with icons, icon-only, and split (primary + menu).',
+          '',
+          '**When to use** — any clickable action: submit, navigate, trigger a menu. Reach for the split shape (`menu`) when a primary action has secondary variants.',
+          '**When not** — for a selectable/removable token use **Chip**; for a read-only state use **Badge**; for navigation that should be a real link, set `href` rather than handling clicks.',
+          '',
+          '**Key props** — `variant` (solid · outline · ghost · tonal · link), `theme` (primary · neutral · error · success · warning), `size`, `surface` (light · dark), `loading` / `disabled`, `href` (renders a real `<a>`), `menu` (split-button items).',
+          '',
+          '**Good to know** — icon-only buttons have no text, so pass `aria-label`. `href` (or `as="a"`) makes the text and icon-only shapes render an anchor with identical styling; the split shape stays a native button group. `loading` shows a spinner and blocks clicks.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
     // Real Button props
-    variant:  { control: 'select',       options: VARIANTS,            table: { category: 'Style' } },
-    theme:    { control: 'select',       options: THEMES,              table: { category: 'Style' } },
-    size:     { control: 'inline-radio', options: SIZES,               table: { category: 'Style' } },
-    surface:  { control: 'inline-radio', options: ['light', 'dark'],   table: { category: 'Style' } },
+    variant:  { control: 'select',       options: VARIANTS,            description: 'solid · outline · ghost · tonal · link', table: { category: 'Style' } },
+    theme:    { control: 'select',       options: THEMES,              description: 'Colour theme — primary · neutral · error · success · warning', table: { category: 'Style' } },
+    size:     { control: 'inline-radio', options: SIZES,               description: 'sm · md · lg', table: { category: 'Style' } },
+    surface:  { control: 'inline-radio', options: ['light', 'dark'],   description: 'Tune contrast for a light or dark background', table: { category: 'Style' } },
     radius:   { control: 'text', name: 'corner radius', description: "px number, or 'pill' / 'sharp'", table: { category: 'Style' } },
     fullWidth:{ control: 'boolean', name: 'full width', description: 'Stretch to width:100% (default is inline width)', table: { category: 'Style' } },
     href:     { control: 'text', description: 'When set, renders a real <a href> with identical styling (great for the link variant). Blank = native <button>', table: { category: 'Polymorphic' } },
-    loading:  { control: 'boolean',                                    table: { category: 'State' } },
-    disabled: { control: 'boolean',                                    table: { category: 'State' } },
-    children: { control: 'text', name: 'label',                        table: { category: 'Content' } },
+    loading:  { control: 'boolean', description: 'Show a spinner and block clicks',     table: { category: 'State' } },
+    disabled: { control: 'boolean', description: 'Non-interactive, dimmed',             table: { category: 'State' } },
+    children: { control: 'text', name: 'label', description: 'Button label (omit for icon-only)', table: { category: 'Content' } },
     // Playground-only synthetic controls (icon/menu are React nodes, so they
     // can't be plain controls — these drive them via the render below).
     shape: {

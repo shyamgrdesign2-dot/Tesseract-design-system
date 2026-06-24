@@ -11,9 +11,21 @@ const meta = {
   title: 'Molecules/Accordion',
   component: Accordion,
   tags: ['autodocs'],
+  parameters: {
+    docs: { description: { component: [
+      'A compound disclosure stack — `Accordion` wraps `AccordionItem` rows, each pairing an `AccordionTrigger` header with collapsible `AccordionContent`.',
+      '',
+      '**When to use** — progressively disclosing long-but-skimmable content (FAQs, a patient history split into sections, a SOAP note). `type="single"` for one-open-at-a-time, `type="multiple"` to expand several.',
+      '**When not** — switching between peer views of equal weight (use `Tabs`); a flat list with no hide/show.',
+      '',
+      '**Key props** — `type` (`single` | `multiple`); `collapsible` (in single mode, lets the open row close to none); `value`/`defaultValue` + `onValueChange` (controlled vs uncontrolled open state); `density` (`comfortable` | `compact` row padding + type scale); `expandIcon`/`iconPosition` (disclosure glyph + which side it sits).',
+      '',
+      '**Good to know** — set a per-trigger `headingLevel` so the trigger wraps in the right `h2`/`h3` for the page outline. A `disabled` `AccordionItem` dims and can\'t toggle while siblings keep working.',
+    ].join('\n') } },
+  },
   argTypes: {
-    type: { control: 'inline-radio', options: ['single', 'multiple'] },
-    collapsible: { control: 'boolean' },
+    type: { control: 'inline-radio', options: ['single', 'multiple'], description: 'single = one row open at a time · multiple = several can be open' },
+    collapsible: { control: 'boolean', description: 'Single mode: allow the open row to collapse to none' },
     itemIcon: { control: 'text', tpIcon: true, name: 'item icon', description: 'Tesseract icon shown before each item title' },
     // ── Disclosure indicator (root defaults; can be overridden per-trigger) ──
     expandIcon: { control: 'text', tpIcon: true, name: 'expand icon', description: 'CDN icon name for the disclosure indicator (rotates on open)', table: { category: 'Indicator' } },

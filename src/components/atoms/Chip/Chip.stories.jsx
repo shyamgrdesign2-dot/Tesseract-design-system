@@ -15,11 +15,27 @@ const meta = {
   title: 'Atoms/Chip',
   component: Chip,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'An interactive pill for selectable, removable, or filter tokens.',
+          '',
+          '**When to use** — toggleable choices (symptom picker), active filter tokens with a dismiss ×, or input tags. Wire `onClick` to select and `onDelete` to remove.',
+          '**When not** — for a read-only status label use **Badge**; for a primary action use **Button**.',
+          '',
+          '**Key props** — `label` (text), `variant` (solid · soft · outline), `color`, `size`, `selected` (active/toggle state), `removable` + `removePosition` (dismiss × and its side).',
+          '',
+          '**Good to know** — passing `onDelete` is what renders the ×; `removable` alone in the playground maps to it. `selected` is a first-class active state (stronger wash + 500-step accent border), not just a CSS class — drive it from your selection state.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    label: { control: 'text', table: { category: 'Content' } },
-    color: { control: 'select', options: COLORS, table: { category: 'Style' } },
-    variant: { control: 'inline-radio', options: VARIANTS, table: { category: 'Style' } },
-    size: { control: 'inline-radio', options: SIZES, table: { category: 'Style' } },
+    label: { control: 'text', description: 'Chip text', table: { category: 'Content' } },
+    color: { control: 'select', options: COLORS, description: 'Accent ramp — default · primary · success · warning · error', table: { category: 'Style' } },
+    variant: { control: 'inline-radio', options: VARIANTS, description: 'solid · soft · outline', table: { category: 'Style' } },
+    size: { control: 'inline-radio', options: SIZES, description: 'sm · md · lg', table: { category: 'Style' } },
     selected: { control: 'boolean', name: 'selected (active)', description: 'First-class active/toggle state — stronger wash + 500 accent border', table: { category: 'State' } },
     disabled: { control: 'boolean', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },

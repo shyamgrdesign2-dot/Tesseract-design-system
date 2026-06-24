@@ -5,9 +5,25 @@ const meta = {
   title: 'Atoms/Radio',
   component: RadioGroup,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A single-select group — `RadioGroup` owns the value; each `Radio` is one mutually-exclusive option.',
+          '',
+          '**When to use** — pick exactly one from a small, visible set (appointment type, gender, reminder channel).',
+          '**When not** — for multiple selections use **Checkbox**; for an instant on/off use **Toggle**; for many options a select/dropdown scales better.',
+          '',
+          '**Key props** — group: `value` + `onChange` (controlled), `orientation`, `size`, `color`, `gap`, `error`. Per-`Radio`: `value`, `label`, `description`, `disabled` (and `color` to override the group).',
+          '',
+          '**Good to know** — render `Radio` children inside a `RadioGroup`; the group wires selection and a shared `name`, so don\'t set `name` on each radio. `error` on the group shifts accent + labels to the error ramp.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], table: { category: 'Style' } },
-    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'], table: { category: 'Style' } },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'sm · md · lg', table: { category: 'Style' } },
+    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'], description: 'Stack vertically or lay out in a row', table: { category: 'Style' } },
     color: { control: 'inline-radio', options: ['primary', 'success', 'error', 'warning'], description: 'Accent colour for the group (primary = blue). Per-Radio color overrides.', table: { category: 'Style' } },
     gap: { control: { type: 'range', min: 0, max: 40, step: 2 }, name: 'gap (px)', description: 'Override the group gap. Blank = token default (horizontal vs vertical).', table: { category: 'Style' } },
     error: { control: 'boolean', description: 'Invalid styling — accent + labels shift to the error ramp.', table: { category: 'State' } },

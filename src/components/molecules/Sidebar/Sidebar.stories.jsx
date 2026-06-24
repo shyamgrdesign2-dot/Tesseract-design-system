@@ -105,10 +105,16 @@ const meta = {
     layout: "fullscreen",
     docs: {
       description: {
-        component:
-          "Scalable sidebar with collapsed rail (80px) and expanded (236px) modes. " +
-          "Supports flat items, nested children with expand/collapse, flyout popovers " +
-          "on collapsed hover, search filtering, badges, and a configurable collapse toggle.",
+        component: [
+          'The app\'s primary navigation — a collapsible left sidebar that toggles between a 80px icon rail and a 236px labelled list, with flat or nested items.',
+          '',
+          '**When to use** — top-level product navigation; supports nested sections that expand inline (or as flyout popovers when collapsed) plus search, badges, and a header/footer slot.',
+          '**When not** — a per-record context rail nested inside a page (use `SecondarySidebar`); peer views of one record (use `Tabs`).',
+          '',
+          '**Key props** — `items` (flat or with `children: [...]`, each `{ id, label, icon, badge? }`); `activeId` + `onSelect`; `collapsed` + `onCollapsedChange` (controlled) or `defaultCollapsed`; `search`/`searchPlaceholder`; `accent` (token recolouring every active state); `density` (`comfortable` | `compact`); `expandedWidth`/`collapsedWidth`, `showCollapseToggle`, `loading`, `header`/`footer`.',
+          '',
+          '**Good to know** — when collapsed, hovering a parent item opens its children as a flyout popover, so nested nav stays reachable in rail mode. `badge` accepts a string shorthand or a full `Badge` config object; `loading` renders skeleton rows.',
+        ].join('\n'),
       },
     },
   },

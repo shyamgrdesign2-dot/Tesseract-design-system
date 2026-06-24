@@ -7,9 +7,25 @@ const meta = {
   title: 'Atoms/Checkbox',
   component: Checkbox,
   tags: ['autodocs', 'ai-generated'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A tri-state checkbox for multi-select choices and consent, with an optional built-in label.',
+          '',
+          '**When to use** — any number of independent selections (symptom lists, consent items) or a parent "select all" using the `indeterminate` state.',
+          '**When not** — for one-of-many use **Radio**; for an instant-apply setting with no submit use **Toggle**.',
+          '',
+          '**Key props** — `checked` + `onCheckedChange` (controlled; `checked` accepts `true | false | "indeterminate"`), `defaultChecked` (uncontrolled), `color`, `error` (invalid styling), `label` + `description` + `labelPosition` (built-in label slot).',
+          '',
+          '**Good to know** — `indeterminate` is a render-only display state (the box shows a dash); it is not a checked value, so a click resolves it to checked/unchecked. `error` is independent of `color` and always uses the error ramp. Clicking the built-in `label` toggles the box.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
     state: { control: 'inline-radio', options: ['unchecked', 'checked', 'indeterminate'], description: 'Tri-state value (indeterminate is reachable here, not just via boolean)' },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'sm · md · lg' },
     color: { control: 'inline-radio', options: COLORS, description: 'Checked / indeterminate fill + border + focus ring. primary = brand blue (default).' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },

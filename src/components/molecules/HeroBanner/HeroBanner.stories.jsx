@@ -69,11 +69,23 @@ const meta = {
   title: 'Molecules/HeroBanner',
   component: HeroBanner,
   tags: ['autodocs'],
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    docs: { description: { component: [
+      'A dark, gradient page header — eyebrow + title + subtitle, an optional back button, a tiled pattern, and an `actions` slot for up to three dark-surface `Button` CTAs.',
+      '',
+      '**When to use** — the top band of a primary page (Appointments, Patient Details) that needs a title plus its main actions in one place.',
+      '**When not** — an inline section heading (use plain headings); a modal/confirmation surface (use `ConfirmDialog`).',
+      '',
+      '**Key props** — `title` + `subtitle` (with `titleSize`/`subtitleSize` 18/24 and 13/16); `tone` (token-only gradient reskin, `violet` default) or `background` (full CSS override that wins over tone); `size`/`height` (80/120/160 or a numeric override); `actions` (the CTA slot — text/icon-only/split Buttons, all `surface="dark"`); `showBackButton`/`backIcon`; `bottomRadius`, `pattern`, `align`.',
+      '',
+      '**Good to know** — the banner is dark-only, so every CTA must be `surface="dark"`; there is no separate trailing end-icon — a third icon-only Button is just another CTA. Pattern opacity is fixed.',
+    ].join('\n') } },
+  },
   argTypes: {
     // ── Content ──
     eyebrow:        { control: 'text', name: 'eyebrow (kicker)', description: 'Small label above the title; blank = none', table: { category: 'Content' } },
-    title:          { control: 'text', table: { category: 'Content' } },
+    title:          { control: 'text', description: 'Banner heading (the page title)', table: { category: 'Content' } },
     titleSize:      { control: 'inline-radio', options: ['sm', 'md'], description: '18px / 24px', table: { category: 'Content' } },
     showSubtitle:   { control: 'boolean', name: 'with subtitle', table: { category: 'Content' } },
     subtitle:       { control: 'text', table: { category: 'Content' } },

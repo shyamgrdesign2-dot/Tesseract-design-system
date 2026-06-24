@@ -10,7 +10,16 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
-    docs: { description: { component: 'Editable RxPad table — every cell is its own input box, composed from the design-system atoms.\n\n**Cell types:** `text` (free-text), `number` (digits), `date` (native picker), `select` (fixed dropdown), `search` (editable combobox + "Add custom"), `multiselect` (multi-pick with chips), `combo` (editable dropdown — type to filter + allow custom values, with chevron).\n\nFixed skeleton: drag-reorder · **Name** (primary search) · …configurable `columns`… · **Notes** (free text) · **Action** (⋯ menu + delete). The Playground story below lets you configure the number of columns, each column\'s name, type, and options — all from Storybook controls.' } },
+    docs: { description: { component: [
+      'An editable, row-per-entry clinical table (RxPad) where every cell is its own input, composed from the design-system InputBox / Dropdown atoms.',
+      '',
+      '**When to use** — capturing a structured list a clinician fills in row by row: symptoms, medications, investigations. The fixed skeleton is drag-reorder · **Name** (primary search) · your `columns` · **Notes** · **Action** (⋯ menu + delete).',
+      '**When not** — for read-only or sortable/paginated data display use `DataTable`; this component is for data entry, not browsing.',
+      '',
+      '**Key props** — `name` configures the primary search column (options + frequently-used label); `columns` defines the middle cells, each with a `type` (`text` · `number` · `date` · `select` · `search` · `multiselect` · `combo`); `rows` + `onChange` make it controlled; `density` (`comfortable` / `compact`) sets row height; `loading` (+ `loadingRows`) swaps in skeleton rows; `stickyHeader` + `maxHeight` pin the header over a scrolling body; `autoRow` + `emptyState` decide the no-data behaviour.',
+      '',
+      '**Good to know** — `autoRow` keeps one draft row to type into; pass `autoRow={false}` with an `emptyState` node to show a message instead. `loading` preserves column widths so there is no layout shift when data arrives. A column\'s `render(value, row)` is a read-only escape hatch that bypasses the type set.',
+    ].join('\n') } },
   },
   argTypes: {
     reorderable: { control: 'boolean', table: { category: 'Actions' } },

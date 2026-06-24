@@ -9,7 +9,20 @@ const meta = {
   tags: ['autodocs', 'ai-generated'],
   parameters: {
     layout: 'centered',
-    docs: { description: { component: 'Thin convenience wrapper over `TPLibraryIcon` that defaults `family="medical"` and maps legacy style names (line → linear, solid → bold). It forwards any extra props (onClick, aria-*, data-*, …) to the underlying icon, and the `family` default can be overridden so it doubles as a general icon alias.' } },
+    docs: {
+      description: {
+        component: [
+          'A thin wrapper over `TPLibraryIcon` that defaults `family="medical"`, so clinical glyphs resolve by short name.',
+          '',
+          '**When to use** — reaching for a medical glyph (ambulance, cardiogram, dna, first-aid) where you want the curated medical subset resolved first.',
+          '**When not** — a general UI glyph is `TPIcon` / `TPLibraryIcon` directly; a configurable icon SLOT inside another component should use that component\'s `tpIcon` prop, not a nested MedicalIcon.',
+          '',
+          '**Key props** — `name` (resolved against the medical subset, then the full library); `variant` linear / bulk / bold (legacy `line`/`solid` accepted); `size` in px; `color` overrides the inherited `currentColor`; `family` overrides the `medical` default so it doubles as a general alias; `alt` sets an a11y label.',
+          '',
+          '**Good to know** — extra props (onClick, aria-*, data-*, style) pass straight through to the underlying icon, so it can act as a button. Leave `alt` blank for purely decorative glyphs; set it (→ `role="img"`) when the icon carries meaning.',
+        ].join('\n'),
+      },
+    },
   },
   argTypes: {
     name: { control: 'text', tpIcon: true, description: 'Icon name (resolved against the medical subset, then the full library)', table: { category: 'Content' } },

@@ -5,11 +5,24 @@ const meta = {
   component: Logo,
   tags: ['autodocs'],
   parameters: {
-    docs: { description: { component: 'The Tatva brand marks. Two SEPARATE marks (never combined): the wordmark and the monochrome symbol. Two brand wordmarks share the symbol — **TatvaPractice** (`brand="practice"`) and **TatvaCare** (`brand="care"`). The shared SVGs are painted via CSS mask, so one asset recolours per surface: gradient / dark (for light backgrounds) / light (white, for dark backgrounds) / violet / blue. Set `height`; width derives from the artwork.' } },
+    docs: {
+      description: {
+        component: [
+          'The Tatva brand marks — two SEPARATE marks (never combined): the full `wordmark` and the monochrome `symbol`.',
+          '',
+          '**When to use** — branding a header, splash, sidebar, or print surface. Use the `wordmark` where there is room to read the name; use the `symbol` in tight or square slots (favicon, collapsed nav).',
+          '**When not** — generic UI glyphs are `MedicalIcon` / `TPIcon`, not the Logo; never recombine wordmark + symbol into a custom lockup.',
+          '',
+          '**Key props** — `variant` wordmark vs symbol; `brand` `practice` (TatvaPractice) vs `care` (TatvaCare), sharing one symbol; `tone` preset paint (gradient / dark / light / violet / blue); `color` overrides `tone` with an arbitrary brand colour/gradient; `height` (width derives) or `width` (wins over height).',
+          '',
+          '**Good to know** — the SVGs are painted via CSS mask, so a single asset recolours per surface: use `tone="light"` (white) on dark backgrounds, `dark`/`gradient` on light. Set `height` and let width derive from the artwork rather than distorting the aspect ratio.',
+        ].join('\n'),
+      },
+    },
   },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['wordmark', 'symbol'] },
-    brand: { control: 'inline-radio', options: ['practice', 'care'] },
+    variant: { control: 'inline-radio', options: ['wordmark', 'symbol'], description: 'Full wordmark, or the standalone monochrome symbol' },
+    brand: { control: 'inline-radio', options: ['practice', 'care'], description: 'Which wordmark — TatvaPractice or TatvaCare (symbol is shared)' },
     tone: { control: 'inline-radio', options: ['gradient', 'dark', 'light', 'violet', 'blue'], description: 'Preset paint. Ignored when `color` is set.', table: { category: 'Appearance' } },
     color: { control: 'text', description: 'Arbitrary brand colour / gradient — overrides `tone`. Blank = use `tone`.', table: { category: 'Appearance' } },
     height: { control: { type: 'range', min: 16, max: 80, step: 2 }, description: 'Height in px; width derives from the aspect ratio. Ignored when `width` is set.', table: { category: 'Sizing' } },

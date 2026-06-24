@@ -50,9 +50,16 @@ const meta = {
     layout: "fullscreen",
     docs: {
       description: {
-        component:
-          "Blue-gradient secondary sidebar rail (RxPad pattern). " +
-          "Always collapsed at 80px. Supports badges, signal dots, bottom fade, and active state indicator.",
+        component: [
+          'A gradient secondary rail (the RxPad pattern) — a fixed-width column of icon pills, always collapsed, with an active-state indicator.',
+          '',
+          '**When to use** — a per-record context nav nested inside a page (a patient\'s Visits / Vitals / Labs), sitting beside the primary `Sidebar`.',
+          '**When not** — the app\'s top-level navigation, or a rail that needs to expand to labels — use `Sidebar`.',
+          '',
+          '**Key props** — `items` (`[{ id, label, icon, badge?, signal? }]`); `activeId` + `onSelect` (controlled selection); `tone` (`blue` default · `violet` · `slate` · `green` — drives gradient, fade, and active-icon ramp); `density` (`comfortable` | `compact` pill/label sizing); `badgeStyle` (`default` · `none` · `dot` · `sticky-right` · `sticky-left`); `collapsedWidth`, `pillRadius`, `bottomFade`, `footer`.',
+          '',
+          '**Good to know** — the rail stays collapsed at 80px; an item `signal: true` shows a notification dot, while `badge` renders a `Badge` (string shorthand or a full `{ text, variant, color, sticky }` object).',
+        ].join('\n'),
       },
     },
   },

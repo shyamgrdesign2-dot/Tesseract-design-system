@@ -19,7 +19,16 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: { description: { component: 'Header · Body · Footer confirmation modal. Convention (developer decides): the **primary** CTA is the safe/non-destructive action; the **destructive** action goes on the **secondary** CTA. CTA colors come from the Button `theme` (Tesseract blue + warning/error/success/neutral).' } },
+    docs: { description: { component: [
+      'A Header · Body · Footer confirmation modal for short, blocking yes/no decisions.',
+      '',
+      '**When to use** — confirming a destructive or irreversible action (delete, discard, archive, log out) or a consequential one (send summary, end consultation) before it runs.',
+      '**When not** — for non-blocking feedback after an action use `Toast`; for a full editing surface use a panel/sidebar, not a dialog.',
+      '',
+      '**Key props** — `open` + `onOpenChange` control visibility; `title` + `description` + `callout` (with `calloutTone` `neutral`/`warning`/`error` and `calloutPlacement`) build the body; `size` sets width (`sm` ~400 · `md` 480 · `lg` ~640); `icon` adds a leading header glyph; the three CTA triples (`primaryLabel`/`primaryVariant`/`primaryTheme`, secondary, tertiary) plus `primaryLoading` drive the footer Buttons.',
+      '',
+      '**Good to know** — convention is safe action = **primary**, destructive = **secondary** (themed `error`); the developer wires this, the component does not enforce it. CTA colors come from the Button `theme`. The close button is always rendered unless `hideClose`; CTAs, the "don\'t show again" checkbox, and icons reuse the Button / Checkbox / TPLibraryIcon atoms.',
+    ].join('\n') } },
   },
 };
 
@@ -117,13 +126,13 @@ export const Playground = {
     actionsFullWidth: false,
   },
   argTypes: {
-    title:            { control: 'text', table: { category: 'Header' } },
+    title:            { control: 'text', description: 'Dialog headline — the question being confirmed', table: { category: 'Header' } },
     size:             { control: 'inline-radio', options: ['sm', 'md', 'lg'], name: 'size', description: 'Dialog width — sm ~400 · md 480 (default) · lg ~640', table: { category: 'Frame' } },
     headerIcon:       { control: 'text', tpIcon: true, name: 'header icon', description: 'Leading icon next to the title (CDN icon name; blank = none)', table: { category: 'Header' } },
     headerIconVariant:{ control: 'select', options: ICON_VARIANTS, name: 'header icon style', description: 'Icon style for the header glyph (default bold)', if: { arg: 'headerIcon' }, table: { category: 'Header' } },
     hideClose:        { control: 'boolean', name: 'hide close', description: 'Hide the always-on close button', table: { category: 'Header' } },
     withDescription:  { control: 'boolean', name: 'with description', table: { category: 'Body' } },
-    description:      { control: 'text', table: { category: 'Body' } },
+    description:      { control: 'text', description: 'Supporting body text explaining the consequence', table: { category: 'Body' } },
     withCallout:      { control: 'boolean', name: 'with callout box', table: { category: 'Body' } },
     callout:          { control: 'text', name: 'callout text', table: { category: 'Body' } },
     calloutTone:      { control: 'inline-radio', options: ['neutral', 'warning', 'error'], name: 'callout tone', table: { category: 'Body' } },
@@ -135,12 +144,12 @@ export const Playground = {
     checkboxLabel:    { control: 'text', name: 'checkbox label', table: { category: 'Body' } },
     iconFamily:       { control: 'text', name: 'icon family (override)', description: 'Override the auto-resolved CDN family for the header + callout icons (blank = auto)', table: { category: 'Icons' } },
 
-    primaryLabel:     { control: 'text', name: 'primary · label', table: { category: 'Primary CTA' } },
+    primaryLabel:     { control: 'text', name: 'primary · label', description: 'Primary CTA text — by convention the safe / non-destructive action', table: { category: 'Primary CTA' } },
     primaryVariant:   { control: 'select', options: VARIANTS, name: 'primary · variant', table: { category: 'Primary CTA' } },
     primaryTheme:     { control: 'select', options: THEMES, name: 'primary · color', table: { category: 'Primary CTA' } },
     primaryLoading:   { control: 'boolean', name: 'primary · loading', description: 'Show the Button spinner + disable while an async confirm runs', table: { category: 'Primary CTA' } },
 
-    secondaryLabel:   { control: 'text', name: 'secondary · label', table: { category: 'Secondary CTA' } },
+    secondaryLabel:   { control: 'text', name: 'secondary · label', description: 'Secondary CTA text — by convention the destructive action (theme it error)', table: { category: 'Secondary CTA' } },
     secondaryVariant: { control: 'select', options: VARIANTS, name: 'secondary · variant', table: { category: 'Secondary CTA' } },
     secondaryTheme:   { control: 'select', options: THEMES, name: 'secondary · color', table: { category: 'Secondary CTA' } },
 

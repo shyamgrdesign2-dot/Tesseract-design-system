@@ -15,7 +15,20 @@ const meta = {
   component: Avatar,
   tags: ['autodocs'],
   parameters: {
-    docs: { description: { component: 'Profile mark. Content is one of **image · initials · icon**; deeply configurable via **shape**, **radius**, **color**, **status dot**, and an optional brand **ring**. Used by the Header and anywhere a user avatar is needed.' } },
+    docs: {
+      description: {
+        component: [
+          'A profile mark that renders one of image · initials · icon, with optional status and brand ring.',
+          '',
+          '**When to use** — represent a user or entity in a header, list row, comment, or assignee slot. Falls back to initials (from `name`) when no `src`, and to an `icon` when neither is given.',
+          '**When not** — for a decorative or standalone glyph use **TPIcon**; for a status tag use **Badge**.',
+          '',
+          '**Key props** — `content` (image · initials · icon), `name` (initials source + alt text), `src` (image URL), `size` (px diameter), `shape` (circle · rounded · square), `status` (corner presence dot), `ring` (brand gradient ring).',
+          '',
+          '**Good to know** — `name` doubles as the image `alt`, so always pass it even for image avatars. `radius` overrides `shape` when set; the status dot carries a white halo so it stays legible over any photo.',
+        ].join('\n'),
+      },
+    },
   },
   argTypes: {
     content: { control: 'inline-radio', options: ['image', 'initials', 'icon'], description: 'What the avatar shows', table: { category: 'Content' } },

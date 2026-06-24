@@ -13,8 +13,24 @@ const meta = {
   title: "Atoms/Segmented Control",
   component: SegmentedControl,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A horizontal (or vertical) row of mutually-exclusive options with a sliding indicator marking the active one.',
+          '',
+          '**When to use** — switching between a small set (2–5) of views or modes that share the same space: a queue/finished/cancelled filter, a list/grid toggle, a billing-period picker.',
+          '**When not** — more than ~5 options, or options that need their own labels/icons in a menu, reach for `Tabs`; an on/off toggle is the `Switch`; a yes/no/maybe form field is `Radio`.',
+          '',
+          '**Key props** — `options` is the config array (`{ value, label, icon?, disabled? }`); `value` + `onValueChange` (controlled) or `defaultValue`; `variant` is `pill` vs `block`; `theme` colours the indicator; `orientation` row vs column; `fullWidth` stretches segments to fill the container.',
+          '',
+          '**Good to know** — selection is config-driven, so per-option `disabled` and `icon` live on the `options` entries, not on the root. Keep labels short and equal in weight; the indicator animates between equal-width cells.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    size: { control: "inline-radio", options: ["sm", "md", "lg"], description: "Segment height / text size" },
     variant: {
       control: "inline-radio",
       options: ["pill", "block"],
@@ -36,8 +52,8 @@ const meta = {
       name: "corner radius",
       description: "px number, or 'pill' / 'sharp' — outer + indicator radius (blank = default)",
     },
-    fullWidth: { control: "boolean" },
-    disabled: { control: "boolean" },
+    fullWidth: { control: "boolean", description: "Stretch segments to fill the container width" },
+    disabled: { control: "boolean", description: "Disable the whole control (per-option disable lives on `options`)" },
     // ── Icons: one shared set of controls applied to every option ──
     withIcons: { control: "boolean", name: "with icons", description: "Show a leading icon on every segment", table: { category: "Icons" } },
     opt1Icon: { control: "text", tpIcon: true, name: "icon · Monthly", description: "CDN icon name for the first option", if: { arg: "withIcons" }, table: { category: "Icons" } },

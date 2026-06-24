@@ -97,17 +97,33 @@ export default {
   title: 'Atoms/InputBox',
   component: InputBox,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component: [
+          'A single text field that absorbs every common input capability — icons, status, filtering, affixes, add-ons, tags — so one component covers them all.',
+          '',
+          '**When to use** — any text or number entry: search, email, phone, amounts. Compose `leftAddon` / `rightAddon` (dropdown · CTA · text) or `action` (an in-field Button) for prefixed, suffixed, or actioned fields.',
+          '**When not** — for a one-of-many choice use **Radio**; for an on/off setting use **Toggle**.',
+          '',
+          '**Key props** — `label` + `helperText`, `size`, `status` (default · success · error · warning), `allow` (filter to numeric / alpha / alphanumeric), `clearable`, `leftIcon` / `rightIcon`, `leftAddon` / `rightAddon`, `action`.',
+          '',
+          '**Good to know** — `allow` strips disallowed characters as the user types (not just on submit). `status` auto-shows a glyph (success→tick-circle · error→danger · warning→warning); override with `statusIcon`. `autoGrow` + `maxHeight` turns it into a textarea that grows then scrolls.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
     showLabel:   { control: 'boolean', name: 'show label', table: { category: 'Content' } },
-    label:       { control: 'text', table: { category: 'Content' } },
+    label:       { control: 'text', description: 'Field label', table: { category: 'Content' } },
     showHelper:  { control: 'boolean', name: 'show helper text', table: { category: 'Content' } },
-    helperText:  { control: 'text', table: { category: 'Content' } },
-    placeholder: { control: 'text', table: { category: 'Content' } },
+    helperText:  { control: 'text', description: 'Helper / error text below the field', table: { category: 'Content' } },
+    placeholder: { control: 'text', description: 'Placeholder shown when empty', table: { category: 'Content' } },
     required:    { control: 'boolean', table: { category: 'Content' } },
 
-    size:        { control: 'inline-radio', options: SIZES, table: { category: 'Appearance' } },
-    status:      { control: 'inline-radio', options: STATUSES, table: { category: 'Appearance' } },
+    size:        { control: 'inline-radio', options: SIZES, description: 'sm · md · lg', table: { category: 'Appearance' } },
+    status:      { control: 'inline-radio', options: STATUSES, description: 'Validation state — default · success · error · warning (drives border + status glyph)', table: { category: 'Appearance' } },
     fullWidth:   { control: 'boolean', table: { category: 'Appearance' } },
     radius:      { control: 'text', name: 'radius', description: 'Field corner radius — a number (px), "pill", "sharp", or any CSS length / token. Blank = default 10px.', table: { category: 'Appearance' } },
 

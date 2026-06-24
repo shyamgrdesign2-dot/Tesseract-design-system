@@ -7,14 +7,30 @@ const meta = {
   title: 'Atoms/Toggle',
   component: Toggle,
   tags: ['autodocs', 'ai-generated'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A switch for an instant on/off setting.',
+          '',
+          '**When to use** — a single binary preference that applies immediately (notifications on/off, feature flags) — no Save step.',
+          '**When not** — if the choice is part of a form you submit, prefer **Checkbox**; for one-of-many use **Radio**.',
+          '',
+          '**Key props** — `checked` + `onCheckedChange` (controlled), `defaultChecked` (uncontrolled), `size`, `color` (checked track tone), `label` + `labelPosition` (clicking the text toggles).',
+          '',
+          '**Good to know** — controlled (`checked`/`onCheckedChange`) and uncontrolled (`defaultChecked`) are mutually exclusive. With no `label`, pass `aria-label` so the bare switch is announced.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'sm · md · lg' },
     shape: { control: 'inline-radio', options: ['rounded', 'square'], description: 'Pill toggle vs squared toggle' },
     color: { control: 'inline-radio', options: COLORS, description: 'Checked track colour (primary = blue)' },
     label: { control: 'text', description: 'Adjacent label — clicking it toggles. Blank = bare switch.' },
     labelPosition: { control: 'inline-radio', options: ['right', 'left'], description: 'Side the label sits on', if: { arg: 'label', truthy: true } },
-    checked: { control: 'boolean' },
-    defaultChecked: { control: 'boolean' },
+    checked: { control: 'boolean', description: 'Controlled on/off — pair with `onCheckedChange`' },
+    defaultChecked: { control: 'boolean', description: 'Initial state for uncontrolled use' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
   },

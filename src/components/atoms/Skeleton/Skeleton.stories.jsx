@@ -4,10 +4,26 @@ const meta = {
   title: 'Atoms/Skeleton',
   component: Skeleton,
   tags: ['autodocs', 'ai-generated'],
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'A shimmering placeholder that holds a content shape while its data loads.',
+          '',
+          '**When to use** — filling the layout during an initial fetch so the page does not jump: table rows, a profile hero, card lists. Mirror the real content with `variant` + sizing so nothing shifts on swap-in.',
+          '**When not** — a brief inline or indeterminate wait with no known shape is `LoadingIndicator`; an empty result (not loading) is an empty-state, not a skeleton.',
+          '',
+          '**Key props** — `variant` is `text` / `circular` / `rectangular`; `width` + `height` accept px or any CSS length; `count` stacks lines (last text line auto-shortens); `animation` is `pulse` / `wave` / `none`; `radius` and `speed` fine-tune shape and timing.',
+          '',
+          '**Good to know** — animation is automatically suppressed under `prefers-reduced-motion`. Match each skeleton to the element it replaces (an avatar = `circular`, a thumbnail = `rectangular`) so the loaded state lands without reflow.',
+        ].join('\n'),
+      },
+    },
+  },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['text', 'circular', 'rectangular'] },
-    width: { control: 'text' },
-    height: { control: 'text' },
+    variant: { control: 'inline-radio', options: ['text', 'circular', 'rectangular'], description: 'Shape to mimic — line of text, avatar, or block' },
+    width: { control: 'text', description: 'px or any CSS length (e.g. "60%")' },
+    height: { control: 'text', description: 'px or any CSS length; text infers from font' },
     radius: { control: 'text' },
     count: { control: { type: 'number', min: 1 }, description: 'Number of stacked skeletons. For variant="text" the last line is shortened.' },
     animation: { control: 'inline-radio', options: ['pulse', 'wave', 'none'], description: 'pulse (default) · wave shimmer · none. Disabled under prefers-reduced-motion.' },
