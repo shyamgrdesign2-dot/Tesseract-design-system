@@ -38,7 +38,7 @@ const Row = ({ children, gap = 12 }) => (
 
 const Section = ({ label, children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-400, #54545C)' }}>
+    <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-500, #717179)' }}>
       {label}
     </span>
     {children}
@@ -379,7 +379,7 @@ export const FullMatrix = {
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, marginBottom: 8 }}>
         <div />
         {VARIANTS.map((v) => (
-          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-400, #54545C)', textAlign: 'center' }}>
+          <span key={v} style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--tesseract-slate-500, #717179)', textAlign: 'center' }}>
             {v}
           </span>
         ))}
@@ -397,7 +397,7 @@ export const FullMatrix = {
         </div>
       ))}
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center', marginTop: 12, marginBottom: 8 }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-400, #54545C)' }}>Disabled</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-500, #717179)' }}>Disabled</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} disabled>Label</Button>
@@ -405,7 +405,7 @@ export const FullMatrix = {
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(5, 1fr)', gap: 8, alignItems: 'center' }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-400, #54545C)' }}>Loading</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--tesseract-slate-500, #717179)' }}>Loading</span>
         {VARIANTS.map((variant) => (
           <div key={variant} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant={variant} loading>Label</Button>
