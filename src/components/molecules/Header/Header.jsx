@@ -65,6 +65,7 @@ import { Badge } from "@/src/components/atoms/Badge";
 import { Avatar } from "@/src/components/atoms/Avatar";
 import { Divider } from "@/src/components/atoms/Divider";
 import { Dropdown } from "@/src/components/molecules/Dropdown";
+import { Menu, MenuTrigger, MenuContent, MenuItem } from "@/src/components/molecules/Menu";
 import { InputBox } from "@/src/components/atoms/Input/InputBox";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { cn } from "@/src/hooks/utils";
@@ -91,26 +92,29 @@ function TitleBlock({ title, subtitle }) {
 }
 
 // Overflow "More" menu — actions past `maxVisibleActions` roll into a single
-// dropdown so a crowded bar stays on one line at narrow widths.
+// action menu so a crowded bar stays on one line at narrow widths. Composes the
+// shared Menu primitive (proper menu/menuitem semantics, not a value select).
 function OverflowMenu({ items }) {
-  const options = items.map((a, i) => ({
-    value: a.key ?? `more-${i}`,
-    label: a.label ?? a.value ?? "Action",
-    icon: typeof a.icon === "string" ? a.icon : undefined,
-  }));
-  const handle = (val) => {
-    const it = items.find((a, i) => (a.key ?? `more-${i}`) === val);
-    it?.onClick?.();
-  };
   return (
-    <Dropdown
-      mode="single"
-      options={options}
-      onChange={handle}
-      leadingIcon={<TPLibraryIcon name="more" size={18} />}
-      placeholder="More"
-      width="auto"
-    />
+    <Menu>
+      <MenuTrigger asChild>
+        <Button
+          variant="tonal"
+          theme="neutral"
+          leftIcon={<TPLibraryIcon name="more" size={18} />}
+          style={{ height: "var(--tesseract-header-control)" }}
+        >
+          More
+        </Button>
+      </MenuTrigger>
+      <MenuContent align="end">
+        {items.map((a, i) => (
+          <MenuItem key={a.key ?? i} icon={a.icon} onSelect={() => a.onClick?.()}>
+            {a.label ?? a.value ?? "Action"}
+          </MenuItem>
+        ))}
+      </MenuContent>
+    </Menu>
   );
 }
 
