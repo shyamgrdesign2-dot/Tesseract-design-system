@@ -37,6 +37,7 @@ export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } fr
 export { Breadcrumb } from "./Breadcrumb";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./Card";
 export { Pagination } from "./Pagination";
+export { Empty } from "./Empty";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";

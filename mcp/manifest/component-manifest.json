@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 35,
+    "components": 36,
     "atoms": 16,
-    "molecules": 19,
+    "molecules": 20,
     "tokens": 216
   },
   "rules": [
@@ -3705,6 +3705,59 @@
       ],
       "sourcePath": "src/components/molecules/Dropdown/Dropdown.jsx",
       "storiesPath": "src/components/molecules/Dropdown/Dropdown.stories.jsx"
+    },
+    {
+      "name": "Empty",
+      "dir": "Empty",
+      "layer": "molecules",
+      "exports": [
+        "Empty"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Empty } from \"@/src/components/molecules\";",
+      "description": "Empty — empty-state for tables, lists, sidebars, and search no-results. A centered icon/illustration + title + description + optional action(s). <Empty icon=\"folder-open\" title=\"No patients yet\" description=\"Add your first patient to get started.\" action={<Button leftIcon={…}>Add patient</Button>} />",
+      "props": [
+        {
+          "name": "icon",
+          "default": "'box'",
+          "control": "text"
+        },
+        {
+          "name": "media"
+        },
+        {
+          "name": "title",
+          "default": "'No patients yet'",
+          "control": "text"
+        },
+        {
+          "name": "description",
+          "default": "'Add your first patient to start managing appointments and records.'",
+          "control": "text"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "NoResults",
+        "Small"
+      ],
+      "sourcePath": "src/components/molecules/Empty/Empty.jsx",
+      "storiesPath": "src/components/molecules/Empty/Empty.stories.jsx"
     },
     {
       "name": "Filter",

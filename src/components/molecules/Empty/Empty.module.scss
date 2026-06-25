@@ -1,0 +1,57 @@
+/* Empty.module.scss — centered empty-state. Token-only, self-contained. */
+
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--tesseract-space-2);
+  padding: var(--tesseract-space-8) var(--tesseract-space-4);
+  max-width: 380px;
+  margin: 0 auto;
+
+  &[data-size="sm"] { padding: var(--tesseract-space-5) var(--tesseract-space-3); gap: var(--tesseract-space-1-5); }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tesseract-size-48, 48px);
+  height: var(--tesseract-size-48, 48px);
+  margin-bottom: var(--tesseract-space-1);
+  border-radius: var(--tesseract-radius-full);
+  corner-shape: round;
+  background: var(--tesseract-slate-50);
+  color: var(--tesseract-slate-400);
+}
+.root[data-size="sm"] .icon { width: 40px; height: 40px; }
+
+.media { margin-bottom: var(--tesseract-space-1); }
+
+.title {
+  margin: 0;
+  font-size: var(--tesseract-text-body-base);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-900);
+}
+.root[data-size="sm"] .title { font-size: var(--tesseract-text-body-sm); }
+
+.description {
+  margin: 0;
+  font-size: var(--tesseract-text-body-sm);
+  line-height: 1.5;
+  color: var(--tesseract-slate-500);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tesseract-space-2);
+  margin-top: var(--tesseract-space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
