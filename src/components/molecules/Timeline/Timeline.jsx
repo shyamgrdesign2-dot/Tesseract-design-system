@@ -2,8 +2,12 @@
 
 import * as React from "react";
 import { cn } from "@/src/hooks/utils";
+import { Badge } from "@/src/components/atoms/Badge/Badge";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./Timeline.module.scss";
+
+// Map the timeline tone to a Badge colour for the date pill.
+const TONE_TO_BADGE = { violet: "violet", primary: "primary", success: "success", neutral: "neutral" };
 
 /**
  * Timeline / TimelineItem — a vertical event timeline (visit history, audit log,
@@ -51,10 +55,14 @@ export const TimelineItem = React.forwardRef(function TimelineItem(
             <div className={styles.headMain}>
               {title != null && <p className={styles.title}>{title}</p>}
               {date != null && (
-                <span className={styles.datePill}>
-                  {dateIcon && <TPLibraryIcon name={dateIcon} variant="linear" size={13} />}
-                  <span>{date}</span>
-                </span>
+                <Badge
+                  variant="soft"
+                  color={TONE_TO_BADGE[tone] || "violet"}
+                  size="sm"
+                  icon={dateIcon ? <TPLibraryIcon name={dateIcon} variant="linear" size={13} /> : undefined}
+                >
+                  {date}
+                </Badge>
               )}
             </div>
             {action != null && <div className={styles.action}>{action}</div>}

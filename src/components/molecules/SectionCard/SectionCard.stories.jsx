@@ -35,7 +35,9 @@ const meta = {
     icon: { control: 'text', description: 'Icon name (string) or ReactNode' },
     iconColor: { control: 'color' },
     tone: { control: 'inline-radio', options: ['neutral', 'primary', 'active', 'success', 'violet'] },
-    headerGradient: { control: 'boolean' },
+    headerFill: { control: 'inline-radio', options: ['none', 'gradient', 'solid'], description: 'Header background style' },
+    headerColor: { control: 'color', description: 'Custom header fill colour (overrides tone)' },
+    headerGradient: { control: 'boolean', description: 'Legacy alias for headerFill="gradient"' },
     number: { control: 'text', description: 'Index chip on the left' },
     amount: { control: 'text', description: 'Pill under the title' },
     collapsible: { control: 'boolean', description: 'Make this card an accordion (per-card)' },
@@ -254,6 +256,46 @@ export const MixedNesting = {
       </div>
     </SectionCard>
   ),
+};
+
+/** Header fills — none · gradient (fade) · solid · custom colour. Fully configurable. */
+export const HeaderFills = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 560 }}>
+      <SectionCard title="No fill (flat)" headerFill="none" amount="default" />
+      <SectionCard title="Gradient fade" tone="primary" headerFill="gradient" amount="tone-tinted" />
+      <SectionCard title="Solid fill" tone="success" headerFill="solid" amount="tone-50 solid" />
+      <SectionCard title="Custom gradient colour" headerFill="gradient" headerColor="#7C3AED" amount="violet hex" />
+      <SectionCard title="Custom solid colour" headerFill="solid" headerColor="var(--tesseract-blue-50)" amount="token" />
+    </div>
+  ),
+};
+
+/** Permutation matrix — tone × fill × chevron side, all from one primitive. */
+export const PermutationMatrix = {
+  render: () => {
+    const tones = ['neutral', 'primary', 'active', 'success', 'violet'];
+    const fills = ['none', 'gradient', 'solid'];
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+        {tones.flatMap((tone) => fills.map((headerFill) => (
+          <SectionCard
+            key={tone + headerFill}
+            number={1}
+            title={`${tone}`}
+            subtitle={headerFill}
+            tone={tone}
+            headerFill={headerFill}
+            collapsible
+            collapseIconPosition={headerFill === 'solid' ? 'right' : 'left'}
+            tools={[{ icon: 'grid-5', title: 'Templates' }]}
+          >
+            <p style={{ margin: 0, font: '13px var(--tesseract-font-body)', color: 'var(--tesseract-slate-600)' }}>Body content</p>
+          </SectionCard>
+        )))}
+      </div>
+    );
+  },
 };
 
 /** Non-collapsible, borderless on a tinted page. */

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn, resolveRadius } from "@/src/hooks/utils";
 import { Button } from "@/src/components/atoms/Button/Button";
+import { Badge } from "@/src/components/atoms/Badge/Badge";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import styles from "./SectionCard.module.scss";
 
@@ -48,6 +49,8 @@ export const SectionCard = React.forwardRef(function SectionCard(
     amount,
     tone = "neutral",
     headerGradient = false,
+    headerFill,
+    headerColor,
     tools,
     headerActions,
     headerExtra,
@@ -91,6 +94,11 @@ export const SectionCard = React.forwardRef(function SectionCard(
     title != null || subtitle != null || icon != null || number != null ||
     headerActions != null || headerExtra != null || (tools && tools.length) || collapsible;
 
+  // Header fill: "none" | "gradient" | "solid". `headerGradient` (bool) is the
+  // legacy alias for "gradient". A custom `headerColor` overrides the tone-derived
+  // colour for either the solid fill or the gradient's top stop.
+  const fill = headerFill ?? (headerGradient ? "gradient" : "none");
+
   const cardStyle = {
     ...(radius != null ? { "--sc-radius": resolveRadius(radius) } : null),
     ...(padding != null ? { "--sc-pad": px(padding) } : null),
@@ -98,6 +106,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
     ...(headerBg ? { "--sc-header-bg": headerBg } : null),
     ...(bodyBg ? { "--sc-body-bg": bodyBg } : null),
     ...(footerBg ? { "--sc-footer-bg": footerBg } : null),
+    ...(headerColor ? { "--sc-header-solid": headerColor, "--sc-grad": `color-mix(in srgb, ${headerColor} 14%, transparent)` } : null),
     ...style,
   };
 
@@ -142,7 +151,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
       {...rest}
     >
       {hasHeader && (
-        <header className={cn(styles.header, sticky && styles.sticky)} data-gradient={headerGradient ? "" : undefined}>
+        <header className={cn(styles.header, sticky && styles.sticky)} data-fill={fill !== "none" ? fill : undefined}>
           <div className={cn(styles.titleRow, collapsible && styles.titleRowClickable)} onClick={onHeaderClick}>
             {collapseIconPosition === "left" && chevronBtn}
             {number != null && <span className={styles.numberChip}>{number}</span>}
@@ -156,7 +165,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
                 {title != null && <h3 className={styles.title}>{title}</h3>}
                 {(amount != null || subtitle != null) && (
                   <div className={styles.metaRow}>
-                    {amount != null && <span className={styles.amount}>{amount}</span>}
+                    {amount != null && <Badge variant="soft" color="neutral" size="sm" radius={6}>{amount}</Badge>}
                     {subtitle != null && <span className={styles.subtitle}>{subtitle}</span>}
                   </div>
                 )}

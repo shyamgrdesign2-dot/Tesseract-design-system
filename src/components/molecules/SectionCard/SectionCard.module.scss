@@ -47,8 +47,12 @@
   flex-direction: column;
   gap: var(--tesseract-space-3);
 }
-.header[data-gradient] {
+/* Header fill — gradient (fade) or solid; colour from tone or a custom headerColor. */
+.header[data-fill="gradient"] {
   background: linear-gradient(180deg, var(--sc-grad) 0%, var(--sc-header-bg) 100%);
+}
+.header[data-fill="solid"] {
+  background: var(--sc-header-solid, var(--sc-accent-bg));
 }
 .sticky {
   position: sticky;
