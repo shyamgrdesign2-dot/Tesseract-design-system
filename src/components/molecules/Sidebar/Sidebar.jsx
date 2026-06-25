@@ -271,7 +271,7 @@ function ExpandedSection({
             active && styles.chipActive,
           )}
         >
-          <ItemIcon icon={item.icon} active={active} size={22} />
+          <ItemIcon icon={item.icon} active={active} size={18} />
         </span>
         <span
           className={cn(
@@ -312,7 +312,7 @@ function ExpandedSection({
           <ItemIcon
             icon={item.icon}
             active={!expanded && containsActive}
-            size={22}
+            size={18}
           />
         </span>
         <span

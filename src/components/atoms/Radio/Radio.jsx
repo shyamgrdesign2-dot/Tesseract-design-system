@@ -103,26 +103,29 @@ export const Radio = React.forwardRef(function Radio({
         ...styleProp,
       }}
     >
-      <input
-        type="radio"
-        name={name ?? ctx.name}
-        value={value}
-        checked={isChecked}
-        disabled={disabled}
-        onChange={handleChange}
-        aria-label={ariaLabel}
-        aria-invalid={isError || undefined}
+      <span
+        className={styles.box}
         style={{
-          width: s.box,
-          height: s.box,
-          margin: 0,
+          "--radio-accent": accent,
+          "--radio-size": s.box,
           // Nudge the box to align with the first line of label text when a
           // description stacks below.
           marginTop: description != null ? "var(--tesseract-space-1)" : 0,
-          accentColor: accent,
-          cursor: disabled ? "not-allowed" : "pointer",
         }}
-      />
+      >
+        <input
+          type="radio"
+          className={styles.input}
+          name={name ?? ctx.name}
+          value={value}
+          checked={isChecked}
+          disabled={disabled}
+          onChange={handleChange}
+          aria-label={ariaLabel}
+          aria-invalid={isError || undefined}
+        />
+        <span className={styles.dot} aria-hidden="true" />
+      </span>
       {description != null ? (
         <span style={{ display: "inline-flex", flexDirection: "column", gap: "var(--tesseract-space-1)" }}>
           <span>{label}</span>

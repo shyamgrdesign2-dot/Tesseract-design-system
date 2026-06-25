@@ -8,3 +8,52 @@
   &, & *, & *::before, & *::after { box-sizing: border-box; }
   font-family: var(--tesseract-font-body);
 }
+
+/* Custom-rendered indicator — we drop the native accent-color render because the
+   browser auto-picks the inner-mark colour for contrast, drawing a DARK centre
+   on light accents (amber/green) that reads as a "black ring". A ring + white
+   gap + accent dot looks identical for every colour. Accent + box size arrive
+   as the --radio-accent / --radio-size CSS vars set inline. */
+.box {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: var(--radio-size, var(--tesseract-size-16));
+  height: var(--radio-size, var(--tesseract-size-16));
+}
+
+.input {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--tesseract-slate-300);
+  border-radius: var(--tesseract-radius-full, 9999px);
+  background: var(--tesseract-slate-0);
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+
+  &:hover:not(:disabled) { border-color: var(--radio-accent); }
+  &:checked { border-color: var(--radio-accent); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--radio-accent) 30%, transparent); }
+  &:disabled { background: var(--tesseract-slate-50); border-color: var(--tesseract-slate-200); cursor: not-allowed; }
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  border-radius: var(--tesseract-radius-full, 9999px);
+  background: var(--radio-accent);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 150ms ease;
+  pointer-events: none;
+
+  .input:checked ~ & { transform: translate(-50%, -50%) scale(1); }
+  .input:disabled ~ & { background: var(--tesseract-slate-400); }
+}
