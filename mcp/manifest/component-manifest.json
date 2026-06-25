@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 40,
+    "components": 41,
     "atoms": 17,
-    "molecules": 23,
+    "molecules": 24,
     "tokens": 216
   },
   "rules": [
@@ -2669,6 +2669,56 @@
       ],
       "sourcePath": "src/components/molecules/ClinicalTable/ClinicalTable.jsx",
       "storiesPath": "src/components/molecules/ClinicalTable/ClinicalTable.stories.jsx"
+    },
+    {
+      "name": "Command",
+      "dir": "Command",
+      "layer": "molecules",
+      "exports": [
+        "Command"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Command } from \"@/src/components/molecules\";",
+      "description": "Command — a ⌘K command palette: a dialog-hosted, searchable, keyboard-navigable action list for fast global navigation/actions (patient search, quick actions). Data-driven: pass `groups` (or flat `items`); the palette filters live as you type (label + keywords), supports ↑/↓/Enter, and runs the item's `onSelect`. Controlled via `open`/`onOpenChange` (wire it to your ⌘K shortcut), or uncontrolled via `defaultOpen` for demos. <Command open={open} onOpenChange={setOpen} placeholder=\"Search…\" groups={[ { heading: \"Patients\", items: [{ id, label, icon, keywords, onSelect }] }, { heading: \"Actions\",  items: [{ id, label, icon, shortcut, onSelect }] }, ]} />",
+      "props": [
+        {
+          "name": "open"
+        },
+        {
+          "name": "defaultOpen",
+          "default": "false"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "groups"
+        },
+        {
+          "name": "items"
+        },
+        {
+          "name": "placeholder",
+          "default": "\"Type a command or search…\""
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No results found.\""
+        },
+        {
+          "name": "label",
+          "default": "\"Command palette\""
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Open"
+      ],
+      "sourcePath": "src/components/molecules/Command/Command.jsx",
+      "storiesPath": "src/components/molecules/Command/Command.stories.jsx"
     },
     {
       "name": "ConfirmDialog",

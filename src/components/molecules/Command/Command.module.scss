@@ -1,0 +1,102 @@
+/* Command.module.scss — ⌘K command palette. Hosted in DialogPrimitive. */
+
+.overlay {
+  background: color-mix(in srgb, var(--tesseract-slate-900) 40%, transparent);
+  animation: tesseract-cmd-fade 140ms ease;
+}
+
+.palette {
+  // Portaled modal surface — self-contain box model + font.
+  box-sizing: border-box;
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  position: fixed;
+  top: 14vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  background: var(--tesseract-slate-0);
+  border: 1px solid var(--tesseract-slate-200);
+  border-radius: var(--tesseract-radius-14, var(--tesseract-radius-12));
+  corner-shape: round;
+  box-shadow: 0 24px 56px -16px color-mix(in srgb, var(--tesseract-slate-900) 28%, transparent);
+  overflow: hidden;
+  animation: tesseract-cmd-pop 150ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-2-5);
+  padding: 0 var(--tesseract-space-4);
+  height: var(--tesseract-size-48, 48px);
+  border-bottom: 1px solid var(--tesseract-slate-100);
+  flex-shrink: 0;
+}
+.searchIcon { color: var(--tesseract-slate-400); flex-shrink: 0; }
+.input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--tesseract-text-body-base);
+  font-family: var(--tesseract-font-body);
+  color: var(--tesseract-slate-900);
+  &::placeholder { color: var(--tesseract-slate-400); }
+}
+
+.list {
+  max-height: min(50vh, 400px);
+  overflow-y: auto;
+  padding: var(--tesseract-space-1-5);
+}
+
+.group + .group { margin-top: var(--tesseract-space-1); }
+.groupLabel {
+  padding: var(--tesseract-space-2) var(--tesseract-space-2-5) var(--tesseract-space-1);
+  font-size: var(--tesseract-text-body-xs);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-2-5);
+  padding: var(--tesseract-space-2) var(--tesseract-space-2-5);
+  border-radius: var(--tesseract-radius-8);
+  corner-shape: round;
+  color: var(--tesseract-slate-700);
+  font-size: var(--tesseract-text-body-sm);
+  cursor: pointer;
+
+  &[data-active] { background: var(--tesseract-slate-50); color: var(--tesseract-slate-900); }
+  &[data-disabled] { color: var(--tesseract-slate-400); cursor: not-allowed; }
+}
+.itemIcon { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--tesseract-slate-500); }
+.itemLabel { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.itemShortcut {
+  flex-shrink: 0;
+  font-size: var(--tesseract-text-body-xs);
+  color: var(--tesseract-slate-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  padding: var(--tesseract-space-8) var(--tesseract-space-4);
+  text-align: center;
+  color: var(--tesseract-slate-500);
+  font-size: var(--tesseract-text-body-sm);
+}
+
+@keyframes tesseract-cmd-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tesseract-cmd-pop { from { opacity: 0; transform: translateX(-50%) scale(0.98); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .palette { animation-duration: 0.01ms; }
+}
