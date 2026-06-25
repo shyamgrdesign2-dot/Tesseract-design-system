@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 37,
+    "components": 38,
     "atoms": 17,
-    "molecules": 20,
+    "molecules": 21,
     "tokens": 216
   },
   "rules": [
@@ -4486,6 +4486,40 @@
       ],
       "sourcePath": "src/components/molecules/Pagination/Pagination.jsx",
       "storiesPath": "src/components/molecules/Pagination/Pagination.stories.jsx"
+    },
+    {
+      "name": "Popover",
+      "dir": "Popover",
+      "layer": "molecules",
+      "exports": [
+        "Popover",
+        "PopoverTrigger",
+        "PopoverContent"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Popover, PopoverTrigger, PopoverContent } from \"@/src/components/molecules\";",
+      "description": "Popover — a generic anchored floating panel (Radix-style compound parts). The substrate for date pickers, comboboxes, colour/quantity pickers, and rich \"more info\" panels. Unlike Menu (a list of actions) or Tooltip (hover text), Popover holds arbitrary interactive content in a focus-managed dialog. <Popover> <PopoverTrigger asChild><Button>Open</Button></PopoverTrigger> <PopoverContent side=\"bottom\" align=\"start\">…</PopoverContent> </Popover> Parts: Popover (root — controlled/uncontrolled `open`) · PopoverTrigger (asChild) · PopoverContent (portal, collision-aware via usePosition, focus-trapped, Escape, click-outside; role=\"dialog\").",
+      "props": [
+        {
+          "name": "open"
+        },
+        {
+          "name": "defaultOpen",
+          "default": "false"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "QuickEdit"
+      ],
+      "sourcePath": "src/components/molecules/Popover/Popover.jsx",
+      "storiesPath": "src/components/molecules/Popover/Popover.stories.jsx"
     },
     {
       "name": "RxPadSection",
