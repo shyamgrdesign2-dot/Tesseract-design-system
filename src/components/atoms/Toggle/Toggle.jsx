@@ -17,6 +17,8 @@
  *   color: "primary" (default, blue) | "success" | "error" | "warning"
  *          — the CHECKED track colour
  *   label: string | ReactNode — adjacent label; clicking it toggles
+ *   ariaLabel: string — accessible name for the switch; required when there is
+ *          no visible `label` (a generic fallback is applied otherwise)
  *   labelPosition: "right" (default) | "left"
  */
 
@@ -30,6 +32,7 @@ export const Toggle = React.forwardRef(function Toggle(
     shape = "rounded",
     color = "primary",
     label,
+    ariaLabel,
     labelPosition = "right",
     checked,
     defaultChecked,
@@ -81,10 +84,17 @@ export const Toggle = React.forwardRef(function Toggle(
 
   const cls = [styles.root, className].filter(Boolean).join(" ");
 
+  // Accessible name: prefer an explicit ariaLabel; otherwise, when there is no
+  // visible label wrapping the switch, fall back to a generic name so the bare
+  // toggle is never unnamed. Skip the fallback when a visible label is present
+  // (the wrapping <label> already names the switch).
+  const resolvedAriaLabel = ariaLabel ?? (label == null ? "Toggle" : undefined);
+
   const switchEl = (
     <button
       type="button"
       role="switch"
+      aria-label={resolvedAriaLabel}
       aria-checked={isOn}
       aria-required={required || undefined}
       data-slot="switch"

@@ -588,7 +588,8 @@ export const Sidebar = React.forwardRef(function Sidebar(
         <div className={styles.header}>{header}</div>
       )}
 
-      {/* Items */}
+      {/* Items — wrapped so the bottom fade anchors to the scroll bottom (above footer) */}
+      <div className={styles.scrollArea}>
       <nav className={styles.list}>
         {loading ? (
           <SkeletonRows collapsed={collapsed} />
@@ -624,13 +625,14 @@ export const Sidebar = React.forwardRef(function Sidebar(
           ))
         )}
       </nav>
+        {bottomFade && !collapsed && (
+          <div className={styles.fade} aria-hidden />
+        )}
+      </div>
 
       {/* Footer */}
       {footer != null && (
         <div className={styles.footer}>{footer}</div>
-      )}
-      {bottomFade && !collapsed && (
-        <div className={styles.fade} aria-hidden />
       )}
     </aside>
   );

@@ -92,15 +92,27 @@ export const Avatar = React.forwardRef(function Avatar({
   const corner = { borderRadius, cornerShape: "round" };
   const palette = COLOR_TOKENS[color] || COLOR_TOKENS.slate;
 
+  // Accessible name for the avatar: prefer an explicit alt, then the person's
+  // name. Only fall back to a generic label when neither is available.
+  const accessibleName = alt || name || "User avatar";
+
   let content;
+  // When the content is not a real image (icon or initials), the inner mark
+  // carries the accessible name so screen readers announce who it represents.
+  let contentRole;
+  let contentLabel;
   if (icon != null) {
     content = typeof icon === "string"
       ? <TPLibraryIcon name={icon} size={Math.round(size * 0.5)} color={palette.fg} />
       : icon;
+    contentRole = "img";
+    contentLabel = accessibleName;
   } else if (src && !broken) {
-    content = <img src={src} alt={alt || name || "User"} onError={() => setBroken(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
+    content = <img src={src} alt={accessibleName} onError={() => setBroken(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
   } else {
     content = initialsOf(name);
+    contentRole = "img";
+    contentLabel = accessibleName;
   }
 
   // Status dot — built-in preset (coloured dot) or a custom ReactNode.
@@ -111,7 +123,7 @@ export const Avatar = React.forwardRef(function Avatar({
     statusNode = (
       <span
         role={isPreset ? "img" : undefined}
-        aria-label={isPreset ? status : undefined}
+        aria-label={isPreset ? (name ? `${name} — ${status}` : `Status: ${status}`) : undefined}
         style={{
           position: "absolute",
           bottom: 0,
@@ -137,7 +149,7 @@ export const Avatar = React.forwardRef(function Avatar({
       ref={ref}
       type={onClick ? "button" : undefined}
       onClick={onClick}
-      aria-label={onClick ? (name || "Profile") : undefined}
+      aria-label={onClick ? accessibleName : undefined}
       className={cn(className)}
       {...rest}
       style={{
@@ -158,6 +170,8 @@ export const Avatar = React.forwardRef(function Avatar({
       }}
     >
       <span
+        role={onClick ? undefined : contentRole}
+        aria-label={onClick ? undefined : contentLabel}
         style={{
           boxSizing: "border-box",
           ...corner,

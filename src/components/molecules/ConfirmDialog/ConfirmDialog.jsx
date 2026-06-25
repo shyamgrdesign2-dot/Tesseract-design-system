@@ -227,7 +227,7 @@ export const ConfirmDialog = React.forwardRef(function ConfirmDialog({
             )}
           </div>
 
-          <div className={styles.divider} aria-hidden />
+          {hasBody && <div className={styles.divider} aria-hidden />}
 
           {/* Body */}
           {hasBody && (

@@ -85,6 +85,7 @@
   transition: background-color 120ms ease;
 
   &:hover { background-color: var(--tesseract-slate-50); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-100); }
   &[aria-selected="true"] { color: var(--tesseract-blue-600); font-weight: var(--tesseract-weight-semibold); }
 }
 

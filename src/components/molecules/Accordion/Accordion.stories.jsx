@@ -215,8 +215,8 @@ export const PatientMedicalHistory = {
                 { name: 'Aspirin 75mg', freq: 'Once daily', since: 'Jun 2024' },
               ].map((med) => (
                 <div key={med.name} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '6px 0', borderBottom: '1px solid #F1F1F5' }}>
-                  <span style={{ fontWeight: 600, color: '#171725' }}>{med.name}</span>
-                  <span style={{ color: '#54545C' }}>{med.freq} · Since {med.since}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--tesseract-slate-900, #171725)' }}>{med.name}</span>
+                  <span style={{ color: 'var(--tesseract-slate-600, #54545C)' }}>{med.freq} · Since {med.since}</span>
                 </div>
               ))}
             </div>
@@ -227,7 +227,7 @@ export const PatientMedicalHistory = {
           <AccordionContent>
             <div style={{ display: 'flex', gap: 8 }}>
               {['Penicillin', 'Sulfa drugs'].map((a) => (
-                <span key={a} style={{ background: '#FFF1F2', color: '#E11D48', border: '1px solid #FECDD3', borderRadius: 6, padding: '3px 10px', fontSize: 13, fontWeight: 600 }}>
+                <span key={a} style={{ background: 'var(--tesseract-error-50, #FFF1F2)', color: 'var(--tesseract-error-500, #E11D48)', border: '1px solid var(--tesseract-error-200, #FECDD3)', borderRadius: 6, padding: '3px 10px', fontSize: 13, fontWeight: 600 }}>
                   {a}
                 </span>
               ))}

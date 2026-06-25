@@ -38,10 +38,13 @@
   cursor: pointer;
   transition: background-color 120ms ease, color 120ms ease;
 
-  &:hover:not([data-disabled]),
+  &:hover:not([data-disabled]) {
+    background: var(--tesseract-slate-50);
+  }
   &:focus-visible {
     background: var(--tesseract-slate-50);
-    outline: none;
+    outline: 2px solid var(--tesseract-blue-500, #2563eb);
+    outline-offset: -2px;
   }
   &[data-disabled] { color: var(--tesseract-slate-400); cursor: not-allowed; }
 

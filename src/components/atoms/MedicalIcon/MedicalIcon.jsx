@@ -13,15 +13,17 @@
  *        underlying TPLibraryIcon, so this can serve as a general icon alias.
  */
 
+import { forwardRef } from "react";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { resolveTPMedicalIconName } from "./registry";
 
 const VARIANT = { line: "linear", linear: "linear", bulk: "bulk", solid: "bold", bold: "bold" };
 
-export function MedicalIcon({ name, variant = "linear", size = 24, color, alt, className, style, family = "medical", ...rest }) {
+export const MedicalIcon = forwardRef(function MedicalIcon({ name, variant = "linear", size = 24, color, alt, className, style, family = "medical", ...rest }, ref) {
   const resolved = typeof name === "string" ? (resolveTPMedicalIconName(name) ?? name) : name;
   return (
     <TPLibraryIcon
+      ref={ref}
       name={resolved}
       variant={VARIANT[variant] || "linear"}
       family={family}
@@ -33,7 +35,7 @@ export function MedicalIcon({ name, variant = "linear", size = 24, color, alt, c
       {...rest}
     />
   );
-}
+});
 
 MedicalIcon.displayName = "MedicalIcon";
 export default MedicalIcon;

@@ -35,7 +35,16 @@ import styles from "./Menu.module.scss";
 
 const MenuCtx = React.createContext(null);
 
-export function Menu({ open: openProp, defaultOpen = false, onOpenChange, children }) {
+// Assign a DOM node to any number of refs (callback or object refs).
+function assignRefs(node, ...refs) {
+  for (const r of refs) {
+    if (!r) continue;
+    if (typeof r === "function") r(node);
+    else r.current = node;
+  }
+}
+
+export function Menu({ open: openProp, defaultOpen = false, onOpenChange, children, ...rest }) {
   const [internal, setInternal] = React.useState(defaultOpen);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : internal;
@@ -52,17 +61,25 @@ export function Menu({ open: openProp, defaultOpen = false, onOpenChange, childr
   const triggerRef = React.useRef(null);
   const contentRef = React.useRef(null);
   const ctx = React.useMemo(() => ({ open, setOpen, triggerRef, contentRef }), [open, setOpen]);
-  return <MenuCtx.Provider value={ctx}>{children}</MenuCtx.Provider>;
+  return <MenuCtx.Provider value={ctx} {...rest}>{children}</MenuCtx.Provider>;
 }
 
-export function MenuTrigger({ asChild = false, children, onClick, ...props }) {
+export const MenuTrigger = React.forwardRef(function MenuTrigger(
+  { asChild = false, children, onClick, ...props },
+  ref,
+) {
   const ctx = React.useContext(MenuCtx);
+  const triggerRef = ctx?.triggerRef;
+  const setRefs = React.useCallback(
+    (node) => assignRefs(node, triggerRef, ref),
+    [triggerRef, ref],
+  );
   const handleClick = (e) => {
     onClick?.(e);
     if (!e.defaultPrevented) ctx?.setOpen((o) => !o);
   };
   const triggerProps = {
-    ref: ctx?.triggerRef,
+    ref: setRefs,
     "aria-haspopup": "menu",
     "aria-expanded": ctx?.open || false,
     "data-state": ctx?.open ? "open" : "closed",
@@ -71,7 +88,7 @@ export function MenuTrigger({ asChild = false, children, onClick, ...props }) {
   };
   if (asChild) return <Slot {...triggerProps}>{children}</Slot>;
   return <button type="button" {...triggerProps}>{children}</button>;
-}
+});
 
 export function MenuContent({ side = "bottom", align = "start", sideOffset = 6, className, style, children, ...props }) {
   const ctx = React.useContext(MenuCtx);
@@ -150,12 +167,12 @@ export function MenuItem({ icon, shortcut, danger = false, disabled = false, onS
   );
 }
 
-export function MenuSeparator({ className }) {
-  return <div role="separator" className={cn(styles.separator, className)} />;
+export function MenuSeparator({ className, ...rest }) {
+  return <div role="separator" className={cn(styles.separator, className)} {...rest} />;
 }
 
-export function MenuLabel({ className, children }) {
-  return <div className={cn(styles.label, className)}>{children}</div>;
+export function MenuLabel({ className, children, ...rest }) {
+  return <div className={cn(styles.label, className)} {...rest}>{children}</div>;
 }
 
 Menu.displayName = "Menu";

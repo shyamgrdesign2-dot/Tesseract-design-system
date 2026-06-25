@@ -35,6 +35,7 @@ export default {
     orientation: 'horizontal',
     variant: 'solid',
     lineStyle: 'solid',
+    color: 'var(--tesseract-slate-200, #E2E2EA)',
     spacing: 0,
     thickness: 1,
     inset: 0,
@@ -66,7 +67,7 @@ const Text = ({ children }) => (
 );
 
 const Label = ({ children }) => (
-  <span style={{ fontSize: 'var(--tesseract-text-caption-sm)', fontWeight: 'var(--tesseract-weight-semibold)', letterSpacing: '0.07em', textTransform: 'uppercase', color: '#54545C' }}>
+  <span style={{ fontSize: 'var(--tesseract-text-caption-sm)', fontWeight: 'var(--tesseract-weight-semibold)', letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--tesseract-slate-600, #54545C)' }}>
     {children}
   </span>
 );

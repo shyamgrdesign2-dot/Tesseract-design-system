@@ -152,8 +152,20 @@ export function Tooltip({
   return <TooltipContext.Provider value={ctxValue}>{children}</TooltipContext.Provider>;
 }
 
-export function TooltipTrigger({ asChild, children, ...props }) {
+// Assign a node to a ref that may be a callback or object ref.
+function assignRef(r, node) {
+  if (!r) return;
+  if (typeof r === "function") r(node);
+  else r.current = node;
+}
+
+export const TooltipTrigger = React.forwardRef(function TooltipTrigger({ asChild, children, ...props }, ref) {
   const ctx = React.useContext(TooltipContext);
+  const triggerRef = ctx?.triggerRef;
+  const mergedRef = React.useCallback(
+    (node) => { assignRef(triggerRef, node); assignRef(ref, node); },
+    [triggerRef, ref],
+  );
   if (!ctx) return children;
 
   const handlers = ctx.isClick
@@ -162,7 +174,7 @@ export function TooltipTrigger({ asChild, children, ...props }) {
         "aria-expanded": ctx.open,
         "aria-haspopup": "dialog",
         "aria-controls": ctx.open ? ctx.id : undefined,
-        ref: ctx.triggerRef,
+        ref: mergedRef,
       }
     : {
         onPointerEnter: (e) => { props.onPointerEnter?.(e); ctx.requestOpen(); },
@@ -170,7 +182,7 @@ export function TooltipTrigger({ asChild, children, ...props }) {
         onFocus: (e) => { props.onFocus?.(e); ctx.requestOpen(); },
         onBlur: (e) => { props.onBlur?.(e); ctx.requestClose(); },
         "aria-describedby": ctx.open ? ctx.id : undefined,
-        ref: ctx.triggerRef,
+        ref: mergedRef,
       };
 
   if (asChild) return <Slot {...handlers}>{children}</Slot>;
@@ -179,19 +191,19 @@ export function TooltipTrigger({ asChild, children, ...props }) {
       {children}
     </span>
   );
-}
+});
 
-export function TooltipContent({ className = "", side: sideProp, align: alignProp, sideOffset: sideOffsetProp, collisionPadding: collisionPaddingProp, style, children, ...props }) {
+export const TooltipContent = React.forwardRef(function TooltipContent({ className = "", side: sideProp, align: alignProp, sideOffset: sideOffsetProp, collisionPadding: collisionPaddingProp, style, children, ...props }, ref) {
   const ctx = React.useContext(TooltipContext);
   if (!ctx || !ctx.open) return null;
   return (
-    <TooltipContentInner ctx={ctx} side={sideProp} align={alignProp} sideOffset={sideOffsetProp} collisionPadding={collisionPaddingProp} className={className} style={style} {...props}>
+    <TooltipContentInner ctx={ctx} side={sideProp} align={alignProp} sideOffset={sideOffsetProp} collisionPadding={collisionPaddingProp} className={className} style={style} forwardedRef={ref} {...props}>
       {children}
     </TooltipContentInner>
   );
-}
+});
 
-function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, className, style, children, ...props }) {
+function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, className, style, forwardedRef, children, ...props }) {
   const ref = React.useRef(null);
   const bodyRef = React.useRef(null);
   // Single line → center the icon/×; wraps to 2+ lines → top-align them.
@@ -223,6 +235,10 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
 
   // Pointer-events are needed for click / dismissible panels, and for hover
   // tooltips opted into `interactive` (so the pointer can move into the bubble).
+  const mergedRef = React.useCallback(
+    (node) => { assignRef(ref, node); assignRef(forwardedRef, node); },
+    [forwardedRef],
+  );
   const hoverInteractive = !ctx.isClick && ctx.interactive;
   const wantsPointer = ctx.isClick || ctx.dismissible || hoverInteractive;
   const isDialog = ctx.isClick || ctx.dismissible;
@@ -244,7 +260,7 @@ function TooltipContentInner({ ctx, side, align, sideOffset, collisionPadding, c
   return (
     <Portal container={ctx.portalContainer}>
       <div
-        ref={ref}
+        ref={mergedRef}
         id={ctx.id}
         role={isDialog ? "dialog" : "tooltip"}
         data-state="open"

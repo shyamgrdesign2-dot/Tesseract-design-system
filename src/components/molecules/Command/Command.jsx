@@ -34,7 +34,7 @@ const matches = (item, q) => {
   return hay.includes(q);
 };
 
-export function Command({
+export const Command = React.forwardRef(function Command({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -45,7 +45,7 @@ export function Command({
   label = "Command palette",
   className,
   ...rest
-}) {
+}, ref) {
   const isControlled = openProp !== undefined;
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
   const open = isControlled ? openProp : internalOpen;
@@ -91,7 +91,7 @@ export function Command({
       {open && (
         <Dialog.Portal>
           <Dialog.Overlay className={styles.overlay} />
-          <Dialog.Content aria-label={label} className={cn(styles.palette, className)} onKeyDown={onKeyDown} {...rest}>
+          <Dialog.Content ref={ref} aria-label={label} className={cn(styles.palette, className)} onKeyDown={onKeyDown} {...rest}>
             <div className={styles.searchRow}>
               <TPLibraryIcon name="search-normal-1" size={18} className={styles.searchIcon} aria-hidden />
               <input
@@ -103,7 +103,7 @@ export function Command({
                 role="combobox"
                 aria-expanded="true"
                 aria-controls="tesseract-command-list"
-                aria-label={placeholder}
+                aria-label="Command search"
               />
             </div>
             <div id="tesseract-command-list" role="listbox" className={styles.list}>
@@ -147,7 +147,7 @@ export function Command({
       )}
     </Dialog.Root>
   );
-}
+});
 
 Command.displayName = "Command";
 export default Command;

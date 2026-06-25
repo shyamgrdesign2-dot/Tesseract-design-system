@@ -40,7 +40,7 @@ const FunnelIcon = () => <TPLibraryIcon name="filter-2" size={15} />;
 
 const toLen = (v) => (typeof v === "number" ? `${v}px` : v || undefined);
 
-export function Filter({
+export const Filter = React.forwardRef(function Filter({
   groups = [],
   value,
   defaultValue,
@@ -53,7 +53,7 @@ export function Filter({
   width,
   maxHeight,
   className,
-}) {
+}, ref) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = React.useState(defaultValue || {});
   const committed = isControlled ? value : internal;
@@ -91,9 +91,9 @@ export function Filter({
     setOpen(false);
   };
 
-  const ref = React.useRef(null);
+  const ddRef = React.useRef(null);
   const panelId = React.useId();
-  useClickOutside(ref, () => setOpen(false), open);
+  useClickOutside(ddRef, () => setOpen(false), open);
 
   const toggle = (gid, val) => {
     const group = groups.find((g) => g.id === gid);
@@ -128,9 +128,9 @@ export function Filter({
   );
 
   return (
-    <div className={cn(styles.root, className)}>
+    <div ref={ref} className={cn(styles.root, className)}>
       <div className={styles.bar}>
-        <div ref={ref} className={styles.ddRoot}>
+        <div ref={ddRef} className={styles.ddRoot}>
           <button
             type="button"
             className={styles.trigger}
@@ -218,7 +218,7 @@ export function Filter({
       )}
     </div>
   );
-}
+});
 
 Filter.displayName = "Filter";
 export default Filter;

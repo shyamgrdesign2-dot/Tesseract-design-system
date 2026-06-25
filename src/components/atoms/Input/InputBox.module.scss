@@ -337,6 +337,7 @@
     background: var(--tesseract-slate-200);
     color:      var(--tesseract-slate-700);
   }
+  &:focus-visible { outline: 2px solid var(--tesseract-blue-300); outline-offset: 2px; }
   svg { width: var(--tesseract-size-12); height: var(--tesseract-size-12); }
 }
 
@@ -451,6 +452,7 @@
 
   &:hover:not(:disabled) { background: var(--tesseract-slate-100); }
   &:disabled { cursor: not-allowed; color: var(--tesseract-slate-400); }
+  &:focus-visible { outline: 2px solid var(--tesseract-blue-300); outline-offset: -2px; }
 
   &:first-child { border-right: 1.5px solid var(--tesseract-slate-200); }
   &:last-child  { border-left:  1.5px solid var(--tesseract-slate-200); }

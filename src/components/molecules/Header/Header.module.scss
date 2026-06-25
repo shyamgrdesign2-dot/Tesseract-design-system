@@ -68,6 +68,7 @@
   cursor: pointer;
   transition: background-color 120ms ease;
   &:hover { background-color: var(--tesseract-slate-100); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); }
 }
 
 .logo { display: flex; align-items: center; flex-shrink: 0; }
@@ -99,6 +100,7 @@
   text-align: left;
   transition: background-color 120ms ease;
   &:hover { background-color: var(--tesseract-slate-50); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); }
 }
 .userText { display: flex; flex-direction: column; min-width: 0; }
 .userName {
@@ -182,6 +184,7 @@
   flex-shrink: 0;
   transition: opacity 120ms ease;
   &:hover { opacity: 0.85; }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); border-radius: var(--tesseract-radius-full); }
   > svg { width: var(--tesseract-header-control); height: var(--tesseract-header-control); }
 }
 

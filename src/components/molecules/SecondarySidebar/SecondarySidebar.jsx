@@ -334,8 +334,9 @@ export const SecondarySidebar = React.forwardRef(function SecondarySidebar({
       aria-label="Secondary"
       {...rest}
     >
-      {/* Toggle + search header for expanded */}
-      {!collapsed && (
+      {/* Toggle + search header for expanded — only when it has content,
+          so removing the collapse toggle (and search) leaves no empty band/divider */}
+      {!collapsed && (search || showCollapseToggle) && (
         <div className={styles.expHead}>
           {search && (
             <div className={styles.expSearch}>
@@ -344,7 +345,7 @@ export const SecondarySidebar = React.forwardRef(function SecondarySidebar({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                aria-label={searchPlaceholder}
+                aria-label={searchPlaceholder || "Search"}
               />
             </div>
           )}

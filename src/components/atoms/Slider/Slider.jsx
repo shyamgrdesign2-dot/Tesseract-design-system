@@ -45,6 +45,7 @@ export const Slider = forwardRef(function Slider({
   size = "md",
   error = false,
   label,
+  ariaLabel,
   showValue = false,
   formatValue = (v) => v,
   marks = false,
@@ -75,7 +76,7 @@ export const Slider = forwardRef(function Slider({
       max={max}
       step={step}
       disabled={disabled}
-      aria-label={typeof label === "string" && label ? label : undefined}
+      aria-label={(typeof label === "string" && label ? label : ariaLabel) || undefined}
       data-size={size}
       data-error={error || undefined}
       data-disabled={disabled || undefined}

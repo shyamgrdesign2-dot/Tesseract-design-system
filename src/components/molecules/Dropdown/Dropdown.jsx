@@ -496,6 +496,7 @@ export const Dropdown = forwardRef(function Dropdown({
             className={styles.searchInput}
             value={query}
             placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder || "Search options"}
             onChange={(e) => { setQuery(e.target.value); setActiveIdx(-1); }}
             onKeyDown={onKeyDown}
           />

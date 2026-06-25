@@ -96,6 +96,11 @@
     background: var(--tesseract-slate-100);
     color: var(--sidebar-accent);
   }
+
+  &:focus-visible {
+    outline: 2px solid var(--sidebar-accent);
+    outline-offset: 2px;
+  }
 }
 
 .toggleBtnSm {
@@ -120,6 +125,17 @@
 }
 
 /* ── Nav list ── */
+/* Wrapper that owns the flex height + is the positioning context for the bottom
+   fade, so the fade anchors to the BOTTOM of the scroll area (above the footer)
+   rather than the bottom of the whole sidebar (where the footer covers it). */
+.scrollArea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .list {
   flex: 1;
   min-height: 0;
@@ -461,6 +477,8 @@
 }
 
 .fade {
+  /* Absolute to .scrollArea: sits at the bottom edge of the scrollable nav,
+     ABOVE the footer sibling, so it's visible over overflowing content. */
   position: absolute;
   left: 0;
   bottom: 0;

@@ -27,7 +27,7 @@ import styles from "./Field.module.scss";
 
 const FieldCtx = React.createContext(null);
 
-export function Field({ invalid = false, orientation = "vertical", required = false, className, children, ...rest }) {
+export const Field = React.forwardRef(function Field({ invalid = false, orientation = "vertical", required = false, className, children, ...rest }, ref) {
   const id = React.useId();
   const ctx = React.useMemo(
     () => ({
@@ -42,43 +42,43 @@ export function Field({ invalid = false, orientation = "vertical", required = fa
   );
   return (
     <FieldCtx.Provider value={ctx}>
-      <div className={cn(styles.field, className)} data-orientation={orientation} data-invalid={invalid || undefined} {...rest}>
+      <div ref={ref} className={cn(styles.field, className)} data-orientation={orientation} data-invalid={invalid || undefined} {...rest}>
         {children}
       </div>
     </FieldCtx.Provider>
   );
-}
+});
 
-export function FieldLabel({ className, children, ...rest }) {
+export const FieldLabel = React.forwardRef(function FieldLabel({ className, children, ...rest }, ref) {
   const ctx = React.useContext(FieldCtx);
   return (
-    <label htmlFor={ctx?.controlId} className={cn(styles.label, className)} {...rest}>
+    <label ref={ref} htmlFor={ctx?.controlId} className={cn(styles.label, className)} {...rest}>
       {children}
       {ctx?.required && <span className={styles.required} aria-hidden> *</span>}
     </label>
   );
-}
+});
 
-export function FieldControl({ children }) {
+export const FieldControl = React.forwardRef(function FieldControl({ children }, ref) {
   const ctx = React.useContext(FieldCtx);
   const describedBy = [ctx?.descId, ctx?.invalid ? ctx?.errorId : null].filter(Boolean).join(" ") || undefined;
   return (
-    <Slot id={ctx?.controlId} aria-describedby={describedBy} aria-invalid={ctx?.invalid || undefined} aria-required={ctx?.required || undefined}>
+    <Slot ref={ref} id={ctx?.controlId} aria-describedby={describedBy} aria-invalid={ctx?.invalid || undefined} aria-required={ctx?.required || undefined}>
       {children}
     </Slot>
   );
-}
+});
 
-export function FieldDescription({ className, children, ...rest }) {
+export const FieldDescription = React.forwardRef(function FieldDescription({ className, children, ...rest }, ref) {
   const ctx = React.useContext(FieldCtx);
-  return <p id={ctx?.descId} className={cn(styles.description, className)} {...rest}>{children}</p>;
-}
+  return <p ref={ref} id={ctx?.descId} className={cn(styles.description, className)} {...rest}>{children}</p>;
+});
 
-export function FieldError({ className, children, ...rest }) {
+export const FieldError = React.forwardRef(function FieldError({ className, children, ...rest }, ref) {
   const ctx = React.useContext(FieldCtx);
   if (children == null || children === false) return null;
-  return <p id={ctx?.errorId} role="alert" className={cn(styles.error, className)} {...rest}>{children}</p>;
-}
+  return <p ref={ref} id={ctx?.errorId} role="alert" className={cn(styles.error, className)} {...rest}>{children}</p>;
+});
 
 Field.displayName = "Field";
 FieldLabel.displayName = "FieldLabel";

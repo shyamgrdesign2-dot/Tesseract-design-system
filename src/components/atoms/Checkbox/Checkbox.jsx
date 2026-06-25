@@ -43,6 +43,7 @@ export const Checkbox = React.forwardRef(function Checkbox(
     label,
     description,
     labelPosition = "right",
+    "aria-label": ariaLabel,
     className = "",
     style,
     onClick,
@@ -106,6 +107,7 @@ export const Checkbox = React.forwardRef(function Checkbox(
       aria-invalid={error || undefined}
       aria-labelledby={hasLabel ? labelId : undefined}
       aria-describedby={hasLabel ? descId : undefined}
+      aria-label={hasLabel ? undefined : ariaLabel}
       data-slot="checkbox"
       data-state={stateAttr}
       data-size={size}

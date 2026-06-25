@@ -47,14 +47,23 @@ export function Popover({ open: openProp, defaultOpen = false, onOpenChange, chi
   return <PopoverCtx.Provider value={ctx}>{children}</PopoverCtx.Provider>;
 }
 
-export function PopoverTrigger({ asChild = false, children, onClick, ...props }) {
+// Assign a node to a ref that may be a callback or object ref.
+function assignRef(r, node) {
+  if (!r) return;
+  if (typeof r === "function") r(node);
+  else r.current = node;
+}
+
+export const PopoverTrigger = React.forwardRef(function PopoverTrigger({ asChild = false, children, onClick, ...props }, ref) {
   const ctx = React.useContext(PopoverCtx);
   const handleClick = (e) => {
     onClick?.(e);
     if (!e.defaultPrevented) ctx?.setOpen((o) => !o);
   };
+  const triggerRef = ctx?.triggerRef;
+  const setRefs = React.useCallback((node) => { assignRef(triggerRef, node); assignRef(ref, node); }, [triggerRef, ref]);
   const triggerProps = {
-    ref: ctx?.triggerRef,
+    ref: setRefs,
     "aria-haspopup": "dialog",
     "aria-expanded": ctx?.open || false,
     "data-state": ctx?.open ? "open" : "closed",
@@ -63,9 +72,9 @@ export function PopoverTrigger({ asChild = false, children, onClick, ...props })
   };
   if (asChild) return <Slot {...triggerProps}>{children}</Slot>;
   return <button type="button" {...triggerProps}>{children}</button>;
-}
+});
 
-export function PopoverContent({ side = "bottom", align = "center", sideOffset = 8, trapFocus = true, className, style, children, ...props }) {
+export const PopoverContent = React.forwardRef(function PopoverContent({ side = "bottom", align = "center", sideOffset = 8, trapFocus = true, className, style, children, ...props }, ref) {
   const ctx = React.useContext(PopoverCtx);
   const mounted = useIsClient();
   const { open, setOpen, triggerRef, contentRef } = ctx || {};
@@ -75,11 +84,13 @@ export function PopoverContent({ side = "bottom", align = "center", sideOffset =
   useClickOutside([triggerRef, contentRef], () => setOpen?.(false), open);
   useFocusTrap(contentRef, open && trapFocus);
 
+  const setRefs = React.useCallback((node) => { assignRef(contentRef, node); assignRef(ref, node); }, [contentRef, ref]);
+
   if (!open || !mounted) return null;
   return (
     <Portal>
       <div
-        ref={contentRef}
+        ref={setRefs}
         role="dialog"
         className={cn(styles.content, className)}
         style={{ position: "fixed", top: y, left: x, ...style }}
@@ -89,7 +100,7 @@ export function PopoverContent({ side = "bottom", align = "center", sideOffset =
       </div>
     </Portal>
   );
-}
+});
 
 Popover.displayName = "Popover";
 PopoverTrigger.displayName = "PopoverTrigger";
