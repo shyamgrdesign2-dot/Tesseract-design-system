@@ -22,7 +22,8 @@
      container; overflowing text fills to the cap then truncates (see
      title/message rules below). The cap is wired to --toast-max-width. */
   width: max-content;
-  max-width: var(--toast-max-width, 60%);
+  /* Never exceed the viewport on small screens, even when a fixed max-width is set. */
+  max-width: min(var(--toast-max-width, 60%), calc(100vw - var(--tesseract-space-8)));
   /* no border */
   /* Clip the depleting progress bar to the rounded corners. */
   overflow: hidden;
