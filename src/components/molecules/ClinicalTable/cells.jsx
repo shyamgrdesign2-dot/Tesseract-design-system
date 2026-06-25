@@ -15,13 +15,11 @@
  */
 
 import * as React from "react";
-import { createPortal } from "react-dom";
 import { InputBox } from "@/src/components/atoms/Input/InputBox";
 import { Dropdown } from "@/src/components/molecules/Dropdown";
+import { Menu, MenuTrigger, MenuContent, MenuItem } from "@/src/components/molecules/Menu";
 import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
-import { useIsClient } from "@/src/hooks/use-is-client";
-import { cn } from "@/src/hooks/utils";
 import { toOptions, showsKeyHints, resolveStatus } from "./columns";
 import styles from "./ClinicalTable.module.scss";
 
@@ -138,64 +136,27 @@ export function DragHandle({ icon, iconVariant, iconFamily, onDragStart, onDragE
 }
 
 // ── Row "⋯" menu (portal of row actions) ──────────────────────────────────────
+// Row "⋯" actions — composes the shared Menu primitive (accessible action menu).
 function MoreMenu({ items, row, moreIcon, iconVariant, iconFamily }) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [pos, setPos] = React.useState(null);
-  const mounted = useIsClient();
-  const menuId = React.useId();
-
-  React.useEffect(() => {
-    if (!open) return undefined;
-    const place = () => {
-      const el = anchorRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      setPos({ top: r.bottom + 4, right: window.innerWidth - r.right });
-    };
-    place();
-    const onDoc = (e) => { if (!anchorRef.current?.contains(e.target) && !e.target.closest?.(`.${styles.menu}`)) setOpen(false); };
-    window.addEventListener("scroll", place, true);
-    window.addEventListener("resize", place);
-    document.addEventListener("mousedown", onDoc);
-    return () => {
-      window.removeEventListener("scroll", place, true);
-      window.removeEventListener("resize", place);
-      document.removeEventListener("mousedown", onDoc);
-    };
-  }, [open]);
-
   return (
-    <span ref={anchorRef} className={styles.moreAnchor}>
-      <Button
-        variant="ghost"
-        theme="neutral"
-        size="sm"
-        aria-label="More actions"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-controls={open ? menuId : undefined}
-        icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant={iconVariant || "bold"} family={iconFamily || undefined} corner="straight" size={16} />}
-        onClick={() => setOpen((o) => !o)}
-      />
-      {open && mounted && pos && createPortal(
-        <div id={menuId} className={styles.menu} style={{ position: "fixed", top: pos.top, right: pos.right, zIndex: 3000 }} role="menu">
-          {items.map((it, i) => (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className={cn(styles.menuItem, it.danger && styles.menuItemDanger)}
-              onClick={() => { setOpen(false); it.onClick?.(row); }}
-            >
-              {it.icon && <span className={styles.menuItemIcon}>{it.icon}</span>}
-              {it.label}
-            </button>
-          ))}
-        </div>,
-        document.body,
-      )}
-    </span>
+    <Menu>
+      <MenuTrigger asChild>
+        <Button
+          variant="ghost"
+          theme="neutral"
+          size="sm"
+          aria-label="More actions"
+          icon={<TPLibraryIcon name={moreIcon || "3-dots-more"} variant={iconVariant || "bold"} family={iconFamily || undefined} corner="straight" size={16} />}
+        />
+      </MenuTrigger>
+      <MenuContent align="end">
+        {items.map((it, i) => (
+          <MenuItem key={i} icon={it.icon} danger={it.danger} onSelect={() => it.onClick?.(row)}>
+            {it.label}
+          </MenuItem>
+        ))}
+      </MenuContent>
+    </Menu>
   );
 }
 
