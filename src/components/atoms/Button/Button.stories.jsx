@@ -217,7 +217,7 @@ export const Playground = {
 /** Interaction test — the button is clickable and fires onClick. */
 export const ClickInteraction = {
   args: { onClick: fn(), href: undefined },
-  render: ({ href, ...a }) => <Button {...a}>Click me</Button>,
+  render: ({ href, shape, leftIcon, rightIcon, iconVariant, iconFamily, radius, ...a }) => <Button {...a}>Click me</Button>,
   play: async ({ canvasElement, args }) => {
     const c = within(canvasElement);
     await userEvent.click(c.getByRole('button', { name: /click me/i }));
