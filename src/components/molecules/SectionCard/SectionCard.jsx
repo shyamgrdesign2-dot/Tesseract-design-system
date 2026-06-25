@@ -46,6 +46,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
     icon,
     iconColor,
     number,
+    leading,
     amount,
     tone = "neutral",
     headerGradient = false,
@@ -91,7 +92,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
   const px = (v) => (typeof v === "number" ? `${v}px` : v);
 
   const hasHeader =
-    title != null || subtitle != null || icon != null || number != null ||
+    title != null || subtitle != null || icon != null || number != null || leading != null ||
     headerActions != null || headerExtra != null || (tools && tools.length) || collapsible;
 
   // Header fill: "none" | "gradient" | "solid". `headerGradient` (bool) is the
@@ -129,7 +130,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
       aria-label={collapsed ? "Expand section" : "Collapse section"}
       onClick={(e) => { e.stopPropagation(); setCollapsed(!collapsed); }}
     >
-      <TPLibraryIcon name={collapseIcon} variant="linear" size={18} className={cn(styles.chevron, collapsed && styles.chevronCollapsed)} />
+      <TPLibraryIcon name={collapseIcon} variant="linear" size={18} className={cn(styles.chevron, !collapsed && styles.chevronOpen)} />
     </button>
   ) : null;
 
@@ -154,7 +155,9 @@ export const SectionCard = React.forwardRef(function SectionCard(
         <header className={cn(styles.header, sticky && styles.sticky)} data-fill={fill !== "none" ? fill : undefined}>
           <div className={cn(styles.titleRow, collapsible && styles.titleRowClickable)} onClick={onHeaderClick}>
             {collapseIconPosition === "left" && chevronBtn}
-            {number != null && <span className={styles.numberChip}>{number}</span>}
+            {(leading != null || number != null) && (
+              <span className={styles.numberChip}>{leading != null ? leading : number}</span>
+            )}
             {iconEl && (
               <span className={styles.iconChip} style={iconColor ? { color: iconColor } : undefined}>
                 {iconEl}

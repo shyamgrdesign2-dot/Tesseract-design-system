@@ -93,22 +93,27 @@
   &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); }
 }
 
+/* Accordion rule: chevron points DOWN when closed (default), UP when open. */
 .chevron { transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-.chevronCollapsed { transform: rotate(-90deg); }
+.chevronOpen { transform: rotate(180deg); }
 
-/* Number chip (plan-cluster style) — tinted by tone. */
+/* Leading chip — a common tinted container for any NON-clickable content
+   (a number, an icon, short text). Tinted by tone. */
 .numberChip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--tesseract-size-40);
+  gap: var(--tesseract-space-1);
+  min-width: var(--tesseract-size-40);
   height: var(--tesseract-size-40);
+  padding: 0 var(--tesseract-space-2);
   flex-shrink: 0;
   border-radius: var(--tesseract-radius-12);
   background: var(--sc-accent-bg);
   color: var(--sc-accent-fg);
   font-size: var(--tesseract-text-body-sm);
   font-weight: var(--tesseract-weight-bold);
+  line-height: 1;
 }
 
 .iconChip {
