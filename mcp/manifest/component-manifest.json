@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 38,
+    "components": 39,
     "atoms": 17,
-    "molecules": 21,
+    "molecules": 22,
     "tokens": 216
   },
   "rules": [
@@ -4919,6 +4919,31 @@
       ],
       "sourcePath": "src/components/molecules/SecondarySidebar/SecondarySidebar.jsx",
       "storiesPath": "src/components/molecules/SecondarySidebar/SecondarySidebar.stories.jsx"
+    },
+    {
+      "name": "Sheet",
+      "dir": "Sheet",
+      "layer": "molecules",
+      "exports": [
+        "Sheet",
+        "SheetTrigger",
+        "SheetContent",
+        "SheetHeader",
+        "SheetTitle",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetClose"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from \"@/src/components/molecules\";",
+      "description": "Sheet — a side drawer / panel (mobile sidebar, filters, quick-view, slide-in forms). A modal surface that slides in from an edge. Composes the shared DialogPrimitive (focus trap + scroll lock + Escape + focus restore + role=\"dialog\"/aria-modal) and just adds the edge positioning + slide animation + scrim. <Sheet> <SheetTrigger asChild><Button>Filters</Button></SheetTrigger> <SheetContent side=\"right\"> <SheetHeader><SheetTitle>Filters</SheetTitle><SheetDescription>Refine results</SheetDescription></SheetHeader> … <SheetFooter><SheetClose asChild><Button>Apply</Button></SheetClose></SheetFooter> </SheetContent> </Sheet> Parts: Sheet (root, controlled/uncontrolled `open`) · SheetTrigger (asChild) · SheetContent (`side` left/right/top/bottom, `showClose`) · SheetHeader · SheetTitle · SheetDescription · SheetFooter · SheetClose (asChild).",
+      "props": [],
+      "stories": [
+        "Playground",
+        "Sides"
+      ],
+      "sourcePath": "src/components/molecules/Sheet/Sheet.jsx",
+      "storiesPath": "src/components/molecules/Sheet/Sheet.stories.jsx"
     },
     {
       "name": "Sidebar",
