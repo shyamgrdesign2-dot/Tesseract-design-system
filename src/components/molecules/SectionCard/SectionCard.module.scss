@@ -1,5 +1,5 @@
-/* SectionCard.module.scss — generic collapsible container shell.
-   Token-only, self-contained. Per-band backgrounds via CSS vars set inline. */
+/* SectionCard.module.scss — the system container shell.
+   Token-only, self-contained. Per-band backgrounds + tone via CSS vars. */
 
 .card {
   &, & *, & *::before, & *::after { box-sizing: border-box; }
@@ -14,13 +14,27 @@
   --sc-footer-bg: var(--sc-bg);
   --sc-border: var(--tesseract-slate-200);
 
+  /* Tone accents (number chip / icon / gradient). Default = neutral slate. */
+  --sc-accent-bg: var(--tesseract-slate-100);
+  --sc-accent-fg: var(--tesseract-slate-600);
+  --sc-grad: color-mix(in srgb, var(--tesseract-slate-200) 35%, transparent);
+
   display: flex;
   flex-direction: column;
+  min-height: 0;
   background: var(--sc-bg);
   border-radius: var(--sc-radius);
   corner-shape: round;
   color: var(--tesseract-fg-primary);
   overflow: hidden;
+
+  &[data-tone="primary"] { --sc-accent-bg: var(--tesseract-blue-50);    --sc-accent-fg: var(--tesseract-blue-600);    --sc-grad: color-mix(in srgb, var(--tesseract-blue-500) 8%, transparent); }
+  &[data-tone="active"]  { --sc-accent-bg: var(--tesseract-warning-50); --sc-accent-fg: var(--tesseract-warning-700); --sc-grad: color-mix(in srgb, var(--tesseract-warning-500) 12%, transparent); }
+  &[data-tone="success"] { --sc-accent-bg: var(--tesseract-success-50); --sc-accent-fg: var(--tesseract-success-700); --sc-grad: color-mix(in srgb, var(--tesseract-success-500) 12%, transparent); }
+  &[data-tone="violet"]  { --sc-accent-bg: var(--tesseract-violet-50);  --sc-accent-fg: var(--tesseract-violet-700);  --sc-grad: color-mix(in srgb, var(--tesseract-violet-500) 10%, transparent); }
+
+  &[data-elevation="sm"] { box-shadow: 0 1px 2px color-mix(in srgb, var(--tesseract-slate-900) 6%, transparent); }
+  &[data-elevation="md"] { box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent); }
 }
 
 .bordered { border: 1px solid var(--sc-border); }
@@ -32,6 +46,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--tesseract-space-3);
+}
+.header[data-gradient] {
+  background: linear-gradient(180deg, var(--sc-grad) 0%, var(--sc-header-bg) 100%);
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 3;
 }
 
 .titleRow {
@@ -63,6 +85,21 @@
 .chevron { transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .chevronCollapsed { transform: rotate(-90deg); }
 
+/* Number chip (plan-cluster style) — tinted by tone. */
+.numberChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tesseract-size-40);
+  height: var(--tesseract-size-40);
+  flex-shrink: 0;
+  border-radius: var(--tesseract-radius-12);
+  background: var(--sc-accent-bg);
+  color: var(--sc-accent-fg);
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-bold);
+}
+
 .iconChip {
   display: inline-flex;
   align-items: center;
@@ -78,7 +115,6 @@
   flex: 1;
 }
 
-/* Compact section heading — NOT a page h1/h3. */
 .title {
   margin: 0;
   font-family: var(--tesseract-font-body);
@@ -89,6 +125,20 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.metaRow { display: inline-flex; align-items: center; gap: var(--tesseract-space-2); flex-wrap: wrap; }
+
+.amount {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--tesseract-radius-6);
+  background: var(--tesseract-slate-100);
+  padding: 0 var(--tesseract-space-2);
+  min-height: var(--tesseract-size-20);
+  font-size: var(--tesseract-text-body-xs);
+  font-weight: var(--tesseract-weight-medium);
+  color: var(--tesseract-slate-600);
 }
 
 .subtitle {
@@ -108,10 +158,11 @@
 
 .headerExtra { width: 100%; }
 
-/* ── Body (any content) ── */
+/* ── Body (any content; scrolls past maxBodyHeight) ── */
 .body {
   background: var(--sc-body-bg);
   padding: var(--sc-pad);
+  min-height: 0;
 }
 
 /* ── Footer ── */
@@ -127,7 +178,6 @@
   &[data-align="between"] { justify-content: space-between; }
 }
 
-/* ── Dividers between bands (only when adjacent bands are present) ── */
+/* Dividers between bands (only when adjacent bands are present). */
 .card[data-divided] .body { border-top: 1px solid var(--sc-border); }
 .card[data-divided] .footer { border-top: 1px solid var(--sc-border); }
-/* When collapsed, the footer sits directly under the header — keep its divider. */

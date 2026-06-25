@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 46,
+    "components": 47,
     "atoms": 19,
-    "molecules": 27,
+    "molecules": 28,
     "tokens": 216
   },
   "rules": [
@@ -5594,7 +5594,7 @@
       ],
       "importFrom": "@/src/components/molecules",
       "importExample": "import { SectionCard } from \"@/src/components/molecules\";",
-      "description": "SectionCard — a generic container shell: a card with an optional header, arbitrary body content, and an optional footer. Each band can be collapsed, recoloured, and filled with any content (a table, inputs, or a mix). Use it for rxpad sections, multi-section forms (e.g. patient: Personal / Additional / Address), dashboards — anywhere you need a titled, optionally-collapsible block. White surface + padding + outer stroke + radius by default; collapsing hides the body (header + footer stay), so a footer's CTAs remain reachable.",
+      "description": "SectionCard — the system's container shell. A card with an optional header, arbitrary body content, and an optional footer; collapsible, recolourable, and deeply nestable. One primitive covers rxpad sections, multi-section forms (patient: Personal · Additional · Address), plan clusters (an outer tinted shell holding inner cards), examination panels, and dashboard blocks. Compose freely: put SectionCards inside a SectionCard's body to nest; set a tinted `bodyBg` on the outer one for the \"cluster\" look. Use <Timeline> inside the body for visit timelines.",
       "props": [
         {
           "name": "title",
@@ -5616,6 +5616,23 @@
           "name": "iconColor",
           "default": "'var(--tesseract-blue-500)'",
           "control": "color"
+        },
+        {
+          "name": "number"
+        },
+        {
+          "name": "amount"
+        },
+        {
+          "name": "tone",
+          "default": "\"neutral\""
+        },
+        {
+          "name": "headerGradient",
+          "default": "false"
+        },
+        {
+          "name": "tools"
         },
         {
           "name": "headerActions"
@@ -5655,6 +5672,17 @@
         {
           "name": "collapseIcon",
           "default": "\"chevron-down\""
+        },
+        {
+          "name": "sticky",
+          "default": "false"
+        },
+        {
+          "name": "maxBodyHeight"
+        },
+        {
+          "name": "elevation",
+          "default": "false"
         },
         {
           "name": "bordered",
@@ -5710,6 +5738,8 @@
         "MultiSectionForm",
         "SegmentedBackgrounds",
         "WithHeaderSearch",
+        "PlanCluster",
+        "WithTimeline",
         "Plain"
       ],
       "sourcePath": "src/components/molecules/SectionCard/SectionCard.jsx",
@@ -6044,6 +6074,43 @@
       ],
       "sourcePath": "src/components/molecules/Tabs/Tabs.jsx",
       "storiesPath": "src/components/molecules/Tabs/Tabs.stories.jsx"
+    },
+    {
+      "name": "Timeline",
+      "dir": "Timeline",
+      "layer": "molecules",
+      "exports": [
+        "Timeline",
+        "TimelineItem"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Timeline, TimelineItem } from \"@/src/components/molecules\";",
+      "description": "Timeline / TimelineItem — a vertical event timeline (visit history, audit log, plan progress). Each item shows a connector line + node dot on the left and a card on the right with a title, an optional date pill, a right-aligned action slot, and any body content (clinical notes, etc.). Drop it inside a SectionCard body for the plan visit-timeline pattern. <Timeline tone=\"violet\"> <TimelineItem title=\"Dr. Sheela B R\" date=\"10 Apr 2026\" action={<Button>View Rx</Button>}> <strong>Clinical Notes:</strong> Canal shaping + obturation completed </TimelineItem> </Timeline> Timeline props: tone (\"violet\" | \"primary\" | \"success\" | \"neutral\"), className. TimelineItem props: title, date, dateIcon, action, tone (override), muted (hollow node, e.g. a skipped/rescheduled entry), className, children (body).",
+      "props": [
+        {
+          "name": "tone",
+          "default": "\"violet\"",
+          "allowedValues": [
+            "violet",
+            "primary",
+            "success",
+            "neutral"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Tones"
+      ],
+      "sourcePath": "src/components/molecules/Timeline/Timeline.jsx",
+      "storiesPath": "src/components/molecules/Timeline/Timeline.stories.jsx"
     },
     {
       "name": "Toast",

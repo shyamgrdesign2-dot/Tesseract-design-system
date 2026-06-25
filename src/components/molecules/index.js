@@ -55,3 +55,4 @@ export { DatePicker, DateRangePicker } from "./DateRangePicker";
 export { HeroBanner } from "./HeroBanner";
 export { RxPadSection } from "./RxPadSection";
 export { SectionCard } from "./SectionCard";
+export { Timeline, TimelineItem } from "./Timeline";

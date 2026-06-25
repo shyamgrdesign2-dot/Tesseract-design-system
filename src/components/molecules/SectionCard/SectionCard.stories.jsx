@@ -1,8 +1,15 @@
 import { SectionCard } from './SectionCard';
+import { Timeline, TimelineItem } from '../Timeline/Timeline';
 import { Button } from '../../atoms/Button/Button';
 import { InputBox } from '../../atoms/Input/InputBox';
 import { Badge } from '../../atoms/Badge/Badge';
 import { TPLibraryIcon } from '../../atoms/icons/tp/TPLibraryIcon';
+
+const TOOLS = [
+  { icon: 'grid-5', title: 'Templates' },
+  { icon: 'ram', title: 'Save as template' },
+  { icon: 'eraser', title: 'Clear', danger: true },
+];
 
 const meta = {
   title: 'Molecules/SectionCard',
@@ -133,6 +140,63 @@ export const WithHeaderSearch = {
           <Button key={s} variant="tonal" theme="neutral" size="sm">{s}</Button>
         ))}
       </div>
+    </SectionCard>
+  ),
+};
+
+/** Plan cluster — an outer tinted shell holding nested inner cards (number chip,
+ *  amount pill, tone gradient header). The dental Plan-Estimates pattern. */
+export const PlanCluster = {
+  render: () => (
+    <SectionCard
+      title="Plan Estimates"
+      amount="₹20,000"
+      icon="document-text"
+      tone="primary"
+      headerGradient
+      bodyBg="var(--tesseract-slate-50)"
+      headerActions={<Button size="sm" leftIcon={<TPLibraryIcon name="add" variant="linear" size={18} />}>Create Plan</Button>}
+    >
+      <SectionCard
+        number={1}
+        title="Wisdom Tooth Removal"
+        amount="₹20,000"
+        tone="primary"
+        collapsible
+        headerActions={<Button variant="outline" theme="success" size="sm">Activate Plan</Button>}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, font: '13px var(--tesseract-font-body)', color: 'var(--tesseract-slate-700)' }}>
+          {['T18', 'T28', 'T38', 'T48'].map((t) => (
+            <div key={t} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Wisdom Tooth Removal · {t}</span><strong>₹5,000</strong>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </SectionCard>
+  ),
+};
+
+/** In-progress plan with a visit Timeline nested in the body (tone="active"). */
+export const WithTimeline = {
+  render: () => (
+    <SectionCard title="Primary Care Plan" amount="₹11,500" icon="health" tone="active" headerGradient
+      headerActions={<Button theme="success" size="sm" leftIcon={<TPLibraryIcon name="tick-circle" variant="linear" size={18} />}>End Plan</Button>}>
+      <SectionCard number={1} title="Root Canal Treatment" subtitle="Lower Left First Molar (T36)" tone="active" tools={TOOLS} collapsible>
+        <Timeline tone="violet">
+          <TimelineItem title="Dr. Sheela B R" date="10 Apr 2026"
+            action={<Button variant="tonal" theme="neutral" size="sm" leftIcon={<TPLibraryIcon name="document-text" variant="linear" size={14} />}>View Rx</Button>}>
+            <strong>Clinical Notes:</strong> Canal shaping + obturation completed
+          </TimelineItem>
+          <TimelineItem title="Dr. Sheela B R" date="3 Apr 2026"
+            action={<Button variant="tonal" theme="neutral" size="sm" leftIcon={<TPLibraryIcon name="document-text" variant="linear" size={14} />}>View Rx</Button>}>
+            <strong>Clinical Notes:</strong> Initial debridement, access opening, BMP placed
+          </TimelineItem>
+          <TimelineItem title="Dr. Riya Kapoor" date="1 Apr 2026" muted>
+            <strong>Clinical Notes:</strong> Patient rescheduled — no treatment performed.
+          </TimelineItem>
+        </Timeline>
+      </SectionCard>
     </SectionCard>
   ),
 };
