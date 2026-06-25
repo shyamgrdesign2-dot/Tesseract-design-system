@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 39,
+    "components": 40,
     "atoms": 17,
-    "molecules": 22,
+    "molecules": 23,
     "tokens": 216
   },
   "rules": [
@@ -3820,6 +3820,48 @@
       ],
       "sourcePath": "src/components/molecules/Empty/Empty.jsx",
       "storiesPath": "src/components/molecules/Empty/Empty.stories.jsx"
+    },
+    {
+      "name": "Field",
+      "dir": "Field",
+      "layer": "molecules",
+      "exports": [
+        "Field",
+        "FieldLabel",
+        "FieldControl",
+        "FieldDescription",
+        "FieldError"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/src/components/molecules\";",
+      "description": "Field — a form-field grammar: link a label, control, description, and error to ANY form control with consistent layout + accessibility, so each control (Checkbox/Radio/Toggle/Slider/Dropdown/DateRangePicker/custom) doesn't re-implement label/help/error wiring. <Field invalid={!!err}> <FieldLabel>Email</FieldLabel> <FieldControl><InputBox placeholder=\"you@example.com\" /></FieldControl> <FieldDescription>We’ll never share it.</FieldDescription> <FieldError>{err}</FieldError> </Field> Field generates ids and, via FieldControl (Slot), injects `id`, `aria-describedby` (→ description + error), and `aria-invalid` onto the control. Parts: Field (root — `invalid`, `orientation` vertical/horizontal) · FieldLabel · FieldControl (wires the control) · FieldDescription · FieldError (role=\"alert\").",
+      "props": [
+        {
+          "name": "invalid",
+          "default": "false"
+        },
+        {
+          "name": "orientation",
+          "default": "\"vertical\""
+        },
+        {
+          "name": "required",
+          "default": "false"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Invalid",
+        "Horizontal"
+      ],
+      "sourcePath": "src/components/molecules/Field/Field.jsx",
+      "storiesPath": "src/components/molecules/Field/Field.stories.jsx"
     },
     {
       "name": "Filter",

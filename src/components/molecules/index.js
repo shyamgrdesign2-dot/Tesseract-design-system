@@ -36,6 +36,7 @@ export { Dropdown } from "./Dropdown";
 export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "./Menu";
 export { Popover, PopoverTrigger, PopoverContent } from "./Popover";
 export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from "./Sheet";
+export { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from "./Field";
 export { Breadcrumb } from "./Breadcrumb";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./Card";
 export { Pagination } from "./Pagination";

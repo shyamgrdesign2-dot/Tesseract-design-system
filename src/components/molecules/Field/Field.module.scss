@@ -1,0 +1,48 @@
+/* Field.module.scss — form-field layout grammar. Token-only, self-contained. */
+
+.field {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--tesseract-space-1-5);
+  min-width: 0;
+
+  // Horizontal: label beside the control (label | control), description/error wrap.
+  &[data-orientation="horizontal"] {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--tesseract-space-3);
+  }
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-medium);
+  color: var(--tesseract-slate-700);
+  line-height: 1.4;
+}
+
+.required { color: var(--tesseract-error-500); }
+
+.description {
+  margin: 0;
+  font-size: var(--tesseract-text-body-xs);
+  line-height: 1.4;
+  color: var(--tesseract-slate-500);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--tesseract-text-body-xs);
+  line-height: 1.4;
+  color: var(--tesseract-error-600);
+}
+
+// In horizontal layout, description/error take the full row under the control.
+.field[data-orientation="horizontal"] .description,
+.field[data-orientation="horizontal"] .error { flex-basis: 100%; }
