@@ -6,7 +6,8 @@
  * search filtering, badges, and a configurable collapse toggle.
  *
  * Props:
- *   items          [{ id, label, icon, signal?, badge?, disabled?, children? }]
+ *   items          [{ id, label, icon, signal?, badge?, disabled?, href?, children? }]
+ *                  — a leaf with `href` renders as a real <a> (SSR / routing).
  *   activeId       id of the active item (controlled)
  *   onSelect       (id) => void
  *   collapsed      controlled collapsed state
@@ -38,6 +39,17 @@ import { Badge } from "@/src/components/atoms/Badge";
 import { TPIcon } from "@/src/components/atoms/icons/tp/TPIcon";
 import { cn } from "@/src/hooks/utils";
 import styles from "./SecondarySidebar.module.scss";
+
+// Render a navigation LEAF as a real link when `item.href` is provided (SSR /
+// middle-click / routing) — else a <button>. Additive: same classes/handlers, so
+// the look is unchanged. Disabled items stay <button> (a real <a> can't disable).
+const NavTag = React.forwardRef(function NavTag({ href, disabled, children, ...rest }, ref) {
+  if (href != null && !disabled) {
+    const { type: _type, ...anchorRest } = rest; // <a> has no `type`
+    return <a ref={ref} href={href} {...anchorRest}>{children}</a>;
+  }
+  return <button ref={ref} type="button" disabled={disabled} {...rest}>{children}</button>;
+});
 
 const isLeaf = (item) => !item.children || item.children.length === 0;
 const hasActive = (item, activeId) =>
@@ -88,14 +100,14 @@ function CollapsedItem({ item, activeId, onSelect }) {
     : hasActive(item, activeId);
 
   return (
-    <button
+    <NavTag
       key={item.id}
-      type="button"
+      href={isLeaf(item) ? item.href : undefined}
+      disabled={item.disabled}
       className={styles.item}
       data-active={active || undefined}
       data-disabled={item.disabled || undefined}
       aria-current={active ? "page" : undefined}
-      disabled={item.disabled}
       onClick={() => onSelect(isLeaf(item) ? item.id : item.children?.[0]?.id)}
       title={item.label}
     >
@@ -117,7 +129,7 @@ function CollapsedItem({ item, activeId, onSelect }) {
       )}
       {active && <span className={styles.bar} aria-hidden />}
       {active && <span className={styles.pointer} aria-hidden />}
-    </button>
+    </NavTag>
   );
 }
 
@@ -130,12 +142,12 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
 
   if (leaf) {
     return (
-      <button
-        type="button"
+      <NavTag
+        href={item.href}
+        disabled={item.disabled}
         className={styles.expItem}
         data-active={active || undefined}
         data-disabled={item.disabled || undefined}
-        disabled={item.disabled}
         onClick={() => onSelect(item.id)}
         aria-current={active ? "page" : undefined}
       >
@@ -151,7 +163,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
           </span>
         )}
         {active && <span className={styles.bar} aria-hidden />}
-      </button>
+      </NavTag>
     );
   }
 
@@ -192,13 +204,13 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
           {item.children.map((child) => {
             const childActive = child.id === activeId;
             return (
-              <button
+              <NavTag
                 key={child.id}
-                type="button"
+                href={child.href}
+                disabled={child.disabled}
                 className={styles.expChild}
                 data-active={childActive || undefined}
                 data-disabled={child.disabled || undefined}
-                disabled={child.disabled}
                 onClick={() => onSelect(child.id)}
                 aria-current={childActive ? "page" : undefined}
               >
@@ -211,7 +223,7 @@ function ExpandedItem({ item, activeId, onSelect, expanded, onToggle, caretIcon 
                     <ItemBadge badge={child.badge} />
                   </span>
                 )}
-              </button>
+              </NavTag>
             );
           })}
         </div>
