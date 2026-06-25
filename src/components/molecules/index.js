@@ -38,6 +38,7 @@ export { Popover, PopoverTrigger, PopoverContent } from "./Popover";
 export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from "./Sheet";
 export { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from "./Field";
 export { Command } from "./Command";
+export { Alert } from "./Alert";
 export { Breadcrumb } from "./Breadcrumb";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./Card";
 export { Pagination } from "./Pagination";

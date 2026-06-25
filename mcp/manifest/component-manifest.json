@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 41,
+    "components": 42,
     "atoms": 17,
-    "molecules": 24,
+    "molecules": 25,
     "tokens": 216
   },
   "rules": [
@@ -2385,6 +2385,67 @@
       ],
       "sourcePath": "src/components/molecules/Accordion/Accordion.jsx",
       "storiesPath": "src/components/molecules/Accordion/Accordion.stories.jsx"
+    },
+    {
+      "name": "Alert",
+      "dir": "Alert",
+      "layer": "molecules",
+      "exports": [
+        "Alert"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Alert } from \"@/src/components/molecules\";",
+      "description": "Alert — an inline status banner (allergy/drug-interaction warnings, page-level notices). Persistent and in-flow — distinct from Toast (transient, floating) and ConfirmDialog (modal). <Alert status=\"warning\" title=\"Allergy on file\"> Patient is allergic to penicillin. Review before prescribing. </Alert>",
+      "props": [
+        {
+          "name": "status",
+          "default": "\"info\"",
+          "allowedValues": [
+            "info",
+            "success",
+            "warning",
+            "error"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "title",
+          "default": "'Allergy on file'",
+          "control": "text"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "onDismiss"
+        },
+        {
+          "name": "variant",
+          "default": "\"soft\"",
+          "allowedValues": [
+            "soft",
+            "outline"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Statuses",
+        "WithActionAndDismiss",
+        "Outline"
+      ],
+      "sourcePath": "src/components/molecules/Alert/Alert.jsx",
+      "storiesPath": "src/components/molecules/Alert/Alert.stories.jsx"
     },
     {
       "name": "Breadcrumb",

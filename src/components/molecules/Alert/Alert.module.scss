@@ -1,0 +1,44 @@
+/* Alert.module.scss — inline status banner. Token-only, self-contained. */
+
+.alert {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tesseract-space-2-5);
+  padding: var(--tesseract-space-3) var(--tesseract-space-3-5);
+  border-radius: var(--tesseract-radius-12);
+  corner-shape: round;
+  border: 1px solid transparent;
+
+  // Per-status accent (icon + soft fill / outline border).
+  --al-fg: var(--tesseract-blue-600);
+  --al-soft: var(--tesseract-blue-50);
+  --al-border: color-mix(in srgb, var(--tesseract-blue-500) 22%, transparent);
+
+  &[data-status="success"] { --al-fg: var(--tesseract-success-600); --al-soft: var(--tesseract-success-50); --al-border: color-mix(in srgb, var(--tesseract-success-500) 22%, transparent); }
+  &[data-status="warning"] { --al-fg: var(--tesseract-warning-700); --al-soft: var(--tesseract-warning-50); --al-border: color-mix(in srgb, var(--tesseract-warning-500) 26%, transparent); }
+  &[data-status="error"]   { --al-fg: var(--tesseract-error-600);   --al-soft: var(--tesseract-error-50);   --al-border: color-mix(in srgb, var(--tesseract-error-500) 22%, transparent); }
+
+  &[data-variant="soft"]    { background: var(--al-soft); border-color: var(--al-border); }
+  &[data-variant="outline"] { background: var(--tesseract-slate-0); border-color: var(--al-border); }
+}
+
+.icon { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--al-fg); margin-top: 1px; }
+
+.body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--tesseract-space-0-5); }
+.title {
+  margin: 0;
+  font-size: var(--tesseract-text-body-sm);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-900);
+}
+.description {
+  font-size: var(--tesseract-text-body-sm);
+  line-height: 1.45;
+  color: var(--tesseract-slate-700);
+}
+
+.action { flex-shrink: 0; display: inline-flex; align-items: center; gap: var(--tesseract-space-2); }
+.close { flex-shrink: 0; margin: -4px -6px -4px 0; }
