@@ -6,7 +6,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ color: 'var(--tesseract-slate-700, #454551)', background: '#fff', padding: 24, borderRadius: 8 }}>
+      <div style={{ color: 'var(--tesseract-slate-700, #454551)', background: 'var(--tesseract-slate-0)', padding: 24, borderRadius: 'var(--tesseract-radius-8)' }}>
         <Story />
       </div>
     ),
@@ -57,7 +57,7 @@ export const Playground = {
 /** The three glyphs side by side (the requested default demo). */
 export const Default = {
   render: () => (
-    <div style={{ display: 'flex', gap: 64, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: 'var(--tesseract-space-16)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
       <LoadingIndicator type="line-simple" size="md" label="Loading..." />
       <LoadingIndicator type="line-spinner" size="md" label="Loading..." />
       <LoadingIndicator type="dot-circle" size="md" label="Loading..." />
@@ -67,11 +67,11 @@ export const Default = {
 
 export const Sizes = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--tesseract-space-10)' }}>
       {['xs', 'sm', 'md', 'lg'].map((size) => (
-        <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+        <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--tesseract-space-2)' }}>
           <LoadingIndicator type="line-spinner" size={size} />
-          <span style={{ fontSize: 12, color: 'var(--tesseract-slate-500, #71717a)' }}>{size}</span>
+          <span style={{ fontSize: 'var(--tesseract-text-body-xs)', color: 'var(--tesseract-slate-500, #71717a)' }}>{size}</span>
         </div>
       ))}
     </div>
@@ -81,7 +81,7 @@ export const Sizes = {
 /** Glyph follows `currentColor`. */
 export const Colors = {
   render: () => (
-    <div style={{ display: 'flex', gap: 32 }}>
+    <div style={{ display: 'flex', gap: 'var(--tesseract-space-8)' }}>
       <span style={{ color: 'var(--tesseract-blue-500, #4b4ad5)' }}><LoadingIndicator type="line-simple" /></span>
       <span style={{ color: 'var(--tesseract-error-500, #e11d48)' }}><LoadingIndicator type="line-spinner" /></span>
       <span style={{ color: 'var(--tesseract-slate-700, #454551)' }}><LoadingIndicator type="dot-circle" /></span>

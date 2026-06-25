@@ -218,7 +218,7 @@ export const Gradient = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tesseract-space-2)' }}>
         <Label>On dark background</Label>
         <div style={{ background: 'linear-gradient(135deg,#1a1966,#0e0d3d)', padding: 'var(--tesseract-space-5) var(--tesseract-space-6)', borderRadius: 'var(--tesseract-radius-12)' }}>
-          <Divider variant="gradient" color="rgba(255,255,255,0.5)" />
+          <Divider variant="gradient" color="color-mix(in srgb, var(--tesseract-slate-0) 50%, transparent)" />
         </div>
       </div>
 
@@ -269,11 +269,11 @@ export const Vertical = {
 export const InContext = {
   name: '🏥 In Context',
   render: () => (
-    <div style={{ width: 360, background: '#fff', border: '1px solid #E2E2EA', borderRadius: 'var(--tesseract-radius-12)', overflow: 'hidden' }}>
+    <div style={{ width: 360, background: 'var(--tesseract-slate-0)', border: '1px solid var(--tesseract-slate-200)', borderRadius: 'var(--tesseract-radius-12)', overflow: 'hidden' }}>
       {['Vitals', 'Medications', 'Allergies'].map((section, i) => (
         <div key={section}>
           {i > 0 && <Divider variant="gradient" color="var(--tesseract-slate-200, #E2E2EA)" />}
-          <div style={{ padding: 'var(--tesseract-space-4) var(--tesseract-space-5)', fontSize: 'var(--tesseract-text-body-sm)', fontWeight: 'var(--tesseract-weight-medium)', color: '#171725' }}>
+          <div style={{ padding: 'var(--tesseract-space-4) var(--tesseract-space-5)', fontSize: 'var(--tesseract-text-body-sm)', fontWeight: 'var(--tesseract-weight-medium)', color: 'var(--tesseract-slate-900)' }}>
             {section}
           </div>
         </div>

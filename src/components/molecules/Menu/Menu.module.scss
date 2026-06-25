@@ -43,7 +43,7 @@
   }
   &:focus-visible {
     background: var(--tesseract-slate-50);
-    outline: 2px solid var(--tesseract-blue-500, #2563eb);
+    outline: 2px solid var(--tesseract-blue-500, #4B4AD5);
     outline-offset: -2px;
   }
   &[data-disabled] { color: var(--tesseract-slate-400); cursor: not-allowed; }

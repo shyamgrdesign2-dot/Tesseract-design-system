@@ -190,7 +190,7 @@ export const WithProgress = {
   render: () => {
     const [seq, setSeq] = React.useState(0);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'var(--tesseract-font-body)' }}>
         <Button variant="solid" size="sm" onClick={() => setSeq((s) => s + 1)}>Show toast</Button>
         <div style={{ minHeight: 64 }}>
           {seq > 0 && (
@@ -285,10 +285,10 @@ export const AutoDismiss = {
     const [seq, setSeq] = React.useState(0);
     const [count, setCount] = React.useState(0);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'var(--tesseract-font-body)' }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Button variant="solid" size="sm" onClick={() => setSeq((s) => s + 1)}>Show toast</Button>
-          <span style={{ fontSize: 13, color: '#54545C' }}>Dismissed: <strong style={{ color: '#171725' }}>{count}</strong></span>
+          <span style={{ fontSize: 13, color: '#54545C' }}>Dismissed: <strong style={{ color: 'var(--tesseract-slate-900)' }}>{count}</strong></span>
         </div>
         <div style={{ minHeight: 64 }}>
           {seq > 0 && (

@@ -52,7 +52,7 @@ const logoCode = ({ variant = 'wordmark', brand = 'practice', tone = 'gradient',
 
 export const Playground = {
   render: (args) => (
-    <div style={{ padding: "var(--tesseract-space-6)", background: args.tone === 'light' ? '#171725' : '#fff', borderRadius: "var(--tesseract-radius-12)", display: 'inline-block' }}>
+    <div style={{ padding: "var(--tesseract-space-6)", background: args.tone === 'light' ? 'var(--tesseract-slate-900)' : 'var(--tesseract-slate-0)', borderRadius: "var(--tesseract-radius-12)", display: 'inline-block' }}>
       <Logo {...args} />
     </div>
   ),
@@ -61,8 +61,8 @@ export const Playground = {
 
 const Tile = ({ dark, children, label }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: "var(--tesseract-space-2)", alignItems: 'flex-start' }}>
-    <span style={{ fontSize: "var(--tesseract-text-caption-sm)", color: '#717179', fontFamily: 'var(--tesseract-font-body)' }}>{label}</span>
-    <div style={{ padding: "var(--tesseract-space-5)", borderRadius: "var(--tesseract-radius-12)", background: dark ? '#171725' : '#fff', border: '1px solid #e2e2ea' }}>{children}</div>
+    <span style={{ fontSize: "var(--tesseract-text-caption-sm)", color: 'var(--tesseract-slate-500)', fontFamily: 'var(--tesseract-font-body)' }}>{label}</span>
+    <div style={{ padding: "var(--tesseract-space-5)", borderRadius: "var(--tesseract-radius-12)", background: dark ? 'var(--tesseract-slate-900)' : 'var(--tesseract-slate-0)', border: '1px solid var(--tesseract-slate-200)' }}>{children}</div>
   </div>
 );
 

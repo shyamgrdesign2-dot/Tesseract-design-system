@@ -82,7 +82,7 @@
 .center .titleBlock { align-items: center; }
 .center .title, .center .subtitle { text-align: center; }
 .title { font-size: var(--tesseract-text-body-base); font-weight: var(--tesseract-weight-semibold); color: var(--tesseract-slate-900); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.subtitle { font-size: var(--tesseract-text-body-xs); line-height: 18px; color: var(--tesseract-slate-600); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.subtitle { font-size: var(--tesseract-text-body-xs); line-height: var(--tesseract-text-body-xs-lh, 18px); color: var(--tesseract-slate-600); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ── User / patient details block (avatar = Avatar atom) ── */
 .user {
@@ -113,7 +113,7 @@
   min-width: 0;
   > :first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
-.userMeta { font-size: var(--tesseract-text-body-xs); line-height: 18px; letter-spacing: 0.1px; color: var(--tesseract-slate-600); white-space: nowrap; }
+.userMeta { font-size: var(--tesseract-text-body-xs); line-height: var(--tesseract-text-body-xs-lh, 18px); letter-spacing: 0.1px; color: var(--tesseract-slate-600); white-space: nowrap; }
 
 /* ── Icon CTA + notification dot ── */
 .iconWrap { position: relative; display: inline-flex; flex-shrink: 0; }

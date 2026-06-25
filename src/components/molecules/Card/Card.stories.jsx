@@ -53,7 +53,7 @@ export const Playground = {
 /** The three surface variants. */
 export const Variants = {
   render: () => (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 'var(--tesseract-space-4)', flexWrap: 'wrap' }}>
       {['default', 'outline', 'elevated'].map((v) => (
         <Card key={v} variant={v} style={{ width: 240 }}>
           <CardHeader><CardTitle style={{ textTransform: 'capitalize' }}>{v}</CardTitle><CardDescription>Surface variant</CardDescription></CardHeader>
@@ -69,8 +69,8 @@ export const StatTile = {
   render: () => (
     <Card variant="elevated" style={{ width: 220 }}>
       <CardHeader><CardDescription>Appointments today</CardDescription></CardHeader>
-      <CardContent style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-        <span style={{ fontSize: 32, fontWeight: 700, color: 'var(--tesseract-slate-900)' }}>32</span>
+      <CardContent style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--tesseract-space-2)' }}>
+        <span style={{ fontSize: 32, fontWeight: 'var(--tesseract-weight-bold)', color: 'var(--tesseract-slate-900)' }}>32</span>
         <Badge color="success" variant="soft" size="sm">+12%</Badge>
       </CardContent>
     </Card>
