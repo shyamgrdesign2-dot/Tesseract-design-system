@@ -32,11 +32,13 @@ import styles from "./Chip.module.scss";
 const X = ({ size = 12 }) => <TPLibraryIcon name="close-square" variant="bold" size={size} />;
 
 // One color token per tone; bg/border are translucent washes derived from it.
+// Text/icon tone — uses the deep ramp step so it clears WCAG AA on the soft
+// tinted chip fill (success/warning at -600 fail; amber needs -800).
 const TONES = {
   default: "var(--tesseract-slate-700)",
   primary: "var(--tesseract-blue-600)",
-  success: "var(--tesseract-success-600)",
-  warning: "var(--tesseract-warning-600)",
+  success: "var(--tesseract-success-700)",
+  warning: "var(--tesseract-warning-800)",
   error:   "var(--tesseract-error-600)",
 };
 

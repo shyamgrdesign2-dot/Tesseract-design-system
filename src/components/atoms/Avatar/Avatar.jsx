@@ -44,8 +44,8 @@ const SHAPE_RADIUS = {
 const COLOR_TOKENS = {
   slate: { bg: "var(--tesseract-slate-100, #f1f1f5)", fg: "var(--tesseract-slate-600, #545460)" },
   primary: { bg: "var(--tesseract-primary-100)", fg: "var(--tesseract-primary-600)" },
-  success: { bg: "var(--tesseract-success-100)", fg: "var(--tesseract-success-600)" },
-  warning: { bg: "var(--tesseract-warning-100)", fg: "var(--tesseract-warning-600)" },
+  success: { bg: "var(--tesseract-success-100)", fg: "var(--tesseract-success-700)" },
+  warning: { bg: "var(--tesseract-warning-100)", fg: "var(--tesseract-warning-700)" },
   error: { bg: "var(--tesseract-error-100)", fg: "var(--tesseract-error-600)" },
   violet: { bg: "var(--tesseract-violet-100)", fg: "var(--tesseract-violet-600)" },
 };

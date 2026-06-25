@@ -48,8 +48,8 @@
 
   .icon {
     &[data-status="info"]    { color: var(--tesseract-slate-700); }   /* neutral ink (no blue) */
-    &[data-status="success"] { color: var(--tesseract-success-600); }
-    &[data-status="warning"] { color: var(--tesseract-warning-600); }
+    &[data-status="success"] { color: var(--tesseract-success-700); }
+    &[data-status="warning"] { color: var(--tesseract-warning-700); }
     &[data-status="error"]   { color: var(--tesseract-error-500); }
   }
 }

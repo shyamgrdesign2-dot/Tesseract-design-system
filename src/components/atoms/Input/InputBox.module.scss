@@ -477,7 +477,7 @@
   color:       var(--tesseract-slate-500);
   line-height: 1.4;
 
-  [data-status="success"] & { color: var(--tesseract-success-600); }
+  [data-status="success"] & { color: var(--tesseract-success-700); }
   [data-status="error"]   & { color: var(--tesseract-error-600); }
   [data-status="warning"] & { color: var(--tesseract-warning-700); }
 
