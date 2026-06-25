@@ -55,7 +55,7 @@
      SOLID
      ══════════════════════════════════ */
   &[data-variant="solid"] {
-    box-shadow: 0 1px 3px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent);
+    /* CTAs are flat — no elevation/drop shadow (only focus rings below). */
 
     /* primary */
     &[data-theme="primary"] {

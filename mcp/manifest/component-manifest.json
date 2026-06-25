@@ -1696,38 +1696,28 @@
       "description": "MedicalIcon (a.k.a. TPMedicalIcon) — health icons are no longer a separate set; they live in the single icon library (/tp-icons/{linear,bulk,bold}). This is a thin convenience wrapper over TPLibraryIcon that keeps the old API working and maps the legacy style names (line → linear, solid → bold).",
       "props": [
         {
-          "name": "name",
-          "default": "'ambulance'",
-          "control": "text",
-          "description": "Icon name (resolved against the medical subset, then the full library)"
+          "name": "name"
         },
         {
           "name": "variant",
           "default": "\"linear\"",
           "allowedValues": [
+            "line",
             "linear",
             "bulk",
+            "solid",
             "bold"
-          ],
-          "control": "inline-radio",
-          "description": "Icon style (legacy "
+          ]
         },
         {
           "name": "size",
-          "default": "24",
-          "control": "range"
+          "default": "24"
         },
         {
-          "name": "color",
-          "default": "''",
-          "control": "color",
-          "description": "Override fill (blank = inherit currentColor)"
+          "name": "color"
         },
         {
-          "name": "alt",
-          "default": "''",
-          "control": "text",
-          "description": "Accessible label (sets role="
+          "name": "alt"
         },
         {
           "name": "className"
@@ -1737,20 +1727,12 @@
         },
         {
           "name": "family",
-          "default": "\"medical\"",
-          "control": "text",
-          "description": "Icon family — defaults to "
+          "default": "\"medical\""
         }
       ],
-      "stories": [
-        "Playground",
-        "Variants",
-        "Gallery",
-        "Interactive",
-        "FamilyOverride"
-      ],
+      "stories": [],
       "sourcePath": "src/components/atoms/MedicalIcon/MedicalIcon.jsx",
-      "storiesPath": "src/components/atoms/MedicalIcon/MedicalIcon.stories.jsx"
+      "storiesPath": null
     },
     {
       "name": "Progress",

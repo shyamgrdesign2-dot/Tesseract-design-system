@@ -38,12 +38,35 @@ function deepMerge(base, over) {
   return out;
 }
 
-// Dark scheme: reverse the neutral ramp + soften the *-50 tints.
+// Dark scheme: reverse the neutral ramp, soften the *-50 tints, and LIFT the
+// accent ramps two steps lighter. The lift is the key to legible CTAs on dark:
+// without it the accent mid-tones (blue-500 etc.) stay too dark for a dark
+// surface, so solid fills go dark-on-dark (slate-0 text auto-flips to near-black)
+// and outline/ghost foregrounds disappear. Lifting makes solid fills light
+// (paired with the auto-dark text = readable dark-on-light) and outline/ghost
+// text bright. One ramp change fixes every accent-coloured component at once.
 const SLATE = ["#FFFFFF", "#FAFAFB", "#F1F1F5", "#E2E2EA", "#D0D5DD", "#A2A2A8", "#717179", "#545460", "#454551", "#2C2C35", "#171725"];
 const SLATE_STEPS = ["0", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900"];
+// Each accent ramp listed light→dark (50→900). In dark mode steps 400/500/600/700
+// are remapped to the value two steps lighter (e.g. 500 → the 300 value).
+const ACCENT_RAMPS = {
+  blue:    ["#EEEEFF", "#D8D8FA", "#B5B4F2", "#8E8DE8", "#6C6BDE", "#4B4AD5", "#3C3BB5", "#2E2D96", "#212077", "#161558"],
+  violet:  ["#FAF5FE", "#EDDFF7", "#DBBFEF", "#C89FE7", "#BA7DE9", "#A461D8", "#8A4DBB", "#703A9E", "#572A81", "#3E1C64"],
+  success: ["#ECFDF5", "#D1FAE5", "#A7F3D0", "#6EE7B7", "#34D399", "#10B981", "#059669", "#047857", "#065F46", "#064E3B"],
+  warning: ["#FFFBEB", "#FEF3C7", "#FDE68A", "#FCD34D", "#FBBF24", "#F59E0B", "#D97706", "#B45309", "#92400E", "#78350F"],
+  error:   ["#FFF1F2", "#FFE4E6", "#FECDD3", "#FDA4AF", "#FB7185", "#E11D48", "#C8102E", "#9F1239", "#881337", "#4C0519"],
+};
+const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 const DARK_VARS = (() => {
   const v = {};
   SLATE_STEPS.forEach((s, i) => { v[`--tesseract-slate-${s}`] = SLATE[SLATE.length - 1 - i]; });
+  // Lift the foreground/fill steps (400–700) two stops lighter for dark surfaces.
+  for (const [name, ramp] of Object.entries(ACCENT_RAMPS)) {
+    [400, 500, 600, 700].forEach((step) => {
+      const idx = RAMP_STEPS.indexOf(step);
+      v[`--tesseract-${name}-${step}`] = ramp[idx - 2];
+    });
+  }
   Object.assign(v, {
     "--tesseract-blue-50": "rgba(75, 74, 213, 0.22)", "--tesseract-violet-50": "rgba(164, 97, 216, 0.20)",
     "--tesseract-success-50": "rgba(16, 185, 129, 0.16)", "--tesseract-warning-50": "rgba(245, 158, 11, 0.16)", "--tesseract-error-50": "rgba(225, 29, 72, 0.16)",

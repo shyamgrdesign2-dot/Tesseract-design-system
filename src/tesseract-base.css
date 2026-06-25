@@ -30,12 +30,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-tp-theme] :is(button, input, select, textarea) {
+/* Zero-specificity (:where) so these neutralize the UA defaults but NEVER win
+   against a component's own class styles. Without :where, the element-level
+   selectors (specificity 0,1,1) silently override single-class component rules
+   like a Toggle track or Checkbox fill, blanking their background/colour. */
+:where([data-tp-theme] :is(button, input, select, textarea)) {
   font: inherit;
   color: inherit;
 }
 
-[data-tp-theme] button {
+:where([data-tp-theme] button) {
   background: none;
 }
 
