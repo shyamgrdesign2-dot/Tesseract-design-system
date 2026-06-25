@@ -33,6 +33,7 @@ export { Filter } from "./Filter";
 
 /* ── Form / selection ── */
 export { Dropdown } from "./Dropdown";
+export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "./Menu";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";

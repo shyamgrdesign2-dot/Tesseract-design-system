@@ -1,0 +1,81 @@
+/* Menu.module.scss — shared action-menu surface. Portaled to document.body, so
+   it self-contains its own box model + font (host-isolation, per the rubric). */
+
+.menu {
+  // Portaled — outside any component root; re-establish box model + font here.
+  box-sizing: border-box;
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  z-index: var(--tesseract-z-popover, 2100);
+  min-width: 180px;
+  max-height: min(420px, calc(100vh - 24px));
+  overflow-y: auto;
+  padding: var(--tesseract-space-1);
+  background: var(--tesseract-slate-0);
+  border: 1px solid var(--tesseract-slate-200);
+  border-radius: var(--tesseract-radius-12);
+  corner-shape: round;
+  box-shadow:
+    0 12px 24px -4px color-mix(in srgb, var(--tesseract-slate-900) 8%, transparent),
+    0 4px 8px -4px color-mix(in srgb, var(--tesseract-slate-900) 4%, transparent);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-2);
+  width: 100%;
+  padding: var(--tesseract-space-2) var(--tesseract-space-3);
+  border: none;
+  border-radius: var(--tesseract-radius-8);
+  corner-shape: round;
+  background: transparent;
+  color: var(--tesseract-slate-700);
+  font-size: var(--tesseract-text-body-sm);
+  font-family: var(--tesseract-font-body);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+
+  &:hover:not([data-disabled]),
+  &:focus-visible {
+    background: var(--tesseract-slate-50);
+    outline: none;
+  }
+  &[data-disabled] { color: var(--tesseract-slate-400); cursor: not-allowed; }
+
+  &[data-danger] {
+    color: var(--tesseract-error-600);
+    &:hover:not([data-disabled]), &:focus-visible { background: var(--tesseract-error-50); }
+  }
+}
+
+.itemIcon { display: inline-flex; align-items: center; flex-shrink: 0; color: currentColor; }
+.itemLabel { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.itemShortcut {
+  flex-shrink: 0;
+  margin-left: var(--tesseract-space-3);
+  font-size: var(--tesseract-text-body-xs);
+  color: var(--tesseract-slate-400);
+  font-variant-numeric: tabular-nums;
+}
+
+.separator {
+  height: 1px;
+  margin: var(--tesseract-space-1) 0;
+  background: var(--tesseract-slate-100);
+}
+
+.label {
+  padding: var(--tesseract-space-1-5) var(--tesseract-space-3) var(--tesseract-space-1);
+  font-size: var(--tesseract-text-body-xs);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item { transition: none; }
+}

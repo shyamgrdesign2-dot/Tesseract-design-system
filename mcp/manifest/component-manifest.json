@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 31,
+    "components": 32,
     "atoms": 16,
-    "molecules": 15,
+    "molecules": 16,
     "tokens": 216
   },
   "rules": [
@@ -4168,6 +4168,44 @@
       ],
       "sourcePath": "src/components/molecules/HeroBanner/HeroBanner.jsx",
       "storiesPath": "src/components/molecules/HeroBanner/HeroBanner.stories.jsx"
+    },
+    {
+      "name": "Menu",
+      "dir": "Menu",
+      "layer": "molecules",
+      "exports": [
+        "Menu",
+        "MenuTrigger",
+        "MenuContent",
+        "MenuItem",
+        "MenuSeparator",
+        "MenuLabel"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from \"@/src/components/molecules\";",
+      "description": "Menu — the shared action-menu primitive (Radix-style compound parts). An accessible, portaled action menu (role=\"menu\" + menuitem) — distinct from Dropdown (which is a value SELECT). Use it for row \"…\" actions, header overflow menus, and nav flyouts so they share one keyboard/focus/positioning contract. <Menu> <MenuTrigger asChild><Button icon={…} aria-label=\"Actions\" /></MenuTrigger> <MenuContent> <MenuLabel>Row</MenuLabel> <MenuItem icon=\"edit-2\" onSelect={…}>Edit</MenuItem> <MenuItem icon=\"copy\" shortcut=\"⌘D\" onSelect={…}>Duplicate</MenuItem> <MenuSeparator /> <MenuItem icon=\"trash\" danger onSelect={…}>Delete</MenuItem> </MenuContent> </Menu> Parts: Menu (root, controlled/uncontrolled open) · MenuTrigger (asChild) · MenuContent (portal, collision-aware, focus-trapped, arrow-key nav, Escape, click-outside) · MenuItem (icon/shortcut/danger/disabled/onSelect) · MenuSeparator · MenuLabel.",
+      "props": [
+        {
+          "name": "open"
+        },
+        {
+          "name": "defaultOpen",
+          "default": "false"
+        },
+        {
+          "name": "onOpenChange"
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "RowActions",
+        "WithDisabled"
+      ],
+      "sourcePath": "src/components/molecules/Menu/Menu.jsx",
+      "storiesPath": "src/components/molecules/Menu/Menu.stories.jsx"
     },
     {
       "name": "RxPadSection",
