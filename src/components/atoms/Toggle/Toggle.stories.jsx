@@ -93,6 +93,19 @@ export const Playground = {
   parameters: { docs: { source: { transform: (_code, ctx) => toggleCode(ctx.args) } } },
 };
 
+/** Interaction test — clicking flips the switch state. */
+export const ToggleInteraction = {
+  render: (args) => <ToggleDemo {...args} ariaLabel="Notifications" />,
+  play: async ({ canvasElement }) => {
+    const { within, userEvent, expect } = await import('storybook/test');
+    const c = within(canvasElement);
+    const sw = c.getByRole('switch');
+    const before = sw.getAttribute('aria-checked');
+    await userEvent.click(sw);
+    await expect(sw.getAttribute('aria-checked')).not.toBe(before);
+  },
+};
+
 export const Sizes = {
   render: (args) => (
     <Row>

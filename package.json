@@ -30,7 +30,8 @@
     "prepublishOnly": "npm run build:lib",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test-storybook": "vitest run --project=storybook"
   },
   "peerDependencies": {
     "react": ">=18",

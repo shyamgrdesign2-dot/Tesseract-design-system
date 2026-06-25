@@ -51,6 +51,20 @@ export default meta;
 
 export const Playground = { render: (a) => <InputOTP {...a} /> };
 
+/** Interaction test — typing fills boxes and auto-advances. */
+export const TypeInteraction = {
+  args: { length: 4 },
+  play: async ({ canvasElement }) => {
+    const { within, userEvent, expect } = await import('storybook/test');
+    const c = within(canvasElement);
+    const boxes = c.getAllByRole('textbox');
+    await userEvent.type(boxes[0], '4');
+    await expect(boxes[0]).toHaveValue('4');
+    await userEvent.type(boxes[1], '8');
+    await expect(boxes[1]).toHaveValue('8');
+  },
+};
+
 /** Controlled — reads back the live code and fires onComplete. */
 export const Controlled = {
   render: () => {

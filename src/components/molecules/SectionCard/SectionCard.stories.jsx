@@ -1,3 +1,4 @@
+import { within, userEvent, expect } from 'storybook/test';
 import { SectionCard } from './SectionCard';
 import { Timeline, TimelineItem } from '../Timeline/Timeline';
 import { Button } from '../../atoms/Button/Button';
@@ -296,6 +297,20 @@ export const PermutationMatrix = {
         )))}
       </div>
     );
+  },
+};
+
+/** Interaction test — collapsing hides the body, expanding restores it. */
+export const CollapseInteraction = {
+  args: { title: 'Collapsible section', collapsible: true, children: <p>Body content here</p> },
+  play: async ({ canvasElement }) => {
+    const c = within(canvasElement);
+    await expect(c.getByText('Body content here')).toBeInTheDocument();
+    const toggle = c.getByRole('button', { name: /collapse|expand/i });
+    await userEvent.click(toggle);
+    await expect(c.queryByText('Body content here')).not.toBeInTheDocument();
+    await userEvent.click(toggle);
+    await expect(c.getByText('Body content here')).toBeInTheDocument();
   },
 };
 
