@@ -1,0 +1,88 @@
+/* Breadcrumb.module.scss — wayfinding trail. Token-only; self-contained. */
+
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+  min-width: 0;
+
+  &[data-size="sm"] { --bc-fs: var(--tesseract-text-body-xs); --bc-gap: var(--tesseract-space-1); }
+  &[data-size="md"] { --bc-fs: var(--tesseract-text-body-sm); --bc-gap: var(--tesseract-space-1-5); }
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--bc-gap, var(--tesseract-space-1-5));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bc-gap, var(--tesseract-space-1-5));
+  min-width: 0;
+}
+
+.crumbIcon { display: inline-flex; align-items: center; flex-shrink: 0; }
+
+// Link crumb (a / button / static span) — interactive ones tint to brand on hover.
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tesseract-space-1);
+  max-width: 200px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--bc-fs, var(--tesseract-text-body-sm));
+  color: var(--tesseract-slate-500);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: var(--tesseract-radius-6);
+  transition: color 120ms ease;
+
+  &:hover:not([data-static]) { color: var(--tesseract-blue-600); }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--tesseract-blue-500) 40%, transparent);
+  }
+  &[data-static] { cursor: default; }
+}
+
+// Current page — last crumb, non-interactive, emphasized.
+.current {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tesseract-space-1);
+  max-width: 260px;
+  font-size: var(--bc-fs, var(--tesseract-text-body-sm));
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sep {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--tesseract-slate-300);
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--tesseract-space-1);
+  color: var(--tesseract-slate-400);
+  font-size: var(--bc-fs, var(--tesseract-text-body-sm));
+  cursor: default;
+}

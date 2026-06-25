@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 32,
+    "components": 33,
     "atoms": 16,
-    "molecules": 16,
+    "molecules": 17,
     "tokens": 216
   },
   "rules": [
@@ -2323,6 +2323,53 @@
       ],
       "sourcePath": "src/components/molecules/Accordion/Accordion.jsx",
       "storiesPath": "src/components/molecules/Accordion/Accordion.stories.jsx"
+    },
+    {
+      "name": "Breadcrumb",
+      "dir": "Breadcrumb",
+      "layer": "molecules",
+      "exports": [
+        "Breadcrumb"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Breadcrumb } from \"@/src/components/molecules\";",
+      "description": "Breadcrumb — wayfinding for deep navigation (Patients › Ramesh Kumar › Visit). Data-driven (config over markup, per the Tesseract standard): pass `items`, each a crumb. The last item is the current page (rendered as text with aria-current); earlier items are links (real <a> when `href`, else a <button> if `onClick`, else plain text). Long trails collapse to first … last via `maxItems`. <Breadcrumb items={[ { label: \"Patients\", href: \"/patients\", icon: \"user\" }, { label: \"Ramesh Kumar\", href: \"/patients/123\" }, { label: \"Visit — 24 Jun\" },                // current page (no href) ]} />",
+      "props": [
+        {
+          "name": "items",
+          "default": "[]"
+        },
+        {
+          "name": "separator",
+          "default": "\"arrow-right3\"",
+          "control": "text"
+        },
+        {
+          "name": "maxItems",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Basic",
+        "WithIcons",
+        "Collapsed"
+      ],
+      "sourcePath": "src/components/molecules/Breadcrumb/Breadcrumb.jsx",
+      "storiesPath": "src/components/molecules/Breadcrumb/Breadcrumb.stories.jsx"
     },
     {
       "name": "ClinicalTable",

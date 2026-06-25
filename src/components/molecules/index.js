@@ -34,6 +34,7 @@ export { Filter } from "./Filter";
 /* ── Form / selection ── */
 export { Dropdown } from "./Dropdown";
 export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "./Menu";
+export { Breadcrumb } from "./Breadcrumb";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";
