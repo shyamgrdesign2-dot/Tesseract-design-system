@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 33,
+    "components": 34,
     "atoms": 16,
-    "molecules": 17,
+    "molecules": 18,
     "tokens": 216
   },
   "rules": [
@@ -2370,6 +2370,75 @@
       ],
       "sourcePath": "src/components/molecules/Breadcrumb/Breadcrumb.jsx",
       "storiesPath": "src/components/molecules/Breadcrumb/Breadcrumb.stories.jsx"
+    },
+    {
+      "name": "Card",
+      "dir": "Card",
+      "layer": "molecules",
+      "exports": [
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "CardFooter"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from \"@/src/components/molecules\";",
+      "description": "Card — the default surface container (dashboards, patient tiles, vitals panels). Compound parts (all optional, compose freely): Card · CardHeader · CardTitle · CardDescription · CardContent · CardFooter <Card variant=\"elevated\"> <CardHeader> <CardTitle>Vitals</CardTitle> <CardDescription>Last recorded 2h ago</CardDescription> </CardHeader> <CardContent>…</CardContent> <CardFooter>…</CardFooter> </Card>",
+      "props": [
+        {
+          "name": "variant",
+          "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "outline",
+            "elevated"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "padding",
+          "default": "\"md\"",
+          "allowedValues": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "radius",
+          "default": "'default'",
+          "allowedValues": [
+            "default",
+            "sharp",
+            "8",
+            "12",
+            "16",
+            "20",
+            "24"
+          ],
+          "control": "select"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        },
+        {
+          "name": "children"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Variants",
+        "StatTile"
+      ],
+      "sourcePath": "src/components/molecules/Card/Card.jsx",
+      "storiesPath": "src/components/molecules/Card/Card.stories.jsx"
     },
     {
       "name": "ClinicalTable",
