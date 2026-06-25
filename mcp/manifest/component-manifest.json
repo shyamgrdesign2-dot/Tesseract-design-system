@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 34,
+    "components": 35,
     "atoms": 16,
-    "molecules": 18,
+    "molecules": 19,
     "tokens": 216
   },
   "rules": [
@@ -4322,6 +4322,55 @@
       ],
       "sourcePath": "src/components/molecules/Menu/Menu.jsx",
       "storiesPath": "src/components/molecules/Menu/Menu.stories.jsx"
+    },
+    {
+      "name": "Pagination",
+      "dir": "Pagination",
+      "layer": "molecules",
+      "exports": [
+        "Pagination"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { Pagination } from \"@/src/components/molecules\";",
+      "description": "Pagination — page navigation (pairs with DataTable, lists, audit logs). Controlled: pass the 0-indexed `page` + `pageCount` + `onPageChange`. Composes the Button atom for prev / next / page buttons; long ranges collapse to first … window … last around the current page. <Pagination page={p} pageCount={12} onPageChange={setP} />",
+      "props": [
+        {
+          "name": "page",
+          "default": "0"
+        },
+        {
+          "name": "pageCount",
+          "default": "1",
+          "control": "number"
+        },
+        {
+          "name": "onPageChange"
+        },
+        {
+          "name": "siblingCount",
+          "default": "1",
+          "control": "number"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "FewPages",
+        "Small"
+      ],
+      "sourcePath": "src/components/molecules/Pagination/Pagination.jsx",
+      "storiesPath": "src/components/molecules/Pagination/Pagination.stories.jsx"
     },
     {
       "name": "RxPadSection",

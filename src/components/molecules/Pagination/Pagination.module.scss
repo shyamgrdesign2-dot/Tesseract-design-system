@@ -1,0 +1,22 @@
+/* Pagination.module.scss — page navigation. Composes Button; token-only. */
+
+.root {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tesseract-space-1);
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tesseract-size-20);
+  color: var(--tesseract-slate-400);
+  font-size: var(--tesseract-text-body-sm);
+  user-select: none;
+}
+
+.root[data-size="sm"] .ellipsis { font-size: var(--tesseract-text-body-xs); }

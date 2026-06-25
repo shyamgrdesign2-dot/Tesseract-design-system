@@ -36,6 +36,7 @@ export { Dropdown } from "./Dropdown";
 export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "./Menu";
 export { Breadcrumb } from "./Breadcrumb";
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./Card";
+export { Pagination } from "./Pagination";
 
 /* ── Navigation ── */
 export { Sidebar } from "./Sidebar";
