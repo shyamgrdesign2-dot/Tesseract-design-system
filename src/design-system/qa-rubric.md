@@ -83,9 +83,17 @@ collapsed-item flyout** stays a flyout (justified): it's a HOVER-triggered navig
 already has `role="menu"`/`menuitem`/`aria-current` — the click-triggered Menu would regress the
 hover UX.
 
-Still-open OPTIONAL investments (larger work, not blocking): **Filter → Dropdown** rewrite
-(multi-group apply/clear; behavioral risk); nav-item `href`/`render` routing across the sidebar
-render paths; an InputBox "trigger" mode for the DateRangePicker trigger.
+**Nav-item routing — DONE.** Sidebar + SecondarySidebar leaf items render as a real `<a>` when
+given `item.href` (SSR / middle-click / routing), via a polymorphic NavTag helper; additive, look
+unchanged.
+
+Remaining items reviewed and classified as **justified exceptions** (not worth forcing):
+- **Filter → Dropdown** — semantic mismatch: Filter is a MULTI-FACET filter (independent groups,
+  each with its own value + apply/clear); Dropdown is a single grouped value-list. Reuse would be a
+  large rewrite that doesn't fit. Would need a dedicated Dropdown "facet mode" (future, if ever).
+- **DateRangePicker trigger → InputBox** — the trigger is a well-tuned field-BUTTON (dialog trigger
+  with status ring / placeholder / chevron-rotate); reusing InputBox needs a new trigger-mode and
+  risks regressing it. Keep bespoke unless a deliberate InputBox trigger-mode is built.
 
 ## Benchmark north star
 Match or exceed Material UI / Radix UI / shadcn-ui on **composition, customizability, a11y, and
