@@ -12,7 +12,7 @@
  *  • States: default, disabled, loading · Surface: light | dark
  */
 
-import { fn } from 'storybook/test';
+import { fn, within, userEvent, expect } from 'storybook/test';
 import { Button } from './Button';
 import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 import { TPIcon } from '@/src/components/atoms/icons/tp/TPIcon';
@@ -219,7 +219,6 @@ export const ClickInteraction = {
   args: { onClick: fn(), href: undefined },
   render: ({ href, ...a }) => <Button {...a}>Click me</Button>,
   play: async ({ canvasElement, args }) => {
-    const { within, userEvent, expect } = await import('storybook/test');
     const c = within(canvasElement);
     await userEvent.click(c.getByRole('button', { name: /click me/i }));
     await expect(args.onClick).toHaveBeenCalled();

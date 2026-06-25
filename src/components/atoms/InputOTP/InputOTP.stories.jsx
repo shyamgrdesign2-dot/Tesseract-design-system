@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { within, userEvent, expect } from 'storybook/test';
 import { InputOTP } from './InputOTP';
 
 const meta = {
@@ -55,7 +56,6 @@ export const Playground = { render: (a) => <InputOTP {...a} /> };
 export const TypeInteraction = {
   args: { length: 4 },
   play: async ({ canvasElement }) => {
-    const { within, userEvent, expect } = await import('storybook/test');
     const c = within(canvasElement);
     const boxes = c.getAllByRole('textbox');
     await userEvent.type(boxes[0], '4');

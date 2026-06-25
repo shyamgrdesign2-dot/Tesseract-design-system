@@ -1,4 +1,5 @@
 import React from 'react';
+import { within, userEvent, expect } from 'storybook/test';
 import { Toggle } from './Toggle';
 
 const COLORS = ['primary', 'success', 'error', 'warning'];
@@ -97,7 +98,6 @@ export const Playground = {
 export const ToggleInteraction = {
   render: (args) => <ToggleDemo {...args} ariaLabel="Notifications" />,
   play: async ({ canvasElement }) => {
-    const { within, userEvent, expect } = await import('storybook/test');
     const c = within(canvasElement);
     const sw = c.getByRole('switch');
     const before = sw.getAttribute('aria-checked');
