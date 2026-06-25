@@ -63,14 +63,17 @@
     &[data-color="violet"]  { background-color: var(--tesseract-violet-500);  color: var(--tesseract-slate-0); }
   }
 
-  /* ── SOFT ── */
+  /* ── SOFT ──
+     Text uses the deep (600/700) ramp step, not 500: a *-500 fill on a *-50 tint
+     fails WCAG AA (e.g. warning-500 on warning-50 ≈ 2.1:1). The deeper step keeps
+     the same hue but clears 4.5:1 on the pale background. */
   &[data-variant="soft"] {
-    &[data-color="primary"] { background-color: var(--tesseract-blue-50);    color: var(--tesseract-blue-500); }
-    &[data-color="success"] { background-color: var(--tesseract-success-50); color: var(--tesseract-success-500); }
-    &[data-color="warning"] { background-color: var(--tesseract-warning-50); color: var(--tesseract-warning-500); }
-    &[data-color="error"]   { background-color: var(--tesseract-error-50);   color: var(--tesseract-error-500); }
-    &[data-color="neutral"] { background-color: var(--tesseract-slate-100);  color: var(--tesseract-slate-500); }
-    &[data-color="violet"]  { background-color: var(--tesseract-violet-50);  color: var(--tesseract-violet-500); }
+    &[data-color="primary"] { background-color: var(--tesseract-blue-50);    color: var(--tesseract-blue-600); }
+    &[data-color="success"] { background-color: var(--tesseract-success-50); color: var(--tesseract-success-700); }
+    &[data-color="warning"] { background-color: var(--tesseract-warning-50); color: var(--tesseract-warning-700); }
+    &[data-color="error"]   { background-color: var(--tesseract-error-50);   color: var(--tesseract-error-700); }
+    &[data-color="neutral"] { background-color: var(--tesseract-slate-100);  color: var(--tesseract-slate-600); }
+    &[data-color="violet"]  { background-color: var(--tesseract-violet-50);  color: var(--tesseract-violet-700); }
   }
 
   /* ── GRADIENT ── (white text; color picks the gradient ramp) */

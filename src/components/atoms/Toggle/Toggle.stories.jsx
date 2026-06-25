@@ -28,6 +28,7 @@ const meta = {
     shape: { control: 'inline-radio', options: ['rounded', 'square'], description: 'Pill toggle vs squared toggle' },
     color: { control: 'inline-radio', options: COLORS, description: 'Checked track colour (primary = blue)' },
     label: { control: 'text', description: 'Adjacent label — clicking it toggles. Blank = bare switch.' },
+    ariaLabel: { control: 'text', description: 'Accessible name for the bare switch (no visible label). Always set when `label` is blank.' },
     labelPosition: { control: 'inline-radio', options: ['right', 'left'], description: 'Side the label sits on', if: { arg: 'label', truthy: true } },
     defaultChecked: { control: 'boolean', description: 'Initial on/off state — drives the preview here.' },
     disabled: { control: 'boolean' },
@@ -45,6 +46,7 @@ const meta = {
     shape: 'rounded',
     color: 'primary',
     label: '',
+    ariaLabel: 'Notifications',
     labelPosition: 'right',
     defaultChecked: false,
     disabled: false,
@@ -57,12 +59,13 @@ const meta = {
 export default meta;
 
 // Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
-const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label = '', labelPosition = 'right', disabled, required, defaultChecked, name, value = 'on' }) => {
+const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label = '', ariaLabel, labelPosition = 'right', disabled, required, defaultChecked, name, value = 'on' }) => {
   const lines = [];
   if (size !== 'md') lines.push(`  size="${size}"`);
   if (shape !== 'rounded') lines.push(`  shape="${shape}"`);
   if (color !== 'primary') lines.push(`  color="${color}"`);
   if (label) lines.push(`  label="${label}"`);
+  if (!label && ariaLabel) lines.push(`  ariaLabel="${ariaLabel}"`);
   if (label && labelPosition !== 'right') lines.push(`  labelPosition="${labelPosition}"`);
   if (defaultChecked) lines.push('  defaultChecked');
   if (disabled) lines.push('  disabled');

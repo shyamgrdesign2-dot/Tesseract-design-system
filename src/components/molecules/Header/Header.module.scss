@@ -156,7 +156,8 @@
 .infoTagLabel {
   font-size: var(--tesseract-text-body-xs);
   font-weight: var(--tesseract-weight-medium);
-  color: var(--tesseract-violet-400);
+  /* violet-600 (not 400) so the muted label still clears AA on the violet-50 tag. */
+  color: var(--tesseract-violet-600);
   white-space: nowrap;
 }
 

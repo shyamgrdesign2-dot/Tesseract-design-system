@@ -76,7 +76,7 @@ export const Sizes = {
   render: () => (
     <Row>
       {['sm', 'md', 'lg'].map((size) => (
-        <Checkbox key={size} size={size} defaultChecked />
+        <Checkbox key={size} size={size} defaultChecked aria-label={`${size} checkbox`} />
       ))}
     </Row>
   ),

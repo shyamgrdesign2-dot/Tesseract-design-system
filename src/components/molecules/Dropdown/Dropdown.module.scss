@@ -62,7 +62,7 @@
   font-size: var(--tesseract-text-body-sm);
   font-weight: var(--tesseract-weight-medium);
   color: var(--tesseract-slate-900);
-  &::placeholder { color: var(--tesseract-slate-400); }
+  &::placeholder { color: var(--tesseract-slate-500); }
   &:disabled { color: var(--tesseract-slate-400); cursor: not-allowed; }
 }
 .chevronBtn {
@@ -105,7 +105,7 @@
 .triggerLead { display: inline-flex; align-items: center; flex-shrink: 0; color: var(--tesseract-slate-600); }
 
 .triggerText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.placeholder { color: var(--tesseract-slate-400); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.placeholder { color: var(--tesseract-slate-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .triggerChips {
   display: flex;
@@ -212,7 +212,7 @@
   font-size: var(--tesseract-text-body-sm);
   font-family: inherit;
   color: var(--tesseract-slate-900);
-  &::placeholder { color: var(--tesseract-slate-400); }
+  &::placeholder { color: var(--tesseract-slate-500); }
 }
 
 // ─── Group label (sticky header above the list, e.g. "Frequently used") ───────
@@ -250,7 +250,7 @@
   padding: var(--tesseract-space-4) var(--tesseract-space-3);
   text-align: center;
   font-size: var(--tesseract-text-body-sm);
-  color: var(--tesseract-slate-400);
+  color: var(--tesseract-slate-500);
 }
 
 /* Async loading row — spinner + label, centred in the list. */
@@ -261,7 +261,7 @@
   gap: var(--tesseract-space-2);
   padding: var(--tesseract-space-4) var(--tesseract-space-3);
   font-size: var(--tesseract-text-body-sm);
-  color: var(--tesseract-slate-400);
+  color: var(--tesseract-slate-500);
 }
 
 // ─── Option row ───────────────────────────────────────────────────────────────
@@ -313,7 +313,7 @@
 
 .optText { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 .optTitle { font-size: var(--tesseract-text-body-sm); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.optSub { font-size: var(--tesseract-text-body-xs); line-height: 1.3; color: var(--tesseract-slate-400); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.optSub { font-size: var(--tesseract-text-body-xs); line-height: 1.3; color: var(--tesseract-slate-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .optRight { display: inline-flex; align-items: center; gap: var(--tesseract-space-2); flex-shrink: 0; }
 

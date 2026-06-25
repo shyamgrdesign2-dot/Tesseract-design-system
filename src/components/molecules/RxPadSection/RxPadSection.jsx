@@ -26,12 +26,14 @@ function ActionButton({ iconProp, defaultIcon, defaultVariant = "linear", tip, o
   const { name, variant } = parseIconProp(iconProp, defaultIcon, defaultVariant);
   // Pass-through styling for the button atom. Defaults preserve the current look.
   const { variant: btnVariant = "tonal", theme = "neutral", size: btnSize = "sm", ...restButton } = buttonProps || {};
+  // Icon-only button must always have an accessible name; fall back to the icon name.
+  const accessibleName = tip || (name ? name.replace(/[-_]/g, " ") : "Action");
   const btn = (
     <Button
       variant={btnVariant}
       theme={theme}
       size={btnSize}
-      aria-label={tip}
+      aria-label={accessibleName}
       disabled={disabled}
       onClick={onClick}
       icon={<TPLibraryIcon name={name} variant={variant} size={size} color={color} />}
@@ -210,6 +212,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
 
               {bodyType === "text" && (
                 <InputBox fullWidth autoGrow maxHeight={160} value={text} onChange={(e) => setText(e.target?.value ?? e)}
+                  aria-label={searchPlaceholder || `${title} notes`}
                   placeholder={searchPlaceholder || "Add clinical notes…"} />
               )}
 
@@ -217,6 +220,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
                 <div className={styles.fields}>
                   {fields.map((f) => (
                     <InputBox key={f.id} fullWidth label={f.label} type={f.type} placeholder={f.placeholder}
+                      aria-label={f.label || f.placeholder || f.id}
                       leftIcon={f.icon} value={fieldVals[f.id] || ""}
                       onChange={(e) => setFieldVals((s) => ({ ...s, [f.id]: e.target?.value ?? e }))} />
                   ))}
@@ -230,6 +234,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
                   onChange={(e) => setQuery(e.target?.value ?? e)}
                   onKeyDown={(e) => { if (e.key === "Enter") addRow(query); }}
                   leftIcon={<TPLibraryIcon name={searchParsed.name} variant={searchParsed.variant} size={18} />}
+                  aria-label={searchPlaceholder || `Search & add ${title}`}
                   placeholder={searchPlaceholder || `Search & add ${title}`}
                 />
               )}

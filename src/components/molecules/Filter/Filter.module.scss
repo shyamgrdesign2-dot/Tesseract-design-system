@@ -86,7 +86,8 @@
 
   &:hover { background-color: var(--tesseract-slate-50); }
   &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-100); }
-  &[aria-selected="true"] { color: var(--tesseract-blue-600); font-weight: var(--tesseract-weight-semibold); }
+  /* a11y: active option text on the light-blue selected fill fails contrast (3.53) — darken one step. */
+  &[aria-selected="true"] { color: var(--tesseract-blue-700); font-weight: var(--tesseract-weight-semibold); }
 }
 
 /* Decorative wrapper around the reused Checkbox atom — the option row owns the
@@ -114,11 +115,22 @@
   flex-shrink: 0;
   font-size: var(--tesseract-text-body-sm);
   font-weight: var(--tesseract-weight-semibold);
-  color: var(--tesseract-slate-400);
+  /* a11y: slate-400 on the slate-50 active bar fails contrast (2.43) — darken one step. */
+  color: var(--tesseract-slate-600);
 }
 
 // Active chips reuse the Chip atom (composed in Filter.jsx). Only the group
 // prefix ("Status:") needs a lighter weight inside the chip label.
 .chips { display: flex; align-items: center; gap: var(--tesseract-space-1-5); flex-wrap: wrap; flex: 1; min-width: 0; }
 
-.chipGroup { font-weight: var(--tesseract-weight-medium); opacity: 0.7; }
+/* No opacity dim — it dropped the inherited blue text to ~3.5:1 on the active bar.
+   Medium weight already reads as a muted prefix while staying AA-legible. */
+.chipGroup { font-weight: var(--tesseract-weight-medium); color: var(--tesseract-blue-700); }
+
+/* a11y: the ghost "Clear all" Button (theme=warning) renders warning-600 text,
+   which fails contrast (3.05) on the slate-50 active bar / panel footer — darken
+   its rest text one ramp step. Token-only; scoped to this component's chrome. */
+.activeBar [data-variant="ghost"][data-theme="warning"]:not(:hover):not(:disabled),
+.panelFooter [data-variant="ghost"][data-theme="warning"]:not(:hover):not(:disabled) {
+  color: var(--tesseract-warning-700);
+}

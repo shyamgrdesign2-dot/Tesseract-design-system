@@ -30,6 +30,7 @@ const meta = {
     disabled: { control: 'boolean', description: 'Non-interactive, dimmed' },
     error: { control: 'boolean', description: 'Error styling — e.g. value past a safe limit' },
     label: { control: 'text', description: 'Caption above the track (also the a11y label)' },
+    ariaLabel: { control: 'text', description: 'Accessible name for the range input when there is no visible `label`' },
     showValue: { control: 'boolean', description: 'Show the live value readout (format with `formatValue`)' },
     marks: { control: 'boolean', description: 'true = show min & max ticks; or pass an array of {value,label}' },
   },
@@ -42,6 +43,7 @@ const meta = {
     disabled: false,
     error: false,
     label: '',
+    ariaLabel: 'Volume',
     showValue: false,
     marks: false,
   },
@@ -50,12 +52,13 @@ const meta = {
 export default meta;
 
 // Build a copy-paste snippet from the controls (what "Show code" shows).
-const sliderCode = ({ color = 'primary', size = 'md', min = 0, max = 100, step = 1, disabled, error, label, showValue, marks }) => {
+const sliderCode = ({ color = 'primary', size = 'md', min = 0, max = 100, step = 1, disabled, error, label, ariaLabel, showValue, marks }) => {
   const lines = [`  color="${color}"`, `  size="${size}"`];
   if (min !== 0) lines.push(`  min={${min}}`);
   if (max !== 100) lines.push(`  max={${max}}`);
   if (step !== 1) lines.push(`  step={${step}}`);
   if (label) lines.push(`  label="${label}"`);
+  else if (ariaLabel) lines.push(`  ariaLabel="${ariaLabel}"`);
   if (showValue) lines.push(`  showValue`);
   if (marks) lines.push(`  marks`);
   if (disabled) lines.push(`  disabled`);

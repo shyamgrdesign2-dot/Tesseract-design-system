@@ -61,6 +61,8 @@
  *                  (full → CTAs share the footer width equally)
  *   width     "trigger" | "auto" | number            default "trigger"
  *   placeholder, label, disabled, className
+ *   ariaLabel string — accessible name for the trigger when there is no visible
+ *     `label` (e.g. icon-only / empty value). Falls back to the placeholder.
  *   renderOption (option, { selected, active }) => node — custom option-row layout
  *     (avatars, two-line, etc.); replaces the icon/title/subtitle/shortcut/check default
  *   loading   boolean — show a loading row in the menu while options load (async)
@@ -154,6 +156,7 @@ export const Dropdown = forwardRef(function Dropdown({
   width = "trigger",
   placeholder = "Select…",
   label,
+  ariaLabel,
   disabled = false,
   analyticsId,
   className,
@@ -206,6 +209,13 @@ export const Dropdown = forwardRef(function Dropdown({
   const menuId = `dd-${id}`;
   const labelId = `dd-label-${id}`;
   const isSelected = (val) => selectedArr.includes(val);
+
+  // Accessible name for the trigger. A visible `label` already names it via
+  // aria-labelledby; otherwise the trigger can render with no text (icon-only /
+  // empty value) and would have no accessible name. Fall back to an explicit
+  // `ariaLabel` prop, then the placeholder, so it is always named. (Not applied
+  // when a visible label exists, to avoid two competing names.)
+  const triggerAriaLabel = label ? undefined : (ariaLabel || placeholder || undefined);
 
   // Active query: editable combobox filters by the trigger value; otherwise the
   // popover search box drives filtering (only when searchable).
@@ -594,6 +604,7 @@ export const Dropdown = forwardRef(function Dropdown({
             aria-haspopup="listbox"
             aria-controls={open ? menuId : undefined}
             aria-labelledby={label ? labelId : undefined}
+            aria-label={triggerAriaLabel}
             disabled={disabled}
             value={currentValue ?? ""}
             placeholder={placeholder}
@@ -629,6 +640,7 @@ export const Dropdown = forwardRef(function Dropdown({
           aria-expanded={open}
           aria-controls={open ? menuId : undefined}
           aria-labelledby={label ? labelId : undefined}
+          aria-label={triggerAriaLabel}
           onClick={() => (open ? setOpen(false) : openMenu())}
           onKeyDown={onKeyDown}
         >

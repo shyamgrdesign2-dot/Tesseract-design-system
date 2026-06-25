@@ -55,7 +55,7 @@
     border-color: var(--tesseract-blue-500);
     box-shadow: 0 0 0 3px var(--tesseract-blue-100, #d8d8fa);
   }
-  &[data-placeholder="true"] { color: var(--tesseract-slate-400); }
+  &[data-placeholder="true"] { color: var(--tesseract-slate-500); }
   &[data-placeholder="true"] .triggerText { font-weight: var(--tesseract-weight-regular); }
 
   // Sizes
@@ -142,7 +142,7 @@
   font-weight: var(--tesseract-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.025em;
-  color: var(--tesseract-slate-400);
+  color: var(--tesseract-slate-500);
 }
 
 .preset {
@@ -256,7 +256,7 @@
   &:hover { background: var(--tesseract-slate-100); }
   &[data-selected="true"] { background: var(--tesseract-blue-500); color: var(--tesseract-slate-0); }
 }
-.timeSep { align-self: center; font-size: var(--tesseract-text-body-lg); font-weight: var(--tesseract-weight-bold); color: var(--tesseract-slate-400); }
+.timeSep { align-self: center; font-size: var(--tesseract-text-body-lg); font-weight: var(--tesseract-weight-bold); color: var(--tesseract-slate-500); }
 
 // ─── Shared header nav (month/year stepping + jump-to picker) ──────────────────
 .navRow {
@@ -372,7 +372,7 @@
   text-align: center;
   font-size: var(--tesseract-text-body-xs);
   font-weight: var(--tesseract-weight-semibold);
-  color: var(--tesseract-slate-400);
+  color: var(--tesseract-slate-500);
 }
 
 .grid {

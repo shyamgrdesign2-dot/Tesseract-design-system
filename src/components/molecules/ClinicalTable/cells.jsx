@@ -27,11 +27,15 @@ import styles from "./ClinicalTable.module.scss";
 export function EditableCell({ column: c, value, row, locked, onChange, onCommit }) {
   const status = locked ? undefined : resolveStatus(c, value, row);
   const readOnly = c.editable === false;
+  // Cells have no visible <label>; name each control from its column header so
+  // screen readers (and axe) get an accessible name. Falls back to the column id.
+  const cellLabel = typeof c.header === "string" && c.header ? c.header : c.id;
 
   if (c.type === "multiselect") {
     return (
       <Dropdown
         variant="seamless"
+        ariaLabel={cellLabel}
         mode="multi"
         chips={c.chips !== false}
         chevron
@@ -53,6 +57,7 @@ export function EditableCell({ column: c, value, row, locked, onChange, onCommit
     return (
       <Dropdown
         variant="seamless"
+        ariaLabel={cellLabel}
         editable
         chevron={c.chevron !== false}
         allowCustom={c.allowCustom !== false}
@@ -77,6 +82,7 @@ export function EditableCell({ column: c, value, row, locked, onChange, onCommit
     return (
       <Dropdown
         variant="seamless"
+        ariaLabel={cellLabel}
         editable={isSearch}
         chevron={!isSearch}
         searchable={!isSearch && c.searchable}
@@ -100,6 +106,7 @@ export function EditableCell({ column: c, value, row, locked, onChange, onCommit
   return (
     <InputBox
       variant="seamless"
+      aria-label={cellLabel}
       fullWidth
       type={inputType}
       allow={c.type === "number" ? "numeric" : c.allow ?? "any"}
