@@ -10,8 +10,8 @@
     ]
   },
   "counts": {
-    "components": 43,
-    "atoms": 18,
+    "components": 44,
+    "atoms": 19,
     "molecules": 25,
     "tokens": 216
   },
@@ -1360,6 +1360,113 @@
       ],
       "sourcePath": "src/components/atoms/Input/InputBox.jsx",
       "storiesPath": "src/components/atoms/Input/InputBox.stories.jsx"
+    },
+    {
+      "name": "InputOTP",
+      "dir": "InputOTP",
+      "layer": "atoms",
+      "exports": [
+        "InputOTP"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { InputOTP } from \"@/src/components/atoms\";",
+      "description": "InputOTP — one-time-code / PIN input. Renders `length` separate single-char boxes with auto-advance, backspace-to-previous, arrow-key nav, and paste-to-fill across all boxes. Built for 2FA and e-prescription sign-off. Controlled/uncontrolled parity: pass `value` + `onChange`, or `defaultValue`. `onComplete(code)` fires once every box is filled.",
+      "props": [
+        {
+          "name": "length",
+          "default": "6",
+          "control": "number"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "defaultValue",
+          "default": "\"\""
+        },
+        {
+          "name": "onChange"
+        },
+        {
+          "name": "onComplete"
+        },
+        {
+          "name": "allow",
+          "default": "\"numeric\"",
+          "allowedValues": [
+            "numeric",
+            "alphanumeric",
+            "any"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "status",
+          "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "error",
+            "success"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "mask",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "separator",
+          "default": "\"-\""
+        },
+        {
+          "name": "groupSize",
+          "control": "number"
+        },
+        {
+          "name": "radius"
+        },
+        {
+          "name": "disabled",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "autoFocus",
+          "default": "false"
+        },
+        {
+          "name": "inputMode"
+        },
+        {
+          "name": "ariaLabel",
+          "default": "\"Verification code\""
+        },
+        {
+          "name": "className"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Controlled",
+        "Grouped",
+        "Masked",
+        "Sizes",
+        "Status",
+        "Alphanumeric"
+      ],
+      "sourcePath": "src/components/atoms/InputOTP/InputOTP.jsx",
+      "storiesPath": "src/components/atoms/InputOTP/InputOTP.stories.jsx"
     },
     {
       "name": "Kbd",

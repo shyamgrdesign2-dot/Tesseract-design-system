@@ -22,6 +22,7 @@ export { Kbd } from "./Kbd";
 
 // Form
 export { InputBox } from "./Input";
+export { InputOTP } from "./InputOTP";
 export { Checkbox } from "./Checkbox";
 export { Toggle } from "./Toggle";
 
