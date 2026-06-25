@@ -23,11 +23,12 @@ const meta = {
   },
   argTypes: {
     value: { control: { type: 'range', min: 0, max: 100, step: 1 }, table: { category: 'Content' } },
+    max: { control: { type: 'number', min: 1, step: 1 }, table: { category: 'Content' }, description: 'Value scale; fill width = value / max.' },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], table: { category: 'Appearance' } },
     tone: { control: 'inline-radio', options: ['primary', 'success', 'warning', 'error'], table: { category: 'Appearance' } },
     label: { control: 'text', table: { category: 'Content' } },
   },
-  args: { value: 64, size: 'md', tone: 'primary', label: 'Upload progress' },
+  args: { value: 64, max: 100, size: 'md', tone: 'primary', label: 'Upload progress' },
 };
 export default meta;
 

@@ -28,6 +28,7 @@ const meta = {
     autoRow: { control: 'boolean', name: 'auto empty row' },
     density: { control: 'inline-radio', options: ['comfortable', 'compact'], description: 'Row/header height + cell padding', table: { category: 'Layout' } },
     loading: { control: 'boolean', description: 'Show skeleton rows instead of data', table: { category: 'State' } },
+    loadingRows: { control: { type: 'number', min: 1, max: 12, step: 1 }, name: 'loading rows', description: 'How many skeleton rows to render while loading', table: { category: 'State' } },
     stickyHeader: { control: 'boolean', name: 'sticky header', description: 'Pin the header while the body scrolls (pair with maxHeight)', table: { category: 'Layout' } },
     flagCustom: { control: 'boolean', name: 'flag custom names', description: 'Ring the Name cell when the entry is not in the frequently-used list' },
     dragIcon:      { control: 'text', tpIcon: true, name: 'Drag handle icon', table: { category: 'Icons' } },
@@ -37,7 +38,7 @@ const meta = {
     actionIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'Action icon style', description: "Shared icon style for the action glyphs. 'default' keeps each glyph's own style (drag/delete/duplicate linear, more bold).", table: { category: 'Icons' } },
     actionIconFamily:  { control: 'text', name: 'Action icon family', description: 'Override the auto-resolved CDN family for the action glyphs (blank = auto)', table: { category: 'Icons' } },
   },
-  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy', actionIconVariant: 'default', actionIconFamily: '' },
+  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, loadingRows: 4, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy', actionIconVariant: 'default', actionIconFamily: '' },
 };
 
 export default meta;
@@ -54,6 +55,7 @@ const ctTransform = (_code, ctx) => {
   if (a.autoRow === false) lines.push('  autoRow={false}');
   if (a.density && a.density !== 'comfortable') lines.push(`  density="${a.density}"`);
   if (a.loading) lines.push('  loading');
+  if (a.loading && a.loadingRows && a.loadingRows !== 4) lines.push(`  loadingRows={${a.loadingRows}}`);
   if (a.stickyHeader) lines.push('  stickyHeader\n  maxHeight={320}');
   if (a.actionIconVariant && a.actionIconVariant !== 'default') lines.push(`  iconVariant="${a.actionIconVariant}"`);
   if (a.actionIconFamily) lines.push(`  iconFamily="${a.actionIconFamily}"`);

@@ -18,7 +18,20 @@ const meta = {
       },
     },
   },
-  argTypes: { size: { control: 'inline-radio', options: ['sm', 'md'] } },
+  argTypes: {
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      description: 'Key-cap size.',
+      table: { category: 'Appearance' },
+    },
+    children: {
+      control: 'text',
+      name: 'children (key text)',
+      description: 'The key / glyph to render inside the cap (e.g. ⌘, K, Esc, ↵).',
+      table: { category: 'Content' },
+    },
+  },
   args: { size: 'md', children: 'K' },
 };
 export default meta;

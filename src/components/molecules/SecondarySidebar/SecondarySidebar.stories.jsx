@@ -93,10 +93,14 @@ const meta = {
       description: "Pill / padding / label sizing",
       table: { category: "Appearance" },
     },
+    // Dead in these stories: the empty state only renders when the search
+    // filter matches nothing, but every story runs with search disabled and a
+    // non-empty list, so this control can never change the preview. Kept
+    // documented but removed from the panel.
     emptyText: {
       control: "text",
-      description: "No-matches message",
-      table: { category: "Content" },
+      description: "No-matches message (shown only when the search filter matches nothing)",
+      table: { category: "Content", disable: true },
     },
     collapsedWidth: {
       control: { type: "number", min: 64, max: 100, step: 4 },
@@ -119,23 +123,28 @@ const meta = {
       description: "Badge display variant",
       table: { category: "Badge" },
     },
+    // Icon controls are dead in these stories: every story renders the rail
+    // collapsed with `search={false}`, `showCollapseToggle={false}` and a flat
+    // item list (no children), so the search input, collapse toggle and section
+    // caret are never rendered and these icons can't change the preview. Kept
+    // documented but removed from the panel.
     searchIcon: {
       control: "text",
       tpIcon: true,
-      description: "Icon shown inside the search input",
-      table: { category: "Icons" },
+      description: "Icon shown inside the search input (visible in expanded mode with search enabled)",
+      table: { category: "Icons", disable: true },
     },
     collapseIcon: {
       control: "text",
       tpIcon: true,
-      description: "Icon for the collapse/expand toggle button",
-      table: { category: "Icons" },
+      description: "Icon for the collapse/expand toggle button (visible when showCollapseToggle)",
+      table: { category: "Icons", disable: true },
     },
     caretIcon: {
       control: "text",
       tpIcon: true,
-      description: "Caret icon on expandable section rows",
-      table: { category: "Icons" },
+      description: "Caret icon on expandable section rows (visible for items with children)",
+      table: { category: "Icons", disable: true },
     },
   },
   args: {

@@ -25,20 +25,74 @@ const meta = {
 };
 export default meta;
 
+// Build an accurate "Show code" snippet from the Playground controls.
+const menuCode = ({ side, align, sideOffset, triggerLabel, triggerVariant, item1Icon, item2Icon, item2Shortcut, showSeparator, dangerIcon, dangerDisabled }) => {
+  const contentProps = [];
+  if (side && side !== 'bottom') contentProps.push(`side="${side}"`);
+  if (align && align !== 'start') contentProps.push(`align="${align}"`);
+  if (sideOffset != null && sideOffset !== 6) contentProps.push(`sideOffset={${sideOffset}}`);
+  const cp = contentProps.length ? ` ${contentProps.join(' ')}` : '';
+  return [
+    `<Menu>`,
+    `  <MenuTrigger asChild>`,
+    `    <Button variant="${triggerVariant}" theme="neutral">${triggerLabel}</Button>`,
+    `  </MenuTrigger>`,
+    `  <MenuContent${cp}>`,
+    `    <MenuItem icon="${item1Icon}" onSelect={() => {}}>Edit</MenuItem>`,
+    `    <MenuItem icon="${item2Icon}"${item2Shortcut ? ` shortcut="${item2Shortcut}"` : ''} onSelect={() => {}}>Duplicate</MenuItem>`,
+    showSeparator ? `    <MenuSeparator />` : null,
+    `    <MenuItem icon="${dangerIcon}" danger${dangerDisabled ? ' disabled' : ''} onSelect={() => {}}>Delete</MenuItem>`,
+    `  </MenuContent>`,
+    `</Menu>`,
+  ].filter(Boolean).join('\n');
+};
+
+// ── Playground — every knob lives in the Controls panel ───────────────────────
 export const Playground = {
-  render: () => (
-    <Menu>
-      <MenuTrigger asChild>
-        <Button variant="outline" theme="neutral" rightIcon={<TPLibraryIcon name="chevron-down" size={16} />}>Actions</Button>
-      </MenuTrigger>
-      <MenuContent>
-        <MenuItem icon="edit-2" onSelect={() => {}}>Edit</MenuItem>
-        <MenuItem icon="copy" shortcut="⌘D" onSelect={() => {}}>Duplicate</MenuItem>
-        <MenuItem icon="document-download" onSelect={() => {}}>Export</MenuItem>
-        <MenuSeparator />
-        <MenuItem icon="trash" danger onSelect={() => {}}>Delete</MenuItem>
-      </MenuContent>
-    </Menu>
+  args: {
+    defaultOpen: false,
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 6,
+    triggerLabel: 'Actions',
+    triggerVariant: 'outline',
+    item1Icon: 'edit-2',
+    item2Icon: 'copy',
+    item2Shortcut: '⌘D',
+    showSeparator: true,
+    dangerIcon: 'trash',
+    dangerDisabled: false,
+  },
+  argTypes: {
+    defaultOpen:    { control: 'boolean', name: 'open by default', description: 'Render the menu open on mount (uncontrolled)', table: { category: 'Behavior' } },
+    side:           { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'], description: 'Preferred side of the trigger to place the surface (collision-aware)', table: { category: 'Position' } },
+    align:          { control: 'inline-radio', options: ['start', 'center', 'end'], description: 'Alignment of the surface along the chosen side', table: { category: 'Position' } },
+    sideOffset:     { control: { type: 'number', min: 0, max: 32, step: 1 }, name: 'side offset', description: 'Gap in px between trigger and surface', table: { category: 'Position' } },
+    triggerLabel:   { control: 'text', name: 'trigger label', table: { category: 'Trigger' } },
+    triggerVariant: { control: 'inline-radio', options: ['solid', 'outline', 'ghost', 'tonal', 'link'], name: 'trigger variant', table: { category: 'Trigger' } },
+    item1Icon:      { control: 'text', tpIcon: true, name: 'item 1 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)', table: { category: 'Items' } },
+    item2Icon:      { control: 'text', tpIcon: true, name: 'item 2 · icon', description: 'Pick from the Tesseract Icons panel (or type a name)', table: { category: 'Items' } },
+    item2Shortcut:  { control: 'text', name: 'item 2 · shortcut', description: 'Right-aligned shortcut hint, e.g. ⌘D', table: { category: 'Items' } },
+    showSeparator:  { control: 'boolean', name: 'separator', description: 'Show a divider before the danger item', table: { category: 'Items' } },
+    dangerIcon:     { control: 'text', tpIcon: true, name: 'danger · icon', table: { category: 'Items' } },
+    dangerDisabled: { control: 'boolean', name: 'danger · disabled', description: 'Disable the destructive item', table: { category: 'Items' } },
+  },
+  parameters: { docs: { source: { transform: (_code, ctx) => menuCode(ctx.args) } } },
+  render: ({ defaultOpen, side, align, sideOffset, triggerLabel, triggerVariant, item1Icon, item2Icon, item2Shortcut, showSeparator, dangerIcon, dangerDisabled }) => (
+    <div style={{ padding: 40, display: 'flex', justifyContent: 'center' }}>
+      <Menu defaultOpen={defaultOpen}>
+        <MenuTrigger asChild>
+          <Button variant={triggerVariant} theme="neutral" rightIcon={<TPLibraryIcon name="chevron-down" size={16} />}>{triggerLabel}</Button>
+        </MenuTrigger>
+        <MenuContent side={side} align={align} sideOffset={Number(sideOffset)}>
+          <MenuItem icon={item1Icon} onSelect={() => {}}>Edit</MenuItem>
+          <MenuItem icon={item2Icon} shortcut={item2Shortcut || undefined} onSelect={() => {}}>Duplicate</MenuItem>
+          <MenuItem icon="document-download" onSelect={() => {}}>Export</MenuItem>
+          {showSeparator && <MenuSeparator />}
+          <MenuItem icon={dangerIcon} danger disabled={dangerDisabled} onSelect={() => {}}>Delete</MenuItem>
+        </MenuContent>
+      </Menu>
+    </div>
   ),
 };
 

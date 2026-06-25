@@ -26,6 +26,7 @@ const meta = {
     pageCount: { control: { type: 'number', min: 1 }, table: { category: 'Content' } },
     siblingCount: { control: { type: 'number', min: 0, max: 3 }, table: { category: 'Behaviour' } },
     size: { control: 'inline-radio', options: ['sm', 'md'], table: { category: 'Appearance' } },
+    onPageChange: { control: false, action: 'pageChange', description: 'Fires with the next 0-indexed page when a page / prev / next button is clicked', table: { category: 'State' } },
   },
   args: { pageCount: 12, siblingCount: 1, size: 'md' },
 };
@@ -34,7 +35,13 @@ export default meta;
 export const Playground = {
   render: (a) => {
     const [page, setPage] = React.useState(3);
-    return <Pagination {...a} page={page} onPageChange={setPage} />;
+    return (
+      <Pagination
+        {...a}
+        page={page}
+        onPageChange={(p) => { setPage(p); a.onPageChange?.(p); }}
+      />
+    );
   },
 };
 

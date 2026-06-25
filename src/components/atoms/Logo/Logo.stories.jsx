@@ -29,8 +29,9 @@ const meta = {
     width: { control: 'number', description: 'Width in px; height then derives from the aspect ratio. Wins over `height`.', table: { category: 'Sizing' } },
     maxWidth: { control: 'number', description: 'Optional cap on rendered width (px).', table: { category: 'Sizing' } },
     basePath: { control: 'text', description: 'Prefix for the brand SVG asset paths (CDN / alt root).', table: { category: 'Assets' } },
+    title: { control: 'text', description: 'Accessible label (aria-label). Blank = defaults to the brand name.', table: { category: 'Accessibility' } },
   },
-  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', color: '', height: 32, width: undefined, maxWidth: undefined, basePath: '/brand' },
+  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', color: '', height: 32, width: undefined, maxWidth: undefined, basePath: '/brand', title: '' },
 };
 
 export default meta;

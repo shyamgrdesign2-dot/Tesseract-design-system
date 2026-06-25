@@ -2,6 +2,8 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescri
 import { Button } from '@/src/components/atoms/Button';
 import { InputBox } from '@/src/components/atoms/Input/InputBox';
 
+const SIDES = ['left', 'right', 'top', 'bottom'];
+
 const meta = {
   title: 'Molecules/Sheet',
   component: Sheet,
@@ -22,14 +24,39 @@ const meta = {
       },
     },
   },
+  // These controls drive SheetContent in the Playground render below.
+  argTypes: {
+    side: {
+      control: 'inline-radio',
+      options: SIDES,
+      description: 'Edge the sheet slides in from.',
+      table: { category: 'SheetContent', defaultValue: { summary: 'right' } },
+    },
+    showClose: {
+      control: 'boolean',
+      description: 'Render the built-in close (X) button in the corner.',
+      table: { category: 'SheetContent', defaultValue: { summary: 'true' } },
+    },
+    closeIcon: {
+      control: 'text',
+      description: 'TPLibraryIcon name for the built-in close button glyph.',
+      if: { arg: 'showClose' },
+      table: { category: 'SheetContent', defaultValue: { summary: 'close-square' } },
+    },
+  },
+  args: {
+    side: 'right',
+    showClose: true,
+    closeIcon: 'close-square',
+  },
 };
 export default meta;
 
 export const Playground = {
-  render: () => (
+  render: ({ side, showClose, closeIcon }) => (
     <Sheet>
       <SheetTrigger asChild><Button variant="outline" theme="neutral">Open filters</Button></SheetTrigger>
-      <SheetContent side="right">
+      <SheetContent side={side} showClose={showClose} closeIcon={closeIcon}>
         <SheetHeader>
           <SheetTitle>Filters</SheetTitle>
           <SheetDescription>Refine the patient list.</SheetDescription>
@@ -46,9 +73,10 @@ export const Playground = {
 
 /** Each side. */
 export const Sides = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-      {['left', 'right', 'top', 'bottom'].map((side) => (
+      {SIDES.map((side) => (
         <Sheet key={side}>
           <SheetTrigger asChild><Button variant="tonal" theme="neutral" style={{ textTransform: 'capitalize' }}>{side}</Button></SheetTrigger>
           <SheetContent side={side}>

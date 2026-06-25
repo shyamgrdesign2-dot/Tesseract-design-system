@@ -93,6 +93,7 @@ const meta = {
     showBackButton: { control: 'boolean', name: 'with back button', table: { category: 'Content' } },
     backIcon:        { control: 'text', tpIcon: true, name: 'back icon', table: { category: 'Content' } },
     backIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'back icon style', table: { category: 'Content' } },
+    onBack:          { control: false, action: 'back', name: 'onBack', description: 'Fires when the back button is clicked', table: { category: 'Content' } },
 
     // ── Appearance ──  (pattern opacity is fixed at 100%, no control)
     tone:         { control: 'inline-radio', options: TONES, description: 'Gradient tone (token-only); violet = default look', table: { category: 'Appearance' } },
@@ -235,6 +236,7 @@ export const Playground = {
       showBackButton={args.showBackButton}
       backIcon={args.backIcon}
       backIconVariant={args.backIconVariant}
+      onBack={args.onBack}
       pattern={args.pattern}
       actions={renderActions(args)}
     />

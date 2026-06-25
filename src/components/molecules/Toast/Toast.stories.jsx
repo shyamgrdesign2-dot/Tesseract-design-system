@@ -36,6 +36,8 @@ const meta = {
     closeIcon:   { control: 'text', tpIcon: true, name: 'close icon', description: 'Library icon name to override the dismiss glyph (blank = close-square)', if: { arg: 'dismissible' }, table: { category: 'Parts' } },
     progress:    { control: 'boolean', name: 'with progress bar', description: 'Depleting bar over `duration` (needs duration > 0)', table: { category: 'Parts' } },
     duration:    { control: { type: 'number', min: 0, step: 500 }, name: 'duration (ms)', description: '0 = persist; > 0 auto-dismisses', table: { category: 'Parts' } },
+    maxWidth:    { control: { type: 'number', min: 120, step: 20 }, name: 'max width (px)', description: 'Cap the toast width in px (component default is 60%)', table: { category: 'Sizing' } },
+    lineClamp:   { control: { type: 'number', min: 1, max: 4, step: 1 }, name: 'line clamp', description: 'Max lines for the title-only clamp before truncating (default 2)', table: { category: 'Sizing' } },
     iconName:    { control: 'text', tpIcon: true, name: 'icon', description: 'CDN icon name to override the status icon (blank = none)', table: { category: 'Icons' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style for the override icon', table: { category: 'Icons' } },
     iconFamily:  { control: 'text', name: 'icon family', description: 'Override the auto-resolved CDN family (blank = auto)', table: { category: 'Icons' } },
@@ -57,6 +59,8 @@ const meta = {
     closeIcon: '',
     progress: false,
     duration: 0,
+    maxWidth: 480,
+    lineClamp: 2,
     iconName: '',
     iconVariant: 'linear',
     iconFamily: '',
@@ -83,7 +87,7 @@ const renderAction = (on, variant, label, surface = 'dark') =>
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const toastCode = ({ status = 'info', surface = 'dark', title = '', withSubtext, subtext = '', showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, withCTA, action, actionLabel }) => {
+const toastCode = ({ status = 'info', surface = 'dark', title = '', withSubtext, subtext = '', showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, maxWidth, lineClamp, withCTA, action, actionLabel }) => {
   const btnSurface = surface === 'light' ? 'light' : 'dark';
   const lines = [`  status="${status}"`];
   if (surface !== 'dark') lines.push(`  surface="${surface}"`);
@@ -92,6 +96,8 @@ const toastCode = ({ status = 'info', surface = 'dark', title = '', withSubtext,
   if (iconName) lines.push(`  icon={${iconJsx(iconName, iconVariant, iconFamily, withSubtext ? 42 : 24)}}`);
   if (dismissible) lines.push('  dismissible');
   if (dismissible && closeIcon) lines.push(`  closeIcon="${closeIcon}"`);
+  if (maxWidth) lines.push(`  maxWidth={${maxWidth}}`);
+  if (lineClamp && lineClamp !== 2) lines.push(`  lineClamp={${lineClamp}}`);
   if (duration > 0) lines.push(`  duration={${duration}}`);
   if (progress && duration > 0) lines.push('  progress');
   if (withCTA) lines.push(`  action={<Button surface="${btnSurface}" variant="${action}" size="sm">${actionLabel || 'Action'}</Button>}`);
@@ -100,7 +106,7 @@ const toastCode = ({ status = 'info', surface = 'dark', title = '', withSubtext,
 };
 
 export const Playground = {
-  render: ({ status, surface, title, withSubtext, subtext, showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, withCTA, action, actionLabel }) => (
+  render: ({ status, surface, title, withSubtext, subtext, showIcon, iconName, iconVariant, iconFamily, dismissible, closeIcon, progress, duration, maxWidth, lineClamp, withCTA, action, actionLabel }) => (
     <div style={{ width: '100%' }}>
       <Toast
         status={status}
@@ -112,6 +118,8 @@ export const Playground = {
         closeIcon={closeIcon || undefined}
         progress={progress}
         duration={duration}
+        maxWidth={maxWidth || undefined}
+        lineClamp={lineClamp || undefined}
         action={renderAction(withCTA, action, actionLabel, surface === 'light' ? 'light' : 'dark')}
       >
         {withSubtext ? (subtext || undefined) : undefined}

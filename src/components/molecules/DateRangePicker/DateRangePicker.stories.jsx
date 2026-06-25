@@ -40,6 +40,7 @@ const meta = {
     showFooter: { control: 'boolean', name: 'show footer', description: 'Show the Clear · Cancel · Apply footer', table: { category: 'Footer' } },
     commitMode: { control: 'inline-radio', options: ['outside-click', 'apply'], name: 'commit mode', description: 'When the selection commits', table: { category: 'Footer' } },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'], description: 'Field height — sm · md · lg', table: { category: 'Field' } },
+    fullWidth: { control: 'boolean', name: 'full width', description: 'Stretch the field to fill its container (vs shrink to content)', table: { category: 'Field' } },
     label: { control: 'text', table: { category: 'Field' } },
     helperText: { control: 'text', name: 'helper text', table: { category: 'Field' } },
     status: { control: 'inline-radio', options: [undefined, 'error', 'success', 'warning'], table: { category: 'Field' } },
@@ -52,7 +53,7 @@ const meta = {
     value: { control: false },
     onChange: { control: false },
   },
-  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '', iconVariant: 'linear', iconFamily: '', locale: 'en-IN', weekStartsOn: 1, applyLabel: 'Apply', cancelLabel: 'Cancel', clearLabel: 'Clear', showFooter: true, commitMode: 'outside-click' },
+  args: { mode: 'single', months: 2, showPresets: true, use12Hour: true, minuteStep: 5, size: 'md', fullWidth: true, label: '', helperText: '', status: undefined, required: false, disabled: false, iconName: '', iconVariant: 'linear', iconFamily: '', locale: 'en-IN', weekStartsOn: 1, applyLabel: 'Apply', cancelLabel: 'Cancel', clearLabel: 'Clear', showFooter: true, commitMode: 'outside-click' },
 };
 
 export default meta;
@@ -61,7 +62,7 @@ export default meta;
 // Only non-default props are emitted so the snippet stays minimal.
 const datePickerCode = ({
   mode = 'single', months = 2, showPresets = true, use12Hour = true, minuteStep = 5,
-  size = 'md', label, helperText, status, required, disabled, placeholder,
+  size = 'md', fullWidth = true, label, helperText, status, required, disabled, placeholder,
   locale = 'en-IN', weekStartsOn = 1,
   applyLabel = 'Apply', cancelLabel = 'Cancel', clearLabel = 'Clear', showFooter = true,
   commitMode = 'outside-click',
@@ -73,6 +74,7 @@ const datePickerCode = ({
   if ((mode === 'time' || mode === 'datetime') && !use12Hour) lines.push('  use12Hour={false}');
   if ((mode === 'time' || mode === 'datetime') && minuteStep !== 5) lines.push(`  minuteStep={${minuteStep}}`);
   if (size !== 'md') lines.push(`  size="${size}"`);
+  if (fullWidth === false) lines.push('  fullWidth={false}');
   if (label) lines.push(`  label="${label}"`);
   if (helperText) lines.push(`  helperText="${helperText}"`);
   if (status) lines.push(`  status="${status}"`);

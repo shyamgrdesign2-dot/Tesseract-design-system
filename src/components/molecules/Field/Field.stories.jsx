@@ -6,6 +6,35 @@ const meta = {
   title: 'Molecules/Field',
   component: Field,
   tags: ['autodocs'],
+  argTypes: {
+    orientation: {
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      description: 'Layout of label vs. control — `vertical` stacks them, `horizontal` places the label beside the control (e.g. a settings toggle/checkbox row).',
+    },
+    invalid: {
+      control: 'boolean',
+      description: 'Marks the field invalid — sets `data-invalid`, wires `aria-invalid`/`aria-describedby` onto the control, and reveals the FieldError message.',
+    },
+    required: {
+      control: 'boolean',
+      description: 'Marks the field required — renders the `*` marker on FieldLabel and sets `aria-required` on the control.',
+    },
+    // Story-helper args (not Field root props) that drive the Playground render():
+    label: { control: 'text', description: '(Story helper) FieldLabel text.' },
+    placeholder: { control: 'text', description: '(Story helper) InputBox placeholder.' },
+    description: { control: 'text', description: '(Story helper) FieldDescription text (hidden when empty).' },
+    error: { control: 'text', description: '(Story helper) FieldError message (shown only when `invalid`).' },
+  },
+  args: {
+    orientation: 'vertical',
+    invalid: false,
+    required: true,
+    label: 'Email address',
+    placeholder: 'you@example.com',
+    description: 'We’ll never share it.',
+    error: 'Enter a valid email address.',
+  },
   parameters: {
     layout: 'padded',
     docs: {
@@ -26,17 +55,19 @@ const meta = {
 export default meta;
 
 export const Playground = {
-  render: () => (
-    <Field required style={{ maxWidth: 360 }}>
-      <FieldLabel>Email address</FieldLabel>
-      <FieldControl><InputBox placeholder="you@example.com" fullWidth /></FieldControl>
-      <FieldDescription>We’ll never share it.</FieldDescription>
+  render: ({ orientation, invalid, required, label, placeholder, description, error }) => (
+    <Field orientation={orientation} invalid={invalid} required={required} style={{ maxWidth: 360 }}>
+      <FieldLabel>{label}</FieldLabel>
+      <FieldControl><InputBox placeholder={placeholder} status={invalid ? 'error' : undefined} fullWidth /></FieldControl>
+      {description ? <FieldDescription>{description}</FieldDescription> : null}
+      {invalid ? <FieldError>{error}</FieldError> : null}
     </Field>
   ),
 };
 
 /** Invalid state — FieldError shows and the control gets aria-invalid + describedby. */
 export const Invalid = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Field invalid required style={{ maxWidth: 360 }}>
       <FieldLabel>Email address</FieldLabel>
@@ -48,6 +79,7 @@ export const Invalid = {
 
 /** Horizontal — label beside the control (e.g. a settings toggle/checkbox row). */
 export const Horizontal = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Field orientation="horizontal" style={{ maxWidth: 420 }}>
       <FieldControl><Checkbox /></FieldControl>

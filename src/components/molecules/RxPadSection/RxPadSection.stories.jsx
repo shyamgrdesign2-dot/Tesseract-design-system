@@ -29,6 +29,7 @@ const meta = {
     title:        { control: 'text', description: 'Section title in the header.' },
     subtitle:     { control: 'text', name: 'Subtitle', description: 'Secondary line under the title (blank = none).', table: { category: 'Header' } },
     icon:         { control: 'text', tpIcon: true, name: 'Header icon' },
+    iconColor:    { control: 'color', name: 'Header icon colour', description: 'Colour of the header icon chip.', table: { category: 'Header' } },
     repeatIcon:   { control: 'text', tpIcon: true, name: 'Repeat icon' },
     templateIcon: { control: 'text', tpIcon: true, name: 'Template icon' },
     saveIcon:     { control: 'text', tpIcon: true, name: 'Save icon' },
@@ -40,6 +41,8 @@ const meta = {
     duplicateIcon:{ control: 'text', tpIcon: true, name: 'Duplicate icon' },
     mode:         { control: 'inline-radio', options: ['table-first', 'search-first'], description: 'Layout: body above the search, or search above the body' },
     bodyType:     { control: 'inline-radio', options: ['table', 'text', 'fields'], description: 'Body renderer: ClinicalTable · free-text · labelled fields' },
+    search:       { control: 'boolean', name: 'Show search box', description: 'Show the search-&-add input (table body, search-first mode only).', table: { category: 'Body' } },
+    searchPlaceholder: { control: 'text', name: 'Search/body placeholder', description: 'Placeholder for the search box / free-text body.', table: { category: 'Body' } },
     showRepeat:   { control: 'boolean', description: 'Show the default Repeat header action' },
     showTemplate: { control: 'boolean', description: 'Show the default Template header action' }, showSave:   { control: 'boolean', description: 'Show the default Save header action' }, showClear: { control: 'boolean', description: 'Show the default Clear/Erase header action' },
     loading:      { control: 'boolean', name: 'Loading', description: 'Show skeleton rows instead of the body.', table: { category: 'State' } },
@@ -47,12 +50,13 @@ const meta = {
     defaultCollapsed: { control: 'boolean', name: 'Start collapsed', if: { arg: 'collapsible' }, table: { category: 'State' } },
   },
   args: {
-    title: 'Symptoms', subtitle: '', icon: 'virus', mode: 'table-first', bodyType: 'table',
+    title: 'Symptoms', subtitle: '', icon: 'virus', iconColor: 'var(--tesseract-violet-500)',
+    mode: 'table-first', bodyType: 'table', search: true, searchPlaceholder: '',
     showRepeat: true, showTemplate: true, showSave: true, showClear: true,
     loading: false, collapsible: false, defaultCollapsed: false,
     repeatIcon: 'refresh-arrow', templateIcon: 'grid-5',
     saveIcon: 'ram', clearIcon: 'eraser', searchIcon: 'search-normal-1',
-    dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy',
+    dragIcon: 'menu', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy',
   },
 };
 export default meta;

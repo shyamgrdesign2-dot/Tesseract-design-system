@@ -52,8 +52,18 @@ const meta = {
       name: "corner radius",
       description: "px number, or 'pill' / 'sharp' — outer + indicator radius (blank = default)",
     },
+    indicatorColor: {
+      control: "color",
+      name: "indicator color",
+      description: "Override the sliding indicator's colour (blank = theme default)",
+    },
     fullWidth: { control: "boolean", description: "Stretch segments to fill the container width" },
     disabled: { control: "boolean", description: "Disable the whole control (per-option disable lives on `options`)" },
+    onValueChange: {
+      table: { category: "Events" },
+      control: false,
+      description: "Fired with the newly-selected option value (stories manage selection internally)",
+    },
     // ── Icons: one shared set of controls applied to every option ──
     withIcons: { control: "boolean", name: "with icons", description: "Show a leading icon on every segment", table: { category: "Icons" } },
     opt1Icon: { control: "text", tpIcon: true, name: "icon · Monthly", description: "CDN icon name for the first option", if: { arg: "withIcons" }, table: { category: "Icons" } },
@@ -106,6 +116,7 @@ const scCode = ({
   theme = "neutral",
   orientation = "horizontal",
   radius,
+  indicatorColor,
   fullWidth = false,
   disabled = false,
   withIcons = false,
@@ -119,6 +130,7 @@ const scCode = ({
   if (orientation !== "horizontal") lines.push(`  orientation="${orientation}"`);
   const rv = radiusValue(radius);
   if (rv != null) lines.push(typeof rv === "number" ? `  radius={${rv}}` : `  radius="${rv}"`);
+  if (indicatorColor) lines.push(`  indicatorColor="${indicatorColor}"`);
   if (fullWidth) lines.push("  fullWidth");
   if (disabled) lines.push("  disabled");
   if (withIcons) {

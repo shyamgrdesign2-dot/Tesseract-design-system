@@ -38,6 +38,7 @@ const meta = {
     size: { control: 'inline-radio', options: SIZES, description: 'sm · md · lg', table: { category: 'Style' } },
     selected: { control: 'boolean', name: 'selected (active)', description: 'First-class active/toggle state — stronger wash + 500 accent border', table: { category: 'State' } },
     disabled: { control: 'boolean', table: { category: 'State' } },
+    clickable: { control: 'boolean', name: 'clickable (onClick)', description: 'Makes the chip act as a button — button role, hover/press affordance, aria-pressed when selected', table: { category: 'State' } },
     removable: { control: 'boolean', name: 'with dismiss (×)', table: { category: 'State' } },
     removePosition: { control: 'inline-radio', options: ['right', 'left'], name: 'dismiss side', table: { category: 'State' } },
     radius: { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'corner radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Layout' } },
@@ -53,6 +54,7 @@ const meta = {
     size: 'md',
     selected: false,
     disabled: false,
+    clickable: false,
     removable: false,
     removePosition: 'right',
     radius: 'default',
@@ -83,13 +85,14 @@ const Row = ({ children }) => (
 const iconJsx = (name, variant, family, size) =>
   `<TPIcon name="${name}"${variant && variant !== 'linear' ? ` variant="${variant}"` : ''}${family ? ` family="${family}"` : ''} size={${size}} />`;
 
-const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md', selected, radius, disabled, removable, removePosition, leftIcon, rightIcon, iconVariant, iconFamily }) => {
+const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md', selected, radius, disabled, clickable, removable, removePosition, leftIcon, rightIcon, iconVariant, iconFamily }) => {
   const px = ICON_PX[size] || 14;
   const lines = [`  label="${label}"`, `  color="${color}"`, `  variant="${variant}"`, `  size="${size}"`];
   if (selected) lines.push('  selected');
   const rv = radiusValue(radius);
   if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   if (disabled) lines.push('  disabled');
+  if (clickable) lines.push('  onClick={() => {}}');
   if (removable) lines.push(`  onDelete={() => {}}${removePosition === 'left' ? '\n  removePosition="left"' : ''}`);
   if (leftIcon) lines.push(`  icon={${iconJsx(leftIcon, iconVariant, iconFamily, px)}}`);
   if (rightIcon) lines.push(`  rightIcon={${iconJsx(rightIcon, iconVariant, iconFamily, px)}}`);
@@ -98,12 +101,13 @@ const chipCode = ({ label = '', color = 'primary', variant = 'soft', size = 'md'
 
 export const Playground = {
   // blank radius keeps the default token look; "pill"/"sharp"/numbers reshape via resolveRadius.
-  render: ({ leftIcon, rightIcon, removable, iconVariant, iconFamily, radius, ...args }) => (
+  render: ({ leftIcon, rightIcon, removable, clickable, iconVariant, iconFamily, radius, ...args }) => (
     <Chip
       {...args}
       radius={radiusValue(radius)}
       icon={glyphFor(leftIcon, args.size, iconVariant, iconFamily)}
       rightIcon={glyphFor(rightIcon, args.size, iconVariant, iconFamily)}
+      onClick={clickable ? () => {} : undefined}
       onDelete={removable ? () => {} : undefined}
     />
   ),

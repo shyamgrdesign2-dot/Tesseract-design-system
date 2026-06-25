@@ -90,10 +90,13 @@ const meta = {
     chips: { control: 'boolean', description: 'Multi: show selected as removable chips in the trigger', table: { category: 'Selection' } },
     searchable: { control: 'boolean', description: 'Add an in-popover search field that filters options (and sections)', table: { category: 'Behaviour' } },
     searchPlaceholder: { control: 'text', name: 'search placeholder', description: 'Placeholder for the in-popover search field', if: { arg: 'searchable' }, table: { category: 'Behaviour' } },
+    editable: { control: 'boolean', description: 'Make the trigger a typeahead input (combobox) — type to filter', table: { category: 'Behaviour' } },
+    allowCustom: { control: 'boolean', name: 'allow custom', description: 'Editable: offer an "Add ‹query›" row when nothing matches', if: { arg: 'editable' }, table: { category: 'Behaviour' } },
     clearable: { control: 'boolean', name: 'clearable', description: 'Single-select: show a clear (×) affordance to reset the value', table: { category: 'Behaviour' } },
     loading: { control: 'boolean', name: 'loading', description: 'Show a loading row in the menu (async option fetch)', table: { category: 'Behaviour' } },
     emptyLabel: { control: 'text', name: 'empty label', description: 'Text shown when no options match', table: { category: 'Behaviour' } },
     placement: { control: 'inline-radio', options: ['auto', 'bottom', 'top'], name: 'placement', description: 'Menu placement relative to the trigger', table: { category: 'Layout' } },
+    maxMenuHeight: { control: 'number', name: 'max menu height', description: 'Menu max-height in px before it scrolls', table: { category: 'Layout' } },
     showShortcuts: { control: 'boolean', name: 'item shortcuts', description: 'Show each option\'s `shortcut` hint on its row', table: { category: 'Behaviour' } },
     footerHint: { control: 'boolean', name: 'footer shortcut bar', description: 'Show a keyboard-hint bar at the bottom of the menu', table: { category: 'Behaviour' } },
     withActions: { control: 'boolean', name: 'footer CTAs', description: 'Render the footer Button CTAs (primary / secondary / tertiary)', table: { category: 'Footer' } },
@@ -105,8 +108,12 @@ const meta = {
     twoLine: { control: 'boolean', name: 'title + subtitle', description: 'Render each option as a two-line title + `subtitle`', table: { category: 'Content' } },
     withIcons: { control: 'boolean', name: 'item icons', description: 'Show each option\'s leading icon', table: { category: 'Content' } },
     iconVariant: { control: 'select', options: ICON_VARIANTS, name: 'icon style', description: 'Icon style applied to the per-item icons and footer CTA icons', table: { category: 'Icons' } },
+    groupLabel: { control: 'text', name: 'group label', description: 'Sticky heading shown above a flat option list', table: { category: 'Content' } },
+    chevron: { control: 'boolean', description: 'Show the trigger chevron affordance', table: { category: 'Content' } },
     label: { control: 'text', description: 'Field label above the trigger', table: { category: 'Content' } },
     placeholder: { control: 'text', description: 'Trigger text shown when nothing is selected', table: { category: 'Content' } },
+    variant: { control: 'inline-radio', options: ['default', 'seamless'], description: 'Trigger style — `seamless` is a borderless, container-filling trigger (table cells)', table: { category: 'State' } },
+    status: { control: 'inline-radio', options: [undefined, 'success', 'error', 'warning'], description: 'Status ring colour (most visible with `variant="seamless"`)', table: { category: 'State' } },
     disabled: { control: 'boolean', description: 'Disable the trigger', table: { category: 'State' } },
     value: { control: false },
     onChange: { control: false },
@@ -116,11 +123,14 @@ const meta = {
     optionControl: 'none',
     chips: false,
     searchable: false,
+    editable: false,
+    allowCustom: false,
     searchPlaceholder: 'Search…',
     clearable: false,
     loading: false,
     emptyLabel: 'No matches',
     placement: 'auto',
+    maxMenuHeight: 340,
     showShortcuts: false,
     footerHint: false,
     withActions: false,
@@ -132,6 +142,10 @@ const meta = {
     twoLine: true,
     withIcons: true,
     iconVariant: 'linear',
+    groupLabel: '',
+    chevron: true,
+    variant: 'default',
+    status: undefined,
     label: 'Department',
     placeholder: 'Select department…',
     disabled: false,
@@ -151,10 +165,17 @@ function dropdownCode(a) {
   if (a.chips) lines.push('  chips');
   if (a.searchable) lines.push('  searchable');
   if (a.searchPlaceholder && a.searchPlaceholder !== 'Search…') lines.push(`  searchPlaceholder="${a.searchPlaceholder}"`);
+  if (a.editable) lines.push('  editable');
+  if (a.allowCustom) lines.push('  allowCustom');
+  if (a.chevron === false) lines.push('  chevron={false}');
+  if (a.variant && a.variant !== 'default') lines.push(`  variant="${a.variant}"`);
+  if (a.status) lines.push(`  status="${a.status}"`);
+  if (a.groupLabel) lines.push(`  groupLabel="${a.groupLabel}"`);
   if (a.clearable) lines.push('  clearable');
   if (a.loading) lines.push('  loading');
   if (a.emptyLabel && a.emptyLabel !== 'No matches') lines.push(`  emptyLabel="${a.emptyLabel}"`);
   if (a.placement && a.placement !== 'auto') lines.push(`  placement="${a.placement}"`);
+  if (a.maxMenuHeight && a.maxMenuHeight !== 340) lines.push(`  maxMenuHeight={${a.maxMenuHeight}}`);
   if (a.showShortcuts) lines.push('  showShortcuts');
   if (a.footerHint) lines.push('  footerHint');
   if (a.actionsAlign && a.actionsAlign !== 'right' && a.withActions) lines.push(`  actionsAlign="${a.actionsAlign}"`);

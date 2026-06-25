@@ -26,9 +26,26 @@ const meta = {
     status: { control: 'inline-radio', options: ['default', 'error', 'success'] },
     mask: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    groupSize: { control: { type: 'number', min: 0 } },
+    autoFocus: { control: 'boolean', description: 'Focus the first box on mount' },
+    groupSize: { control: { type: 'number', min: 0 }, description: 'Insert a separator every N boxes (e.g. 3 → "123 456")' },
+    separator: { control: 'text', description: 'Node rendered between groups when groupSize is set' },
+    radius: { control: 'select', options: ['sharp', 4, 8, 12, 'pill'], description: 'Per-box corner radius' },
+    defaultValue: { control: 'text', description: 'Initial value (uncontrolled)' },
+    ariaLabel: { control: 'text', description: 'Group label for assistive tech' },
+    onChange: { control: false, table: { category: 'Events' }, description: '(code) => void — fires on every change' },
+    onComplete: { control: false, table: { category: 'Events' }, description: '(code) => void — fires when all boxes are filled' },
   },
-  args: { length: 6, allow: 'numeric', size: 'md', status: 'default', mask: false, disabled: false },
+  args: {
+    length: 6,
+    allow: 'numeric',
+    size: 'md',
+    status: 'default',
+    mask: false,
+    disabled: false,
+    autoFocus: false,
+    separator: '-',
+    ariaLabel: 'Verification code',
+  },
 };
 export default meta;
 

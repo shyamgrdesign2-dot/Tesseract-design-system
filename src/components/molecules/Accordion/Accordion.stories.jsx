@@ -32,6 +32,8 @@ const meta = {
     iconPosition: { control: 'inline-radio', options: ['right', 'left'], name: 'icon position', description: 'Which side the indicator sits on', table: { category: 'Indicator' } },
     // ── Layout ──
     density: { control: 'inline-radio', options: ['comfortable', 'compact'], description: 'Row padding + font scale', table: { category: 'Layout' } },
+    // ── State ──
+    onValueChange: { control: false, action: 'valueChange', description: 'Fires with the next open value(s) when a row is toggled', table: { category: 'State' } },
   },
   args: {
     type: 'single',

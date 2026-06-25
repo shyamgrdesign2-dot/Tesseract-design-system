@@ -29,10 +29,16 @@ const meta = {
     color: { control: 'inline-radio', options: COLORS, description: 'Checked track colour (primary = blue)' },
     label: { control: 'text', description: 'Adjacent label — clicking it toggles. Blank = bare switch.' },
     labelPosition: { control: 'inline-radio', options: ['right', 'left'], description: 'Side the label sits on', if: { arg: 'label', truthy: true } },
-    checked: { control: 'boolean', description: 'Controlled on/off — pair with `onCheckedChange`' },
-    defaultChecked: { control: 'boolean', description: 'Initial state for uncontrolled use' },
+    defaultChecked: { control: 'boolean', description: 'Initial on/off state — drives the preview here.' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
+    name: { control: 'text', description: 'Renders a hidden checkbox for native form submission.' },
+    value: { control: 'text', description: 'Submitted form value when `name` is set and the switch is on.' },
+    // Controlled prop — the Playground manages on/off via local state, so this
+    // can't drive the preview here. Documented for the API, control disabled.
+    checked: { control: false, description: 'Controlled on/off — pair with `onCheckedChange`. (Use `defaultChecked` to seed the preview.)' },
+    // Event handler — repo stories don't use Storybook actions; documented only.
+    onCheckedChange: { control: false, description: 'Fired with the next boolean state on toggle: `(next, event) => void`.' },
   },
   args: {
     size: 'md',
@@ -40,15 +46,18 @@ const meta = {
     color: 'primary',
     label: '',
     labelPosition: 'right',
+    defaultChecked: false,
     disabled: false,
     required: false,
+    name: '',
+    value: 'on',
   },
 };
 
 export default meta;
 
 // Build an accurate, copy-paste snippet from the controls (what "Show code" shows).
-const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label = '', labelPosition = 'right', disabled, defaultChecked }) => {
+const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label = '', labelPosition = 'right', disabled, required, defaultChecked, name, value = 'on' }) => {
   const lines = [];
   if (size !== 'md') lines.push(`  size="${size}"`);
   if (shape !== 'rounded') lines.push(`  shape="${shape}"`);
@@ -57,6 +66,9 @@ const toggleCode = ({ size = 'md', shape = 'rounded', color = 'primary', label =
   if (label && labelPosition !== 'right') lines.push(`  labelPosition="${labelPosition}"`);
   if (defaultChecked) lines.push('  defaultChecked');
   if (disabled) lines.push('  disabled');
+  if (required) lines.push('  required');
+  if (name) lines.push(`  name="${name}"`);
+  if (name && value !== 'on') lines.push(`  value="${value}"`);
   return lines.length ? `<Toggle\n${lines.join('\n')}\n/>` : '<Toggle />';
 };
 
@@ -66,11 +78,15 @@ const Row = ({ children }) => (
   </div>
 );
 
+// Keyed on `defaultChecked` so changing that control re-initialises the local
+// value (the switch stays interactive while the control still drives it).
+function ToggleDemo({ defaultChecked, ...args }) {
+  const [on, setOn] = React.useState(Boolean(defaultChecked));
+  return <Toggle {...args} checked={on} onCheckedChange={setOn} />;
+}
+
 export const Playground = {
-  render: (args) => {
-    const [on, setOn] = React.useState(false);
-    return <Toggle {...args} checked={on} onCheckedChange={setOn} />;
-  },
+  render: (args) => <ToggleDemo key={String(args.defaultChecked)} {...args} />,
   parameters: { docs: { source: { transform: (_code, ctx) => toggleCode(ctx.args) } } },
 };
 
@@ -118,11 +134,8 @@ export const Colors = {
 
 /** Built-in `label` prop — clicking the text toggles. Position via `labelPosition`. */
 export const WithLabel = {
-  args: { label: 'Enable notifications' },
-  render: (args) => {
-    const [on, setOn] = React.useState(true);
-    return <Toggle {...args} checked={on} onCheckedChange={setOn} />;
-  },
+  args: { label: 'Enable notifications', defaultChecked: true },
+  render: (args) => <ToggleDemo key={String(args.defaultChecked)} {...args} />,
   parameters: { docs: { source: { transform: (_code, ctx) => toggleCode(ctx.args) } } },
 };
 

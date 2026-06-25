@@ -22,16 +22,33 @@ const meta = {
       },
     },
   },
+  argTypes: {
+    // ── PopoverContent placement ──
+    side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'], description: 'Preferred side of the trigger the panel opens on (flips on collision)', table: { category: 'Placement' } },
+    align: { control: 'inline-radio', options: ['start', 'center', 'end'], description: 'Alignment along the chosen side', table: { category: 'Placement' } },
+    sideOffset: { control: { type: 'number', min: 0, max: 40, step: 1 }, description: 'Gap in px between the trigger and the panel', table: { category: 'Placement' } },
+    // ── Behaviour ──
+    trapFocus: { control: 'boolean', description: 'Trap keyboard focus inside the open panel', table: { category: 'Behaviour' } },
+    defaultOpen: { control: 'boolean', description: 'Open on first render (uncontrolled)', table: { category: 'Behaviour' } },
+    onOpenChange: { control: false, action: 'openChange', description: 'Fires with the next open state when the panel toggles', table: { category: 'Behaviour' } },
+  },
+  args: {
+    side: 'bottom',
+    align: 'start',
+    sideOffset: 8,
+    trapFocus: true,
+    defaultOpen: false,
+  },
 };
 export default meta;
 
 export const Playground = {
-  render: () => (
-    <Popover>
+  render: ({ side, align, sideOffset, trapFocus, defaultOpen, onOpenChange }) => (
+    <Popover defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="outline" theme="neutral">Open popover</Button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="start">
+      <PopoverContent side={side} align={align} sideOffset={sideOffset} trapFocus={trapFocus}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <strong style={{ color: 'var(--tesseract-slate-900)' }}>Quick note</strong>
           <span style={{ color: 'var(--tesseract-slate-600)' }}>Anchored, focus-managed content. Press Esc or click away to close.</span>

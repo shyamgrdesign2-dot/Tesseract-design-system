@@ -70,6 +70,7 @@ export default {
 
     size:        { control: 'inline-radio', options: SIZES, description: 'sm · md · lg', table: { category: 'Appearance' } },
     variant:     { control: 'inline-radio', options: ['default', 'seamless'], description: 'default · seamless (borderless, fills a table cell with an inset focus ring)', table: { category: 'Appearance' } },
+    surface:     { control: 'inline-radio', options: ['default', 'muted'], description: 'default · muted (slate-50 filled background for inline search fields)', table: { category: 'Appearance' } },
     status:      { control: 'inline-radio', options: STATUSES, description: 'Validation state — default · success · error · warning (drives border + status glyph)', table: { category: 'Appearance' } },
     fullWidth:   { control: 'boolean', table: { category: 'Appearance' } },
     radius:      { control: 'select', options: ['default', 'sharp', '2', '4', '6', '8', '10', '12', '14', '16', '20', '24', 'pill'], name: 'radius', description: "Restricted radius — a px step, or 'pill' / 'sharp'. 'default' keeps the size default.", table: { category: 'Appearance' } },
@@ -120,6 +121,7 @@ export default {
     required: false,
     size: 'md',
     variant: 'default',
+    surface: 'default',
     status: 'default',
     fullWidth: true,
     radius: 'default',
@@ -181,6 +183,7 @@ const inputCode = (a) => {
   const ra = addonCode(a.rightAddon, 'right');
   if (ra) lines.push(`  rightAddon={${ra}}`);
   if (a.variant && a.variant !== 'default') lines.push(`  variant="${a.variant}"`);
+  if (a.surface && a.surface !== 'default') lines.push(`  surface="${a.surface}"`);
   const rv = radiusValue(a.radius);
   if (rv != null) lines.push(typeof rv === 'number' ? `  radius={${rv}}` : `  radius="${rv}"`);
   const hv = radiusValue(a.height);
@@ -203,6 +206,7 @@ export const Playground = {
         <InputBox
           size={a.size}
           variant={a.variant}
+          surface={a.surface}
           status={a.status}
           allow={a.allow}
           label={a.showLabel ? a.label : undefined}
