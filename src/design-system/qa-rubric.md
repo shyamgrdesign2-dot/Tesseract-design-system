@@ -76,10 +76,16 @@ because reuse would regress the look or mismatch semantics. They are correct as-
 - **Chip remove (×)** — a `role="button"` span, not a real `<button>`, because chips render
   inside button triggers and nested `<button>` is invalid HTML.
 
-Open architectural investments (deferred, would need a new primitive / large rewrite — not
-exceptions, just larger work): a shared **Menu primitive** for action menus (ClinicalTable
-MoreMenu · Header overflow · Sidebar flyout); **Filter → Dropdown** rewrite; nav-item
-`href`/`render` routing; an InputBox "trigger" mode for the DateRangePicker trigger.
+**Menu primitive — DONE.** A shared accessible action menu (`Menu`/`MenuTrigger`/`MenuContent`/
+`MenuItem`/`MenuSeparator`/`MenuLabel`) now exists; **ClinicalTable MoreMenu** and **Header
+overflow "More"** compose it (correct menu/menuitem semantics + focus/keyboard). The **Sidebar
+collapsed-item flyout** stays a flyout (justified): it's a HOVER-triggered navigation popover that
+already has `role="menu"`/`menuitem`/`aria-current` — the click-triggered Menu would regress the
+hover UX.
+
+Still-open OPTIONAL investments (larger work, not blocking): **Filter → Dropdown** rewrite
+(multi-group apply/clear; behavioral risk); nav-item `href`/`render` routing across the sidebar
+render paths; an InputBox "trigger" mode for the DateRangePicker trigger.
 
 ## Benchmark north star
 Match or exceed Material UI / Radix UI / shadcn-ui on **composition, customizability, a11y, and
