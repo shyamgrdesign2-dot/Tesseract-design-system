@@ -9,6 +9,17 @@ import { cn } from "@/src/hooks/utils";
 import styles from "./Sidebar.module.scss";
 
 /* ── Helpers ── */
+// Render a navigation LEAF as a real link when `item.href` is provided — for SSR /
+// middle-click / router prefetch — else a <button>. Additive: same classes/handlers,
+// so the look is unchanged. onSelect still fires (active-state) alongside navigation.
+const NavTag = React.forwardRef(function NavTag({ href, children, ...rest }, ref) {
+  if (href != null) {
+    const { type: _type, ...anchorRest } = rest; // <a> has no `type`
+    return <a ref={ref} href={href} {...anchorRest}>{children}</a>;
+  }
+  return <button ref={ref} type="button" {...rest}>{children}</button>;
+});
+
 const isLeaf = (item) => !item.children || item.children.length === 0;
 const hasActive = (item, activeId) =>
   isLeaf(item)
@@ -141,8 +152,8 @@ function FlyoutContent({ item, activeId, onSelect }) {
           const active = child.id === activeId;
           return (
             <li key={child.id}>
-              <button
-                type="button"
+              <NavTag
+                href={child.href}
                 role="menuitem"
                 aria-current={active ? "page" : undefined}
                 className={cn(styles.flyoutItem, active && styles.flyoutItemActive)}
@@ -157,7 +168,7 @@ function FlyoutContent({ item, activeId, onSelect }) {
                     <ItemBadge badge={child.badge} />
                   </span>
                 )}
-              </button>
+              </NavTag>
             </li>
           );
         })}
@@ -192,8 +203,9 @@ function CollapsedItem({ item, activeId, onSelect, accentVars }) {
   const leaf = isLeaf(item);
 
   const renderTrigger = (bind, ref) => (
-    <button
-      type="button"
+    <NavTag
+      // Only a leaf navigates; a parent stays a <button> (it toggles the flyout).
+      href={leaf ? item.href : undefined}
       ref={ref}
       className={cn(styles.railItem, active && styles.railItemActive)}
       onClick={() => onSelect(leaf ? item.id : null, item)}
@@ -214,7 +226,7 @@ function CollapsedItem({ item, activeId, onSelect, accentVars }) {
       <span className={cn(styles.railLabel, active && styles.railLabelActive)}>
         {item.label}
       </span>
-    </button>
+    </NavTag>
   );
 
   if (leaf) return renderTrigger({}, null);
@@ -244,8 +256,8 @@ function ExpandedSection({
 
   if (leaf) {
     return (
-      <button
-        type="button"
+      <NavTag
+        href={item.href}
         className={cn(
           styles.section,
           active && styles.sectionActiveLeaf,
@@ -274,7 +286,7 @@ function ExpandedSection({
             <ItemBadge badge={item.badge} />
           </span>
         )}
-      </button>
+      </NavTag>
     );
   }
 
@@ -328,8 +340,8 @@ function ExpandedSection({
               const childActive = child.id === activeId;
               return (
                 <li key={child.id}>
-                  <button
-                    type="button"
+                  <NavTag
+                    href={child.href}
                     className={cn(
                       styles.childItem,
                       childActive && styles.childItemActive,
@@ -350,7 +362,7 @@ function ExpandedSection({
                         <ItemBadge badge={child.badge} />
                       </span>
                     )}
-                  </button>
+                  </NavTag>
                 </li>
               );
             })}
@@ -361,7 +373,10 @@ function ExpandedSection({
   );
 }
 
-/* ── Main Sidebar ── */
+/* ── Main Sidebar ──
+   items: [{ id, label, icon, badge?, href?, children? }]. A leaf with `href`
+   renders as a real <a> (SSR / middle-click / router prefetch) instead of a
+   <button>; onSelect still fires for active-state. */
 export const Sidebar = React.forwardRef(function Sidebar(
   {
     items = [],
