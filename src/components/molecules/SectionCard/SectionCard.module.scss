@@ -62,6 +62,13 @@
   gap: var(--tesseract-space-2-5);
   min-width: 0;
 }
+/* Whole header toggles when collapsible (clicks on inner controls are ignored in JS). */
+.titleRowClickable { cursor: pointer; user-select: none; }
+
+/* Chevron pinned to the far right (collapseIconPosition="right"). */
+.collapseBtnEnd { margin-left: var(--tesseract-space-1); }
+/* When there are no headerActions, push the right-side chevron to the edge. */
+.titleRow > .collapseBtnEnd:last-child { margin-left: auto; }
 
 .collapseBtn {
   display: inline-flex;

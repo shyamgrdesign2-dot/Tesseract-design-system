@@ -58,6 +58,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
     defaultCollapsed = false,
     onCollapsedChange,
     collapseIcon = "chevron-down",
+    collapseIconPosition = "left",
     sticky = false,
     maxBodyHeight,
     elevation = false,
@@ -110,6 +111,25 @@ export const SectionCard = React.forwardRef(function SectionCard(
         : icon
       : null;
 
+  const chevronBtn = collapsible ? (
+    <button
+      type="button"
+      className={cn(styles.collapseBtn, collapseIconPosition === "right" && styles.collapseBtnEnd)}
+      aria-expanded={!collapsed}
+      aria-controls={bodyId}
+      aria-label={collapsed ? "Expand section" : "Collapse section"}
+      onClick={(e) => { e.stopPropagation(); setCollapsed(!collapsed); }}
+    >
+      <TPLibraryIcon name={collapseIcon} variant="linear" size={18} className={cn(styles.chevron, collapsed && styles.chevronCollapsed)} />
+    </button>
+  ) : null;
+
+  // Whole header toggles when collapsible — but never when the click lands on an
+  // interactive control (the tools / action buttons / inputs inside the header).
+  const onHeaderClick = collapsible
+    ? (e) => { if (!e.target.closest("button, a, input, select, textarea, label")) setCollapsed(!collapsed); }
+    : undefined;
+
   return (
     <section
       ref={ref}
@@ -123,19 +143,8 @@ export const SectionCard = React.forwardRef(function SectionCard(
     >
       {hasHeader && (
         <header className={cn(styles.header, sticky && styles.sticky)} data-gradient={headerGradient ? "" : undefined}>
-          <div className={styles.titleRow}>
-            {collapsible && (
-              <button
-                type="button"
-                className={styles.collapseBtn}
-                aria-expanded={!collapsed}
-                aria-controls={bodyId}
-                aria-label={collapsed ? "Expand section" : "Collapse section"}
-                onClick={() => setCollapsed(!collapsed)}
-              >
-                <TPLibraryIcon name={collapseIcon} variant="linear" size={18} className={cn(styles.chevron, collapsed && styles.chevronCollapsed)} />
-              </button>
-            )}
+          <div className={cn(styles.titleRow, collapsible && styles.titleRowClickable)} onClick={onHeaderClick}>
+            {collapseIconPosition === "left" && chevronBtn}
             {number != null && <span className={styles.numberChip}>{number}</span>}
             {iconEl && (
               <span className={styles.iconChip} style={iconColor ? { color: iconColor } : undefined}>
@@ -171,6 +180,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
                 ))}
               </div>
             )}
+            {collapseIconPosition === "right" && chevronBtn}
           </div>
           {headerExtra != null && <div className={styles.headerExtra}>{headerExtra}</div>}
         </header>

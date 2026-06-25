@@ -34,8 +34,14 @@ const meta = {
     subtitle: { control: 'text' },
     icon: { control: 'text', description: 'Icon name (string) or ReactNode' },
     iconColor: { control: 'color' },
-    collapsible: { control: 'boolean' },
+    tone: { control: 'inline-radio', options: ['neutral', 'primary', 'active', 'success', 'violet'] },
+    headerGradient: { control: 'boolean' },
+    number: { control: 'text', description: 'Index chip on the left' },
+    amount: { control: 'text', description: 'Pill under the title' },
+    collapsible: { control: 'boolean', description: 'Make this card an accordion (per-card)' },
+    collapseIconPosition: { control: 'inline-radio', options: ['left', 'right'] },
     defaultCollapsed: { control: 'boolean' },
+    elevation: { control: 'inline-radio', options: [false, 'sm', 'md'] },
     bordered: { control: 'boolean' },
     divided: { control: 'boolean' },
     footerAlign: { control: 'inline-radio', options: ['start', 'between', 'end'] },
@@ -52,8 +58,12 @@ const meta = {
     subtitle: 'Basic information about the patient',
     icon: 'user',
     iconColor: 'var(--tesseract-blue-500)',
+    tone: 'neutral',
+    headerGradient: false,
     collapsible: true,
+    collapseIconPosition: 'left',
     defaultCollapsed: false,
+    elevation: false,
     bordered: true,
     divided: true,
     footerAlign: 'end',
@@ -197,6 +207,51 @@ export const WithTimeline = {
           </TimelineItem>
         </Timeline>
       </SectionCard>
+    </SectionCard>
+  ),
+};
+
+/** The body is ANY content — here free inputs + notes, not a Timeline; with a
+ *  tinted body background and the chevron pinned to the right. */
+export const FreeFormBody = {
+  render: () => (
+    <SectionCard
+      title="Additional details"
+      icon="note"
+      tone="primary"
+      collapsible
+      collapseIconPosition="right"
+      bodyBg="var(--tesseract-slate-50)"
+      tools={TOOLS}
+      footer={<><Button variant="ghost" theme="neutral" size="sm">Reset</Button><Button size="sm">Save</Button></>}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <FieldGrid>
+          <InputBox label="Blood group" placeholder="O+" fullWidth />
+          <InputBox label="Allergies" placeholder="None" fullWidth />
+        </FieldGrid>
+        <InputBox label="Clinical note" placeholder="Free text…" fullWidth autoGrow />
+      </div>
+    </SectionCard>
+  ),
+};
+
+/** Mixed nesting — a table card + a free-input card inside one cluster, each an
+ *  independent accordion, each with its own background. */
+export const MixedNesting = {
+  render: () => (
+    <SectionCard title="Patient Intake" amount="3 sections" icon="document-text" tone="primary" headerGradient bodyBg="var(--tesseract-slate-50)">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <SectionCard number={1} title="Personal" collapsible tone="primary">
+          <FieldGrid><InputBox label="First name" placeholder="Jane" fullWidth /><InputBox label="Last name" placeholder="Doe" fullWidth /></FieldGrid>
+        </SectionCard>
+        <SectionCard number={2} title="Vitals" collapsible defaultCollapsed tone="active" headerBg="var(--tesseract-warning-50)">
+          <FieldGrid><InputBox label="BP" placeholder="120/80" fullWidth /><InputBox label="Pulse" placeholder="72" fullWidth /></FieldGrid>
+        </SectionCard>
+        <SectionCard number={3} title="Consent" collapsible defaultCollapsed tone="success">
+          <p style={{ margin: 0, font: '14px var(--tesseract-font-body)', color: 'var(--tesseract-slate-600)' }}>Signed on 25 Jun 2026.</p>
+        </SectionCard>
+      </div>
     </SectionCard>
   ),
 };
