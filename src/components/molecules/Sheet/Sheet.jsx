@@ -1,20 +1,14 @@
 "use client";
 
 /**
- * Sheet — a side drawer / panel (mobile sidebar, filters, quick-view, slide-in forms).
+ * Sheet — DEPRECATED. Prefer `Drawer` (molecules/Drawer): same DialogPrimitive
+ * backing, plus a standard header (close · divider · title · action), a footer
+ * band, and configurable width presets ("full" | "70%" | px). Sheet is kept
+ * working for existing imports.
  *
  * A modal surface that slides in from an edge. Composes the shared DialogPrimitive
  * (focus trap + scroll lock + Escape + focus restore + role="dialog"/aria-modal)
  * and just adds the edge positioning + slide animation + scrim.
- *
- *   <Sheet>
- *     <SheetTrigger asChild><Button>Filters</Button></SheetTrigger>
- *     <SheetContent side="right">
- *       <SheetHeader><SheetTitle>Filters</SheetTitle><SheetDescription>Refine results</SheetDescription></SheetHeader>
- *       …
- *       <SheetFooter><SheetClose asChild><Button>Apply</Button></SheetClose></SheetFooter>
- *     </SheetContent>
- *   </Sheet>
  *
  * Parts: Sheet (root, controlled/uncontrolled `open`) · SheetTrigger (asChild) ·
  * SheetContent (`side` left/right/top/bottom, `showClose`) · SheetHeader ·

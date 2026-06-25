@@ -35,6 +35,7 @@ export { Filter } from "./Filter";
 export { Dropdown } from "./Dropdown";
 export { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from "./Menu";
 export { Popover, PopoverTrigger, PopoverContent } from "./Popover";
+export { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter, DrawerClose } from "./Drawer";
 export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from "./Sheet";
 export { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from "./Field";
 export { Command } from "./Command";

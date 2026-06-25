@@ -1,0 +1,128 @@
+/* Drawer.module.scss — edge-anchored modal panel with header/body/footer chrome.
+   Wraps DialogPrimitive. Width/height arrive as --drawer-w / --drawer-h. */
+
+.overlay {
+  background: color-mix(in srgb, var(--tesseract-slate-900) 45%, transparent);
+  animation: tesseract-drawer-fade 160ms ease;
+}
+
+.content {
+  box-sizing: border-box;
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+  font-family: var(--tesseract-font-body);
+
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--tesseract-slate-0);
+  color: var(--tesseract-slate-900);
+  box-shadow: 0 16px 48px -12px color-mix(in srgb, var(--tesseract-slate-900) 24%, transparent);
+
+  --drawer-body-pad: var(--tesseract-space-5);
+
+  &[data-side="right"]  { top: 0; right: 0; height: 100vh; width: var(--drawer-w); border-left: 1px solid var(--tesseract-slate-200); animation: tesseract-drawer-right 240ms cubic-bezier(0.32, 0.72, 0, 1); }
+  &[data-side="left"]   { top: 0; left: 0;  height: 100vh; width: var(--drawer-w); border-right: 1px solid var(--tesseract-slate-200); animation: tesseract-drawer-left 240ms cubic-bezier(0.32, 0.72, 0, 1); }
+  &[data-side="top"]    { top: 0; left: 0;  width: 100vw; height: var(--drawer-h); border-bottom: 1px solid var(--tesseract-slate-200); animation: tesseract-drawer-top 240ms cubic-bezier(0.32, 0.72, 0, 1); }
+  &[data-side="bottom"] { bottom: 0; left: 0; width: 100vw; height: var(--drawer-h); border-top: 1px solid var(--tesseract-slate-200); border-radius: var(--tesseract-radius-16) var(--tesseract-radius-16) 0 0; corner-shape: round; animation: tesseract-drawer-bottom 240ms cubic-bezier(0.32, 0.72, 0, 1); }
+}
+
+/* ── Header: close (left) · divider · title · action (right) ── */
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: var(--tesseract-size-56, 56px);
+  padding: 0 var(--tesseract-space-4);
+  border-bottom: 1px solid color-mix(in srgb, var(--tesseract-slate-100) 70%, transparent);
+  background: var(--tesseract-slate-0);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tesseract-size-28);
+  height: var(--tesseract-size-28);
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--tesseract-radius-8);
+  background: transparent;
+  color: var(--tesseract-slate-700);
+  cursor: pointer;
+  transition: background-color 150ms ease, opacity 150ms ease;
+
+  &:hover { background: var(--tesseract-slate-100); }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); }
+}
+
+.divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: var(--tesseract-size-20);
+  margin: 0 var(--tesseract-space-3);
+  opacity: 0.8;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--tesseract-slate-300) 20%, transparent) 0%,
+    var(--tesseract-slate-300) 50%,
+    color-mix(in srgb, var(--tesseract-slate-300) 20%, transparent) 100%);
+}
+
+.headerText { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: var(--tesseract-space-0-5); }
+
+.title {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--tesseract-text-body-base);
+  font-weight: var(--tesseract-weight-semibold);
+  color: var(--tesseract-slate-900);
+  flex: 1;
+}
+
+.description {
+  margin: 0;
+  font-size: var(--tesseract-text-body-xs);
+  line-height: 1.45;
+  color: var(--tesseract-slate-500);
+}
+
+.action { flex-shrink: 0; margin-left: var(--tesseract-space-3); display: inline-flex; align-items: center; gap: var(--tesseract-space-2); }
+
+/* ── Body: the scrollable middle ── */
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--drawer-body-pad);
+}
+
+/* ── Footer ── */
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--tesseract-space-2);
+  padding: var(--tesseract-space-4);
+  border-top: 1px solid color-mix(in srgb, var(--tesseract-slate-100) 70%, transparent);
+  background: var(--tesseract-slate-0);
+  flex-wrap: wrap;
+
+  &[data-align="end"] { justify-content: flex-end; }
+  &[data-align="start"] { justify-content: flex-start; }
+  &[data-align="between"] { justify-content: space-between; }
+}
+
+@keyframes tesseract-drawer-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tesseract-drawer-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes tesseract-drawer-left  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes tesseract-drawer-top    { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes tesseract-drawer-bottom { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .content { animation-duration: 0.01ms; }
+}
