@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 44,
+    "components": 45,
     "atoms": 19,
-    "molecules": 25,
+    "molecules": 26,
     "tokens": 216
   },
   "rules": [
@@ -898,6 +898,12 @@
           "name": "style"
         },
         {
+          "name": "clickable",
+          "control": "boolean",
+          "description": "Makes the chip act as a button — button role, hover/press affordance, aria-pressed when selected",
+          "default": "false"
+        },
+        {
           "name": "removable",
           "control": "boolean",
           "default": "false"
@@ -1097,7 +1103,13 @@
         },
         {
           "name": "surface",
-          "default": "\"default\""
+          "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "muted"
+          ],
+          "control": "inline-radio",
+          "description": "default · muted (slate-50 filled background for inline search fields)"
         },
         {
           "name": "allow",
@@ -1382,13 +1394,17 @@
         },
         {
           "name": "defaultValue",
-          "default": "\"\""
+          "default": "\"\"",
+          "control": "text",
+          "description": "Initial value (uncontrolled)"
         },
         {
-          "name": "onChange"
+          "name": "onChange",
+          "description": "(code) => void — fires on every change"
         },
         {
-          "name": "onComplete"
+          "name": "onComplete",
+          "description": "(code) => void — fires when all boxes are filled"
         },
         {
           "name": "allow",
@@ -1427,14 +1443,23 @@
         },
         {
           "name": "separator",
-          "default": "\"-\""
+          "default": "\"-\"",
+          "control": "text",
+          "description": "Node rendered between groups when groupSize is set"
         },
         {
           "name": "groupSize",
-          "control": "number"
+          "control": "number",
+          "description": "Insert a separator every N boxes (e.g. 3 → "
         },
         {
-          "name": "radius"
+          "name": "radius",
+          "allowedValues": [
+            "sharp",
+            "pill"
+          ],
+          "control": "select",
+          "description": "Per-box corner radius"
         },
         {
           "name": "disabled",
@@ -1443,14 +1468,18 @@
         },
         {
           "name": "autoFocus",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Focus the first box on mount"
         },
         {
           "name": "inputMode"
         },
         {
           "name": "ariaLabel",
-          "default": "\"Verification code\""
+          "default": "\"Verification code\"",
+          "control": "text",
+          "description": "Group label for assistive tech"
         },
         {
           "name": "className"
@@ -1486,14 +1515,17 @@
             "sm",
             "md"
           ],
-          "control": "inline-radio"
+          "control": "inline-radio",
+          "description": "Key-cap size."
         },
         {
           "name": "className"
         },
         {
           "name": "children",
-          "default": "'K'"
+          "default": "'K'",
+          "control": "text",
+          "description": "The key / glyph to render inside the cap (e.g. ⌘, K, Esc, ↵)."
         }
       ],
       "stories": [
@@ -1663,7 +1695,10 @@
           "description": "Prefix for the brand SVG asset paths (CDN / alt root)."
         },
         {
-          "name": "title"
+          "name": "title",
+          "default": "''",
+          "control": "text",
+          "description": "Accessible label (aria-label). Blank = defaults to the brand name."
         },
         {
           "name": "className"
@@ -1752,7 +1787,9 @@
         },
         {
           "name": "max",
-          "default": "100"
+          "default": "100",
+          "control": "number",
+          "description": "Value scale; fill width = value / max."
         },
         {
           "name": "size",
@@ -1935,7 +1972,8 @@
           "name": "defaultValue"
         },
         {
-          "name": "onValueChange"
+          "name": "onValueChange",
+          "description": "Fired with the newly-selected option value (stories manage selection internally)"
         },
         {
           "name": "size",
@@ -1988,7 +2026,9 @@
           "description": "px number, or "
         },
         {
-          "name": "indicatorColor"
+          "name": "indicatorColor",
+          "control": "color",
+          "description": "Override the sliding indicator"
         },
         {
           "name": "fullWidth",
@@ -2252,6 +2292,9 @@
           "description": "Caption above the track (also the a11y label)"
         },
         {
+          "name": "ariaLabel"
+        },
+        {
           "name": "showValue",
           "default": "false",
           "control": "boolean",
@@ -2340,6 +2383,9 @@
           "description": "Adjacent label — clicking it toggles. Blank = bare switch."
         },
         {
+          "name": "ariaLabel"
+        },
+        {
           "name": "labelPosition",
           "default": "\"right\"",
           "allowedValues": [
@@ -2351,16 +2397,17 @@
         },
         {
           "name": "checked",
-          "control": "boolean",
-          "description": "Controlled on/off — pair with `onCheckedChange`"
+          "description": "Controlled on/off — pair with `onCheckedChange`. (Use `defaultChecked` to seed the preview.)"
         },
         {
           "name": "defaultChecked",
+          "default": "false",
           "control": "boolean",
-          "description": "Initial state for uncontrolled use"
+          "description": "Initial on/off state — drives the preview here."
         },
         {
-          "name": "onCheckedChange"
+          "name": "onCheckedChange",
+          "description": "Fired with the next boolean state on toggle: `(next, event) => void`."
         },
         {
           "name": "disabled",
@@ -2373,11 +2420,16 @@
           "control": "boolean"
         },
         {
-          "name": "name"
+          "name": "name",
+          "default": "''",
+          "control": "text",
+          "description": "Renders a hidden checkbox for native form submission."
         },
         {
           "name": "value",
-          "default": "\"on\""
+          "default": "\"on\"",
+          "control": "text",
+          "description": "Submitted form value when `name` is set and the switch is on."
         },
         {
           "name": "className",
@@ -2448,7 +2500,8 @@
           "name": "defaultValue"
         },
         {
-          "name": "onValueChange"
+          "name": "onValueChange",
+          "description": "Fires with the next open value(s) when a row is toggled"
         },
         {
           "name": "expandIcon",
@@ -2531,24 +2584,30 @@
             "warning",
             "error"
           ],
-          "control": "inline-radio"
+          "control": "inline-radio",
+          "description": "Status colour ramp + auto glyph; warning/error are assertive (role="
         },
         {
           "name": "title",
           "default": "'Allergy on file'",
-          "control": "text"
+          "control": "text",
+          "description": "Bold lead line above the body."
         },
         {
           "name": "children"
         },
         {
-          "name": "icon"
+          "name": "icon",
+          "default": "''",
+          "control": "text",
+          "description": "Override the auto status glyph with a CDN icon name. Type "
         },
         {
           "name": "action"
         },
         {
-          "name": "onDismiss"
+          "name": "onDismiss",
+          "description": "Called when the × close button is clicked."
         },
         {
           "name": "variant",
@@ -2557,10 +2616,23 @@
             "soft",
             "outline"
           ],
-          "control": "inline-radio"
+          "control": "inline-radio",
+          "description": "soft (tinted fill) or outline (bordered, lower emphasis)."
         },
         {
           "name": "className"
+        },
+        {
+          "name": "body",
+          "control": "text",
+          "description": "Body text rendered as children.",
+          "default": "'Patient is allergic to penicillin. Review before prescribing.'"
+        },
+        {
+          "name": "showDismiss",
+          "control": "boolean",
+          "description": "Show the × close button (wires onDismiss).",
+          "default": "false"
         }
       ],
       "stories": [
@@ -2765,7 +2837,9 @@
         },
         {
           "name": "loadingRows",
-          "default": "4"
+          "default": "4",
+          "control": "number",
+          "description": "How many skeleton rows to render while loading"
         },
         {
           "name": "emptyState"
@@ -2868,35 +2942,64 @@
       "description": "Command — a ⌘K command palette: a dialog-hosted, searchable, keyboard-navigable action list for fast global navigation/actions (patient search, quick actions). Data-driven: pass `groups` (or flat `items`); the palette filters live as you type (label + keywords), supports ↑/↓/Enter, and runs the item's `onSelect`. Controlled via `open`/`onOpenChange` (wire it to your ⌘K shortcut), or uncontrolled via `defaultOpen` for demos. <Command open={open} onOpenChange={setOpen} placeholder=\"Search…\" groups={[ { heading: \"Patients\", items: [{ id, label, icon, keywords, onSelect }] }, { heading: \"Actions\",  items: [{ id, label, icon, shortcut, onSelect }] }, ]} />",
       "props": [
         {
-          "name": "open"
+          "name": "open",
+          "description": "Controlled open state (wire to your ⌘K shortcut)"
         },
         {
           "name": "defaultOpen",
-          "default": "false"
+          "default": "false",
+          "description": "Uncontrolled initial open state"
         },
         {
-          "name": "onOpenChange"
+          "name": "onOpenChange",
+          "description": "Called when the palette opens/closes"
         },
         {
-          "name": "groups"
+          "name": "groups",
+          "description": "Grouped items — [{ heading?, items: [{ id, label, icon?, shortcut?, keywords?, onSelect, disabled? }] }]"
         },
         {
-          "name": "items"
+          "name": "items",
+          "description": "Flat items convenience (one unlabeled group)"
         },
         {
           "name": "placeholder",
-          "default": "\"Type a command or search…\""
+          "default": "\"Type a command or search…\"",
+          "control": "text",
+          "description": "Search-input placeholder"
         },
         {
           "name": "emptyText",
-          "default": "\"No results found.\""
+          "default": "\"No results found.\"",
+          "control": "text",
+          "description": "Shown when the query matches nothing"
         },
         {
           "name": "label",
-          "default": "\"Command palette\""
+          "default": "\"Command palette\"",
+          "control": "text",
+          "description": "Accessible name for the palette dialog (aria-label)"
         },
         {
           "name": "className"
+        },
+        {
+          "name": "withGroupHeadings",
+          "control": "boolean",
+          "description": "Story helper — render grouped (with headings) vs a single flat list",
+          "default": "true"
+        },
+        {
+          "name": "withIcons",
+          "control": "boolean",
+          "description": "Story helper — show leading icons on items",
+          "default": "true"
+        },
+        {
+          "name": "withShortcuts",
+          "control": "boolean",
+          "description": "Story helper — show keyboard-shortcut hints on action items",
+          "default": "true"
         }
       ],
       "stories": [
@@ -3632,7 +3735,9 @@
         },
         {
           "name": "fullWidth",
-          "default": "true"
+          "default": "true",
+          "control": "boolean",
+          "description": "Stretch the field to fill its container (vs shrink to content)"
         },
         {
           "name": "analyticsId"
@@ -3801,28 +3906,51 @@
         },
         {
           "name": "editable",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Make the trigger a typeahead input (combobox) — type to filter"
         },
         {
           "name": "allowCustom",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Editable: offer an "
         },
         {
           "name": "addLabel"
         },
         {
           "name": "chevron",
-          "default": "true"
+          "default": "true",
+          "control": "boolean",
+          "description": "Show the trigger chevron affordance"
         },
         {
           "name": "variant",
-          "default": "\"default\""
+          "default": "\"default\"",
+          "allowedValues": [
+            "default",
+            "seamless"
+          ],
+          "control": "inline-radio",
+          "description": "Trigger style — `seamless` is a borderless, container-filling trigger (table cells)"
         },
         {
-          "name": "status"
+          "name": "status",
+          "default": "undefined",
+          "allowedValues": [
+            "success",
+            "error",
+            "warning"
+          ],
+          "control": "inline-radio",
+          "description": "Status ring colour (most visible with `variant="
         },
         {
-          "name": "groupLabel"
+          "name": "groupLabel",
+          "default": "''",
+          "control": "text",
+          "description": "Sticky heading shown above a flat option list"
         },
         {
           "name": "showShortcuts",
@@ -3923,7 +4051,9 @@
         },
         {
           "name": "maxMenuHeight",
-          "default": "340"
+          "default": "340",
+          "control": "number",
+          "description": "Menu max-height in px before it scrolls"
         },
         {
           "name": "placement",
@@ -4018,23 +4148,28 @@
         {
           "name": "icon",
           "default": "'box'",
-          "control": "text"
+          "control": "text",
+          "description": "Icon name (rendered in a soft tinted disc) or a node. Ignored when `media` is set."
         },
         {
-          "name": "media"
+          "name": "media",
+          "description": "Custom illustration node — overrides `icon` when provided."
         },
         {
           "name": "title",
           "default": "'No patients yet'",
-          "control": "text"
+          "control": "text",
+          "description": "Heading for the empty state."
         },
         {
           "name": "description",
           "default": "'Add your first patient to start managing appointments and records.'",
-          "control": "text"
+          "control": "text",
+          "description": "Supporting copy below the title."
         },
         {
-          "name": "action"
+          "name": "action",
+          "description": "Primary action node (compose the Button atom). Driven via `actionLabel` in stories."
         },
         {
           "name": "size",
@@ -4043,10 +4178,17 @@
             "sm",
             "md"
           ],
-          "control": "inline-radio"
+          "control": "inline-radio",
+          "description": "Overall scale of the icon disc and text."
         },
         {
           "name": "className"
+        },
+        {
+          "name": "actionLabel",
+          "control": "text",
+          "description": "Story helper: label for the primary action Button. Leave empty for no action.",
+          "default": "'Add patient'"
         }
       ],
       "stories": [
@@ -4074,21 +4216,55 @@
       "props": [
         {
           "name": "invalid",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Marks the field invalid — sets `data-invalid`, wires `aria-invalid`/`aria-describedby` onto the control, and reveals the FieldError message."
         },
         {
           "name": "orientation",
-          "default": "\"vertical\""
+          "default": "\"vertical\"",
+          "allowedValues": [
+            "vertical",
+            "horizontal"
+          ],
+          "control": "inline-radio",
+          "description": "Layout of label vs. control — `vertical` stacks them, `horizontal` places the label beside the control (e.g. a settings toggle/checkbox row)."
         },
         {
           "name": "required",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Marks the field required — renders the `*` marker on FieldLabel and sets `aria-required` on the control."
         },
         {
           "name": "className"
         },
         {
           "name": "children"
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "description": "(Story helper) FieldLabel text.",
+          "default": "'Email address'"
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "description": "(Story helper) InputBox placeholder.",
+          "default": "'you@example.com'"
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "description": "(Story helper) FieldDescription text (hidden when empty).",
+          "default": "'We’ll never share it.'"
+        },
+        {
+          "name": "error",
+          "control": "text",
+          "description": "(Story helper) FieldError message (shown only when `invalid`).",
+          "default": "'Enter a valid email address.'"
         }
       ],
       "stories": [
@@ -4493,7 +4669,8 @@
           "control": "select"
         },
         {
-          "name": "onBack"
+          "name": "onBack",
+          "description": "Fires when the back button is clicked"
         },
         {
           "name": "actions",
@@ -4699,13 +4876,96 @@
         },
         {
           "name": "defaultOpen",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Render the menu open on mount (uncontrolled)"
         },
         {
           "name": "onOpenChange"
         },
         {
           "name": "children"
+        },
+        {
+          "name": "side",
+          "allowedValues": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "control": "inline-radio",
+          "description": "Preferred side of the trigger to place the surface (collision-aware)",
+          "default": "'bottom'"
+        },
+        {
+          "name": "align",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio",
+          "description": "Alignment of the surface along the chosen side",
+          "default": "'start'"
+        },
+        {
+          "name": "sideOffset",
+          "control": "number",
+          "description": "Gap in px between trigger and surface",
+          "default": "6"
+        },
+        {
+          "name": "triggerLabel",
+          "control": "text",
+          "default": "'Actions'"
+        },
+        {
+          "name": "triggerVariant",
+          "allowedValues": [
+            "solid",
+            "outline",
+            "ghost",
+            "tonal",
+            "link"
+          ],
+          "control": "inline-radio",
+          "default": "'outline'"
+        },
+        {
+          "name": "item1Icon",
+          "control": "text",
+          "description": "Pick from the Tesseract Icons panel (or type a name)",
+          "default": "'edit-2'"
+        },
+        {
+          "name": "item2Icon",
+          "control": "text",
+          "description": "Pick from the Tesseract Icons panel (or type a name)",
+          "default": "'copy'"
+        },
+        {
+          "name": "item2Shortcut",
+          "control": "text",
+          "description": "Right-aligned shortcut hint, e.g. ⌘D",
+          "default": "'⌘D'"
+        },
+        {
+          "name": "showSeparator",
+          "control": "boolean",
+          "description": "Show a divider before the danger item",
+          "default": "true"
+        },
+        {
+          "name": "dangerIcon",
+          "control": "text",
+          "default": "'trash'"
+        },
+        {
+          "name": "dangerDisabled",
+          "control": "boolean",
+          "description": "Disable the destructive item",
+          "default": "false"
         }
       ],
       "stories": [
@@ -4737,7 +4997,8 @@
           "control": "number"
         },
         {
-          "name": "onPageChange"
+          "name": "onPageChange",
+          "description": "Fires with the next 0-indexed page when a page / prev / next button is clicked"
         },
         {
           "name": "siblingCount",
@@ -4783,13 +5044,51 @@
         },
         {
           "name": "defaultOpen",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Open on first render (uncontrolled)"
         },
         {
-          "name": "onOpenChange"
+          "name": "onOpenChange",
+          "description": "Fires with the next open state when the panel toggles"
         },
         {
           "name": "children"
+        },
+        {
+          "name": "side",
+          "allowedValues": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "control": "inline-radio",
+          "description": "Preferred side of the trigger the panel opens on (flips on collision)",
+          "default": "'bottom'"
+        },
+        {
+          "name": "align",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio",
+          "description": "Alignment along the chosen side",
+          "default": "'start'"
+        },
+        {
+          "name": "sideOffset",
+          "control": "number",
+          "description": "Gap in px between the trigger and the panel",
+          "default": "8"
+        },
+        {
+          "name": "trapFocus",
+          "control": "boolean",
+          "description": "Trap keyboard focus inside the open panel",
+          "default": "true"
         }
       ],
       "stories": [
@@ -4832,7 +5131,9 @@
         },
         {
           "name": "iconColor",
-          "default": "\"var(--tesseract-violet-500)\""
+          "default": "\"var(--tesseract-violet-500)\"",
+          "control": "color",
+          "description": "Colour of the header icon chip."
         },
         {
           "name": "mode",
@@ -4871,10 +5172,15 @@
         },
         {
           "name": "search",
-          "default": "true"
+          "default": "true",
+          "control": "boolean",
+          "description": "Show the search-&-add input (table body, search-first mode only)."
         },
         {
-          "name": "searchPlaceholder"
+          "name": "searchPlaceholder",
+          "default": "''",
+          "control": "text",
+          "description": "Placeholder for the search box / free-text body."
         },
         {
           "name": "frequentlyUsed",
@@ -5138,7 +5444,8 @@
           "name": "emptyText",
           "default": "\"No matches\"",
           "control": "text",
-          "description": "No-matches message"
+          "description": "No-matches message (shown only when the search filter matches nothing)",
+          "storyHidden": true
         },
         {
           "name": "pointerColor",
@@ -5148,19 +5455,22 @@
           "name": "searchIcon",
           "default": "\"search-normal-1\"",
           "control": "text",
-          "description": "Icon shown inside the search input"
+          "description": "Icon shown inside the search input (visible in expanded mode with search enabled)",
+          "storyHidden": true
         },
         {
           "name": "collapseIcon",
           "default": "\"sidebar-left\"",
           "control": "text",
-          "description": "Icon for the collapse/expand toggle button"
+          "description": "Icon for the collapse/expand toggle button (visible when showCollapseToggle)",
+          "storyHidden": true
         },
         {
           "name": "caretIcon",
           "default": "\"chevron-down\"",
           "control": "text",
-          "description": "Caret icon on expandable section rows"
+          "description": "Caret icon on expandable section rows (visible for items with children)",
+          "storyHidden": true
         },
         {
           "name": "className",
@@ -5199,6 +5509,136 @@
       "storiesPath": "src/components/molecules/SecondarySidebar/SecondarySidebar.stories.jsx"
     },
     {
+      "name": "SectionCard",
+      "dir": "SectionCard",
+      "layer": "molecules",
+      "exports": [
+        "SectionCard"
+      ],
+      "importFrom": "@/src/components/molecules",
+      "importExample": "import { SectionCard } from \"@/src/components/molecules\";",
+      "description": "SectionCard — a generic container shell: a card with an optional header, arbitrary body content, and an optional footer. Each band can be collapsed, recoloured, and filled with any content (a table, inputs, or a mix). Use it for rxpad sections, multi-section forms (e.g. patient: Personal / Additional / Address), dashboards — anywhere you need a titled, optionally-collapsible block. White surface + padding + outer stroke + radius by default; collapsing hides the body (header + footer stay), so a footer's CTAs remain reachable.",
+      "props": [
+        {
+          "name": "title",
+          "default": "'Personal details'",
+          "control": "text"
+        },
+        {
+          "name": "subtitle",
+          "default": "'Basic information about the patient'",
+          "control": "text"
+        },
+        {
+          "name": "icon",
+          "default": "'user'",
+          "control": "text",
+          "description": "Icon name (string) or ReactNode"
+        },
+        {
+          "name": "iconColor",
+          "default": "'var(--tesseract-blue-500)'",
+          "control": "color"
+        },
+        {
+          "name": "headerActions"
+        },
+        {
+          "name": "headerExtra"
+        },
+        {
+          "name": "footer"
+        },
+        {
+          "name": "footerAlign",
+          "default": "\"end\"",
+          "allowedValues": [
+            "start",
+            "between",
+            "end"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "collapsible",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "collapsed"
+        },
+        {
+          "name": "defaultCollapsed",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "onCollapsedChange"
+        },
+        {
+          "name": "collapseIcon",
+          "default": "\"chevron-down\""
+        },
+        {
+          "name": "bordered",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "divided",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "radius",
+          "allowedValues": [
+            "sharp",
+            "pill"
+          ],
+          "control": "select"
+        },
+        {
+          "name": "padding",
+          "control": "number"
+        },
+        {
+          "name": "surface",
+          "control": "color",
+          "description": "One background for all bands"
+        },
+        {
+          "name": "headerBg",
+          "control": "color"
+        },
+        {
+          "name": "bodyBg",
+          "control": "color"
+        },
+        {
+          "name": "footerBg",
+          "control": "color"
+        },
+        {
+          "name": "children"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "MultiSectionForm",
+        "SegmentedBackgrounds",
+        "WithHeaderSearch",
+        "Plain"
+      ],
+      "sourcePath": "src/components/molecules/SectionCard/SectionCard.jsx",
+      "storiesPath": "src/components/molecules/SectionCard/SectionCard.stories.jsx"
+    },
+    {
       "name": "Sheet",
       "dir": "Sheet",
       "layer": "molecules",
@@ -5215,7 +5655,32 @@
       "importFrom": "@/src/components/molecules",
       "importExample": "import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from \"@/src/components/molecules\";",
       "description": "Sheet — a side drawer / panel (mobile sidebar, filters, quick-view, slide-in forms). A modal surface that slides in from an edge. Composes the shared DialogPrimitive (focus trap + scroll lock + Escape + focus restore + role=\"dialog\"/aria-modal) and just adds the edge positioning + slide animation + scrim. <Sheet> <SheetTrigger asChild><Button>Filters</Button></SheetTrigger> <SheetContent side=\"right\"> <SheetHeader><SheetTitle>Filters</SheetTitle><SheetDescription>Refine results</SheetDescription></SheetHeader> … <SheetFooter><SheetClose asChild><Button>Apply</Button></SheetClose></SheetFooter> </SheetContent> </Sheet> Parts: Sheet (root, controlled/uncontrolled `open`) · SheetTrigger (asChild) · SheetContent (`side` left/right/top/bottom, `showClose`) · SheetHeader · SheetTitle · SheetDescription · SheetFooter · SheetClose (asChild).",
-      "props": [],
+      "props": [
+        {
+          "name": "side",
+          "allowedValues": [
+            "left",
+            "right",
+            "top",
+            "bottom"
+          ],
+          "control": "inline-radio",
+          "description": "Edge the sheet slides in from.",
+          "default": "'right'"
+        },
+        {
+          "name": "showClose",
+          "control": "boolean",
+          "description": "Render the built-in close (X) button in the corner.",
+          "default": "true"
+        },
+        {
+          "name": "closeIcon",
+          "control": "text",
+          "description": "TPLibraryIcon name for the built-in close button glyph.",
+          "default": "'close-square'"
+        }
+      ],
       "stories": [
         "Playground",
         "Sides"
@@ -5581,10 +6046,16 @@
           "description": "Library icon name to override the dismiss glyph (blank = close-square)"
         },
         {
-          "name": "maxWidth"
+          "name": "maxWidth",
+          "default": "480",
+          "control": "number",
+          "description": "Cap the toast width in px (component default is 60%)"
         },
         {
-          "name": "lineClamp"
+          "name": "lineClamp",
+          "default": "2",
+          "control": "number",
+          "description": "Max lines for the title-only clamp before truncating (default 2)"
         },
         {
           "name": "progress",

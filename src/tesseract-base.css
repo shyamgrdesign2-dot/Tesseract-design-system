@@ -59,8 +59,12 @@ body {
   display: none;
 }
 
-/* Heading roles — scoped so the host's own h1..h6 are untouched. */
-[data-tp-theme] h1 {
+/* Heading roles — scoped so the host's own h1..h6 are untouched, and wrapped in
+   :where() so they are DEFAULTS (zero specificity): a component that styles its
+   own heading via a class (e.g. a card .title) always wins. Without :where the
+   element selector (0,1,1) silently overrode component .title classes (0,1,0),
+   forcing section titles to the big h3/h2 size. */
+:where([data-tp-theme] h1) {
   font-family: var(--font-heading);
   font-size: 36px;
   font-weight: 700;
@@ -68,11 +72,11 @@ body {
   letter-spacing: -0.02em;
   margin: 0;
 }
-[data-tp-theme] h2 { font-family: var(--font-sans); font-size: 30px; font-weight: 600; line-height: 1.27; letter-spacing: -0.01em; margin: 0; }
-[data-tp-theme] h3 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; line-height: 1.33; margin: 0; }
-[data-tp-theme] h4 { font-family: var(--font-sans); font-size: 20px; font-weight: 600; line-height: 1.4; margin: 0; }
-[data-tp-theme] h5 { font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 1.5; margin: 0; }
-[data-tp-theme] h6 { font-family: var(--font-sans); font-size: 14px; font-weight: 600; line-height: 1.43; letter-spacing: 0.01em; margin: 0; }
+:where([data-tp-theme] h2) { font-family: var(--font-sans); font-size: 30px; font-weight: 600; line-height: 1.27; letter-spacing: -0.01em; margin: 0; }
+:where([data-tp-theme] h3) { font-family: var(--font-sans); font-size: 24px; font-weight: 600; line-height: 1.33; margin: 0; }
+:where([data-tp-theme] h4) { font-family: var(--font-sans); font-size: 20px; font-weight: 600; line-height: 1.4; margin: 0; }
+:where([data-tp-theme] h5) { font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 1.5; margin: 0; }
+:where([data-tp-theme] h6) { font-family: var(--font-sans); font-size: 14px; font-weight: 600; line-height: 1.43; letter-spacing: 0.01em; margin: 0; }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────────
    Respect the OS "reduce motion" preference across every Tesseract component in
