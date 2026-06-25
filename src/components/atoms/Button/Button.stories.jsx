@@ -177,7 +177,11 @@ const buildCode = ({ shape = 'text', variant = 'solid', theme = 'primary', size 
 };
 
 export const Playground = {
-  name: '🎛 Playground',
+  args: {
+    leftIcon: "check-mark---tick"
+  },
+  name:'🎛 Playground',
+
   // For surface="dark", switch the canvas background via the Storybook
   // toolbar (Backgrounds → Dark) rather than a hardcoded backdrop.
   render: ({ shape, leftIcon, rightIcon, iconVariant, iconFamily, radius, href, children, ...args }) => {
@@ -206,7 +210,7 @@ export const Playground = {
       </Button>
     );
   },
-  parameters: { docs: { source: { transform: (_code, ctx) => buildCode(ctx.args) } } },
+  parameters:{ docs: { source: { transform: (_code, ctx) => buildCode(ctx.args) } } }
 };
 
 // ─── 2. Variants ────────────────────────────────────────────────────────────────

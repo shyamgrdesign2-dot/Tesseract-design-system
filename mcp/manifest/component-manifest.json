@@ -10,8 +10,8 @@
     ]
   },
   "counts": {
-    "components": 42,
-    "atoms": 17,
+    "components": 43,
+    "atoms": 18,
     "molecules": 25,
     "tokens": 216
   },
@@ -1360,6 +1360,42 @@
       ],
       "sourcePath": "src/components/atoms/Input/InputBox.jsx",
       "storiesPath": "src/components/atoms/Input/InputBox.stories.jsx"
+    },
+    {
+      "name": "Kbd",
+      "dir": "Kbd",
+      "layer": "atoms",
+      "exports": [
+        "Kbd"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Kbd } from \"@/src/components/atoms\";",
+      "description": "Kbd — a keyboard key/shortcut cap (⌘K, Esc, ↵). Pairs with Command / Menu shortcut hints and shortcut documentation. <Kbd>⌘</Kbd><Kbd>K</Kbd>   ·   <Kbd>Esc</Kbd>",
+      "props": [
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "children",
+          "default": "'K'"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Examples",
+        "Sizes"
+      ],
+      "sourcePath": "src/components/atoms/Kbd/Kbd.jsx",
+      "storiesPath": "src/components/atoms/Kbd/Kbd.stories.jsx"
     },
     {
       "name": "LoadingIndicator",
