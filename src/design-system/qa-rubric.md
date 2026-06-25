@@ -63,6 +63,24 @@ with a specific reason + file:line when failing.
 - [ ] `npm run lint` → 0 errors. `npm run build:lib` → clean. `npm run build:mcp` regenerated (31+ components).
 - [ ] Verified in Storybook (render + key interactions); default look unchanged; screenshot proof for visual changes.
 
+## Justified reuse exceptions (intentional — do NOT "fix")
+These hand-rolled bits were reviewed and deliberately NOT replaced with an atom/molecule,
+because reuse would regress the look or mismatch semantics. They are correct as-is:
+- **Plain checkmark / indeterminate** (Checkbox, Dropdown CheckIcon), **play-circle** (Header
+  tutorial), **drag-dots** (ClinicalTable), **spinner source** (LoadingIndicator), **tooltip
+  arrow** — no clean Iconsax catalog equivalent; swapping changes the glyph.
+- **DataTable pagination + rows-per-page** — 26px dense table-footer controls; the Button (36px)
+  and Dropdown (42px) atoms would visibly bloat them.
+- **SecondarySidebar search** — translucent white-on-gradient field on the blue rail; a slate-50
+  muted InputBox would mis-color it.
+- **Chip remove (×)** — a `role="button"` span, not a real `<button>`, because chips render
+  inside button triggers and nested `<button>` is invalid HTML.
+
+Open architectural investments (deferred, would need a new primitive / large rewrite — not
+exceptions, just larger work): a shared **Menu primitive** for action menus (ClinicalTable
+MoreMenu · Header overflow · Sidebar flyout); **Filter → Dropdown** rewrite; nav-item
+`href`/`render` routing; an InputBox "trigger" mode for the DateRangePicker trigger.
+
 ## Benchmark north star
 Match or exceed Material UI / Radix UI / shadcn-ui on **composition, customizability, a11y, and
 adoptability** — NOT on stylistic variant types. Do NOT import a foreign component's variant zoo
