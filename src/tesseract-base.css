@@ -28,6 +28,12 @@ body {
   color: var(--tesseract-fg-default, var(--tesseract-slate-900, #171725));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* "On a dark surface" white — theme-INDEPENDENT (the dark-mode ramp never
+     remaps this), so surface="dark" CTAs/chips stay white whether the page is
+     in light or dark mode. Use this (not slate-0) for content on a fixed-dark
+     banner, since slate-0 flips to near-black under the dark ramp. */
+  --tesseract-on-dark: #FFFFFF;
 }
 
 /* Zero-specificity (:where) so these neutralize the UA defaults but NEVER win

@@ -152,71 +152,71 @@
 
     /* dark surface ── solid */
     &[data-surface="dark"][data-theme="primary"] {
-      background-color: var(--tesseract-slate-0);
+      background-color: var(--tesseract-on-dark);
       color: var(--tesseract-blue-900);
 
       &:hover:not(:disabled):not([data-loading]) { background-color: var(--tesseract-slate-200); }
       &:active:not(:disabled):not([data-loading]) { background-color: var(--tesseract-slate-300); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 40%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 40%, transparent); }
       &:disabled:not([data-loading]) {
-        background-color: color-mix(in srgb, var(--tesseract-slate-0) 10%, transparent);
-        color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
+        background-color: color-mix(in srgb, var(--tesseract-on-dark) 10%, transparent);
+        color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
         box-shadow: none;
       }
     }
 
     &[data-surface="dark"][data-theme="neutral"] {
-      background-color: color-mix(in srgb, var(--tesseract-slate-0) 15%, transparent);
-      color: color-mix(in srgb, var(--tesseract-slate-0) 90%, transparent);
+      background-color: color-mix(in srgb, var(--tesseract-on-dark) 15%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 90%, transparent);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 22%, transparent); }
-      &:active:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 28%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 35%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent); }
+      &:active:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 28%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 35%, transparent); }
       &:disabled:not([data-loading]) {
-        background-color: color-mix(in srgb, var(--tesseract-slate-0) 7%, transparent);
-        color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
+        background-color: color-mix(in srgb, var(--tesseract-on-dark) 7%, transparent);
+        color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
         box-shadow: none;
       }
     }
 
     &[data-surface="dark"][data-theme="error"] {
       background-color: var(--tesseract-error-600);
-      color: var(--tesseract-slate-0);
+      color: var(--tesseract-on-dark);
 
       &:hover:not(:disabled):not([data-loading]) { background-color: var(--tesseract-error-400, var(--tesseract-error-500)); }
       &:active:not(:disabled):not([data-loading]) { background-color: var(--tesseract-error-600); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-error-400) 45%, transparent); }
       &:disabled:not([data-loading]) {
-        background-color: color-mix(in srgb, var(--tesseract-slate-0) 10%, transparent);
-        color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
+        background-color: color-mix(in srgb, var(--tesseract-on-dark) 10%, transparent);
+        color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
         box-shadow: none;
       }
     }
 
     &[data-surface="dark"][data-theme="success"] {
       background-color: var(--tesseract-success-700);
-      color: var(--tesseract-slate-0);
+      color: var(--tesseract-on-dark);
 
       &:hover:not(:disabled):not([data-loading]) { background-color: var(--tesseract-success-700); }
       &:active:not(:disabled):not([data-loading]) { background-color: var(--tesseract-success-700); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-success-600) 45%, transparent); }
       &:disabled:not([data-loading]) {
-        background-color: color-mix(in srgb, var(--tesseract-slate-0) 10%, transparent);
-        color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
+        background-color: color-mix(in srgb, var(--tesseract-on-dark) 10%, transparent);
+        color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
         box-shadow: none;
       }
     }
 
     &[data-surface="dark"][data-theme="warning"] {
       background-color: var(--tesseract-warning-700);
-      color: var(--tesseract-slate-0);
+      color: var(--tesseract-on-dark);
 
       &:hover:not(:disabled):not([data-loading]) { background-color: var(--tesseract-warning-700); }
-      &:active:not(:disabled):not([data-loading]) { background-color: var(--tesseract-warning-700); color: var(--tesseract-slate-0); }
+      &:active:not(:disabled):not([data-loading]) { background-color: var(--tesseract-warning-700); color: var(--tesseract-on-dark); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-warning-600) 45%, transparent); }
       &:disabled:not([data-loading]) {
-        background-color: color-mix(in srgb, var(--tesseract-slate-0) 10%, transparent);
-        color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
+        background-color: color-mix(in srgb, var(--tesseract-on-dark) 10%, transparent);
+        color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
         box-shadow: none;
       }
     }
@@ -310,27 +310,27 @@
 
     /* dark surface ── outline (frosted glass: subtle fill + backdrop blur) */
     &[data-surface="dark"][data-theme="primary"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 90%, transparent);
-      border-color: color-mix(in srgb, var(--tesseract-slate-0) 60%, transparent);
-      background-color: color-mix(in srgb, var(--tesseract-slate-0) 8%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 90%, transparent);
+      border-color: color-mix(in srgb, var(--tesseract-on-dark) 60%, transparent);
+      background-color: color-mix(in srgb, var(--tesseract-on-dark) 8%, transparent);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 16%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); }
-      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); border-color: color-mix(in srgb, var(--tesseract-slate-0) 15%, transparent); background-color: color-mix(in srgb, var(--tesseract-slate-0) 4%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 16%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); }
+      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); border-color: color-mix(in srgb, var(--tesseract-on-dark) 15%, transparent); background-color: color-mix(in srgb, var(--tesseract-on-dark) 4%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="neutral"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 65%, transparent);
-      border-color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent);
-      background-color: color-mix(in srgb, var(--tesseract-slate-0) 6%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 65%, transparent);
+      border-color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent);
+      background-color: color-mix(in srgb, var(--tesseract-on-dark) 6%, transparent);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 12%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent); }
-      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-slate-0) 25%, transparent); border-color: color-mix(in srgb, var(--tesseract-slate-0) 12%, transparent); background-color: color-mix(in srgb, var(--tesseract-slate-0) 3%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 20%, transparent); }
+      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-on-dark) 25%, transparent); border-color: color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent); background-color: color-mix(in srgb, var(--tesseract-on-dark) 3%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="error"] {
@@ -429,19 +429,19 @@
 
     /* dark surface ── ghost */
     &[data-surface="dark"][data-theme="primary"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 88%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 88%, transparent);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 10%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 28%, transparent); }
-      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 10%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 28%, transparent); }
+      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="neutral"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 60%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 60%, transparent);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 8%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent); }
-      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-slate-0) 25%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 8%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 20%, transparent); }
+      &:disabled:not([data-loading]) { color: color-mix(in srgb, var(--tesseract-on-dark) 25%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="error"] {
@@ -549,21 +549,21 @@
 
     /* dark surface ── tonal */
     &[data-surface="dark"][data-theme="primary"] {
-      background-color: color-mix(in srgb, var(--tesseract-slate-0) 14%, transparent);
-      color: color-mix(in srgb, var(--tesseract-slate-0) 90%, transparent);
+      background-color: color-mix(in srgb, var(--tesseract-on-dark) 14%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 90%, transparent);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 22%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 28%, transparent); }
-      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 6%, transparent); color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 28%, transparent); }
+      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 6%, transparent); color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="neutral"] {
-      background-color: color-mix(in srgb, var(--tesseract-slate-0) 9%, transparent);
-      color: color-mix(in srgb, var(--tesseract-slate-0) 65%, transparent);
+      background-color: color-mix(in srgb, var(--tesseract-on-dark) 9%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 65%, transparent);
 
-      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 15%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent); }
-      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 4%, transparent); color: color-mix(in srgb, var(--tesseract-slate-0) 25%, transparent); }
+      &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 15%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 20%, transparent); }
+      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 4%, transparent); color: color-mix(in srgb, var(--tesseract-on-dark) 25%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="error"] {
@@ -572,7 +572,7 @@
 
       &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-error-300) 22%, transparent); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-error-300) 30%, transparent); }
-      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 4%, transparent); color: color-mix(in srgb, var(--tesseract-error-300) 30%, transparent); }
+      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 4%, transparent); color: color-mix(in srgb, var(--tesseract-error-300) 30%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="success"] {
@@ -581,7 +581,7 @@
 
       &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-success-600) 22%, transparent); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-success-600) 30%, transparent); }
-      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 4%, transparent); color: color-mix(in srgb, var(--tesseract-success-600) 30%, transparent); }
+      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 4%, transparent); color: color-mix(in srgb, var(--tesseract-success-600) 30%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="warning"] {
@@ -590,7 +590,7 @@
 
       &:hover:not(:disabled):not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-warning-600) 22%, transparent); }
       &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-warning-600) 30%, transparent); }
-      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-slate-0) 4%, transparent); color: color-mix(in srgb, var(--tesseract-warning-600) 30%, transparent); }
+      &:disabled:not([data-loading]) { background-color: color-mix(in srgb, var(--tesseract-on-dark) 4%, transparent); color: color-mix(in srgb, var(--tesseract-warning-600) 30%, transparent); }
     }
   }
 
@@ -656,19 +656,19 @@
 
     /* dark surface ── link */
     &[data-surface="dark"][data-theme="primary"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 88%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 88%, transparent);
 
-      &:hover:not(:disabled) { color: var(--tesseract-slate-0); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); border-radius: var(--tesseract-radius-2, 2px); }
-      &:disabled { color: color-mix(in srgb, var(--tesseract-slate-0) 30%, transparent); }
+      &:hover:not(:disabled) { color: var(--tesseract-on-dark); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); border-radius: var(--tesseract-radius-2, 2px); }
+      &:disabled { color: color-mix(in srgb, var(--tesseract-on-dark) 30%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="neutral"] {
-      color: color-mix(in srgb, var(--tesseract-slate-0) 60%, transparent);
+      color: color-mix(in srgb, var(--tesseract-on-dark) 60%, transparent);
 
-      &:hover:not(:disabled) { color: color-mix(in srgb, var(--tesseract-slate-0) 85%, transparent); }
-      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent); border-radius: var(--tesseract-radius-2, 2px); }
-      &:disabled { color: color-mix(in srgb, var(--tesseract-slate-0) 25%, transparent); }
+      &:hover:not(:disabled) { color: color-mix(in srgb, var(--tesseract-on-dark) 85%, transparent); }
+      &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--tesseract-on-dark) 20%, transparent); border-radius: var(--tesseract-radius-2, 2px); }
+      &:disabled { color: color-mix(in srgb, var(--tesseract-on-dark) 25%, transparent); }
     }
 
     &[data-surface="dark"][data-theme="error"] {
