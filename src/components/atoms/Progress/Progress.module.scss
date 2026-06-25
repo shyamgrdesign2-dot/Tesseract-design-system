@@ -1,0 +1,44 @@
+/* Progress.module.scss — progress bar. Token-only, self-contained. */
+
+.track {
+  &, & *, & *::before, & *::after { box-sizing: border-box; }
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--tesseract-slate-100);
+  border-radius: var(--tesseract-radius-full);
+  corner-shape: round;
+
+  --pg-fill: var(--tesseract-blue-500);
+  &[data-tone="success"] { --pg-fill: var(--tesseract-success-500); }
+  &[data-tone="warning"] { --pg-fill: var(--tesseract-warning-500); }
+  &[data-tone="error"]   { --pg-fill: var(--tesseract-error-500); }
+
+  &[data-size="sm"] { height: var(--tesseract-size-4, 4px); }
+  &[data-size="md"] { height: var(--tesseract-size-8, 8px); }
+  &[data-size="lg"] { height: var(--tesseract-size-12, 12px); }
+}
+
+.fill {
+  height: 100%;
+  background: var(--pg-fill);
+  border-radius: inherit;
+  transition: width 240ms ease;
+}
+
+// Indeterminate — a sweeping segment.
+.track[data-indeterminate] .fill {
+  width: 40%;
+  transition: none;
+  animation: tesseract-pg-sweep 1.2s ease-in-out infinite;
+}
+
+@keyframes tesseract-pg-sweep {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track[data-indeterminate] .fill { animation-duration: 2.4s; }
+}

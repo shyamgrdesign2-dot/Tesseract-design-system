@@ -10,8 +10,8 @@
     ]
   },
   "counts": {
-    "components": 36,
-    "atoms": 16,
+    "components": 37,
+    "atoms": 17,
     "molecules": 20,
     "tokens": 216
   },
@@ -1608,6 +1608,68 @@
       ],
       "sourcePath": "src/components/atoms/MedicalIcon/MedicalIcon.jsx",
       "storiesPath": "src/components/atoms/MedicalIcon/MedicalIcon.stories.jsx"
+    },
+    {
+      "name": "Progress",
+      "dir": "Progress",
+      "layer": "atoms",
+      "exports": [
+        "Progress"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { Progress } from \"@/src/components/atoms\";",
+      "description": "Progress — a horizontal progress bar (uploads, imports, treatment-plan completion). Determinate when `value` (0–100) is set; indeterminate (animated sweep) when it is omitted/null. Exposes the progressbar role + aria-value* for assistive tech. <Progress value={64} /> <Progress />            // indeterminate",
+      "props": [
+        {
+          "name": "value",
+          "default": "null",
+          "control": "range"
+        },
+        {
+          "name": "max",
+          "default": "100"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "tone",
+          "default": "\"primary\"",
+          "allowedValues": [
+            "primary",
+            "success",
+            "warning",
+            "error"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "label",
+          "default": "'Upload progress'",
+          "control": "text"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Tones",
+        "Indeterminate",
+        "Sizes"
+      ],
+      "sourcePath": "src/components/atoms/Progress/Progress.jsx",
+      "storiesPath": "src/components/atoms/Progress/Progress.stories.jsx"
     },
     {
       "name": "Radio",

@@ -17,6 +17,7 @@ export { Skeleton } from "./Skeleton";
 
 // Feedback
 export { LoadingIndicator } from "./LoadingIndicator";
+export { Progress } from "./Progress";
 
 // Form
 export { InputBox } from "./Input";
