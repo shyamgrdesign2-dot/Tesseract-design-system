@@ -61,7 +61,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
     defaultCollapsed = false,
     onCollapsedChange,
     collapseIcon = "chevron-down",
-    collapseIconPosition = "left",
+    collapseIconPosition = "right",
     sticky = false,
     maxBodyHeight,
     elevation = false,

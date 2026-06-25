@@ -63,7 +63,7 @@ const meta = {
     tone: 'neutral',
     headerGradient: false,
     collapsible: true,
-    collapseIconPosition: 'left',
+    collapseIconPosition: 'right',
     defaultCollapsed: false,
     elevation: false,
     bordered: true,
