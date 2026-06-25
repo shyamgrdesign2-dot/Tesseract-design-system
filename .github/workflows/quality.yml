@@ -1,0 +1,47 @@
+name: Quality gate
+
+# Runs on every push to main and every PR. Gate = lint + library build +
+# the Storybook test harness (render + interaction play() + axe a11y, in real
+# Chromium via @storybook/addon-vitest). Keeps the components FE-dev-ready:
+# nothing merges that breaks rendering, an interaction, or accessibility.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-build:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build library
+        run: npm run build:lib
+
+  storybook-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Storybook tests (render + interaction + a11y)
+        run: npm run test-storybook
