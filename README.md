@@ -68,13 +68,19 @@ import { Button, Badge, DataTable, TPIcon } from "tesseract-ui";
 
 ## What's inside
 
-- **Atoms (16):** Button, Badge, Chip, Checkbox, Radio, Toggle, Slider, InputBox,
-  Avatar, Divider, Skeleton, LoadingIndicator, SegmentedControl, AnimatedGrid,
-  Logo, MedicalIcon — plus the icon components `TPIcon` / `TPLibraryIcon`.
-- **Molecules (15):** Header, Sidebar, SecondarySidebar, Tabs, Accordion,
-  DataTable, ClinicalTable, Filter, Dropdown, DateRangePicker, ConfirmDialog,
-  Toast, Tooltip, RxPadSection, HeroBanner.
+**40 components — 17 atoms + 23 molecules.** Each ships one configurable component
+per job rather than many near-duplicates (one Button, one Dropdown, one DataTable,
+one date picker, one container shell).
 
+- **Atoms (17):** Button, Badge, Chip, Checkbox, Radio, Toggle, Slider, InputBox,
+  InputOTP, Avatar, Divider, Skeleton, LoadingIndicator, SegmentedControl,
+  Progress, AnimatedGrid, Logo — plus the icon components `TPIcon` / `TPLibraryIcon`.
+- **Molecules (23):** Header, Sidebar, SecondarySidebar, Breadcrumb, Tabs, Command,
+  Accordion, Card, SectionCard, DataTable, ClinicalTable, Pagination, Filter,
+  Dropdown, DateRangePicker, Drawer, ConfirmDialog, Empty, Alert, Toast, Tooltip,
+  RxPadSection, HeroBanner.
+
+Full list with one-line descriptions and per-component docs: **[`docs/CATALOG.md`](docs/CATALOG.md)**.
 Browse them live in **Storybook** (`npm run storybook`).
 
 ---
@@ -233,6 +239,12 @@ via `TesseractThemeProvider`. Icons are 100% CDN (no local SVG assets).
 
 ## Docs
 
+Start at **[`docs/README.md`](docs/README.md)** — the documentation index. Key files:
+
+- [`docs/CATALOG.md`](docs/CATALOG.md) — every component (40), grouped, with one-line
+  descriptions and links to per-component usage docs in [`docs/components/`](docs/components).
+- [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md) — the **v1.0 stability contract**
+  (SemVer, public-API surface, how consumers stay upgrade-safe). Read before adopting.
 - [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md) — consume the package, the
   skill, and the MCP in a new project (CLI / cloud).
 - [`docs/ICONS.md`](docs/ICONS.md) — the icon CDN URL structure, families, styles,

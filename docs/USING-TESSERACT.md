@@ -105,8 +105,9 @@ then `npm install`. (Or one-shot: `npm i github:DHSPL-Tatvacare/tesseract-design
 - Because `dist/` is prebuilt on the `build` branch and there's **no `prepare`
   script**, the install is lightweight — it does **not** build or pull our dev
   tools (Storybook/Playwright) into Pm-Doctor-Portal.
-- To pin a version, install from a tag instead of `#build` once you start tagging
-  releases (e.g. `#v0.1.0`).
+- To pin a version, install from a tag instead of `#build` (e.g. `#v1.0.0` — the
+  first stable release). See [PREREQUISITE.md](./PREREQUISITE.md) for the
+  semver stability contract: within `1.x`, code built against v1.0 keeps working.
 - After this is set up, the `build` branch refreshes automatically on every merge
   to `main`. To pull updates in Pm-Doctor-Portal: `npm update tesseract-ui` (or
   re-`npm install`).
@@ -165,7 +166,7 @@ Also:
 npm create vite@latest my-emr -- --template react && cd my-emr
 
 # 2. components
-npm install /Users/shyamsundar/Desktop/TP_UI_Storybook/tesseract-ui-0.1.0.tgz react react-dom   # (Option B)
+npm install /Users/shyamsundar/Desktop/TP_UI_Storybook/tesseract-ui-1.0.0.tgz react react-dom   # (Option B)
 
 # 3. AI grounding
 cp -R /Users/shyamsundar/Desktop/TP_UI_Storybook/.claude/skills/tesseract .claude/skills/tesseract

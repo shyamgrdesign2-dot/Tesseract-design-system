@@ -1,6 +1,6 @@
 {
   "name": "tesseract-ui",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tesseract Design System — a zero-runtime-dependency React component library (atoms + molecules), published as tesseract-ui. Only react / react-dom as peers.",
   "license": "UNLICENSED",
   "type": "module",
