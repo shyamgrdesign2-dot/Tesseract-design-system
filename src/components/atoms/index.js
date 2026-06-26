@@ -28,6 +28,7 @@ export { Toggle } from "./Toggle";
 // Form — extended
 export { Radio, RadioGroup, FormControlLabel } from "./Radio";
 export { Slider } from "./Slider";
+export { SegmentedControl } from "./SegmentedControl";
 
 // Data Display
 export { Chip } from "./Chip";
