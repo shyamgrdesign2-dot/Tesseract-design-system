@@ -2713,6 +2713,36 @@
           "control": "select"
         },
         {
+          "name": "tone",
+          "default": "\"neutral\"",
+          "allowedValues": [
+            "neutral",
+            "primary",
+            "success",
+            "warning",
+            "error",
+            "violet"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "gradient",
+          "default": "false",
+          "control": "boolean",
+          "description": "Branded gradient fill (in tone) + light text"
+        },
+        {
+          "name": "background",
+          "control": "color",
+          "description": "Custom background override"
+        },
+        {
+          "name": "interactive",
+          "default": "false",
+          "control": "boolean",
+          "description": "Hover-lift for clickable cards"
+        },
+        {
           "name": "className"
         },
         {
@@ -2725,6 +2755,8 @@
       "stories": [
         "Playground",
         "Variants",
+        "GradientCards",
+        "IconAndProfile",
         "StatTile"
       ],
       "sourcePath": "src/components/molecules/Card/Card.jsx",
@@ -3888,6 +3920,10 @@
       "stories": [
         "Playground",
         "WidthPresets",
+        "WithAppHeader",
+        "FooterVariants",
+        "RichContent",
+        "NoHeader",
         "BottomSheet"
       ],
       "sourcePath": "src/components/molecules/Drawer/Drawer.jsx",
@@ -4205,7 +4241,7 @@
       ],
       "importFrom": "@/src/components/molecules",
       "importExample": "import { Empty } from \"@/src/components/molecules\";",
-      "description": "Empty — empty-state for tables, lists, sidebars, and search no-results. A centered icon/illustration + title + description + optional action(s). <Empty icon=\"folder-open\" title=\"No patients yet\" description=\"Add your first patient to get started.\" action={<Button leftIcon={…}>Add patient</Button>} />",
+      "description": "Empty — empty-state for tables, lists, sidebars, and search no-results. A centered icon/illustration + title + description + optional action(s) + an optional text link. <Empty icon=\"folder-open\" title=\"No patients yet\" description=\"Add your first patient to get started.\" action={<Button>Add patient</Button>} secondaryAction={<Button variant=\"outline\" theme=\"neutral\">Import</Button>} link={{ label: \"Learn more\", href: \"/docs\" }} />",
       "props": [
         {
           "name": "icon",
@@ -4216,6 +4252,11 @@
         {
           "name": "media",
           "description": "Custom illustration node — overrides `icon` when provided."
+        },
+        {
+          "name": "iconSize",
+          "control": "number",
+          "description": "Glyph size in px (disc scales with it)."
         },
         {
           "name": "title",
@@ -4234,6 +4275,12 @@
           "description": "Primary action node (compose the Button atom). Driven via `actionLabel` in stories."
         },
         {
+          "name": "secondaryAction"
+        },
+        {
+          "name": "link"
+        },
+        {
           "name": "size",
           "default": "\"md\"",
           "allowedValues": [
@@ -4247,6 +4294,9 @@
           "name": "className"
         },
         {
+          "name": "style"
+        },
+        {
           "name": "actionLabel",
           "control": "text",
           "description": "Story helper: label for the primary action Button. Leave empty for no action.",
@@ -4256,7 +4306,10 @@
       "stories": [
         "Playground",
         "NoResults",
-        "Small"
+        "Small",
+        "TwoActions",
+        "WithLink",
+        "IconSizes"
       ],
       "sourcePath": "src/components/molecules/Empty/Empty.jsx",
       "storiesPath": "src/components/molecules/Empty/Empty.stories.jsx"
