@@ -140,6 +140,30 @@
   background: linear-gradient(to left, color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent), transparent);
 }
 
+/* ── Sticky FIRST column (left-pinned) ── mirror of .sticky, anchored left. */
+.stickyLeft {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--tesseract-slate-0, var(--tesseract-slate-0));
+}
+.headRow .stickyLeft { background: var(--tesseract-slate-50, var(--tesseract-slate-50)); z-index: 6; }
+.wrap[data-sticky-header] .th.stickyLeft { z-index: 8; }
+
+/* Right fade — shadow on the right edge of a left-pinned column while content
+   scrolls under it. */
+.wrap[data-behind] .stickyLeft[data-shadow]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--tesseract-size-18);
+  transform: translateX(100%);
+  pointer-events: none;
+  background: linear-gradient(to right, color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent), transparent);
+}
+
 .actionCell {
   display: flex;
   align-items: center;

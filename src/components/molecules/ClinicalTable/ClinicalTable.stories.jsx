@@ -30,6 +30,8 @@ const meta = {
     loading: { control: 'boolean', description: 'Show skeleton rows instead of data', table: { category: 'State' } },
     loadingRows: { control: { type: 'number', min: 1, max: 12, step: 1 }, name: 'loading rows', description: 'How many skeleton rows to render while loading', table: { category: 'State' } },
     stickyHeader: { control: 'boolean', name: 'sticky header', description: 'Pin the header while the body scrolls (pair with maxHeight)', table: { category: 'Layout' } },
+    stickyFirst: { control: 'boolean', name: 'sticky first column', description: 'Pin the first (Name) column to the left edge on horizontal scroll', table: { category: 'Layout' } },
+    stickyLast: { control: 'boolean', name: 'sticky last column', description: 'Pin the last data column to the right edge on horizontal scroll', table: { category: 'Layout' } },
     flagCustom: { control: 'boolean', name: 'flag custom names', description: 'Ring the Name cell when the entry is not in the frequently-used list' },
     dragIcon:      { control: 'text', tpIcon: true, name: 'Drag handle icon', table: { category: 'Icons' } },
     moreIcon:      { control: 'text', tpIcon: true, name: 'Kebab/More icon', table: { category: 'Icons' } },
@@ -38,7 +40,7 @@ const meta = {
     actionIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'Action icon style', description: "Shared icon style for the action glyphs. 'default' keeps each glyph's own style (drag/delete/duplicate linear, more bold).", table: { category: 'Icons' } },
     actionIconFamily:  { control: 'text', name: 'Action icon family', description: 'Override the auto-resolved CDN family for the action glyphs (blank = auto)', table: { category: 'Icons' } },
   },
-  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, loadingRows: 4, stickyHeader: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy', actionIconVariant: 'default', actionIconFamily: '' },
+  args: { reorderable: true, deletable: true, showRowMenu: true, autoRow: true, density: 'comfortable', loading: false, loadingRows: 4, stickyHeader: false, stickyFirst: false, stickyLast: false, flagCustom: false, dragIcon: '', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy', actionIconVariant: 'default', actionIconFamily: '' },
 };
 
 export default meta;

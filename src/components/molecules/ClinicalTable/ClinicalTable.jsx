@@ -52,6 +52,10 @@
  *   emptyState   ReactNode  shown when there are no rows AND no draft row
  *                  (autoRow off / loading off). Default: the draft row only.
  *   stickyHeader boolean  pin the header while the body scrolls vertically
+ *   stickyFirst  boolean  pin the first (Name) column to the left edge
+ *   stickyLast   boolean  pin the last data column to the right edge
+ *                (edge-anchored, single column per edge; an explicit
+ *                 column.sticky still wins)
  *   maxHeight    number|string  cap the table height → vertical scroll
  *
  *   Per-column `render(value, row) => ReactNode`  escape hatch: when present, the
@@ -97,6 +101,8 @@ export const ClinicalTable = React.forwardRef(function ClinicalTable({
   loadingRows = 4,
   emptyState,
   stickyHeader = false,
+  stickyFirst = false,
+  stickyLast = false,
   maxHeight,
   dragIcon,
   moreIcon,
@@ -126,7 +132,20 @@ export const ClinicalTable = React.forwardRef(function ClinicalTable({
     id: "notes", header: "Notes", type: "text", placeholder: "Notes", minWidth: 160, expand: true,
     ...notes,
   };
-  const rawDataColumns = [nameCol, ...columns, ...(notesCol ? [notesCol] : [])];
+  // Edge-sticky convenience: stickyFirst pins the first (Name) column to the left
+  // edge, stickyLast pins the last data column to the right. Always edge-anchored;
+  // an explicit column.sticky wins. (Single column per edge — ClinicalTable's
+  // fluid min/max widths make accurate multi-column pixel offsets unreliable;
+  // DataTable does 1–2 via header measurement.)
+  const baseColumns = [nameCol, ...columns, ...(notesCol ? [notesCol] : [])];
+  const rawDataColumns = (!stickyFirst && !stickyLast)
+    ? baseColumns
+    : baseColumns.map((c, i) => {
+        if (c.sticky) return c;
+        if (stickyFirst && i === 0) return { ...c, sticky: "left" };
+        if (stickyLast && i === baseColumns.length - 1) return { ...c, sticky: "right" };
+        return c;
+      });
   const dataColumns = React.useMemo(() => {
     const normal = rawDataColumns.filter((c) => c.sticky !== "right");
     const sticky = rawDataColumns.filter((c) => c.sticky === "right");
@@ -302,7 +321,7 @@ export const ClinicalTable = React.forwardRef(function ClinicalTable({
           <tr className={styles.headRow}>
             {reorderable && <th className={cn(styles.th, styles.sideCol)} aria-hidden />}
             {dataColumns.map((c) => (
-              <th key={c.id} className={cn(styles.th, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-align={c.align} data-shadow={c.sticky === "right" || undefined}>
+              <th key={c.id} className={cn(styles.th, c.sticky === "right" && styles.sticky, c.sticky === "left" && styles.stickyLeft)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-align={c.align} data-shadow={(c.sticky === "right" || c.sticky === "left") || undefined}>
                 {c.header}
               </th>
             ))}
@@ -314,7 +333,7 @@ export const ClinicalTable = React.forwardRef(function ClinicalTable({
             <tr key={`sk-${i}`} className={styles.row} aria-hidden>
               {reorderable && <td className={cn(styles.td, styles.sideCol)} />}
               {dataColumns.map((c) => (
-                <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={c.sticky === "right" || undefined}>
+                <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky, c.sticky === "left" && styles.stickyLeft)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={(c.sticky === "right" || c.sticky === "left") || undefined}>
                   <div className={styles.skelCell}>
                     <Skeleton variant="text" height={12} width={c.id === primaryColId ? "70%" : "55%"} />
                   </div>
@@ -361,7 +380,7 @@ export const ClinicalTable = React.forwardRef(function ClinicalTable({
                   // row can be typed in regardless of custom renderers.
                   const useCustom = typeof c.render === "function" && !isDraft;
                   return (
-                    <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={c.sticky === "right" || undefined}>
+                    <td key={c.id} className={cn(styles.td, c.sticky === "right" && styles.sticky, c.sticky === "left" && styles.stickyLeft)} style={{ ...columnWidthStyle(c), ...(c.sticky === "right" && hasAction ? { right: 92 } : {}) }} data-shadow={(c.sticky === "right" || c.sticky === "left") || undefined}>
                       {useCustom ? (
                         <div className={styles.customCell} data-align={c.align}>{c.render(row[c.id], row)}</div>
                       ) : (
