@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card';
 import { Button } from '@/src/components/atoms/Button';
 import { Badge } from '@/src/components/atoms/Badge';
+import { Avatar } from '@/src/components/atoms/Avatar';
+import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 
 const meta = {
   title: 'Molecules/Card',
@@ -27,8 +29,13 @@ const meta = {
     variant: { control: 'inline-radio', options: ['default', 'outline', 'elevated'], table: { category: 'Appearance' } },
     padding: { control: 'inline-radio', options: ['none', 'sm', 'md', 'lg'], table: { category: 'Appearance' } },
     radius: { control: 'select', options: ['default', 'sharp', '8', '12', '16', '20', '24'], table: { category: 'Appearance' } },
+    tone: { control: 'inline-radio', options: ['neutral', 'primary', 'success', 'warning', 'error', 'violet'], table: { category: 'Appearance' } },
+    gradient: { control: 'boolean', description: 'Branded gradient fill (in tone) + light text', table: { category: 'Appearance' } },
+    pattern: { control: 'inline-radio', options: ['dots', 'grid', 'none'], description: 'Texture over the gradient', table: { category: 'Appearance' } },
+    background: { control: 'color', description: 'Custom background override', table: { category: 'Appearance' } },
+    interactive: { control: 'boolean', description: 'Hover-lift for clickable cards', table: { category: 'Appearance' } },
   },
-  args: { variant: 'default', padding: 'md', radius: 'default' },
+  args: { variant: 'default', padding: 'md', radius: 'default', tone: 'neutral', gradient: false, pattern: 'dots', interactive: false },
 };
 export default meta;
 
@@ -60,6 +67,49 @@ export const Variants = {
           <CardContent>Body content sits here.</CardContent>
         </Card>
       ))}
+    </div>
+  ),
+};
+
+/** Gradient hero cards — branded gradient + pattern + light text, per tone. */
+export const GradientCards = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+      {[['primary', 'dots'], ['violet', 'grid'], ['success', 'dots']].map(([tone, pattern]) => (
+        <Card key={tone} gradient tone={tone} pattern={pattern} padding="lg" style={{ width: 240 }}>
+          <CardHeader>
+            <span style={{ display: 'inline-flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--tesseract-radius-12)', background: 'color-mix(in srgb, var(--tesseract-on-dark) 18%, transparent)' }}>
+              <TPLibraryIcon name="health" variant="bulk" size={22} color="var(--tesseract-on-dark)" />
+            </span>
+            <CardTitle style={{ textTransform: 'capitalize' }}>{tone} plan</CardTitle>
+            <CardDescription>Includes consults, labs & follow-ups.</CardDescription>
+          </CardHeader>
+          <CardFooter><Button size="sm" surface="dark" variant="solid">View</Button></CardFooter>
+        </Card>
+      ))}
+    </div>
+  ),
+};
+
+/** Icon card + profile card (composition with Avatar / icon disc). */
+export const IconAndProfile = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+      <Card variant="elevated" style={{ width: 260 }}>
+        <CardHeader style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <span style={{ display: 'inline-flex', width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--tesseract-radius-12)', background: 'var(--tesseract-blue-50)' }}>
+            <TPLibraryIcon name="calendar-1" variant="bulk" size={24} color="var(--tesseract-blue-600)" />
+          </span>
+          <div><CardTitle>Appointments</CardTitle><CardDescription>12 scheduled today</CardDescription></div>
+        </CardHeader>
+      </Card>
+      <Card variant="default" interactive style={{ width: 260 }}>
+        <CardHeader style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Avatar name="Shyam GR" size="md" />
+          <div><CardTitle>Shyam GR</CardTitle><CardDescription>M · 35y · MRN-0061</CardDescription></div>
+        </CardHeader>
+        <CardFooter><Badge variant="soft" color="success" size="sm">Active</Badge></CardFooter>
+      </Card>
     </div>
   ),
 };

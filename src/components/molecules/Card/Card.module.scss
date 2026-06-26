@@ -27,6 +27,56 @@
   &[data-padding="sm"]   { padding: var(--tesseract-space-3); }
   &[data-padding="md"]   { padding: var(--tesseract-space-4); }
   &[data-padding="lg"]   { padding: var(--tesseract-space-6); }
+
+  // Tone accent (gradient stops). Default neutral = slate.
+  --card-grad-from: var(--tesseract-slate-700);
+  --card-grad-to: var(--tesseract-slate-900);
+  &[data-tone="primary"] { --card-grad-from: var(--tesseract-blue-500);    --card-grad-to: var(--tesseract-blue-700); }
+  &[data-tone="success"] { --card-grad-from: var(--tesseract-success-500); --card-grad-to: var(--tesseract-success-700); }
+  &[data-tone="warning"] { --card-grad-from: var(--tesseract-warning-500); --card-grad-to: var(--tesseract-warning-700); }
+  &[data-tone="error"]   { --card-grad-from: var(--tesseract-error-500);   --card-grad-to: var(--tesseract-error-700); }
+  &[data-tone="violet"]  { --card-grad-from: var(--tesseract-violet-500);  --card-grad-to: var(--tesseract-violet-700); }
+
+  // Custom background override (token/colour/gradient).
+  &[data-bg], & { background: var(--card-bg, var(--tesseract-slate-0)); }
+
+  // Interactive (clickable) — hover lift.
+  &[data-interactive] {
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+    &:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--tesseract-slate-900) 18%, transparent); }
+  }
+
+  // Gradient fill — branded gradient in `tone`, light text, optional pattern.
+  &[data-gradient] {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    background: linear-gradient(135deg, var(--card-grad-from) 0%, var(--card-grad-to) 100%);
+    color: var(--tesseract-on-dark);
+    isolation: isolate;
+    .title, .description, .content { color: var(--tesseract-on-dark); }
+    .description, .content { color: color-mix(in srgb, var(--tesseract-on-dark) 82%, transparent); }
+  }
+  // Pattern overlays (sit above the gradient, below content).
+  &[data-pattern]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  &[data-pattern="dots"]::before {
+    background-image: radial-gradient(color-mix(in srgb, var(--tesseract-on-dark) 16%, transparent) 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+  }
+  &[data-pattern="grid"]::before {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
 }
 
 .header {

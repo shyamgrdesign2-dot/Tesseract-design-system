@@ -19,6 +19,13 @@
  *   variant   "default" | "outline" | "elevated"   surface treatment (default "default")
  *   padding   "none" | "sm" | "md" | "lg"          inner padding scale (default "md")
  *   radius    number | "pill" | "sharp" | string   corner override (else token)
+ *   tone      "neutral" | "primary" | "success" | "warning" | "error" | "violet"
+ *             accent for the gradient / left-accent treatments (default "neutral")
+ *   gradient  boolean — fill with a branded gradient in `tone` + a subtle pattern
+ *             and light text (for hero / highlight tiles)
+ *   pattern   "dots" | "grid" | "none" — texture over a gradient (default "dots")
+ *   background  any CSS background (token/colour/gradient) — custom override
+ *   interactive boolean — hover lift + pointer (clickable cards)
  *   className, style, …rest (spread to root)
  */
 
@@ -27,17 +34,26 @@ import { resolveRadius, cn } from "@/src/hooks/utils";
 import styles from "./Card.module.scss";
 
 export const Card = React.forwardRef(function Card(
-  { variant = "default", padding = "md", radius, className, style, children, ...rest },
+  { variant = "default", padding = "md", radius, tone = "neutral", gradient = false, pattern = "dots", background, interactive = false, className, style, children, ...rest },
   ref,
 ) {
   const r = resolveRadius(radius);
+  const cardStyle = {
+    ...(r != null ? { "--card-radius": r } : null),
+    ...(background ? { "--card-bg": background } : null),
+    ...style,
+  };
   return (
     <div
       ref={ref}
       className={cn(styles.card, className)}
       data-variant={variant}
       data-padding={padding}
-      style={r != null ? { "--card-radius": r, ...style } : style}
+      data-tone={tone !== "neutral" ? tone : undefined}
+      data-gradient={gradient ? "" : undefined}
+      data-pattern={gradient && pattern !== "none" ? pattern : undefined}
+      data-interactive={interactive ? "" : undefined}
+      style={Object.keys(cardStyle).length ? cardStyle : undefined}
       {...rest}
     >
       {children}
