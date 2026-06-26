@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Badge } from "tesseract-ui";
+import { Badge } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — a read-only state tag (`Confirmed`, `Critical`), a notification count on a nav item, or a dot indicator. Pair `color` with meaning (`success` / `warning` / `error` / `neutral`).

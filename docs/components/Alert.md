@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Alert } from "tesseract-ui";
+import { Alert } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Important context that should stay visible on the page (e.g. allergy on file, drug interaction). Persistent and in-flow.

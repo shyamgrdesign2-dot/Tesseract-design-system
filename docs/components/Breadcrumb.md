@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Breadcrumb } from "tesseract-ui";
+import { Breadcrumb } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — deep EMR drill-downs where the user needs the trail back (patient → encounter → result). Pair it with a page Header/HeroBanner.

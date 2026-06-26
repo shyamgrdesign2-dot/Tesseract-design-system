@@ -3,9 +3,9 @@
 
 **Import**
 ```jsx
-import { Tooltip } from "tesseract-ui";
+import { Tooltip } from "@dhspl-tatvacare/tesseract-ui";
 // compound parts, only when you need full control:
-import { TooltipProvider, TooltipTrigger, TooltipContent } from "tesseract-ui";
+import { TooltipProvider, TooltipTrigger, TooltipContent } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — a short hint or label on hover, a click-dismissible info bubble, or revealing the full value of clipped text (`whenTruncated`).

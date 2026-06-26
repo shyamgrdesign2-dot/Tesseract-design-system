@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { InputOTP } from "tesseract-ui";
+import { InputOTP } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — 2FA / OTP verification and e-prescription sign-off, where a short code is entered digit-by-digit (with paste support).

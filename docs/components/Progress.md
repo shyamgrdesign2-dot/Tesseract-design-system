@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Progress } from "tesseract-ui";
+import { Progress } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Show how far a task has gotten: file upload, import, sync, or treatment-plan completion. Omit `value` for an indeterminate sweep when the duration is unknown.

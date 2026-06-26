@@ -15,7 +15,7 @@ v1.0 is the **first stable, public version**. From here we follow [SemVer](https
 
 ## What is "public API" (covered by the contract)
 
-- The named exports from the package root (`import { Button, Drawer } from "tesseract-ui"`).
+- The named exports from the package root (`import { Button, Drawer } from "@dhspl-tatvacare/tesseract-ui"`).
 - Their documented props (see each component's doc in [`docs/components/`](./components)) and their defaults.
 - The design tokens (`--tesseract-*`) and their meaning.
 
@@ -37,6 +37,6 @@ v1.0 is the **first stable, public version**. From here we follow [SemVer](https
 
 1. Import only from the package root, never deep internal paths.
 2. Configure via **props and tokens** — don't override hashed `.module.scss` classes.
-3. Pin a minor range (`"tesseract-ui": "^1.0.0"`) and take patches/minors freely; review the CHANGELOG before a major.
+3. Pin a minor range (`"@dhspl-tatvacare/tesseract-ui": "^1.0.0"`) and take patches/minors freely; review the CHANGELOG before a major.
 
 See [USING-TESSERACT.md](./USING-TESSERACT.md) to install and start using it without touching your existing components, and [CATALOG.md](./CATALOG.md) for the full component list.

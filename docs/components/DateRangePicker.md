@@ -4,8 +4,8 @@
 **Import**
 ```jsx
 // Canonical name is DatePicker; DateRangePicker is a kept back-compat alias.
-import { DatePicker } from "tesseract-ui";
-// or: import { DateRangePicker } from "tesseract-ui";
+import { DatePicker } from "@dhspl-tatvacare/tesseract-ui";
+// or: import { DateRangePicker } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Any date/time entry in a form or filter bar: DOB, appointment slot, billing month, financial year, or a start–end reporting range (the `mode="range"` story drives EMR analytics filters).

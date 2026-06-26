@@ -1,9 +1,16 @@
 {
-  "name": "tesseract-ui",
+  "name": "@dhspl-tatvacare/tesseract-ui",
   "version": "1.0.0",
-  "description": "Tesseract Design System — a zero-runtime-dependency React component library (atoms + molecules), published as tesseract-ui. Only react / react-dom as peers.",
+  "description": "Tesseract Design System — a zero-runtime-dependency React component library (atoms + molecules). Only react / react-dom as peers.",
   "license": "UNLICENSED",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DHSPL-Tatvacare/tesseract-design-system.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "sideEffects": [
     "**/*.css"
   ],

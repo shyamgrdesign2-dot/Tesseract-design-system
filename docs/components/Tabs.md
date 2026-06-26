@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "tesseract-ui";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Segment a single screen's content into peer sections the user toggles between (patient Overview / Vitals / History, billing Pending / Paid). Keeps everything on one route.

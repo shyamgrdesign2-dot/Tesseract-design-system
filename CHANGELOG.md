@@ -44,7 +44,9 @@ list in [`docs/CATALOG.md`](docs/CATALOG.md).
 - CI quality gate (lint + build + tests) on every push.
 
 ### Distribution
-- Installable from the private repo's prebuilt `build` branch or a version tag —
+- Published as a private, versioned npm package to **GitHub Packages**:
+  `@dhspl-tatvacare/tesseract-ui` (`npm install @dhspl-tatvacare/tesseract-ui`).
+  Immutable versions + semver ranges. No-token fallback: git tag install
   `github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0`. No public npm. See
   [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
 

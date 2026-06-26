@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Drawer, DrawerTrigger, DrawerContent, DrawerClose } from "tesseract-ui";
+import { Drawer, DrawerTrigger, DrawerContent, DrawerClose } from "@dhspl-tatvacare/tesseract-ui";
 // also available: DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter
 ```
 

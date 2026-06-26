@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { ClinicalTable } from "tesseract-ui";
+import { ClinicalTable } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Capturing structured clinical entries the clinician types/picks inline (Name → configurable columns → Notes), with drag-reorder, per-cell validation, and an auto-growing draft row.

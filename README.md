@@ -12,29 +12,29 @@ library (atoms + molecules), built with **zero runtime dependencies** (only
 
 ---
 
-## Install (private — straight from this repo)
+## Install (private — GitHub Packages registry)
 
-A GitHub Action builds the library on every push to `main` and keeps a prebuilt
-**`build`** branch up to date. Consumers install from that branch — no registry,
-no public npm, no per-package tokens. Add to your app's `package.json`:
+Published as a versioned npm package to the org's private **GitHub Packages**
+registry — `@dhspl-tatvacare/tesseract-ui`. Versions are immutable and semver
+ranges work, so consumers get safe patches and never a surprise breaking change.
 
-```jsonc
-{
-  "dependencies": {
-    "tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#build"
-  }
-}
+**One-time:** add an `.npmrc` to your app's repo root (see [`.npmrc.example`](.npmrc.example)):
+```ini
+@dhspl-tatvacare:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+Set a GitHub token with **`read:packages`** as `GITHUB_TOKEN` (shell profile locally;
+CI secret in pipelines). Then:
+```bash
+npm install @dhspl-tatvacare/tesseract-ui react react-dom
 ```
 
-then `npm install`. (SSH form, for machines using an SSH key:
-`git+ssh://git@github.com/DHSPL-Tatvacare/tesseract-design-system.git#build`.)
-
-- **The only access gate is Git access to this repo** — an SSH key locally, or a
-  PAT / deploy key with repo-read in CI. No repo access → `npm install` fails.
-- The `build` branch ships prebuilt `dist/` and runs **no install-time build**, so
-  it never pulls our dev tooling (Storybook/Playwright) into your app.
-- **Updates:** `npm update tesseract-ui` — the branch refreshes on every merge to `main`.
-- **Peers:** `npm install react react-dom` (React 18+).
+- **Access gate:** org membership + the `read:packages` token. No access → install fails.
+- **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
+- **No-token fallback:** install the prebuilt bundle by git tag —
+  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0"`
+  (gated by git access; no semver ranges). Full detail: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+- **Peers:** `react` / `react-dom` (React 18+).
 
 ---
 
@@ -42,8 +42,8 @@ then `npm install`. (SSH form, for machines using an SSH key:
 
 ```jsx
 // app root — once
-import "tesseract-ui/styles.css";
-import { TesseractThemeProvider } from "tesseract-ui";
+import "@dhspl-tatvacare/tesseract-ui/styles.css";
+import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
 
 root.render(
   <TesseractThemeProvider colorScheme="light">
@@ -54,7 +54,7 @@ root.render(
 
 ```jsx
 // anywhere
-import { Button, Badge, DataTable, TPIcon } from "tesseract-ui";
+import { Button, Badge, DataTable, TPIcon } from "@dhspl-tatvacare/tesseract-ui";
 
 <Button variant="solid" theme="primary" leftIcon={<TPIcon name="add" size={16} />}>
   Add Patient
@@ -98,7 +98,7 @@ You pass only a **name**; `corner`/`style` default to `rounded`/`linear` and the
 `family` is resolved automatically. Use the exact CDN name.
 
 ```jsx
-import { TPIcon, setIconBaseUrl } from "tesseract-ui";
+import { TPIcon, setIconBaseUrl } from "@dhspl-tatvacare/tesseract-ui";
 
 <TPIcon name="calendar-1" />
 <TPIcon name="warning" variant="bulk" color="var(--tesseract-warning-500)" />
@@ -117,7 +117,7 @@ Variants: `linear` (default) · `bold` · `bulk` · `broken` · `twotone` · `ou
 
 ## Tokens & fonts
 
-`tesseract-ui/styles.css` ships the whole foundation as CSS variables —
+`@dhspl-tatvacare/tesseract-ui/styles.css` ships the whole foundation as CSS variables —
 `--tesseract-blue-500`, `--tesseract-space-4`, `--tesseract-radius-12`, the
 typography scale, shadows, gradients — plus ready-made type classes
 (`.tp-body-base`, `.tp-caption`, …) you can use in your own styles.
@@ -137,7 +137,7 @@ tokens, breakpoints, or colour scheme; components re-theme with no prop changes
 (they read `var(--tesseract-*)`). Never edit the token file; theme here instead.
 
 ```jsx
-import { TesseractThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "tesseract-ui";
+import { TesseractThemeProvider, useTheme, useBreakpoint, useComponentTokens } from "@dhspl-tatvacare/tesseract-ui";
 
 <TesseractThemeProvider
   colorScheme="dark"                 // light | dark | system
@@ -227,10 +227,14 @@ npm run lint                           # eslint (0 errors)
 node mcp/scripts/build-manifest.mjs    # refresh the MCP component manifest
 ```
 
-**Distribution:** pushing to `main` triggers
-[`.github/workflows/build-dist.yml`](.github/workflows/build-dist.yml), which
-rebuilds and force-commits `dist/` to the **`build`** branch that consumers install
-from. (The branch is already seeded, so installs work even before the first CI run.)
+**Distribution — cut a release:** to publish a new version, bump `version` in
+`package.json`, then create a GitHub Release (`vX.Y.Z`).
+[`.github/workflows/publish-package.yml`](.github/workflows/publish-package.yml)
+builds with Vite and publishes `@dhspl-tatvacare/tesseract-ui@X.Y.Z` to **GitHub
+Packages** (using the repo's built-in `GITHUB_TOKEN` — no PAT needed). Published
+versions are immutable. In parallel, every push to `main` triggers
+[`build-dist.yml`](.github/workflows/build-dist.yml), which keeps the prebuilt
+**`build`** branch current for the no-token git-install fallback.
 
 Tokens live in `src/tesseract-tokens.css` — never hand-edit in product code; theme
 via `TesseractThemeProvider`. Icons are 100% CDN (no local SVG assets).

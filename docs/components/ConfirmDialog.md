@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { ConfirmDialog } from "tesseract-ui";
+import { ConfirmDialog } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — confirming a destructive/irreversible action (delete, discard, archive, log out) or a consequential one (send summary, end consultation) before it executes.

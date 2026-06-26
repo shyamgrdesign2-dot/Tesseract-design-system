@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Button } from "tesseract-ui";
+import { Button } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Any clickable action/CTA: form submits, row actions, toolbar buttons, dropdown menus. One `<Button>` covers text, icons, icon-only, and split shapes.

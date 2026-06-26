@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { SectionCard } from "tesseract-ui";
+import { SectionCard } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Any titled, optionally-collapsible block: rxpad sections, multi-section forms (patient: Personal · Additional · Address), plan clusters, examination panels, dashboard blocks. Nest SectionCards in the body (with a tinted `bodyBg`) for the cluster look.

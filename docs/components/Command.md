@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Command } from "tesseract-ui";
+import { Command } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Power-user fast access across the whole app: jump to a patient, fire a quick action, navigate anywhere. Wire it to a global ⌘K shortcut.

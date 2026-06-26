@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { RxPadSection } from "tesseract-ui";
+import { RxPadSection } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — building a prescription / clinical-note section (Symptoms, Diagnosis, Advice, Follow-up); stack several to compose a full pad.

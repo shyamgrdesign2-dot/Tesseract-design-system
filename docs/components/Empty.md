@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Empty } from "tesseract-ui";
+import { Empty } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — "no records yet", "no matches", "nothing scheduled": orient the user and offer a next step.

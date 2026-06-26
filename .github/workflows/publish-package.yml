@@ -1,0 +1,50 @@
+name: Publish to GitHub Packages
+
+# Publishes @dhspl-tatvacare/tesseract-ui to the org's private GitHub Packages npm
+# registry. Consumers then install a real, versioned npm package:
+#   npm install @dhspl-tatvacare/tesseract-ui@^1.0.0
+# (each consumer needs a one-time .npmrc with a read:packages token — see
+#  docs/USING-TESSERACT.md). Access is gated by org membership.
+#
+# Triggers:
+#   - when a GitHub Release is published (the normal path — cut a release per version)
+#   - manually via workflow_dispatch (e.g. to publish the very first version)
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-package
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: "@dhspl-tatvacare"
+
+      - run: npm ci
+
+      - name: Build library (ESM + CJS + CSS + types)
+        run: npm run build:lib
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          # GITHUB_TOKEN has packages:write for this repo's own packages — no PAT needed.
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

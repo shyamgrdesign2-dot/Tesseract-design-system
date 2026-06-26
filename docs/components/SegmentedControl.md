@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { SegmentedControl } from "tesseract-ui";
+import { SegmentedControl } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Switching between a small set (2–5) of views/modes that share the same space: a Queue/Finished/Cancelled filter, a List/Grid toggle, a billing-period picker.

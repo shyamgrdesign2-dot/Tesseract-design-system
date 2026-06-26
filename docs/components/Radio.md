@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Radio, RadioGroup } from "tesseract-ui";
+import { Radio, RadioGroup } from "@dhspl-tatvacare/tesseract-ui";
 // FormControlLabel is also exported for pairing a custom control with a label.
 ```
 

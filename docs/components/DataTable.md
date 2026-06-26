@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { DataTable, DataCell, CellTag, TableActions } from "tesseract-ui";
+import { DataTable, DataCell, CellTag, TableActions } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Any tabular list surface (patient lists, appointments, billing rows, lab results). Drive it with a `columns` config + `data`; use the `type`-based columns so backend data maps straight in.

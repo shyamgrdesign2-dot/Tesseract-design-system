@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Toggle } from "tesseract-ui";
+import { Toggle } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — a single binary preference that takes effect the moment it flips (notifications on/off, feature flags, active/inactive status).

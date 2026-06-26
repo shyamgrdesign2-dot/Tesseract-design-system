@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "tesseract-ui";
+} from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Progressively disclose long-but-skimmable content: FAQs, patient history sections, a SOAP note. Use `type="single"` for one-open-at-a-time, `type="multiple"` to expand several at once.

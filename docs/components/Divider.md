@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Divider } from "tesseract-ui";
+import { Divider } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Splitting a list/card into labelled sections, separating inline meta (`Left | Mid | Right`), or an "OR" break between two choices via `label`.

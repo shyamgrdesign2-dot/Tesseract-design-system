@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Dropdown } from "tesseract-ui";
+import { Dropdown } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Any selection surface: a single picker, a multi-select with chips/checkboxes, a searchable list, a typeahead combobox, or a borderless select inside a table cell.

@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Pagination } from "tesseract-ui";
+import { Pagination } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — navigating paged lists, tables, and audit logs (patient lists, billing, logs); pairs naturally with DataTable.

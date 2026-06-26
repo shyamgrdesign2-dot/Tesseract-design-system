@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { SecondarySidebar } from "tesseract-ui";
+import { SecondarySidebar } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — a per-record context nav nested inside a page (e.g. a patient's Visits / Vitals / Lab Results), sitting beside the primary `Sidebar`.

@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Skeleton } from "tesseract-ui";
+import { Skeleton } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Fill the layout during an initial fetch so the page doesn't jump on swap-in: table rows, a profile hero, card lists. Mirror the real content with `variant` + sizing so nothing reflows.

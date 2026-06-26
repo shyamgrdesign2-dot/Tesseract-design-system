@@ -18,14 +18,14 @@ One concise usage doc per component lives in **[`components/`](./components)** â
 
 ```jsonc
 // package.json â€” installs the prebuilt bundle from the private repo, gated by repo access
-{ "dependencies": { "tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0" } }
+{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0" } }
 ```
 
 ```jsx
 // app root, once:
-import "tesseract-ui/styles.css";
-import { TesseractThemeProvider } from "tesseract-ui";
-// then import any component from "tesseract-ui".
+import "@dhspl-tatvacare/tesseract-ui/styles.css";
+import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
+// then import any component from "@dhspl-tatvacare/tesseract-ui".
 ```
 
 Adopting alongside an existing UI? Importing Tesseract components does not touch your

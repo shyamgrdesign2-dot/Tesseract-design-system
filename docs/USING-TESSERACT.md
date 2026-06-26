@@ -11,7 +11,7 @@ There are three independent pieces. You can set up any subset.
 │  1. /tesseract skill   → brand, principles, page intake        │
 │  2. tesseract MCP       → exact components/props/icons + guard  │
 ├─ The actual code ─────────────────────────────────────────────┤
-│  3. tesseract-ui package → import { Button } from "tesseract-ui"│
+│  3. tesseract-ui package → import { Button } from "@dhspl-tatvacare/tesseract-ui"│
 └───────────────────────────────────────────────────────────────┘
 ```
 
@@ -82,46 +82,51 @@ The package is **private** (org `DHSPL-Tatvacare`), React `>=18`, ships a prebui
 bundle (`dist/`) — so a consuming app never deals with the SCSS/aliases. It is
 **never published to public npm.** Access is gated by who can access this repo.
 
-### ✅ Internal install — Git + `build` branch (the chosen method)
+### ✅ Primary install — GitHub Packages (private npm registry)
 
-A GitHub Action (`.github/workflows/build-dist.yml`) builds the library on every
-push to `main` and commits the prebuilt `dist/` to a **`build`** branch. Consumers
-install straight from the private repo — no registry, no publish, no public npm.
-Only someone with **access to this repo** can install it.
+The library is published as a real, **versioned** npm package to the org's private
+GitHub Packages registry: **`@dhspl-tatvacare/tesseract-ui`**. This is the chosen
+method because published versions are **immutable** (a release can never change
+under a consumer), semver ranges work (`^1.0.0` → safe patches), and it scales
+cleanly to any number of apps. Access is gated by **org membership** + a token.
 
-In **Pm-Doctor-Portal** `package.json`:
-```jsonc
-{
-  "dependencies": {
-    "tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#build"
-  }
-}
+**One-time consumer setup** — add an `.npmrc` to the app's repo root (template in
+the DS repo's [`.npmrc.example`](../.npmrc.example)):
+```ini
+@dhspl-tatvacare:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
-then `npm install`. (Or one-shot: `npm i github:DHSPL-Tatvacare/tesseract-design-system#build`.)
+Then expose a GitHub token with **`read:packages`** as `GITHUB_TOKEN` (in your
+shell profile locally; as a CI secret in pipelines). Never paste the token into the
+file — the `${GITHUB_TOKEN}` reference keeps it out of git.
 
-- The installing machine just needs **Git access to the repo** (SSH key or a
-  GitHub token) — exactly the gate you want. In CI, add a deploy key or a PAT with
-  repo read.
-- Because `dist/` is prebuilt on the `build` branch and there's **no `prepare`
-  script**, the install is lightweight — it does **not** build or pull our dev
-  tools (Storybook/Playwright) into Pm-Doctor-Portal.
-- To pin a version, install from a tag instead of `#build` (e.g. `#v1.0.0` — the
-  first stable release). See [PREREQUISITE.md](./PREREQUISITE.md) for the
-  semver stability contract: within `1.x`, code built against v1.0 keeps working.
-- After this is set up, the `build` branch refreshes automatically on every merge
-  to `main`. To pull updates in Pm-Doctor-Portal: `npm update tesseract-ui` (or
-  re-`npm install`).
+**Install:**
+```bash
+npm install @dhspl-tatvacare/tesseract-ui
+```
+In `package.json` this lands as `"@dhspl-tatvacare/tesseract-ui": "^1.0.0"`. Pull
+updates with `npm update @dhspl-tatvacare/tesseract-ui` — you get patches/minors
+automatically and never a breaking change within `1.x` (see [PREREQUISITE.md](./PREREQUISITE.md)).
 
-> CRA note: react-scripts 5 (webpack 5) resolves the package `exports`, so
-> `import "tesseract-ui/styles.css"` works. If a tool ever can't resolve the
-> subpath, fall back to `import "tesseract-ui/dist/tesseract-ui.css"`.
+**How a new version ships:** a maintainer cuts a GitHub Release (e.g. `v1.0.1`);
+`.github/workflows/publish-package.yml` then builds with Vite and publishes that
+version to the registry using the repo's built-in `GITHUB_TOKEN` (no PAT needed on
+our side). Immutable, one version per release.
 
-We deliberately do **not** use public npm (it would make the package public) or
-GitHub Packages (a private registry, but it needs per-consumer tokens and a
-publish step). The `build`-branch git install above keeps everything gated by
-this private repo's access — that's the whole point. For a quick local trial
-without touching a consumer repo, `npm run build:lib && npm pack` produces a
-`.tgz` you can `npm install <path>`.
+### Fallback — Git tag install (no token needed)
+
+For a quick spike, or a machine where you'd rather not set up the registry token,
+you can still install the prebuilt bundle straight from the repo by tag (gated by
+git access alone):
+```jsonc
+{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0" } }
+```
+A GitHub Action keeps a `build` branch with the prebuilt `dist/` up to date, so
+`#build` (always-latest) and `#v1.0.0` (pinned) both work. Prefer the registry for
+real consumers — a pinned tag/`#build` doesn't give true semver ranges.
+
+For a fully local trial, `npm run build:lib && npm pack` produces a `.tgz` you can
+`npm install <path>`.
 
 ---
 
@@ -129,8 +134,8 @@ without touching a consumer repo, `npm run build:lib && npm pack` produces a
 
 ```jsx
 // main.jsx / app root — once:
-import "tesseract-ui/styles.css";                 // the whole token + style layer
-import { TesseractThemeProvider } from "tesseract-ui";
+import "@dhspl-tatvacare/tesseract-ui/styles.css";                 // the whole token + style layer
+import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
 
 createRoot(el).render(
   <TesseractThemeProvider colorScheme="light">
@@ -141,7 +146,7 @@ createRoot(el).render(
 
 ```jsx
 // anywhere:
-import { Button, DataTable, Badge, TPIcon } from "tesseract-ui";
+import { Button, DataTable, Badge, TPIcon } from "@dhspl-tatvacare/tesseract-ui";
 
 <Button variant="solid" theme="primary" leftIcon={<TPIcon name="add" size={16} />}>
   Add Patient
@@ -154,8 +159,8 @@ Also:
   `setIconBaseUrl("/tp-icons")` once at startup.
 - **Theming** — override via `TesseractThemeProvider` props; never edit tokens.
 
-> If you used a scoped name (Option A), import from `@dhspl-tatvacare/tesseract-ui`
-> instead of `tesseract-ui`. The `/tesseract` skill auto-detects the right path.
+> The package is scoped: always import from `@dhspl-tatvacare/tesseract-ui`. The
+> `/tesseract` skill and the MCP know the correct path.
 
 ---
 

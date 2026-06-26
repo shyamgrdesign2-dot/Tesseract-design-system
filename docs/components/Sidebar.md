@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Sidebar } from "tesseract-ui";
+import { Sidebar } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — The primary left-hand navigation for an EMR/app shell: top-level sections, nested sub-pages, and a collapsible icon rail. Pass a flat or one-level-nested `items` tree and let it manage active highlighting + open sections.

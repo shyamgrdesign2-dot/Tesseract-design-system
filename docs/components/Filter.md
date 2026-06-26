@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Filter } from "tesseract-ui";
+import { Filter } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Narrowing a `DataTable` by several facets at once (status, doctor, type); pass a different `groups` config per table. **When not** — A single binary or one-axis choice (use a Checkbox / segmented control); date ranges go to `DateRangePicker`.

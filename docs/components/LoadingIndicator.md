@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { LoadingIndicator } from "tesseract-ui";
+import { LoadingIndicator } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Short or open-ended waits where you can't show how much is left: a button in flight, a lazy-loading table, an inline "fetching…" next to a label.

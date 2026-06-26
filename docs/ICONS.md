@@ -36,7 +36,7 @@ is resolved automatically from `icon-manifest.json` (name → family), so you ne
 hand-write the family.
 
 ```jsx
-import { TPLibraryIcon, TPIcon, MedicalIcon } from "tesseract-ui";
+import { TPLibraryIcon, TPIcon, MedicalIcon } from "@dhspl-tatvacare/tesseract-ui";
 
 <TPLibraryIcon name="search" />                          // rounded / linear / (family auto)
 <TPLibraryIcon name="search" variant="bold" />           // rounded / bold

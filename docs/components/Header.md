@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Header } from "tesseract-ui";
+import { Header } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — The page/shell top bar: home shell, RxPad, print views, patient context bars. Composes atoms (Button, Avatar, Badge, Divider) so every CTA stays consistent.

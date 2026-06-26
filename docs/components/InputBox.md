@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { InputBox } from "tesseract-ui";
+import { InputBox } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — any single-line (or auto-growing) text/number entry: search fields, form inputs, table-cell editors, phone/URL fields with affixes. **When not** — for one-time codes use [InputOTP](./InputOTP.md); for a list/menu selection use [Dropdown](./Dropdown.md).

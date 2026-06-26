@@ -4,8 +4,8 @@ The complete public surface of `tesseract-ui` v1.0: **17 atoms + 23 molecules = 
 Every name links to its concise usage doc. All are imported from the package root:
 
 ```jsx
-import { Button, DataTable, Drawer /* … */ } from "tesseract-ui";
-import "tesseract-ui/styles.css"; // once, at app root
+import { Button, DataTable, Drawer /* … */ } from "@dhspl-tatvacare/tesseract-ui";
+import "@dhspl-tatvacare/tesseract-ui/styles.css"; // once, at app root
 ```
 
 New to the system? Read [USING-TESSERACT.md](./USING-TESSERACT.md) (install + setup) and

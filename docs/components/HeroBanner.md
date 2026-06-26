@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { HeroBanner } from "tesseract-ui";
+import { HeroBanner } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — the top band of a primary page (Appointments, Patient Details) that needs the page title plus its main actions in one place. This is the only banner.

@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Checkbox } from "tesseract-ui";
+import { Checkbox } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — any number of independent selections (symptom lists, consent items), or a parent "select all" using the `indeterminate` state.

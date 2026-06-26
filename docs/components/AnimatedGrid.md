@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { AnimatedGrid } from "tesseract-ui";
+import { AnimatedGrid } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — purely ambient motion behind a hero, splash, empty state, login, or marketing panel. Standalone (HeroBanner just reuses it), so drop it behind any panel.

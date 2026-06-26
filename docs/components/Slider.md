@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Slider } from "tesseract-ui";
+import { Slider } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — choosing a magnitude where the slider position itself is meaningful: a pain score, a dosage, a volume/threshold filter. Add `showValue` when the exact figure matters.

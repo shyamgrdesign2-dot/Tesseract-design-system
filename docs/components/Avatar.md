@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Avatar } from "tesseract-ui";
+import { Avatar } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — Represent a user or entity in a header, list row, comment, or assignee slot (doctor, patient, staff). Auto-falls back to initials from `name` when there's no `src`, and to an `icon` when neither is given.

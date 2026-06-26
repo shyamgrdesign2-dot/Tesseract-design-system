@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Chip } from "tesseract-ui";
+import { Chip } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — toggleable choices (symptom picker), active filter tokens with a dismiss ×, or input tags. Wire `onClick` to select and `onDelete` to remove.

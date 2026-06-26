@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Toast } from "tesseract-ui";
+import { Toast } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — brief feedback on a result or system event (saved, sync failed, license expiring). Pass `duration` to auto-dismiss, or leave it persistent.

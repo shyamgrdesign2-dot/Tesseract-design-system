@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Logo } from "tesseract-ui";
+import { Logo } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — branding a header, splash, sidebar, or print surface; `wordmark` where the name can be read, `symbol` in tight/square slots (favicon, collapsed nav).

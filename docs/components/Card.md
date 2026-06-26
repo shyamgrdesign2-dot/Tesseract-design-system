@@ -3,7 +3,7 @@
 
 **Import**
 ```jsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "tesseract-ui";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@dhspl-tatvacare/tesseract-ui";
 ```
 
 **When to use** — group related content on a raised/bordered surface; compose the optional parts (`CardHeader` + `CardTitle`/`CardDescription`, `CardContent`, `CardFooter`) freely.
