@@ -28,12 +28,9 @@ dist-ssr
 storybook-static
 .gstack/
 
-# Vendored TP icon library (~102MB, 25k files). Distributed separately and
-# copied into public/ per the adoption guide — kept out of git history.
-# EXCEPT the curated dr-agent set, which lives under the same root but is
-# tracked. (Medical icons are now merged into the library's linear/bulk/bold.)
-public/tp-icons/*
-!public/tp-icons/dr-agent/
+# Icons are served 100% from the CDN — never store the icon library locally.
+# This guard keeps any local dev copy out of git.
+public/tp-icons/
 
 # Secrets / local config — never commit
 .mcp.json
@@ -41,6 +38,3 @@ public/tp-icons/*
 .env.*
 *.local
 .npmrc
-
-# Stray scratch file
-Untitled

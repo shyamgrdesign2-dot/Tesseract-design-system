@@ -47,7 +47,8 @@
     &:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--tesseract-slate-900) 18%, transparent); }
   }
 
-  // Gradient fill — branded gradient in `tone`, light text, optional pattern.
+  // Gradient fill — branded gradient in `tone`, light text. For texture, compose
+  // an <AnimatedGrid /> child (the only sanctioned overlay) — no CSS patterns.
   &[data-gradient] {
     position: relative;
     overflow: hidden;
@@ -57,25 +58,6 @@
     isolation: isolate;
     .title, .description, .content { color: var(--tesseract-on-dark); }
     .description, .content { color: color-mix(in srgb, var(--tesseract-on-dark) 82%, transparent); }
-  }
-  // Pattern overlays (sit above the gradient, below content).
-  &[data-pattern]::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.5;
-  }
-  &[data-pattern="dots"]::before {
-    background-image: radial-gradient(color-mix(in srgb, var(--tesseract-on-dark) 16%, transparent) 1.2px, transparent 1.2px);
-    background-size: 14px 14px;
-  }
-  &[data-pattern="grid"]::before {
-    background-image:
-      linear-gradient(color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--tesseract-on-dark) 12%, transparent) 1px, transparent 1px);
-    background-size: 18px 18px;
   }
 }
 

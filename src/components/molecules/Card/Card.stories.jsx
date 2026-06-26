@@ -31,11 +31,10 @@ const meta = {
     radius: { control: 'select', options: ['default', 'sharp', '8', '12', '16', '20', '24'], table: { category: 'Appearance' } },
     tone: { control: 'inline-radio', options: ['neutral', 'primary', 'success', 'warning', 'error', 'violet'], table: { category: 'Appearance' } },
     gradient: { control: 'boolean', description: 'Branded gradient fill (in tone) + light text', table: { category: 'Appearance' } },
-    pattern: { control: 'inline-radio', options: ['dots', 'grid', 'none'], description: 'Texture over the gradient', table: { category: 'Appearance' } },
     background: { control: 'color', description: 'Custom background override', table: { category: 'Appearance' } },
     interactive: { control: 'boolean', description: 'Hover-lift for clickable cards', table: { category: 'Appearance' } },
   },
-  args: { variant: 'default', padding: 'md', radius: 'default', tone: 'neutral', gradient: false, pattern: 'dots', interactive: false },
+  args: { variant: 'default', padding: 'md', radius: 'default', tone: 'neutral', gradient: false, interactive: false },
 };
 export default meta;
 
@@ -71,12 +70,12 @@ export const Variants = {
   ),
 };
 
-/** Gradient hero cards — branded gradient + pattern + light text, per tone. */
+/** Gradient hero cards — branded gradient + light text, per tone. */
 export const GradientCards = {
   render: () => (
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-      {[['primary', 'dots'], ['violet', 'grid'], ['success', 'dots']].map(([tone, pattern]) => (
-        <Card key={tone} gradient tone={tone} pattern={pattern} padding="lg" style={{ width: 240 }}>
+      {['primary', 'violet', 'success'].map((tone) => (
+        <Card key={tone} gradient tone={tone} padding="lg" style={{ width: 240 }}>
           <CardHeader>
             <span style={{ display: 'inline-flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--tesseract-radius-12)', background: 'color-mix(in srgb, var(--tesseract-on-dark) 18%, transparent)' }}>
               <TPLibraryIcon name="health" variant="bulk" size={22} color="var(--tesseract-on-dark)" />

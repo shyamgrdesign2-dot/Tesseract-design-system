@@ -17,12 +17,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 | `padding` | `"none" \| "sm" \| "md" \| "lg"` | `"md"` | inner padding scale (use `sm`/`none` for dense tiles) |
 | `tone` | `"neutral" \| "primary" \| "success" \| "warning" \| "error" \| "violet"` | `"neutral"` | accent for gradient / accent treatments |
 | `gradient` | `boolean` | `false` | branded gradient fill in `tone` + light text (hero/highlight tiles) |
-| `pattern` | `"dots" \| "grid" \| "none"` | `"dots"` | texture over a gradient |
 | `interactive` | `boolean` | `false` | hover-lift + pointer for clickable cards |
 | `radius` | `number \| "pill" \| "sharp" \| string` | token | corner override (else design token) |
 | `background` | CSS background | — | custom surface override (token/colour/gradient) |
 
-Colours, spacing, and radii all come from `--tesseract-*` tokens — don't hardcode hex/px. All compound parts forward refs and spread props. `CardTitle` accepts `as` to set the heading tag (default `h3`).
+Colours, spacing, and radii all come from `--tesseract-*` tokens — don't hardcode hex/px. All compound parts forward refs and spread props. `CardTitle` accepts `as` to set the heading tag (default `h3`). For texture over a gradient, drop an `<AnimatedGrid />` in as a child — that's the only sanctioned overlay (no decorative dot/line patterns).
 
 **Example**
 ```jsx
@@ -42,6 +41,6 @@ Colours, spacing, and radii all come from `--tesseract-*` tokens — don't hardc
 **Variants**
 - **Playground** — full patient-summary card with header/content/footer.
 - **Variants** — the three surfaces: default, outline, elevated.
-- **GradientCards** — branded gradient hero tiles per tone with dots/grid pattern + light text.
+- **GradientCards** — branded gradient hero tiles per tone with light text.
 - **IconAndProfile** — icon-disc tile and an interactive profile card (Avatar + Badge).
 - **StatTile** — compact KPI tile (label + value + trend Badge).

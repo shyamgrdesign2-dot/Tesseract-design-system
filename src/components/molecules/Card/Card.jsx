@@ -21,9 +21,9 @@
  *   radius    number | "pill" | "sharp" | string   corner override (else token)
  *   tone      "neutral" | "primary" | "success" | "warning" | "error" | "violet"
  *             accent for the gradient / left-accent treatments (default "neutral")
- *   gradient  boolean — fill with a branded gradient in `tone` + a subtle pattern
- *             and light text (for hero / highlight tiles)
- *   pattern   "dots" | "grid" | "none" — texture over a gradient (default "dots")
+ *   gradient  boolean — fill with a branded gradient in `tone` + light text
+ *             (for hero / highlight tiles). For texture, drop an <AnimatedGrid />
+ *             in as a child — that's the only sanctioned overlay.
  *   background  any CSS background (token/colour/gradient) — custom override
  *   interactive boolean — hover lift + pointer (clickable cards)
  *   className, style, …rest (spread to root)
@@ -34,7 +34,7 @@ import { resolveRadius, cn } from "@/src/hooks/utils";
 import styles from "./Card.module.scss";
 
 export const Card = React.forwardRef(function Card(
-  { variant = "default", padding = "md", radius, tone = "neutral", gradient = false, pattern = "dots", background, interactive = false, className, style, children, ...rest },
+  { variant = "default", padding = "md", radius, tone = "neutral", gradient = false, background, interactive = false, className, style, children, ...rest },
   ref,
 ) {
   const r = resolveRadius(radius);
@@ -51,7 +51,6 @@ export const Card = React.forwardRef(function Card(
       data-padding={padding}
       data-tone={tone !== "neutral" ? tone : undefined}
       data-gradient={gradient ? "" : undefined}
-      data-pattern={gradient && pattern !== "none" ? pattern : undefined}
       data-interactive={interactive ? "" : undefined}
       style={Object.keys(cardStyle).length ? cardStyle : undefined}
       {...rest}
