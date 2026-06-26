@@ -38,6 +38,7 @@ const meta = {
       description: 'Overall scale of the icon disc and text.',
       table: { category: 'Appearance' },
     },
+    iconSize: { control: { type: 'number', min: 16, max: 64 }, description: 'Glyph size in px (disc scales with it).', table: { category: 'Appearance' } },
     // Story helper — render() turns this label into a composed Button action. Empty string hides the action.
     actionLabel: {
       control: 'text',
@@ -90,5 +91,42 @@ export const NoResults = {
 export const Small = {
   render: () => (
     <Empty size="sm" icon="document-text" title="No notes" description="Clinical notes will appear here." />
+  ),
+};
+
+/** Two CTAs — a primary plus a secondary action. */
+export const TwoActions = {
+  render: () => (
+    <Empty
+      icon="profile-2user"
+      title="No patients yet"
+      description="Add one manually or import an existing list."
+      action={<Button leftIcon={<TPLibraryIcon name="add-square" size={18} />}>Add patient</Button>}
+      secondaryAction={<Button variant="outline" theme="neutral">Import CSV</Button>}
+    />
+  ),
+};
+
+/** Action + a text hyperlink CTA (the `link` prop). */
+export const WithLink = {
+  render: () => (
+    <Empty
+      icon="box"
+      title="No templates"
+      description="Create a template to reuse common plans."
+      action={<Button>New template</Button>}
+      link={{ label: 'Learn how templates work', href: '#' }}
+    />
+  ),
+};
+
+/** Adjustable icon size — the disc scales with `iconSize`. */
+export const IconSizes = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+      {[20, 28, 40].map((s) => (
+        <Empty key={s} iconSize={s} icon="gallery" title={`${s}px`} description="Icon size" />
+      ))}
+    </div>
   ),
 };

@@ -20,15 +20,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--tesseract-size-48, 48px);
-  height: var(--tesseract-size-48, 48px);
+  /* Disc scales with --empty-disc (set from the iconSize prop); else the size token. */
+  width: var(--empty-disc, var(--tesseract-size-48, 48px));
+  height: var(--empty-disc, var(--tesseract-size-48, 48px));
   margin-bottom: var(--tesseract-space-1);
   border-radius: var(--tesseract-radius-full);
   corner-shape: round;
   background: var(--tesseract-slate-50);
   color: var(--tesseract-slate-400);
 }
-.root[data-size="sm"] .icon { width: 40px; height: 40px; }
+.root[data-size="sm"] .icon { width: var(--empty-disc, 40px); height: var(--empty-disc, 40px); }
 
 .media { margin-bottom: var(--tesseract-space-1); }
 
@@ -55,3 +56,6 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* Text hyperlink CTA under the actions. */
+.linkRow { margin-top: var(--tesseract-space-1); }
