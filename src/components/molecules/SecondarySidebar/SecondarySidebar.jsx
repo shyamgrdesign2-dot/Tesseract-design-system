@@ -28,7 +28,7 @@
  *   emptyState     ReactNode shown when the filter matches nothing (overrides emptyText)
  *   emptyText      string for the no-matches message (default "No matches")
  *   pointerColor   colour of the active caret so it matches the adjacent content surface
- *   searchIcon     CDN icon name for the search input (default "search-normal-1")
+ *   searchIcon     CDN icon name for the search input (default "search-normal")
  *   collapseIcon   CDN icon name for the collapse/expand toggle (default "sidebar-left")
  *   caretIcon      CDN icon name for the expandable-section caret (default "chevron-down")
  *   className
@@ -254,7 +254,7 @@ export const SecondarySidebar = React.forwardRef(function SecondarySidebar({
   emptyState,
   emptyText = "No matches",
   pointerColor,
-  searchIcon = "search-normal-1",
+  searchIcon = "search-normal",
   collapseIcon = "sidebar-left",
   caretIcon = "chevron-down",
   className,

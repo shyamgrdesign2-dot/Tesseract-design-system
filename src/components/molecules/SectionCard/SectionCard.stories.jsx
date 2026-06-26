@@ -1,6 +1,5 @@
 import { within, userEvent, expect } from 'storybook/test';
 import { SectionCard } from './SectionCard';
-import { Timeline, TimelineItem } from '../Timeline/Timeline';
 import { Button } from '../../atoms/Button/Button';
 import { InputBox } from '../../atoms/Input/InputBox';
 import { Badge } from '../../atoms/Badge/Badge';
@@ -147,7 +146,7 @@ export const WithHeaderSearch = {
       icon="virus"
       iconColor="var(--tesseract-violet-500)"
       collapsible
-      headerExtra={<InputBox fullWidth leftIcon={<TPLibraryIcon name="search-normal-1" variant="linear" size={18} />} placeholder="Search & add symptoms" />}
+      headerExtra={<InputBox fullWidth leftIcon={<TPLibraryIcon name="search-normal" variant="linear" size={18} />} placeholder="Search & add symptoms" />}
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         {['Fever', 'Cough', 'Fatigue', 'Headache'].map((s) => (
@@ -191,28 +190,31 @@ export const PlanCluster = {
   ),
 };
 
-/** In-progress plan with a visit Timeline nested in the body (tone="active"). */
-export const WithTimeline = {
-  render: () => (
-    <SectionCard title="Primary Care Plan" amount="₹11,500" icon="health" tone="active" headerGradient
-      headerActions={<Button theme="success" size="sm" leftIcon={<TPLibraryIcon name="tick-circle" variant="linear" size={18} />}>End Plan</Button>}>
-      <SectionCard number={1} title="Root Canal Treatment" subtitle="Lower Left First Molar (T36)" tone="active" tools={TOOLS} collapsible>
-        <Timeline tone="violet">
-          <TimelineItem title="Dr. Sheela B R" date="10 Apr 2026"
-            action={<Button variant="tonal" theme="neutral" size="sm" leftIcon={<TPLibraryIcon name="document-text" variant="linear" size={14} />}>View Rx</Button>}>
-            <strong>Clinical Notes:</strong> Canal shaping + obturation completed
-          </TimelineItem>
-          <TimelineItem title="Dr. Sheela B R" date="3 Apr 2026"
-            action={<Button variant="tonal" theme="neutral" size="sm" leftIcon={<TPLibraryIcon name="document-text" variant="linear" size={14} />}>View Rx</Button>}>
-            <strong>Clinical Notes:</strong> Initial debridement, access opening, BMP placed
-          </TimelineItem>
-          <TimelineItem title="Dr. Riya Kapoor" date="1 Apr 2026" muted>
-            <strong>Clinical Notes:</strong> Patient rescheduled — no treatment performed.
-          </TimelineItem>
-        </Timeline>
+/** In-progress plan — visit entries composed as nested SectionCards (the
+ *  timeline pattern is just card-on-card content; no separate Timeline needed). */
+export const VisitEntries = {
+  render: () => {
+    const visits = [
+      { who: 'Dr. Sheela B R', date: '10 Apr 2026', note: 'Canal shaping + obturation completed' },
+      { who: 'Dr. Sheela B R', date: '3 Apr 2026', note: 'Initial debridement, access opening, BMP placed' },
+      { who: 'Dr. Riya Kapoor', date: '1 Apr 2026', note: 'Patient rescheduled — no treatment performed.' },
+    ];
+    return (
+      <SectionCard title="Primary Care Plan" amount="₹11,500" icon="health" tone="active" headerGradient
+        headerActions={<Button theme="success" size="sm" leftIcon={<TPLibraryIcon name="tick-circle" variant="linear" size={18} />}>End Plan</Button>}>
+        <SectionCard number={1} title="Root Canal Treatment" subtitle="Lower Left First Molar (T36)" tone="active" tools={TOOLS} collapsible bodyBg="var(--tesseract-slate-50)">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {visits.map((v, i) => (
+              <SectionCard key={i} title={v.who} subtitle={v.date} tone="violet"
+                headerActions={<Button variant="tonal" theme="neutral" size="sm" leftIcon={<TPLibraryIcon name="document-text" variant="linear" size={14} />}>View Rx</Button>}>
+                <p style={{ margin: 0, font: '14px var(--tesseract-font-body)', color: 'var(--tesseract-slate-700)' }}><strong>Clinical Notes:</strong> {v.note}</p>
+              </SectionCard>
+            ))}
+          </div>
+        </SectionCard>
       </SectionCard>
-    </SectionCard>
-  ),
+    );
+  },
 };
 
 /** The body is ANY content — here free inputs + notes, not a Timeline; with a

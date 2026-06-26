@@ -55,7 +55,7 @@ const meta = {
     showRepeat: true, showTemplate: true, showSave: true, showClear: true,
     loading: false, collapsible: false, defaultCollapsed: false,
     repeatIcon: 'refresh-arrow', templateIcon: 'grid-5',
-    saveIcon: 'ram', clearIcon: 'eraser', searchIcon: 'search-normal-1',
+    saveIcon: 'ram', clearIcon: 'eraser', searchIcon: 'search-normal',
     dragIcon: 'menu', moreIcon: '3-dots-more', deleteIcon: 'trash', duplicateIcon: 'copy',
   },
 };

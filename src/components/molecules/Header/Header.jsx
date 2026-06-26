@@ -280,7 +280,7 @@ export const Header = React.forwardRef(function Header({
         placeholder={search.placeholder || "Search…"}
         value={search.value}
         onChange={search.onChange}
-        leftIcon={<TPLibraryIcon name="search-normal-1" size={18} />}
+        leftIcon={<TPLibraryIcon name="search-normal" size={18} />}
         radius="pill"
         fullWidth
       />

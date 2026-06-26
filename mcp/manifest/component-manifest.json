@@ -10,9 +10,9 @@
     ]
   },
   "counts": {
-    "components": 47,
-    "atoms": 19,
-    "molecules": 28,
+    "components": 42,
+    "atoms": 18,
+    "molecules": 24,
     "tokens": 216
   },
   "rules": [
@@ -626,6 +626,7 @@
       ],
       "stories": [
         "Playground",
+        "ClickInteraction",
         "Variants",
         "Sizes",
         "IconPositions",
@@ -1487,6 +1488,7 @@
       ],
       "stories": [
         "Playground",
+        "TypeInteraction",
         "Controlled",
         "Grouped",
         "Masked",
@@ -1496,45 +1498,6 @@
       ],
       "sourcePath": "src/components/atoms/InputOTP/InputOTP.jsx",
       "storiesPath": "src/components/atoms/InputOTP/InputOTP.stories.jsx"
-    },
-    {
-      "name": "Kbd",
-      "dir": "Kbd",
-      "layer": "atoms",
-      "exports": [
-        "Kbd"
-      ],
-      "importFrom": "@/src/components/atoms",
-      "importExample": "import { Kbd } from \"@/src/components/atoms\";",
-      "description": "Kbd — a keyboard key/shortcut cap (⌘K, Esc, ↵). Pairs with Command / Menu shortcut hints and shortcut documentation. <Kbd>⌘</Kbd><Kbd>K</Kbd>   ·   <Kbd>Esc</Kbd>",
-      "props": [
-        {
-          "name": "size",
-          "default": "\"md\"",
-          "allowedValues": [
-            "sm",
-            "md"
-          ],
-          "control": "inline-radio",
-          "description": "Key-cap size."
-        },
-        {
-          "name": "className"
-        },
-        {
-          "name": "children",
-          "default": "'K'",
-          "control": "text",
-          "description": "The key / glyph to render inside the cap (e.g. ⌘, K, Esc, ↵)."
-        }
-      ],
-      "stories": [
-        "Playground",
-        "Examples",
-        "Sizes"
-      ],
-      "sourcePath": "src/components/atoms/Kbd/Kbd.jsx",
-      "storiesPath": "src/components/atoms/Kbd/Kbd.stories.jsx"
     },
     {
       "name": "LoadingIndicator",
@@ -2456,6 +2419,7 @@
       ],
       "stories": [
         "Playground",
+        "ToggleInteraction",
         "Sizes",
         "Shapes",
         "States",
@@ -2855,6 +2819,18 @@
           "default": "false",
           "control": "boolean",
           "description": "Pin the header while the body scrolls (pair with maxHeight)"
+        },
+        {
+          "name": "stickyFirst",
+          "default": "false",
+          "control": "boolean",
+          "description": "Pin the first (Name) column to the left edge on horizontal scroll"
+        },
+        {
+          "name": "stickyLast",
+          "default": "false",
+          "control": "boolean",
+          "description": "Pin the last data column to the right edge on horizontal scroll"
         },
         {
           "name": "maxHeight"
@@ -3422,6 +3398,14 @@
           "description": "Pin the header while the body scrolls (needs `maxHeight`)"
         },
         {
+          "name": "stickyFirst",
+          "default": "0"
+        },
+        {
+          "name": "stickyLast",
+          "default": "0"
+        },
+        {
           "name": "maxHeight",
           "default": "360",
           "control": "range",
@@ -3606,6 +3590,7 @@
         "ColumnConfigurator",
         "SelectionModes",
         "StickyColumns",
+        "StickyEdgeColumns",
         "RowStates",
         "NestedRows",
         "GroupedRows",
@@ -4277,82 +4262,6 @@
       "storiesPath": "src/components/molecules/Empty/Empty.stories.jsx"
     },
     {
-      "name": "Field",
-      "dir": "Field",
-      "layer": "molecules",
-      "exports": [
-        "Field",
-        "FieldLabel",
-        "FieldControl",
-        "FieldDescription",
-        "FieldError"
-      ],
-      "importFrom": "@/src/components/molecules",
-      "importExample": "import { Field, FieldLabel, FieldControl, FieldDescription, FieldError } from \"@/src/components/molecules\";",
-      "description": "Field — a form-field grammar: link a label, control, description, and error to ANY form control with consistent layout + accessibility, so each control (Checkbox/Radio/Toggle/Slider/Dropdown/DateRangePicker/custom) doesn't re-implement label/help/error wiring. <Field invalid={!!err}> <FieldLabel>Email</FieldLabel> <FieldControl><InputBox placeholder=\"you@example.com\" /></FieldControl> <FieldDescription>We’ll never share it.</FieldDescription> <FieldError>{err}</FieldError> </Field> Field generates ids and, via FieldControl (Slot), injects `id`, `aria-describedby` (→ description + error), and `aria-invalid` onto the control. Parts: Field (root — `invalid`, `orientation` vertical/horizontal) · FieldLabel · FieldControl (wires the control) · FieldDescription · FieldError (role=\"alert\").",
-      "props": [
-        {
-          "name": "invalid",
-          "default": "false",
-          "control": "boolean",
-          "description": "Marks the field invalid — sets `data-invalid`, wires `aria-invalid`/`aria-describedby` onto the control, and reveals the FieldError message."
-        },
-        {
-          "name": "orientation",
-          "default": "\"vertical\"",
-          "allowedValues": [
-            "vertical",
-            "horizontal"
-          ],
-          "control": "inline-radio",
-          "description": "Layout of label vs. control — `vertical` stacks them, `horizontal` places the label beside the control (e.g. a settings toggle/checkbox row)."
-        },
-        {
-          "name": "required",
-          "default": "false",
-          "control": "boolean",
-          "description": "Marks the field required — renders the `*` marker on FieldLabel and sets `aria-required` on the control."
-        },
-        {
-          "name": "className"
-        },
-        {
-          "name": "children"
-        },
-        {
-          "name": "label",
-          "control": "text",
-          "description": "(Story helper) FieldLabel text.",
-          "default": "'Email address'"
-        },
-        {
-          "name": "placeholder",
-          "control": "text",
-          "description": "(Story helper) InputBox placeholder.",
-          "default": "'you@example.com'"
-        },
-        {
-          "name": "description",
-          "control": "text",
-          "description": "(Story helper) FieldDescription text (hidden when empty).",
-          "default": "'We’ll never share it.'"
-        },
-        {
-          "name": "error",
-          "control": "text",
-          "description": "(Story helper) FieldError message (shown only when `invalid`).",
-          "default": "'Enter a valid email address.'"
-        }
-      ],
-      "stories": [
-        "Playground",
-        "Invalid",
-        "Horizontal"
-      ],
-      "sourcePath": "src/components/molecules/Field/Field.jsx",
-      "storiesPath": "src/components/molecules/Field/Field.stories.jsx"
-    },
-    {
       "name": "Filter",
       "dir": "Filter",
       "layer": "molecules",
@@ -4937,15 +4846,10 @@
       "dir": "Menu",
       "layer": "molecules",
       "exports": [
-        "Menu",
-        "MenuTrigger",
-        "MenuContent",
-        "MenuItem",
-        "MenuSeparator",
-        "MenuLabel"
+        "Menu"
       ],
       "importFrom": "@/src/components/molecules",
-      "importExample": "import { Menu, MenuTrigger, MenuContent, MenuItem, MenuSeparator, MenuLabel } from \"@/src/components/molecules\";",
+      "importExample": "import { Menu } from \"@/src/components/molecules\";",
       "description": "Menu — the shared action-menu primitive (Radix-style compound parts). An accessible, portaled action menu (role=\"menu\" + menuitem) — distinct from Dropdown (which is a value SELECT). Use it for row \"…\" actions, header overflow menus, and nav flyouts so they share one keyboard/focus/positioning contract. <Menu> <MenuTrigger asChild><Button icon={…} aria-label=\"Actions\" /></MenuTrigger> <MenuContent> <MenuLabel>Row</MenuLabel> <MenuItem icon=\"edit-2\" onSelect={…}>Edit</MenuItem> <MenuItem icon=\"copy\" shortcut=\"⌘D\" onSelect={…}>Duplicate</MenuItem> <MenuSeparator /> <MenuItem icon=\"trash\" danger onSelect={…}>Delete</MenuItem> </MenuContent> </Menu> Parts: Menu (root, controlled/uncontrolled open) · MenuTrigger (asChild) · MenuContent (portal, collision-aware, focus-trapped, arrow-key nav, Escape, click-outside) · MenuItem (icon/shortcut/danger/disabled/onSelect) · MenuSeparator · MenuLabel.",
       "props": [
         {
@@ -4953,105 +4857,18 @@
         },
         {
           "name": "defaultOpen",
-          "default": "false",
-          "control": "boolean",
-          "description": "Render the menu open on mount (uncontrolled)"
+          "default": "false"
         },
         {
           "name": "onOpenChange"
         },
         {
           "name": "children"
-        },
-        {
-          "name": "side",
-          "allowedValues": [
-            "top",
-            "right",
-            "bottom",
-            "left"
-          ],
-          "control": "inline-radio",
-          "description": "Preferred side of the trigger to place the surface (collision-aware)",
-          "default": "'bottom'"
-        },
-        {
-          "name": "align",
-          "allowedValues": [
-            "start",
-            "center",
-            "end"
-          ],
-          "control": "inline-radio",
-          "description": "Alignment of the surface along the chosen side",
-          "default": "'start'"
-        },
-        {
-          "name": "sideOffset",
-          "control": "number",
-          "description": "Gap in px between trigger and surface",
-          "default": "6"
-        },
-        {
-          "name": "triggerLabel",
-          "control": "text",
-          "default": "'Actions'"
-        },
-        {
-          "name": "triggerVariant",
-          "allowedValues": [
-            "solid",
-            "outline",
-            "ghost",
-            "tonal",
-            "link"
-          ],
-          "control": "inline-radio",
-          "default": "'outline'"
-        },
-        {
-          "name": "item1Icon",
-          "control": "text",
-          "description": "Pick from the Tesseract Icons panel (or type a name)",
-          "default": "'edit-2'"
-        },
-        {
-          "name": "item2Icon",
-          "control": "text",
-          "description": "Pick from the Tesseract Icons panel (or type a name)",
-          "default": "'copy'"
-        },
-        {
-          "name": "item2Shortcut",
-          "control": "text",
-          "description": "Right-aligned shortcut hint, e.g. ⌘D",
-          "default": "'⌘D'"
-        },
-        {
-          "name": "showSeparator",
-          "control": "boolean",
-          "description": "Show a divider before the danger item",
-          "default": "true"
-        },
-        {
-          "name": "dangerIcon",
-          "control": "text",
-          "default": "'trash'"
-        },
-        {
-          "name": "dangerDisabled",
-          "control": "boolean",
-          "description": "Disable the destructive item",
-          "default": "false"
         }
       ],
-      "stories": [
-        "Playground",
-        "RowActions",
-        "WithDisabled"
-      ],
+      "stories": [],
       "sourcePath": "src/components/molecules/Menu/Menu.jsx",
-      "storiesPath": "src/components/molecules/Menu/Menu.stories.jsx"
+      "storiesPath": null
     },
     {
       "name": "Pagination",
@@ -5102,78 +4919,6 @@
       ],
       "sourcePath": "src/components/molecules/Pagination/Pagination.jsx",
       "storiesPath": "src/components/molecules/Pagination/Pagination.stories.jsx"
-    },
-    {
-      "name": "Popover",
-      "dir": "Popover",
-      "layer": "molecules",
-      "exports": [
-        "Popover",
-        "PopoverTrigger",
-        "PopoverContent"
-      ],
-      "importFrom": "@/src/components/molecules",
-      "importExample": "import { Popover, PopoverTrigger, PopoverContent } from \"@/src/components/molecules\";",
-      "description": "Popover — a generic anchored floating panel (Radix-style compound parts). The substrate for date pickers, comboboxes, colour/quantity pickers, and rich \"more info\" panels. Unlike Menu (a list of actions) or Tooltip (hover text), Popover holds arbitrary interactive content in a focus-managed dialog. <Popover> <PopoverTrigger asChild><Button>Open</Button></PopoverTrigger> <PopoverContent side=\"bottom\" align=\"start\">…</PopoverContent> </Popover> Parts: Popover (root — controlled/uncontrolled `open`) · PopoverTrigger (asChild) · PopoverContent (portal, collision-aware via usePosition, focus-trapped, Escape, click-outside; role=\"dialog\").",
-      "props": [
-        {
-          "name": "open"
-        },
-        {
-          "name": "defaultOpen",
-          "default": "false",
-          "control": "boolean",
-          "description": "Open on first render (uncontrolled)"
-        },
-        {
-          "name": "onOpenChange",
-          "description": "Fires with the next open state when the panel toggles"
-        },
-        {
-          "name": "children"
-        },
-        {
-          "name": "side",
-          "allowedValues": [
-            "top",
-            "right",
-            "bottom",
-            "left"
-          ],
-          "control": "inline-radio",
-          "description": "Preferred side of the trigger the panel opens on (flips on collision)",
-          "default": "'bottom'"
-        },
-        {
-          "name": "align",
-          "allowedValues": [
-            "start",
-            "center",
-            "end"
-          ],
-          "control": "inline-radio",
-          "description": "Alignment along the chosen side",
-          "default": "'start'"
-        },
-        {
-          "name": "sideOffset",
-          "control": "number",
-          "description": "Gap in px between the trigger and the panel",
-          "default": "8"
-        },
-        {
-          "name": "trapFocus",
-          "control": "boolean",
-          "description": "Trap keyboard focus inside the open panel",
-          "default": "true"
-        }
-      ],
-      "stories": [
-        "Playground",
-        "QuickEdit"
-      ],
-      "sourcePath": "src/components/molecules/Popover/Popover.jsx",
-      "storiesPath": "src/components/molecules/Popover/Popover.stories.jsx"
     },
     {
       "name": "RxPadSection",
@@ -5327,7 +5072,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal-1\"",
+          "default": "\"search-normal\"",
           "control": "text"
         },
         {
@@ -5530,7 +5275,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal-1\"",
+          "default": "\"search-normal\"",
           "control": "text",
           "description": "Icon shown inside the search input (visible in expanded mode with search enabled)",
           "storyHidden": true
@@ -5618,18 +5363,52 @@
           "control": "color"
         },
         {
-          "name": "number"
+          "name": "number",
+          "control": "text",
+          "description": "Shorthand for the leading chip content (a number)"
         },
         {
-          "name": "amount"
+          "name": "leading",
+          "control": "text",
+          "description": "Leading chip slot — any non-clickable content (number, icon, text)"
+        },
+        {
+          "name": "amount",
+          "control": "text",
+          "description": "Pill under the title"
         },
         {
           "name": "tone",
-          "default": "\"neutral\""
+          "default": "\"neutral\"",
+          "allowedValues": [
+            "neutral",
+            "primary",
+            "active",
+            "success",
+            "violet"
+          ],
+          "control": "inline-radio"
         },
         {
           "name": "headerGradient",
-          "default": "false"
+          "default": "false",
+          "control": "boolean",
+          "description": "Legacy alias for headerFill="
+        },
+        {
+          "name": "headerFill",
+          "allowedValues": [
+            "none",
+            "gradient",
+            "solid"
+          ],
+          "control": "inline-radio",
+          "description": "Header background style"
+        },
+        {
+          "name": "headerColor",
+          "control": "color",
+          "description": "Custom header fill colour (overrides tone)"
         },
         {
           "name": "tools"
@@ -5656,7 +5435,8 @@
         {
           "name": "collapsible",
           "default": "false",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Make this card an accordion (per-card)"
         },
         {
           "name": "collapsed"
@@ -5674,6 +5454,15 @@
           "default": "\"chevron-down\""
         },
         {
+          "name": "collapseIconPosition",
+          "default": "\"right\"",
+          "allowedValues": [
+            "left",
+            "right"
+          ],
+          "control": "inline-radio"
+        },
+        {
           "name": "sticky",
           "default": "false"
         },
@@ -5682,7 +5471,12 @@
         },
         {
           "name": "elevation",
-          "default": "false"
+          "default": "false",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
         },
         {
           "name": "bordered",
@@ -5739,61 +5533,16 @@
         "SegmentedBackgrounds",
         "WithHeaderSearch",
         "PlanCluster",
-        "WithTimeline",
+        "VisitEntries",
+        "FreeFormBody",
+        "MixedNesting",
+        "HeaderFills",
+        "PermutationMatrix",
+        "CollapseInteraction",
         "Plain"
       ],
       "sourcePath": "src/components/molecules/SectionCard/SectionCard.jsx",
       "storiesPath": "src/components/molecules/SectionCard/SectionCard.stories.jsx"
-    },
-    {
-      "name": "Sheet",
-      "dir": "Sheet",
-      "layer": "molecules",
-      "exports": [
-        "Sheet",
-        "SheetTrigger",
-        "SheetContent",
-        "SheetHeader",
-        "SheetTitle",
-        "SheetDescription",
-        "SheetFooter",
-        "SheetClose"
-      ],
-      "importFrom": "@/src/components/molecules",
-      "importExample": "import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetClose } from \"@/src/components/molecules\";",
-      "description": "Sheet — DEPRECATED. Prefer `Drawer` (molecules/Drawer): same DialogPrimitive backing, plus a standard header (close · divider · title · action), a footer band, and configurable width presets (\"full\" | \"70%\" | px). Sheet is kept working for existing imports. A modal surface that slides in from an edge. Composes the shared DialogPrimitive (focus trap + scroll lock + Escape + focus restore + role=\"dialog\"/aria-modal) and just adds the edge positioning + slide animation + scrim. Parts: Sheet (root, controlled/uncontrolled `open`) · SheetTrigger (asChild) · SheetContent (`side` left/right/top/bottom, `showClose`) · SheetHeader · SheetTitle · SheetDescription · SheetFooter · SheetClose (asChild).",
-      "props": [
-        {
-          "name": "side",
-          "allowedValues": [
-            "left",
-            "right",
-            "top",
-            "bottom"
-          ],
-          "control": "inline-radio",
-          "description": "Edge the sheet slides in from.",
-          "default": "'right'"
-        },
-        {
-          "name": "showClose",
-          "control": "boolean",
-          "description": "Render the built-in close (X) button in the corner.",
-          "default": "true"
-        },
-        {
-          "name": "closeIcon",
-          "control": "text",
-          "description": "TPLibraryIcon name for the built-in close button glyph.",
-          "default": "'close-square'"
-        }
-      ],
-      "stories": [
-        "Playground",
-        "Sides"
-      ],
-      "sourcePath": "src/components/molecules/Sheet/Sheet.jsx",
-      "storiesPath": "src/components/molecules/Sheet/Sheet.stories.jsx"
     },
     {
       "name": "Sidebar",
@@ -5933,7 +5682,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal-1\"",
+          "default": "\"search-normal\"",
           "control": "text",
           "description": "Icon shown inside the search input"
         },
@@ -6074,43 +5823,6 @@
       ],
       "sourcePath": "src/components/molecules/Tabs/Tabs.jsx",
       "storiesPath": "src/components/molecules/Tabs/Tabs.stories.jsx"
-    },
-    {
-      "name": "Timeline",
-      "dir": "Timeline",
-      "layer": "molecules",
-      "exports": [
-        "Timeline",
-        "TimelineItem"
-      ],
-      "importFrom": "@/src/components/molecules",
-      "importExample": "import { Timeline, TimelineItem } from \"@/src/components/molecules\";",
-      "description": "Timeline / TimelineItem — a vertical event timeline (visit history, audit log, plan progress). Each item shows a connector line + node dot on the left and a card on the right with a title, an optional date pill, a right-aligned action slot, and any body content (clinical notes, etc.). Drop it inside a SectionCard body for the plan visit-timeline pattern. <Timeline tone=\"violet\"> <TimelineItem title=\"Dr. Sheela B R\" date=\"10 Apr 2026\" action={<Button>View Rx</Button>}> <strong>Clinical Notes:</strong> Canal shaping + obturation completed </TimelineItem> </Timeline> Timeline props: tone (\"violet\" | \"primary\" | \"success\" | \"neutral\"), className. TimelineItem props: title, date, dateIcon, action, tone (override), muted (hollow node, e.g. a skipped/rescheduled entry), className, children (body).",
-      "props": [
-        {
-          "name": "tone",
-          "default": "\"violet\"",
-          "allowedValues": [
-            "violet",
-            "primary",
-            "success",
-            "neutral"
-          ],
-          "control": "inline-radio"
-        },
-        {
-          "name": "className"
-        },
-        {
-          "name": "children"
-        }
-      ],
-      "stories": [
-        "Playground",
-        "Tones"
-      ],
-      "sourcePath": "src/components/molecules/Timeline/Timeline.jsx",
-      "storiesPath": "src/components/molecules/Timeline/Timeline.stories.jsx"
     },
     {
       "name": "Toast",

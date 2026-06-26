@@ -82,7 +82,7 @@ export const Playground = {
 /** Search no-results (no action). */
 export const NoResults = {
   render: () => (
-    <Empty icon="search-normal-1" title="No matches" description="Try a different name, MRN, or phone number." />
+    <Empty icon="search-normal" title="No matches" description="Try a different name, MRN, or phone number." />
   ),
 };
 

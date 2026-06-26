@@ -402,7 +402,7 @@ export const Sidebar = React.forwardRef(function Sidebar(
     emptyText = "No matches.",
     loading = false,
     collapseIcon = "sidebar-left",
-    searchIcon = "search-normal-1",
+    searchIcon = "search-normal",
     caretIcon = "chevron-down",
     defaultOpenIds,
     onOpenChange,
