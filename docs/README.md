@@ -10,6 +10,7 @@ for GenX and TatvaPractice.
 2. **[USING-TESSERACT.md](./USING-TESSERACT.md)** — install the package, the `/tesseract` skill, and the MCP; set up the theme provider; use it in code.
 3. **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API, how to stay upgrade-safe). Read before adopting.
 4. **[ICONS.md](./ICONS.md)** — the icon system (`TPIcon` / `TPLibraryIcon`, families, self-hosting).
+5. **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — password-protect the deployed Storybook (built-in login gate + Vercel real-security option).
 
 ## Per-component docs
 
