@@ -4,6 +4,26 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.0.1] — first published registry release
+
+The first version published to the private **GitHub Packages** registry as
+`@dhspl-tatvacare/tesseract-ui`. (v1.0.0 was the announced milestone but predated
+the registry + scoped-name setup, so it was never published; install `1.0.1`.)
+
+### Changed
+- **Distribution:** published to GitHub Packages — `npm install @dhspl-tatvacare/tesseract-ui`,
+  versioned + immutable. The git `#v1.0.1` / `#build` install remains a no-token fallback.
+- **Card:** removed the decorative dot/grid patterns from gradient cards. Gradients stay;
+  for texture, compose an `<AnimatedGrid />` child (the only sanctioned overlay).
+- **Repo slimmed:** icons are served 100% from the CDN — removed the 61 MB local icon copy
+  and 2.3 MB of unused assets. `public/` is now just brand marks + favicon.
+
+### Fixed
+- **Tooltip (light variant):** removed the outer `1px` stroke; the white surface is now
+  defined by layered shadows (also removes the arrow seam).
+- **SegmentedControl:** now exported from the package root. It was documented in 1.0.0 but
+  missing from the atoms barrel, so `import { SegmentedControl }` failed — fixed.
+
 ## [1.0.0] — first stable release
 
 The first stable, public-to-the-org version. 40 components (17 atoms + 23 molecules),
@@ -50,4 +70,5 @@ list in [`docs/CATALOG.md`](docs/CATALOG.md).
   `github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0`. No public npm. See
   [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
 
+[1.0.1]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.1
 [1.0.0]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.0

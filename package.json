@@ -1,6 +1,6 @@
 {
   "name": "@dhspl-tatvacare/tesseract-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tesseract Design System — a zero-runtime-dependency React component library (atoms + molecules). Only react / react-dom as peers.",
   "license": "UNLICENSED",
   "type": "module",

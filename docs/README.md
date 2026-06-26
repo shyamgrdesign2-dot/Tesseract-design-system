@@ -5,6 +5,7 @@ for GenX and TatvaPractice.
 
 ## Start here
 
+0. **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh local project: get a token, install from GitHub Packages, render your first component.
 1. **[CATALOG.md](./CATALOG.md)** — every component, grouped, with a one-line description and a link to its usage doc.
 2. **[USING-TESSERACT.md](./USING-TESSERACT.md)** — install the package, the `/tesseract` skill, and the MCP; set up the theme provider; use it in code.
 3. **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API, how to stay upgrade-safe). Read before adopting.
