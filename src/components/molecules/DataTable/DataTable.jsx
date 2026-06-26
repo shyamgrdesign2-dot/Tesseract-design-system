@@ -10,6 +10,9 @@
  *   rowKey       (row, i) => key
  *   rowHeight    "xs"|"sm"|"md"|"lg"|"xl"  density          default "lg"
  *   stickyHeader boolean   header sticks on vertical scroll  default false
+ *   stickyFirst  boolean|1|2  auto-pin the first N columns to the left edge   default 0
+ *   stickyLast   boolean|1|2  auto-pin the last N columns to the right edge   default 0
+ *                (always edge-anchored; an explicit column.sticky still wins)
  *                (auto-applies a maxHeight so there's something to scroll)
  *   maxHeight    number|string  vertical scroll cap
  *   zebra        boolean   alternating row stripes           default false
@@ -381,6 +384,8 @@ export const DataTable = React.forwardRef(function DataTable({
   style,
   rowHeight = "lg",
   stickyHeader = false,
+  stickyFirst = 0,
+  stickyLast = 0,
   maxHeight,
   zebra = false,
   hoverable = true,
@@ -441,9 +446,25 @@ export const DataTable = React.forwardRef(function DataTable({
   const hasNesting = typeof getSubRows === "function";
   const radioName = React.useId();
 
+  // High-level edge-sticky convenience: stickyFirst / stickyLast (boolean or a
+  // count, 1–2) auto-pin the first/last N columns without hand-marking each.
+  // Always edge-anchored (never arbitrary columns). An explicit column.sticky wins.
+  const effectiveColumns = React.useMemo(() => {
+    const first = stickyFirst === true ? 1 : Math.max(0, Number(stickyFirst) || 0);
+    const last = stickyLast === true ? 1 : Math.max(0, Number(stickyLast) || 0);
+    if (!first && !last) return columnsProp;
+    const n = columnsProp.length;
+    return columnsProp.map((c, i) => {
+      if (c.sticky) return c;
+      if (i < first) return { ...c, sticky: "left" };
+      if (i >= n - last) return { ...c, sticky: "right" };
+      return c;
+    });
+  }, [columnsProp, stickyFirst, stickyLast]);
+
   // Sticky columns are reordered so left-sticky come first and right-sticky last;
   // relative order within each band is preserved.
-  const columns = React.useMemo(() => orderColumns(columnsProp), [columnsProp]);
+  const columns = React.useMemo(() => orderColumns(effectiveColumns), [effectiveColumns]);
 
   // Pixel offsets for every sticky column (cumulative per side). This is the
   // first-paint / SSR estimate from declared widths; it's then corrected with

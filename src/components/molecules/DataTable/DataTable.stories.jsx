@@ -704,6 +704,35 @@ export const StickyColumns = {
   },
 };
 
+/** High-level edge sticky — `stickyFirst` / `stickyLast` (0 · 1 · 2) auto-pin the
+ *  first/last N columns; no per-column marking. Always edge-anchored. */
+export const StickyEdgeColumns = {
+  name: 'Sticky Columns (stickyFirst / stickyLast)',
+  args: { stickyFirst: 1, stickyLast: 1 },
+  argTypes: {
+    stickyFirst: { control: { type: 'inline-radio' }, options: [0, 1, 2], description: 'Pin the first N columns (left edge)' },
+    stickyLast: { control: { type: 'inline-radio' }, options: [0, 1, 2], description: 'Pin the last N columns (right edge)' },
+  },
+  parameters: { docs: { description: { story: 'Set `stickyFirst` / `stickyLast` (a count, 1–2) to pin columns from the edges without marking each one. Always the first/last columns, never arbitrary ones. Toggle the controls and scroll horizontally.' } } },
+  render: ({ stickyFirst, stickyLast }) => {
+    const columns = [
+      patientCol({ width: 230 }),
+      { id: 'appt', header: 'Appointment', type: 'text', minWidth: 180, primary: (r) => r.appt, leftIcon: <TPIcon name="calendar-1" size={16} /> },
+      { id: 'doctor', header: 'Doctor', type: 'text', minWidth: 160, primary: (r) => r.doctor },
+      { id: 'type', header: 'Type', type: 'tag', minWidth: 170, tag: (r) => ({ label: r.type, tone: 'neutral' }) },
+      { id: 'phone', header: 'Contact', type: 'text', minWidth: 180, primary: (r) => r.phone, leftIcon: <TPIcon name="call" size={16} /> },
+      { id: 'blood', header: 'Blood', type: 'text', minWidth: 120, primary: (r) => r.blood },
+      { id: 'status', header: 'Status', type: 'tag', minWidth: 140, tag: (r) => ({ label: r.status, tone: STATUS_TO_TONE[r.status] }) },
+      { id: 'actions', header: 'Actions', type: 'action', width: 200, align: 'right', actions: () => <Actions /> },
+    ];
+    return (
+      <div style={{ maxWidth: 720 }}>
+        <DataTable columns={columns} data={ROWS.slice(0, 7)} rowKey={(r) => r.mrn} stickyFirst={stickyFirst} stickyLast={stickyLast} hoverable />
+      </div>
+    );
+  },
+};
+
 // ── Row states — semantic background tint + leading accent ────────────────────
 export const RowStates = {
   name: 'Row States (info · success · warning · error · reference)',
