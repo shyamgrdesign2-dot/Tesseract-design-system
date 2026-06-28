@@ -304,12 +304,19 @@ export const Header = React.forwardRef(function Header({
     >
       <div className={styles.left}>
         {back && (
-          <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
-            <Chevron dir="left" size={20} name={backIcon} variant={backIconVariant} corner={backIconCorner} />
-          </button>
-        )}
-        {back && backDivider && (logo != null || user || (!centered && title != null) || leading != null) && (
-          <Divider orientation="vertical" variant="gradient" color="var(--tesseract-slate-300)" style={{ height: "var(--tesseract-header-control)", opacity: 0.8 }} />
+          (backDivider && (logo != null || user || (!centered && title != null) || leading != null)) ? (
+            // 80px left column (aligns with the 80px secondary-sidebar rail): ghost
+            // back button centred, solid full-height divider at the 80px mark.
+            <div className={styles.backZone}>
+              <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
+                <Chevron dir="left" size={20} name={backIcon} variant={backIconVariant} corner={backIconCorner} />
+              </button>
+            </div>
+          ) : (
+            <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
+              <Chevron dir="left" size={20} name={backIcon} variant={backIconVariant} corner={backIconCorner} />
+            </button>
+          )
         )}
         {logo != null && <div className={styles.logo}>{logo}</div>}
         {user && <UserBlock {...user} onClick={user.onClick || onUserClick} />}

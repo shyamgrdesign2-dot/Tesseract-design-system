@@ -51,7 +51,22 @@
 .center { display: flex; align-items: center; justify-content: center; min-width: 0; }
 .actions { display: flex; align-items: center; gap: var(--tesseract-header-gap); flex-shrink: 0; }
 
-/* ── Back button — small control-sized icon button (not a full-height cell) ── */
+/* ── Back zone — fixed 80px left column that aligns with the 80px secondary-
+   sidebar rail. Pulled to the true screen edge (negating the header pad); the
+   ghost back button is centred and a SOLID full-height divider closes it at
+   the 80px mark. ── */
+.backZone {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 80px;
+  margin-left: calc(-1 * var(--tesseract-header-pad));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--tesseract-slate-200);
+}
+
+/* ── Back button — ghost icon CTA (transparent until hover; not tonal) ── */
 .back {
   display: flex;
   align-items: center;
@@ -63,7 +78,7 @@
   border: none;
   border-radius: var(--tesseract-radius-10);
   corner-shape: round;
-  background-color: var(--tesseract-slate-50);
+  background-color: transparent;
   color: var(--tesseract-slate-700);
   cursor: pointer;
   transition: background-color 120ms ease;
