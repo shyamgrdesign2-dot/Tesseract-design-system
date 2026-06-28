@@ -4451,6 +4451,12 @@
           "description": "Back glyph corner variant (default "
         },
         {
+          "name": "backDivider",
+          "default": "true",
+          "control": "boolean",
+          "description": "Vertical rule after the back button when the left cluster has following content (default on)"
+        },
+        {
           "name": "logo",
           "description": "Brand mark (use the Logo atom)"
         },

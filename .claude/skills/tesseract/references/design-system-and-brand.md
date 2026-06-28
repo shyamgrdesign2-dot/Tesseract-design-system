@@ -43,17 +43,17 @@ import { DataTable, Header, Sidebar } from "@/src/components/molecules";
 Component source and stories live at `src/components/{atoms,molecules}/<Name>/` — read them for exact APIs. Tokens are at `src/tesseract-tokens.css`.
 
 ### Case B — a separate project consuming the published package
-A new app that installed the library. Import from the package name it was installed as (currently **`tesseract-ui`**; publish/scoping is still pending, so confirm the name in that project's `package.json`):
+A new app that installed the library from the org's private **GitHub Packages** registry. The published name is scoped: **`@dhspl-tatvacare/tesseract-ui`** (v1.0.1+). Import from that name:
 ```jsx
-import { Button, DataTable, Header } from "tesseract-ui";        // or the scoped name in package.json
-import "tesseract-ui/styles.css";                                 // load the stylesheet once at app root
+import { Button, DataTable, Header } from "@dhspl-tatvacare/tesseract-ui";
+import "@dhspl-tatvacare/tesseract-ui/styles.css";               // load the stylesheet once at app root
 ```
 Then wrap the app root once in the theme provider so tokens + component overrides apply:
 ```jsx
-import { TesseractThemeProvider } from "tesseract-ui";
+import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
 <TesseractThemeProvider colorScheme="light">{/* app */}</TesseractThemeProvider>
 ```
-If you cannot tell which case you're in, check the project's `package.json` (is `tesseract-ui` a dependency?) and whether `src/components/atoms` exists locally. When unsure, ask the user which install they have.
+Install + token setup for that project lives in the repo's `docs/TRIAL.md` / `docs/USING-TESSERACT.md`. If you cannot tell which case you're in, check the project's `package.json` (is `@dhspl-tatvacare/tesseract-ui` a dependency?) and whether `src/components/atoms` exists locally. When unsure, ask the user which install they have.
 
 ### Either case
 - Wrap the app once in `TesseractThemeProvider` (theme overrides, `colorScheme`, breakpoints). Re-theme via provider overrides — **never** by editing tokens.

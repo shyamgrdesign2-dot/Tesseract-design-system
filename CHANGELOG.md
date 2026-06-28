@@ -4,6 +4,22 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.0.2]
+
+### Changed
+- **Header — back affordance.** The back button now sits in a fixed **80px** left
+  column (aligned with the 80px secondary-sidebar rail), rendered as a **ghost** icon
+  CTA (transparent until hover, no tonal fill), closed by a **solid** full-height
+  divider at the 80px mark. New `backDivider` prop (default `true`) draws the divider
+  whenever the left cluster has following content; a lone back button renders plain.
+
+### Tooling & AI grounding (not shipped in the npm package)
+- The deployed Storybook is now gated by a password login screen — see
+  [`docs/DEPLOY-AUTH.md`](docs/DEPLOY-AUTH.md).
+- The `/tesseract` skill catalog and the MCP manifest were reconciled to all **40**
+  components (added Card, SectionCard, Drawer, Empty, Breadcrumb, Pagination, Command,
+  InputOTP, Progress) and the scoped `@dhspl-tatvacare/tesseract-ui` install path.
+
 ## [1.0.1] — first published registry release
 
 The first version published to the private **GitHub Packages** registry as
@@ -70,5 +86,6 @@ list in [`docs/CATALOG.md`](docs/CATALOG.md).
   `github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0`. No public npm. See
   [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
 
+[1.0.2]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.2
 [1.0.1]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.1
 [1.0.0]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.0
