@@ -51,6 +51,7 @@ const meta = {
   // props (description + control), not just the Playground's synthetic controls.
   argTypes: {
     back:            { control: 'boolean', description: 'Show the back button (a small, control-sized icon button)', table: { category: 'Left' } },
+    backDivider:     { control: 'boolean', description: 'Vertical rule after the back button when the left cluster has following content (default on)', table: { category: 'Left' } },
     backIcon:        { control: 'text', description: 'Back glyph name (default "arrow-left3")', table: { category: 'Left' } },
     backIconVariant: { control: 'select', options: ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'], description: 'Back glyph style', table: { category: 'Left' } },
     backIconCorner:  { control: 'inline-radio', options: ['straight', 'rounded'], description: 'Back glyph corner variant (default "straight")', table: { category: 'Left' } },

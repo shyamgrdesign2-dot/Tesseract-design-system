@@ -33,6 +33,8 @@
  *
  * Props: back, onBack, backIcon (default "arrow-left3"),
  *        backIconVariant (default "linear"), backIconCorner (default "straight"),
+ *        backDivider (default true — vertical rule after the back button when the
+ *          left cluster has following content: the standard back · | · content look),
  *        logo, user, title, subtitle, leading, actions,
  *        height (default 62), bordered (default true), className.
  *
@@ -234,7 +236,7 @@ function Action({ item, controlPx = 42 }) {
 }
 
 export const Header = React.forwardRef(function Header({
-  back, onBack, backIcon = "arrow-left3", backIconVariant = "linear", backIconCorner = "straight",
+  back, onBack, backIcon = "arrow-left3", backIconVariant = "linear", backIconCorner = "straight", backDivider = true,
   logo, user, title, subtitle, leading, actions = [],
   align = "left", search, maxVisibleActions,
   height = 62, bordered = true, density = "comfortable",
@@ -305,6 +307,9 @@ export const Header = React.forwardRef(function Header({
           <button type="button" className={styles.back} aria-label="Go back" onClick={onBack}>
             <Chevron dir="left" size={20} name={backIcon} variant={backIconVariant} corner={backIconCorner} />
           </button>
+        )}
+        {back && backDivider && (logo != null || user || (!centered && title != null) || leading != null) && (
+          <Divider orientation="vertical" variant="gradient" color="var(--tesseract-slate-300)" style={{ height: "var(--tesseract-header-control)", opacity: 0.8 }} />
         )}
         {logo != null && <div className={styles.logo}>{logo}</div>}
         {user && <UserBlock {...user} onClick={user.onClick || onUserClick} />}
