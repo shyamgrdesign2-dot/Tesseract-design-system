@@ -32,7 +32,7 @@ npm install @dhspl-tatvacare/tesseract-ui react react-dom
 - **Access gate:** org membership + the `read:packages` token. No access → install fails.
 - **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
 - **No-token fallback:** install the prebuilt bundle by git tag —
-  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0"`
+  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.2"`
   (gated by git access; no semver ranges). Full detail: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
 - **Peers:** `react` / `react-dom` (React 18+).
 
