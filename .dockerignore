@@ -1,0 +1,42 @@
+# Keep the build context small + the image clean. Anything the static-Storybook
+# build doesn't need is excluded. (src/**/*.mdx + public/ ARE kept — they're part
+# of the build.)
+
+# Dependencies & build outputs (regenerated inside the image)
+node_modules
+**/node_modules
+dist
+storybook-static
+build
+coverage
+
+# Version control & CI
+.git
+.gitignore
+.github
+
+# Editors / OS cruft
+.vscode
+.idea
+.DS_Store
+**/.DS_Store
+*.swp
+
+# Logs & temp
+*.log
+*.local
+
+# Secrets — never copy into the image
+.npmrc
+.env
+.env.*
+
+# Not needed to build the static Storybook
+.claude
+mcp
+docs
+*.tgz
+Dockerfile
+.dockerignore
+README.md
+CHANGELOG.md
