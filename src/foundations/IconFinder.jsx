@@ -19,6 +19,7 @@ import { iconPath } from "@/src/components/atoms/icons/tp/icon-resolve";
 import { getIconBaseUrl } from "@/src/components/atoms/icons/tp/iconBase";
 import { InputBox } from "@/src/components/atoms/Input/InputBox";
 import { Button } from "@/src/components/atoms/Button";
+import { Dropdown } from "@/src/components/molecules/Dropdown";
 
 // Order MUST match the availability bitmask (built from the CDN catalog):
 // bit = cornerIndex*6 + styleIndex.
@@ -99,13 +100,18 @@ export function IconFinder() {
   const visible = queryPairs.filter((p) => !excluded.has(p.family));
   const shown = visible.slice(0, CAP);
 
-  const toggleFamily = (family) =>
+  // Family multi-select (dropdown). Selected = every family in the current
+  // results minus the ones the user explicitly excluded → all-on by default.
+  const familyOptions = familiesInResults.map((f) => ({ value: f, label: f }));
+  const selectedFamilies = familiesInResults.filter((f) => !excluded.has(f));
+  const onFamilyChange = (next) => {
+    const keep = new Set(next);
     setExcluded((prev) => {
-      const next = new Set(prev);
-      if (next.has(family)) next.delete(family);
-      else next.add(family);
-      return next;
+      const e = new Set(prev);
+      for (const f of familiesInResults) { if (keep.has(f)) e.delete(f); else e.add(f); }
+      return e;
     });
+  };
 
   const copy = (name, family) => {
     const key = `${family}:${name}`;
@@ -133,28 +139,27 @@ export function IconFinder() {
           <div style={{ display: "grid", gap: 6 }}><span style={LABEL}>Corner</span><Toggle value={corner} set={setCorner} options={CORNERS} /></div>
         </div>
 
-        {/* Family filter — all selected by default; click to narrow. Shows the
-            families present in the current search. */}
+        {/* Family filter — a multi-select dropdown, all families selected by
+            default (uncheck to narrow; "all"/"none" for quick reset). */}
         {familiesInResults.length > 1 && (
-          <div style={{ display: "grid", gap: 6 }}>
-            <span style={LABEL}>
+          <div style={{ display: "grid", gap: 6, justifyItems: "start" }}>
+            <span style={{ ...LABEL, display: "inline-flex", alignItems: "center", gap: 4 }}>
               Family
-              {excluded.size > 0 && (
-                <Button size="sm" variant="link" theme="primary" onClick={() => setExcluded(new Set())} style={{ marginLeft: 8, textTransform: "none" }}>
-                  select all
-                </Button>
-              )}
+              <Button size="sm" variant="link" theme="primary" onClick={() => setExcluded(new Set())} style={{ textTransform: "none" }}>all</Button>
+              <span style={{ color: "var(--tesseract-slate-300)" }}>·</span>
+              <Button size="sm" variant="link" theme="neutral" onClick={() => setExcluded(new Set(familiesInResults))} style={{ textTransform: "none" }}>none</Button>
             </span>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", maxHeight: 92, overflowY: "auto" }}>
-              {familiesInResults.map((f) => {
-                const on = !excluded.has(f);
-                return (
-                  <Button key={f} size="sm" variant={on ? "solid" : "outline"} theme={on ? "primary" : "neutral"} onClick={() => toggleFamily(f)}>
-                    {f}
-                  </Button>
-                );
-              })}
-            </div>
+            <Dropdown
+              mode="multi"
+              optionControl="checkbox"
+              searchable
+              searchPlaceholder="Filter families…"
+              width={280}
+              placeholder="Select families…"
+              options={familyOptions}
+              value={selectedFamilies}
+              onChange={onFamilyChange}
+            />
           </div>
         )}
 
