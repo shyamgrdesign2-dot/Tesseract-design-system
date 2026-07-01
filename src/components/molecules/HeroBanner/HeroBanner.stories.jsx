@@ -13,7 +13,7 @@ import { TPLibraryIcon } from '@/src/components/atoms/icons/tp/TPLibraryIcon';
 const CTA_VARIANTS = ['none', 'solid', 'outline', 'ghost', 'tonal', 'link'];
 const CTA_SHAPES = ['text', 'icon', 'split'];
 const ICON_VARIANTS = ['linear', 'bulk', 'bold', 'broken', 'twotone', 'outline'];
-const TONES = ['violet', 'blue', 'slate', 'dark'];
+const TONES = ['violet', 'blue'];
 
 // Clean line plus (two crossing strokes) — matches the accordion-style line
 // icons, not the chunky TP_Icons "Plus" silhouette.

@@ -1,5 +1,6 @@
 import React from "react";
 import { Page, Title, Section, Code } from "./_kit";
+import { SURFACE_GRADIENTS, grainStyle } from "./surfaceGradients";
 
 export default {
   title: "Foundations/Colors",
@@ -184,6 +185,37 @@ export const Gradients = {
       <Title sub={<>Brand depth + AI surface + component marks. Use via <Code>var(--tesseract-gradient-&lt;name&gt;)</Code>. Each card lists the hex stops it blends.</>}>Gradients</Title>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
         {GRADS.map(([g, label]) => <GradientCard key={g} g={g} label={label} />)}
+      </div>
+    </Page>
+  ),
+};
+
+// ── Premium SURFACE gradients (violet + blue) — the shiny dark surfaces used by
+// HeroBanner, with an optional film-grain overlay. One shared source of truth in
+// foundations/surfaceGradients.js, so docs + component can't drift.
+function SurfaceCard({ tone, grain }) {
+  return (
+    <div>
+      <div style={{ position: "relative", height: 160, borderRadius: 16, overflow: "hidden", background: SURFACE_GRADIENTS[tone] }}>
+        {grain && <div style={grainStyle} aria-hidden />}
+        <span style={{ position: "absolute", left: 16, bottom: 13, zIndex: 1, font: "700 15px/18px Mulish, Inter", color: "rgba(255,255,255,0.94)", textTransform: "capitalize" }}>{tone} surface</span>
+      </div>
+      <div style={{ font: "400 11px/14px ui-monospace, monospace", color: "var(--tesseract-slate-500)", marginTop: 7 }}>
+        SURFACE_GRADIENTS.{tone}{grain ? " + grain" : ""}
+      </div>
+    </div>
+  );
+}
+
+export const SurfaceGradients = {
+  args: { grain: true },
+  argTypes: { grain: { control: "boolean", name: "film grain" } },
+  parameters: { layout: "fullscreen", options: { showPanel: true } },
+  render: ({ grain }) => (
+    <Page>
+      <Title sub={<>The premium dark <strong>surface gradients</strong> the <Code>HeroBanner</Code> uses — token-only, two tones (violet · blue), each a layered sheen + highlight pools + a near-black field. Toggle the <strong>film-grain</strong> texture. Shared source: <Code>foundations/surfaceGradients.js</Code>.</>}>Surface gradients</Title>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 18 }}>
+        {Object.keys(SURFACE_GRADIENTS).map((t) => <SurfaceCard key={t} tone={t} grain={grain} />)}
       </div>
     </Page>
   ),

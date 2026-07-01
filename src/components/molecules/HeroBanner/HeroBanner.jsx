@@ -4,76 +4,23 @@ import * as React from "react";
 import { AnimatedGrid } from "@/src/components/atoms/AnimatedGrid/AnimatedGrid";
 import { LightRays } from "@/src/components/atoms/LightRays/LightRays";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
+import { SURFACE_GRADIENTS, SURFACE_RAY_COLORS, DEFAULT_SURFACE_TONE, grainStyle } from "@/src/foundations/surfaceGradients";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { cn } from "@/src/hooks/utils";
 import styles from "./HeroBanner.module.scss";
 
-// Surface gradient by tone — token-only (no raw hex). Deeper + more premium than
-// before: the light focus sits toward the LEFT (under the content) and the bright
-// edge is dropped for a richer, darker field. The top-right glow + light rays
-// (below) supply the premium highlight. Other tones reskin per page/specialty.
-const TONE_GRADIENTS = {
-  // Deep premium PURPLE with a built-in SHINE. Three token-only layers (top → base):
-  //   1 · a soft diagonal sheen band sweeping across (a highlight, like light on glass)
-  //   2 · a broad highlight bloom from just above top-centre (the light source)
-  //   3 · the dark field — violet-900 focal falling to near-black (slate-900) corners
-  // The animated <LightRays/> then adds the drifting glow on top. Rich, not flat.
-  violet: `
-    linear-gradient(118deg, transparent 0%,
-      color-mix(in srgb, var(--tesseract-violet-600) 18%, transparent) 34%,
-      color-mix(in srgb, var(--tesseract-violet-400) 12%, transparent) 47%,
-      color-mix(in srgb, var(--tesseract-violet-700) 14%, transparent) 60%,
-      transparent 84%),
-    radial-gradient(52% 125% at 60% -18%,
-      color-mix(in srgb, var(--tesseract-violet-600) 30%, transparent) 0%,
-      color-mix(in srgb, var(--tesseract-violet-800) 13%, transparent) 34%,
-      transparent 60%),
-    radial-gradient(24% 78% at 34% -8%,
-      color-mix(in srgb, var(--tesseract-violet-500) 14%, transparent) 0%,
-      transparent 54%),
-    radial-gradient(125% 150% at 50% 42%,
-      color-mix(in srgb, var(--tesseract-violet-900) 82%, var(--tesseract-slate-900)) 0%,
-      color-mix(in srgb, var(--tesseract-violet-900) 40%, var(--tesseract-slate-900)) 52%,
-      color-mix(in srgb, var(--tesseract-violet-900) 8%, var(--tesseract-slate-900)) 100%)`,
-  blue: `
-    linear-gradient(118deg, transparent 0%,
-      color-mix(in srgb, var(--tesseract-blue-600) 18%, transparent) 34%,
-      color-mix(in srgb, var(--tesseract-blue-400) 12%, transparent) 47%,
-      color-mix(in srgb, var(--tesseract-blue-700) 14%, transparent) 60%,
-      transparent 84%),
-    radial-gradient(52% 125% at 60% -18%,
-      color-mix(in srgb, var(--tesseract-blue-500) 38%, transparent) 0%,
-      color-mix(in srgb, var(--tesseract-blue-700) 17%, transparent) 34%,
-      transparent 60%),
-    radial-gradient(24% 78% at 34% -8%,
-      color-mix(in srgb, var(--tesseract-blue-400) 20%, transparent) 0%,
-      transparent 54%),
-    radial-gradient(125% 150% at 50% 42%,
-      color-mix(in srgb, var(--tesseract-blue-700) 62%, var(--tesseract-blue-900)) 0%,
-      color-mix(in srgb, var(--tesseract-blue-900) 74%, var(--tesseract-slate-900)) 55%,
-      color-mix(in srgb, var(--tesseract-blue-900) 16%, var(--tesseract-slate-900)) 100%)`,
-  slate:
-    "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
-  dark:
-    "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 50%, var(--tesseract-slate-900) 100%)",
-};
-const DEFAULT_TONE = "violet";
+// Surface gradient + film grain + ray tints per tone — shared, token-only source
+// of truth (so the component and the Foundations docs stay in sync). Two tones
+// only: violet + blue. See surfaceGradients.js for the layer breakdown.
+const TONE_GRADIENTS = SURFACE_GRADIENTS;
+const RAY_COLORS = SURFACE_RAY_COLORS;
+const DEFAULT_TONE = DEFAULT_SURFACE_TONE;
 
 const SIZE_HEIGHT = { sm: 80, md: 120, lg: 160 };
 // Default bottom corner radius scales with size (md = 24px). Soft, generous
 // corners; the practical ceiling is 42px.
 const SIZE_RADIUS = { sm: 20, md: 24, lg: 32 };
 const MAX_RADIUS = 42;
-
-// Light-ray tint per tone. Mid-ramp (300s), not the palest 200s — screen-
-// blending a near-white tint bleaches to white behind the text; the more
-// saturated 300s keep the glow coloured (violet/blue) instead of washing out.
-const RAY_COLORS = {
-  violet: ["var(--tesseract-violet-300)", "var(--tesseract-blue-300)"],
-  blue:   ["var(--tesseract-blue-300)", "var(--tesseract-violet-300)"],
-  slate:  ["var(--tesseract-slate-300)", "var(--tesseract-slate-400)"],
-  dark:   ["var(--tesseract-slate-300)", "var(--tesseract-slate-400)"],
-};
 
 // Headings come in exactly two sizes: 18px and 24px.
 const TITLE_FONT_SIZE = { sm: 18, md: 24 };
@@ -94,7 +41,7 @@ const BACK_BOX = { sm: 20, md: 28 };
  *   size          "sm" | "md" | "lg"          banner height; default "md"
  *   height        number                       numeric height override (escape hatch); default undefined → use size
  *   bottomRadius  number                       overrides the size default (sm 20 / md 24 / lg 32); max 42
- *   tone          "violet" | "blue" | "slate" | "dark"   gradient tone (token-only); default "violet" = current look
+ *   tone          "violet" | "blue"            gradient tone (token-only); default "violet" = current look
  *   background    string                       full CSS background override (wins over tone); default undefined
  *   eyebrow       string | node                small kicker label above the title; default none
  *   align         "center" | "top"             vertical alignment of the content block; default "center" = current
@@ -202,9 +149,9 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
         />
       )}
 
-      {/* Film-grain texture across the whole surface (premium tooth, like the
-          reference). Static, subtle, overlay-blended, beneath the content. */}
-      <div className={styles.grain} aria-hidden />
+      {/* Film-grain texture across the whole surface (premium tooth). Static,
+          subtle, screen-blended, beneath the content. Shared with Foundations. */}
+      <div style={grainStyle} aria-hidden />
 
       {/* Content — `align="center"` (default) vertically centers the block in
           the banner; `align="top"` lets it hug the top. */}

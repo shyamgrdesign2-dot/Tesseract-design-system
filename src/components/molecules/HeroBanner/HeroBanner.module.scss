@@ -5,21 +5,6 @@
   z-index: 0;
 }
 
-/* Film grain — a fine fractal-noise texture overlaid across the whole surface,
-   like the reference. 'overlay' blend keeps it subtle (adds tooth to the light,
-   speckle to the shadows) without lifting the field. Reduced-motion agnostic
-   (it's static). Sits under the content layer. */
-.grain {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.09;
-  mix-blend-mode: screen;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 120px 120px;
-}
-
 /* Back affordance — a BARE icon (no button shell), so it reads as the arrow
    alone sitting on the H1's centre line. Its box height matches the title's
    line box (set inline) and the icon is centred within it; only a subtle
