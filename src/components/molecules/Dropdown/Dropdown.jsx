@@ -88,7 +88,7 @@ import styles from "./Dropdown.module.scss";
 
 // Icons from the CDN (no inline SVG). Chevron forwards props (className/data-open).
 const Chevron = (props) => <TPLibraryIcon name="chevron-down" size={14} {...props} />;
-const SearchIcon = () => <TPLibraryIcon name="search" size={15} />;
+const SearchIcon = () => <TPLibraryIcon name="search:search-2" size={15} />;
 const PlusIcon = () => <TPLibraryIcon name="add" size={14} />;
 const ClearIcon = () => <TPLibraryIcon name="close" size={13} />;
 // Plain checkmark — the CDN only ships circled/squared ticks, so the selected

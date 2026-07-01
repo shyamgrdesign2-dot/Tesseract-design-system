@@ -236,7 +236,7 @@ const meta = {
     loading: false,
     badgeStyle: "default",
     collapseIcon: "sidebar-left",
-    searchIcon: "search-normal",
+    searchIcon: "search:search-2",
     caretIcon: "chevron-down",
   },
 };
@@ -278,7 +278,7 @@ const sidebarCode = (args = {}) => {
   if (loading) lines.push("  loading");
   if (collapseIcon && collapseIcon !== "sidebar-left")
     lines.push(`  collapseIcon="${collapseIcon}"`);
-  if (searchIcon && searchIcon !== "search-normal")
+  if (searchIcon && searchIcon !== "search:search-2")
     lines.push(`  searchIcon="${searchIcon}"`);
   if (caretIcon && caretIcon !== "chevron-down")
     lines.push(`  caretIcon="${caretIcon}"`);

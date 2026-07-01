@@ -146,7 +146,7 @@ export const WithHeaderSearch = {
       icon="virus"
       iconColor="var(--tesseract-violet-500)"
       collapsible
-      headerExtra={<InputBox fullWidth leftIcon={<TPLibraryIcon name="search-normal" variant="linear" size={18} />} placeholder="Search & add symptoms" />}
+      headerExtra={<InputBox fullWidth leftIcon={<TPLibraryIcon name="search:search-2" variant="linear" size={18} />} placeholder="Search & add symptoms" />}
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         {['Fever', 'Cough', 'Fatigue', 'Headache'].map((s) => (

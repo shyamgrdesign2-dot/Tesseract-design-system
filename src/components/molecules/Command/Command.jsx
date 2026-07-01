@@ -93,7 +93,7 @@ export const Command = React.forwardRef(function Command({
           <Dialog.Overlay className={styles.overlay} />
           <Dialog.Content ref={ref} aria-label={label} className={cn(styles.palette, className)} onKeyDown={onKeyDown} {...rest}>
             <div className={styles.searchRow}>
-              <TPLibraryIcon name="search-normal" size={18} className={styles.searchIcon} aria-hidden />
+              <TPLibraryIcon name="search:search-2" size={18} className={styles.searchIcon} aria-hidden />
               <input
                 ref={inputRef}
                 className={styles.input}

@@ -132,7 +132,7 @@ export function IconFinder() {
       <div style={{ display: "grid", gap: 14, marginBottom: 20 }}>
         <div style={{ maxWidth: 440 }}>
           <InputBox value={q} onChange={(e) => setQ(e?.target?.value ?? e)} placeholder="Search icons by name… (heart, calendar, arrow, user)"
-            leftIcon={<TPLibraryIcon name="search" size={16} />} clearable />
+            leftIcon={<TPLibraryIcon name="search:search-2" size={16} />} clearable />
         </div>
         <div style={{ display: "flex", gap: 28, flexWrap: "wrap", alignItems: "center" }}>
           <div style={{ display: "grid", gap: 6 }}><span style={LABEL}>Style</span><Toggle value={style} set={setStyle} options={STYLES} /></div>

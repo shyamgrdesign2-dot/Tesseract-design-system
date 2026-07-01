@@ -72,7 +72,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
   templateIcon = "grid-5",
   saveIcon = "ram",
   clearIcon = "eraser",
-  searchIcon = "search-normal",
+  searchIcon = "search:search-2",
   dragIcon = "menu",
   moreIcon = "3-dots-more",
   deleteIcon = "trash",
@@ -125,7 +125,7 @@ export const RxPadSection = React.forwardRef(function RxPadSection({
   const showTable = bodyType === "table" && (mode === "table-first" || rows.length > 0);
 
   const headerIcon = parseIconProp(icon, "virus", "bulk");
-  const searchParsed = parseIconProp(searchIcon, "search-normal");
+  const searchParsed = parseIconProp(searchIcon, "search:search-2");
 
   // The default Repeat/Template/Save/Clear quartet — preserved as the default.
   const defaultActions = (

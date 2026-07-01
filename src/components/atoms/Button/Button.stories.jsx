@@ -318,7 +318,7 @@ export const IconOnly = {
       <Section label="Variants (md)">
         <Row>
           {VARIANTS.filter((v) => v !== 'link').map((variant) => (
-            <Button key={variant} variant={variant} aria-label="Search" icon={<TPLibraryIcon name="search-normal" size={20} />} />
+            <Button key={variant} variant={variant} aria-label="Search" icon={<TPLibraryIcon name="search:search-2" size={20} />} />
           ))}
         </Row>
       </Section>
@@ -564,7 +564,7 @@ export const UseCases = {
         <Row>
           <Button leftIcon={<TPLibraryIcon name="add" size={16} />}>New Patient</Button>
           <Button variant="outline" leftIcon={<TPLibraryIcon name="edit-2" size={16} />}>Edit Profile</Button>
-          <Button variant="ghost" leftIcon={<TPLibraryIcon name="search-normal" size={16} />}>Search Records</Button>
+          <Button variant="ghost" leftIcon={<TPLibraryIcon name="search:search-2" size={16} />}>Search Records</Button>
           <Button variant="tonal" leftIcon={<TPLibraryIcon name="tick-square" size={16} />}>Mark Complete</Button>
           <Button variant="link" rightIcon={<TPLibraryIcon name="arrow-right" size={16} />}>View All Patients</Button>
         </Row>
@@ -644,7 +644,7 @@ export const Polymorphic = {
           <Button href="#export" variant="solid" leftIcon={<TPLibraryIcon name="import" size={16} />}>
             Download as link
           </Button>
-          <Button href="#search" variant="ghost" aria-label="Search" icon={<TPLibraryIcon name="search-normal" size={20} />} />
+          <Button href="#search" variant="ghost" aria-label="Search" icon={<TPLibraryIcon name="search:search-2" size={20} />} />
         </Row>
       </Section>
       <Section label="as → render any element (e.g. an external anchor)">

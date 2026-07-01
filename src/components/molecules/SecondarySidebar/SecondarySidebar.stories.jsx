@@ -155,7 +155,7 @@ const meta = {
     tone: "blue",
     density: "comfortable",
     emptyText: "No matches",
-    searchIcon: "search-normal",
+    searchIcon: "search:search-2",
     collapseIcon: "sidebar-left",
     caretIcon: "chevron-down",
   },
@@ -171,7 +171,7 @@ const sidebarCode = ({ tone = "blue", density = "comfortable", collapsedWidth = 
   if (collapsedWidth !== 80) lines.push(`  collapsedWidth={${collapsedWidth}}`);
   if (!bottomFade) lines.push("  bottomFade={false}");
   if (emptyText && emptyText !== "No matches") lines.push(`  emptyText="${emptyText}"`);
-  if (searchIcon && searchIcon !== "search-normal") lines.push(`  searchIcon="${searchIcon}"`);
+  if (searchIcon && searchIcon !== "search:search-2") lines.push(`  searchIcon="${searchIcon}"`);
   if (collapseIcon && collapseIcon !== "sidebar-left") lines.push(`  collapseIcon="${collapseIcon}"`);
   if (caretIcon && caretIcon !== "chevron-down") lines.push(`  caretIcon="${caretIcon}"`);
   return `<SecondarySidebar\n${lines.join("\n")}\n/>`;

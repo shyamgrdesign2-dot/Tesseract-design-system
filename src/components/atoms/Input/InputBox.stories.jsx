@@ -30,7 +30,7 @@ const addonDescriptor = (kind, side) => {
   if (!kind || kind === 'none') return undefined;
   if (kind === 'text')   return { type: 'text',   content: side === 'left' ? 'https://' : '.com' };
   if (kind === 'select') return { type: 'select', ariaLabel: side === 'left' ? 'Country code' : 'Unit', options: side === 'left' ? ['+91', '+1', '+44', '+971'] : ['kg', 'lb', 'g'] };
-  if (kind === 'button') return { type: 'button', label: side === 'left' ? 'Browse' : 'Search', icon: side === 'left' ? 'document-upload' : 'search-normal' };
+  if (kind === 'button') return { type: 'button', label: side === 'left' ? 'Browse' : 'Search', icon: side === 'left' ? 'document-upload' : 'search:search-2' };
   return undefined;
 };
 // Emit the descriptor literal for the Show-code snippet.
@@ -247,7 +247,7 @@ export const Sizes = {
   render: () => (
     <Stack>
       {SIZES.map((s) => (
-        <InputBox key={s} size={s} label={`Size ${s}`} placeholder={`${s} input`} leftIcon={<TPLibraryIcon name="search-normal" size={ICON_PX[s]} />} fullWidth />
+        <InputBox key={s} size={s} label={`Size ${s}`} placeholder={`${s} input`} leftIcon={<TPLibraryIcon name="search:search-2" size={ICON_PX[s]} />} fullWidth />
       ))}
     </Stack>
   ),
@@ -273,7 +273,7 @@ export const Radius = {
   render: () => (
     <Stack>
       <InputBox label="Default (10px token)" placeholder="Unchanged corners" fullWidth />
-      <InputBox label="Pill" radius="pill" placeholder="Search…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="Pill" radius="pill" placeholder="Search…" leftIcon={<TPLibraryIcon name="search:search-2" size={18} />} fullWidth />
       <InputBox label="Sharp" radius="sharp" placeholder="Square corners" fullWidth />
       <InputBox label="Custom 4px" radius={4} placeholder="Tighter corners" fullWidth />
       <InputBox label="Token" radius="var(--tesseract-radius-16)" placeholder="16px token" fullWidth />
@@ -288,7 +288,7 @@ export const Height = {
     <Stack>
       <InputBox label="Default md (42px)" placeholder="Size token height" fullWidth />
       <InputBox label="40px" height={40} placeholder="Compact" fullWidth />
-      <InputBox label="48px" height={48} placeholder="Roomier" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="48px" height={48} placeholder="Roomier" leftIcon={<TPLibraryIcon name="search:search-2" size={18} />} fullWidth />
       <InputBox label="56px" height={56} placeholder="Tall field" fullWidth />
     </Stack>
   ),
@@ -325,7 +325,7 @@ export const AllowedTypes = {
 export const Icons = {
   render: () => (
     <Stack>
-      <InputBox label="Left icon" placeholder="Search patients…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} fullWidth />
+      <InputBox label="Left icon" placeholder="Search patients…" leftIcon={<TPLibraryIcon name="search:search-2" size={18} />} fullWidth />
       <InputBox label="Right icon" placeholder="Pick a date" rightIcon={<TPLibraryIcon name="calendar-1" size={18} />} fullWidth />
       <InputBox label="Both icons" type="password" defaultValue="secret123" leftIcon={<TPLibraryIcon name="lock" size={18} />} rightIcon={<TPLibraryIcon name="eye-slash" size={18} />} fullWidth />
       <InputBox label="Clearable" clearable defaultValue="Clear me" leftIcon={<TPLibraryIcon name="edit-2" size={18} />} fullWidth />
@@ -365,7 +365,7 @@ export const AffixesAndAddons = {
 export const AddonEitherSide = {
   name: 'Add-on either side',
   render: () => {
-    const search = { type: 'button', label: 'Search', icon: 'search-normal' };
+    const search = { type: 'button', label: 'Search', icon: 'search:search-2' };
     const unit = { type: 'select', ariaLabel: 'Unit', options: ['kg', 'lb', 'g'] };
     return (
       <Stack w={440}>
@@ -383,7 +383,7 @@ export const AddonsAsCTAs = {
   name: 'Add-ons as CTAs',
   render: () => (
     <Stack w={440}>
-      <InputBox label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search-normal" size={18} />} rightAddon={{ type: 'button', label: 'Search', icon: 'search-normal' }} fullWidth />
+      <InputBox label="Search with CTA" placeholder="Search patients, doctors…" leftIcon={<TPLibraryIcon name="search:search-2" size={18} />} rightAddon={{ type: 'button', label: 'Search', icon: 'search:search-2' }} fullWidth />
       <InputBox label="Newsletter" placeholder="you@example.com" leftIcon={<TPLibraryIcon name="sms" size={18} />} rightAddon={{ type: 'button', label: 'Subscribe' }} fullWidth />
       <InputBox label="Upload path" placeholder="No file selected" leftAddon={{ type: 'button', label: 'Browse', icon: 'document-upload' }} fullWidth />
       <InputBox label="Both-side CTAs" placeholder="0.00" leftAddon={{ type: 'button', label: '$' }} rightAddon={{ type: 'button', label: 'Convert' }} fullWidth />

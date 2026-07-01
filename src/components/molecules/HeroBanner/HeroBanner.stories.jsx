@@ -302,7 +302,7 @@ export const ActionsWithIconButtons = {
       subtitle="Compact, icon-only quick actions"
       actions={
         <>
-          <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="Search" icon={<TPIcon name="search" size={18} />} />
+          <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="Search" icon={<TPIcon name="search:search-2" size={18} />} />
           <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="Print" icon={<TPIcon name="printer" size={18} />} />
           <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="More options" icon={<TPIcon name="more-horizontal" size={18} />} />
         </>
@@ -367,7 +367,7 @@ export const AllCtaTypes = {
       subtitle="Icon-only + split + text"
       actions={
         <>
-          <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="Search" icon={<TPIcon name="search" size={18} />} />
+          <Button surface="dark" variant="tonal" theme="neutral" size="sm" aria-label="Search" icon={<TPIcon name="search:search-2" size={18} />} />
           <Button
             surface="dark"
             size="sm"
