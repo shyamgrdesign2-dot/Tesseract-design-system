@@ -79,7 +79,7 @@ const icon = (g, size = 20) => (typeof g === "string" ? <TPLibraryIcon name={g} 
 // glyph defaults to the standard back affordance (arrow-left3 in the straight
 // corner variant) and can be overridden (name + style + corner) by Header props.
 function Chevron({ dir = "down", size = 18, name, variant = "linear", corner = "rounded" }) {
-  const glyph = name ?? (dir === "left" ? "arrow-left-02" : "arrow-down-02");
+  const glyph = name ?? (dir === "left" ? "arrow-left3" : "arrow-down-02");
   return <TPLibraryIcon name={glyph} variant={variant} corner={corner} size={size} />;
 }
 

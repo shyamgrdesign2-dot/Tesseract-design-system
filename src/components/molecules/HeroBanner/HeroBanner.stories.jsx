@@ -93,6 +93,7 @@ const meta = {
     showBackButton: { control: 'boolean', name: 'with back button', table: { category: 'Content' } },
     backIcon:        { control: 'text', tpIcon: true, name: 'back icon', table: { category: 'Content' } },
     backIconVariant: { control: 'select', options: ICON_VARIANTS, name: 'back icon style', table: { category: 'Content' } },
+    backIconCorner:  { control: 'inline-radio', options: ['rounded', 'straight'], name: 'back icon corner', table: { category: 'Content' } },
     onBack:          { control: false, action: 'back', name: 'onBack', description: 'Fires when the back button is clicked', table: { category: 'Content' } },
 
     // ── Appearance ──  (pattern opacity is fixed at 100%, no control)
@@ -143,8 +144,9 @@ const meta = {
     subtitle: '32 scheduled today · 4 awaiting confirmation',
     subtitleSize: 'sm',
     showBackButton: false,
-    backIcon: 'arrow-left',
-    backIconVariant: 'linear',
+    backIcon: 'arrow-left3',
+    backIconVariant: 'outline',
+    backIconCorner: 'straight',
 
     tone: 'violet',
     background: '',
@@ -211,8 +213,9 @@ const heroBackCode = (a) => {
   if (a.height) lines.push(`  height={${a.height}}`);
   if (a.showBackButton) {
     lines.push('  showBackButton');
-    if (a.backIcon && a.backIcon !== 'arrow-left') lines.push(`  backIcon="${a.backIcon}"`);
-    if (a.backIconVariant && a.backIconVariant !== 'linear') lines.push(`  backIconVariant="${a.backIconVariant}"`);
+    if (a.backIcon && a.backIcon !== 'arrow-left3') lines.push(`  backIcon="${a.backIcon}"`);
+    if (a.backIconVariant && a.backIconVariant !== 'outline') lines.push(`  backIconVariant="${a.backIconVariant}"`);
+    if (a.backIconCorner && a.backIconCorner !== 'straight') lines.push(`  backIconCorner="${a.backIconCorner}"`);
   }
   return `<HeroBanner\n${lines.join('\n')}\n  /* …size, subtitle, actions… */\n/>`;
 };
@@ -238,6 +241,7 @@ export const Playground = {
       showBackButton={args.showBackButton}
       backIcon={args.backIcon}
       backIconVariant={args.backIconVariant}
+      backIconCorner={args.backIconCorner}
       onBack={args.onBack}
       rays={args.rays}
       pattern={args.pattern}
