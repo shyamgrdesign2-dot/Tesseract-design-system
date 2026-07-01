@@ -17,9 +17,9 @@ const TONE_GRADIENTS = {
   // the original (the bright edge is gone) but unmistakably purple, not blue. A
   // soft violet-800 sheen toward the top-centre lifts it off pure violet-900.
   violet:
-    "radial-gradient(120% 145% at 46% 28%, color-mix(in srgb, var(--tesseract-violet-800) 58%, var(--tesseract-violet-900)) 0%, var(--tesseract-violet-900) 42%, var(--tesseract-violet-900) 100%)",
+    "radial-gradient(120% 145% at 46% 28%, var(--tesseract-violet-900) 0%, color-mix(in srgb, var(--tesseract-violet-900) 72%, var(--tesseract-slate-900)) 50%, color-mix(in srgb, var(--tesseract-violet-900) 58%, var(--tesseract-slate-900)) 100%)",
   blue:
-    "radial-gradient(120% 145% at 46% 28%, color-mix(in srgb, var(--tesseract-blue-800) 58%, var(--tesseract-blue-900)) 0%, var(--tesseract-blue-900) 42%, var(--tesseract-blue-900) 100%)",
+    "radial-gradient(120% 145% at 46% 28%, var(--tesseract-blue-900) 0%, color-mix(in srgb, var(--tesseract-blue-900) 72%, var(--tesseract-slate-900)) 50%, color-mix(in srgb, var(--tesseract-blue-900) 58%, var(--tesseract-slate-900)) 100%)",
   slate:
     "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
