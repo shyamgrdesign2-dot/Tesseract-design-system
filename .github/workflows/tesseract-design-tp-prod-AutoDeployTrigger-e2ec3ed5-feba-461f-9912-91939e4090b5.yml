@@ -1,0 +1,49 @@
+name: Trigger auto deployment for tesseract-design-tp-prod
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ tesseract ]
+    paths:
+    - '**'
+    - '.github/workflows/tesseract-design-tp-prod-AutoDeployTrigger-e2ec3ed5-feba-461f-9912-91939e4090b5.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.TESSERACTDESIGNTPPROD_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TESSERACTDESIGNTPPROD_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.TESSERACTDESIGNTPPROD_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: snapai.azurecr.io
+          registryUsername: ${{ secrets.TESSERACTDESIGNTPPROD_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TESSERACTDESIGNTPPROD_REGISTRY_PASSWORD }}
+          containerAppName: tesseract-design-tp-prod
+          resourceGroup: tatva-prod
+          imageToBuild: snapai.azurecr.io/tesseract-design-tp-prod:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
