@@ -47,3 +47,28 @@
 @media (prefers-reduced-motion: reduce) {
   .leak::before { animation: none; opacity: 0.9; }
 }
+
+/* Back affordance — a BARE icon (no button shell), so it reads as the arrow
+   alone sitting on the H1's centre line. Its box height matches the title's
+   line box (set inline) and the icon is centred within it; only a subtle
+   opacity/hover + a keyboard focus ring, no background or border. */
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 2px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tesseract-fg-inverse);
+  cursor: pointer;
+  opacity: 0.82;
+  border-radius: var(--tesseract-radius-sm, 6px);
+  transition: opacity 150ms ease;
+}
+.back:hover { opacity: 1; }
+.back:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--tesseract-slate-0) 60%, transparent);
+  outline-offset: 2px;
+}

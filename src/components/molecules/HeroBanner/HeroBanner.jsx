@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { AnimatedGrid } from "@/src/components/atoms/AnimatedGrid/AnimatedGrid";
-import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { cn } from "@/src/hooks/utils";
@@ -46,6 +45,9 @@ const TITLE_FONT_SIZE = { sm: 18, md: 24 };
 const SUBTITLE_FONT_SIZE = { sm: 13, md: 16 };
 // Back-button glyph size scales with the heading.
 const BACK_ICON = { sm: 14, md: 18 };
+// Back-control box height = the H1 line box (fontSize × 1.15), so the BARE icon
+// (no button shell) sits exactly on the title's centre line.
+const BACK_BOX = { sm: 20, md: 28 };
 
 /**
  * HeroBanner — The page hero banner. Dark radial-gradient surface with an
@@ -178,15 +180,15 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
             button on the TITLE line (the top line) rather than the whole block. */}
         <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--tesseract-space-2)", minWidth: 0, flex: 1 }}>
           {showBackButton && (
-            <Button
-              surface="dark"
-              variant="ghost"
-              theme="neutral"
-              size="sm"
+            <button
+              type="button"
+              className={styles.back}
               aria-label="Go back"
               onClick={onBack}
-              icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} corner={backIconCorner} size={BACK_ICON[ts]} color="currentColor" />}
-            />
+              style={{ height: BACK_BOX[ts] }}
+            >
+              <TPLibraryIcon name={backIcon} variant={backIconVariant} corner={backIconCorner} size={BACK_ICON[ts]} color="currentColor" />
+            </button>
           )}
 
           {/* Title + subtitle block — always left-aligned to each other. */}
