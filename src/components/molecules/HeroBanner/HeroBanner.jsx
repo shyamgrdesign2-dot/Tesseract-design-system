@@ -17,9 +17,9 @@ const TONE_GRADIENTS = {
   // left) blooming out of a near-black field (violet-900 → slate-900). Dark but
   // never flat — the glow gives it shine; the edges stay deep.
   violet:
-    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-violet-500) 36%, var(--tesseract-violet-900)) 0%, var(--tesseract-violet-900) 40%, color-mix(in srgb, var(--tesseract-violet-900) 56%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-violet-500) 33%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 86%, var(--tesseract-slate-900)) 42%, color-mix(in srgb, var(--tesseract-violet-900) 44%, var(--tesseract-slate-900)) 100%)",
   blue:
-    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-blue-500) 36%, var(--tesseract-blue-900)) 0%, var(--tesseract-blue-900) 40%, color-mix(in srgb, var(--tesseract-blue-900) 56%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-blue-500) 33%, var(--tesseract-blue-900)) 0%, color-mix(in srgb, var(--tesseract-blue-900) 86%, var(--tesseract-slate-900)) 42%, color-mix(in srgb, var(--tesseract-blue-900) 44%, var(--tesseract-slate-900)) 100%)",
   slate:
     "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
@@ -130,6 +130,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
           detailed lattice shows, fading inward. */}
       {pattern && (
         <AnimatedGrid
+          lineColor="color-mix(in srgb, var(--tesseract-slate-0) 20%, transparent)"
           style={{
             position: "absolute",
             top: "50%",
@@ -139,7 +140,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
             height: "250%",
             pointerEvents: "none",
             mixBlendMode: "screen",
-            opacity: 0.85,
+            opacity: 1,
             WebkitMaskImage: "linear-gradient(to left, black 0%, black 26%, transparent 92%)",
             maskImage: "linear-gradient(to left, black 0%, black 26%, transparent 92%)",
           }}
