@@ -12,26 +12,29 @@
   mix-blend-mode: screen;
 }
 
-/* The bleed itself — slightly larger than the banner so the blur feathers past
-   the corner; drifts subtly for a living, natural leak. */
+/* A subtle FIELD of soft aura spots — a few faint, heavily-feathered blooms
+   scattered across the banner (not just one corner) so the light reads as an
+   ambient glow field. Kept low + blurred so it stays a whisper over the dark. */
 .leak::before {
   content: "";
   position: absolute;
-  inset: -30% -10% -30% -20%;
-  filter: blur(8px);
+  inset: -22%;
+  filter: blur(11px);
   background:
-    /* a contained bright spot tucked into the very top-left corner */
-    radial-gradient(22% 42% at -10% -16%, color-mix(in srgb, var(--tesseract-on-dark) 36%, transparent) 0%, transparent 52%),
-    /* small violet bloom around it */
-    radial-gradient(36% 70% at -8% -18%, color-mix(in srgb, var(--tesseract-violet-400) 50%, transparent) 0%, transparent 56%),
-    /* faint cool bleed just along the very top-left edge */
-    radial-gradient(46% 54% at 2% -30%, color-mix(in srgb, var(--tesseract-blue-500) 22%, transparent) 0%, transparent 62%);
-  animation: tp-hero-leak 15s ease-in-out infinite alternate;
+    /* top-left */
+    radial-gradient(24% 44% at 6% 4%, color-mix(in srgb, var(--tesseract-violet-400) 30%, transparent) 0%, transparent 58%),
+    /* upper-right (cool) */
+    radial-gradient(28% 50% at 84% 14%, color-mix(in srgb, var(--tesseract-blue-400) 22%, transparent) 0%, transparent 60%),
+    /* lower-centre-left */
+    radial-gradient(34% 62% at 34% 96%, color-mix(in srgb, var(--tesseract-violet-500) 20%, transparent) 0%, transparent 62%),
+    /* faint lower-right */
+    radial-gradient(24% 46% at 98% 90%, color-mix(in srgb, var(--tesseract-violet-400) 16%, transparent) 0%, transparent 60%);
+  animation: tp-hero-leak 20s ease-in-out infinite alternate;
 }
 
 @keyframes tp-hero-leak {
-  from { opacity: 0.78; transform: translate(0, 0) scale(1); }
-  to   { opacity: 1;    transform: translate(1.6%, 1.2%) scale(1.05); }
+  from { opacity: 0.72; transform: translate(0, 0) scale(1); }
+  to   { opacity: 0.95; transform: translate(1%, -1%) scale(1.03); }
 }
 
 @media (prefers-reduced-motion: reduce) {
