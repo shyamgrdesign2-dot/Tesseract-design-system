@@ -12,23 +12,19 @@
   mix-blend-mode: screen;
 }
 
-/* A subtle FIELD of soft aura spots — a few faint, heavily-feathered blooms
-   scattered across the banner (not just one corner) so the light reads as an
-   ambient glow field. Kept low + blurred so it stays a whisper over the dark. */
+/* Two soft aura spots sitting in the MIDDLE of the banner at slightly different
+   heights, so the light reads as a gentle wavy fade through the centre — not a
+   leak from the top. Heavily blurred + low, a very subtle blended glow. */
 .leak::before {
   content: "";
   position: absolute;
   inset: -22%;
-  filter: blur(11px);
+  filter: blur(14px);
   background:
-    /* top-left */
-    radial-gradient(24% 44% at 6% 4%, color-mix(in srgb, var(--tesseract-violet-400) 30%, transparent) 0%, transparent 58%),
-    /* upper-right (cool) */
-    radial-gradient(28% 50% at 84% 14%, color-mix(in srgb, var(--tesseract-blue-400) 22%, transparent) 0%, transparent 60%),
-    /* lower-centre-left */
-    radial-gradient(34% 62% at 34% 96%, color-mix(in srgb, var(--tesseract-violet-500) 20%, transparent) 0%, transparent 62%),
-    /* faint lower-right */
-    radial-gradient(24% 46% at 98% 90%, color-mix(in srgb, var(--tesseract-violet-400) 16%, transparent) 0%, transparent 60%);
+    /* left-of-centre spot, a touch lower */
+    radial-gradient(30% 66% at 37% 56%, color-mix(in srgb, var(--tesseract-violet-400) 26%, transparent) 0%, transparent 64%),
+    /* right-of-centre spot, a touch higher — forms the wave */
+    radial-gradient(32% 70% at 64% 42%, color-mix(in srgb, var(--tesseract-blue-400) 22%, transparent) 0%, transparent 66%);
   animation: tp-hero-leak 20s ease-in-out infinite alternate;
 }
 
