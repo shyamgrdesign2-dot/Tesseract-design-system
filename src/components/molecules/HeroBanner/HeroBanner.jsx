@@ -17,9 +17,9 @@ const TONE_GRADIENTS = {
   // left) blooming out of a near-black field (violet-900 → slate-900). Dark but
   // never flat — the glow gives it shine; the edges stay deep.
   violet:
-    "radial-gradient(115% 165% at 34% 18%, color-mix(in srgb, var(--tesseract-violet-500) 42%, var(--tesseract-violet-900)) 0%, var(--tesseract-violet-900) 40%, color-mix(in srgb, var(--tesseract-violet-900) 58%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-violet-500) 36%, var(--tesseract-violet-900)) 0%, var(--tesseract-violet-900) 40%, color-mix(in srgb, var(--tesseract-violet-900) 56%, var(--tesseract-slate-900)) 100%)",
   blue:
-    "radial-gradient(115% 165% at 34% 18%, color-mix(in srgb, var(--tesseract-blue-500) 42%, var(--tesseract-blue-900)) 0%, var(--tesseract-blue-900) 40%, color-mix(in srgb, var(--tesseract-blue-900) 58%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(105% 150% at 54% 12%, color-mix(in srgb, var(--tesseract-blue-500) 36%, var(--tesseract-blue-900)) 0%, var(--tesseract-blue-900) 40%, color-mix(in srgb, var(--tesseract-blue-900) 56%, var(--tesseract-slate-900)) 100%)",
   slate:
     "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:

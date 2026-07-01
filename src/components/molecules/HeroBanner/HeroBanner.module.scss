@@ -20,12 +20,12 @@
   inset: -30% -10% -30% -20%;
   filter: blur(8px);
   background:
-    /* bright light spilling right at the top-left corner */
-    radial-gradient(38% 68% at -6% -10%, color-mix(in srgb, var(--tesseract-on-dark) 48%, transparent) 0%, transparent 58%),
-    /* violet bloom feathering inward */
-    radial-gradient(64% 116% at 0% -14%, color-mix(in srgb, var(--tesseract-violet-400) 74%, transparent) 0%, transparent 64%),
-    /* cool blue bleed running along the top edge */
-    radial-gradient(86% 92% at 16% -26%, color-mix(in srgb, var(--tesseract-blue-500) 42%, transparent) 0%, transparent 70%);
+    /* a contained bright spot tucked into the very top-left corner */
+    radial-gradient(22% 42% at -10% -16%, color-mix(in srgb, var(--tesseract-on-dark) 36%, transparent) 0%, transparent 52%),
+    /* small violet bloom around it */
+    radial-gradient(36% 70% at -8% -18%, color-mix(in srgb, var(--tesseract-violet-400) 50%, transparent) 0%, transparent 56%),
+    /* faint cool bleed just along the very top-left edge */
+    radial-gradient(46% 54% at 2% -30%, color-mix(in srgb, var(--tesseract-blue-500) 22%, transparent) 0%, transparent 62%);
   animation: tp-hero-leak 15s ease-in-out infinite alternate;
 }
 
