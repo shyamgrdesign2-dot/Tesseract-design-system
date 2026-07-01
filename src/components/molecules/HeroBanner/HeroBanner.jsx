@@ -13,13 +13,13 @@ import styles from "./HeroBanner.module.scss";
 // edge is dropped for a richer, darker field. The top-right glow + light rays
 // (below) supply the premium highlight. Other tones reskin per page/specialty.
 const TONE_GRADIENTS = {
-  // Deep, premium PURPLE — matches the reference: a rich dark violet, darker than
-  // the original (the bright edge is gone) but unmistakably purple, not blue. A
-  // soft violet-800 sheen toward the top-centre lifts it off pure violet-900.
+  // Deep premium PURPLE with LIFE: a luminous violet glow (light source, upper-
+  // left) blooming out of a near-black field (violet-900 → slate-900). Dark but
+  // never flat — the glow gives it shine; the edges stay deep.
   violet:
-    "radial-gradient(120% 145% at 46% 28%, var(--tesseract-violet-900) 0%, color-mix(in srgb, var(--tesseract-violet-900) 72%, var(--tesseract-slate-900)) 50%, color-mix(in srgb, var(--tesseract-violet-900) 58%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(115% 165% at 34% 18%, color-mix(in srgb, var(--tesseract-violet-500) 42%, var(--tesseract-violet-900)) 0%, var(--tesseract-violet-900) 40%, color-mix(in srgb, var(--tesseract-violet-900) 58%, var(--tesseract-slate-900)) 100%)",
   blue:
-    "radial-gradient(120% 145% at 46% 28%, var(--tesseract-blue-900) 0%, color-mix(in srgb, var(--tesseract-blue-900) 72%, var(--tesseract-slate-900)) 50%, color-mix(in srgb, var(--tesseract-blue-900) 58%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(115% 165% at 34% 18%, color-mix(in srgb, var(--tesseract-blue-500) 42%, var(--tesseract-blue-900)) 0%, var(--tesseract-blue-900) 40%, color-mix(in srgb, var(--tesseract-blue-900) 58%, var(--tesseract-slate-900)) 100%)",
   slate:
     "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
