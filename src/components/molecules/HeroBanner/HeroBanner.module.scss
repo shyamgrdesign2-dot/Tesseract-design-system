@@ -1,0 +1,55 @@
+/* HeroBanner premium accents — a soft corner glow + animated light rays fanning
+   from the top-right. Pure CSS (no WebGL/deps), token-driven, screen-blended over
+   the dark gradient, and reduced-motion aware. */
+
+/* Soft coloured light source at the top-right corner — a bright near-white core
+   feathering into a violet→blue halo (on-brand, premium). */
+.glow {
+  position: absolute;
+  top: -70%;
+  right: -22%;
+  width: 84%;
+  height: 250%;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(26% 26% at 100% 0%, color-mix(in srgb, var(--tesseract-on-dark) 42%, transparent) 0%, transparent 60%),
+    radial-gradient(52% 52% at 100% 0%,
+      color-mix(in srgb, var(--tesseract-violet-400) 62%, transparent) 0%,
+      color-mix(in srgb, var(--tesseract-blue-400) 32%, transparent) 44%,
+      transparent 74%);
+}
+
+/* Light rays — a fine fan of near-white wedges emanating from the top-right,
+   masked so they dissolve away from the corner, with a slow premium sway. */
+.rays {
+  position: absolute;
+  top: -60%;
+  right: -12%;
+  width: 88%;
+  height: 240%;
+  pointer-events: none;
+  z-index: 0;
+  transform-origin: 100% 0%;
+  mix-blend-mode: screen;
+  background: repeating-conic-gradient(
+    from 204deg at 100% 0%,
+    transparent 0deg,
+    color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent) 1.1deg,
+    color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent) 1.9deg,
+    transparent 4.2deg
+  );
+  -webkit-mask-image: radial-gradient(96% 96% at 100% 0%, #000 0%, rgba(0, 0, 0, 0.7) 34%, transparent 74%);
+  mask-image: radial-gradient(96% 96% at 100% 0%, #000 0%, rgba(0, 0, 0, 0.7) 34%, transparent 74%);
+  animation: tp-hero-rays 13s ease-in-out infinite alternate;
+}
+
+@keyframes tp-hero-rays {
+  from { transform: rotate(-3.5deg); opacity: 0.78; }
+  to   { transform: rotate(4.5deg);  opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rays { animation: none; opacity: 0.9; }
+}

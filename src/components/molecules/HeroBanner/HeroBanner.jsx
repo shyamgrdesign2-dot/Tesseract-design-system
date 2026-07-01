@@ -6,20 +6,21 @@ import { Button } from "@/src/components/atoms/Button";
 import { TPLibraryIcon } from "@/src/components/atoms/icons/tp/TPLibraryIcon";
 import { Tooltip } from "@/src/components/molecules/Tooltip";
 import { cn } from "@/src/hooks/utils";
+import styles from "./HeroBanner.module.scss";
 
-// Surface gradient by tone — token-only (no raw hex). The "violet" tone is the
-// default look: the original radial gradient with each stop swapped for the
-// nearest --tesseract-violet token (it reads ~identically). Other tones reskin
-// the hero per page/specialty using the matching dark colour ramp.
+// Surface gradient by tone — token-only (no raw hex). Deeper + more premium than
+// before: the light focus sits toward the LEFT (under the content) and the bright
+// edge is dropped for a richer, darker field. The top-right glow + light rays
+// (below) supply the premium highlight. Other tones reskin per page/specialty.
 const TONE_GRADIENTS = {
   violet:
-    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-violet-800) 0%, var(--tesseract-violet-900) 39.08%, var(--tesseract-violet-900) 78.16%, var(--tesseract-violet-700) 100%)",
+    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-violet-800) 0%, var(--tesseract-violet-900) 50%, var(--tesseract-violet-900) 100%)",
   blue:
-    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-blue-800) 0%, var(--tesseract-blue-900) 39.08%, var(--tesseract-blue-900) 78.16%, var(--tesseract-blue-700) 100%)",
+    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-blue-800) 0%, var(--tesseract-blue-900) 50%, var(--tesseract-blue-900) 100%)",
   slate:
-    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-slate-700) 0%, var(--tesseract-slate-900) 39.08%, var(--tesseract-slate-800) 78.16%, var(--tesseract-slate-600) 100%)",
+    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-slate-700) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
-    "radial-gradient(99.09% 59.99% at 50% 55.44%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 39.08%, var(--tesseract-slate-900) 78.16%, var(--tesseract-slate-700) 100%)",
+    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 50%, var(--tesseract-slate-900) 100%)",
 };
 const DEFAULT_TONE = "violet";
 
@@ -58,7 +59,8 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   backIcon      string                       back glyph name; default "arrow-left"
  *   backIconVariant "linear" | …               back glyph style; default "linear"
  *   actions       ReactNode                    CTA slot (dark-surface Button: text / icon / split)
- *   pattern       boolean                      default true — animated lattice accent
+ *   rays          boolean                      default true — premium light-rays + glow accent (top-right)
+ *   pattern       boolean                      default false — animated lattice accent (opt-in; layers under the rays)
  *   className     string
  */
 export const HeroBanner = React.forwardRef(function HeroBanner({
@@ -78,7 +80,8 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
   backIconVariant = "linear",
   onBack,
   actions,
-  pattern = true,
+  rays = true,
+  pattern = false,
   className = "",
   style,
   ...rest
@@ -113,6 +116,16 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
       }}
       {...rest}
     >
+      {/* Premium light accent — a soft violet→blue corner glow with a fine fan of
+          light rays sweeping from the top-right. Pure CSS, screen-blended over the
+          dark field; reduced-motion stills the sway. */}
+      {rays && (
+        <>
+          <div className={styles.glow} aria-hidden />
+          <div className={styles.rays} aria-hidden />
+        </>
+      )}
+
       {/* Animated lattice accent — larger lattice, vertically centered and
           pushed further off-canvas on the right so only a sliver shows,
           fading inward. Opacity is fixed at 100%. */}
@@ -139,6 +152,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
       <div
         style={{
           position: "relative",
+          zIndex: 1,
           display: "flex",
           alignItems: align === "top" ? "flex-start" : "center",
           justifyContent: "space-between",

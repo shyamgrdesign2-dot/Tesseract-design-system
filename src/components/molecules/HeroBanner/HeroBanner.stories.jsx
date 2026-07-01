@@ -102,7 +102,8 @@ const meta = {
     height:       { control: { type: 'number', min: 0, step: 4 }, name: 'height (override)', description: 'Numeric height; overrides size. Blank = use size', table: { category: 'Appearance' } },
     align:        { control: 'inline-radio', options: ['center', 'top'], description: 'Vertical alignment of the content block', table: { category: 'Appearance' } },
     bottomRadius: { control: { type: 'range', min: 0, max: 42, step: 1 }, name: 'bottom radius (L + R)', table: { category: 'Appearance' } },
-    pattern:      { control: 'boolean', name: 'with pattern', table: { category: 'Appearance' } },
+    rays:         { control: 'boolean', name: 'light rays (premium)', table: { category: 'Appearance' } },
+    pattern:      { control: 'boolean', name: 'with lattice pattern', table: { category: 'Appearance' } },
 
     // ── Actions — up to 3 CTAs, each a dark-surface Button (text / icon / split) ──
     // Shared
@@ -151,7 +152,8 @@ const meta = {
     height: undefined,
     align: 'center',
     bottomRadius: 24,
-    pattern: true,
+    rays: true,
+    pattern: false,
 
     ctaSize: 'sm',
     iconSize: 16,
@@ -237,6 +239,7 @@ export const Playground = {
       backIcon={args.backIcon}
       backIconVariant={args.backIconVariant}
       onBack={args.onBack}
+      rays={args.rays}
       pattern={args.pattern}
       actions={renderActions(args)}
     />
