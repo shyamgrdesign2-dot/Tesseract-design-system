@@ -12,27 +12,35 @@
   mix-blend-mode: screen;
 }
 
-/* THREE small, distinct aura spots spread across the banner with clear gaps
-   between them, at offset heights so they read as separate soft glows (a pretty
-   wavy rhythm), not one big central blob. Contained + softly blurred. */
+/* Soft, angled LIGHT RAYS streaming in from the top-left corner — like the
+   SideRays reference, but pure-CSS and gentle: a heavily-blurred fan of diffuse
+   beams (violet, with a cool tint) fading across the banner, so you feel light
+   falling at an angle rather than seeing discrete spots. Slow drift = a live wave. */
 .leak::before {
   content: "";
   position: absolute;
-  inset: -15%;
+  inset: -45% -35% -45% -25%;
+  transform-origin: 0% 0%;
   filter: blur(9px);
+  opacity: 0.95;
   background:
-    /* left — lower */
-    radial-gradient(15% 36% at 20% 56%, color-mix(in srgb, var(--tesseract-violet-400) 40%, transparent) 0%, transparent 60%),
-    /* centre — higher (the wave peak) */
-    radial-gradient(16% 40% at 50% 36%, color-mix(in srgb, var(--tesseract-blue-400) 34%, transparent) 0%, transparent 62%),
-    /* right — lower */
-    radial-gradient(15% 36% at 80% 56%, color-mix(in srgb, var(--tesseract-violet-500) 38%, transparent) 0%, transparent 60%);
+    /* the light source — a soft glow just past the top-left corner */
+    radial-gradient(30% 62% at 0% -4%, color-mix(in srgb, var(--tesseract-violet-300) 24%, transparent) 0%, transparent 60%),
+    /* the ray fan — soft wide beams sweeping down-right from that corner */
+    repeating-conic-gradient(from 4deg at 0% 0%,
+      transparent 0deg,
+      color-mix(in srgb, var(--tesseract-violet-300) 17%, transparent) 6deg,
+      color-mix(in srgb, var(--tesseract-blue-300) 13%, transparent) 9deg,
+      transparent 20deg);
+  /* brightest at the corner, dissolving as it falls across */
+  -webkit-mask-image: radial-gradient(135% 140% at 0% 2%, #000 0%, rgba(0, 0, 0, 0.42) 40%, transparent 80%);
+  mask-image: radial-gradient(135% 140% at 0% 2%, #000 0%, rgba(0, 0, 0, 0.42) 40%, transparent 80%);
   animation: tp-hero-leak 22s ease-in-out infinite alternate;
 }
 
 @keyframes tp-hero-leak {
-  from { opacity: 0.72; transform: translate(0, 0) scale(1); }
-  to   { opacity: 0.95; transform: translate(1%, -1%) scale(1.03); }
+  from { opacity: 0.82; transform: rotate(-1.6deg); }
+  to   { opacity: 1;    transform: rotate(2.2deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
