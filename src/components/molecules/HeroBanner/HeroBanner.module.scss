@@ -1,55 +1,39 @@
-/* HeroBanner premium accents — a soft corner glow + animated light rays fanning
-   from the top-right. Pure CSS (no WebGL/deps), token-driven, screen-blended over
-   the dark gradient, and reduced-motion aware. */
-
-/* Soft coloured light source at the top-right corner — a bright near-white core
-   feathering into a violet→blue halo (on-brand, premium). */
-.glow {
+/* HeroBanner premium accent — a soft LIGHT LEAK bleeding in from the top-LEFT
+   corner (opposite the lattice grid on the right), like natural light spilling
+   over the edge. No hard rays: layered, feathered radial blooms (near-white core
+   → violet → cool-blue) that gently drift and breathe. Pure CSS, token-driven,
+   screen-blended, reduced-motion aware. */
+.leak {
   position: absolute;
-  top: -70%;
-  right: -22%;
-  width: 84%;
-  height: 250%;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
   mix-blend-mode: screen;
+}
+
+/* The bleed itself — slightly larger than the banner so the blur feathers past
+   the corner; drifts subtly for a living, natural leak. */
+.leak::before {
+  content: "";
+  position: absolute;
+  inset: -30% -10% -30% -20%;
+  filter: blur(8px);
   background:
-    radial-gradient(26% 26% at 100% 0%, color-mix(in srgb, var(--tesseract-on-dark) 42%, transparent) 0%, transparent 60%),
-    radial-gradient(52% 52% at 100% 0%,
-      color-mix(in srgb, var(--tesseract-violet-400) 62%, transparent) 0%,
-      color-mix(in srgb, var(--tesseract-blue-400) 32%, transparent) 44%,
-      transparent 74%);
+    /* bright light spilling right at the top-left corner */
+    radial-gradient(34% 62% at -6% -10%, color-mix(in srgb, var(--tesseract-on-dark) 34%, transparent) 0%, transparent 56%),
+    /* violet bloom feathering inward */
+    radial-gradient(58% 104% at 0% -14%, color-mix(in srgb, var(--tesseract-violet-400) 56%, transparent) 0%, transparent 62%),
+    /* cool blue bleed running along the top edge */
+    radial-gradient(78% 82% at 16% -26%, color-mix(in srgb, var(--tesseract-blue-500) 34%, transparent) 0%, transparent 68%);
+  animation: tp-hero-leak 15s ease-in-out infinite alternate;
 }
 
-/* Light rays — a fine fan of near-white wedges emanating from the top-right,
-   masked so they dissolve away from the corner, with a slow premium sway. */
-.rays {
-  position: absolute;
-  top: -60%;
-  right: -12%;
-  width: 88%;
-  height: 240%;
-  pointer-events: none;
-  z-index: 0;
-  transform-origin: 100% 0%;
-  mix-blend-mode: screen;
-  background: repeating-conic-gradient(
-    from 204deg at 100% 0%,
-    transparent 0deg,
-    color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent) 1.1deg,
-    color-mix(in srgb, var(--tesseract-on-dark) 22%, transparent) 1.9deg,
-    transparent 4.2deg
-  );
-  -webkit-mask-image: radial-gradient(96% 96% at 100% 0%, #000 0%, rgba(0, 0, 0, 0.7) 34%, transparent 74%);
-  mask-image: radial-gradient(96% 96% at 100% 0%, #000 0%, rgba(0, 0, 0, 0.7) 34%, transparent 74%);
-  animation: tp-hero-rays 13s ease-in-out infinite alternate;
-}
-
-@keyframes tp-hero-rays {
-  from { transform: rotate(-3.5deg); opacity: 0.78; }
-  to   { transform: rotate(4.5deg);  opacity: 1; }
+@keyframes tp-hero-leak {
+  from { opacity: 0.78; transform: translate(0, 0) scale(1); }
+  to   { opacity: 1;    transform: translate(1.6%, 1.2%) scale(1.05); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rays { animation: none; opacity: 0.9; }
+  .leak::before { animation: none; opacity: 0.9; }
 }

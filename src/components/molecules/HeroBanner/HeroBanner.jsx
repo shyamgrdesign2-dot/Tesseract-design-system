@@ -13,14 +13,16 @@ import styles from "./HeroBanner.module.scss";
 // edge is dropped for a richer, darker field. The top-right glow + light rays
 // (below) supply the premium highlight. Other tones reskin per page/specialty.
 const TONE_GRADIENTS = {
+  // Deep, premium indigo — a darker violet blended toward a very dark blue. Rich,
+  // not pitch-black: the centre keeps a hint of lift; the field is a deep blue-violet.
   violet:
-    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-violet-800) 0%, var(--tesseract-violet-900) 50%, var(--tesseract-violet-900) 100%)",
+    "radial-gradient(125% 155% at 44% 32%, color-mix(in srgb, var(--tesseract-violet-800) 60%, var(--tesseract-blue-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 55%, var(--tesseract-blue-900)) 56%, color-mix(in srgb, var(--tesseract-violet-900) 45%, var(--tesseract-blue-900)) 100%)",
   blue:
-    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-blue-800) 0%, var(--tesseract-blue-900) 50%, var(--tesseract-blue-900) 100%)",
+    "radial-gradient(125% 155% at 44% 32%, color-mix(in srgb, var(--tesseract-blue-800) 62%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-blue-900) 60%, var(--tesseract-violet-900)) 56%, var(--tesseract-blue-900) 100%)",
   slate:
-    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-slate-700) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
+    "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
-    "radial-gradient(130% 150% at 14% 26%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 50%, var(--tesseract-slate-900) 100%)",
+    "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 50%, var(--tesseract-slate-900) 100%)",
 };
 const DEFAULT_TONE = "violet";
 
@@ -59,8 +61,8 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   backIcon      string                       back glyph name; default "arrow-left"
  *   backIconVariant "linear" | …               back glyph style; default "linear"
  *   actions       ReactNode                    CTA slot (dark-surface Button: text / icon / split)
- *   rays          boolean                      default true — premium light-rays + glow accent (top-right)
- *   pattern       boolean                      default false — animated lattice accent (opt-in; layers under the rays)
+ *   rays          boolean                      default true — premium soft light-leak accent (bleeds from the top-left corner)
+ *   pattern       boolean                      default true — animated lattice accent (finer; right side, opposite the leak)
  *   className     string
  */
 export const HeroBanner = React.forwardRef(function HeroBanner({
@@ -81,7 +83,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
   onBack,
   actions,
   rays = true,
-  pattern = false,
+  pattern = true,
   className = "",
   style,
   ...rest
@@ -119,29 +121,26 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
       {/* Premium light accent — a soft violet→blue corner glow with a fine fan of
           light rays sweeping from the top-right. Pure CSS, screen-blended over the
           dark field; reduced-motion stills the sway. */}
-      {rays && (
-        <>
-          <div className={styles.glow} aria-hidden />
-          <div className={styles.rays} aria-hidden />
-        </>
-      )}
+      {/* Soft light leak — bleeds in from the top-LEFT corner (opposite the grid). */}
+      {rays && <div className={styles.leak} aria-hidden />}
 
-      {/* Animated lattice accent — larger lattice, vertically centered and
-          pushed further off-canvas on the right so only a sliver shows,
-          fading inward. Opacity is fixed at 100%. */}
+      {/* Animated lattice accent — its original RIGHT side, smaller now (finer
+          cells), vertically centered and pushed off-canvas so only a sliver of
+          detailed lattice shows, fading inward. */}
       {pattern && (
         <AnimatedGrid
           style={{
             position: "absolute",
             top: "50%",
             transform: "translateY(-50%)",
-            width: "52%",
-            right: "-15%",
-            height: "320%",
+            width: "30%",
+            right: "-8%",
+            height: "250%",
             pointerEvents: "none",
             mixBlendMode: "screen",
-            WebkitMaskImage: "linear-gradient(to left, black 0%, black 30%, transparent 94%)",
-            maskImage: "linear-gradient(to left, black 0%, black 30%, transparent 94%)",
+            opacity: 0.85,
+            WebkitMaskImage: "linear-gradient(to left, black 0%, black 26%, transparent 92%)",
+            maskImage: "linear-gradient(to left, black 0%, black 26%, transparent 92%)",
           }}
         />
       )}
