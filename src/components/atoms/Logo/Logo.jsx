@@ -1,8 +1,12 @@
 "use client";
 
 /**
- * Logo — the Tatva brand marks. Renders the shared SVGs (served from
- * /public/brand) as CSS masks so the same artwork can be recoloured per surface.
+ * Logo — the Tatva brand marks.
+ *
+ * SELF-CONTAINED: the brand artwork lives beside this component as real SVG files
+ * in ./assets and is bundled in (imported below), so the atom needs no /public
+ * hosting. Each mark is painted as a CSS mask so the same artwork recolours per
+ * surface.
  *
  * Two SEPARATE marks (never combined into one lockup):
  *   variant "wordmark" — the full brand logo (symbol + word)          default
@@ -24,20 +28,27 @@
  *            the aspect ratio. `width` sets it outright; `maxWidth` only caps it.
  *   color    string — overrides the closed TONES lookup with an arbitrary brand
  *            colour (any CSS color / gradient). Falls back to `tone`.
- *   basePath string — prefixes the SVG asset paths so consumers serving the
- *            brand assets from a CDN / different root can redirect. default "/brand"
+ *   basePath string — OPTIONAL override. If set, load the brand SVGs from this URL
+ *            root as `<basePath>/<file>.svg` (e.g. serve them from a CDN) instead
+ *            of the bundled copy. Omit to use the bundled assets (default).
  *   title    accessible label (defaults to the brand name)
  *   className, style
  */
 
-// Filenames relative to `basePath` (default "/brand").
-const SYMBOL_FILE = "tatvapractice-symbol.svg";
-const SYMBOL_AR = 78 / 112; // width / height
+// The brand artwork — real SVG files stored in ./assets, imported as raw markup
+// and inlined as data-URIs so the mark ships inside the component (no hosting).
+import symbolSvg from "./assets/tatvapractice-symbol.svg?raw";
+import practiceSvg from "./assets/tatvapractice-wordmark.svg?raw";
+import careSvg from "./assets/tatvacare-wordmark.svg?raw";
 
-// Per-brand wordmark artwork + aspect ratio (from each SVG's viewBox).
+const toDataUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
+
+// Each variant: its filename (for the basePath override), bundled data-URI, and
+// aspect ratio (width / height, read from the SVG's viewBox).
+const SYMBOL = { file: "tatvapractice-symbol.svg", data: toDataUri(symbolSvg), ar: 78 / 112 };
 const WORDMARKS = {
-  practice: { file: "tatvapractice-wordmark.svg", ar: 600 / 105, label: "TatvaPractice" },
-  care:     { file: "tatvacare-wordmark.svg",     ar: 600 / 146, label: "TatvaCare" },
+  practice: { file: "tatvapractice-wordmark.svg", data: toDataUri(practiceSvg), ar: 600 / 105, label: "TatvaPractice" },
+  care:     { file: "tatvacare-wordmark.svg",     data: toDataUri(careSvg),     ar: 600 / 146, label: "TatvaCare" },
 };
 
 const TONES = {
@@ -62,13 +73,14 @@ function mark(src, w, h, paint) {
   };
 }
 
-export function Logo({ variant = "wordmark", brand = "practice", tone = "gradient", height = 32, width, maxWidth, color, basePath = "/brand", title, className, style }) {
+export function Logo({ variant = "wordmark", brand = "practice", tone = "gradient", height = 32, width, maxWidth, color, basePath, title, className, style }) {
   const wrap = { display: "inline-flex", alignItems: "center", ...style };
   const isSymbol = variant === "symbol";
   const word = WORDMARKS[brand] || WORDMARKS.practice;
-  const root = String(basePath).replace(/\/$/, "");
-  const src = `${root}/${isSymbol ? SYMBOL_FILE : word.file}`;
-  const ar = isSymbol ? SYMBOL_AR : word.ar;
+  const asset = isSymbol ? SYMBOL : word;
+  // Default: the bundled data-URI (self-contained). A `basePath` swaps to a URL.
+  const src = basePath ? `${String(basePath).replace(/\/$/, "")}/${asset.file}` : asset.data;
+  const ar = asset.ar;
   // Width-based sizing wins when provided; otherwise derive width from height.
   const h = width != null ? Math.round(width / ar) : height;
   const w = width != null ? width : Math.round(height * ar);

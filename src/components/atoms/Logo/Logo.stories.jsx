@@ -28,16 +28,16 @@ const meta = {
     height: { control: { type: 'range', min: 16, max: 80, step: 2 }, description: 'Height in px; width derives from the aspect ratio. Ignored when `width` is set.', table: { category: 'Sizing' } },
     width: { control: 'number', description: 'Width in px; height then derives from the aspect ratio. Wins over `height`.', table: { category: 'Sizing' } },
     maxWidth: { control: 'number', description: 'Optional cap on rendered width (px).', table: { category: 'Sizing' } },
-    basePath: { control: 'text', description: 'Prefix for the brand SVG asset paths (CDN / alt root).', table: { category: 'Assets' } },
+    basePath: { control: 'text', description: 'Optional CDN / alt-root override — blank uses the bundled brand SVGs (self-contained).', table: { category: 'Assets' } },
     title: { control: 'text', description: 'Accessible label (aria-label). Blank = defaults to the brand name.', table: { category: 'Accessibility' } },
   },
-  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', color: '', height: 32, width: undefined, maxWidth: undefined, basePath: '/brand', title: '' },
+  args: { variant: 'wordmark', brand: 'practice', tone: 'gradient', color: '', height: 32, width: undefined, maxWidth: undefined, basePath: '', title: '' },
 };
 
 export default meta;
 
 // Build a copy-paste snippet from the controls — only emit non-default props.
-const logoCode = ({ variant = 'wordmark', brand = 'practice', tone = 'gradient', color, height = 32, width, maxWidth, basePath = '/brand' }) => {
+const logoCode = ({ variant = 'wordmark', brand = 'practice', tone = 'gradient', color, height = 32, width, maxWidth, basePath = '' }) => {
   const lines = [];
   if (variant !== 'wordmark') lines.push(`  variant="${variant}"`);
   if (brand !== 'practice') lines.push(`  brand="${brand}"`);
@@ -46,7 +46,7 @@ const logoCode = ({ variant = 'wordmark', brand = 'practice', tone = 'gradient',
   if (width != null && width !== '') lines.push(`  width={${width}}`);
   else if (height !== 32) lines.push(`  height={${height}}`);
   if (maxWidth != null && maxWidth !== '') lines.push(`  maxWidth={${maxWidth}}`);
-  if (basePath && basePath !== '/brand') lines.push(`  basePath="${basePath}"`);
+  if (basePath) lines.push(`  basePath="${basePath}"`);
   return lines.length ? `<Logo\n${lines.join('\n')}\n/>` : '<Logo />';
 };
 

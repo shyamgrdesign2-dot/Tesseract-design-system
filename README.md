@@ -109,9 +109,10 @@ setIconBaseUrl("/tp-icons"); // optional — self-host the SVGs
 Variants: `linear` (default) · `bold` · `bulk` · `broken` · `twotone` · `outline`
 (use `bulk` for active/selected state). Details in [`docs/ICONS.md`](docs/ICONS.md).
 
-> **Logo** loads brand SVGs from `/brand/*.svg` — copy `public/brand/` into your
-> app's web root (~20 KB). Every other component uses inline SVG and needs no
-> extra assets.
+> **Logo** is self-contained — its brand SVGs are bundled inside the component
+> (`src/components/atoms/Logo/assets/`), so it needs **no** extra hosting. (Pass
+> `basePath` only if you'd rather serve the marks from your own CDN.) No component
+> requires copying any assets.
 
 ---
 
