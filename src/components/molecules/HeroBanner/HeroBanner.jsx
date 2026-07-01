@@ -66,8 +66,9 @@ const BACK_ICON = { sm: 14, md: 18 };
  *   titleSize     "sm" (18px) | "md" (24px)    default "md"
  *   subtitleSize  "sm" | "md"                  default "sm"
  *   showBackButton boolean                     back button (centered on the heading)
- *   backIcon      string                       back glyph name; default "arrow-left"
- *   backIconVariant "linear" | …               back glyph style; default "linear"
+ *   backIcon      string                       back glyph name; default "arrow-left3"
+ *   backIconVariant "linear" | …               back glyph style; default "outline"
+ *   backIconCorner "rounded" | "straight"       back glyph corner; default "straight"
  *   actions       ReactNode                    CTA slot (dark-surface Button: text / icon / split)
  *   rays          boolean                      default true — premium soft light-leak accent (bleeds from the top-left corner)
  *   pattern       boolean                      default true — animated lattice accent (finer; right side, opposite the leak)
@@ -86,8 +87,9 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
   titleSize = "md",
   subtitleSize = "sm",
   showBackButton = false,
-  backIcon = "arrow-left",
-  backIconVariant = "linear",
+  backIcon = "arrow-left3",
+  backIconVariant = "outline",
+  backIconCorner = "straight",
   onBack,
   actions,
   rays = true,
@@ -170,11 +172,11 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
           padding: "var(--tesseract-space-3-5) var(--tesseract-space-4-5)",
         }}
       >
-        {/* Left cluster: back button (a small ghost CTA, vertically centred to the
-            title+subtitle block) + the title/subtitle block. The back button lives
-            OUTSIDE the text column, so the title and subtitle stay left-aligned to
-            each other (no fragile indents). */}
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", minWidth: 0, flex: 1 }}>
+        {/* Left cluster: back button (a small ghost CTA) + the title/subtitle
+            block. The back button lives OUTSIDE the text column, so the title and
+            subtitle stay left-aligned to each other; `flex-start` centres the back
+            button on the TITLE line (the top line) rather than the whole block. */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--tesseract-space-2)", minWidth: 0, flex: 1 }}>
           {showBackButton && (
             <Button
               surface="dark"
@@ -183,7 +185,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
               size="sm"
               aria-label="Go back"
               onClick={onBack}
-              icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} size={BACK_ICON[ts]} color="currentColor" />}
+              icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} corner={backIconCorner} size={BACK_ICON[ts]} color="currentColor" />}
             />
           )}
 

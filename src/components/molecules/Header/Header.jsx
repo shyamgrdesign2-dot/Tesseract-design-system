@@ -32,7 +32,7 @@
  *     icon — Tesseract library icon NAME (string) or a ReactNode.
  *
  * Props: back, onBack, backIcon (default "arrow-left3"),
- *        backIconVariant (default "linear"), backIconCorner (default "straight"),
+ *        backIconVariant (default "outline"), backIconCorner (default "straight"),
  *        backDivider (default true — vertical rule after the back button when the
  *          left cluster has following content: the standard back · | · content look),
  *        logo, user, title, subtitle, leading, actions,
@@ -236,7 +236,7 @@ function Action({ item, controlPx = 42 }) {
 }
 
 export const Header = React.forwardRef(function Header({
-  back, onBack, backIcon = "arrow-left3", backIconVariant = "linear", backIconCorner = "straight", backDivider = true,
+  back, onBack, backIcon = "arrow-left3", backIconVariant = "outline", backIconCorner = "straight", backDivider = true,
   logo, user, title, subtitle, leading, actions = [],
   align = "left", search, maxVisibleActions,
   height = 62, bordered = true, density = "comfortable",
