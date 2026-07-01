@@ -17,9 +17,9 @@ const TONE_GRADIENTS = {
   // left) blooming out of a near-black field (violet-900 → slate-900). Dark but
   // never flat — the glow gives it shine; the edges stay deep.
   violet:
-    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-violet-800) 38%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 80%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-violet-900) 32%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-violet-800) 30%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 82%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-violet-900) 28%, var(--tesseract-slate-900)) 100%)",
   blue:
-    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-blue-800) 38%, var(--tesseract-blue-900)) 0%, color-mix(in srgb, var(--tesseract-blue-900) 80%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-blue-900) 32%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-blue-700) 34%, var(--tesseract-blue-900)) 0%, color-mix(in srgb, var(--tesseract-blue-900) 82%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-blue-900) 30%, var(--tesseract-slate-900)) 100%)",
   slate:
     "radial-gradient(125% 155% at 44% 32%, var(--tesseract-slate-800) 0%, var(--tesseract-slate-900) 52%, var(--tesseract-slate-900) 100%)",
   dark:
@@ -32,6 +32,14 @@ const SIZE_HEIGHT = { sm: 80, md: 120, lg: 160 };
 // corners; the practical ceiling is 42px.
 const SIZE_RADIUS = { sm: 20, md: 24, lg: 32 };
 const MAX_RADIUS = 42;
+
+// Light-ray tint per tone — keeps the angled rays cohesive with the surface.
+const RAY_COLORS = {
+  violet: ["var(--tesseract-violet-300)", "var(--tesseract-blue-300)"],
+  blue:   ["var(--tesseract-blue-300)", "var(--tesseract-blue-400)"],
+  slate:  ["var(--tesseract-slate-300)", "var(--tesseract-slate-400)"],
+  dark:   ["var(--tesseract-slate-300)", "var(--tesseract-slate-400)"],
+};
 
 // Headings come in exactly two sizes: 18px and 24px.
 const TITLE_FONT_SIZE = { sm: 18, md: 24 };
@@ -98,6 +106,8 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
   const radius = Math.min(MAX_RADIUS, bottomRadius ?? SIZE_RADIUS[size] ?? SIZE_RADIUS.md);
   // Explicit `background` string wins; otherwise pick the tone gradient.
   const surface = background ?? TONE_GRADIENTS[tone] ?? TONE_GRADIENTS[DEFAULT_TONE];
+  // Tint the angled light rays to match the tone.
+  const [ray1, ray2] = RAY_COLORS[tone] ?? RAY_COLORS[DEFAULT_TONE];
 
   return (
     <div
@@ -113,6 +123,8 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
         overflow: "hidden",
         height: resolvedHeight,
         background: surface,
+        "--tp-hero-ray-1": ray1,
+        "--tp-hero-ray-2": ray2,
         borderBottomLeftRadius: radius,
         borderBottomRightRadius: radius,
         ...style,

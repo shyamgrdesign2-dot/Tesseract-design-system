@@ -420,6 +420,24 @@ export const Tones = {
   ),
 };
 
+/** Primary Blue — the same premium hero on the deep primary-blue ramp. The angled
+    light rays automatically re-tint blue to match. */
+export const PrimaryBlue = {
+  render: () => (
+    <HeroBanner
+      tone="blue"
+      title="Your Appointments"
+      subtitle="32 scheduled today · 4 awaiting confirmation"
+      actions={
+        <>
+          <Button surface="dark" variant="outline" size="sm" leftIcon={<PlusIcon size={16} />}>Add Appointment</Button>
+          <Button surface="dark" variant="solid" size="sm" leftIcon={<TPIcon name="flash" size={16} />}>Start Walk-in</Button>
+        </>
+      }
+    />
+  ),
+};
+
 /** Eyebrow kicker + top-aligned content (taller banner). */
 export const EyebrowAndAlign = {
   name: 'Eyebrow + align="top"',

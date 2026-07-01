@@ -25,12 +25,13 @@
   opacity: 0.95;
   background:
     /* the light source — a soft glow just past the top-left corner */
-    radial-gradient(30% 62% at 0% -4%, color-mix(in srgb, var(--tesseract-violet-300) 24%, transparent) 0%, transparent 60%),
-    /* the ray fan — soft wide beams sweeping down-right from that corner */
+    radial-gradient(30% 62% at 0% -4%, color-mix(in srgb, var(--tp-hero-ray-1, var(--tesseract-violet-300)) 24%, transparent) 0%, transparent 60%),
+    /* the ray fan — soft wide beams sweeping down-right from that corner. Colours
+       are tone-aware via --tp-hero-ray-1 / -2 (set per tone by the component). */
     repeating-conic-gradient(from 4deg at 0% 0%,
       transparent 0deg,
-      color-mix(in srgb, var(--tesseract-violet-300) 17%, transparent) 6deg,
-      color-mix(in srgb, var(--tesseract-blue-300) 13%, transparent) 9deg,
+      color-mix(in srgb, var(--tp-hero-ray-1, var(--tesseract-violet-300)) 17%, transparent) 6deg,
+      color-mix(in srgb, var(--tp-hero-ray-2, var(--tesseract-blue-300)) 13%, transparent) 9deg,
       transparent 20deg);
   /* brightest at the corner, dissolving as it falls across */
   -webkit-mask-image: radial-gradient(135% 140% at 0% 2%, #000 0%, rgba(0, 0, 0, 0.42) 40%, transparent 80%);
