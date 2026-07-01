@@ -12,20 +12,22 @@
   mix-blend-mode: screen;
 }
 
-/* Two soft aura spots sitting in the MIDDLE of the banner at slightly different
-   heights, so the light reads as a gentle wavy fade through the centre — not a
-   leak from the top. Heavily blurred + low, a very subtle blended glow. */
+/* THREE small, distinct aura spots spread across the banner with clear gaps
+   between them, at offset heights so they read as separate soft glows (a pretty
+   wavy rhythm), not one big central blob. Contained + softly blurred. */
 .leak::before {
   content: "";
   position: absolute;
-  inset: -22%;
-  filter: blur(14px);
+  inset: -15%;
+  filter: blur(9px);
   background:
-    /* left-of-centre spot, a touch lower */
-    radial-gradient(30% 66% at 37% 56%, color-mix(in srgb, var(--tesseract-violet-400) 26%, transparent) 0%, transparent 64%),
-    /* right-of-centre spot, a touch higher — forms the wave */
-    radial-gradient(32% 70% at 64% 42%, color-mix(in srgb, var(--tesseract-blue-400) 22%, transparent) 0%, transparent 66%);
-  animation: tp-hero-leak 20s ease-in-out infinite alternate;
+    /* left — lower */
+    radial-gradient(15% 36% at 20% 56%, color-mix(in srgb, var(--tesseract-violet-400) 40%, transparent) 0%, transparent 60%),
+    /* centre — higher (the wave peak) */
+    radial-gradient(16% 40% at 50% 36%, color-mix(in srgb, var(--tesseract-blue-400) 34%, transparent) 0%, transparent 62%),
+    /* right — lower */
+    radial-gradient(15% 36% at 80% 56%, color-mix(in srgb, var(--tesseract-violet-500) 38%, transparent) 0%, transparent 60%);
+  animation: tp-hero-leak 22s ease-in-out infinite alternate;
 }
 
 @keyframes tp-hero-leak {
