@@ -17,7 +17,7 @@ const TONE_GRADIENTS = {
   // left) blooming out of a near-black field (violet-900 → slate-900). Dark but
   // never flat — the glow gives it shine; the edges stay deep.
   violet:
-    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-violet-800) 30%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 82%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-violet-900) 28%, var(--tesseract-slate-900)) 100%)",
+    "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-violet-700) 30%, var(--tesseract-violet-900)) 0%, color-mix(in srgb, var(--tesseract-violet-900) 84%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-violet-900) 24%, var(--tesseract-slate-900)) 100%)",
   blue:
     "radial-gradient(120% 150% at 50% 46%, color-mix(in srgb, var(--tesseract-blue-700) 34%, var(--tesseract-blue-900)) 0%, color-mix(in srgb, var(--tesseract-blue-900) 82%, var(--tesseract-slate-900)) 48%, color-mix(in srgb, var(--tesseract-blue-900) 30%, var(--tesseract-slate-900)) 100%)",
   slate:
@@ -44,8 +44,7 @@ const RAY_COLORS = {
 // Headings come in exactly two sizes: 18px and 24px.
 const TITLE_FONT_SIZE = { sm: 18, md: 24 };
 const SUBTITLE_FONT_SIZE = { sm: 13, md: 16 };
-// Back button scales with the heading and is centered on the heading line.
-const BACK_SIZE = { sm: 20, md: 24 };
+// Back-button glyph size scales with the heading.
 const BACK_ICON = { sm: 14, md: 18 };
 
 /**
@@ -100,7 +99,6 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
   // Numeric `height` is an escape hatch; otherwise it derives from `size`.
   const resolvedHeight = height ?? SIZE_HEIGHT[size] ?? SIZE_HEIGHT.md;
   const ts = TITLE_FONT_SIZE[titleSize] ? titleSize : "md";
-  const backSize = BACK_SIZE[ts];
   // Explicit bottomRadius wins; otherwise it scales with size (md = 24px).
   // Clamped to a 42px ceiling so the banner corners stay sane.
   const radius = Math.min(MAX_RADIUS, bottomRadius ?? SIZE_RADIUS[size] ?? SIZE_RADIUS.md);
@@ -160,8 +158,7 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
       )}
 
       {/* Content — `align="center"` (default) vertically centers the block in
-          the banner; `align="top"` lets it hug the top. The CTAs stay centered
-          against the whole title + subtitle column. */}
+          the banner; `align="top"` lets it hug the top. */}
       <div
         style={{
           position: "relative",
@@ -173,42 +170,42 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
           padding: "var(--tesseract-space-3-5) var(--tesseract-space-4-5)",
         }}
       >
-        {/* Title + subtitle column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--tesseract-space-1-5)", minWidth: 0, flex: 1 }}>
-          {/* Eyebrow — a small kicker label above the title. */}
-          {eyebrow && (
-            <span
-              style={{
-                marginLeft: showBackButton ? backSize + 8 : 0,
-                color: "color-mix(in srgb, var(--tesseract-slate-0) 70%, transparent)",
-                fontSize: "var(--tesseract-text-body-xs, 12px)",
-                fontWeight: "var(--tesseract-weight-semibold)",
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                lineHeight: 1.2,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {eyebrow}
-            </span>
+        {/* Left cluster: back button (a small ghost CTA, vertically centred to the
+            title+subtitle block) + the title/subtitle block. The back button lives
+            OUTSIDE the text column, so the title and subtitle stay left-aligned to
+            each other (no fragile indents). */}
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", minWidth: 0, flex: 1 }}>
+          {showBackButton && (
+            <Button
+              surface="dark"
+              variant="ghost"
+              theme="neutral"
+              size="sm"
+              aria-label="Go back"
+              onClick={onBack}
+              icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} size={BACK_ICON[ts]} color="currentColor" />}
+            />
           )}
 
-          {/* Heading line: back button + title, centered together */}
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--tesseract-space-2)", minWidth: 0 }}>
-            {showBackButton && (
-              // Reuse the Button atom (dark-surface, ghost, icon-only) instead of
-              // a hand-rolled <button> with inline styles.
-              <Button
-                surface="dark"
-                variant="tonal"
-                theme="neutral"
-                size={ts === "sm" ? "sm" : "md"}
-                aria-label="Go back"
-                onClick={onBack}
-                icon={<TPLibraryIcon name={backIcon} variant={backIconVariant} size={BACK_ICON[ts]} color="currentColor" />}
-              />
+          {/* Title + subtitle block — always left-aligned to each other. */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--tesseract-space-1-5)", minWidth: 0, flex: 1 }}>
+            {/* Eyebrow — a small kicker label above the title. */}
+            {eyebrow && (
+              <span
+                style={{
+                  color: "color-mix(in srgb, var(--tesseract-slate-0) 70%, transparent)",
+                  fontSize: "var(--tesseract-text-body-xs, 12px)",
+                  fontWeight: "var(--tesseract-weight-semibold)",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.2,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {eyebrow}
+              </span>
             )}
 
             {/* Title truncates when the CTAs squeeze the row; the full text
@@ -230,28 +227,26 @@ export const HeroBanner = React.forwardRef(function HeroBanner({
                 {title}
               </h1>
             </Tooltip>
-          </div>
 
-          {/* Subtitle — below the heading, aligned under the title text.
-              Truncates the same way; tooltip on hover only when clipped. */}
-          {subtitle && (
-            <Tooltip content={subtitle} whenTruncated side="bottom" sideOffset={8}>
-              <p
-                style={{
-                  margin: 0,
-                  marginLeft: showBackButton ? backSize + 8 : 0,
-                  color: "color-mix(in srgb, var(--tesseract-slate-0) 75%, transparent)",
-                  fontSize: SUBTITLE_FONT_SIZE[subtitleSize] ?? 13,
-                  lineHeight: 1.4,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {subtitle}
-              </p>
-            </Tooltip>
-          )}
+            {/* Subtitle — left-aligned under the title. Truncates the same way. */}
+            {subtitle && (
+              <Tooltip content={subtitle} whenTruncated side="bottom" sideOffset={8}>
+                <p
+                  style={{
+                    margin: 0,
+                    color: "color-mix(in srgb, var(--tesseract-slate-0) 75%, transparent)",
+                    fontSize: SUBTITLE_FONT_SIZE[subtitleSize] ?? 13,
+                    lineHeight: 1.4,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {subtitle}
+                </p>
+              </Tooltip>
+            )}
+          </div>
         </div>
 
         {/* CTAs — vertically centered to the title + subtitle column. */}
