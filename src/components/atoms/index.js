@@ -42,3 +42,4 @@ export { TPIcon, TPLibraryIcon, TP_ICON_NAMES, TP_ICON_VARIANTS, TP_LIBRARY_ICON
 
 // Animation / Decorative
 export { AnimatedGrid } from "./AnimatedGrid";
+export { LightRays } from "./LightRays";

@@ -1,51 +1,23 @@
-/* HeroBanner premium accent — a soft LIGHT LEAK bleeding in from the top-LEFT
-   corner (opposite the lattice grid on the right), like natural light spilling
-   over the edge. No hard rays: layered, feathered radial blooms (near-white core
-   → violet → cool-blue) that gently drift and breathe. Pure CSS, token-driven,
-   screen-blended, reduced-motion aware. */
-.leak {
+/* HeroBanner premium accent — the animated WebGL <LightRays/> canvas that
+   streams soft beams from the top-left corner. The component itself handles
+   positioning + 'screen' blend; this just pins it beneath the content layer. */
+.rays {
+  z-index: 0;
+}
+
+/* Film grain — a fine fractal-noise texture overlaid across the whole surface,
+   like the reference. 'overlay' blend keeps it subtle (adds tooth to the light,
+   speckle to the shadows) without lifting the field. Reduced-motion agnostic
+   (it's static). Sits under the content layer. */
+.grain {
   position: absolute;
   inset: 0;
-  pointer-events: none;
   z-index: 0;
-  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.09;
   mix-blend-mode: screen;
-}
-
-/* Soft, angled LIGHT RAYS streaming in from the top-left corner — like the
-   SideRays reference, but pure-CSS and gentle: a heavily-blurred fan of diffuse
-   beams (violet, with a cool tint) fading across the banner, so you feel light
-   falling at an angle rather than seeing discrete spots. Slow drift = a live wave. */
-.leak::before {
-  content: "";
-  position: absolute;
-  inset: -45% -35% -45% -25%;
-  transform-origin: 0% 0%;
-  filter: blur(5px);
-  opacity: 0.95;
-  background:
-    /* the light source — a soft glow just past the top-left corner */
-    radial-gradient(30% 62% at 0% -4%, color-mix(in srgb, var(--tp-hero-ray-1, var(--tesseract-violet-300)) 24%, transparent) 0%, transparent 60%),
-    /* the ray fan — soft wide beams sweeping down-right from that corner. Colours
-       are tone-aware via --tp-hero-ray-1 / -2 (set per tone by the component). */
-    repeating-conic-gradient(from 4deg at 0% 0%,
-      transparent 0deg,
-      color-mix(in srgb, var(--tp-hero-ray-1, var(--tesseract-violet-300)) 17%, transparent) 6deg,
-      color-mix(in srgb, var(--tp-hero-ray-2, var(--tesseract-blue-300)) 13%, transparent) 9deg,
-      transparent 20deg);
-  /* brightest at the corner, dissolving as it falls across */
-  -webkit-mask-image: radial-gradient(135% 140% at 0% 2%, #000 0%, rgba(0, 0, 0, 0.42) 40%, transparent 80%);
-  mask-image: radial-gradient(135% 140% at 0% 2%, #000 0%, rgba(0, 0, 0, 0.42) 40%, transparent 80%);
-  animation: tp-hero-leak 22s ease-in-out infinite alternate;
-}
-
-@keyframes tp-hero-leak {
-  from { opacity: 0.82; transform: rotate(-1.6deg); }
-  to   { opacity: 1;    transform: rotate(2.2deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .leak::before { animation: none; opacity: 0.9; }
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
 }
 
 /* Back affordance — a BARE icon (no button shell), so it reads as the arrow
