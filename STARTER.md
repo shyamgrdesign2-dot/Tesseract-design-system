@@ -15,7 +15,7 @@ Everything below lives in a **private** GitHub repo. It only works if:
 
 1. **You have access to the repo** `DHSPL-Tatvacare/tesseract-design-system`.
    → **No access?** Ask your **dev / operations team** to add your GitHub account
-   to the repo — tag **Karthik Jangam** (GitHub **@KarthikJangam04**). Without
+   to the repo — contact **Karthik Jangam** (karthik.jangam@tatvacare.in). Without
    access, Step 1 and Step 3 will fail — this is the #1 reason setup doesn't work.
 2. **You're in Claude Code** (desktop app, CLI, or web) — that's where `/plugin`
    and `/tesseract` exist. A brand-new Claude account/workspace does **not** have
