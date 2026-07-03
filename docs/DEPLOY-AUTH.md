@@ -1,67 +1,48 @@
 # Protecting the deployed Storybook
 
-The deployed Storybook (Vercel → `storybook-static`) is gated by a **password
-login screen** so casual visitors can't browse it. There are two layers; use the
-one that matches how much protection you actually need.
+> **Status: the deployed Storybook is currently OPEN (no password).** The
+> client-side login gate was removed from
+> [`.storybook/manager-head.html`](../.storybook/manager-head.html) — anyone with
+> the URL can view it. If you need to lock it down, use platform-level protection
+> (below); don't rely on a client-side gate.
 
 ---
 
-## Layer 1 — the built-in login gate (active now)
+## If you want access control
 
-A login screen is injected into the Storybook manager via
-[`.storybook/manager-head.html`](../.storybook/manager-head.html). On the live
-site, visitors see a Tatvacare-branded password screen before the Storybook loads.
-A correct password unlocks it for that browser session (`sessionStorage`).
+Gate the deployment **at the platform**, before any file is served — this is real,
+server-side, and needs zero code in this repo.
 
-> ⚠️ **This is a deterrent, not real security.** The password *hashes* ship inside
-> the page's JavaScript, so a determined person can bypass it (read the bundle, or
-> open a story's `iframe.html` directly). It's the right amount of lock for a
-> component library with no sensitive data — it is **not** suitable for anything
-> confidential. For that, use Layer 2.
+- **Azure Container Apps** (current prod host): put the app behind
+  **Authentication (Easy Auth)** or an ingress/IP restriction in the Container App
+  settings, or front it with an authenticated gateway.
+- **Vercel** (if deployed there): **Settings → Deployment Protection** → *Password
+  Protection* (one shared password) or *Vercel Authentication* (team SSO), then
+  redeploy. (May require a paid plan.)
 
-### Change / add / remove passwords
+Platform protection also covers direct `…/iframe.html?id=…` deep-links, which a
+client-side gate never could.
 
-Passwords are stored only as **SHA-256 hashes** in `manager-head.html` (the
-plaintext is never committed). To set a new one:
+---
+
+## Re-adding the old client-side login gate (deterrent only)
+
+The previous branded password screen lived entirely in `manager-head.html`. It was
+a **deterrent, not security** — the password hashes shipped in the page, so it was
+bypassable. If you want it back for casual friction (not real protection), restore
+it from git history:
 
 ```bash
-node -e 'console.log(require("crypto").createHash("sha256").update("YOUR_NEW_PASSWORD").digest("hex"))'
+# find the commit that removed it, then restore that file from its parent
+git log --oneline -- .storybook/manager-head.html
+git show <commit-before-removal>:.storybook/manager-head.html > .storybook/manager-head.html
 ```
 
-Paste the resulting hash into the `HASHES` array in
-[`.storybook/manager-head.html`](../.storybook/manager-head.html) (add, replace, or
-delete entries — any listed password works). Commit, and the next deploy picks it
-up. Share the plaintext with your team out-of-band (chat/password manager), never
-in the repo.
+Passwords were stored only as SHA-256 hashes (plaintext never committed); generate a
+new one with:
 
-> Note: the gate covers the Storybook **manager** (the normal entry point). It does
-> not block direct `…/iframe.html?id=…` deep-links to a single component. Layer 2
-> closes that gap.
+```bash
+node -e 'console.log(require("crypto").createHash("sha256").update("YOUR_PASSWORD").digest("hex"))'
+```
 
----
-
-## Layer 2 — Vercel Deployment Protection (real, server-side)
-
-For genuine access control, turn on Vercel's built-in protection — it gates the
-deployment at the edge (before any file is served), so nothing is bypassable from
-the browser, and it needs **zero code**.
-
-In the Vercel dashboard for this project:
-
-1. **Settings → Deployment Protection.**
-2. Choose one:
-   - **Password Protection** — one shared password for the whole deployment.
-   - **Vercel Authentication** — only members of your Vercel team can view it (SSO).
-3. Save and redeploy.
-
-(Password Protection / advanced protection may require a Vercel Pro plan — check
-your plan.) With Layer 2 on, you can keep Layer 1 as the branded landing screen or
-remove it — Layer 2 is what actually secures the site.
-
----
-
-## Recommendation
-
-- **Internal-only design system, low sensitivity:** Layer 1 is fine on its own.
-- **Anything you truly need locked down:** enable Layer 2 (Vercel) — and treat
-  Layer 1 purely as branding.
+For anything that must actually be private, use platform protection above — not this.
