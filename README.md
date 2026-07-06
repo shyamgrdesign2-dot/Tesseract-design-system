@@ -68,9 +68,9 @@ import { Button, Badge, DataTable, TPIcon } from "@dhspl-tatvacare/tesseract-ui"
 
 ## What's inside
 
-**40 components — 17 atoms + 23 molecules.** Each ships one configurable component
-per job rather than many near-duplicates (one Button, one Dropdown, one DataTable,
-one date picker, one container shell).
+**48 components — 17 atoms + 23 molecules + 8 charts.** Each ships one configurable
+component per job rather than many near-duplicates (one Button, one Dropdown, one
+DataTable, one date picker, one container shell), plus a zero-dependency charts layer.
 
 - **Atoms (17):** Button, Badge, Chip, Checkbox, Radio, Toggle, Slider, InputBox,
   InputOTP, Avatar, Divider, Skeleton, LoadingIndicator, SegmentedControl,

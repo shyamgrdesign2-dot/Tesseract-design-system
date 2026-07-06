@@ -1,7 +1,7 @@
 # Tesseract UI — documentation (v1.0)
 
-The `tesseract-ui` design system: 40 token-driven React components (atoms + molecules)
-for GenX and TatvaPractice.
+The `tesseract-ui` design system: 48 token-driven React components (atoms, molecules,
+charts) for GenX and TatvaPractice.
 
 ## Start here
 
@@ -10,7 +10,9 @@ for GenX and TatvaPractice.
 2. **[USING-TESSERACT.md](./USING-TESSERACT.md)** — install the package, the `/tesseract` skill, and the MCP; set up the theme provider; use it in code.
 3. **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API, how to stay upgrade-safe). Read before adopting.
 4. **[ICONS.md](./ICONS.md)** — the icon system (`TPIcon` / `TPLibraryIcon`, families, self-hosting).
-5. **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — password-protect the deployed Storybook (built-in login gate + Vercel real-security option).
+5. **[../design.md](../design.md)** — the design language: foundations (colour, type, spacing, elevation, motion, shape, icons), hard rules, and voice — for agents and humans.
+6. **[UPGRADING.md](./UPGRADING.md)** — how to move between versions (per-version notes + an agent instruction). Full history in [CHANGELOG](../CHANGELOG.md).
+7. **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — access-protecting the deployed Storybook (the client gate was removed; use platform-level protection).
 
 ## Per-component docs
 
