@@ -26,6 +26,8 @@ import { dirname, join, resolve } from "node:path";
 const here = dirname(fileURLToPath(import.meta.url));
 const MANIFEST_PATH = resolve(here, "..", "manifest", "component-manifest.json");
 const ICONS_PATH = resolve(here, "..", "manifest", "icon-names.json");
+// design.md lives at the plugin / repo root (one level above mcp/).
+const DESIGN_PATH = resolve(here, "..", "..", "design.md");
 
 function loadManifest() {
   if (!existsSync(MANIFEST_PATH)) {
@@ -36,9 +38,11 @@ function loadManifest() {
   return JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
 }
 const loadIcons = () => (existsSync(ICONS_PATH) ? JSON.parse(readFileSync(ICONS_PATH, "utf8")) : { variants: [], curatedVariants: [], count: 0, names: [] });
+const loadDesign = () => (existsSync(DESIGN_PATH) ? readFileSync(DESIGN_PATH, "utf8") : "");
 
 let manifest = loadManifest();
 let icons = loadIcons();
+const design = loadDesign();
 
 const findComponent = (name) =>
   manifest.components.find((c) => c.name.toLowerCase() === String(name).toLowerCase()) ||
@@ -213,6 +217,14 @@ server.tool(
   "The non-negotiable rules every Tesseract page must follow (tokens-only, even dimensions, no external UI kits, etc.).",
   {},
   async () => text({ rules: manifest.rules, package: manifest.designSystem })
+);
+
+/* ── get_design ────────────────────────────────────────────────────── */
+server.tool(
+  "get_design",
+  "The Tesseract design language (design.md): foundations — colours & their meaning, typography, spacing, elevation, motion, shape, icons — plus the hard rules, voice & tone, and do/don't. Read this to design 'in our world' beyond raw component/prop data.",
+  {},
+  async () => text(design || "design.md not found next to the plugin. Ensure design.md is at the repo/plugin root."),
 );
 
 const transport = new StdioServerTransport();

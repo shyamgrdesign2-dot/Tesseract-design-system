@@ -32,7 +32,8 @@ Read `references/component-catalog.md`. For each region in the agreed architectu
 **Ground-truth props — prefer the MCP if connected.** This repo ships a `tesseract` MCP server (`mcp/`) that serves the *exact* components and props from source. If its tools are available, use them so you never hallucinate a prop or value:
 - `get_component(name)` → the real prop list + allowed values before you write JSX.
 - `validate_usage(component, props)` → confirm zero unknown props / out-of-range values before committing the usage.
-If the MCP isn't connected, fall back to the catalog and the component's source/story at `src/components/{atoms,molecules}/<Name>/`.
+- `get_design()` → the design language (`design.md`): colour meanings, type, spacing, motion, shape, voice, do/don't. `get_tokens` / `get_rules` / `get_icons` for tokens, rules, and icon names.
+If the MCP isn't connected, fall back to the catalog and the component's source/story at `src/components/{atoms,molecules,charts}/<Name>/`.
 
 ### 4 · Populate with our domain
 Read `references/product-and-domain.md`. Use real module names, entities, statuses, and vocabulary (Patient, Encounter, MRN, Visit Type, IPD admission, Form 3C, ABHA…) so the page reads like TatvaPractice, not generic CRUD.

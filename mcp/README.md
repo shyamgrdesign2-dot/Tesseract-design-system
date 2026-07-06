@@ -26,6 +26,7 @@ The server answers **only** from the manifest. It cannot return a prop or value 
 | `get_tokens` | Design tokens by family (`blue`, `space`, `radius`, `fg`, `bg`, …). Use instead of raw values. |
 | `get_icons` | **Icon guardrail.** Search/validate real icon names (4,724 in the library) and list the valid `variant`s, so you never invent an icon name. |
 | `get_rules` | The non-negotiable rules every page must follow. |
+| `get_design` | The full **design language** (`design.md`): colour meanings, typography, spacing, elevation, motion, shape, icons, voice, do/don't. Read to design "in our world" beyond raw prop data. |
 
 ## Run
 
