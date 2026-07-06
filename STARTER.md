@@ -82,5 +82,9 @@ Update later with `npm update @dhspl-tatvacare/tesseract-ui`.
 ---
 
 **In one line:** get access → `/plugin install` the skill + MCP → `/tesseract`
-before each screen → `npm install` the package in your app. Deeper reference:
-[`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+before each screen → `npm install` the package in your app.
+
+**Learn the design language:** [`design.md`](design.md) — one clean, agent-and-human
+readable file covering the foundations (colours, type, spacing, elevation, motion,
+shape, icons), the hard rules, and voice. Deeper: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md)
+· [`docs/CATALOG.md`](docs/CATALOG.md).
