@@ -39,7 +39,9 @@ export const StatCard = React.forwardRef(function StatCard(
     showSparkline = true,
     sparkPosition = "bottom",
     icon,
+    iconPosition = "left",
     footer,
+    deltaPlacement = "header",
     variant = "surface",
     size = "md",
     align = "left",
@@ -81,6 +83,7 @@ export const StatCard = React.forwardRef(function StatCard(
         fontWeight: 600,
         lineHeight: 1,
         whiteSpace: "nowrap",
+        fontVariantNumeric: "tabular-nums",
       }}
     >
       {arrow && (
@@ -92,6 +95,17 @@ export const StatCard = React.forwardRef(function StatCard(
       {deltaSuffix}
     </span>
   );
+
+  const iconChip = icon && (
+    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: "var(--tesseract-bg-brand-soft)", color: "var(--tesseract-fg-link)", flexShrink: 0 }}>
+      {icon}
+    </span>
+  );
+
+  // icon on the right forces the delta below the value (the reference layout)
+  const deltaBelow = deltaPlacement === "below" || iconPosition === "right";
+  const headerRight = iconPosition === "right" ? iconChip : (!deltaBelow && !centered ? deltaPill : null);
+  const belowDelta = deltaBelow || centered ? deltaPill : null;
 
   const hasSpark = showSparkline && spark && spark.length > 0;
   const bottomSparkW = Math.max(60, cardWidth - s.pad * 2);
@@ -116,24 +130,20 @@ export const StatCard = React.forwardRef(function StatCard(
       }}
       {...rest}
     >
-      {/* header: icon + label ............ delta pill */}
+      {/* header: [icon] label ............ [icon | delta pill] */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: centered ? "center" : "space-between" }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-          {icon && (
-            <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 8, background: "var(--tesseract-bg-brand-soft)", color: "var(--tesseract-fg-link)", flexShrink: 0 }}>
-              {icon}
-            </span>
-          )}
+          {iconPosition === "left" && iconChip}
           <span style={{ fontSize: s.label, color: "var(--tesseract-fg-secondary)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
         </span>
-        {!centered && deltaPill}
+        {!centered && headerRight}
       </div>
 
-      {/* value ( + side spark ) */}
+      {/* value ( + delta below / side spark ) */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: centered ? "center" : "space-between", gap: 12 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: centered ? "center" : "flex-start" }}>
-          <span style={{ fontSize: s.value, fontWeight: 700, color: "var(--tesseract-fg-heading)", lineHeight: 1.05, letterSpacing: "-0.01em" }}>{format(value)}</span>
-          {centered && deltaPill}
+          <span style={{ fontSize: s.value, fontWeight: 700, color: "var(--tesseract-fg-heading)", lineHeight: 1.05, letterSpacing: "-0.01em", fontVariantNumeric: "tabular-nums" }}>{format(value)}</span>
+          {belowDelta}
         </div>
         {hasSpark && sparkPosition === "side" && <Sparkline data={spark} color={sparkColor} area={sparkArea} curve={sparkCurve} width={96} height={40} />}
       </div>

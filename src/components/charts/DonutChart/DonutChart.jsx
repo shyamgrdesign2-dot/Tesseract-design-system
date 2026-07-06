@@ -124,8 +124,8 @@ export const DonutChart = React.forwardRef(function DonutChart(
             <button key={i} type="button" onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: 0, padding: "2px 0", cursor: "default", textAlign: "left", opacity: hover == null || hover === i ? 1 : 0.5, transition: "opacity 120ms" }}>
               <span style={{ width: 10, height: 10, borderRadius: 3, background: a.color, flexShrink: 0 }} />
               <span style={{ fontSize: 12, color: "var(--tesseract-fg-secondary)", marginRight: "auto" }}>{a.label}</span>
-              {showValue && <span style={{ fontSize: 12, fontWeight: 600, color: "var(--tesseract-fg-primary)" }}>{valueFormat(a.value)}</span>}
-              {showPercent && <span style={{ fontSize: 11, color: "var(--tesseract-fg-tertiary)", width: 34, textAlign: "right" }}>{Math.round(a.pct * 100)}%</span>}
+              {showValue && <span style={{ fontSize: 12, fontWeight: 600, color: "var(--tesseract-fg-primary)", fontVariantNumeric: "tabular-nums" }}>{valueFormat(a.value)}</span>}
+              {showPercent && <span style={{ fontSize: 11, color: "var(--tesseract-fg-tertiary)", width: 34, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{Math.round(a.pct * 100)}%</span>}
             </button>
           ))}
         </div>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/src/hooks/utils";
-import { scaleLinear, scaleBand, niceTicks, sum, maxOf, formatCompact, seriesColor, MARGINS, downloadCSV } from "../internal/lib";
+import { scaleLinear, scaleBand, niceTicks, sum, maxOf, formatCompact, seriesColor, MARGINS, downloadCSV, barPath } from "../internal/lib";
 import { useElementWidth } from "../internal/hooks";
 import { GridLines, AxisLeft, AxisBottom, ChartLegend, ChartToolbar, TooltipCard } from "../internal/primitives";
 
@@ -94,16 +94,18 @@ export const BarChart = React.forwardRef(function BarChart(
     const bw = band.bandwidth;
     if (stacked) {
       let acc = 0;
-      active.forEach((s) => {
+      const lastJ = active.length - 1;
+      active.forEach((s, j) => {
         const v = Number(row[s.key]) || 0;
+        const round = j === lastJ; // only the outermost segment rounds its value end
         if (horizontal) {
           const x0 = vScale(acc);
           const x1 = vScale(acc + v);
-          bars.push({ x: x0, y: bStart, w: Math.max(0, x1 - x0), h: bw, color: s.color, v, ci });
+          bars.push({ x: x0, y: bStart, w: Math.max(0, x1 - x0), h: bw, color: s.color, v, ci, round });
         } else {
           const y0 = vScale(acc);
           const y1 = vScale(acc + v);
-          bars.push({ x: bStart, y: y1, w: bw, h: Math.max(0, y0 - y1), color: s.color, v, ci });
+          bars.push({ x: bStart, y: y1, w: bw, h: Math.max(0, y0 - y1), color: s.color, v, ci, round });
         }
         acc += v;
       });
@@ -114,10 +116,10 @@ export const BarChart = React.forwardRef(function BarChart(
         const v = Number(row[s.key]) || 0;
         if (horizontal) {
           const x1 = vScale(v);
-          bars.push({ x: plot.x, y: bStart + j * inner + gap / 2, w: Math.max(0, x1 - plot.x), h: inner - gap, color: s.color, v, ci });
+          bars.push({ x: plot.x, y: bStart + j * inner + gap / 2, w: Math.max(0, x1 - plot.x), h: inner - gap, color: s.color, v, ci, round: true });
         } else {
           const y1 = vScale(v);
-          bars.push({ x: bStart + j * inner + gap / 2, y: y1, w: inner - gap, h: Math.max(0, plot.y + plot.h - y1), color: s.color, v, ci });
+          bars.push({ x: bStart + j * inner + gap / 2, y: y1, w: inner - gap, h: Math.max(0, plot.y + plot.h - y1), color: s.color, v, ci, round: true });
         }
       });
     }
@@ -160,7 +162,7 @@ export const BarChart = React.forwardRef(function BarChart(
             <line x1={plot.x} y1={plot.y + plot.h} x2={plot.x + plot.w} y2={plot.y + plot.h} stroke="var(--tesseract-border-neutral)" strokeWidth={1} />
 
             {bars.map((b, i) => (
-              <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} rx={stacked ? Math.min(barRadius, 2) : barRadius} fill={b.color} opacity={(dimOnHover && hover != null && hover !== b.ci ? 0.4 : 1) * barOpacity} style={{ transition: "opacity 120ms" }} />
+              <path key={i} d={barPath(b.x, b.y, b.w, b.h, b.round ? barRadius : 0, horizontal)} fill={b.color} opacity={(dimOnHover && hover != null && hover !== b.ci ? 0.4 : 1) * barOpacity} style={{ transition: "opacity 120ms" }} />
             ))}
 
             {valueLabels && bars.map((b, i) => (b.v ? (

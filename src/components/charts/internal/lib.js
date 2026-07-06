@@ -112,6 +112,19 @@ export function areaPath(pts, y0, curve = "linear") {
   return `${top}L${last.x},${y0}L${first.x},${y0}Z`;
 }
 
+// Bar path with only the VALUE-END corners rounded (top for vertical, right for
+// horizontal) — the clean look most chart libs use. r=0 → plain rect.
+export function barPath(x, y, w, h, r, horizontal) {
+  const rr = Math.max(0, Math.min(r, w / 2, h / 2));
+  if (rr <= 0 || w <= 0 || h <= 0) return `M${x},${y}h${w}v${h}h${-w}Z`;
+  if (horizontal) {
+    // round the right edge (x+w)
+    return `M${x},${y}H${x + w - rr}Q${x + w},${y} ${x + w},${y + rr}V${y + h - rr}Q${x + w},${y + h} ${x + w - rr},${y + h}H${x}Z`;
+  }
+  // round the top edge (y)
+  return `M${x},${y + h}V${y + rr}Q${x},${y} ${x + rr},${y}H${x + w - rr}Q${x + w},${y} ${x + w},${y + rr}V${y + h}Z`;
+}
+
 /* ───────────────────────── arc geometry (pie / donut / gauge) ───────────────────────── */
 
 // angle in radians; 0 = 12 o'clock, increasing clockwise.
@@ -152,6 +165,17 @@ export function formatCompact(n) {
 }
 
 export const formatNumber = (n) => (n == null || Number.isNaN(n) ? "" : n.toLocaleString());
+
+// Indian compact — 1234→"1.2k", 2.6e5→"2.6L", 1.3e7→"1.3Cr". For ₹ money data.
+export function formatIndian(n) {
+  if (n == null || Number.isNaN(n)) return "";
+  const abs = Math.abs(n);
+  const trim = (x) => x.toFixed(1).replace(/\.0$/, "");
+  if (abs >= 1e7) return trim(n / 1e7) + "Cr";
+  if (abs >= 1e5) return trim(n / 1e5) + "L";
+  if (abs >= 1e3) return trim(n / 1e3) + "k";
+  return String(Math.round(n * 100) / 100);
+}
 
 /* ───────────────────────── series colour scale (token-only) ───────────────────────── */
 

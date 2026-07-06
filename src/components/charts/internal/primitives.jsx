@@ -9,6 +9,7 @@ const AXIS_TEXT = {
   fontSize: 11,
   fill: "var(--tesseract-fg-tertiary)",
   fontFamily: "var(--tesseract-font-body)",
+  fontVariantNumeric: "tabular-nums",
 };
 
 /* Horizontal gridlines at the y ticks (+ optional verticals at x ticks). */

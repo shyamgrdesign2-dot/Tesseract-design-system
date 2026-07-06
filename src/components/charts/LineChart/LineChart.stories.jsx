@@ -1,5 +1,16 @@
 import React from 'react';
 import { LineChart } from './LineChart';
+import { formatIndian } from '../internal/lib';
+
+const money = [
+  { day: '30 Jun', collected: 260000, refunded: 12000 },
+  { day: '01 Jul', collected: 90000, refunded: 9000 },
+  { day: '02 Jul', collected: 150000, refunded: 15000 },
+  { day: '03 Jul', collected: 190000, refunded: 8000 },
+  { day: '04 Jul', collected: 120000, refunded: 11000 },
+  { day: '05 Jul', collected: 95000, refunded: 7000 },
+  { day: '06 Jul', collected: 210000, refunded: 13000 },
+];
 
 const week = [
   { day: 'Mon', visits: 42, walkins: 12 },
@@ -73,4 +84,6 @@ export default meta;
 
 export const Playground = {};
 export const MarkersStep = { args: { area: false, markers: true, curve: 'step' } };
+/** Money series with the Indian ₹ compact axis (2.6L, 65k) — like "Collection vs refund". */
+export const MoneyIndian = { args: { data: money, series: [{ key: 'collected', label: 'Collected' }, { key: 'refunded', label: 'Refunded' }], yFormat: formatIndian, area: false } };
 export const ZoomAndPan = { args: { data: month, series: [{ key: 'visits', label: 'Daily visits' }], area: true, zoomable: true, showToolbar: true, yAxisLabel: 'Visits', xAxisLabel: 'Day' } };

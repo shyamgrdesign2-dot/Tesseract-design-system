@@ -2,6 +2,10 @@ import React from 'react';
 import { StatCard } from './StatCard';
 
 const spark = [12, 14, 13, 16, 15, 19, 22, 21, 24, 27];
+const inr = (v) => `₹${Number(v).toLocaleString('en-IN')}`;
+const barsGlyph = (
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden><path d="M3 13V7M8 13V3M13 13V9.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+);
 
 const meta = {
   title: 'Charts/StatCard',
@@ -32,6 +36,8 @@ const meta = {
     variant: { control: 'inline-radio', options: ['surface', 'soft', 'outline'], table: { category: 'Look' } },
     size: { control: 'inline-radio', options: ['sm', 'md'], table: { category: 'Look' } },
     align: { control: 'inline-radio', options: ['left', 'center'], table: { category: 'Look' } },
+    iconPosition: { control: 'inline-radio', options: ['left', 'right'], table: { category: 'Look' } },
+    deltaPlacement: { control: 'inline-radio', options: ['header', 'below'], table: { category: 'Look' } },
     bordered: { control: 'boolean', table: { category: 'Look' } },
   },
   args: {
@@ -40,7 +46,7 @@ const meta = {
     delta: 12.5, deltaSuffix: '%', footer: 'vs. last week',
     invertDelta: false, trend: undefined,
     spark, showSparkline: true, sparkPosition: 'bottom', sparkColor: 'var(--tesseract-blue-500)', sparkArea: true, sparkCurve: 'smooth',
-    variant: 'surface', size: 'md', align: 'left', bordered: true,
+    variant: 'surface', size: 'md', align: 'left', iconPosition: 'left', deltaPlacement: 'header', bordered: true,
   },
   render: (a) => <div style={{ maxWidth: 280 }}><StatCard {...a} /></div>,
 };
@@ -55,6 +61,19 @@ export const Dashboard = {
       <StatCard label="Collections" value={84200} format={(v) => `₹${(v / 1000).toFixed(1)}k`} delta={8.2} spark={[60, 62, 61, 66, 70, 72, 78, 80, 82, 84]} sparkColor="var(--tesseract-success-500)" footer="this month" />
       <StatCard label="No-show rate" value="6.4%" delta={-1.8} invertDelta spark={[11, 10, 9, 9, 8, 8, 7, 7, 6, 6]} sparkColor="var(--tesseract-violet-500)" footer="down is good" />
       <StatCard label="Bed occupancy" value="78%" delta={0} trend="flat" spark={[70, 72, 74, 73, 75, 77, 78, 78, 78, 78]} sparkColor="var(--tesseract-amber-500)" footer="stable" />
+    </div>
+  ),
+};
+
+/** Reference-style KPI row: icon top-right, delta below the value, no sparkline,
+ *  ₹ Indian grouping — like the IPD "Key metrics" cards. */
+export const KeyMetricsRow = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(232px, 1fr))', gap: 16, maxWidth: 1000 }}>
+      <StatCard iconPosition="right" icon={barsGlyph} showSparkline={false} label="Total billed" value={2850000} format={inr} delta={-4} footer="vs previous period" />
+      <StatCard iconPosition="right" icon={barsGlyph} showSparkline={false} label="Total collected" value={2410000} format={inr} delta={15} footer="vs previous period" />
+      <StatCard iconPosition="right" icon={barsGlyph} showSparkline={false} label="Total bill due" value={440000} format={inr} delta={17} invertDelta footer="vs previous period" />
+      <StatCard iconPosition="right" icon={barsGlyph} showSparkline={false} label="Total bill refunded" value={62000} format={inr} delta={-8} footer="vs previous period" />
     </div>
   ),
 };
