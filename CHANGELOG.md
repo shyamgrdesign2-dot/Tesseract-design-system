@@ -4,6 +4,34 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.0.4]
+
+### Added
+- **Charts — a new zero-dependency analytics category (6 components):**
+  `LineChart`, `BarChart`, `DonutChart`, `PieChart`, `Sparkline`, `StatCard`.
+  Built from scratch — pure SVG with our own scales, tick math, path/arc geometry,
+  number formatting, and token colour scale (no chart library, no D3). Token-only,
+  responsive, deeply configurable (curve/area/markers, grouped/stacked, pad-angle,
+  zoom + pan, legend toggle, tooltip, CSV export, …). Exported from the package
+  root, plus formatters `formatCompact` (k/M/B), `formatIndian` (k/L/Cr), `formatNumber`.
+
+### Changed
+- Chart polish: bars round only the value end (top/right); tabular-nums on axes,
+  legends, and KPI numbers; `StatCard` gained a tinted delta **pill** and
+  `iconPosition` / `deltaPlacement` / `sparkPosition` controls.
+
+## [1.0.3]
+
+### Changed
+- **HeroBanner — premium surface redesign.** Layered token-only "shiny" gradient
+  (diagonal sheen + highlight pools + near-black corners), an animated WebGL
+  light-ray glow (new self-contained **`LightRays`** atom, zero deps), and a fine
+  film-grain texture. The back affordance is now a bare `arrow-left3` icon centred
+  on the title.
+- **Breaking-ish:** HeroBanner `tone` reduced to **`violet` + `blue`** — `slate`
+  and `dark` were removed and now fall back to `violet`. Migrate those usages.
+- Foundations gains a **Surface gradients** doc (shared `surfaceGradients` source).
+
 ## [1.0.2]
 
 ### Changed

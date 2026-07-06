@@ -13,7 +13,7 @@ const preview: Preview = {
         order: [
           'Design System', ['Introduction', 'Why Tesseract', 'Overview', 'Component Standards'],
           'Foundations', ['Colors', 'Typography', 'Spacing & Grid', 'Shadow & Radius', 'Icons', 'Theme Provider'],
-          'Atoms', 'Molecules', '*',
+          'Atoms', 'Molecules', 'Charts', '*',
         ],
       },
     },

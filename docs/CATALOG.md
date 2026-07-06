@@ -1,6 +1,6 @@
 # Tesseract UI — component catalog (v1.0)
 
-The complete public surface of `tesseract-ui` v1.0: **17 atoms + 23 molecules = 40 components**.
+The complete public surface of `tesseract-ui`: **17 atoms + 23 molecules + 6 charts = 46 components** (charts added in v1.0.4).
 Every name links to its concise usage doc. All are imported from the package root:
 
 ```jsx
@@ -88,6 +88,23 @@ Composed surfaces and patterns. Molecules compose foundations, atoms, and other 
 | [Filter](./components/Filter.md) | One trigger → panel of grouped multi/single-select sections → removable chips, to narrow a DataTable. |
 | [HeroBanner](./components/HeroBanner.md) | Dark gradient page-header band — eyebrow/title/subtitle, back button, up to three dark-surface CTAs. |
 | [RxPadSection](./components/RxPadSection.md) | RxPad prescription-form section — icon/title header, action quartet, swappable table/text/fields body. |
+
+---
+
+## Charts (6)
+
+Analytical / data-viz components — **zero-dependency** (pure SVG + own scales, geometry, and formatting; no chart library), token-only, responsive, deeply configurable. Added in **v1.0.4**.
+
+| Component | What it is |
+|---|---|
+| [LineChart](./components/LineChart.md) | Multi-series trend/time chart — smooth/linear/step, area, markers, crosshair tooltip, legend toggle, zoom + pan, toolbar (CSV). |
+| [BarChart](./components/BarChart.md) | Categorical comparison — grouped/stacked, vertical/horizontal, rounded value ends, value labels, tooltip, legend. |
+| [DonutChart](./components/DonutChart.md) | Part-to-whole ring — center total, pad-angle, slice sort/stroke, hover-expand, legend value + %. |
+| [PieChart](./components/DonutChart.md) | Full pie — `DonutChart` with no hole (`innerRadius=0`). |
+| [Sparkline](./components/Sparkline.md) | Tiny axis-less inline trend for table cells / KPI tiles. |
+| [StatCard](./components/StatCard.md) | KPI tile — value, tinted delta pill, inline sparkline; variant/size/icon controls. |
+
+Convenience formatters are exported too: `formatCompact` (k/M/B), `formatIndian` (k/L/Cr), `formatNumber` — pass as `yFormat` / `valueFormat` / `format`.
 
 ---
 
