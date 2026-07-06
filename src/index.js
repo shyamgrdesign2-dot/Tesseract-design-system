@@ -16,6 +16,7 @@ import "./tesseract-typography.css";
 
 export * from "./components/atoms";
 export * from "./components/molecules";
+export * from "./components/charts";
 
 // Runtime theming — foundation + component tokens, breakpoints, light/dark.
 // `createTheme({ brand })` derives a full theme from a seed.
