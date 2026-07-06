@@ -12,15 +12,16 @@ const AXIS_TEXT = {
 };
 
 /* Horizontal gridlines at the y ticks (+ optional verticals at x ticks). */
-export function GridLines({ x, y, w, h, yTicks = [], xTicks = [], showX = false }) {
+export function GridLines({ x, y, w, h, yTicks = [], xTicks = [], showX = false, dashed = false }) {
+  const dash = dashed ? "3 3" : undefined;
   return (
     <g pointerEvents="none">
       {yTicks.map((t, i) => (
-        <line key={`gy${i}`} x1={x} x2={x + w} y1={t.y} y2={t.y} stroke="var(--tesseract-border-soft)" strokeWidth={1} />
+        <line key={`gy${i}`} x1={x} x2={x + w} y1={t.y} y2={t.y} stroke="var(--tesseract-border-soft)" strokeWidth={1} strokeDasharray={dash} />
       ))}
       {showX &&
         xTicks.map((t, i) => (
-          <line key={`gx${i}`} x1={t.x} x2={t.x} y1={y} y2={y + h} stroke="var(--tesseract-border-soft)" strokeWidth={1} />
+          <line key={`gx${i}`} x1={t.x} x2={t.x} y1={y} y2={y + h} stroke="var(--tesseract-border-soft)" strokeWidth={1} strokeDasharray={dash} />
         ))}
     </g>
   );

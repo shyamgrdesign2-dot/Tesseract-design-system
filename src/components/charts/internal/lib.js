@@ -88,10 +88,25 @@ export function smoothPath(pts) {
   return d;
 }
 
-// Filled area under a line down to baseline y0 (px). `smooth` uses the curve.
-export function areaPath(pts, y0, smooth = false) {
+// Step line (step-after): hold value, then jump. Good for discrete counts.
+export function stepPath(pts) {
   if (!pts.length) return "";
-  const top = smooth ? smoothPath(pts) : linePath(pts);
+  let d = `M${pts[0].x},${pts[0].y}`;
+  for (let i = 1; i < pts.length; i++) d += `L${pts[i].x},${pts[i - 1].y}L${pts[i].x},${pts[i].y}`;
+  return d;
+}
+
+// Resolve a curve name → its line path generator.
+export function pathFor(pts, curve = "linear") {
+  if (curve === true || curve === "smooth") return smoothPath(pts);
+  if (curve === "step") return stepPath(pts);
+  return linePath(pts);
+}
+
+// Filled area under a line down to baseline y0 (px). `curve`: linear|smooth|step.
+export function areaPath(pts, y0, curve = "linear") {
+  if (!pts.length) return "";
+  const top = pathFor(pts, curve);
   const last = pts[pts.length - 1];
   const first = pts[0];
   return `${top}L${last.x},${y0}L${first.x},${y0}Z`;
