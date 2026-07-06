@@ -4,6 +4,15 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.0.5]
+
+### Added
+- **Charts — `RadarChart` + `GaugeChart`** (round two; zero-dependency, token-only).
+  `RadarChart` — multi-variable profile across 3+ axes (overlaid series polygons,
+  grid rings, per-axis hover tooltip, legend toggle). `GaugeChart` — single value vs
+  a range (rounded arc, threshold colouring, center readout, range labels). Purely
+  additive — nothing else changed.
+
 ## [1.0.4]
 
 ### Added

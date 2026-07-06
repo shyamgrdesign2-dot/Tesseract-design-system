@@ -1,6 +1,6 @@
 # Tesseract UI — component catalog (v1.0)
 
-The complete public surface of `tesseract-ui`: **17 atoms + 23 molecules + 6 charts = 46 components** (charts added in v1.0.4).
+The complete public surface of `tesseract-ui`: **17 atoms + 23 molecules + 8 charts = 48 components** (charts added in v1.0.4; RadarChart + GaugeChart in v1.0.5).
 Every name links to its concise usage doc. All are imported from the package root:
 
 ```jsx
@@ -91,9 +91,9 @@ Composed surfaces and patterns. Molecules compose foundations, atoms, and other 
 
 ---
 
-## Charts (6)
+## Charts (8)
 
-Analytical / data-viz components — **zero-dependency** (pure SVG + own scales, geometry, and formatting; no chart library), token-only, responsive, deeply configurable. Added in **v1.0.4**.
+Analytical / data-viz components — **zero-dependency** (pure SVG + own scales, geometry, and formatting; no chart library), token-only, responsive, deeply configurable. Added in **v1.0.4** (RadarChart + GaugeChart in **v1.0.5**).
 
 | Component | What it is |
 |---|---|
@@ -103,6 +103,8 @@ Analytical / data-viz components — **zero-dependency** (pure SVG + own scales,
 | [PieChart](./components/DonutChart.md) | Full pie — `DonutChart` with no hole (`innerRadius=0`). |
 | [Sparkline](./components/Sparkline.md) | Tiny axis-less inline trend for table cells / KPI tiles. |
 | [StatCard](./components/StatCard.md) | KPI tile — value, tinted delta pill, inline sparkline; variant/size/icon controls. |
+| [RadarChart](./components/RadarChart.md) | Multi-variable profile across 3+ axes — overlaid series polygons, grid rings, per-axis tooltip. |
+| [GaugeChart](./components/GaugeChart.md) | Single value vs a range — rounded arc, threshold colouring, center readout (occupancy, utilisation). |
 
 Convenience formatters are exported too: `formatCompact` (k/M/B), `formatIndian` (k/L/Cr), `formatNumber` — pass as `yFormat` / `valueFormat` / `format`.
 
