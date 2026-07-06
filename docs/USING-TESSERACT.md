@@ -108,7 +108,7 @@ In `package.json` this lands as `"@dhspl-tatvacare/tesseract-ui": "^1.0.0"`. Pul
 updates with `npm update @dhspl-tatvacare/tesseract-ui` — you get patches/minors
 automatically and never a breaking change within `1.x` (see [PREREQUISITE.md](./PREREQUISITE.md)).
 
-**How a new version ships:** a maintainer cuts a GitHub Release (e.g. `v1.0.4`);
+**How a new version ships:** a maintainer cuts a GitHub Release (e.g. `v1.0.5`);
 `.github/workflows/publish-package.yml` then builds with Vite and publishes that
 version to the registry using the repo's built-in `GITHUB_TOKEN` (no PAT needed on
 our side). Immutable, one version per release.
@@ -119,10 +119,10 @@ For a quick spike, or a machine where you'd rather not set up the registry token
 you can still install the prebuilt bundle straight from the repo by tag (gated by
 git access alone):
 ```jsonc
-{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.4" } }
+{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5" } }
 ```
 A GitHub Action keeps a `build` branch with the prebuilt `dist/` up to date, so
-`#build` (always-latest) and `#v1.0.4` (pinned) both work. Prefer the registry for
+`#build` (always-latest) and `#v1.0.5` (pinned) both work. Prefer the registry for
 real consumers — a pinned tag/`#build` doesn't give true semver ranges.
 
 For a fully local trial, `npm run build:lib && npm pack` produces a `.tgz` you can
@@ -171,7 +171,7 @@ Also:
 npm create vite@latest my-emr -- --template react && cd my-emr
 
 # 2. components
-npm install /Users/shyamsundar/Desktop/TP_UI_Storybook/dhspl-tatvacare-tesseract-ui-1.0.4.tgz react react-dom   # (Option B — from `npm pack`)
+npm install /Users/shyamsundar/Desktop/TP_UI_Storybook/dhspl-tatvacare-tesseract-ui-1.0.5.tgz react react-dom   # (Option B — from `npm pack`)
 
 # 3. AI grounding
 cp -R /Users/shyamsundar/Desktop/TP_UI_Storybook/.claude/skills/tesseract .claude/skills/tesseract

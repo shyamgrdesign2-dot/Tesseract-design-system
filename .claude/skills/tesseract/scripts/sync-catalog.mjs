@@ -34,7 +34,7 @@ if (!existsSync(join(root, "src", "components"))) {
   }
 }
 
-const LAYERS = ["atoms", "molecules"];
+const LAYERS = ["atoms", "molecules", "charts"];
 
 /** Parse a barrel index.js into a list of exported names. */
 function parseBarrel(indexPath) {
@@ -83,6 +83,7 @@ function scanLayer(layer) {
   const base = join(root, "src", "components", layer);
   if (!existsSync(base)) return [];
   const entries = readdirSync(base).filter((name) => {
+    if (name === "internal" || name === "icons") return false; // shared helpers, not public components
     const p = join(base, name);
     return statSync(p).isDirectory();
   });

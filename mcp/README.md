@@ -84,8 +84,8 @@ When generating a page with Tesseract components:
 
 ## Coverage
 
-- **Components:** 31 (16 atoms, 15 molecules) — every public prop extracted.
-- **Allowed-value enums:** 29/31 components; the other two (`ClinicalTable`, `Filter`) have only object/function props with nothing to enumerate. Enums are resolved from storybook `argTypes` (including `options: CONST` references), with a small verified `ENUM_OVERRIDES` map for source-derived cases (e.g. `MedicalIcon.variant`).
+- **Components:** 50 (19 atoms, 24 molecules, 7 charts) — every public prop extracted. Charts (LineChart, BarChart, DonutChart/PieChart, Sparkline, StatCard, RadarChart, GaugeChart) added in v1.0.4–v1.0.5.
+- **Allowed-value enums:** 46/50 components; the rest have only object/function props with nothing to enumerate. Enums are resolved from storybook `argTypes` (including `options: CONST` references), with a small verified `ENUM_OVERRIDES` map for source-derived cases (e.g. `MedicalIcon.variant`).
 - **Tokens:** 216 CSS variables across all families.
 - **Icons:** 4,724 library names + 6 variants, searchable/validatable via `get_icons`.
 

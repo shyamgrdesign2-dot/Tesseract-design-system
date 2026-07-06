@@ -20,7 +20,7 @@ One concise usage doc per component lives in **[`components/`](./components)** â
 
 ```jsonc
 // package.json â€” installs the prebuilt bundle from the private repo, gated by repo access
-{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.4" } }
+{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5" } }
 ```
 
 ```jsx

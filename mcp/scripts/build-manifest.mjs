@@ -28,7 +28,7 @@ if (!existsSync(join(root, "src", "components"))) {
   else { console.error("Cannot find src/components. Run from repo root."); process.exit(1); }
 }
 
-const LAYERS = ["atoms", "molecules"];
+const LAYERS = ["atoms", "molecules", "charts"];
 
 // Curated enum supplements for props whose allowed values can't be auto-extracted
 // from stories (e.g. derived from a source map). Each value is verified against
@@ -312,6 +312,7 @@ function scanLayer(layer) {
   if (!existsSync(base)) return { comps, barrel };
 
   for (const dir of readdirSync(base)) {
+    if (dir === "internal" || dir === "icons") continue; // shared helpers, not public components
     const dirPath = join(base, dir);
     if (!statSync(dirPath).isDirectory()) continue;
     const files = readdirSync(dirPath);
@@ -408,6 +409,7 @@ const manifest = {
     components: components.length,
     atoms: components.filter((c) => c.layer === "atoms").length,
     molecules: components.filter((c) => c.layer === "molecules").length,
+    charts: components.filter((c) => c.layer === "charts").length,
     tokens: tokens.count,
   },
   rules: [
@@ -447,6 +449,6 @@ writeFileSync(iconPath, JSON.stringify({
 
 console.log(`Wrote ${outPath}`);
 console.log(`Wrote ${iconPath}`);
-console.log(`Components: ${manifest.counts.components} (atoms ${manifest.counts.atoms}, molecules ${manifest.counts.molecules}) · tokens ${manifest.counts.tokens} · icons ${icons.names.length}`);
+console.log(`Components: ${manifest.counts.components} (atoms ${manifest.counts.atoms}, molecules ${manifest.counts.molecules}, charts ${manifest.counts.charts}) · tokens ${manifest.counts.tokens} · icons ${icons.names.length}`);
 const withEnums = components.filter((c) => c.props.some((p) => p.allowedValues)).length;
 console.log(`Components with extracted allowed-value enums: ${withEnums}/${components.length}`);

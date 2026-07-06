@@ -6,13 +6,15 @@
     "package": "tesseract-ui",
     "importAliases": [
       "@/src/components/atoms",
-      "@/src/components/molecules"
+      "@/src/components/molecules",
+      "@/src/components/charts"
     ]
   },
   "counts": {
-    "components": 42,
-    "atoms": 18,
+    "components": 50,
+    "atoms": 19,
     "molecules": 24,
+    "charts": 7,
     "tokens": 216
   },
   "rules": [
@@ -1500,6 +1502,76 @@
       "storiesPath": "src/components/atoms/InputOTP/InputOTP.stories.jsx"
     },
     {
+      "name": "LightRays",
+      "dir": "LightRays",
+      "layer": "atoms",
+      "exports": [
+        "LightRays"
+      ],
+      "importFrom": "@/src/components/atoms",
+      "importExample": "import { LightRays } from \"@/src/components/atoms\";",
+      "description": "LightRays — a self-contained WebGL light-ray accent using the ReactBits \"LightRays\" beam shader (its exact rayStrength math), ported to raw WebGL so there is ZERO runtime dependency (no `ogl`/three). A fan of soft volumetric beams streams from an origin corner and drifts over time; meant to be screen-blended over a dark surface (the HeroBanner violet field). SSR-safe (all GL work runs in an effect), reduced-motion aware (freezes on a still frame), and degrades gracefully: if the context can't be created it renders nothing, so the host surface stands on its own. Colours are token-driven: pass any CSS colour (including `var(--tesseract-*)`) and it is resolved to RGB in the component's themed context at mount.",
+      "props": [
+        {
+          "name": "color1",
+          "default": "\"var(--tesseract-violet-200)\""
+        },
+        {
+          "name": "color2",
+          "default": "\"var(--tesseract-blue-200)\""
+        },
+        {
+          "name": "origin",
+          "default": "[-0.04, -0.04]"
+        },
+        {
+          "name": "direction",
+          "default": "[1.0, 0.6]"
+        },
+        {
+          "name": "spread",
+          "default": "1.35"
+        },
+        {
+          "name": "length",
+          "default": "2.1"
+        },
+        {
+          "name": "fade",
+          "default": "1.15"
+        },
+        {
+          "name": "noise",
+          "default": "0.08"
+        },
+        {
+          "name": "distortion",
+          "default": "0.05"
+        },
+        {
+          "name": "intensity",
+          "default": "0.36"
+        },
+        {
+          "name": "speed",
+          "default": "0.35"
+        },
+        {
+          "name": "blur",
+          "default": "16"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [],
+      "sourcePath": "src/components/atoms/LightRays/LightRays.jsx",
+      "storiesPath": null
+    },
+    {
       "name": "LoadingIndicator",
       "dir": "LoadingIndicator",
       "layer": "atoms",
@@ -1592,7 +1664,7 @@
       ],
       "importFrom": "@/src/components/atoms",
       "importExample": "import { Logo } from \"@/src/components/atoms\";",
-      "description": "Logo — the Tatva brand marks. Renders the shared SVGs (served from /public/brand) as CSS masks so the same artwork can be recoloured per surface. Two SEPARATE marks (never combined into one lockup): variant \"wordmark\" — the full brand logo (symbol + word)          default variant \"symbol\"   — the monochrome symbol on its own Two brand wordmarks (the symbol is shared): brand \"practice\" — TatvaPractice                                  default brand \"care\"     — TatvaCare",
+      "description": "Logo — the Tatva brand marks. SELF-CONTAINED: the brand artwork lives beside this component as real SVG files in ./assets and is bundled in (imported below), so the atom needs no /public hosting. Each mark is painted as a CSS mask so the same artwork recolours per surface. Two SEPARATE marks (never combined into one lockup): variant \"wordmark\" — the full brand logo (symbol + word)          default variant \"symbol\"   — the monochrome symbol on its own Two brand wordmarks (the symbol is shared): brand \"practice\" — TatvaPractice                                  default brand \"care\"     — TatvaCare",
       "props": [
         {
           "name": "variant",
@@ -1653,9 +1725,9 @@
         },
         {
           "name": "basePath",
-          "default": "\"/brand\"",
+          "default": "''",
           "control": "text",
-          "description": "Prefix for the brand SVG asset paths (CDN / alt root)."
+          "description": "Optional CDN / alt-root override — blank uses the bundled brand SVGs (self-contained)."
         },
         {
           "name": "title",
@@ -4428,7 +4500,7 @@
         },
         {
           "name": "backIconVariant",
-          "default": "\"linear\"",
+          "default": "\"outline\"",
           "allowedValues": [
             "linear",
             "bulk",
@@ -4466,19 +4538,19 @@
         },
         {
           "name": "title",
-          "default": "'Welcome Dr. Sheela BR!'",
+          "default": "\"Nursing\"",
           "control": "text",
           "description": "Leading title (string or node)"
         },
         {
           "name": "subtitle",
-          "default": "'Your Appointments'",
+          "default": "\"\"",
           "control": "text",
           "description": "Subtext under the title"
         },
         {
           "name": "leading",
-          "default": "'logo'",
+          "default": "\"title\"",
           "description": "Custom left content (escape hatch)"
         },
         {
@@ -4630,9 +4702,7 @@
           "default": "DEFAULT_TONE",
           "allowedValues": [
             "violet",
-            "blue",
-            "slate",
-            "dark"
+            "blue"
           ],
           "control": "inline-radio",
           "description": "Gradient tone (token-only); violet = default look"
@@ -4697,12 +4767,12 @@
         },
         {
           "name": "backIcon",
-          "default": "\"arrow-left\"",
+          "default": "\"arrow-left3\"",
           "control": "text"
         },
         {
           "name": "backIconVariant",
-          "default": "\"linear\"",
+          "default": "\"outline\"",
           "allowedValues": [
             "linear",
             "bulk",
@@ -4714,12 +4784,26 @@
           "control": "select"
         },
         {
+          "name": "backIconCorner",
+          "default": "\"straight\"",
+          "allowedValues": [
+            "rounded",
+            "straight"
+          ],
+          "control": "inline-radio"
+        },
+        {
           "name": "onBack",
           "description": "Fires when the back button is clicked"
         },
         {
           "name": "actions",
           "storyHidden": true
+        },
+        {
+          "name": "rays",
+          "default": "true",
+          "control": "boolean"
         },
         {
           "name": "pattern",
@@ -4894,6 +4978,7 @@
         "TitleSizes",
         "BottomRadius",
         "Tones",
+        "PrimaryBlue",
         "EyebrowAndAlign",
         "FullFeatured"
       ],
@@ -5131,7 +5216,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal\"",
+          "default": "\"search:search-2\"",
           "control": "text"
         },
         {
@@ -5334,7 +5419,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal\"",
+          "default": "\"search:search-2\"",
           "control": "text",
           "description": "Icon shown inside the search input (visible in expanded mode with search enabled)",
           "storyHidden": true
@@ -5741,7 +5826,7 @@
         },
         {
           "name": "searchIcon",
-          "default": "\"search-normal\"",
+          "default": "\"search:search-2\"",
           "control": "text",
           "description": "Icon shown inside the search input"
         },
@@ -6259,6 +6344,993 @@
       ],
       "sourcePath": "src/components/molecules/Tooltip/Tooltip.jsx",
       "storiesPath": "src/components/molecules/Tooltip/Tooltip.stories.jsx"
+    },
+    {
+      "name": "BarChart",
+      "dir": "BarChart",
+      "layer": "charts",
+      "exports": [
+        "BarChart"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { BarChart } from \"@/src/components/charts\";",
+      "description": "BarChart — categorical comparison. Zero-dependency. Deeply configurable; defaults preserve the standard look. Data:       data, xKey, series (string | {key,label?,color?})[] Layout:     height, width, margin, stacked, horizontal Bars:       barRadius, barPadding (0..0.9), groupPadding, barOpacity, dimOnHover Value axis: yMin, yMax, yTickCount, valueFormat, showValueAxis, valueAxisLabel Category:   showCategoryAxis, categoryAxisLabel Grid/legend/tooltip: showGrid, gridStyle, showLegend, legendPosition, legendAlign, showTooltip, valueLabels, showToolbar Misc:       colors[], emptyText",
+      "props": [
+        {
+          "name": "data",
+          "default": "[]"
+        },
+        {
+          "name": "xKey",
+          "default": "\"x\""
+        },
+        {
+          "name": "series",
+          "default": "[]"
+        },
+        {
+          "name": "height",
+          "default": "280",
+          "control": "range"
+        },
+        {
+          "name": "width"
+        },
+        {
+          "name": "margin"
+        },
+        {
+          "name": "stacked",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "horizontal",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "barRadius",
+          "default": "3",
+          "control": "range"
+        },
+        {
+          "name": "barPadding",
+          "default": "0.3",
+          "control": "range"
+        },
+        {
+          "name": "groupPadding",
+          "default": "0.18",
+          "control": "range"
+        },
+        {
+          "name": "barOpacity",
+          "default": "1",
+          "control": "range"
+        },
+        {
+          "name": "dimOnHover",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "valueLabels",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "yMin",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "yMax",
+          "default": "undefined",
+          "control": "number"
+        },
+        {
+          "name": "yTickCount",
+          "default": "5",
+          "control": "range"
+        },
+        {
+          "name": "valueFormat",
+          "default": "formatCompact"
+        },
+        {
+          "name": "showValueAxis",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "valueAxisLabel",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "showCategoryAxis",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "categoryAxisLabel",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "showGrid",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "gridStyle",
+          "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "dashed"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showLegend",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "legendPosition",
+          "default": "\"bottom\"",
+          "allowedValues": [
+            "top",
+            "bottom"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "legendAlign",
+          "default": "\"start\"",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showTooltip",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showToolbar",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "colors"
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No data\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Grouped",
+        "Stacked",
+        "Horizontal"
+      ],
+      "sourcePath": "src/components/charts/BarChart/BarChart.jsx",
+      "storiesPath": "src/components/charts/BarChart/BarChart.stories.jsx"
+    },
+    {
+      "name": "DonutChart",
+      "dir": "DonutChart",
+      "layer": "charts",
+      "exports": [
+        "DonutChart",
+        "PieChart"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { DonutChart, PieChart } from \"@/src/components/charts\";",
+      "description": "DonutChart — part-to-whole composition. Zero-dependency (own arc geometry). Deeply configurable; defaults preserve the standard donut look. Data:     data [{ label, value, color? }] Ring:     height/size, innerRadius (0→pie), padAngle (deg gap), startAngle (deg), sort (\"none\"|\"desc\"|\"asc\"), sliceStroke, sliceStrokeColor, hoverExpand Center:   showCenter, centerLabel, centerValueFormat Legend:   legend (\"right\"|\"bottom\"|\"none\"), showPercent, showValue Other:    showTooltip, colors[], valueFormat, emptyText",
+      "props": [
+        {
+          "name": "data",
+          "default": "[]"
+        },
+        {
+          "name": "height",
+          "default": "240",
+          "control": "range"
+        },
+        {
+          "name": "size"
+        },
+        {
+          "name": "innerRadius",
+          "default": "0.62",
+          "control": "range"
+        },
+        {
+          "name": "padAngle",
+          "default": "0",
+          "control": "range"
+        },
+        {
+          "name": "startAngle",
+          "default": "0",
+          "control": "range"
+        },
+        {
+          "name": "sort",
+          "default": "\"none\"",
+          "allowedValues": [
+            "none",
+            "desc",
+            "asc"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "sliceStroke",
+          "default": "2",
+          "control": "range"
+        },
+        {
+          "name": "sliceStrokeColor",
+          "default": "\"var(--tesseract-bg-surface)\""
+        },
+        {
+          "name": "hoverExpand",
+          "default": "4",
+          "control": "range"
+        },
+        {
+          "name": "centerLabel",
+          "default": "'Collections'",
+          "control": "text"
+        },
+        {
+          "name": "centerValueFormat"
+        },
+        {
+          "name": "showCenter",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "legend",
+          "default": "\"right\"",
+          "allowedValues": [
+            "right",
+            "bottom",
+            "none"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showPercent",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showValue",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showTooltip",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "colors"
+        },
+        {
+          "name": "valueFormat",
+          "default": "formatCompact"
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No data\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Donut",
+        "GappedSorted",
+        "Pie"
+      ],
+      "sourcePath": "src/components/charts/DonutChart/DonutChart.jsx",
+      "storiesPath": "src/components/charts/DonutChart/DonutChart.stories.jsx"
+    },
+    {
+      "name": "GaugeChart",
+      "dir": "GaugeChart",
+      "layer": "charts",
+      "exports": [
+        "GaugeChart"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { GaugeChart } from \"@/src/components/charts\";",
+      "description": "GaugeChart — a single value against a range (KPI vs target). Zero-dependency (own arc geometry). A rounded arc with a neutral track, a value arc coloured by optional thresholds, a big centre readout, and range labels. Value:   value, min (0), max (100), valueFormat, unit, label, showValue, showRange Arc:     height, arcDegrees (sweep), thickness, rounded Colour:  color, trackColor, segments ([{ upTo, color }] threshold colouring)",
+      "props": [
+        {
+          "name": "value",
+          "default": "0",
+          "control": "range"
+        },
+        {
+          "name": "min",
+          "default": "0",
+          "control": "number"
+        },
+        {
+          "name": "max",
+          "default": "100",
+          "control": "number"
+        },
+        {
+          "name": "height",
+          "default": "180",
+          "control": "range"
+        },
+        {
+          "name": "arcDegrees",
+          "default": "240",
+          "control": "range"
+        },
+        {
+          "name": "thickness",
+          "default": "undefined",
+          "control": "range"
+        },
+        {
+          "name": "rounded",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "color",
+          "default": "\"var(--tesseract-blue-500)\"",
+          "control": "text"
+        },
+        {
+          "name": "trackColor",
+          "default": "\"var(--tesseract-slate-100)\"",
+          "control": "text"
+        },
+        {
+          "name": "segments"
+        },
+        {
+          "name": "label",
+          "default": "'Bed occupancy'",
+          "control": "text"
+        },
+        {
+          "name": "unit",
+          "default": "\"\"",
+          "control": "text"
+        },
+        {
+          "name": "valueFormat",
+          "default": "(v) => formatCompact(v)"
+        },
+        {
+          "name": "showValue",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showRange",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Thresholds",
+        "Row"
+      ],
+      "sourcePath": "src/components/charts/GaugeChart/GaugeChart.jsx",
+      "storiesPath": "src/components/charts/GaugeChart/GaugeChart.stories.jsx"
+    },
+    {
+      "name": "LineChart",
+      "dir": "LineChart",
+      "layer": "charts",
+      "exports": [
+        "LineChart"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { LineChart } from \"@/src/components/charts\";",
+      "description": "LineChart — multi-series time/trend chart. Zero-dependency (pure SVG + own scales/curves). Deeply configurable; defaults preserve the standard look. Data:        data, xKey, series (string | {key,label?,color?})[] Size:        height, margin ({top,right,bottom,left} partial), width (fixed) Line:        curve (\"smooth\"|\"linear\"|\"step\"), strokeWidth, area, areaOpacity, markers, markerSize Value axis:  yMin, yMax, yTickCount, yFormat, showYAxis, yAxisLabel Category axis: xFormat, showXAxis, xAxisLabel, xTickCount Grid:        showGrid, gridStyle (\"solid\"|\"dashed\"), showVerticalGrid Legend:      showLegend, legendPosition (\"top\"|\"bottom\"), legendAlign Interaction: showTooltip, showCrosshair, zoomable, showToolbar Misc:        colors[], emptyText",
+      "props": [
+        {
+          "name": "data",
+          "default": "[]"
+        },
+        {
+          "name": "xKey",
+          "default": "\"x\""
+        },
+        {
+          "name": "series",
+          "default": "[]"
+        },
+        {
+          "name": "height",
+          "default": "260",
+          "control": "range"
+        },
+        {
+          "name": "width"
+        },
+        {
+          "name": "margin"
+        },
+        {
+          "name": "curve",
+          "default": "\"smooth\"",
+          "allowedValues": [
+            "smooth",
+            "linear",
+            "step"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "strokeWidth",
+          "default": "2",
+          "control": "range"
+        },
+        {
+          "name": "area",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "areaOpacity",
+          "default": "0.14",
+          "control": "range"
+        },
+        {
+          "name": "markers",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "markerSize",
+          "default": "2.5",
+          "control": "range"
+        },
+        {
+          "name": "yMin",
+          "default": "undefined",
+          "control": "number"
+        },
+        {
+          "name": "yMax",
+          "default": "undefined",
+          "control": "number"
+        },
+        {
+          "name": "yTickCount",
+          "default": "5",
+          "control": "range"
+        },
+        {
+          "name": "yFormat",
+          "default": "formatCompact"
+        },
+        {
+          "name": "showYAxis",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "yAxisLabel",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "xFormat",
+          "default": "(v) => v"
+        },
+        {
+          "name": "showXAxis",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "xAxisLabel",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "xTickCount",
+          "default": "6",
+          "control": "range"
+        },
+        {
+          "name": "showGrid",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "gridStyle",
+          "default": "\"solid\"",
+          "allowedValues": [
+            "solid",
+            "dashed"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showVerticalGrid",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "showLegend",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "legendPosition",
+          "default": "\"bottom\"",
+          "allowedValues": [
+            "top",
+            "bottom"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "legendAlign",
+          "default": "\"start\"",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showTooltip",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showCrosshair",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "zoomable",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "showToolbar",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "colors"
+        },
+        {
+          "name": "emptyText",
+          "default": "\"No data\""
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "MarkersStep",
+        "MoneyIndian",
+        "ZoomAndPan"
+      ],
+      "sourcePath": "src/components/charts/LineChart/LineChart.jsx",
+      "storiesPath": "src/components/charts/LineChart/LineChart.stories.jsx"
+    },
+    {
+      "name": "RadarChart",
+      "dir": "RadarChart",
+      "layer": "charts",
+      "exports": [
+        "RadarChart"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { RadarChart } from \"@/src/components/charts\";",
+      "description": "RadarChart — multi-variable comparison across 3+ axes. Zero-dependency (pure SVG + own polar geometry). One polygon per series over a shared set of axes; grid rings, axis labels, hover tooltip per axis, legend toggle. Data:   data (one row per axis) + axisKey; series (string | {key,label?,color?})[] Scale:  max (auto), levels (grid rings) Shape:  fillOpacity, strokeWidth, dot Chrome: showGrid, showAxisLabels, showLegend, showTooltip, legendAlign Misc:   height (square), colors[], valueFormat",
+      "props": [
+        {
+          "name": "data",
+          "default": "[]"
+        },
+        {
+          "name": "axisKey",
+          "default": "\"axis\""
+        },
+        {
+          "name": "series",
+          "default": "[]"
+        },
+        {
+          "name": "height",
+          "default": "300",
+          "control": "range"
+        },
+        {
+          "name": "max",
+          "default": "100",
+          "control": "number"
+        },
+        {
+          "name": "levels",
+          "default": "4",
+          "control": "range"
+        },
+        {
+          "name": "fillOpacity",
+          "default": "0.15",
+          "control": "range"
+        },
+        {
+          "name": "strokeWidth",
+          "default": "2",
+          "control": "range"
+        },
+        {
+          "name": "dot",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showGrid",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showAxisLabels",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showLegend",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "showTooltip",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "legendAlign",
+          "default": "\"center\"",
+          "allowedValues": [
+            "start",
+            "center",
+            "end"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "colors"
+        },
+        {
+          "name": "valueFormat",
+          "default": "formatCompact"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "SingleSeries"
+      ],
+      "sourcePath": "src/components/charts/RadarChart/RadarChart.jsx",
+      "storiesPath": "src/components/charts/RadarChart/RadarChart.stories.jsx"
+    },
+    {
+      "name": "Sparkline",
+      "dir": "Sparkline",
+      "layer": "charts",
+      "exports": [
+        "Sparkline"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { Sparkline } from \"@/src/components/charts\";",
+      "description": "Sparkline — a tiny, axis-less trend line for inline use. Zero-dependency. Data:   data (numbers | objects), valueKey Size:   width, height Line:   color, strokeWidth, curve (\"smooth\"|\"linear\"|\"step\") Fill:   area, fillOpacity Dots:   showLastDot, markers (all points), dotColor, dotRadius Domain: min, max (override auto-fit)",
+      "props": [
+        {
+          "name": "data",
+          "default": "[]"
+        },
+        {
+          "name": "valueKey"
+        },
+        {
+          "name": "width",
+          "default": "96",
+          "control": "range"
+        },
+        {
+          "name": "height",
+          "default": "28",
+          "control": "range"
+        },
+        {
+          "name": "color",
+          "default": "seriesColor(0)",
+          "control": "text"
+        },
+        {
+          "name": "strokeWidth",
+          "default": "1.5",
+          "control": "range"
+        },
+        {
+          "name": "curve",
+          "default": "\"smooth\"",
+          "allowedValues": [
+            "smooth",
+            "linear",
+            "step"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "area",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "fillOpacity",
+          "default": "0.15",
+          "control": "range"
+        },
+        {
+          "name": "showLastDot",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "markers",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "dotColor",
+          "default": "''",
+          "control": "text"
+        },
+        {
+          "name": "dotRadius",
+          "default": "undefined",
+          "control": "range"
+        },
+        {
+          "name": "min",
+          "default": "undefined",
+          "control": "number"
+        },
+        {
+          "name": "max",
+          "default": "undefined",
+          "control": "number"
+        },
+        {
+          "name": "className"
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Markers",
+        "InlineWithValue"
+      ],
+      "sourcePath": "src/components/charts/Sparkline/Sparkline.jsx",
+      "storiesPath": "src/components/charts/Sparkline/Sparkline.stories.jsx"
+    },
+    {
+      "name": "StatCard",
+      "dir": "StatCard",
+      "layer": "charts",
+      "exports": [
+        "StatCard"
+      ],
+      "importFrom": "@/src/components/charts",
+      "importExample": "import { StatCard } from \"@/src/components/charts\";",
+      "description": "StatCard — a KPI tile. Zero-dependency. Deeply configurable. Content:  label, value, format, delta, deltaSuffix, footer, icon Delta:    invertDelta (down is good), trend override (\"up\"|\"down\"|\"flat\") Spark:    spark, sparkColor, sparkArea, sparkCurve, showSparkline, sparkPosition (\"bottom\"|\"side\"|\"none\") Look:     variant (\"surface\"|\"soft\"|\"outline\"), size (\"sm\"|\"md\"), align (\"left\"|\"center\"), bordered",
+      "props": [
+        {
+          "name": "label",
+          "default": "'Appointments today'",
+          "control": "text"
+        },
+        {
+          "name": "value",
+          "default": "128",
+          "control": "text"
+        },
+        {
+          "name": "format",
+          "default": "(v) => (typeof v === \"number\" ? formatCompact(v) : v)"
+        },
+        {
+          "name": "delta",
+          "default": "12.5",
+          "control": "number"
+        },
+        {
+          "name": "deltaSuffix",
+          "default": "\"%\"",
+          "control": "text"
+        },
+        {
+          "name": "invertDelta",
+          "default": "false",
+          "control": "boolean"
+        },
+        {
+          "name": "trend",
+          "default": "undefined",
+          "allowedValues": [
+            "up",
+            "down",
+            "flat"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "spark"
+        },
+        {
+          "name": "sparkColor",
+          "default": "seriesColor(0)",
+          "control": "text"
+        },
+        {
+          "name": "sparkArea",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "sparkCurve",
+          "default": "\"smooth\"",
+          "allowedValues": [
+            "smooth",
+            "linear",
+            "step"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "showSparkline",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "sparkPosition",
+          "default": "\"bottom\"",
+          "allowedValues": [
+            "bottom",
+            "side",
+            "none"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "icon"
+        },
+        {
+          "name": "iconPosition",
+          "default": "\"left\"",
+          "allowedValues": [
+            "left",
+            "right"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "footer",
+          "default": "'vs. last week'",
+          "control": "text"
+        },
+        {
+          "name": "deltaPlacement",
+          "default": "\"header\"",
+          "allowedValues": [
+            "header",
+            "below"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "variant",
+          "default": "\"surface\"",
+          "allowedValues": [
+            "surface",
+            "soft",
+            "outline"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "size",
+          "default": "\"md\"",
+          "allowedValues": [
+            "sm",
+            "md"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "align",
+          "default": "\"left\"",
+          "allowedValues": [
+            "left",
+            "center"
+          ],
+          "control": "inline-radio"
+        },
+        {
+          "name": "bordered",
+          "default": "true",
+          "control": "boolean"
+        },
+        {
+          "name": "className",
+          "default": "\"\""
+        },
+        {
+          "name": "style"
+        }
+      ],
+      "stories": [
+        "Playground",
+        "Dashboard",
+        "KeyMetricsRow",
+        "Variants"
+      ],
+      "sourcePath": "src/components/charts/StatCard/StatCard.jsx",
+      "storiesPath": "src/components/charts/StatCard/StatCard.stories.jsx"
     }
   ],
   "tokenFamilies": {
