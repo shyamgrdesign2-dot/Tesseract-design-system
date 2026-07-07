@@ -44,6 +44,13 @@ const gitClean = (paths) => {
 const manifest = () => JSON.parse(read("mcp/manifest/component-manifest.json"));
 const components = () => { const m = manifest(); const c = m.components || m; return Array.isArray(c) ? c : Object.values(c); };
 
+// The MCP is a SEPARATE package (its own mcp/node_modules). Building/smoke-testing it
+// needs those deps — fail fast with a clear fix if they're missing.
+if (!existsSync(join(root, "mcp/node_modules/@modelcontextprotocol"))) {
+  console.error("\n✗ preflight: MCP deps missing.\n  run: npm --prefix mcp ci   (then re-run `npm run preflight`)\n");
+  process.exit(1);
+}
+
 // 1 — MCP manifest + bundles are freshly built and committed.
 check("MCP artifacts fresh (manifest + dist bundles)", () => {
   run("npm run build:mcp");

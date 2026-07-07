@@ -55,6 +55,7 @@ Each failure prints the exact fix command.
 
 ## Fresh clone
 ```bash
-npm ci
+npm ci                # root deps
+npm --prefix mcp ci   # the MCP is a separate package (needed by the preflight gate)
 npm run setup:hooks   # points git at .githooks so the pre-push gate is active
 ```

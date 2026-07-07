@@ -25,6 +25,8 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Install MCP deps (separate package under mcp/)
+        run: npm --prefix mcp ci || npm --prefix mcp install
       - name: Preflight checklist
         run: npm run preflight
 
