@@ -141,6 +141,14 @@ export function TesseractThemeProvider({
   tokens,
   vars,
   as: Tag = "div",
+  // rootTheme (default true) — the outermost provider "owns the page": it stamps
+  // the theme (data-tp-theme + color-scheme) onto <html> so base typography and
+  // portals inherit it. This is what a PURE-Tesseract app wants (TatvaPractice).
+  // Set rootTheme={false} when EMBEDDING Tesseract inside a non-Tesseract app
+  // (Ant Design / Material / etc.): the CSS variables are still exposed on <html>
+  // so portals (Dropdown/Tooltip/Dialog menus) resolve tokens, but Tesseract will
+  // NOT apply its base font/colour or color-scheme to the host document — no leak.
+  rootTheme = true,
   className,
   style,
   children,
@@ -172,15 +180,24 @@ export function TesseractThemeProvider({
     const prevColorScheme = root.style.colorScheme;
     const keys = Object.keys(cssVars).filter((k) => k.startsWith("--"));
     const prev = {};
+    // Always expose the CSS variables on <html> — portals to document.body resolve
+    // their tokens (and dark values) from here, whether or not we "own" the page.
     keys.forEach((k) => { prev[k] = root.style.getPropertyValue(k); root.style.setProperty(k, cssVars[k]); });
-    root.setAttribute("data-tp-theme", resolved);
-    root.style.colorScheme = resolved === "dark" ? "dark" : "light";
+    // Only stamp the theme attribute + color-scheme onto the host root when we own
+    // the page (rootTheme). Embedded mode skips this so the host's base typography
+    // and native controls are untouched.
+    if (rootTheme) {
+      root.setAttribute("data-tp-theme", resolved);
+      root.style.colorScheme = resolved === "dark" ? "dark" : "light";
+    }
     return () => {
       keys.forEach((k) => { if (prev[k]) root.style.setProperty(k, prev[k]); else root.style.removeProperty(k); });
-      if (prevAttr) root.setAttribute("data-tp-theme", prevAttr); else root.removeAttribute("data-tp-theme");
-      root.style.colorScheme = prevColorScheme;
+      if (rootTheme) {
+        if (prevAttr) root.setAttribute("data-tp-theme", prevAttr); else root.removeAttribute("data-tp-theme");
+        root.style.colorScheme = prevColorScheme;
+      }
     };
-  }, [isRoot, resolved, cssVars]);
+  }, [isRoot, resolved, cssVars, rootTheme]);
 
   const ctx = React.useMemo(
     () => ({ theme, colorScheme: resolved, setColorScheme: setOverride, breakpoint, __provided: true }),

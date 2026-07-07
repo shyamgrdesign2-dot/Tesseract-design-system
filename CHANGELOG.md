@@ -4,6 +4,24 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.0.6]
+
+### Changed
+- **No source maps in the published package** (`sourcemap:false`). Removes shipped
+  `sourcesContent` (source exposure) and shrinks the tarball ~884KB → ~326KB. No
+  runtime/behaviour change.
+
+### Added
+- **`TesseractThemeProvider` `rootTheme` prop** (default `true` — behaviour unchanged;
+  pure-Tesseract apps are unaffected). Set `rootTheme={false}` when **embedding
+  Tesseract inside a non-Tesseract app** (Ant Design / Material / …): the CSS variables
+  still land on `<html>` so portals (Dropdown/Tooltip/Dialog) resolve tokens + dark
+  values, but Tesseract no longer applies its base typography or `color-scheme` to the
+  host document — no style leak into the host's own screens.
+- **`docs/ADOPTION.md`** — contained, gradual adoption in a mixed stack: install from
+  the registry, use `rootTheme={false}`, target the stable `data-*` contract (not hashed
+  CSS-module classes), set an env icon base.
+
 ## [1.0.5]
 
 ### Added
