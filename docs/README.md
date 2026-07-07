@@ -8,6 +8,7 @@ hosted MCP) that builds screens with the real components.
 - **[../STARTER.md](../STARTER.md)** — set up the three pieces: the MCP, the skill, the package.
 - **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh project: get a token, install, render a component.
 - **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the **hosted** MCP to Claude Code / Cursor / Claude Desktop.
+- **[SESSION-BRIEF.md](./SESSION-BRIEF.md)** — paste-in context brief that tells any Claude/Cursor session the current Tesseract reality + how to connect (read-only, no changes).
 - **[MIGRATE-TO-HOSTED-MCP.md](./MIGRATE-TO-HOSTED-MCP.md)** — paste-in task to sync any project to the latest Tesseract: hosted MCP, current plugin, and auto-upgrade the component package.
 - **[CATALOG.md](./CATALOG.md)** — every component, grouped, each linking its usage doc.
 
