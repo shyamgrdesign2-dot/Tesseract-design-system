@@ -31,9 +31,18 @@ claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp
   --header "Authorization: Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54"
 ```
 
-## Claude Desktop
-Settings → **Connectors** → add a custom **HTTP** connector: the URL above, with a header
-`Authorization: Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54`.
+## Claude web & Desktop — Connectors (custom connector)
+The Connectors UI authenticates over **OAuth**, and the server now supports it with
+**dynamic client registration** — so you paste **no** client ID or secret.
+
+1. Settings → **Connectors** → **Add custom connector**.
+2. **Name:** `tesseract` · **Remote MCP server URL:** `https://tesseract.tatvapractice.in/mcp`
+3. Leave **OAuth Client ID** and **OAuth Client Secret** **blank** (Claude self-registers).
+4. Click through — a **Tesseract consent page** opens; paste the **access token**
+   (the bearer token below) once and authorize. Done.
+
+> The consent page asks for the shared token — that's the sign-in. It's the same token
+> used everywhere else: `c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54`.
 
 ---
 
@@ -62,9 +71,8 @@ On first use, Claude Code asks to **approve** the server (a one-time trust promp
 **Scopes:** `--scope local` (just you, this project) · `--scope project` (committed
 `.mcp.json`, whole team + cloud ← use this) · `--scope user` (just you, all your projects).
 
-> Don't add it through the claude.ai **chat Connectors** UI — that path is OAuth-only and
-> fails with "a client id must be provided with a client secret." Use the Claude Code
-> config above (CLI or `.mcp.json`), which sends the bearer header directly.
+> The claude.ai / Desktop **Connectors** UI works too (OAuth + DCR — see the section
+> above; leave client ID/secret blank). For Claude Code, the config above is simpler.
 
 ## Verify
 Ask your agent: **"list the tesseract MCP tools."** You should see 8:
