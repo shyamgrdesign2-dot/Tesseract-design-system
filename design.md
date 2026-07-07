@@ -228,5 +228,5 @@ for labels, UPPERCASE only for small trackers.
   import { Button, DataTable, LineChart } from "@dhspl-tatvacare/tesseract-ui";
   ```
 
-Reference: [CATALOG](docs/CATALOG.md) · [USING-TESSERACT](docs/USING-TESSERACT.md) ·
+Reference: [CATALOG](docs/CATALOG.md) · [STARTER](STARTER.md) ·
 [ICONS](docs/ICONS.md) · [CHANGELOG](CHANGELOG.md).

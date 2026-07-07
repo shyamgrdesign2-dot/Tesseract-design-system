@@ -33,7 +33,7 @@ npm install @dhspl-tatvacare/tesseract-ui react react-dom
 - **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
 - **No-token fallback:** install the prebuilt bundle by git tag —
   `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5"`
-  (gated by git access; no semver ranges). Full detail: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+  (gated by git access; no semver ranges). Full detail: [`STARTER.md`](STARTER.md).
 - **Peers:** `react` / `react-dom` (React 18+).
 
 ---
@@ -206,7 +206,7 @@ claude mcp add tesseract -- node <this-repo>/mcp/src/server.mjs
 
 Then, in Claude Code: *“/tesseract — build me an All Patients list page.”* The
 skill runs the intake, the MCP validates every component/prop/icon, and the output
-is real `tesseract-ui` code. Full runbook: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+is real `tesseract-ui` code. Full runbook: [`STARTER.md`](STARTER.md) · [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
 
 > Maintainers: after changing components, run `npm run build:mcp` to refresh the
 > MCP manifest + bundled server, and commit — that keeps the plugin current.
@@ -246,11 +246,11 @@ via `TesseractThemeProvider`. Icons are 100% CDN (no local SVG assets).
 
 Start at **[`docs/README.md`](docs/README.md)** — the documentation index. Key files:
 
-- [`docs/CATALOG.md`](docs/CATALOG.md) — every component (40), grouped, with one-line
+- [`docs/CATALOG.md`](docs/CATALOG.md) — every component (50), grouped, with one-line
   descriptions and links to per-component usage docs in [`docs/components/`](docs/components).
 - [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md) — the **v1.0 stability contract**
   (SemVer, public-API surface, how consumers stay upgrade-safe). Read before adopting.
-- [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md) — consume the package, the
-  skill, and the MCP in a new project (CLI / cloud).
+- [`STARTER.md`](STARTER.md) — set up the package, the skill, and the hosted MCP
+  in a new project; [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md) for the MCP config.
 - [`docs/ICONS.md`](docs/ICONS.md) — the icon CDN URL structure, families, styles,
   and name aliases.

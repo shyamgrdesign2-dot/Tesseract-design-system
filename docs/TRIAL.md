@@ -146,4 +146,4 @@ the git install doesn't give true semver ranges.
 ## Want the AI page-builder too?
 
 Beyond the components, you can ground Claude in our system so it builds whole pages
-correctly (the `/tesseract` skill + the MCP). See [USING-TESSERACT.md](./USING-TESSERACT.md).
+correctly (the `/tesseract` skill + the MCP). See [../STARTER.md](../STARTER.md) · [CONNECT-MCP.md](./CONNECT-MCP.md).

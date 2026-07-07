@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "tesseract": {
+      "url": "https://tesseract.tatvapractice.in/mcp",
+      "headers": {
+        "Authorization": "Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54"
+      }
+    }
+  }
+}

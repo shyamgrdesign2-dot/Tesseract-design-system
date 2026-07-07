@@ -8,7 +8,7 @@ import { Button, DataTable, Drawer /* … */ } from "@dhspl-tatvacare/tesseract-
 import "@dhspl-tatvacare/tesseract-ui/styles.css"; // once, at app root
 ```
 
-New to the system? Read [USING-TESSERACT.md](./USING-TESSERACT.md) (install + setup) and
+New to the system? Read [../STARTER.md](../STARTER.md) (install + setup) and
 [PREREQUISITE.md](./PREREQUISITE.md) (the v1.0 stability contract) first.
 
 > **One component per job.** Tesseract deliberately ships *one* configurable component per

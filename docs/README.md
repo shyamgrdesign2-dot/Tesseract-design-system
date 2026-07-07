@@ -1,32 +1,35 @@
-# Tesseract UI — documentation (v1.0)
+# Tesseract UI — documentation
 
-The `tesseract-ui` design system: 48 token-driven React components (atoms, molecules,
-charts) for GenX and TatvaPractice.
+The `tesseract-ui` design system: 50 token-driven React components (atoms, molecules,
+charts) for GenX and TatvaPractice — plus an AI layer (the `/tesseract` skill + a
+hosted MCP) that builds screens with the real components.
 
 ## Start here
+- **[../STARTER.md](../STARTER.md)** — set up the three pieces: the MCP, the skill, the package.
+- **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh project: get a token, install, render a component.
+- **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the **hosted** MCP to Claude Code / Cursor / Claude Desktop.
+- **[CATALOG.md](./CATALOG.md)** — every component, grouped, each linking its usage doc.
 
-0. **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh local project: get a token, install from GitHub Packages, render your first component.
-1. **[CATALOG.md](./CATALOG.md)** — every component, grouped, with a one-line description and a link to its usage doc.
-2. **[USING-TESSERACT.md](./USING-TESSERACT.md)** — install the package, the `/tesseract` skill, and the MCP; set up the theme provider; use it in code.
-2b. **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the tesseract MCP to Claude Code, Cursor, or Claude Desktop (copy-paste config + a paste-into-chat setup).
-2c. **[ADOPTION.md](./ADOPTION.md)** — adopting Tesseract into an existing / mixed-stack app (AntD/Material): `rootTheme={false}` containment, the stable `data-*` styling contract, env icon base.
-3. **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API, how to stay upgrade-safe). Read before adopting.
-4. **[ICONS.md](./ICONS.md)** — the icon system (`TPIcon` / `TPLibraryIcon`, families, self-hosting).
-5. **[../design.md](../design.md)** — the design language: foundations (colour, type, spacing, elevation, motion, shape, icons), hard rules, and voice — for agents and humans.
-6. **[UPGRADING.md](./UPGRADING.md)** — how to move between versions (per-version notes + an agent instruction). Full history in [CHANGELOG](../CHANGELOG.md).
-7. **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — access-protecting the deployed Storybook (the client gate was removed; use platform-level protection).
+## Build with it
+- **[../design.md](../design.md)** — the design language: foundations (colour, type, spacing, elevation, motion, shape, icons), hard rules, and voice — for agents and humans.
+- **[ADOPTION.md](./ADOPTION.md)** — adopting into an existing / mixed-stack app (AntD/Material): `rootTheme={false}` containment, the stable `data-*` styling contract, env icon base.
+- **[ICONS.md](./ICONS.md)** — the icon system (`TPIcon` / `TPLibraryIcon`, families, self-hosting).
+- **Per-component docs** — one concise usage doc per component in **[`components/`](./components)** (import, when-to-use, key props, a realistic example, notable variants).
 
-## Per-component docs
+## Stay upgrade-safe
+- **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API).
+- **[UPGRADING.md](./UPGRADING.md)** — moving between versions. Full history: [CHANGELOG](../CHANGELOG.md).
 
-One concise usage doc per component lives in **[`components/`](./components)** — import, when-to-use, key props, a realistic example, and the notable variants.
+## Operate (maintainers)
+- **[DEPLOY-AZURE.md](./DEPLOY-AZURE.md)** — building & deploying the Storybook container (which also co-hosts the MCP).
+- **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — access-protecting the deployed Storybook.
 
-## Quick install (GenX / TatvaPractice)
+## Quick install
 
 ```jsonc
-// package.json — installs the prebuilt bundle from the private repo, gated by repo access
-{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5" } }
+// .npmrc gated by org membership; then:
+{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "^1.0.0" } }
 ```
-
 ```jsx
 // app root, once:
 import "@dhspl-tatvacare/tesseract-ui/styles.css";
@@ -34,9 +37,8 @@ import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
 // then import any component from "@dhspl-tatvacare/tesseract-ui".
 ```
 
-Adopting alongside an existing UI? Importing Tesseract components does not touch your
-current ones — styles are scoped CSS-module classes under `--tesseract-*` tokens, so
-there's no global bleed. See USING-TESSERACT.md for the safe-coexistence details.
+Adopting alongside an existing UI? Tesseract's styles are scoped CSS-module classes
+under `--tesseract-*` tokens — no global bleed. See [ADOPTION.md](./ADOPTION.md).
 
 ## Explore interactively
 

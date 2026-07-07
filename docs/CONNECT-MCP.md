@@ -1,161 +1,51 @@
 # Connect the Tesseract MCP
 
-The **tesseract MCP** serves our exact components, props, design tokens, icons,
-the hard rules, and the design language (`design.md`) — with a `validate_usage`
-guardrail — so any AI client builds with *real* Tesseract, not invented props.
+The **tesseract MCP** feeds your AI tool our *exact* components, props, tokens, icons,
+rules, and the design language (`design.md`) — with a `validate_usage` guardrail — so it
+builds with **real** Tesseract, not invented props.
 
-Two ways to connect:
-- **Hosted (recommended)** — a URL, always the latest, no cloning. ⬇︎ use this once the
-  endpoint is live.
-- **Local (stdio)** — the server bundled in the repo; needs the files present (clone or
-  the Claude Code plugin). Covered further down.
+It's **hosted** — connect by URL, always the latest, nothing to clone.
+
+- **URL:** `https://tesseract.tatvapractice.in/mcp`
+- **Auth:** a bearer token. **Ask the DS team for the token** (it's a shared secret — not
+  stored in this repo).
 
 ---
 
-## A · Hosted (remote URL) — recommended
-
-Once deployed, the MCP is at **`https://tesseract.tatvapractice.in/mcp`** (co-hosted with
-the Storybook). Ask the DS team for the **access token** (bearer). Then:
-
-**Cursor** — `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+## Cursor
+`.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
 ```json
 {
   "mcpServers": {
     "tesseract": {
       "url": "https://tesseract.tatvapractice.in/mcp",
-      "headers": { "Authorization": "Bearer <token>" }
+      "headers": { "Authorization": "Bearer <TOKEN>" }
     }
   }
 }
 ```
 
-**Claude Code**:
+## Claude Code
 ```
 claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
-  --header "Authorization: Bearer <token>"
+  --header "Authorization: Bearer <TOKEN>"
 ```
 
-**Claude Desktop** — Settings → Connectors → add a custom (HTTP) connector with the URL
-above and an `Authorization: Bearer <token>` header.
-
-*(If the endpoint is deployed **open** (no token), drop the `headers` / `--header`.)*
-Verify: ask the agent *"list the tesseract MCP tools"* → expect the 8 below.
+## Claude Desktop
+Settings → **Connectors** → add a custom **HTTP** connector: the URL above, with a header
+`Authorization: Bearer <TOKEN>`.
 
 ---
 
-## B · Local (stdio) — bundled in the repo
+## Verify
+Ask your agent: **"list the tesseract MCP tools."** You should see 8:
+`list_components`, `get_component`, `search_components`, `validate_usage`, `get_tokens`,
+`get_icons`, `get_rules`, `get_design`.
 
-The stdio server is **self-contained** (no `npm install`, just Node); it reads local files,
-so you need the repo present (clone it, or on Claude Code the plugin auto-clones it).
-
----
-
-## Before you connect (once)
-
-1. **Repo access** — a GitHub account with access to the **private** repo
-   `DHSPL-Tatvacare/tesseract-design-system`. No access? Ask the dev/ops team
-   (**karthik.jangam@tatvacare.in**).
-2. **Node.js 18+** installed (`node -v`).
-3. **Get the files** — either use the Claude Code plugin (auto-clones, below), or clone:
-   ```bash
-   git clone https://github.com/DHSPL-Tatvacare/tesseract-design-system.git
-   ```
-   Then note the **absolute path** to `…/tesseract-design-system/mcp/dist/server.mjs`.
-
----
-
-## Claude Code — the plugin (recommended, zero config)
-
+## Want it local, or need the `/tesseract` skill?
+Install the Claude Code plugin (ships the page-building **`/tesseract`** skill + a local
+stdio MCP; needs access to the private repo):
 ```
 /plugin marketplace add DHSPL-Tatvacare/tesseract-design-system
 /plugin install tesseract@tesseract
 ```
-
-That clones the repo and wires **both** the `/tesseract` skill and the MCP.
-*(Manual alternative:* `claude mcp add tesseract -- node /ABS/PATH/tesseract-design-system/mcp/dist/server.mjs`.)
-
-## Cursor
-
-Add to **`.cursor/mcp.json`** in the project (or `~/.cursor/mcp.json` for global), then
-reload MCP / restart Cursor:
-
-```json
-{
-  "mcpServers": {
-    "tesseract": {
-      "command": "node",
-      "args": ["/ABS/PATH/tesseract-design-system/mcp/dist/server.mjs"]
-    }
-  }
-}
-```
-
-## Claude Desktop
-
-**Settings → Developer → Edit Config** (`claude_desktop_config.json`), add the same
-block, then restart Claude Desktop:
-
-```json
-{
-  "mcpServers": {
-    "tesseract": {
-      "command": "node",
-      "args": ["/ABS/PATH/tesseract-design-system/mcp/dist/server.mjs"]
-    }
-  }
-}
-```
-
-## Any other MCP client
-
-It's a standard **stdio** server: `command: node`, `args: [<abs path to mcp/dist/server.mjs>]`.
-No env vars or tokens are needed to *run* it (only repo access to *get* it).
-
----
-
-## Verify it's connected
-
-Ask the agent: **"list the tesseract MCP tools."** You should see 8:
-`list_components`, `get_component`, `search_components`, `validate_usage`,
-`get_tokens`, `get_icons`, `get_rules`, `get_design`.
-
-Or: *"use get_component to show me the LineChart props"* → real props come back.
-
----
-
-## Paste-into-chat setup (let the AI do it)
-
-Paste this into your Cursor / Claude chat and it will set the MCP up for you:
-
-```text
-Set up the "tesseract" design-system MCP for me (a local stdio MCP server).
-1. Check Node 18+ is installed (node -v).
-2. Clone the private repo (I have GitHub access) into my home dir:
-   git clone https://github.com/DHSPL-Tatvacare/tesseract-design-system.git ~/tesseract-design-system
-   (No npm install — the server is self-contained.)
-3. Register the MCP as a stdio server named "tesseract" running:
-   node ~/tesseract-design-system/mcp/dist/server.mjs
-   - Cursor: add it to ~/.cursor/mcp.json (or ./.cursor/mcp.json) under "mcpServers".
-   - Claude Code: run  claude mcp add tesseract -- node ~/tesseract-design-system/mcp/dist/server.mjs
-   - Claude Desktop: add it to claude_desktop_config.json under "mcpServers".
-4. Reload MCP / restart the client, then list the MCP tools to confirm — I expect:
-   list_components, get_component, search_components, validate_usage, get_tokens,
-   get_icons, get_rules, get_design.
-If the clone fails with a permission error, tell me — I need access to
-DHSPL-Tatvacare/tesseract-design-system (ask karthik.jangam@tatvacare.in).
-```
-
----
-
-## Keeping it fresh
-
-The server reads the repo's files, so pull the latest to get new components/tokens:
-
-```bash
-git -C /ABS/PATH/tesseract-design-system pull
-```
-
-Claude Code plugin users: re-run `/plugin install tesseract@tesseract` to update.
-
-> Want a **zero-clone hosted endpoint** (a remote HTTP MCP everyone points a URL at,
-> no local files)? That's a separate deploy — ask the DS team and we can stand one up.

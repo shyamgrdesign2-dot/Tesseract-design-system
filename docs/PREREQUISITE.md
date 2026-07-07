@@ -39,4 +39,4 @@ v1.0 is the **first stable, public version**. From here we follow [SemVer](https
 2. Configure via **props and tokens** — don't override hashed `.module.scss` classes.
 3. Pin a minor range (`"@dhspl-tatvacare/tesseract-ui": "^1.0.0"`) and take patches/minors freely; review the CHANGELOG before a major.
 
-See [USING-TESSERACT.md](./USING-TESSERACT.md) to install and start using it without touching your existing components, and [CATALOG.md](./CATALOG.md) for the full component list.
+See [../STARTER.md](../STARTER.md) to install and start using it without touching your existing components, and [CATALOG.md](./CATALOG.md) for the full component list.

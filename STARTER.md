@@ -1,90 +1,67 @@
-# Tesseract Design System — Starter
+# Tesseract — setup
 
-TatvaPractice's React UI library **plus** a Claude skill (`/tesseract`) and an MCP
-that make Claude build our screens with the real components.
+TatvaPractice's React design system: a **component library** plus an **AI layer**
+(the `/tesseract` skill + a hosted MCP) that makes Claude / Cursor build our screens
+with the *real* components — not invented props.
 
-Nothing here is pre-installed in your account — this guide sets it up from scratch.
-You can read it and follow along, or paste the whole file into a **Claude Code**
-chat and ask it to do the steps.
-
----
-
-## Before you start — check access (important)
-
-Everything below lives in a **private** GitHub repo. It only works if:
-
-1. **You have access to the repo** `DHSPL-Tatvacare/tesseract-design-system`.
-   → **No access?** Ask your **dev / operations team** to add your GitHub account
-   to the repo — contact **Karthik Jangam** (karthik.jangam@tatvacare.in). Without
-   access, Step 1 and Step 3 will fail — this is the #1 reason setup doesn't work.
-2. **You're in Claude Code** (desktop app, CLI, or web) — that's where `/plugin`
-   and `/tesseract` exist. A brand-new Claude account/workspace does **not** have
-   the skill or MCP; Step 1 installs them, and you repeat Step 1 in each new
-   workspace where you want them.
-3. **Node.js is available** (already true in Claude Code) — the MCP runs on Node.
+Three independent pieces — set up whichever you need.
 
 ---
 
-## 1 · Install the `/tesseract` skill + MCP
+## Access (read first)
+Everything is **private** to the `DHSPL-Tatvacare` org:
+- the repo `DHSPL-Tatvacare/tesseract-design-system` (skill + MCP),
+- the npm package `@dhspl-tatvacare/tesseract-ui` (GitHub Packages),
+- the hosted-MCP bearer token.
 
-In Claude Code, run:
+No access? Ask dev / ops — **Karthik Jangam** (karthik.jangam@tatvacare.in).
 
+---
+
+## 1 · Point your AI at Tesseract (the MCP)
+The **hosted MCP** feeds your AI tool our exact components, props, tokens, icons, and
+design language, with a `validate_usage` guardrail. Connect by URL — always the
+latest, nothing to clone:
+
+- **URL:** `https://tesseract.tatvapractice.in/mcp`
+- **Auth:** a bearer token — ask the DS team.
+
+Per-tool config (Cursor / Claude Code / Claude Desktop) → **[docs/CONNECT-MCP.md](docs/CONNECT-MCP.md)**.
+
+## 2 · Add the `/tesseract` skill (Claude Code)
+The skill grounds Claude in our brand + EMR page principles + a guided page intake
+(and bundles a local MCP). Install once:
 ```
 /plugin marketplace add DHSPL-Tatvacare/tesseract-design-system
 /plugin install tesseract@tesseract
 ```
+Then start every screen by typing `/tesseract` (or "use the Tesseract design system").
 
-You now have:
-
-- **`/tesseract` skill** — our brand, EMR page principles, and a guided page intake.
-- **tesseract MCP** — ground-truth components, props, tokens, and icons, plus a
-  `validate_usage` guardrail so Claude can't invent props or icon names.
-
-The MCP ships **pre-built inside the plugin** — no `npm install`, no build step.
-
-> If `/plugin marketplace add` errors, you don't have access to the private repo →
-> request it (see "Before you start").
-
-## 2 · Use it — start every screen with `/tesseract`
-
-```
-/tesseract
-```
-
-Type that (or say *"use the Tesseract design system"*) **before** building any
-clinic/EMR page. Claude plans the page with you and builds from real components;
-the MCP checks every component, prop, icon, and token as it goes.
-
-## 3 · Install the component package in your app
-
-The library is a **private** npm package on GitHub Packages (same access as the
-repo). One-time `.npmrc` in your app's root — the token needs `read:packages` scope
-on `DHSPL-Tatvacare`:
-
+## 3 · Install the component package
+Private npm on GitHub Packages. One-time `.npmrc` in your app root (token needs
+`read:packages`):
 ```ini
 @dhspl-tatvacare:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
-
-Then install and use it:
-
 ```bash
 npm install @dhspl-tatvacare/tesseract-ui
 ```
-
 ```jsx
-import "@dhspl-tatvacare/tesseract-ui/styles.css";        // tokens + styles, once
-import { Button, HeroBanner } from "@dhspl-tatvacare/tesseract-ui";
+// app root, once:
+import "@dhspl-tatvacare/tesseract-ui/styles.css";
+import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
+// then import any component:
+import { Button, DataTable, LineChart } from "@dhspl-tatvacare/tesseract-ui";
 ```
+Pin a range (`^1.0.0`) and take patches/minors freely — never a breaking change
+within `1.x` (see [docs/PREREQUISITE.md](docs/PREREQUISITE.md)).
 
-Update later with `npm update @dhspl-tatvacare/tesseract-ui`.
+Want a copy-paste, brand-new-project walkthrough? → **[docs/TRIAL.md](docs/TRIAL.md)**.
 
 ---
 
-**In one line:** get access → `/plugin install` the skill + MCP → `/tesseract`
-before each screen → `npm install` the package in your app.
+**In one line:** connect the MCP by URL → `/plugin install` the skill → `npm install`
+the package.
 
-**Learn the design language:** [`design.md`](design.md) — one clean, agent-and-human
-readable file covering the foundations (colours, type, spacing, elevation, motion,
-shape, icons), the hard rules, and voice. Deeper: [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md)
-· [`docs/CATALOG.md`](docs/CATALOG.md).
+**Learn the design language:** [design.md](design.md) · **every component:** [docs/CATALOG.md](docs/CATALOG.md) · **mixed-stack app:** [docs/ADOPTION.md](docs/ADOPTION.md).

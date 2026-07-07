@@ -53,7 +53,7 @@ Then wrap the app root once in the theme provider so tokens + component override
 import { TesseractThemeProvider } from "@dhspl-tatvacare/tesseract-ui";
 <TesseractThemeProvider colorScheme="light">{/* app */}</TesseractThemeProvider>
 ```
-Install + token setup for that project lives in the repo's `docs/TRIAL.md` / `docs/USING-TESSERACT.md`. If you cannot tell which case you're in, check the project's `package.json` (is `@dhspl-tatvacare/tesseract-ui` a dependency?) and whether `src/components/atoms` exists locally. When unsure, ask the user which install they have.
+Install + token setup for that project lives in the repo's `docs/TRIAL.md` / `STARTER.md`. If you cannot tell which case you're in, check the project's `package.json` (is `@dhspl-tatvacare/tesseract-ui` a dependency?) and whether `src/components/atoms` exists locally. When unsure, ask the user which install they have.
 
 ### Either case
 - Wrap the app once in `TesseractThemeProvider` (theme overrides, `colorScheme`, breakpoints). Re-theme via provider overrides — **never** by editing tokens.
