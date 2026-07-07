@@ -170,12 +170,27 @@ a component:
   props, allowed values, tokens, and icon names from source, with a
   `validate_usage` guardrail.
 
+### The MCP is HOSTED — always the latest
+
+The `tesseract` MCP runs as a **hosted HTTP server** at
+`https://tesseract.tatvapractice.in/mcp`. You connect by URL, never run it locally —
+so when a new Tesseract version ships, the MCP updates itself and every connected
+client sees the new components/props/tokens **automatically**, with nothing to
+re-clone or re-bundle.
+
+**Add it to Claude Code / Cursor** (bearer token in the config):
+```bash
+claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
+  --header "Authorization: Bearer <token>"
+```
+Full per-tool config → [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
+
 ### Install once, use everywhere (plugin — recommended, incl. cloud)
 
 This repo is also a **private Claude Code plugin marketplace** — install it once and
-the `/tesseract` skill **and** the MCP are available in **every** Claude Code session
-(local or cloud), no per-project copying. The MCP is bundled dependency-free
-(`mcp/dist/server.mjs`), so it runs anywhere Node runs.
+the `/tesseract` skill is available in **every** Claude Code session (local or cloud),
+and the plugin **auto-configures the hosted MCP** for you (no local server, no
+per-project copying):
 
 ```bash
 # add this private repo as a marketplace, then install the plugin:
@@ -191,25 +206,13 @@ then `/plugin install tesseract@tesseract`.)
   sessions** — set `GITHUB_TOKEN` (a PAT with repo read) in the environment.
 - Updates: `claude plugin update tesseract@tesseract` (or auto on startup with the token).
 
-### Manual alternatives (no plugin)
-
-**In THIS repo** — open it in Claude Code, type `/tesseract`, and enable the MCP:
-```bash
-claude mcp add tesseract -- node "$(pwd)/mcp/src/server.mjs"
-```
-
-**In ANOTHER project** — copy the skill in and point the MCP at this repo:
-```bash
-cp -R <this-repo>/.claude/skills/tesseract  <your-project>/.claude/skills/tesseract
-claude mcp add tesseract -- node <this-repo>/mcp/src/server.mjs
-```
-
 Then, in Claude Code: *“/tesseract — build me an All Patients list page.”* The
-skill runs the intake, the MCP validates every component/prop/icon, and the output
-is real `tesseract-ui` code. Full runbook: [`STARTER.md`](STARTER.md) · [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
+skill runs the intake, the hosted MCP validates every component/prop/icon, and the
+output is real `tesseract-ui` code. Full runbook: [`STARTER.md`](STARTER.md) ·
+[`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
 
 > Maintainers: after changing components, run `npm run build:mcp` to refresh the
-> MCP manifest + bundled server, and commit — that keeps the plugin current.
+> manifest, then deploy so the hosted MCP serves the update.
 
 ---
 

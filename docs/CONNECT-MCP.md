@@ -42,9 +42,10 @@ Ask your agent: **"list the tesseract MCP tools."** You should see 8:
 `list_components`, `get_component`, `search_components`, `validate_usage`, `get_tokens`,
 `get_icons`, `get_rules`, `get_design`.
 
-## Want it local, or need the `/tesseract` skill?
-Install the Claude Code plugin (ships the page-building **`/tesseract`** skill + a local
-stdio MCP; needs access to the private repo):
+## Want the `/tesseract` page-building skill too?
+Install the Claude Code plugin (needs access to the private repo). It ships the
+**`/tesseract`** skill **and auto-configures this same hosted MCP** — there's no local
+server to run or keep in sync, so a new Tesseract version updates you automatically:
 ```
 /plugin marketplace add DHSPL-Tatvacare/tesseract-design-system
 /plugin install tesseract@tesseract

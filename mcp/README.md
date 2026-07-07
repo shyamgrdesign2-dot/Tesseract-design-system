@@ -9,7 +9,7 @@ It is the machine-readable counterpart to the `/tesseract` skill: the skill teac
 ```
 source of truth                     served by
 src/components/**  ──┐
-src/tesseract-tokens.css ──┤  build-manifest.mjs  ──▶  manifest/component-manifest.json  ──▶  src/server.mjs (MCP, stdio)
+src/tesseract-tokens.css ──┤  build-manifest.mjs  ──▶  manifest/component-manifest.json  ──▶  build-server.mjs ──▶ http-server.mjs (HOSTED, deployed) + server.mjs (stdio, dev)
                      ┘
 ```
 
@@ -28,7 +28,17 @@ The server answers **only** from the manifest. It cannot return a prop or value 
 | `get_rules` | The non-negotiable rules every page must follow. |
 | `get_design` | The full **design language** (`design.md`): colour meanings, typography, spacing, elevation, motion, shape, icons, voice, do/don't. Read to design "in our world" beyond raw prop data. |
 
-## Run
+## How consumers connect — the HOSTED server (only)
+
+Consumers **never run this locally.** The MCP is deployed as a hosted HTTP server at
+`https://tesseract.tatvapractice.in/mcp` (co-hosted in the Storybook container, bundle
+`src/http-server.mjs`). Connect by URL with a bearer token — see
+[`../docs/CONNECT-MCP.md`](../docs/CONNECT-MCP.md). This is deliberate: a hosted server
+**auto-updates** when a new Tesseract version ships, so every client sees the new
+components/props/tokens with nothing to re-clone or re-bundle. A local copy would
+freeze at install time and go stale.
+
+## Run locally (for developing the MCP itself only)
 
 ```bash
 # 1. install (once)
@@ -37,43 +47,17 @@ cd mcp && npm install
 # 2. (re)generate the manifest from source
 npm run build:manifest
 
-# 3a. run for development / smoke test
+# 3. run / smoke test over stdio (dev only — not a consumer path)
 npm start                 # regenerates manifest, then serves over stdio
 node test/smoke.mjs       # end-to-end check of all tools
-
-# 3b. run as a plain stdio server off the committed manifest
-node src/server.mjs
+node src/server.mjs       # plain stdio server off the committed manifest
 ```
 
-## Wire into an MCP client
+The stdio entry (`src/server.mjs`) and the HTTP entry (`src/http-server.mjs`) share one
+tool factory (`src/build-server.mjs`), so the two transports can never drift. Only the
+HTTP entry is deployed; stdio is a local dev/test convenience.
 
-Add to your client's MCP config (Claude Code / Claude Desktop `mcpServers`). Inside the design-system repo, prefer `npm start` so the manifest is always fresh:
-
-```jsonc
-{
-  "mcpServers": {
-    "tesseract": {
-      "command": "npm",
-      "args": ["--prefix", "/absolute/path/to/TP_UI_Storybook/mcp", "start"]
-    }
-  }
-}
-```
-
-For a consuming project that only ships the committed manifest, point straight at the server:
-
-```jsonc
-{
-  "mcpServers": {
-    "tesseract": {
-      "command": "node",
-      "args": ["/absolute/path/to/mcp/src/server.mjs"]
-    }
-  }
-}
-```
-
-> Do not commit secrets in your MCP config. This server needs none.
+> Do not commit secrets in a client MCP config. The hosted token is distributed by the DS team.
 
 ## Anti-hallucination workflow (recommended)
 

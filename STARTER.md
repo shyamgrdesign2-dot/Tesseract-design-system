@@ -29,8 +29,8 @@ latest, nothing to clone:
 Per-tool config (Cursor / Claude Code / Claude Desktop) → **[docs/CONNECT-MCP.md](docs/CONNECT-MCP.md)**.
 
 ## 2 · Add the `/tesseract` skill (Claude Code)
-The skill grounds Claude in our brand + EMR page principles + a guided page intake
-(and bundles a local MCP). Install once:
+The skill grounds Claude in our brand + EMR page principles + a guided page intake,
+and **auto-configures the hosted MCP** for you (no local server). Install once:
 ```
 /plugin marketplace add DHSPL-Tatvacare/tesseract-design-system
 /plugin install tesseract@tesseract

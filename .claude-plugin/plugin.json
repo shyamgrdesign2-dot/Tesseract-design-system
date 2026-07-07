@@ -1,13 +1,14 @@
 {
   "name": "tesseract",
-  "description": "Tesseract design system for Claude: the /tesseract page-building skill (brand, EMR page principles, component catalog, domain intake) plus the tesseract MCP server (exact components, props, tokens, icons + a validate_usage guardrail). The MCP is bundled dependency-free so it runs anywhere, including cloud sessions.",
+  "description": "Tesseract design system for Claude: the /tesseract page-building skill (brand, EMR page principles, component catalog, domain intake) plus the tesseract MCP (exact components, props, tokens, icons + a validate_usage guardrail). The MCP is the HOSTED server — always the latest, auto-updated when a new Tesseract version ships; no local copy to go stale.",
   "author": { "name": "TatvaCare", "email": "shyam.gr@tatvacare.in" },
   "homepage": "https://github.com/DHSPL-Tatvacare/tesseract-design-system",
   "skills": "./.claude/skills/",
   "mcpServers": {
     "tesseract": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/dist/server.mjs"]
+      "type": "http",
+      "url": "https://tesseract.tatvapractice.in/mcp",
+      "headers": { "Authorization": "Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54" }
     }
   }
 }
