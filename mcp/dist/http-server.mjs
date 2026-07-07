@@ -22470,7 +22470,7 @@ function createServer() {
 }
 
 // src/http-server.mjs
-var PORT = Number(process.env.PORT || 8787);
+var PORT = Number(process.env.MCP_PORT || 8787);
 var MCP_PATH = process.env.MCP_PATH || "/mcp";
 var TOKEN = process.env.TESSERACT_MCP_TOKEN || "";
 var json = (res, code, obj) => {

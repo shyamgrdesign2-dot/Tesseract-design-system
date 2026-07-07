@@ -1,9 +1,9 @@
 #!/bin/sh
-# Co-hosted Tesseract MCP starter.
+# Co-host entrypoint.
 #
-# The nginx-unprivileged base image sources the scripts in /docker-entrypoint.d/
-# before launching nginx in the foreground. We start the Streamable-HTTP MCP in
-# the BACKGROUND here; nginx (the container's main process) then reverse-proxies
-# /mcp → 127.0.0.1:$PORT. If Node ever exits, nginx keeps serving the static
-# Storybook (a container restart brings the MCP back).
+# Start the Streamable-HTTP MCP in the BACKGROUND, then hand off to the base
+# nginx-unprivileged image's own entrypoint (which does its non-root setup and
+# execs nginx) as PID 1. nginx therefore always runs — a Node crash only affects
+# /mcp, never the static Storybook or the container's health.
 node /app/mcp/dist/http-server.mjs &
+exec /docker-entrypoint.sh nginx -g 'daemon off;'

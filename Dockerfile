@@ -33,6 +33,9 @@ FROM nginxinc/nginx-unprivileged:stable-alpine AS runtime
 # both run non-root in one container; nginx reverse-proxies /mcp → the MCP on :8787.
 USER root
 RUN apk add --no-cache nodejs
+# Explicit entrypoint: start Node, then exec the base nginx entrypoint as PID 1.
+COPY mcp/docker-start-mcp.sh /start.sh
+RUN chmod +x /start.sh
 USER 101
 
 # Static-site server config (gzip, asset caching, SPA fallback) + /mcp proxy on :8080.
@@ -48,13 +51,10 @@ COPY mcp/dist/http-server.mjs /app/mcp/dist/http-server.mjs
 COPY mcp/manifest             /app/mcp/manifest
 COPY design.md                /app/design.md
 
-# Start the MCP in the background before nginx. The base image's entrypoint runs
-# /docker-entrypoint.d/*.sh (this script backgrounds Node) then execs nginx.
-COPY mcp/docker-start-mcp.sh /docker-entrypoint.d/40-tesseract-mcp.sh
-
-# MCP internals. Set TESSERACT_MCP_TOKEN in the Container App to require a bearer
+# MCP internals. NOTE: MCP_PORT (not PORT) — Azure Container Apps treats PORT
+# specially. Set TESSERACT_MCP_TOKEN in the Container App to require a bearer
 # token; leave it unset to run open (matches the already-public Storybook).
-ENV PORT=8787 MCP_PATH=/mcp
+ENV MCP_PORT=8787 MCP_PATH=/mcp
 
 EXPOSE 8080
 
@@ -62,4 +62,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget -qO- http://127.0.0.1:8080/ >/dev/null 2>&1 || exit 1
 
-# The base image's entrypoint runs the MCP starter then launches nginx (non-root).
+# Start Node (MCP) in the background, then the base nginx entrypoint as PID 1.
+ENTRYPOINT ["/start.sh"]

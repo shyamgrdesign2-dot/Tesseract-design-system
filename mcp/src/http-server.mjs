@@ -17,7 +17,8 @@ import http from "node:http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createServer, SUMMARY } from "./build-server.mjs";
 
-const PORT = Number(process.env.PORT || 8787);
+// MCP_PORT, not PORT — Azure Container Apps treats PORT specially (ingress/probe).
+const PORT = Number(process.env.MCP_PORT || 8787);
 const MCP_PATH = process.env.MCP_PATH || "/mcp";
 const TOKEN = process.env.TESSERACT_MCP_TOKEN || "";
 
