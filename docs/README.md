@@ -8,6 +8,7 @@ charts) for GenX and TatvaPractice.
 0. **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh local project: get a token, install from GitHub Packages, render your first component.
 1. **[CATALOG.md](./CATALOG.md)** — every component, grouped, with a one-line description and a link to its usage doc.
 2. **[USING-TESSERACT.md](./USING-TESSERACT.md)** — install the package, the `/tesseract` skill, and the MCP; set up the theme provider; use it in code.
+2b. **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the tesseract MCP to Claude Code, Cursor, or Claude Desktop (copy-paste config + a paste-into-chat setup).
 3. **[PREREQUISITE.md](./PREREQUISITE.md)** — the v1.0 stability contract (SemVer, what's public API, how to stay upgrade-safe). Read before adopting.
 4. **[ICONS.md](./ICONS.md)** — the icon system (`TPIcon` / `TPLibraryIcon`, families, self-hosting).
 5. **[../design.md](../design.md)** — the design language: foundations (colour, type, spacing, elevation, motion, shape, icons), hard rules, and voice — for agents and humans.
