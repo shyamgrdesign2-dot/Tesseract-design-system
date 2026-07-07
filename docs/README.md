@@ -8,6 +8,7 @@ hosted MCP) that builds screens with the real components.
 - **[../STARTER.md](../STARTER.md)** — set up the three pieces: the MCP, the skill, the package.
 - **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh project: get a token, install, render a component.
 - **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the **hosted** MCP to Claude Code / Cursor / Claude Desktop.
+- **[MIGRATE-TO-HOSTED-MCP.md](./MIGRATE-TO-HOSTED-MCP.md)** — paste-in task to wipe a project's stale local MCP and switch it to the hosted server.
 - **[CATALOG.md](./CATALOG.md)** — every component, grouped, each linking its usage doc.
 
 ## Build with it
