@@ -5,6 +5,7 @@ charts) for GenX and TatvaPractice — plus an AI layer (the `/tesseract` skill 
 hosted MCP) that builds screens with the real components.
 
 ## Start here
+- **[SETUP-TESSERACT.md](./SETUP-TESSERACT.md)** — the **one self-contained file** to hand a colleague: paste it into a Claude chat and it sets up all of Tesseract (MCP + skill + package).
 - **[../STARTER.md](../STARTER.md)** — set up the three pieces: the MCP, the skill, the package.
 - **[TRIAL.md](./TRIAL.md)** — ⚡ zero-to-running in a fresh project: get a token, install, render a component.
 - **[CONNECT-MCP.md](./CONNECT-MCP.md)** — connect the **hosted** MCP to Claude Code / Cursor / Claude Desktop.
