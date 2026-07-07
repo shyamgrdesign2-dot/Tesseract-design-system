@@ -40,3 +40,11 @@ Dockerfile
 .dockerignore
 README.md
 CHANGELOG.md
+
+# …but DO ship the co-hosted MCP runtime files the Dockerfile copies (the rest of
+# mcp/ — src, node_modules, tests — stays excluded). Negations must come last.
+!mcp/dist
+!mcp/dist/http-server.mjs
+!mcp/manifest
+!mcp/manifest/**
+!mcp/docker-start-mcp.sh
