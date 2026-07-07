@@ -2,56 +2,95 @@
 /**
  * Tesseract MCP — HTTP entry (hosted / remote).
  *
- * Serves the same tools as the stdio entry over the MCP Streamable-HTTP transport,
- * so clients (Cursor / Claude) connect by URL instead of cloning the repo. Stateless
- * (a fresh server + transport per request), with optional bearer-token auth.
+ * Serves the MCP tools over Streamable-HTTP so clients connect by URL. Two auth modes,
+ * both backed by the same shared secret, so nothing new to provision:
+ *   1. Static bearer — `Authorization: Bearer <TESSERACT_MCP_TOKEN>` (Claude Code, plugin, curl).
+ *   2. OAuth 2.1 + DCR + PKCE (./oauth.mjs) — for Claude's web/Desktop "Connectors" UI,
+ *      which speaks OAuth, not static headers. The consent screen is gated by the same
+ *      shared token, so access control is unchanged.
  *
  * Env:
- *   PORT                  listen port (default 8787; nginx proxies /mcp → here)
- *   MCP_PATH              request path (default "/mcp")
- *   TESSERACT_MCP_TOKEN   if set → every request must send `Authorization: Bearer <token>`.
- *                         If unset → open (matches the already-public Storybook).
+ *   MCP_PORT              listen port (default 8787; nginx proxies to here)
+ *   MCP_PATH              MCP request path (default "/mcp")
+ *   MCP_PUBLIC_ORIGIN     external origin for OAuth issuer/metadata URLs
+ *                         (default: derived from X-Forwarded-Proto + Host)
+ *   TESSERACT_MCP_TOKEN   the shared secret. Set → auth enforced + used as the OAuth
+ *                         signing key and consent gate. Unset → open.
+ *   MCP_OAUTH_SECRET      optional explicit OAuth signing key (defaults to the token).
  */
 
 import http from "node:http";
+import crypto from "node:crypto";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createServer, SUMMARY } from "./build-server.mjs";
+import { handleOAuth, verifyAccessToken } from "./oauth.mjs";
 
 // MCP_PORT, not PORT — Azure Container Apps treats PORT specially (ingress/probe).
 const PORT = Number(process.env.MCP_PORT || 8787);
 const MCP_PATH = process.env.MCP_PATH || "/mcp";
 const TOKEN = process.env.TESSERACT_MCP_TOKEN || "";
+const PUBLIC_ORIGIN = process.env.MCP_PUBLIC_ORIGIN || "";
+// Stable HMAC key for OAuth tokens. Falls back to a random per-boot key only in open
+// mode (no token) — fine there since there is no gate to persist across restarts.
+const SECRET = TOKEN || process.env.MCP_OAUTH_SECRET || crypto.randomBytes(32).toString("hex");
 
 const json = (res, code, obj) => {
   res.writeHead(code, { "content-type": "application/json" });
   res.end(JSON.stringify(obj));
 };
 
-const readBody = (req) =>
+const readRaw = (req) =>
   new Promise((resolve) => {
-    if (req.method !== "POST") return resolve(undefined);
     let d = "";
     req.on("data", (c) => (d += c));
-    req.on("end", () => { try { resolve(d ? JSON.parse(d) : undefined); } catch { resolve(undefined); } });
-    req.on("error", () => resolve(undefined));
+    req.on("end", () => resolve(d));
+    req.on("error", () => resolve(""));
   });
 
 const httpServer = http.createServer(async (req, res) => {
-  const path = (req.url || "/").split("?")[0];
+  const url = new URL(req.url || "/", "http://internal");
+  const pathname = url.pathname;
+  const method = req.method || "GET";
 
-  // Liveness probe — unauthenticated (Azure Container Apps / load balancers).
-  if (path === "/health" || path === `${MCP_PATH}/health`) {
-    return json(res, 200, { status: "ok", server: "tesseract-mcp", ...SUMMARY, auth: TOKEN ? "on" : "off" });
+  const proto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0].trim();
+  const host = req.headers["x-forwarded-host"] || req.headers.host || "localhost";
+  const issuer = PUBLIC_ORIGIN || `${proto}://${host}`;
+  const resource = issuer + MCP_PATH;
+
+  // Liveness probe — unauthenticated.
+  if (pathname === "/health" || pathname === `${MCP_PATH}/health`) {
+    return json(res, 200, { status: "ok", server: "tesseract-mcp", ...SUMMARY, auth: TOKEN ? "on" : "off", oauth: "on" });
   }
-  if (path !== MCP_PATH) return json(res, 404, { error: "not found" });
 
-  // Bearer-token gate — enforced only when a token is configured.
-  if (TOKEN && req.headers.authorization !== `Bearer ${TOKEN}`) {
+  // OAuth 2.1 authorization server (discovery, DCR, authorize, token).
+  if (
+    pathname.startsWith("/.well-known/oauth-") ||
+    pathname === "/register" ||
+    pathname === "/authorize" ||
+    pathname === "/token"
+  ) {
+    const rawBody = method === "POST" ? await readRaw(req) : "";
+    const handled = handleOAuth(req, res, {
+      pathname, method, query: url.searchParams, rawBody, issuer, resource, gateToken: TOKEN, secret: SECRET,
+    });
+    return handled ? undefined : json(res, 404, { error: "not found" });
+  }
+
+  if (pathname !== MCP_PATH) return json(res, 404, { error: "not found" });
+
+  // Gate: accept the static bearer token OR a valid OAuth access token.
+  const authz = req.headers.authorization || "";
+  const ok = (TOKEN && authz === `Bearer ${TOKEN}`) || verifyAccessToken(authz, SECRET);
+  if (TOKEN && !ok) {
+    // Point OAuth clients at the protected-resource metadata (MCP auth spec).
+    res.setHeader("WWW-Authenticate", `Bearer resource_metadata="${issuer}/.well-known/oauth-protected-resource"`);
     return json(res, 401, { jsonrpc: "2.0", id: null, error: { code: -32001, message: "Unauthorized" } });
   }
 
   try {
-    const body = await readBody(req);
+    const raw = method === "POST" ? await readRaw(req) : "";
+    let body;
+    try { body = raw ? JSON.parse(raw) : undefined; } catch { body = undefined; }
     // Stateless: a fresh server + transport per request (safe under concurrency).
     const server = createServer();
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
@@ -67,5 +106,5 @@ const httpServer = http.createServer(async (req, res) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.error(`tesseract-mcp (http) on :${PORT}${MCP_PATH} — ${SUMMARY.components} components; auth ${TOKEN ? "ON" : "OFF (no token set)"}`);
+  console.error(`tesseract-mcp (http) on :${PORT}${MCP_PATH} — ${SUMMARY.components} components; auth ${TOKEN ? "ON" : "OFF"}; oauth ON`);
 });

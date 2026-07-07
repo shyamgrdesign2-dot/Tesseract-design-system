@@ -33,7 +33,7 @@
     "dev": "storybook dev -p 6006",
     "build": "tsc -b && storybook build",
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
-    "build:mcp": "node mcp/scripts/build-manifest.mjs && esbuild mcp/src/server.mjs --bundle --platform=node --format=esm --outfile=mcp/dist/server.mjs",
+    "build:mcp": "node mcp/scripts/build-manifest.mjs && esbuild mcp/src/server.mjs --bundle --platform=node --format=esm --outfile=mcp/dist/server.mjs && esbuild mcp/src/http-server.mjs --bundle --platform=node --format=esm --outfile=mcp/dist/http-server.mjs",
     "prepublishOnly": "npm run build:lib",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",

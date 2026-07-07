@@ -54,7 +54,9 @@ COPY design.md                /app/design.md
 # MCP internals. NOTE: MCP_PORT (not PORT) — Azure Container Apps treats PORT
 # specially. Set TESSERACT_MCP_TOKEN in the Container App to require a bearer
 # token; leave it unset to run open (matches the already-public Storybook).
-ENV MCP_PORT=8787 MCP_PATH=/mcp
+# MCP_PUBLIC_ORIGIN is the external origin for the OAuth issuer + metadata URLs
+# (TLS is terminated at Azure ingress, so we can't derive https from the request).
+ENV MCP_PORT=8787 MCP_PATH=/mcp MCP_PUBLIC_ORIGIN=https://tesseract.tatvapractice.in
 
 EXPOSE 8080
 
