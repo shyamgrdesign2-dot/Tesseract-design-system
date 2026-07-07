@@ -16,6 +16,20 @@ Full history is in [CHANGELOG.md](../CHANGELOG.md). Per-version notes below (new
 
 ---
 
+## → 1.0.6  (additive)
+
+Mixed-stack friendliness — **no change for pure-Tesseract apps**:
+- New **`rootTheme`** prop on `TesseractThemeProvider` (default `true`). Set it to
+  `false` when embedding inside a non-Tesseract host so the provider doesn't write base
+  typography / color-scheme onto `document.documentElement`. See [ADOPTION.md](./ADOPTION.md).
+- Library build ships **without source maps** (smaller install, no source exposure).
+
+Defaults preserve the current look; nothing to change on upgrade.
+
+```bash
+npm install @dhspl-tatvacare/tesseract-ui@1.0.6
+```
+
 ## → 1.0.5  (additive)
 
 Adds **`RadarChart`** (multi-variable profile) and **`GaugeChart`** (value vs a range,
@@ -53,7 +67,7 @@ import { LineChart, StatCard, formatIndian } from "@dhspl-tatvacare/tesseract-ui
 ```text
 TASK: Upgrade @dhspl-tatvacare/tesseract-ui to the latest 1.0.x in this repo.
 STEPS:
-1. In package.json set "@dhspl-tatvacare/tesseract-ui": "^1.0.5", then run: npm install
+1. In package.json set "@dhspl-tatvacare/tesseract-ui": "^1.0.6", then run: npm install
    (confirm package-lock.json resolves the new version).
 2. If upgrading ACROSS 1.0.3: find and migrate removed HeroBanner tones —
    grep -rns 'tone="slate"\|tone="dark"' src  → replace with tone="violet" (or "blue").

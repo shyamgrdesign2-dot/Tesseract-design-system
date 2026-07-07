@@ -1,88 +1,87 @@
-# Migrate a project to the hosted Tesseract MCP
+# Sync a project to the latest Tesseract
 
-Any project that wired up Tesseract **before** the hosted MCP existed may be running a
-**local** MCP — a stdio server (`node …/mcp/src/server.mjs`), a plugin-bundled copy, a
-cloned design-system repo, or a vendored tarball. Those freeze at setup time and go
-stale. The MCP is now **hosted** at `https://tesseract.tatvapractice.in/mcp` (bearer
-auth) and auto-updates on every release.
+Paste the block below into any other Claude Code session / project that uses Tesseract.
+It brings that project fully up to date in one shot:
 
-**How to use:** open the other project in Claude Code and paste the block below as your
-message. It detects everything first, removes only the local MCP wiring, connects the
-hosted MCP, and verifies — while leaving the `@dhspl-tatvacare/tesseract-ui` component
-package (which the app legitimately imports) untouched.
+1. **MCP → hosted only.** Removes any local/stdio/bundled/cloned Tesseract MCP and points
+   the session at the hosted server (`https://tesseract.tatvapractice.in/mcp`), which
+   **auto-updates** on every release — so the AI is always grounded in the current
+   components, props, tokens, icons, rules and design language.
+2. **Skill/plugin → current.** Updates the `/tesseract` plugin (which now auto-configures
+   the hosted MCP).
+3. **Component package → latest.** Checks the installed `@dhspl-tatvacare/tesseract-ui`
+   version against the newest release and **upgrades if older** (SemVer-safe within `1.x`).
+
+It detects before it deletes, keeps the component package the app imports, and reports
+what it changed.
 
 ---
 
 ## ⤵ Paste this into the other session
 
 ```text
-TASK — Migrate this project to the HOSTED Tesseract MCP and remove every local/stale copy.
+TASK — Sync this project to the LATEST Tesseract (MCP + skill + component package).
 
-Context: The Tesseract design-system MCP is now a hosted HTTP server at
-https://tesseract.tatvapractice.in/mcp (bearer-token auth). Any locally-run, bundled,
-cloned, or tarball Tesseract MCP is stale and must be removed. ALL AI grounding must go
-through the hosted MCP so it auto-updates. Do NOT remove the component library
-(@dhspl-tatvacare/tesseract-ui in node_modules / package.json) — the app imports that
-and it stays.
+Context: Tesseract's MCP is now a HOSTED HTTP server at https://tesseract.tatvapractice.in/mcp
+(bearer-token auth, and OAuth for Claude's Connectors UI). It auto-updates on every release,
+so nothing should run a local copy. The component library latest is >= 1.0.6. Bring this
+project fully current. Detect before deleting; keep the component package the app imports.
 
-Work in this order and DO NOT delete anything until after step 1:
+STEP 1 — MCP: hosted only.
+  a) DETECT (read-only), then print findings: `claude mcp list` (any `tesseract` server whose
+     command is a local `node … .mjs` path); `.mcp.json` here/parent with a `tesseract` entry
+     using "command"/"args" (local) rather than "type":"http"; `~/.claude.json` mcpServers
+     named `tesseract` with a local path; copied `**/.claude/skills/tesseract` folders; any
+     local design-system clone (`.claude-plugin/plugin.json` name "tesseract", or mcp/src/server.mjs);
+     any vendored `tesseract-ui-*.tgz`.
+  b) REMOVE the local MCP wiring: `claude mcp remove tesseract` if local; delete/replace local
+     `tesseract` entries in `.mcp.json` and `~/.claude.json`; delete copied `.claude/skills/tesseract`
+     folders; delete a local DS clone ONLY if `git status` shows no unique uncommitted work
+     (else stop and ask me). Keep node_modules/@dhspl-tatvacare/tesseract-ui.
+  c) CONNECT the hosted MCP at project scope (commits a .mcp.json for the team/cloud):
+     claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
+       --scope project --header "Authorization: Bearer <TESSERACT_MCP_TOKEN>"
+     (Get the token from the DS team. For the claude.ai/Desktop Connectors UI instead: add a
+     custom connector with that URL, leave OAuth client id/secret BLANK — it self-registers —
+     and paste the token once on the consent page.)
 
-1) DETECT (read-only) — search this project and my Claude config, then print exactly what
-   you find:
-   - `claude mcp list` — any `tesseract` server whose command is a local `node … .mjs`
-     path (that's a local MCP).
-   - `.mcp.json` in this repo (and any parent) with a `tesseract` entry using
-     `"command"/"args"` (local stdio) rather than `"type":"http"`.
-   - `~/.claude.json` — global or per-project `mcpServers` named `tesseract` with a local
-     command/path.
-   - Copied skill folders: any `**/.claude/skills/tesseract` directory.
-   - Any local clone of the design-system repo (a folder containing
-     `.claude-plugin/plugin.json` with "name": "tesseract", or `mcp/src/server.mjs`).
-   - Any vendored `tesseract-ui-*.tgz` or a `package.json` dependency that points at a
-     local tarball/`file:`/`github:` path instead of the registry.
+STEP 2 — Skill/plugin: current.
+  If the `/tesseract` plugin is installed: run `claude plugin update tesseract@tesseract`
+  (it now auto-configures the hosted MCP). If not installed and you want the page-building
+  skill: `/plugin marketplace add DHSPL-Tatvacare/tesseract-design-system` then
+  `/plugin install tesseract@tesseract`.
 
-2) REMOVE the local MCP wiring (after showing me step 1):
-   - `claude mcp remove tesseract` if a local one is registered.
-   - Delete or replace local `tesseract` entries in `.mcp.json` and `~/.claude.json`.
-   - Delete copied `.claude/skills/tesseract` folders (the skill ships via the plugin now).
-   - Delete a local design-system clone ONLY if it has no uncommitted unique work
-     (run `git status`; if unsure, stop and ask me). It is otherwise recoverable by re-clone.
-   - Keep node_modules/@dhspl-tatvacare/tesseract-ui as-is.
+STEP 3 — Component package: latest (auto-upgrade if older).
+  a) INSTALLED version: read node_modules/@dhspl-tatvacare/tesseract-ui/package.json "version"
+     (and the range in this app's package.json).
+  b) LATEST version: `npm view @dhspl-tatvacare/tesseract-ui version` (needs the org .npmrc +
+     a read:packages token). If that isn't available, fall back to the newest git tag:
+     `git ls-remote --tags https://github.com/DHSPL-Tatvacare/tesseract-design-system` → highest vX.Y.Z.
+  c) IF installed < latest → UPGRADE (SemVer-safe within 1.x — additive only):
+       - registry install:  npm install @dhspl-tatvacare/tesseract-ui@latest
+       - or github pin:      bump "@dhspl-tatvacare/tesseract-ui": "github:…#vX.Y.Z" to the newest tag, then npm install
+     Then rebuild. If the jump crosses a MAJOR (2.x), STOP and tell me — read the CHANGELOG first.
+  d) Confirm one import still resolves, e.g.:
+       import "@dhspl-tatvacare/tesseract-ui/styles.css";
+       import { Button } from "@dhspl-tatvacare/tesseract-ui";
 
-3) CONNECT the hosted MCP:
-   claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
-     --header "Authorization: Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54"
-   (Or, to commit it for the team, add to `.mcp.json`:
-    { "mcpServers": { "tesseract": { "type": "http",
-      "url": "https://tesseract.tatvapractice.in/mcp",
-      "headers": { "Authorization": "Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54" } } } } )
-
-4) COMPONENT PACKAGE (report only, don't break the build): if the app installs the
-   components from a stale vendored `.tgz` or a `file:`/pinned `github:` path instead of
-   the private registry `@dhspl-tatvacare/tesseract-ui` on GitHub Packages, tell me — and
-   offer to switch it to the registry. Do NOT remove the tarball unless you've wired the
-   registry install first.
-
-5) VERIFY and report:
-   - `claude mcp list` shows `tesseract` as the HTTP URL, status Connected.
-   - Ask yourself to "list the tesseract MCP tools" — expect 8: list_components,
-     get_component, search_components, validate_usage, get_tokens, get_icons, get_rules,
-     get_design.
-   Summarize: what you removed, what you added, and anything you left for me to decide.
+STEP 4 — VERIFY + REPORT.
+  `claude mcp list` shows `tesseract` as the HTTP URL, Connected. Ask yourself to "list the
+  tesseract MCP tools" — expect 8: list_components, get_component, search_components,
+  validate_usage, get_tokens, get_icons, get_rules, get_design. Summarize: local MCP removed,
+  hosted MCP connected, plugin updated, package version before → after, and anything left for me.
 ```
 
 ---
 
-## What it does / does not touch
+## What it changes / keeps
 
-| Removed (stale local MCP) | Kept (still needed) |
+| Brought up to date | Left alone |
 |---|---|
-| Local stdio `tesseract` MCP registrations (`claude mcp`, `.mcp.json`, `~/.claude.json`) | `@dhspl-tatvacare/tesseract-ui` component package (imported by the app) |
-| Copied `.claude/skills/tesseract` folders | The hosted MCP config it just added |
-| Local design-system clones used only for the MCP (if git-clean) | The private registry / `.npmrc` setup |
+| MCP → hosted (auto-latest); local copies removed | `@dhspl-tatvacare/tesseract-ui` package (the app imports it — just upgraded, not removed) |
+| `/tesseract` plugin → current (hosted MCP) | Your app code (upgrade is additive within `1.x`) |
+| Component package → newest `1.x` if older | Non-Tesseract dependencies |
 
-The **token** in the block is the shared hosted-MCP bearer token (same one in
-[CONNECT-MCP.md](./CONNECT-MCP.md)). If you'd rather not paste it into a given session,
-replace it with `<token>` and add the header yourself.
-
-See also: [CONNECT-MCP.md](./CONNECT-MCP.md) (per-client config) · [../STARTER.md](../STARTER.md) (full setup).
+The **token** goes to the DS team, not into random chats. See [CONNECT-MCP.md](./CONNECT-MCP.md)
+(all connect options incl. the OAuth Connectors flow) and [UPGRADING.md](./UPGRADING.md)
+(per-version notes).

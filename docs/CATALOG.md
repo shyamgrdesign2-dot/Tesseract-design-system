@@ -1,6 +1,6 @@
 # Tesseract UI — component catalog (v1.0)
 
-The complete public surface of `tesseract-ui`: **17 atoms + 23 molecules + 8 charts = 48 components** (charts added in v1.0.4; RadarChart + GaugeChart in v1.0.5).
+The complete public surface of `tesseract-ui`: **19 atoms + 23 molecules + 8 charts = 50 components** (charts added in v1.0.4; RadarChart + GaugeChart in v1.0.5).
 Every name links to its concise usage doc. All are imported from the package root:
 
 ```jsx
@@ -18,7 +18,7 @@ New to the system? Read [../STARTER.md](../STARTER.md) (install + setup) and
 
 ---
 
-## Atoms (17)
+## Atoms (19)
 
 The smallest building blocks. Atoms compose only foundations (tokens) and other atoms.
 
@@ -33,8 +33,10 @@ The smallest building blocks. Atoms compose only foundations (tokens) and other 
 | [Divider](./components/Divider.md) | Thin rule between sections — horizontal/vertical, solid/gradient/dashed, optional inset + label. |
 | [InputBox](./components/InputBox.md) | The single text-input — labels, icons, add-ons, tags, steppers, clear, validation, counter, auto-grow. |
 | [InputOTP](./components/InputOTP.md) | One-time-code / PIN input with auto-advance, arrow-key nav, paste-to-fill (2FA, e-Rx sign-off). |
+| [LightRays](./components/LightRays.md) | Decorative WebGL fan of soft drifting light beams; screen-blended over a dark surface (zero-dep, reduced-motion aware). |
 | [LoadingIndicator](./components/LoadingIndicator.md) | Indeterminate spinner for waits with no measurable progress (three glyph styles). |
 | [Logo](./components/Logo.md) | Tatva brand marks (wordmark / symbol), masked SVG so one asset recolours per surface. |
+| [MedicalIcon](./ICONS.md) | Clinical glyph component (`MedicalIcon` / `TPMedicalIcon`) — medical icons resolved by name; see the icon system. |
 | [Progress](./components/Progress.md) | Horizontal progress bar — determinate (0–100) or indeterminate sweep, full a11y. |
 | [Radio](./components/Radio.md) | Single-select group — RadioGroup owns the value, each Radio is one option. |
 | [SegmentedControl](./components/SegmentedControl.md) | Row of mutually-exclusive options with a sliding indicator (2–5 views/modes). |

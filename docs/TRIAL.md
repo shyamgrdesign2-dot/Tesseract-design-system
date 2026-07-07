@@ -121,14 +121,14 @@ npm update @dhspl-tatvacare/tesseract-ui
 ```
 You only ever get patches/minors within `1.x` — never a breaking change (see
 [PREREQUISITE.md](./PREREQUISITE.md)). To pin an exact version:
-`npm install @dhspl-tatvacare/tesseract-ui@1.0.5`.
+`npm install @dhspl-tatvacare/tesseract-ui@1.0.6`.
 
 ## No-token fallback (quick spike, git-gated instead of registry)
 
 If you'd rather not set up the token, install the prebuilt bundle straight from
 the repo by tag (you just need git access to the repo):
 ```bash
-npm install github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5
+npm install github:DHSPL-Tatvacare/tesseract-design-system#v1.0.6
 ```
 Everything from step 5 onward is identical. Prefer the registry for real projects —
 the git install doesn't give true semver ranges.

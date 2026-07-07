@@ -32,7 +32,7 @@ npm install @dhspl-tatvacare/tesseract-ui react react-dom
 - **Access gate:** org membership + the `read:packages` token. No access → install fails.
 - **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
 - **No-token fallback:** install the prebuilt bundle by git tag —
-  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.5"`
+  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.6"`
   (gated by git access; no semver ranges). Full detail: [`STARTER.md`](STARTER.md).
 - **Peers:** `react` / `react-dom` (React 18+).
 
@@ -68,7 +68,7 @@ import { Button, Badge, DataTable, TPIcon } from "@dhspl-tatvacare/tesseract-ui"
 
 ## What's inside
 
-**48 components — 17 atoms + 23 molecules + 8 charts.** Each ships one configurable
+**50 components — 19 atoms + 23 molecules + 8 charts.** Each ships one configurable
 component per job rather than many near-duplicates (one Button, one Dropdown, one
 DataTable, one date picker, one container shell), plus a zero-dependency charts layer.
 

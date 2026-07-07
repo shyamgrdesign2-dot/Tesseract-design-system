@@ -1,7 +1,7 @@
 ---
 name: Tesseract
 package: "@dhspl-tatvacare/tesseract-ui"
-version: 1.0.5
+version: 1.0.6
 description: >
   The design system for TatvaPractice (Tatva Care's clinic/EMR product). A
   zero-runtime-dependency React library (react/react-dom peers only) plus the
