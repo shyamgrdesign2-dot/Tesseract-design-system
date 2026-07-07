@@ -1,16 +1,16 @@
 # Tesseract MCP — deploy steps (Karthik)
 
-The co-host code is merged to `tesseract`. On this deploy, the container will run
-**nginx + a small Node MCP**, and the MCP goes live at
-**`https://tesseract.tatvapractice.in/mcp`** (same site, same port, no DNS change).
+**Status: the MCP is DEPLOYED and LIVE** at **`https://tesseract.tatvapractice.in/mcp`**
+(co-hosted in the Storybook container). It is currently running **OPEN** (no token).
+Verified: `GET /mcp/health` → `{"status":"ok","components":50,...,"auth":"off"}`, and the
+Storybook is unaffected.
 
-Your steps:
+**Your one remaining step: set the bearer token to gate it (step 2).** Steps 1 & 3 are
+just for reference / verification.
 
-## 1. Watch the first image build
-The runtime image now also installs **Node** and runs the MCP next to nginx (new
-`Dockerfile`). Please confirm **the build + container start succeed** on this deploy —
-the code was written and Node-tested on our side, but **not Docker-built** (no Docker in
-that env). If the build fails or the container won't start, ping the DS team.
+## 1. (done) The image build
+The runtime image now installs **Node** and runs the MCP next to nginx. This built and
+deployed successfully; the Node process is up (health shows 50 components).
 
 ## 2. Set the access token (bearer)
 ```bash
@@ -28,14 +28,16 @@ vars** → add `TESSERACT_MCP_TOKEN` → *reference secret* `mcp-token`.
 > Leave it unset → the MCP runs **open** (same exposure as the already-public Storybook).
 > Set it → every request must send `Authorization: Bearer <token>`.
 
-## 3. Verify
+## 3. Verify (after setting the token)
 ```bash
-# health (always open) → 200
-curl -s -o /dev/null -w "%{http_code}\n" https://tesseract.tatvapractice.in/health
+# health (always open) → 200 + {"auth":"on"} once the token is set
+curl -s https://tesseract.tatvapractice.in/mcp/health
 
-# MCP without a token → 401 (if token set) ; and the Storybook still loads normally
+# MCP WITHOUT the token → 401 (proves the gate is on)
 curl -s -o /dev/null -w "%{http_code}\n" -X POST https://tesseract.tatvapractice.in/mcp -d '{}'
 ```
+(Note the health path is **`/mcp/health`** — only `/mcp*` reaches the MCP; plain `/…`
+serves the Storybook.)
 
 ## 4. Share the token
 Send it to the DS team (via a password manager, not chat/repo). Devs connect with the URL
