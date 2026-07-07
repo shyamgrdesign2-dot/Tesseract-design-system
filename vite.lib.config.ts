@@ -18,7 +18,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
+    // No sourcemaps in the published package: they ship full `sourcesContent`
+    // (exposes source + ~1.2MB of maps in the tarball). Consumers don't need them.
+    sourcemap: false,
     cssCodeSplit: false, // one stylesheet for the whole library
     lib: {
       entry: path.join(dirname, 'src/index.js'),
