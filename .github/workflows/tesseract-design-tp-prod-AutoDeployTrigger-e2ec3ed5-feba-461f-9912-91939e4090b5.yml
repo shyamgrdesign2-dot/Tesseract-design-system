@@ -14,9 +14,24 @@ on:
   workflow_dispatch:      
 
 jobs:
-  build-and-deploy:
+  # Gate: the internal consistency checklist MUST pass before we build/deploy, so a
+  # bad push to `tesseract` can never ship and break hosted-MCP / design-system users.
+  preflight:
     runs-on: ubuntu-latest
-    permissions: 
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Preflight checklist
+        run: npm run preflight
+
+  build-and-deploy:
+    needs: preflight
+    runs-on: ubuntu-latest
+    permissions:
       id-token: write #This is required for requesting the OIDC JWT Token
       contents: read #Required when GH token is used to authenticate with private repo
 

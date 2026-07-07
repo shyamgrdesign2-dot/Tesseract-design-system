@@ -1,0 +1,9 @@
+#!/bin/sh
+# Tesseract pre-push gate.
+#
+# Runs the preflight checklist (scripts/preflight.mjs) and BLOCKS the push if any
+# check fails — so a change can't ship something that breaks consumers of the hosted
+# MCP or the design system. Enable once per clone: `npm run setup:hooks`.
+#
+# Bypass only in a real emergency (CI + the deploy job still gate you): git push --no-verify
+exec node scripts/preflight.mjs

@@ -22,6 +22,7 @@ hosted MCP) that builds screens with the real components.
 - **[UPGRADING.md](./UPGRADING.md)** — moving between versions. Full history: [CHANGELOG](../CHANGELOG.md).
 
 ## Operate (maintainers)
+- **[MAINTAINING.md](./MAINTAINING.md)** — how skill/MCP/package updates propagate, and the **preflight gate** (local hook + CI + deploy) that blocks any push that would break consumers.
 - **[DEPLOY-AZURE.md](./DEPLOY-AZURE.md)** — building & deploying the Storybook container (which also co-hosts the MCP).
 - **[DEPLOY-AUTH.md](./DEPLOY-AUTH.md)** — access-protecting the deployed Storybook.
 
