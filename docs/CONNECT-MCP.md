@@ -7,8 +7,8 @@ builds with **real** Tesseract, not invented props.
 It's **hosted** — connect by URL, always the latest, nothing to clone.
 
 - **URL:** `https://tesseract.tatvapractice.in/mcp`
-- **Auth:** a bearer token. **Ask the DS team for the token** (it's a shared secret — not
-  stored in this repo).
+- **Auth:** a bearer token — included in the configs below. It's a shared secret; if it
+  leaks, the DS team rotates it on the Container App and reshares.
 
 ---
 
@@ -19,7 +19,7 @@ It's **hosted** — connect by URL, always the latest, nothing to clone.
   "mcpServers": {
     "tesseract": {
       "url": "https://tesseract.tatvapractice.in/mcp",
-      "headers": { "Authorization": "Bearer <TOKEN>" }
+      "headers": { "Authorization": "Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54" }
     }
   }
 }
@@ -28,12 +28,12 @@ It's **hosted** — connect by URL, always the latest, nothing to clone.
 ## Claude Code
 ```
 claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
-  --header "Authorization: Bearer <TOKEN>"
+  --header "Authorization: Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54"
 ```
 
 ## Claude Desktop
 Settings → **Connectors** → add a custom **HTTP** connector: the URL above, with a header
-`Authorization: Bearer <TOKEN>`.
+`Authorization: Bearer c5713ed5ca2e4fc0527e6b19e5ecbb81710554a2dd9b5068f4fea8d4fb3a9f54`.
 
 ---
 

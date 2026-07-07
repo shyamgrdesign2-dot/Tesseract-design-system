@@ -24,7 +24,7 @@ design language, with a `validate_usage` guardrail. Connect by URL — always th
 latest, nothing to clone:
 
 - **URL:** `https://tesseract.tatvapractice.in/mcp`
-- **Auth:** a bearer token — ask the DS team.
+- **Auth:** a bearer token (in the [docs/CONNECT-MCP.md](docs/CONNECT-MCP.md) configs).
 
 Per-tool config (Cursor / Claude Code / Claude Desktop) → **[docs/CONNECT-MCP.md](docs/CONNECT-MCP.md)**.
 
