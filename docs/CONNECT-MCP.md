@@ -4,10 +4,49 @@ The **tesseract MCP** serves our exact components, props, design tokens, icons,
 the hard rules, and the design language (`design.md`) — with a `validate_usage`
 guardrail — so any AI client builds with *real* Tesseract, not invented props.
 
-It is a **local `stdio` server bundled inside the design-system repo** (self-contained
-— no `npm install`, it just needs Node). It reads local files, so **it is not a hosted
-URL** — the client runs `node .../mcp/dist/server.mjs`, which means you need the repo
-present (clone it, or on Claude Code the plugin auto-clones it).
+Two ways to connect:
+- **Hosted (recommended)** — a URL, always the latest, no cloning. ⬇︎ use this once the
+  endpoint is live.
+- **Local (stdio)** — the server bundled in the repo; needs the files present (clone or
+  the Claude Code plugin). Covered further down.
+
+---
+
+## A · Hosted (remote URL) — recommended
+
+Once deployed, the MCP is at **`https://tesseract.tatvapractice.in/mcp`** (co-hosted with
+the Storybook). Ask the DS team for the **access token** (bearer). Then:
+
+**Cursor** — `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+```json
+{
+  "mcpServers": {
+    "tesseract": {
+      "url": "https://tesseract.tatvapractice.in/mcp",
+      "headers": { "Authorization": "Bearer <token>" }
+    }
+  }
+}
+```
+
+**Claude Code**:
+```
+claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
+  --header "Authorization: Bearer <token>"
+```
+
+**Claude Desktop** — Settings → Connectors → add a custom (HTTP) connector with the URL
+above and an `Authorization: Bearer <token>` header.
+
+*(If the endpoint is deployed **open** (no token), drop the `headers` / `--header`.)*
+Verify: ask the agent *"list the tesseract MCP tools"* → expect the 8 below.
+
+---
+
+## B · Local (stdio) — bundled in the repo
+
+The stdio server is **self-contained** (no `npm install`, just Node); it reads local files,
+so you need the repo present (clone it, or on Claude Code the plugin auto-clones it).
 
 ---
 
