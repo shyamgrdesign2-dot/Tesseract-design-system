@@ -31,9 +31,9 @@ hosted MCP) that builds screens with the real components.
 
 ## Quick install
 
-```jsonc
-// .npmrc gated by org membership; then:
-{ "dependencies": { "@dhspl-tatvacare/tesseract-ui": "^1.0.0" } }
+```bash
+# public on npm — no token or .npmrc needed:
+npm install @dhspl-tatvacare/tesseract-ui
 ```
 ```jsx
 // app root, once:

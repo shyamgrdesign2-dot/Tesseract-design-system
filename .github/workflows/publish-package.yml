@@ -1,14 +1,17 @@
-name: Publish to GitHub Packages
+name: Publish to npm (public)
 
-# Publishes @dhspl-tatvacare/tesseract-ui to the org's private GitHub Packages npm
-# registry. Consumers then install a real, versioned npm package:
-#   npm install @dhspl-tatvacare/tesseract-ui@^1.0.0
-# (each consumer needs a one-time .npmrc with a read:packages token — see
-#  docs/USING-TESSERACT.md). Access is gated by org membership.
+# Publishes @dhspl-tatvacare/tesseract-ui to the PUBLIC npm registry (npmjs.org) so
+# consumers install with ZERO auth:
+#   npm install @dhspl-tatvacare/tesseract-ui
+# No .npmrc, no token, no org membership needed on the consumer side.
 #
-# Triggers:
-#   - when a GitHub Release is published (the normal path — cut a release per version)
-#   - manually via workflow_dispatch (e.g. to publish the very first version)
+# ONE-TIME setup (maintainer):
+#   1. Create an npm org named "dhspl-tatvacare" (npmjs.com → orgs) that owns the scope.
+#   2. Create an npm "Automation" access token (npmjs.com → Access Tokens).
+#   3. Add it to this repo's GitHub secrets as NPM_TOKEN.
+# The source repo can stay private — only the built dist is published.
+#
+# Triggers: on a published GitHub Release (normal path), or manual workflow_dispatch.
 
 on:
   release:
@@ -17,7 +20,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 concurrency:
   group: publish-package
@@ -35,7 +37,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          registry-url: https://npm.pkg.github.com
+          registry-url: https://registry.npmjs.org
           scope: "@dhspl-tatvacare"
 
       - run: npm ci
@@ -43,8 +45,7 @@ jobs:
       - name: Build library (ESM + CJS + CSS + types)
         run: npm run build:lib
 
-      - name: Publish to GitHub Packages
-        run: npm publish
+      - name: Publish to public npm
+        run: npm publish --access public
         env:
-          # GITHUB_TOKEN has packages:write for this repo's own packages — no PAT needed.
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

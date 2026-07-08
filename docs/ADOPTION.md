@@ -18,8 +18,8 @@ via your lockfile:
 npm install @dhspl-tatvacare/tesseract-ui@1.0.6
 ```
 
-Needs a one-time `.npmrc` (token with `read:packages`) — see [../STARTER.md](../STARTER.md).
-Avoid `file:vendor/*.tgz`: no integrity pin, no clean upgrade path.
+It's **public on npm** — no token or `.npmrc` needed. Avoid `file:vendor/*.tgz`: no
+integrity pin, no clean upgrade path.
 
 ## 2 · Contain the theme — `rootTheme={false}`
 

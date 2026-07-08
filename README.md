@@ -12,28 +12,18 @@ library (atoms + molecules), built with **zero runtime dependencies** (only
 
 ---
 
-## Install (private — GitHub Packages registry)
+## Install (public npm)
 
-Published as a versioned npm package to the org's private **GitHub Packages**
-registry — `@dhspl-tatvacare/tesseract-ui`. Versions are immutable and semver
-ranges work, so consumers get safe patches and never a surprise breaking change.
+Published to the **public npm registry** as `@dhspl-tatvacare/tesseract-ui` — install with
+**no token, no `.npmrc`, no org membership**. Versions are immutable and semver ranges work,
+so consumers get safe patches and never a surprise breaking change.
 
-**One-time:** add an `.npmrc` to your app's repo root (see [`.npmrc.example`](.npmrc.example)):
-```ini
-@dhspl-tatvacare:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-Set a GitHub token with **`read:packages`** as `GITHUB_TOKEN` (shell profile locally;
-CI secret in pipelines). Then:
 ```bash
 npm install @dhspl-tatvacare/tesseract-ui react react-dom
 ```
 
-- **Access gate:** org membership + the `read:packages` token. No access → install fails.
+- **No auth** — public package; just install (only the built `dist` is published; the source repo stays private).
 - **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
-- **No-token fallback:** install the prebuilt bundle by git tag —
-  `"@dhspl-tatvacare/tesseract-ui": "github:DHSPL-Tatvacare/tesseract-design-system#v1.0.6"`
-  (gated by git access; no semver ranges). Full detail: [`STARTER.md`](STARTER.md).
 - **Peers:** `react` / `react-dom` (React 18+).
 
 ---

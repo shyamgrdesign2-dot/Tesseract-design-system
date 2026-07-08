@@ -38,12 +38,7 @@ and **auto-configures the hosted MCP** for you (no local server). Install once:
 Then start every screen by typing `/tesseract` (or "use the Tesseract design system").
 
 ## 3 · Install the component package
-Private npm on GitHub Packages. One-time `.npmrc` in your app root (token needs
-`read:packages`):
-```ini
-@dhspl-tatvacare:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
+**Public on npm — no token or `.npmrc` needed:**
 ```bash
 npm install @dhspl-tatvacare/tesseract-ui
 ```

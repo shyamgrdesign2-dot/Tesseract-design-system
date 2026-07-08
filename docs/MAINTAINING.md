@@ -11,7 +11,7 @@ Three surfaces, three channels — all pull from this repo, so you control them 
 |---|---|---|
 | **`/tesseract` skill** | `.claude/skills/tesseract/` | The Claude Code plugin. Edit the skill → push to **`main`** → users pick it up on `claude plugin update tesseract@tesseract` (auto at startup when a marketplace + `GITHUB_TOKEN` are configured). |
 | **MCP** (components, props, tokens, icons, rules, design) | `mcp/` → hosted at `tesseract.tatvapractice.in/mcp` | **Hosted = auto-latest.** Deploy the container (push **`tesseract`**) and every connected client — Claude Code, Cursor, the Connectors UI — sees the new data immediately. Nothing to update client-side. |
-| **Component package** | `src/` → `@dhspl-tatvacare/tesseract-ui` | GitHub Packages / build branch. Consumers `npm update` within `1.x` (SemVer-safe). |
+| **Component package** | `src/` → `@dhspl-tatvacare/tesseract-ui` | **Public npm** (published from a GitHub Release via `publish-package.yml`). Consumers `npm install` / `npm update` within `1.x` — no auth. |
 
 So: **edit the skill here → it flows to every cloud session on the plugin. Update the
 components here → the hosted MCP serves them to everyone automatically.** No copies to

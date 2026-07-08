@@ -54,12 +54,10 @@ STEP 2 — Skill/plugin: current.
 STEP 3 — Component package: latest (auto-upgrade if older).
   a) INSTALLED version: read node_modules/@dhspl-tatvacare/tesseract-ui/package.json "version"
      (and the range in this app's package.json).
-  b) LATEST version: `npm view @dhspl-tatvacare/tesseract-ui version` (needs the org .npmrc +
-     a read:packages token). If that isn't available, fall back to the newest git tag:
-     `git ls-remote --tags https://github.com/DHSPL-Tatvacare/tesseract-design-system` → highest vX.Y.Z.
+  b) LATEST version: `npm view @dhspl-tatvacare/tesseract-ui version` (public npm — no auth).
+     Or ask the tesseract MCP's check_version tool with the installed version.
   c) IF installed < latest → UPGRADE (SemVer-safe within 1.x — additive only):
-       - registry install:  npm install @dhspl-tatvacare/tesseract-ui@latest
-       - or github pin:      bump "@dhspl-tatvacare/tesseract-ui": "github:…#vX.Y.Z" to the newest tag, then npm install
+       npm install @dhspl-tatvacare/tesseract-ui@latest
      Then rebuild. If the jump crosses a MAJOR (2.x), STOP and tell me — read the CHANGELOG first.
   d) Confirm one import still resolves, e.g.:
        import "@dhspl-tatvacare/tesseract-ui/styles.css";
