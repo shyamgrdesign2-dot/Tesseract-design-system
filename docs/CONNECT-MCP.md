@@ -75,9 +75,9 @@ On first use, Claude Code asks to **approve** the server (a one-time trust promp
 > above; leave client ID/secret blank). For Claude Code, the config above is simpler.
 
 ## Verify
-Ask your agent: **"list the tesseract MCP tools."** You should see 8:
+Ask your agent: **"list the tesseract MCP tools."** You should see 9:
 `list_components`, `get_component`, `search_components`, `validate_usage`, `get_tokens`,
-`get_icons`, `get_rules`, `get_design`.
+`get_icons`, `get_rules`, `get_design`, `check_version`.
 
 ## Want the `/tesseract` page-building skill too?
 Install the Claude Code plugin (needs access to the private repo). It ships the

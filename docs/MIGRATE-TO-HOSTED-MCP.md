@@ -67,8 +67,8 @@ STEP 3 — Component package: latest (auto-upgrade if older).
 
 STEP 4 — VERIFY + REPORT.
   `claude mcp list` shows `tesseract` as the HTTP URL, Connected. Ask yourself to "list the
-  tesseract MCP tools" — expect 8: list_components, get_component, search_components,
-  validate_usage, get_tokens, get_icons, get_rules, get_design. Summarize: local MCP removed,
+  tesseract MCP tools" — expect 9: list_components, get_component, search_components,
+  validate_usage, get_tokens, get_icons, get_rules, get_design, check_version. Summarize: local MCP removed,
   hosted MCP connected, plugin updated, package version before → after, and anything left for me.
 ```
 

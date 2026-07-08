@@ -21116,7 +21116,14 @@ var loadDesign = () => existsSync(DESIGN_PATH) ? readFileSync(DESIGN_PATH, "utf8
 var manifest = loadManifest();
 var icons = loadIcons();
 var design = loadDesign();
-var SUMMARY = { components: manifest.counts.components, tokens: manifest.counts.tokens, icons: icons.count };
+var VERSION = manifest.designSystem?.version || "0.0.0";
+var PKG_NAME = manifest.designSystem?.package || "@dhspl-tatvacare/tesseract-ui";
+var SUMMARY = { version: VERSION, components: manifest.counts.components, tokens: manifest.counts.tokens, icons: icons.count };
+var parseSemver = (v) => {
+  const m = String(v == null ? "" : v).match(/(\d+)\.(\d+)\.(\d+)/);
+  return m ? { major: +m[1], minor: +m[2], patch: +m[3], raw: `${m[1]}.${m[2]}.${m[3]}` } : null;
+};
+var cmpSemver = (a, b) => a.major - b.major || a.minor - b.minor || a.patch - b.patch;
 var findComponent = (name) => manifest.components.find((c) => c.name.toLowerCase() === String(name).toLowerCase()) || manifest.components.find((c) => c.exports.some((e) => e.toLowerCase() === String(name).toLowerCase()));
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
@@ -21132,7 +21139,7 @@ var PASSTHROUGH = /* @__PURE__ */ new Set(["className", "style", "children", "id
 var isPassthrough = (p) => PASSTHROUGH.has(p) || /^(aria-|data-)/.test(p) || /^on[A-Z]/.test(p);
 var text = (obj) => ({ content: [{ type: "text", text: typeof obj === "string" ? obj : JSON.stringify(obj, null, 2) }] });
 function createServer() {
-  const server2 = new McpServer({ name: "tesseract", version: "0.2.0" });
+  const server2 = new McpServer({ name: "tesseract", version: "0.3.0" });
   server2.tool(
     "list_components",
     "List the exact Tesseract (tesseract-ui) components that exist, with a one-line purpose. Optionally filter by layer.",
@@ -21227,6 +21234,72 @@ function createServer() {
     "The Tesseract design language (design.md): foundations \u2014 colours & their meaning, typography, spacing, elevation, motion, shape, icons \u2014 plus the hard rules, voice & tone, and do/don't. Read this to design 'in our world' beyond raw component/prop data.",
     {},
     async () => text(design || "design.md not found next to the plugin. Ensure design.md is at the repo/plugin root.")
+  );
+  server2.tool(
+    "check_version",
+    "Report the latest Tesseract design-system version and whether a project is up to date. The hosted MCP is always the latest, so call this at the START of working in a project: read the installed version of @dhspl-tatvacare/tesseract-ui from the project's package.json (or node_modules/@dhspl-tatvacare/tesseract-ui/package.json) and pass it as installedVersion to get an upgrade recommendation. Omit installedVersion to just get the latest version and how to find the installed one.",
+    { installedVersion: external_exports.string().optional().describe("The @dhspl-tatvacare/tesseract-ui version in the project (from package.json or node_modules), e.g. '1.0.3' or '^1.0.3'. Omit if unknown.") },
+    async ({ installedVersion }) => {
+      const upgrade = {
+        toLatest: `npm install ${PKG_NAME}@latest`,
+        pinned: `npm install ${PKG_NAME}@${VERSION}`,
+        note: "SemVer-safe within 1.x: patches/minors are additive \u2014 take them freely. A major (2.x) may change public API; read docs/UPGRADING.md + CHANGELOG.md before upgrading."
+      };
+      const howToFindInstalled = `Read "${PKG_NAME}" in the project's package.json, or node_modules/${PKG_NAME}/package.json "version".`;
+      const latest = parseSemver(VERSION);
+      if (installedVersion == null) {
+        return text({
+          package: PKG_NAME,
+          latest: VERSION,
+          installed: null,
+          status: "unknown",
+          message: `Latest Tesseract is ${VERSION}. To check this project, find its installed version and call check_version again with installedVersion.`,
+          howToFindInstalled,
+          upgrade
+        });
+      }
+      const inst = parseSemver(installedVersion);
+      if (!inst || !latest) {
+        return text({
+          package: PKG_NAME,
+          latest: VERSION,
+          installed: installedVersion,
+          status: "unknown",
+          message: `Couldn't read an x.y.z version from "${installedVersion}". Latest is ${VERSION}.`,
+          howToFindInstalled,
+          upgrade
+        });
+      }
+      const c = cmpSemver(inst, latest);
+      if (c === 0) {
+        return text({
+          package: PKG_NAME,
+          latest: VERSION,
+          installed: inst.raw,
+          status: "up-to-date",
+          message: `Up to date \u2014 on the latest (${VERSION}).`
+        });
+      }
+      if (c > 0) {
+        return text({
+          package: PKG_NAME,
+          latest: VERSION,
+          installed: inst.raw,
+          status: "ahead",
+          message: `Installed ${inst.raw} is newer than the latest published ${VERSION} \u2014 likely a local/unpublished build.`
+        });
+      }
+      const severity = inst.major !== latest.major ? "major" : inst.minor !== latest.minor ? "minor" : "patch";
+      return text({
+        package: PKG_NAME,
+        latest: VERSION,
+        installed: inst.raw,
+        status: "update-available",
+        severity,
+        message: `Update available: ${inst.raw} \u2192 ${VERSION} (${severity}). ${severity === "major" ? "Major \u2014 review the migration notes before upgrading." : "Additive within 1.x \u2014 safe to take."}`,
+        upgrade
+      });
+    }
   );
   return server2;
 }

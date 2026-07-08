@@ -32,7 +32,17 @@ const manifest = loadManifest();
 const icons = loadIcons();
 const design = loadDesign();
 
-export const SUMMARY = { components: manifest.counts.components, tokens: manifest.counts.tokens, icons: icons.count };
+// The hosted MCP is always the latest; this is that latest design-system version.
+const VERSION = manifest.designSystem?.version || "0.0.0";
+const PKG_NAME = manifest.designSystem?.package || "@dhspl-tatvacare/tesseract-ui";
+
+export const SUMMARY = { version: VERSION, components: manifest.counts.components, tokens: manifest.counts.tokens, icons: icons.count };
+
+const parseSemver = (v) => {
+  const m = String(v == null ? "" : v).match(/(\d+)\.(\d+)\.(\d+)/);
+  return m ? { major: +m[1], minor: +m[2], patch: +m[3], raw: `${m[1]}.${m[2]}.${m[3]}` } : null;
+};
+const cmpSemver = (a, b) => a.major - b.major || a.minor - b.minor || a.patch - b.patch;
 
 const findComponent = (name) =>
   manifest.components.find((c) => c.name.toLowerCase() === String(name).toLowerCase()) ||
@@ -56,7 +66,7 @@ const isPassthrough = (p) => PASSTHROUGH.has(p) || /^(aria-|data-)/.test(p) || /
 const text = (obj) => ({ content: [{ type: "text", text: typeof obj === "string" ? obj : JSON.stringify(obj, null, 2) }] });
 
 export function createServer() {
-  const server = new McpServer({ name: "tesseract", version: "0.2.0" });
+  const server = new McpServer({ name: "tesseract", version: "0.3.0" });
 
   server.tool(
     "list_components",
@@ -152,6 +162,45 @@ export function createServer() {
     "The Tesseract design language (design.md): foundations — colours & their meaning, typography, spacing, elevation, motion, shape, icons — plus the hard rules, voice & tone, and do/don't. Read this to design 'in our world' beyond raw component/prop data.",
     {},
     async () => text(design || "design.md not found next to the plugin. Ensure design.md is at the repo/plugin root."),
+  );
+
+  server.tool(
+    "check_version",
+    "Report the latest Tesseract design-system version and whether a project is up to date. The hosted MCP is always the latest, so call this at the START of working in a project: read the installed version of @dhspl-tatvacare/tesseract-ui from the project's package.json (or node_modules/@dhspl-tatvacare/tesseract-ui/package.json) and pass it as installedVersion to get an upgrade recommendation. Omit installedVersion to just get the latest version and how to find the installed one.",
+    { installedVersion: z.string().optional().describe("The @dhspl-tatvacare/tesseract-ui version in the project (from package.json or node_modules), e.g. '1.0.3' or '^1.0.3'. Omit if unknown.") },
+    async ({ installedVersion }) => {
+      const upgrade = {
+        toLatest: `npm install ${PKG_NAME}@latest`,
+        pinned: `npm install ${PKG_NAME}@${VERSION}`,
+        note: "SemVer-safe within 1.x: patches/minors are additive — take them freely. A major (2.x) may change public API; read docs/UPGRADING.md + CHANGELOG.md before upgrading.",
+      };
+      const howToFindInstalled = `Read "${PKG_NAME}" in the project's package.json, or node_modules/${PKG_NAME}/package.json "version".`;
+      const latest = parseSemver(VERSION);
+
+      if (installedVersion == null) {
+        return text({ package: PKG_NAME, latest: VERSION, installed: null, status: "unknown",
+          message: `Latest Tesseract is ${VERSION}. To check this project, find its installed version and call check_version again with installedVersion.`,
+          howToFindInstalled, upgrade });
+      }
+      const inst = parseSemver(installedVersion);
+      if (!inst || !latest) {
+        return text({ package: PKG_NAME, latest: VERSION, installed: installedVersion, status: "unknown",
+          message: `Couldn't read an x.y.z version from "${installedVersion}". Latest is ${VERSION}.`, howToFindInstalled, upgrade });
+      }
+      const c = cmpSemver(inst, latest);
+      if (c === 0) {
+        return text({ package: PKG_NAME, latest: VERSION, installed: inst.raw, status: "up-to-date",
+          message: `Up to date — on the latest (${VERSION}).` });
+      }
+      if (c > 0) {
+        return text({ package: PKG_NAME, latest: VERSION, installed: inst.raw, status: "ahead",
+          message: `Installed ${inst.raw} is newer than the latest published ${VERSION} — likely a local/unpublished build.` });
+      }
+      const severity = inst.major !== latest.major ? "major" : inst.minor !== latest.minor ? "minor" : "patch";
+      return text({ package: PKG_NAME, latest: VERSION, installed: inst.raw, status: "update-available", severity,
+        message: `Update available: ${inst.raw} → ${VERSION} (${severity}). ${severity === "major" ? "Major — review the migration notes before upgrading." : "Additive within 1.x — safe to take."}`,
+        upgrade });
+    },
   );
 
   return server;

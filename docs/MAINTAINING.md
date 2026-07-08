@@ -32,7 +32,7 @@ places, all calling the one script (`scripts/preflight.mjs`):
 ### What it checks
 1. **MCP artifacts fresh** — manifest + both `mcp/dist` bundles rebuild to exactly what's
    committed (shipped == source; no stale hosted MCP).
-2. **MCP smoke test** — all 8 tools answer from the manifest.
+2. **MCP smoke test** — all 9 tools answer from the manifest.
 3. **Skill inventory fresh** — the `/tesseract` inventory is regenerated from source.
 4. **Component count** — README + CATALOG match the manifest total.
 5. **Per-component docs** — every component has `docs/components/<Name>.md` (aliases like

@@ -27,6 +27,7 @@ The server answers **only** from the manifest. It cannot return a prop or value 
 | `get_icons` | **Icon guardrail.** Search/validate real icon names (4,724 in the library) and list the valid `variant`s, so you never invent an icon name. |
 | `get_rules` | The non-negotiable rules every page must follow. |
 | `get_design` | The full **design language** (`design.md`): colour meanings, typography, spacing, elevation, motion, shape, icons, voice, do/don't. Read to design "in our world" beyond raw prop data. |
+| `check_version` | Report the latest design-system version and whether a project is up to date. Pass the project's installed `@dhspl-tatvacare/tesseract-ui` version → get an upgrade recommendation (severity + npm command). Call at the start of working in a project. |
 
 ## How consumers connect — the HOSTED server (only)
 

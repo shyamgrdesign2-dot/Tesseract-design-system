@@ -400,11 +400,15 @@ for (const c of components) {
 const tokens = parseTokens();
 const icons = parseIcons();
 
+// The design-system version travels INTO the manifest (root package.json isn't copied
+// into the container) so the MCP can report "latest" and power check_version.
+const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+
 const manifest = {
   $schema: "tesseract-component-manifest/v1",
   generatedFrom: "src/components/** + src/tesseract-tokens.css",
   generatedAtNote: "regenerate with: node mcp/scripts/build-manifest.mjs",
-  designSystem: { package: "tesseract-ui", importAliases: LAYERS.map((l) => `@/src/components/${l}`) },
+  designSystem: { package: pkg.name, version: pkg.version, importAliases: LAYERS.map((l) => `@/src/components/${l}`) },
   counts: {
     components: components.length,
     atoms: components.filter((c) => c.layer === "atoms").length,

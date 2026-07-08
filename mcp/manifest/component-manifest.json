@@ -3,7 +3,8 @@
   "generatedFrom": "src/components/** + src/tesseract-tokens.css",
   "generatedAtNote": "regenerate with: node mcp/scripts/build-manifest.mjs",
   "designSystem": {
-    "package": "tesseract-ui",
+    "package": "@dhspl-tatvacare/tesseract-ui",
+    "version": "1.0.6",
     "importAliases": [
       "@/src/components/atoms",
       "@/src/components/molecules",

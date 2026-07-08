@@ -33,6 +33,7 @@ Read `references/component-catalog.md`. For each region in the agreed architectu
 - `get_component(name)` → the real prop list + allowed values before you write JSX.
 - `validate_usage(component, props)` → confirm zero unknown props / out-of-range values before committing the usage.
 - `get_design()` → the design language (`design.md`): colour meanings, type, spacing, motion, shape, voice, do/don't. `get_tokens` / `get_rules` / `get_icons` for tokens, rules, and icon names.
+- `check_version(installedVersion)` → at the **start** of working in a project, read the installed `@dhspl-tatvacare/tesseract-ui` version (from the project's `package.json` / `node_modules`) and pass it here; if the project is behind the latest, tell the user and recommend the upgrade before building.
 If the MCP isn't connected, fall back to the catalog and the component's source/story at `src/components/{atoms,molecules,charts}/<Name>/`.
 
 ### 4 · Populate with our domain

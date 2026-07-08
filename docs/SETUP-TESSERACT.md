@@ -54,9 +54,9 @@ Settings → **Connectors** → **Add custom connector**:
 - **OAuth Client ID / Secret:** leave **BLANK** (it self-registers)
 - Continue → a Tesseract consent page opens → paste the **token above** once → authorize.
 
-**Verify:** ask your AI *"list the tesseract MCP tools."* You should see 8 —
+**Verify:** ask your AI *"list the tesseract MCP tools."* You should see 9 —
 `list_components`, `get_component`, `search_components`, `validate_usage`, `get_tokens`,
-`get_icons`, `get_rules`, `get_design`.
+`get_icons`, `get_rules`, `get_design`, `check_version`.
 
 ---
 

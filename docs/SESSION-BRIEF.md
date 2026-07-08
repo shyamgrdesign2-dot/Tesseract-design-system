@@ -20,8 +20,8 @@ props, tokens, or icon names.
 
 WHAT'S TRUE NOW
 - The MCP is HOSTED at https://tesseract.tatvapractice.in/mcp — always the latest, nothing
-  to clone. 8 tools: list_components, get_component, search_components, validate_usage,
-  get_tokens, get_icons, get_rules, get_design. NEVER run a local/stdio Tesseract MCP — if
+  to clone. 9 tools: list_components, get_component, search_components, validate_usage,
+  get_tokens, get_icons, get_rules, get_design, check_version. NEVER run a local/stdio Tesseract MCP — if
   one is configured it's stale; use the hosted URL.
 - Auth: a shared bearer token. Claude Code / Cursor send it as an Authorization header; the
   claude.ai / Desktop Connectors UI uses OAuth (add the URL, leave OAuth client id/secret
@@ -30,6 +30,9 @@ WHAT'S TRUE NOW
   Code plugin, which also auto-configures the hosted MCP.
 
 HOW TO WORK WITH IT
+0. Check you're current: call check_version with the project's installed
+   @dhspl-tatvacare/tesseract-ui version (from package.json / node_modules). If it's behind,
+   recommend updating to the latest before building.
 1. Before building any UI "in our world", USE THE MCP: search_components / get_component to
    read real props + allowed values, get_tokens for colour/spacing, get_icons for valid icon
    names, get_design for the design language, and validate_usage to confirm a component +
