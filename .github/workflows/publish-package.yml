@@ -42,6 +42,12 @@ jobs:
 
       - run: npm ci
 
+      - name: Install MCP deps (needed by preflight)
+        run: npm --prefix mcp ci || npm --prefix mcp install
+
+      - name: Preflight — never publish a broken build
+        run: npm run preflight
+
       - name: Build library (ESM + CJS + CSS + types)
         run: npm run build:lib
 
