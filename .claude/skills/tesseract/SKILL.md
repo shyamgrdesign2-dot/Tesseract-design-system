@@ -40,7 +40,7 @@ If the MCP isn't connected, fall back to the catalog and the component's source/
 Read `references/product-and-domain.md`. Use real module names, entities, statuses, and vocabulary (Patient, Encounter, MRN, Visit Type, IPD admission, Form 3C, ABHA…) so the page reads like TatvaPractice, not generic CRUD.
 
 ### 5 · Compliance pass
-Check against `references/tokens-and-rules.md`: tokens-only, no odd numbers, `--tesseract-` prefix, never edit `tesseract-tokens.css`, barrel imports, CSS Modules + `data-*`, **Tesseract components only** (never Ant Design / MUI / Tailwind / raw Radix — our old live apps use those for *structure reference only*).
+Check against `references/tokens-and-rules.md`: tokens-only, no odd numbers, `--tesseract-` prefix, never edit `tesseract-tokens.css`, barrel imports, CSS Modules + `data-*`, **Tesseract components only** (never Ant Design / MUI / Tailwind / raw Radix — our old live apps use those for *structure reference only*). Also apply `references/design-foundations.md` (component states, elevation, layering, density, 18px spacing rhythm) and `references/ux-guidelines.md` (loading / empty / error states, forms, tables, feedback, responsive, microcopy).
 
 ## Reference examples (optional, not mandates)
 - `references/page-archetypes.md` — common EMR page *shapes* (List, Detail, Form, Dashboard, RxPad, Print, Drawer, Settings) as worked illustrations of the principles. Use them as a starting sketch, then adapt to the intake.
@@ -62,6 +62,8 @@ It regenerates `references/_generated-inventory.md` from `src/components/**`. Re
 | `references/page-principles.md` | The ideology for composing any EMR page |
 | `references/component-catalog.md` | Choosing components per region; checking props |
 | `references/product-and-domain.md` | Naming modules/entities/columns/statuses our way |
-| `references/tokens-and-rules.md` | Final compliance pass |
-| `references/page-archetypes.md` | Example page shapes to sketch from |
+| `references/tokens-and-rules.md` | Final compliance pass — tokens, a11y, rules |
+| `references/design-foundations.md` | The general DS layer — states, elevation, layering, density, spacing rhythm |
+| `references/ux-guidelines.md` | Tactical UI/UX — loading/empty/error, forms, tables, feedback, responsive |
+| `references/page-archetypes.md` | Page layout frames (hero / sub-page / drawer) to compose from |
 | `references/recipes/data-listing-page.md` | A complete worked List page |
