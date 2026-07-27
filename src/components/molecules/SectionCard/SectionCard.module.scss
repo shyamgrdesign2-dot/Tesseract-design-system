@@ -22,7 +22,7 @@
   /* Shell = a base tone colour + a configurable intensity (subtle by default; 0–100).
      The `intensity` prop overrides --sc-intensity. */
   --sc-tint: var(--tesseract-slate-400);
-  --sc-intensity: 8;
+  --sc-intensity: 6;
   --sc-grad: color-mix(in srgb, var(--sc-tint) calc(var(--sc-intensity) * 1%), transparent);
   --sc-edge: color-mix(in srgb, var(--sc-tint) 30%, transparent);
 
@@ -40,18 +40,19 @@
   color: var(--tesseract-fg-primary);
   overflow: hidden;
 
-  &[data-tone="primary"] { --sc-tint: var(--tesseract-blue-500);    --sc-accent-bg: var(--tesseract-blue-100);    --sc-accent-fg: var(--tesseract-blue-600); }
-  &[data-tone="active"]  { --sc-tint: var(--tesseract-warning-500); --sc-accent-bg: var(--tesseract-warning-100); --sc-accent-fg: var(--tesseract-warning-700); }
-  &[data-tone="success"] { --sc-tint: var(--tesseract-success-500); --sc-accent-bg: var(--tesseract-success-100); --sc-accent-fg: var(--tesseract-success-700); }
-  &[data-tone="violet"]  { --sc-tint: var(--tesseract-violet-500);  --sc-accent-bg: var(--tesseract-violet-100);  --sc-accent-fg: var(--tesseract-violet-600); }
+  &[data-tone="primary"] { --sc-tint: var(--tesseract-blue-500);    --sc-accent-bg: var(--tesseract-blue-50);    --sc-accent-fg: var(--tesseract-blue-600); }
+  &[data-tone="active"]  { --sc-tint: var(--tesseract-warning-500); --sc-accent-bg: var(--tesseract-warning-50); --sc-accent-fg: var(--tesseract-warning-700); }
+  &[data-tone="success"] { --sc-tint: var(--tesseract-success-500); --sc-accent-bg: var(--tesseract-success-50); --sc-accent-fg: var(--tesseract-success-700); }
+  &[data-tone="violet"]  { --sc-tint: var(--tesseract-violet-500);  --sc-accent-bg: var(--tesseract-violet-50);  --sc-accent-fg: var(--tesseract-violet-600); }
 
   &[data-elevation="sm"] { box-shadow: 0 1px 2px color-mix(in srgb, var(--tesseract-slate-900) 6%, transparent); }
   &[data-elevation="md"] { box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent); }
 }
 
-/* Shell border — a FADED gradient ring: softest on the sides, a touch stronger top &
-   bottom (a vertical 180deg gradient). --sc-edge is already low-opacity so every edge
-   reads as faded. */
+/* Shell border — a FADED gradient ring. A VERTICAL (180deg) gradient dissolves the CENTRE
+   of the left & right edges (per the reference): the top & bottom edges stay present, while
+   each side edge fades to almost nothing toward its middle. The low mid-stop keeps the sides
+   very light. */
 .bordered::before {
   content: "";
   position: absolute;
@@ -61,7 +62,7 @@
   background: linear-gradient(
     180deg,
     var(--sc-edge) 0%,
-    color-mix(in srgb, var(--sc-edge) 22%, transparent) 50%,
+    color-mix(in srgb, var(--sc-edge) 6%, transparent) 50%,
     var(--sc-edge) 100%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -160,9 +161,13 @@
     border-radius: var(--tesseract-radius-10);
     color: var(--sc-accent-fg);
   }
-  &[data-icon-bg="soft"] { background: var(--sc-accent-bg); }
+  /* Square background = a LIGHTER SHADE of the icon's own colour (currentColor), so a
+     violet icon gets a light-violet square, a green icon a light-green square, etc. */
+  &[data-icon-bg="soft"] { background: color-mix(in srgb, currentColor 15%, var(--tesseract-slate-0)); }
   &[data-icon-bg="gradient"] {
-    background: linear-gradient(150deg, var(--sc-accent-bg) 0%, color-mix(in srgb, var(--sc-accent-bg) 35%, var(--tesseract-slate-0)) 100%);
+    background: linear-gradient(150deg,
+      color-mix(in srgb, currentColor 22%, var(--tesseract-slate-0)) 0%,
+      color-mix(in srgb, currentColor 7%, var(--tesseract-slate-0)) 100%);
   }
 }
 
