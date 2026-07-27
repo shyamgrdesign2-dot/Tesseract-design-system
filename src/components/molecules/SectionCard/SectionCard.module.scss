@@ -110,18 +110,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--tesseract-size-24);
-  height: var(--tesseract-size-24);
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: var(--tesseract-radius-6);
-  background: transparent;
-  color: var(--tesseract-slate-500);
+  border-radius: var(--tesseract-radius-10);
+  /* Neutral square background behind the accordion chevron (kept on the right by default). */
+  background: var(--tesseract-slate-100);
+  color: var(--tesseract-slate-600);
   cursor: pointer;
   transition: background-color 150ms ease, color 150ms ease;
 
-  &:hover { background: var(--tesseract-slate-100); color: var(--tesseract-slate-700); }
+  &:hover { background: var(--tesseract-slate-200); color: var(--tesseract-slate-700); }
   &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--tesseract-blue-200); }
 }
 
