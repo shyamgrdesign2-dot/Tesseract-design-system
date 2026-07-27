@@ -52,7 +52,7 @@ Pick a frame by page type (a starting point, not the only layout):
 
 ```
 ┌───────────────────────────────────────────────┐
-│  ‹  Title                     [ CTA ]  [ ⋯ ]   │   Drawer header — right = CTAs / info (NO close ✕)
+│  ‹  Title                     [ CTA ]  [ ⋯ ]   │   Drawer header — right = CTAs / info
 ├───────────────────────────────────────────────┤
 │              ↕ 18px                             │
 │   Content — form · confirm · details            │   Drawer body
@@ -61,9 +61,7 @@ Pick a frame by page type (a starting point, not the only layout):
 │                          [ Cancel ]  [ Save ]   │   Drawer footer
 └───────────────────────────────────────────────┘
 
-> **Header right side = a CTA / action / info zone** (in the top bar *and* the drawer header) —
-> never a close `✕`. Close a drawer via the back `‹` or a footer action. This holds across all
-> three frames (hero, sub-page, drawer).
+> The **header right side** (top bar *and* drawer header) is a **CTAs / actions / info** zone.
 ```
 
 *Optional add-ons:* a `SecondarySidebar` sub-nav on **record** pages (patient tabs, RxPad); a
