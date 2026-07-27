@@ -52,7 +52,7 @@ Pick a frame by page type (a starting point, not the only layout):
 
 ```
 ┌───────────────────────────────────────────────┐
-│  ‹  Title                               ✕      │   Drawer header
+│  ‹  Title                     [ CTA ]  [ ⋯ ]   │   Drawer header — right = CTAs / info (NO close ✕)
 ├───────────────────────────────────────────────┤
 │              ↕ 18px                             │
 │   Content — form · confirm · details            │   Drawer body
@@ -60,6 +60,10 @@ Pick a frame by page type (a starting point, not the only layout):
 ├───────────────────────────────────────────────┤
 │                          [ Cancel ]  [ Save ]   │   Drawer footer
 └───────────────────────────────────────────────┘
+
+> **Header right side = a CTA / action / info zone** (in the top bar *and* the drawer header) —
+> never a close `✕`. Close a drawer via the back `‹` or a footer action. This holds across all
+> three frames (hero, sub-page, drawer).
 ```
 
 *Optional add-ons:* a `SecondarySidebar` sub-nav on **record** pages (patient tabs, RxPad); a
@@ -85,7 +89,7 @@ right-docked **Dr. Agent** `Drawer` on clinical/ops pages.
 
 **Rules:**
 1. **Sidebar and banner are optional and contextual** — sidebar on module pages, banner on hero/landing pages; sub-pages and drawers have neither. Don't force one frame onto every page.
-2. **Top bar + content is the constant**; content sits ~**18px** below the top bar, *or* overlaps the banner on a hero page.
+2. **Spacing** — content sits ~**18px** below the top bar (or overlaps the banner on a hero page); content / card inner **padding defaults to 18px** on all sides (use 24px for roomier surfaces).
 3. **One primary action** per page.
 4. Any side/full-page panel — including **Dr. Agent** — is a `Drawer` (header + body + footer), never a hand-rolled panel.
 5. Lay out with flex/grid; components nest directly. If asked for "just the table / just the content", build the body alone.
