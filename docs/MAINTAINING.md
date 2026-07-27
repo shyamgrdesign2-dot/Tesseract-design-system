@@ -15,7 +15,7 @@ Three surfaces, three channels — all pull from this repo, so you control them 
 
 So: **edit the skill here → it flows to every cloud session on the plugin. Update the
 components here → the hosted MCP serves them to everyone automatically.** No copies to
-chase; the `docs/MIGRATE-TO-HOSTED-MCP.md` prompt brings any stale project back in line.
+chase — every session pulls the latest (hosted MCP + plugin), and `STARTER.md` is the single setup guide.
 
 ## The preflight gate — never ship a break
 

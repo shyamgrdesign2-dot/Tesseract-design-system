@@ -21,7 +21,7 @@ Full history is in [CHANGELOG.md](../CHANGELOG.md). Per-version notes below (new
 Mixed-stack friendliness — **no change for pure-Tesseract apps**:
 - New **`rootTheme`** prop on `TesseractThemeProvider` (default `true`). Set it to
   `false` when embedding inside a non-Tesseract host so the provider doesn't write base
-  typography / color-scheme onto `document.documentElement`. See [ADOPTION.md](./ADOPTION.md).
+  typography / color-scheme onto `document.documentElement`. See [../STARTER.md](../STARTER.md) (mixed-stack notes).
 - Library build ships **without source maps** (smaller install, no source exposure).
 
 Defaults preserve the current look; nothing to change on upgrade.

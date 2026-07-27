@@ -174,7 +174,7 @@ re-clone or re-bundle.
 claude mcp add --transport http tesseract https://tesseract.tatvapractice.in/mcp \
   --header "Authorization: Bearer <token>"
 ```
-Full per-tool config → [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
+Full per-tool config → [`STARTER.md`](STARTER.md).
 
 ### Install once, use everywhere (plugin — recommended, incl. cloud)
 
@@ -200,7 +200,7 @@ then `/plugin install tesseract@tesseract`.)
 Then, in Claude Code: *“/tesseract — build me an All Patients list page.”* The
 skill runs the intake, the hosted MCP validates every component/prop/icon, and the
 output is real `tesseract-ui` code. Full runbook: [`STARTER.md`](STARTER.md) ·
-[`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md).
+[`STARTER.md`](STARTER.md).
 
 > Maintainers: after changing components, run `npm run build:mcp` to refresh the
 > manifest, then deploy so the hosted MCP serves the update.
@@ -245,6 +245,6 @@ Start at **[`docs/README.md`](docs/README.md)** — the documentation index. Key
 - [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md) — the **v1.0 stability contract**
   (SemVer, public-API surface, how consumers stay upgrade-safe). Read before adopting.
 - [`STARTER.md`](STARTER.md) — set up the package, the skill, and the hosted MCP
-  in a new project; [`docs/CONNECT-MCP.md`](docs/CONNECT-MCP.md) for the MCP config.
+  in a new project; [`STARTER.md`](STARTER.md) for the MCP config.
 - [`docs/ICONS.md`](docs/ICONS.md) — the icon CDN URL structure, families, styles,
   and name aliases.

@@ -34,7 +34,7 @@ The server answers **only** from the manifest. It cannot return a prop or value 
 Consumers **never run this locally.** The MCP is deployed as a hosted HTTP server at
 `https://tesseract.tatvapractice.in/mcp` (co-hosted in the Storybook container, bundle
 `src/http-server.mjs`). Connect by URL with a bearer token — see
-[`../docs/CONNECT-MCP.md`](../docs/CONNECT-MCP.md). This is deliberate: a hosted server
+[`../STARTER.md`](../STARTER.md). This is deliberate: a hosted server
 **auto-updates** when a new Tesseract version ships, so every client sees the new
 components/props/tokens with nothing to re-clone or re-bundle. A local copy would
 freeze at install time and go stale.

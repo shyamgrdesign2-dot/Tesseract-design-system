@@ -3,7 +3,7 @@
 The container builds the static Storybook and serves it with a tiny non-root nginx
 on port **8080**, and **co-hosts the Tesseract MCP** — nginx reverse-proxies `/mcp`
 and the OAuth endpoints to a Node process in the same container (see
-[CONNECT-MCP.md](./CONNECT-MCP.md)). Access to the deployed site is protected at the
+[../STARTER.md](../STARTER.md)). Access to the deployed site is protected at the
 platform level (see [DEPLOY-AUTH.md](./DEPLOY-AUTH.md)).
 
 Files: [`Dockerfile`](../Dockerfile) · [`nginx.conf`](../nginx.conf) · [`.dockerignore`](../.dockerignore)
