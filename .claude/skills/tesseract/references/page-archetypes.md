@@ -6,15 +6,17 @@ Most TatvaPractice screens resemble one of these shapes. Sketch from the closest
 
 ---
 
-## The default page skeleton (the TatvaPractice signature — use this unless told otherwise)
+## Page layout — compose from parts (there is NO single fixed template)
 
-Almost every full TatvaPractice screen is the **same skeleton**. When you're asked to build a
-page and given no other layout direction, produce THIS structure and drop the
-archetype-specific body into the overlay card. **Retaining this skeleton is what makes a new
-page look like TatvaPractice on the very first prompt** — do not invent a different frame.
+A TatvaPractice screen is **assembled from parts**; which parts appear depends on the page —
+don't force every page into one frame. The only near-constant is a **top bar + the content
+below it** (with ~**18px** spacing). **`Sidebar` and `HeroBanner` are optional** — the sidebar
+only on module pages, the banner only on hero / section-landing pages; sub-pages and drawers
+have neither.
 
-Four parts: **Sidebar · Header · HeroBanner · Content Card** — and the card **overlaps the
-banner** (its top edge sits *on* the banner, then it runs down the page).
+Pick a frame by page type (a starting point, not the only layout):
+
+### ① Hero / section landing — has the banner, and the content card overlaps it
 
 ```
 ┌────────┬──────────────────────────────────────────────────────────────┐
@@ -32,18 +34,45 @@ banner** (its top edge sits *on* the banner, then it runs down the page).
 └────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-*Optional add-ons, only when the page needs them:* a `SecondarySidebar` sub-nav on **record**
-pages (patient tabs, RxPad sections), and a right-docked **Dr. Agent** `Drawer` on clinical/ops
-pages. They are not part of the base skeleton — don't add them to a plain page.
+### ② Sub-page — no banner; content sits ~18px below the top bar
+
+```
+┌────────┬──────────────────────────────────────────────────────────────┐
+│        │  ‹  Page Title                          ⟳    🔔    Hosp ▾    ◍ │   HEADER
+│  Side  ├──────────────────────────────────────────────────────────────┤
+│  bar   │                        ↕ 18px                                  │
+│ (opt.) │   ┌──────────────────────────────────────────────────────┐    │
+│  ▣     │   │  Content — form · sections · table · detail            │   │   content sits directly
+│  ▣     │   │  …                                                     │   │   below the top bar
+│        │   └──────────────────────────────────────────────────────┘    │
+└────────┴──────────────────────────────────────────────────────────────┘
+```
+
+### ③ Drawer / full-page drawer — no banner, no sidebar; header + body + footer
+
+```
+┌───────────────────────────────────────────────┐
+│  ‹  Title                               ✕      │   Drawer header
+├───────────────────────────────────────────────┤
+│              ↕ 18px                             │
+│   Content — form · confirm · details            │   Drawer body
+│   …                                             │
+├───────────────────────────────────────────────┤
+│                          [ Cancel ]  [ Save ]   │   Drawer footer
+└───────────────────────────────────────────────┘
+```
+
+*Optional add-ons:* a `SecondarySidebar` sub-nav on **record** pages (patient tabs, RxPad); a
+right-docked **Dr. Agent** `Drawer` on clinical/ops pages.
 
 **Regions, outside → in** (each maps to one component):
 
 | Region | Component | Notes |
 |---|---|---|
-| Primary nav (left) | `Sidebar` | icon+label module rail; `activeId` = current module. On every full page. |
+| Primary nav (left) *(optional)* | `Sidebar` | icon+label module rail; `activeId` = current module. **Only on module pages** — drop it on sub-pages, drawers, and standalone flows. |
 | Sub-nav (left, record pages) | `SecondarySidebar` | only on a record's sub-sections (IPD patient tabs, RxPad sections, settings groups). |
 | Top bar | `Header` | **Standard top bar** — `back` chevron + page title + right `actions[]` (refresh, notifications, hospital `Dropdown`, `Avatar`). Add `Tabs`/`SegmentedControl` **only** if the page genuinely has sub-views — not by default. On **record** pages the title area carries entity context — patient name + `Chip`s (ward, consultant, admitted date). |
-| Hero | `HeroBanner` | brand-gradient strip carrying the page title (H1). |
+| Hero *(hero pages only)* | `HeroBanner` | brand-gradient strip carrying the page title (H1). **Hero / section-landing pages only** — never on a sub-page or drawer. |
 | **Overlay card** | `Card` / `SectionCard` pulled **up over the hero** (negative top margin) | the signature move — the white content surface overlaps the hero's lower edge. Render hero and card as one overlapping unit, **not** two stacked blocks with a gap. |
 | Toolbar (top of card) | `InputBox` (search, left) + `Filter` (right); chosen filters → `Chip` row | on listing / searchable pages. |
 | Body (in card) | the archetype content | **the only region that changes** — see A–H below. |
@@ -54,12 +83,12 @@ pages. They are not part of the base skeleton — don't add them to a plain page
 - **Report / category grid** — hero → overlay card → grouped sections (FINANCIAL · CLINICAL · REFERENCE), each a grid of report `Card`s with a Download `Button` (e.g. *OPD Reports*). Shape **D/A** hybrid.
 - **Record section** — `SecondarySidebar` (patient sub-nav) + entity-context top bar (patient + `Chip`s) → hero → overlay card → an **empty state** (icon + text + one primary `Button`) or the section's content (e.g. IPD → *Admission Assessment*). Shape **B**.
 
-**Skeleton rules (keep these even for a "just build a page" request):**
-1. Vary only the **card body**; keep shell → top bar → hero → overlay card intact.
-2. **One primary action** per page (in the toolbar or the empty state).
-3. The **Dr. Agent** panel is a `Drawer` (header + body + footer), not a bespoke sidebar.
-4. Lay the shell out with flex/grid; components nest directly (no special wrapper).
-5. If the user explicitly asks for "just the table / just the content", skip the shell and build the card body alone.
+**Rules:**
+1. **Sidebar and banner are optional and contextual** — sidebar on module pages, banner on hero/landing pages; sub-pages and drawers have neither. Don't force one frame onto every page.
+2. **Top bar + content is the constant**; content sits ~**18px** below the top bar, *or* overlaps the banner on a hero page.
+3. **One primary action** per page.
+4. Any side/full-page panel — including **Dr. Agent** — is a `Drawer` (header + body + footer), never a hand-rolled panel.
+5. Lay out with flex/grid; components nest directly. If asked for "just the table / just the content", build the body alone.
 
 ---
 
