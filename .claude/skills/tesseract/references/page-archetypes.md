@@ -6,26 +6,53 @@ Most TatvaPractice screens resemble one of these shapes. Sketch from the closest
 
 ---
 
-## The app shell (wraps most pages)
+## The default page skeleton (the TatvaPractice signature — use this unless told otherwise)
+
+Almost every full TatvaPractice screen is the **same skeleton**. When you're asked to build a
+page and given no other layout direction, produce THIS structure and drop the
+archetype-specific body into the overlay card. **Retaining this skeleton is what makes a new
+page look like TatvaPractice on the very first prompt** — do not invent a different frame.
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  Header — logo · title/patient-context · user · actions[]     │  ← <Header/>
-├────────┬────────────────────────────────────────┬────────────┤
-│        │                                         │            │
-│ Sidebar│           Content area                  │ Secondary  │  ← <Sidebar/> (left)
-│ (module│   (archetype-specific regions)          │  Sidebar   │     <SecondarySidebar/> (optional rail)
-│  nav)  │                                         │  (context) │
-│        │                                         │            │
-└────────┴────────────────────────────────────────┴────────────┘
+┌────────┬───────────────────────────────────────────────────────┬─────┐
+│        │ ‹  Page Title     ⟨ OPD | IPD ⟩         ⟳  🔔  Hosp ▾  ◍ │     │  ← Header (top bar)
+│        ├───────────────────────────────────────────────────────┤     │
+│  Side  │▓▓▓▓▓▓▓▓▓▓▓▓ HeroBanner  (brand gradient) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓│  D  │  ← HeroBanner
+│  bar   │▓▓  Page Title                                        ▓▓│  r  │     (carries the H1)
+│ (nav)  │   ╭─────────────────────────────────────────────────╮ │  ·  │
+│        │   │ [ 🔍 search ]                       [ Filters ▾ ] │ │  A  │  ← Card LIFTED UP over
+│  ▣ …   │   │ ──────────────────────────────────────────────── │ │  g  │     the hero (negative
+│  ▣ …   │   │  CONTENT  (the only region that changes):         │ │  e  │     top margin, ~-40…-64)
+│  ▣ …   │   │   DataTable · grouped report Cards · a form ·     │ │  n  │
+│        │   │   RxPad sections · empty state · detail sections  │ │  t  │  ← Dr. Agent =
+│        │   ╰─────────────────────────────────────────────────╯ │  ▐  │     right-docked Drawer
+└────────┴───────────────────────────────────────────────────────┴─────┘
 ```
 
-- **Header** — top bar. Right cluster = `actions` array (CTAs, user avatar, info tags). On record pages, put patient context in `title`/`leading`.
-- **Sidebar** — primary module nav (Appointments, Patients, RxPad, Billing…). Collapsed 80px rail or expanded. `activeId` = current module.
-- **SecondarySidebar** — only on module pages that have sub-sections (patient record tabs, RxPad sections). Often a locked 80px rail with `bottomFade`.
-- **Content area** — flex child; this is where the archetype lives.
+**Regions, outside → in** (each maps to one component):
 
-Layout the shell with flex/grid; components nest directly (no special wrapper). If the user asks for "just the table/content", skip the shell and build the content region alone.
+| Region | Component | Notes |
+|---|---|---|
+| Primary nav (left) | `Sidebar` | icon+label module rail; `activeId` = current module. On every full page. |
+| Sub-nav (left, record pages) | `SecondarySidebar` | only on a record's sub-sections (IPD patient tabs, RxPad sections, settings groups). |
+| Top bar | `Header` | `back` chevron + page title + optional `SegmentedControl`/`Tabs` (e.g. OPD \| IPD) + right `actions[]` (refresh, notifications, hospital `Dropdown`, `Avatar`, record button). On **record** pages the title area carries entity context — patient name + `Chip`s (ward, consultant, admitted date). |
+| Hero | `HeroBanner` | brand-gradient strip carrying the page title (H1). |
+| **Overlay card** | `Card` / `SectionCard` pulled **up over the hero** (negative top margin) | the signature move — the white content surface overlaps the hero's lower edge. Render hero and card as one overlapping unit, **not** two stacked blocks with a gap. |
+| Toolbar (top of card) | `InputBox` (search, left) + `Filter` (right); chosen filters → `Chip` row | on listing / searchable pages. |
+| Body (in card) | the archetype content | **the only region that changes** — see A–H below. |
+| Right dock | `Drawer` opened by a docked **"Dr. Agent"** tab on the right edge | the AI-assistant panel is a **right `Drawer`** — use its header / body / footer; don't hand-roll a fixed panel. Present on clinical / ops pages. |
+
+**Three concrete instances (from the live product):**
+- **Listing** — hero → overlay card → `[search] [Filters]` toolbar → `DataTable` (e.g. Nursing → *My Patients*). Shape **A**.
+- **Report / category grid** — hero → overlay card → grouped sections (FINANCIAL · CLINICAL · REFERENCE), each a grid of report `Card`s with a Download `Button` (e.g. *OPD Reports*). Shape **D/A** hybrid.
+- **Record section** — `SecondarySidebar` (patient sub-nav) + entity-context top bar (patient + `Chip`s) → hero → overlay card → an **empty state** (icon + text + one primary `Button`) or the section's content (e.g. IPD → *Admission Assessment*). Shape **B**.
+
+**Skeleton rules (keep these even for a "just build a page" request):**
+1. Vary only the **card body**; keep shell → top bar → hero → overlay card intact.
+2. **One primary action** per page (in the toolbar or the empty state).
+3. The **Dr. Agent** panel is a `Drawer` (header + body + footer), not a bespoke sidebar.
+4. Lay the shell out with flex/grid; components nest directly (no special wrapper).
+5. If the user explicitly asks for "just the table / just the content", skip the shell and build the card body alone.
 
 ---
 

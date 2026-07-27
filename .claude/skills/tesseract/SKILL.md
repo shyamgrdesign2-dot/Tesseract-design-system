@@ -27,7 +27,7 @@ The output of intake is an agreed **page architecture** (which shell regions exi
 Read `references/page-principles.md`. These are the *ideology* — shell-first, one primary action, progressive disclosure, entity context bars, status as colour+text, designed empty/loading states, clinical density, consistency over novelty. Any shared design is just an example of these principles; when a design and a principle conflict, follow the principle.
 
 ### 3 · Compose from the catalog
-Read `references/component-catalog.md`. For each region in the agreed architecture, pick the Tesseract component that fills it (molecules for regions, atoms for leaves).
+**Start from the default page skeleton** in `references/page-archetypes.md` (read it now): app shell (`Sidebar`, + `SecondarySidebar` on record pages) → top bar (`Header`: back + title + optional `SegmentedControl`/`Tabs` + right actions) → `HeroBanner` (carries the H1) → an overlay `Card`/`SectionCard` **lifted up over the hero** → toolbar (`InputBox` search + `Filter`) → the archetype body → the right-docked **Dr. Agent** `Drawer`. **Reproduce this frame by default** — even for a vague "build me a page" request — and change only the card body per archetype; don't invent a different layout unless the user asks. Then read `references/component-catalog.md` and, for each region, pick the Tesseract component that fills it (molecules for regions, atoms for leaves).
 
 **Ground-truth props — prefer the MCP if connected.** This repo ships a `tesseract` MCP server (`mcp/`) that serves the *exact* components and props from source. If its tools are available, use them so you never hallucinate a prop or value:
 - `get_component(name)` → the real prop list + allowed values before you write JSX.
