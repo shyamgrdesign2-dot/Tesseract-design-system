@@ -12,17 +12,18 @@ library (atoms + molecules), built with **zero runtime dependencies** (only
 
 ---
 
-## Install (public npm)
+## Install (private — GitHub Packages)
 
-Published to the **public npm registry** as `@dhspl-tatvacare/tesseract-ui` — install with
-**no token, no `.npmrc`, no org membership**. Versions are immutable and semver ranges work,
-so consumers get safe patches and never a surprise breaking change.
+Published to the org's **private GitHub Packages** registry as `@dhspl-tatvacare/tesseract-ui`.
+Add a one-time `.npmrc` (scope → GitHub Packages + a `read:packages` token; see
+[`.npmrc.example`](.npmrc.example)), then install. Versions are immutable and semver ranges
+work, so consumers get safe patches and never a surprise breaking change.
 
 ```bash
 npm install @dhspl-tatvacare/tesseract-ui react react-dom
 ```
 
-- **No auth** — public package; just install (only the built `dist` is published; the source repo stays private).
+- **Access** — org membership + a `read:packages` token (via `${NPM_TOKEN}` in `.npmrc`); only the built `dist` is published, source stays private.
 - **Updates:** `npm update @dhspl-tatvacare/tesseract-ui` — patches/minors only within `1.x`.
 - **Peers:** `react` / `react-dom` (React 18+).
 

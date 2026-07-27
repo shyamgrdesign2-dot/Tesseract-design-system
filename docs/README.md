@@ -32,7 +32,7 @@ hosted MCP) that builds screens with the real components.
 ## Quick install
 
 ```bash
-# public on npm — no token or .npmrc needed:
+# private (GitHub Packages) — one-time .npmrc + read:packages token, then:
 npm install @dhspl-tatvacare/tesseract-ui
 ```
 ```jsx

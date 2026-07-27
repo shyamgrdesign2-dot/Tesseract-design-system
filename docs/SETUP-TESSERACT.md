@@ -75,7 +75,12 @@ the plugin auto-updates at startup.)
 
 ## 3 · Install the component package
 
-It's **public on npm — no token, no `.npmrc`, no org membership**:
+Private on GitHub Packages. One-time `.npmrc` in your app root (scope → GitHub Packages + a
+`read:packages` token via `${NPM_TOKEN}`), then install:
+```ini
+@dhspl-tatvacare:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+```
 ```bash
 npm install @dhspl-tatvacare/tesseract-ui
 ```
@@ -97,9 +102,9 @@ Add the fonts in your HTML `<head>`:
 
 ---
 
-## Just one token
-Only the **MCP bearer** token `c5713…` (Step 1 / the Connectors consent page). The npm
-package is **public** — installing it (Step 3) needs no token at all.
+## Two tokens
+- **MCP bearer** `c5713…` — connecting the hosted MCP (Step 1 / the Connectors consent page).
+- **`read:packages` token** (via `${NPM_TOKEN}` in `.npmrc`) — installing the package (Step 3). Get both from the DS team.
 
 ## In one line
 Connect the MCP (Step 1) → install the plugin for `/tesseract` (Step 2) → `npm install` the

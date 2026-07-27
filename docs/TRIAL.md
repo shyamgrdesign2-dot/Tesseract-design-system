@@ -1,10 +1,11 @@
 # Try Tesseract in a fresh local project (5 minutes)
 
 A copy-paste walkthrough: spin up a brand-new React app and use the Tesseract design
-system in it. The package is on the **public npm registry** — it installs as a normal
-dependency, **no token, no `.npmrc`, no org membership**. You just `import` components.
+system in it. The package is on the org's **private GitHub Packages** registry — install it
+with a one-time `.npmrc` + a `read:packages` token, then `import` components.
 
-> Prerequisite: **Node 18+**. That's it.
+> Prerequisites: **Node 18+**, membership in the **DHSPL-Tatvacare** org, and a
+> `read:packages` token (exported as `NPM_TOKEN`).
 
 ---
 
@@ -17,9 +18,14 @@ cd tesseract-trial
 
 ## 2. Install
 
+Add a `.npmrc` in the project root (token via the `NPM_TOKEN` env var), then install:
+```ini
+@dhspl-tatvacare:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+```
 ```bash
 npm install                                   # the Vite app's own deps
-npm install @dhspl-tatvacare/tesseract-ui     # the design system (public — no auth)
+npm install @dhspl-tatvacare/tesseract-ui     # the design system
 ```
 
 ## 3. Wire it up once — `src/main.jsx`
@@ -98,7 +104,7 @@ You only ever get patches/minors within `1.x` — never a breaking change (see
 
 | Symptom | Fix |
 |---|---|
-| `404 Not Found` for the package | It's public on npm — check the name is exactly `@dhspl-tatvacare/tesseract-ui` and your network can reach `registry.npmjs.org`. |
+| `401` / `404` for the package | Check the `.npmrc` scope line + that `NPM_TOKEN` (a `read:packages` token) is exported, and that you're in the **DHSPL-Tatvacare** org. |
 | Components render unstyled | You forgot `import "@dhspl-tatvacare/tesseract-ui/styles.css"` in `main.jsx`. |
 | Fonts look generic | Add the Google Fonts `<link>` from step 3. |
 | Icons don't appear | They load from the CDN at runtime — check the network tab isn't blocked; nothing to install locally. |
