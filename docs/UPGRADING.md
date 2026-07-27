@@ -16,6 +16,20 @@ Full history is in [CHANGELOG.md](../CHANGELOG.md). Per-version notes below (new
 
 ---
 
+## → 1.1.0  (SectionCard restyle + 2 new props)
+
+`SectionCard` now renders the **shell** surface by default: a subtle tone-tinted gradient
+fill, a faded gradient border (the centre of the left/right edges dissolves), 14px corners,
+very light dividers, an icon square tinted to a lighter shade of the icon's colour, and the
+accordion chevron in a neutral square. Additive props: **`intensity`** (fill strength) and
+**`iconBg`** (`"none"|"soft"|"gradient"`). No props removed/renamed — cards keep working,
+they just look more refined. Want a flatter look? `intensity={0}`, `iconBg="none"`, and/or
+`bordered={false}`.
+
+```bash
+npm install @dhspl-tatvacare/tesseract-ui@1.1.0
+```
+
 ## → 1.0.6  (additive)
 
 Mixed-stack friendliness — **no change for pure-Tesseract apps**:

@@ -4,6 +4,21 @@ All notable changes to `tesseract-ui`. This project follows [SemVer](https://sem
 and the stability contract in [`docs/PREREQUISITE.md`](docs/PREREQUISITE.md): within a
 major line (`1.x`), code built against v1.0 keeps working.
 
+## [1.1.0]
+
+### Changed
+- **SectionCard — new "shell" surface, now the default across all tones.** A subtle
+  tone-tinted gradient fill, a faded gradient border (the centre of the left/right edges
+  dissolves), **14px** corners, very light header-bottom / footer-top dividers (bands are
+  transparent so one shell gradient shows through), and the accordion chevron in a neutral
+  square (right by default). **Existing SectionCards will look different** — this changes the
+  default rendered surface — but no props were removed or renamed; every existing prop works.
+
+### Added
+- **SectionCard `intensity`** (0–100, default 6) — shell fill strength, fully configurable.
+- **SectionCard `iconBg`** (`"none" | "soft" | "gradient"`, default `"soft"`) — an optional
+  square behind the header icon, auto-tinted to a **lighter shade of the icon's own colour**.
+
 ## [1.0.6]
 
 ### Changed
