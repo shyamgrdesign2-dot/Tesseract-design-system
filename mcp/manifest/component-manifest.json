@@ -5508,6 +5508,10 @@
           "control": "color"
         },
         {
+          "name": "iconBg",
+          "default": "\"soft\""
+        },
+        {
           "name": "number",
           "control": "text",
           "description": "Shorthand for the leading chip content (a number)"
@@ -5533,6 +5537,9 @@
             "violet"
           ],
           "control": "inline-radio"
+        },
+        {
+          "name": "intensity"
         },
         {
           "name": "headerGradient",

@@ -4,40 +4,71 @@
 .card {
   &, & *, & *::before, & *::after { box-sizing: border-box; }
   font-family: var(--tesseract-font-body);
+  position: relative;
 
   /* Knobs (overridable inline) */
-  --sc-radius: var(--tesseract-radius-12);
+  --sc-radius: var(--tesseract-radius-16);
   --sc-pad: var(--tesseract-space-4);
   --sc-bg: var(--tesseract-slate-0);
-  --sc-header-bg: var(--sc-bg);
-  --sc-body-bg: var(--sc-bg);
-  --sc-footer-bg: var(--sc-bg);
+  /* Bands are transparent by default so the card's shell gradient shows through
+     continuously; set headerBg/bodyBg/footerBg to paint an individual band. */
+  --sc-header-bg: transparent;
+  --sc-body-bg: transparent;
+  --sc-footer-bg: transparent;
   --sc-border: var(--tesseract-slate-200);
+  /* Very light band dividers (header-bottom / footer-top). */
+  --sc-divider: color-mix(in srgb, var(--tesseract-slate-900) 6%, transparent);
 
-  /* Tone accents (number chip / icon / gradient). Default = neutral slate. */
+  /* Shell = a base tone colour + a configurable intensity (subtle by default; 0–100).
+     The `intensity` prop overrides --sc-intensity. */
+  --sc-tint: var(--tesseract-slate-400);
+  --sc-intensity: 8;
+  --sc-grad: color-mix(in srgb, var(--sc-tint) calc(var(--sc-intensity) * 1%), transparent);
+  --sc-edge: color-mix(in srgb, var(--sc-tint) 30%, transparent);
+
+  /* Tone accents (number chip / icon square). Default = neutral slate. */
   --sc-accent-bg: var(--tesseract-slate-100);
   --sc-accent-fg: var(--tesseract-slate-600);
-  --sc-grad: color-mix(in srgb, var(--tesseract-slate-200) 35%, transparent);
 
   display: flex;
   flex-direction: column;
   min-height: 0;
-  background: var(--sc-bg);
+  /* Shell fill — a subtle tone-tinted gradient from the top-left, fading to surface. */
+  background: linear-gradient(155deg, var(--sc-grad) 0%, var(--sc-bg) 58%);
   border-radius: var(--sc-radius);
   corner-shape: round;
   color: var(--tesseract-fg-primary);
   overflow: hidden;
 
-  &[data-tone="primary"] { --sc-accent-bg: var(--tesseract-blue-50);    --sc-accent-fg: var(--tesseract-blue-600);    --sc-grad: color-mix(in srgb, var(--tesseract-blue-500) 8%, transparent); }
-  &[data-tone="active"]  { --sc-accent-bg: var(--tesseract-warning-50); --sc-accent-fg: var(--tesseract-warning-700); --sc-grad: color-mix(in srgb, var(--tesseract-warning-500) 12%, transparent); }
-  &[data-tone="success"] { --sc-accent-bg: var(--tesseract-success-50); --sc-accent-fg: var(--tesseract-success-700); --sc-grad: color-mix(in srgb, var(--tesseract-success-500) 12%, transparent); }
-  &[data-tone="violet"]  { --sc-accent-bg: var(--tesseract-violet-50);  --sc-accent-fg: var(--tesseract-violet-700);  --sc-grad: color-mix(in srgb, var(--tesseract-violet-500) 10%, transparent); }
+  &[data-tone="primary"] { --sc-tint: var(--tesseract-blue-500);    --sc-accent-bg: var(--tesseract-blue-100);    --sc-accent-fg: var(--tesseract-blue-600); }
+  &[data-tone="active"]  { --sc-tint: var(--tesseract-warning-500); --sc-accent-bg: var(--tesseract-warning-100); --sc-accent-fg: var(--tesseract-warning-700); }
+  &[data-tone="success"] { --sc-tint: var(--tesseract-success-500); --sc-accent-bg: var(--tesseract-success-100); --sc-accent-fg: var(--tesseract-success-700); }
+  &[data-tone="violet"]  { --sc-tint: var(--tesseract-violet-500);  --sc-accent-bg: var(--tesseract-violet-100);  --sc-accent-fg: var(--tesseract-violet-600); }
 
   &[data-elevation="sm"] { box-shadow: 0 1px 2px color-mix(in srgb, var(--tesseract-slate-900) 6%, transparent); }
   &[data-elevation="md"] { box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--tesseract-slate-900) 12%, transparent); }
 }
 
-.bordered { border: 1px solid var(--sc-border); }
+/* Shell border — a FADED gradient ring: softest on the sides, a touch stronger top &
+   bottom (a vertical 180deg gradient). --sc-edge is already low-opacity so every edge
+   reads as faded. */
+.bordered::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    var(--sc-edge) 0%,
+    color-mix(in srgb, var(--sc-edge) 22%, transparent) 50%,
+    var(--sc-edge) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
 
 /* ── Header ── */
 .header {
@@ -121,6 +152,18 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+
+  /* Optional square background behind the icon (iconBg="soft" | "gradient"). */
+  &[data-icon-bg="soft"], &[data-icon-bg="gradient"] {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--tesseract-radius-10);
+    color: var(--sc-accent-fg);
+  }
+  &[data-icon-bg="soft"] { background: var(--sc-accent-bg); }
+  &[data-icon-bg="gradient"] {
+    background: linear-gradient(150deg, var(--sc-accent-bg) 0%, color-mix(in srgb, var(--sc-accent-bg) 35%, var(--tesseract-slate-0)) 100%);
+  }
 }
 
 .titleText {
@@ -195,5 +238,5 @@
 }
 
 /* Dividers between bands (only when adjacent bands are present). */
-.card[data-divided] .body { border-top: 1px solid var(--sc-border); }
-.card[data-divided] .footer { border-top: 1px solid var(--sc-border); }
+.card[data-divided] .body { border-top: 1px solid var(--sc-divider); }
+.card[data-divided] .footer { border-top: 1px solid var(--sc-divider); }

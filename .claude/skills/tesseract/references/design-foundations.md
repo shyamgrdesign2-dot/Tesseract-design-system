@@ -45,3 +45,16 @@ Keep density consistent within a surface; don't mix comfortable and compact rows
 ## Shape & motion (recap → tokens-and-rules)
 Radius **12** for cards/pills, **10** for chips/badges, **full** for avatars. Micro-interactions
 **120–180ms**, panels **220–320ms**, always `prefers-reduced-motion`-aware.
+
+## Card shell (the SectionCard surface)
+The standard card treatment — use `SectionCard` for cluster / overview / KPI / section cards
+rather than hand-rolling a card:
+- **Fill** — a *subtle*, tone-tinted **linear gradient** from the top-left, fading to surface.
+  Strength is configurable via `intensity` (0–100, default 8 = subtle).
+- **Border** — a **faded gradient ring**: softest on the sides, a touch stronger top & bottom
+  (never a hard uniform line).
+- **Radius** — 16px.
+- **Dividers** — header-bottom and footer-top only, **very light**; bands are transparent so the
+  one shell gradient shows through (no per-band colour).
+- **Icon** — an optional square behind the header icon: `iconBg="none" | "soft" | "gradient"`.
+- **Tones** — `neutral · primary · active · success · violet` tint the fill, edge, and icon square.

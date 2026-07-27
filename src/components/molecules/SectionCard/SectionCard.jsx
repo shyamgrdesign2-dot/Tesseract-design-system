@@ -20,10 +20,14 @@ import styles from "./SectionCard.module.scss";
  *
  * Props:
  *   title / subtitle / icon (name or node) / iconColor
+ *   iconBg       "none" | "soft" | "gradient" (default "soft") — the square behind the icon
  *   number       index chip on the left (plan-cluster style), tinted by `tone`
  *   amount       a pill shown under the title (e.g. "₹20,000")
  *   tone         "neutral" | "primary" | "active" | "success" | "violet" —
- *                accents the number chip + icon, and (with headerGradient) the header
+ *                accents the number chip + icon square + the shell fill/edge tint
+ *   intensity    shell fill strength 0–100 (default 8, subtle); higher = a stronger tint.
+ *                The card is a "shell": a soft tone-tinted gradient fill + a faded gradient
+ *                border (softest on the sides), with very light header/footer dividers.
  *   headerGradient  paint the header with a soft top-tinted gradient in `tone`
  *   tools        [{ icon, title, onClick, disabled, danger }] — the icon-button trio
  *                (template/save/clear pattern); rendered via the Button atom
@@ -45,10 +49,12 @@ export const SectionCard = React.forwardRef(function SectionCard(
     subtitle,
     icon,
     iconColor,
+    iconBg = "soft",
     number,
     leading,
     amount,
     tone = "neutral",
+    intensity,
     headerGradient = false,
     headerFill,
     headerColor,
@@ -103,6 +109,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
   const cardStyle = {
     ...(radius != null ? { "--sc-radius": resolveRadius(radius) } : null),
     ...(padding != null ? { "--sc-pad": px(padding) } : null),
+    ...(intensity != null ? { "--sc-intensity": intensity } : null),
     ...(surface ? { "--sc-bg": surface } : null),
     ...(headerBg ? { "--sc-header-bg": headerBg } : null),
     ...(bodyBg ? { "--sc-body-bg": bodyBg } : null),
@@ -159,7 +166,7 @@ export const SectionCard = React.forwardRef(function SectionCard(
               <span className={styles.numberChip}>{leading != null ? leading : number}</span>
             )}
             {iconEl && (
-              <span className={styles.iconChip} style={iconColor ? { color: iconColor } : undefined}>
+              <span className={styles.iconChip} data-icon-bg={iconBg !== "none" ? iconBg : undefined} style={iconColor ? { color: iconColor } : undefined}>
                 {iconEl}
               </span>
             )}
