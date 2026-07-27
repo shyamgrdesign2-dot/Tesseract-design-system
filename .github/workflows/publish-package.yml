@@ -1,15 +1,9 @@
-name: Publish to npm (public)
+name: Publish to GitHub Packages
 
-# Publishes @dhspl-tatvacare/tesseract-ui to the PUBLIC npm registry (npmjs.org) so
-# consumers install with ZERO auth:
-#   npm install @dhspl-tatvacare/tesseract-ui
-# No .npmrc, no token, no org membership needed on the consumer side.
-#
-# ONE-TIME setup (maintainer):
-#   1. Create an npm org named "dhspl-tatvacare" (npmjs.com → orgs) that owns the scope.
-#   2. Create an npm "Automation" access token (npmjs.com → Access Tokens).
-#   3. Add it to this repo's GitHub secrets as NPM_TOKEN.
-# The source repo can stay private — only the built dist is published.
+# Publishes @dhspl-tatvacare/tesseract-ui to the org's PRIVATE GitHub Packages npm
+# registry. Consumers install with a one-time .npmrc + a read:packages token (see the
+# developer guide). Publish auth uses the repo's built-in GITHUB_TOKEN (packages:write)
+# — no PAT needed on the publishing side.
 #
 # Triggers: on a published GitHub Release (normal path), or manual workflow_dispatch.
 
@@ -20,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 concurrency:
   group: publish-package
@@ -37,7 +32,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          registry-url: https://registry.npmjs.org
+          registry-url: https://npm.pkg.github.com
           scope: "@dhspl-tatvacare"
 
       - run: npm ci
@@ -51,7 +46,7 @@ jobs:
       - name: Build library (ESM + CJS + CSS + types)
         run: npm run build:lib
 
-      - name: Publish to public npm
-        run: npm publish --access public
+      - name: Publish to GitHub Packages
+        run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

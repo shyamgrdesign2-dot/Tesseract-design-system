@@ -9,8 +9,7 @@
     "url": "git+https://github.com/DHSPL-Tatvacare/tesseract-design-system.git"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   },
   "sideEffects": [
     "**/*.css"

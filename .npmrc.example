@@ -1,0 +1,13 @@
+# Consumer .npmrc — copy this to `.npmrc` in the root of any app that installs
+# @dhspl-tatvacare/tesseract-ui from the org's PRIVATE GitHub Packages registry.
+#
+# It does two things:
+#   1. Route the @dhspl-tatvacare scope to GitHub's private npm registry.
+#   2. Authenticate with a token that has `read:packages` (gated by org access).
+#
+# Do NOT paste the token here — reference an env var so the secret never lands in git:
+#   export NPM_TOKEN=<read:packages token>   (locally, in your shell profile)
+#   in CI / Azure: expose it as the NPM_TOKEN secret / build-arg / env var.
+
+@dhspl-tatvacare:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
