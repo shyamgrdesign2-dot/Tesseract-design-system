@@ -43,7 +43,7 @@ import { DataTable, Header, Sidebar } from "@/src/components/molecules";
 Component source and stories live at `src/components/{atoms,molecules}/<Name>/` — read them for exact APIs. Tokens are at `src/tesseract-tokens.css`.
 
 ### Case B — a separate project consuming the published package
-A new app that installed the library from the org's private **GitHub Packages** registry. The published name is scoped: **`@dhspl-tatvacare/tesseract-ui`** (v1.0.1+). Import from that name:
+A new app that installed the library from the org's private **GitHub Packages** registry. The published name is scoped: **`@dhspl-tatvacare/tesseract-ui`** (v1.1.0+). Import from that name:
 ```jsx
 import { Button, DataTable, Header } from "@dhspl-tatvacare/tesseract-ui";
 import "@dhspl-tatvacare/tesseract-ui/styles.css";               // load the stylesheet once at app root
