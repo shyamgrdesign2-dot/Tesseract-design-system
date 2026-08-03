@@ -20,7 +20,7 @@ LOC=centralindia                # region
 ACR=tesseractacr                # registry name (must be globally unique)
 ENV=tesseract-env               # Container Apps environment
 APP=tesseract-storybook
-TAG=1.0.6
+TAG=1.1.0
 ```
 
 ## 1. Build the image (in ACR — no local Docker needed)

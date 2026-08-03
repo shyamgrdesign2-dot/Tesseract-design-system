@@ -79,9 +79,9 @@ import { LineChart, StatCard, formatIndian } from "@dhspl-tatvacare/tesseract-ui
 ## Agent instruction (paste into a coding agent, per microservice)
 
 ```text
-TASK: Upgrade @dhspl-tatvacare/tesseract-ui to the latest 1.0.x in this repo.
+TASK: Upgrade @dhspl-tatvacare/tesseract-ui to the latest 1.x in this repo.
 STEPS:
-1. In package.json set "@dhspl-tatvacare/tesseract-ui": "^1.0.6", then run: npm install
+1. In package.json set "@dhspl-tatvacare/tesseract-ui": "^1.1.0", then run: npm install
    (confirm package-lock.json resolves the new version).
 2. If upgrading ACROSS 1.0.3: find and migrate removed HeroBanner tones —
    grep -rns 'tone="slate"\|tone="dark"' src  → replace with tone="violet" (or "blue").

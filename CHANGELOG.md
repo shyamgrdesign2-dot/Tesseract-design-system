@@ -154,8 +154,13 @@ list in [`docs/CATALOG.md`](docs/CATALOG.md).
   `@dhspl-tatvacare/tesseract-ui` (`npm install @dhspl-tatvacare/tesseract-ui`).
   Immutable versions + semver ranges. No-token fallback: git tag install
   `github:DHSPL-Tatvacare/tesseract-design-system#v1.0.0`. No public npm. See
-  [`docs/USING-TESSERACT.md`](docs/USING-TESSERACT.md).
+  [`STARTER.md`](../STARTER.md).
 
+[1.1.0]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.1.0
+[1.0.6]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.6
+[1.0.5]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.5
+[1.0.4]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.4
+[1.0.3]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.3
 [1.0.2]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.2
 [1.0.1]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.1
 [1.0.0]: https://github.com/DHSPL-Tatvacare/tesseract-design-system/releases/tag/v1.0.0
