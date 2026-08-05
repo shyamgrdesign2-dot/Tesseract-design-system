@@ -39,7 +39,10 @@ If the MCP isn't connected, fall back to the catalog and the component's source/
 ### 4 · Populate with our domain
 Read `references/product-and-domain.md`. Use real module names, entities, statuses, and vocabulary (Patient, Encounter, MRN, Visit Type, IPD admission, Form 3C, ABHA…) so the page reads like TatvaPractice, not generic CRUD.
 
-### 5 · Compliance pass
+### 5 · Defaults-first (wireframe → production)
+Read `references/defaults-guardrails.md`. When translating a wireframe, mockup, or sketch into code, the wireframe dictates **structure only** — which sections, which components, what data. All visual properties (colour, font, radius, spacing, sizing) come from each component's **default props and tokens**, not from the wireframe. Never eyeball a colour, radius, or font size from a wireframe — use the Tesseract default. If product reference screenshots exist in `references/screenshots/`, read the one matching the page type to see what the finished product actually looks like.
+
+### 6 · Compliance pass
 Check against `references/tokens-and-rules.md`: tokens-only, no odd numbers, `--tesseract-` prefix, never edit `tesseract-tokens.css`, barrel imports, CSS Modules + `data-*`, **Tesseract components only** (never Ant Design / MUI / Tailwind / raw Radix — our old live apps use those for *structure reference only*). Also apply `references/design-foundations.md` (component states, elevation, layering, density, 18px spacing rhythm) and `references/ux-guidelines.md` (loading / empty / error states, forms, tables, feedback, responsive, microcopy).
 
 ## Reference examples (optional, not mandates)
@@ -66,4 +69,6 @@ It regenerates `references/_generated-inventory.md` from `src/components/**`. Re
 | `references/design-foundations.md` | The general DS layer — states, elevation, layering, density, spacing rhythm |
 | `references/ux-guidelines.md` | Tactical UI/UX — loading/empty/error, forms, tables, feedback, responsive |
 | `references/page-archetypes.md` | Page layout frames (hero / sub-page / drawer) to compose from |
+| `references/defaults-guardrails.md` | Wireframe → production: use component defaults, not wireframe styling |
+| `references/screenshots/` | Real product screenshots — the visual contract for what pages look like |
 | `references/recipes/data-listing-page.md` | A complete worked List page |

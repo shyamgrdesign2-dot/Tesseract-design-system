@@ -53,7 +53,7 @@ rather than hand-rolling a card:
   Strength is configurable via `intensity` (0–100, default 8 = subtle).
 - **Border** — a **faded gradient ring**: softest on the sides, a touch stronger top & bottom
   (never a hard uniform line).
-- **Radius** — 16px.
+- **Radius** — 14px (`--tesseract-radius-14`).
 - **Dividers** — header-bottom and footer-top only, **very light**; bands are transparent so the
   one shell gradient shows through (no per-band colour).
 - **Icon** — an optional square behind the header icon: `iconBg="none" | "soft" | "gradient"`.
